@@ -1,0 +1,144 @@
+﻿@model scarfproject.ViewModel.ListOfMezonViewModel
+@{ 
+    ViewBag.Title = "لیست مزون ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+   
+
+
+        <div class="clearfix"></div>
+        @*  @Html.DropDownListFor(m => m.dropdownlist.selectedId, Model.dropdownlist.modes, new { id="items"})*@
+        <div class="" style="background-color: #a7a3a3; ">
+
+            <script>
+
+                $.ajax({
+                    url: '/Home/gogetMezonlist',
+                    dataType: 'html',
+                    success: function (data) {
+
+                        $('#Mezonlist').html(data);
+
+                    },
+                    error: function () {
+                        alert("nashod")
+                    }
+                });
+            </script>
+
+
+            <div class="row" >
+                <div class="col-lg-8">
+                    <div  style="float:left; padding-left:15%" id="Mezonlist2"></div>
+                    <div class="row" style="height:10px"></div>
+                </div>
+
+                <div class="col-lg-4" style="padding:20px">
+                    <div class="row" style="height:20px"></div>
+                    <div class="row">
+
+                        <div class="col-lg-4" style="float:left">
+
+                            @Html.DropDownListFor(m => m.selectedItem, new SelectList(Model.listOfItems.data, "Text", "Value"), "همه", new { id = "NBitems", style = "background-color: #007d80 ; color:#fff;height:50px;width: 150px; text-align: center" })
+                        </div>
+                        <div class="col-lg-6">
+                            <div style="height:20px"></div>
+                            <h4>:منطقه مورد نظر</h4>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+
+            <div style="  background-color: #a7a3a3" id="Mezonlist"></div>
+            
+
+            <script>
+
+                $.ajax({
+                    url: '/Home/gogetMezonpagination',
+                    dataType: 'html',
+
+                    success: function (data) {
+
+                        $('#Mezonlist2').html(data);
+
+                    },
+                    error: function () {
+                        alert("nashod")
+                    }
+                });
+            </script>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#NBitems").change(function () {
+            var selectedlistofmode = $("#NBitems").val()
+
+            $.ajax({
+                url: '/Home/changeMezonNB',
+                dataType: 'html',
+                data: {
+                    NB: selectedlistofmode,
+                },
+                success: function (data) {
+
+                    $('#Mezonlist').html(data);
+                    $.ajax({
+                        url: '/Home/gogetMezonpagination',
+                        dataType: 'html',
+                        data: {
+                            NB: selectedlistofmode,
+                        },
+                        success: function (data) {
+                            $('#Mezonlist2').html(data);
+                        },
+                        error: function () {
+
+                        }
+                    })
+                },
+                error: function () {
+
+                }
+            })
+            
+        })
+       
+
+    })
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="banimo.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="banimo_com_payamakpanel_api_Send" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://api.payamak-panel.com/post/Send.asmx</Value>
+    </Setting>
+    <Setting Name="banimo_com_payamakpanel_api_voice_Voice" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://api.payamak-panel.com/post/Voice.asmx</Value>
+    </Setting>
+    <Setting Name="banimo_bankMellat_PaymentGatewayImplService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://bpm.shaparak.ir/pgwchannel/services/pgw</Value>
+    </Setting>
+    <Setting Name="banimo_bankMellat1_PaymentGatewayImplService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://bpm.shaparak.ir/pgwchannel/services/pgw</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

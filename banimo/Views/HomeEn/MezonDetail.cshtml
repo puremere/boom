@@ -1,0 +1,124 @@
+﻿@model scarfproject.ViewModel.MezonDetailViewModel
+@{
+    ViewBag.Title = "پروفایل مزون";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="page-head" style="background: url(@Model.LogoAddress) no-repeat center">
+    <div class="container">
+        <h3>مزون باران</h3>
+    </div>
+</div>
+<div id="Mezonid" style="display:none">@Model.ID</div>
+
+<div class="electronics">
+    <div class="container">
+
+        <div class="clearfix"></div>
+        @*  @Html.DropDownListFor(m => m.dropdownlist.selectedId, Model.dropdownlist.modes, new { id="items"})*@
+        <div class="ele-bottom-grid">
+
+            <script>
+                var mezid = $("#Mezonid").text();
+                alert(mezid)
+                $.ajax({
+                    url: '/Home/gogetMezonproductlist',
+                    dataType: 'html',
+                  
+
+                    success: function (data) {
+
+                        $('#Mezonproductlist').html(data);
+
+                    },
+                    error: function () {
+                        alert("nashod")
+                    }
+                });
+            </script>
+
+
+            <div class="row">
+                <div class="col-lg-8"></div>
+
+               
+            </div>
+
+            <div class="row" style="text-align:center" id="Mezonproductlist"></div>
+            <div class="row" style="text-align:center" id="Mezonproductlist2"></div>
+
+            <script>
+
+                $.ajax({
+                    url: '/Home/gogetMezonProductPagination',
+                    dataType: 'html',
+                   
+                    success: function (data) {
+
+                        $('#Mezonproductlist2').html(data);
+
+                    },
+                    error: function () {
+                        alert("nashod")
+                    }
+                });
+            </script>
+
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</div>
+<!-- //Electronics -->
+<!-- //product-nav -->
+
+
+<script>
+    $(".pagingnumber").click(function () {
+        var num = this.textContent;
+        $.ajax({
+            url: '/Home/changeMezonDetailsubcatid',
+            dataType: 'html',
+            data: {
+                subcatid: num,
+            },
+            success: function (data) {
+                if (data === "1") {
+                    $.ajax({
+                        url: '/Home/gogetMezonproductlist',
+                        dataType: 'html',
+                        success: function (data) {
+
+                            $('#Mezonproductlist').html(data);
+
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+                    $.ajax({
+                        url: '/Home/gogetMezonProductPagination',
+                        dataType: 'html',
+
+                        success: function (data) {
+
+                            $('#Mezonproductlist2').html(data);
+
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+                }
+            },
+            error: function () {
+
+            }
+
+        })
+    })
+</script>
+
+
+
