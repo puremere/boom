@@ -147,10 +147,14 @@ namespace banimo.Controllers
             {
                 foreach(var item in ModelState.Values)
                 {
-                    if (item.Errors.First().ErrorMessage  == "Incorrect CAPTCHA Code!")
+                    if (item.Errors.Count() > 0)
                     {
-                        return RedirectToAction("Register", "Home", new { message = "1" });
+                        if (item.Errors.First().ErrorMessage == "Incorrect CAPTCHA Code!")
+                        {
+                            return RedirectToAction("Register", "Home", new { message = "1" });
+                        }
                     }
+                    
                 }
 
             }

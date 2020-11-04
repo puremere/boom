@@ -11,6 +11,7 @@ namespace banimo.ViewModel
     }
     public class ListOfDeliveryTime
     {
+        public string isActive { get; set; }
         public string ID { get; set; }
         public string DayText { get; set; }
         public string TimeFrom { get; set; }

@@ -1845,8 +1845,16 @@ namespace banimo.Controllers
             return PartialView("");
         }
         [HomeSessionCheck]
-        public ActionResult EndOrder()
+        public ActionResult EndOrder(string error)
         {
+            if(error != "" && error != null)
+            {
+                if (error == "5")
+                {
+                    ViewBag.error = "پرداخت با کیف پول امکان پذیر نیست!";
+                }
+              
+            }
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
             
@@ -1854,6 +1862,7 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("login");
             }
+            string token = Session["token"] as string;
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1863,12 +1872,13 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("token", token);
+                collection.Add("mbrand", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/GetListOfDeliveryTimeWeb.php?", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTime.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1883,6 +1893,9 @@ namespace banimo.Controllers
         {
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             string disC = jsonModel.discount;
+
+
+            
 
             ViewModelPost.ReqestForPaymentViewModel model = new ViewModelPost.ReqestForPaymentViewModel()
             {
@@ -1907,10 +1920,15 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("ReqestForPaymentPasargad", "Connection", model);
             }
-           
+            else if (payment == "1" || payment == "2") {
+
+                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+            }
+
+
             else
             {
-                return RedirectToAction("ReqestForPayment", "Connection", model);
+                return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
             }
                 //disC = Response.Cookies["discount"].Value.ToString();
                
@@ -2891,12 +2909,12 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("mbrand", servername);
                 collection.Add("discountCode", val);
                 collection.Add("token", user.token);
                 collection.Add("price", price);
                 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDiscount.php?", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getDiscount.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }

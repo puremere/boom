@@ -709,7 +709,8 @@
                                             },
                                             success: function (data) {
 
-                                                location.reload();
+                                                var url = "/Home/myprofile?type=4";
+                                                window.location.href = url;
                                             }
                                         });
                                     }
@@ -735,14 +736,15 @@
 
                                 <div class="c-table-orders mustbehide">
                                     <div class="c-table-orders__head c-table-orders__head--highlighted">
-                                        <div class="c-table-orders__row">
-                                            <div class="c-table-orders__cell c-table-orders__cell--hash">#</div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--receive-at">قیمت</div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--price">زمان </div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--price">توضیحات</div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--payment">وضعیت پرداخت</div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--payment"></div>
-                                            <div class="c-table-orders__cell c-table-orders__cell--payment"></div>
+                                        <div class="row" style="margin:0;direction:rtl; padding:25px 0; background-color:#85b3be; color:white">
+                                            <div class="col-lg-1" style="float:right">#</div>
+                                         
+                                            <div class="col-lg-2" style="float:right">قیمت</div>
+                                            <div class="col-lg-2" style="float:right">زمان </div>
+                                            <div class="col-lg-2" style="float:right">توضیحات</div>
+                                            <div class="col-lg-2" style="float:right">وضعیت پرداخت</div>
+                                            <div class="col-lg-2" style="float:right">حذف</div>
+                                            <div class="col-lg-1" style="float:right">پرداخت</div>
                                         </div>
                                     </div>
                                     <div class="c-table-orders__body">
@@ -755,7 +757,7 @@
                                             <div class="c-table-orders__cell c-table-orders__cell--hash">
                                                 @index
                                             </div>
-                                          
+
                                             <div class="c-table-orders__cell c-table-orders__cell--price">
                                                 @item.price
                                             </div>
@@ -768,14 +770,23 @@
                                             @if (@item.status == "0")
                                             {
                                                 <div class="c-table-orders__cell c-table-orders__cell--payment">در اتنظار پرداخت</div>
-                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><p class="deleteTransaction" id="@item.ID"  style=" cursor:pointer">حذف</p></div>
-                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><p class="payTransaction" id="@item.timestamp"   style=" cursor:pointer">پرداخت</p></div>
+                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><p class="deleteTransaction" id="@item.ID" style=" cursor:pointer">حذف</p></div>
+                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><p class="payTransaction" id="@item.timestamp" style=" cursor:pointer">پرداخت</p></div>
                                             }
                                             else
                                             {
-                                                <div class="c-table-orders__cell c-table-orders__cell--payment">پرداخت شده</div>
-                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><i  class="fas fa-check" style="font-size:42px; cursor:pointer"></i></div>
-                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><i class="fas fa-check" style="font-size:42px; cursor:pointer"></i></div>
+                                                if (item.transactionType == "0")
+                                                {
+                                                    <div class="c-table-orders__cell c-table-orders__cell--payment">برداشت</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="c-table-orders__cell c-table-orders__cell--payment">واریز</div>
+                                                }
+
+
+                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><i class="fas fa-check" style="font-size:42px;"></i></div>
+                                                <div class="c-table-orders__cell c-table-orders__cell--detail"><i class="fas fa-check" style="font-size:42px; "></i></div>
                                             }
 
                                         </div>
@@ -785,6 +796,7 @@
                                         <script>
                                             $(".deleteTransaction").click(function () {
                                                 var id = $(this).attr("id");
+
                                                 $.ajax({
                                                     url: '/Home/deleteTransaction',
                                                     dataType: 'html',
@@ -794,7 +806,8 @@
                                                     },
                                                     success: function (data) {
                                                         //alert("success");
-                                                        location.reload();
+                                                        var url = "/Home/myprofile?type=4";
+                                                        window.location.href = url;
                                                     }
                                                 });
                                             })
@@ -1286,7 +1299,26 @@
                     }
             </style>
             <div class="c-profile-box">
-                <div class="c-profile-box__header"><div class="c-profile-box__avatar js-user-avatar" style="background-image: url(https://www.digikala.com/static/files/fd4840b2.svg)"></div><div style="width:5%; margin:0px; padding:0px" class="c-profile-box__btn-edit "></div></div><div class="c-profile-box__username"></div><div class="c-profile-box__tabs">
+
+                <div class="c-profile-box__header">
+                    <div class="c-profile-box__avatar js-user-avatar" style="background-image: url(https://www.digikala.com/static/files/fd4840b2.svg)">
+
+                    </div>
+                    <div style="width:5%; margin:0px; padding:0px" class="c-profile-box__btn-edit "></div>
+                </div>
+                <div class="c-profile-box__username"></div>
+                @{
+                    int total = 0;
+                    if (Model.mytransaction != null)
+                    {
+                        total = Model.mytransaction.Where(x => x.status == "1" && x.transactionType == "1").Sum(x => x.price) - Model.mytransaction.Where(x => x.status == "1" && x.transactionType == "0").Sum(x => x.price);
+                    }
+
+                    <p style="text-align:center; padding-bottom:25px">اعتبار :   <span>@total</span> &nbsp; تومان</p>
+                }
+                <div class="c-profile-box__tabs">
+
+
                     <a href="/Home/forgetpass" class="c-profile-box__tab" style="border-right: 1px solid #ebebeb;"><i class="fa fa-lock" style="width:100%"></i><p>تغییر رمز</p></a>
                     <a href="/CustomerLogin/LogOff" class="c-profile-box__tab ">
                         <i class="fa fa-sign-out-alt" style="width:100%"></i><p>خروج از حساب </p>

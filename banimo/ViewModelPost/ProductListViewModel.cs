@@ -49,10 +49,12 @@ namespace banimo.ViewModelPost
     {
         public string ID { get; set; }
         public string date { get; set; }
-        public string price { get; set; }
+        public int price { get; set; }
         public string status { get; set; }
         public string description { get; set; }
         public string timestamp { get; set; }
+        public string transactionType { get; set; }
+        
 
     }
     public class MyOrder
@@ -77,8 +79,14 @@ namespace banimo.ViewModelPost
     public class OrderList
     {
         public List<MyOrder> myOrder { get; set; }
+        public List<MyUser> myUsers { get; set; }
     }
 
+    public class MyUser
+    {
+        public int ID { get; set; }
+        public string  fullname { get; set; }
+    }
     public class MyProduct
     {
         public string title { get; set; }

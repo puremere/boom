@@ -999,7 +999,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_gogetOrderDetail.cshtml", log2);
 
         }
-        public void finalizeOrder(string id, string type)
+        public void finalizeOrderAndDeliver(string id, string type, string deliverID)
         {
             if (true)
             {
@@ -1018,6 +1018,9 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("status", type);
                     collection.Add("ID", id);
+                    collection.Add("deliverID", deliverID);
+                    
+
 
                     byte[] response =
                     client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/FinalizeOrder.php", collection);
@@ -1054,7 +1057,32 @@ namespace banimo.Controllers
             return Content("");
         }
 
+        public ActionResult ActiveDeliveryTime(string id,string value)
+        {
 
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("value", value);
+                collection.Add("token", token);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/updateDeliveryTime.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("");
+        }
         public ActionResult getsubcatlistlevel3(string subcatid, string levelfinder)
         {
           
@@ -2926,7 +2954,7 @@ namespace banimo.Controllers
                 collection.Add("email", email);
                 collection.Add("mobile", phone);
                 collection.Add("fullname", fullname);
-                collection.Add("password", "");
+                collection.Add("password", MD5Hash(password));
                 collection.Add("type", "add");
                 collection.Add("UserType", UserList);
                 collection.Add("servername", servername);
