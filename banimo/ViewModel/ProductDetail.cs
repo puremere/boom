@@ -28,7 +28,9 @@ namespace banimo.ViewModel
         public List<Time> times { get; set; }
         public string latitiude { get; set; }
         public string longitude{ get; set; }
-        public string final { get; set; }
+        public string credit { get; set; }
+        public string baseDeliver { get; set; }
+        public string priceDeliver { get; set; }
     }
      public class commentModel
     {

@@ -262,6 +262,7 @@
     <Compile Include="Classes\SessionCheck.cs" />
     <Compile Include="Classes\Upload.cs" />
     <Compile Include="Classes\Variables.cs" />
+    <Compile Include="Classes\webservise.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CustomerLoginController.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="ScreenModels\UserCall.cs" />
     <Compile Include="Startup .cs" />
     <Compile Include="ViewModel\aboutVM.cs" />
+    <Compile Include="ViewModel\addTransactionVM.cs" />
     <Compile Include="ViewModel\adminMenuVM.cs" />
     <Compile Include="ViewModel\BankVm.cs" />
     <Compile Include="ViewModel\confrimVM.cs" />

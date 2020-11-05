@@ -124,6 +124,7 @@ namespace banimo.Controllers
 
         //public ActionResult ReqestForPayment(string newdiscount, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment)
 
+
         public ActionResult ReqestForWallet(string id)
         {
 
@@ -207,9 +208,9 @@ namespace banimo.Controllers
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("auth", Authority);
-                    collection2.Add("id", log2.mytransaction.First().ID);
-                    collection2.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/setWalletAuth.php", collection2);
+                    collection2.Add("timestamp", log2.mytransaction.First().timestamp);
+                    collection2.Add("mbrand", servername);
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setWalletAuth.php", collection2);
                     result2 = System.Text.Encoding.UTF8.GetString(response);
 
 
@@ -220,6 +221,7 @@ namespace banimo.Controllers
                 Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
             }
             return Content("");
+
         }
         public ActionResult VerifyWalletZarin()
         {
@@ -240,6 +242,7 @@ namespace banimo.Controllers
                             collection2.Add("device", device);
                             collection2.Add("code", code);
                             collection2.Add("auth", Request.QueryString["Authority"]);
+                           
                             collection2.Add("servername", servername);
                        
 
@@ -285,10 +288,24 @@ namespace banimo.Controllers
                             }
 
 
-                          
-                          
+
+                            string fromOrder = "";
+                            if (TempData["VerifyWalletZarin"] != null) {
+                                fromOrder = TempData["VerifyWalletZarin"] as string;
+                            }
                             
-                            return RedirectToAction("myprofile", "Home", new { type = 4 });
+                            if (fromOrder == "1")
+                            {
+                                string modelstring = TempData["orderModel"] as string;
+                                ViewModelPost.ReqestForPaymentViewModel finalModle = JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", new { model = finalModle });
+                            }
+                            else
+                            {
+                                return RedirectToAction("myprofile", "Home", new { type = 4 });
+                            }
+                            
+                           
 
 
 

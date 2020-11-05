@@ -35,6 +35,7 @@ namespace banimo.Controllers
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
+        webservise wb = new webservise();
 
         public static string MD5Hash(string input)
         {
@@ -988,31 +989,14 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
         }
-        public void addToWallet(string price)
+        public ActionResult addToWallet(string price)
         {
-            string token = Session["token"].ToString();
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
-
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("token", token);
-                collection.Add("price", price);
-                collection.Add("status", "0");
-                collection.Add("servername", servername);
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/addTransaction.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-
-
+            string token = Session["token"] as string ;
+            string result = wb.addTransaction(token, device, code, price, servername);
+            addTransactionVM model = JsonConvert.DeserializeObject<addTransactionVM>(result);
+            return Content(model.timestamp);
         }
         public PartialViewResult gogetprofile()
         {
@@ -1884,6 +1868,10 @@ namespace banimo.Controllers
             }
 
             TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
+            TempData["deliverybase"] = log.baseDeliver;
+            TempData["deliveryprice"] = log.priceDeliver;
+            TempData["credit"] = log.credit;
+
             return View(log);
         }
         [HomeSessionCheck]
@@ -1926,11 +1914,73 @@ namespace banimo.Controllers
             }
 
 
-            else
+            else if(payment == "5")
             {
                 return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
             }
-                //disC = Response.Cookies["discount"].Value.ToString();
+
+            else
+            {
+                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+
+                int orderprice = 0;
+                int discount = 0;
+                int deliverybase = 0;
+                int deliveryprice = 0;
+                int credit = 0;
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        orderprice += (int)(item.price * item.quantity);
+                    }
+                }
+
+                if (TempData["discount"] != null)
+                {
+                    discount = Int32.Parse(TempData["discount"] as string);
+                }
+                deliverybase = Int32.Parse(TempData["deliverybase"] as string);
+                deliveryprice = Int32.Parse(TempData["deliveryprice"] as string);
+                credit = Int32.Parse(TempData["credit"] as string);
+
+                if (orderprice < deliverybase)
+                {
+                    orderprice += deliveryprice;
+                }
+                orderprice -= discount;
+
+                if (credit > orderprice)
+                {
+                    model.payment = "1";
+                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+                }
+                else
+                {
+                    string price = (orderprice - credit).ToString();
+                    string token = Session["token"] as string;
+                    string device = RandomString();
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    string result = wb.addTransaction(token, device, code, price, servername);
+                    addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(result);
+
+                    if (Rmodel.status == 200)
+                    {
+                        TempData["addFromOrder"] = "1";
+                        //TempData["orderModel"] = JsonConvert.SerializeObject(model);
+                        return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
+                    }
+
+                    else
+                    {
+                        return Content("");
+                    }
+                  
+                    
+                }
+               
+            }
+                
                
         }
 
@@ -2925,7 +2975,7 @@ namespace banimo.Controllers
                 SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
                
             }
-
+            TempData["discount"] = model.price;
             return Content(result);
         }
 
