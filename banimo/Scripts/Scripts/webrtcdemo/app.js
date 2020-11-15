@@ -111,7 +111,7 @@ videoSelect.onchange = getStream;
 
 //getStream().then(getDevices).then(gotDevices);
 //getaudio()
-getStream();
+//getStream();
 function getDevices() {
     // AFAICT in Safari this only gets default devices until gUM is called :/
     return navigator.mediaDevices.enumerateDevices();
@@ -228,9 +228,11 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
         _RequestedStream = 'blank',
         _connectionManager = connectionManager,
         _indexMustBeChange,
+        _requestedType ,
         _noMoreConnection = "",
         _relayProcess,
         mixer,
+        _chatSelected,
         _connect = function (username, onSuccess, onFailure) {
             // Set Up SignalR Signaler
 
@@ -254,23 +256,121 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
             hub.client.setMessage = function (message, connectionID, name) {
 
                 if (connectionID == viewModel.MyConnectionId()) {
-                    var ul = $(".messages ul");
-                    const li = document.createElement('li');
-                    li.className = 'sent';
-                    li.innerHTML = `<p>` + name + ": " + message + `</p> `;
-                    // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
-                    ul.append(li);
+                    //var ul = $(".messages ul");
+                    //const li = document.createElement('li');
+                    //li.className = 'sent';
+                    //li.innerHTML = `<p>` + name + ": " + message + `</p> `;
+                    //// var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+                    //ul.append(li);
 
                 }
                 else {
                     var ul = $(".messages ul");
-                    const li = document.createElement('li');
-                    li.className = 'replies';
-                    li.innerHTML = `<p>` + name + ": " + message + `</p> `;
-                    // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
-                    ul.append(li);
+                    var specificLi = $("#" + connectionID).text();
+                    if (specificLi != '') {
 
-                    togglePlay();
+                        var bool = $('#backButt').css('display') == 'block';
+                        var bool2 = $('#hiddeninput').val() == connectionID;
+                        if (bool && bool2) {
+                           
+                            display = 'display';
+                            const li = document.createElement('li');
+                            li.className = 'replies ' + connectionID;
+                            li.style.display = display;
+                            li.innerHTML = `<p>` + name + ": " + message + `</p> `;
+                            // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+
+                            ul.append(li);
+                            
+
+                            $('ul li').css("display", "none");
+                            $("." + connectionID).css("display", "block");
+                            $("#backButt").css("display", "block");
+                            $(".num").css("display", "none");
+                            $(this).find(".num").text('');
+                            $(this).find(".num").css("display", "none");
+                            $(".mainli").css("display", "none");
+                            $(".message-input").css("display", "block")
+
+                            var objDiv = document.getElementById("message");
+                            var num = objDiv.scrollHeight;
+                            objDiv.scrollTop = num
+                        }
+                        else {
+                          
+                            display = 'none';
+                            const li = document.createElement('li');
+                            li.className = 'replies ' + connectionID;
+                            li.style.display = display;
+                            li.innerHTML = `<p>` + name + ": " + message + `</p> `;
+                            // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+
+                            ul.append(li);
+
+
+                            var firstnum = $("#" + connectionID).find(".num");
+                            var numtext = firstnum.text();
+                          
+                            if (numtext == '') {
+                                num = 1;
+                            }
+                            else {
+                                num = parseInt(numtext) + 1;
+                            }
+
+                            firstnum.text(num);
+                            firstnum.css("display", "block");
+                        }
+                       
+                       
+                    }
+                    else {
+                        display = 'block';
+
+                        const li = document.createElement('li');
+                        li.className = 'replies mainli ' + connectionID;
+                        li.id = connectionID;
+                    
+                       
+                        li.style.display = display;
+                        li.innerHTML = `<p onclick='mainliClicked(` + `"` + connectionID + `"`+`,`+`"`+name+`"`+`)'  class="main" > <span style=" width=:100%; font-weight:600">` + name + `</span><br><span>` + message + `</span>` + `<span class="num" style="position:absolute;margin-right: 10px;right: 0;padding: 1px 8px;border-radius:50;border-radius: 50%;top: 5px;background: #4d4d4d;color: white;"></span></p> `  ;
+                        // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+
+                        var ulInnerHtml = ul.html();
+                      
+                        ul.html(li)
+                      
+
+
+
+                        const li2 = document.createElement('li');
+                        li2.className = 'replies ' + connectionID;
+                        li2.style.display = 'none';
+                        li2.innerHTML = `<p>` + name + ": " + message + `</p> `;
+                        // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+
+                        ul.append(li2);
+                        ul.append(ulInnerHtml);
+
+                        var firstnum = $("#" + connectionID).find(".num");
+                        var numtext = firstnum.text();
+                        if (numtext == '') {
+                            num = 1;
+                        }
+                        else {
+                            num = parseInt(num) + 1;
+                        }
+
+                        firstnum.text(num);
+                    }
+                   
+                    var objDiv = document.getElementsByClassName("messages");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    
+
+                   
+
+                    //togglePlay();
 
                 }
             };
@@ -309,23 +409,58 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     _noMoreConnection = "true"; // بخش اضافه شدن کانکشن ها این باید
                 }
                 // Callee accepted our call, let's send them an offer with our video stream
-                console.log(_index);
-                SteamToGo[0] = _mediaStream;
-                SteamToGo[1] = blackSilence();
-                SteamToGo[2] = blackSilence();
+                console.log(_requestedType);
+                var bool;
+                if (_requestedType == 0) {
+                    bool = false;
+                }
+                else {
+                    bool = true;
+                }
+                console.log(bool);
+                getUserMedia(
+                    {
+                        // Permissions to request
+                        video: bool,
+                        audio: true,
+                    },
+                    function (stream) { // succcess callback gives us a media stream
 
-                // send signal moved to onclick
+                        $('.instructions').hide();
 
-                connectionManager.sendSignal(acceptingUser.ConnectionId, _RequestedStream);
-                connectionManager.initiateOffer(acceptingUser.ConnectionId, SteamToGo);
-                //connectionManager.initiateOffer(acceptingUser.ConnectionId, SteamToGo);
+                        _mediaStream = stream;
+                        _finalStream = stream;
+                        var videoElement = document.querySelector('.video.mine');
+                        attachMediaStream(videoElement, stream);
+                        $(".audio.mine").css("display", "none");
 
 
-                //mixer.frameInterval = 1;
-                //mixer.startDrawingFrames();
+                        viewModel.Loading(false);
+                        SteamToGo[0] = _mediaStream;
 
-                // Set UI into call mode
-                viewModel.Mode('incall');
+
+                        // send signal moved to onclick
+
+                        connectionManager.sendSignal(acceptingUser.ConnectionId, _RequestedStream);
+                        connectionManager.initiateOffer(acceptingUser.ConnectionId, SteamToGo);
+                        //connectionManager.initiateOffer(acceptingUser.ConnectionId, SteamToGo);
+
+
+                        //mixer.frameInterval = 1;
+                        //mixer.startDrawingFrames();
+
+                        // Set UI into call mode
+                        viewModel.Mode('incall');
+                    },
+                    function (error) { // error callback
+                        alertify.alert('<h4>Failed to get hardware access!</h4> Do you have another browser type open and using your cam/mic?<br/><br/>You were not connected to the server, because I didn\'t code to make browsers without media access work well. <br/><br/>Actual Error: ' + JSON.stringify(error));
+                        viewModel.Loading(false);
+                    }
+                );
+
+
+
+               
 
             };
 
@@ -357,7 +492,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 // Set the UI back into idle mode
                 viewModel.Mode('idle');
             };
-            hub.client.callEveryOne = function (connectionID) {
+            hub.client.callEveryOne = function (connectionID, callEveryOne) {
                 console.log("i am called");
                 console.log(_noMoreConnection);
 
@@ -379,16 +514,23 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 }
             };
 
-            hub.client.GetStreamRequest = function (connectionId, reason, username) {
+            hub.client.GetStreamRequest = function (connectionId, reason, username,type) {
 
 
                 console.log("calling user");
-
+                _requestedType = type;
                 _RequestedStream = 'blank';
                 togglePlay();
+                var message = '';
+                if (type == 0) {
+                    message = 'شما یک تماس صوتی دارید، آیا میپذیرید؟'
+                }
+                else {
+                    message = 'شما یک تماس تصویری دارید، آیا میپذیرید؟'
 
-                alertify.confirm('', ' تماس ورودی آیا می پذیرید ؟', function () {
-                    _hub.server.callUser(connectionId, "");
+                }
+                alertify.confirm('', message, function () {
+                      _hub.server.callUser(connectionId, "");
                         alertify.success(reason);
                         togglePlay();
                 }
@@ -565,21 +707,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 viewModel.Loading(false);
             });
 
-            //getUserMedia(
-            //    {
-            //        // Permissions to request
-            //        video: true,
-            //        audio: true
-            //    },
-            //    function (stream) { // succcess callback gives us a media stream
-            //       // var audioTrack = stream.getAudioTracks()[0];
-
-            //    },
-            //    function (error) { // error callback
-            //        alertify.alert('<h4>Failed to get hardware access!</h4> Do you have another browser type open and using your cam/mic?<br/><br/>You were not connected to the server, because I didn\'t code to make browsers without media access work well. <br/><br/>Actual Error: ' + JSON.stringify(error));
-            //        viewModel.Loading(false);
-            //    }
-            //);
+           
         },
 
         _attachUiHandlers = function () {
@@ -732,11 +860,36 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
             });
             $(".submit").click(function () {
 
+                var id = $("#hiddeninput").val();
                 var message = $("#chatMessage").val();
                 if (message != "") {
-                    _hub.server.sendMessage(message);
+                    _hub.server.sendMessage(message, id);
 
                 }
+
+               $("#hiddeninput").val('');
+                var ul = $(".messages ul");
+                var name = viewModel.Username();
+
+              
+                const li = document.createElement('li');
+                li.className = 'sent ' + id;
+                li.innerHTML = `<p>` + name + ": " + message + `</p> `;
+                // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+                ul.append(li);
+
+              
+                $('ul li').css("display", "none");
+                $("." + id).css("display", "block");
+                $("#backButt").css("display", "block");
+                $(".num").css("display", "none");
+                $(this).find(".num").text('');
+                $(this).find(".num").css("display", "none");
+                $(".mainli").css("display", "none");
+                $(".message-input").css("display", "block")
+
+
+
 
             });
             $(".chat").click(function () {
@@ -888,6 +1041,9 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
         },
         _setName = function (name) {
             viewModel.Groupname(name);
+        },
+        _chatSelectedfnc = function (name) {
+            _chatSelected = name;
         },
         _resetStream = function (id) {
 
@@ -1237,7 +1393,8 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
             return _mediaStream;
         },
         resetStream: _resetStream,
-        setName: _setName
+        setName: _setName,
+        chatselectedFun : _chatSelectedfnc,
     };
 })(WebRtcDemo.ViewModel, WebRtcDemo.ConnectionManager);
 

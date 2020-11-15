@@ -19,5 +19,6 @@ namespace banimo.ViewModel
         public List<MyOrder> myOrder { get; set; }
         public userdata userdata { get; set; }
         public List<Mytransaction> mytransaction { get; set; }
+       
     }
 }

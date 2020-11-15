@@ -301,10 +301,58 @@ namespace banimo.Controllers
                 }
                 SetCookie(result, "contactUs");
             }
-            
+            else
+            {
+                result = contactInfo;
+            }
 
-            contactSectionVM model = JsonConvert.DeserializeObject<contactSectionVM>(result);
-            return View(model);
+            contactSectionVM info = JsonConvert.DeserializeObject<contactSectionVM>(result);
+
+            DownloadAppVM finalmodel = new DownloadAppVM();
+          
+            finalmodel.directLink = info.directLink;
+            finalmodel.googlePlayLink = info.googlePlayLink;
+            finalmodel.instaLink = info.instaLink;
+            finalmodel.sibappLink = info.sibappLink;
+            finalmodel.name = ConfigurationManager.AppSettings["siteName"]+ ConfigurationManager.AppSettings["siteName2"];
+            return View(finalmodel);
+        }
+
+        public ActionResult dApp()
+        {
+            string contactInfo = getCookie("contactUs");
+            string result = "";
+            if (contactInfo == "")
+            {
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+
+                string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", servername);
+                    byte[] response = client.UploadValues(serverAddress, collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                SetCookie(result, "contactUs");
+            }
+
+
+            contactSectionVM info = JsonConvert.DeserializeObject<contactSectionVM>(result);
+
+            DownloadAppVM finalmodel = new DownloadAppVM();
+
+            finalmodel.directLink = info.directLink;
+            finalmodel.googlePlayLink = info.googlePlayLink;
+            finalmodel.instaLink = info.instaLink;
+            finalmodel.sibappLink = info.sibappLink;
+            finalmodel.name = ConfigurationManager.AppSettings["siteName"];
+            return View(finalmodel);
         }
         public ActionResult Register(string message)
         {
@@ -968,6 +1016,8 @@ namespace banimo.Controllers
             return View(log2);
 
         }
+
+       
         public void deleteTransaction(string id) {
             string token = Session["token"].ToString();
             string device = RandomString();
@@ -1648,9 +1698,10 @@ namespace banimo.Controllers
 
             
             List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
-            if (getCookie("cartModel") != "")
+            string srt = getCookie("cartModel");
+            if (srt!= "")
             {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
 
 
                 if (data != null && data.Count > 0)
@@ -1967,7 +2018,7 @@ namespace banimo.Controllers
                     if (Rmodel.status == 200)
                     {
                         TempData["addFromOrder"] = "1";
-                        //TempData["orderModel"] = JsonConvert.SerializeObject(model);
+                        TempData["orderModel"] = JsonConvert.SerializeObject(model);
                         return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
                     }
 
@@ -1986,6 +2037,31 @@ namespace banimo.Controllers
 
 
 
+        [HomeSessionCheck]
+        public ActionResult TicketList()
+        {
+            string token = Session["token"] as string;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTicketList.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return View();
+        }
 
         public ActionResult AddComment(commentModel model)
         {

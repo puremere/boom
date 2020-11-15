@@ -270,6 +270,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ScreenController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -291,6 +292,7 @@
     <Compile Include="ViewModel\BankVm.cs" />
     <Compile Include="ViewModel\confrimVM.cs" />
     <Compile Include="ViewModel\contactSectionVM.cs" />
+    <Compile Include="ViewModel\DownloadAppVM.cs" />
     <Compile Include="ViewModel\PartnerInfo.cs" />
     <Compile Include="ViewModel\PartnerOrders.cs" />
     <Compile Include="Service References\ServiceReference1\Reference.cs">
@@ -345,6 +347,8 @@
     <Compile Include="ViewModel\ProfileVM.cs" />
     <Compile Include="ViewModel\sendEmailVM.cs" />
     <Compile Include="ViewModel\slider.cs" />
+    <Compile Include="ViewModel\TicketViewModel\InfoForNewTicket.cs" />
+    <Compile Include="ViewModel\TicketViewModel\ticketStremVM.cs" />
     <Compile Include="ViewModel\userdata.cs" />
     <Compile Include="ViewModel\VerificationViewModel.cs" />
     <Compile Include="ViewModel\VerifyViewModel.cs" />
@@ -384,6 +388,7 @@
     <Content Include="AdminPanel\build\images\loading.gif" />
     <Content Include="AdminPanel\build\js\custom.js" />
     <Content Include="AdminPanel\build\js\custom.min.js" />
+    <Content Include="AdminPanel\Content\bootstrap.css" />
     <Content Include="AdminPanel\Content\bootstrap.min.css" />
     <Content Include="AdminPanel\Content\font-awesome.min.css" />
     <Content Include="AdminPanel\Content\font-awesome\css\font-awesome.css" />
@@ -488,6 +493,7 @@
     <Content Include="AdminPanel\Scripts\respond.min.js" />
     <Content Include="AdminPanel\Scripts\toastr.js" />
     <None Include="AdminPanel\Scripts\_references.js" />
+    <Content Include="beep2.mp3" />
     <Content Include="bin\banimo.dll" />
     <Content Include="bin\banimo.pdb" />
     <Content Include="Content\all.css" />
@@ -594,7 +600,6 @@
     <Content Include="fonts\webfonts\fa-light-300.svg" />
     <Content Include="fonts\webfonts\fa-regular-400.svg" />
     <Content Include="fonts\webfonts\fa-solid.svg" />
-    <Content Include="beep.mp3" />
     <Content Include="images\cafeBazar.png" />
     <Content Include="images\call.gif" />
     <Content Include="images\cartblack.png" />
@@ -1322,6 +1327,7 @@
     <Content Include="Scripts\map\mapp.env.js" />
     <Content Include="Scripts\map\mapp.min.js" />
     <Content Include="Scripts\mobile.minified.js" />
+    <Content Include="Scripts\profileJS.js" />
     <Content Include="Scripts\Scripts\adapter.js" />
     <Content Include="Scripts\Scripts\alertify.min.js" />
     <Content Include="Scripts\Scripts\bootstrap-tagsinput-angular.min.js" />
@@ -1739,7 +1745,6 @@
     <Content Include="Views\Demo\info855888.cshtml" />
     <Content Include="Views\Demo\chart.cshtml" />
     <Content Include="Views\Shared\_partialchart.cshtml" />
-    <Content Include="Views\Shared\_armyadminlayout.cshtml" />
     <Content Include="Views\HomeEn\About.cshtml" />
     <Content Include="Views\HomeEn\checkout.cshtml" />
     <Content Include="Views\HomeEn\Contact.cshtml" />
@@ -1827,6 +1832,12 @@
     <Content Include="Views\Connection\RedirectVPOS.cshtml" />
     <Content Include="Views\Screen\AdminFace.cshtml" />
     <Content Include="Views\Screen\UserFace.cshtml" />
+    <Content Include="Views\Connection\VerifyWalletZarin.cshtml" />
+    <Content Include="Views\Connection\ReqestForPaymentInplaceAndWallet.cshtml" />
+    <Content Include="Views\Home\dApp.cshtml" />
+    <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Shared\_TicketLayout.cshtml" />
+    <Content Include="Views\Ticket\newTicket.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
@@ -1940,6 +1951,7 @@
     <Folder Include="AdminPanel\images\scarfimages\" />
     <Folder Include="files\" />
     <Folder Include="Scripts\Scripts\webrtcdemo3\webrtcdemo\" />
+    <Folder Include="UploadFile\" />
     <Folder Include="Views\CustomerLogin\" />
   </ItemGroup>
   <ItemGroup>

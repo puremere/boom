@@ -258,23 +258,30 @@ namespace education2
             
             Clients.Client(requestee).areYouStillThere(Context.ConnectionId);
         }
-        public void StreamRequest(string connectionID)
+        public void StreamRequest(string connectionID,int type)
         {
             User user = Users.SingleOrDefault(c => c.ConnectionId == Context.ConnectionId);
             if (user != null)
             {
                 User resposerUser = Users.SingleOrDefault(x => x.ConnectionId == connectionID);
-                Clients.Client(connectionID).GetStreamRequest(user.ConnectionId, string.Format("{0} درخواست استریم دارد.", resposerUser.Username), resposerUser.Username);
+                Clients.Client(connectionID).GetStreamRequest(user.ConnectionId, string.Format("{0} درخواست استریم دارد.", resposerUser.Username), resposerUser.Username,type);
 
 
             }
         }
-        public void SendMessage(string message)
+        public void SendMessage(string message,string partner)
         {
+            string partnerID = partner;
+            if (partner == "admin")
+            {
+                partnerID = Users.Where(x => x.Type == "admin").Last().ConnectionId;
+            }
             string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
             string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
-            Clients.Group(groupname).setMessage(message, Context.ConnectionId,name);
+            Clients.Client(partnerID).setMessage(message, Context.ConnectionId,name);
+            Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name);
         }
+       
         public void HangUp(string partnerClientId)
         {
            // string groupname = Users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId).GroupName;

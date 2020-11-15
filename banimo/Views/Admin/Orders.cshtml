@@ -13,6 +13,17 @@
         .nav-tabs li {
             float: right !important;
         }
+
+    td {
+        white-space: nowrap;
+        padding: 15px;
+        text-align: center
+    }
+    th {
+        white-space: nowrap;
+        padding:15px;
+        text-align:center
+    }
 </style>
 
 
@@ -26,18 +37,28 @@
 
             </div>
             <div class="modal-body">
-                <p>لطفا یکی از پیک ها را انتخاب کنید</p>
-                <div style="width:50%; display:inline-block">
-                    @if (Model.myUsers != null)
-                    {
+                <div class="row" style="margin:0">
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>لطفا یکی از پیک ها را انتخاب کنید</p>
+                        <div style="display:inline-block">
+                            @if (Model.myUsers != null)
+                            {
 
-                        @Html.DropDownList("deliverDromdown", new SelectList(Model.myUsers, "ID", "fullname"), new { @class = "form-control", })
+                                @Html.DropDownList("deliverDromdown", new SelectList(Model.myUsers, "ID", "fullname"), new { @class = "form-control", })
 
-                    }
 
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>توضحات ادمین</p>
+                        <textarea id="adminDesc" class="form-control" cols="8"  style="height:150px"></textarea>
+                    </div>
                 </div>
                
-               <div id="setDeliver" style="display:inline-block" class="btn  btn-default">تایید</div>
+
+                <div id="setDeliver" style="display:inline-block" class="btn  btn-default">تایید</div>
                 <div id="rowSelectd"></div>
             </div>
            
@@ -95,7 +116,7 @@
                                                 <tr>
                                                     <th style="cursor:pointer" class="orderID">ردیف</th>
                                                     <th>شماره سفارش</th>
-                                                    <th>کاربر</th>
+                                                    <th style="white-space: nowrap; " >کاربر</th>
                                                     <th>موبایل کاربر</th>
                                                     <th>مبلغ (تومان)</th>
                                                     <th>تاریخ سفارش</th>
@@ -104,8 +125,10 @@
                                                     <th>ساعت تحویل</th>
                                                     <th>آدرس</th>
                                                     <th>وضعیت</th>
-                                                    <th></th>
-                                                    <th></th>
+
+                                                    <th>جزئیات</th>
+                                                    <th>اقدامات</th>
+                                                    <th>دلیور</th>
 
                                                 </tr>
                                             </thead>
@@ -121,7 +144,7 @@
                                                 <tr style=" ">
                                                     <td>@i</td>
                                                     <td>@item.orderNumber</td>
-                                                    <td>@item.fullname</td>
+                                                    <td style="white-space: nowrap;">@item.fullname</td>
                                                     <td>@item.phone</td>
                                                     <td>@item.price</td>
                                                     <td>@item.date</td>
@@ -150,6 +173,9 @@
                                                             }
 
                                                         }
+                                                    </td>
+                                                    <td class="deliver" id="@item.ID" style="cursor:pointer">
+                                                        @item.deliver
                                                     </td>
 
                                                 </tr>
@@ -285,14 +311,15 @@
                     $("#setDeliver").click(function () {
                         $("#myModal").modal('toggle');
                         var deliverID = $("#deliverDromdown").val();
-                      
+                        var description = $('textarea#adminDesc').val();
                         $.ajax({
                             url: '/Admin/finalizeOrderAndDeliver',
                             dataType: 'html',
                             data: {
                                 id: idselected,
                                 deliverID: deliverID,
-                                type: "4"
+                                type: "4",
+                                desc: description
                             },
 
                             success: function (data) {
@@ -304,6 +331,12 @@
 
                         });
                     })
+
+                    $(".deliver").click(function () {
+                        $("#myModal").modal('toggle');
+                        idselected = $(this).attr('id');
+                    })
+                    //comment
                     $(".finalorder").click(function () {
                         $("#myModal").modal('toggle');
                         idselected = $(this).attr('id');

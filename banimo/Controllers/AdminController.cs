@@ -118,7 +118,7 @@ namespace banimo.Controllers
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
         {
 
-           
+
 
             try
             {
@@ -185,7 +185,7 @@ namespace banimo.Controllers
 
                 return Content(e.InnerException.ToString());
             }
-            
+
 
 
 
@@ -198,7 +198,7 @@ namespace banimo.Controllers
 
 
             BaseViewModel basemodel = new BaseViewModel();
-            
+
             return View(basemodel);
         }
         public static IEnumerable<SelectListItem> GetProvincesList()
@@ -223,10 +223,10 @@ namespace banimo.Controllers
         public ActionResult productdetail()
         {
 
-            
-         
+
+
             string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909")+"";
+            string code = MD5Hash(device + "ncase8934f49909") + "";
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -252,8 +252,8 @@ namespace banimo.Controllers
         }
         public ActionResult Features()
         {
-            
-          
+
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -275,14 +275,14 @@ namespace banimo.Controllers
             return View(log);
 
 
-           
+
 
         }
 
 
         public ActionResult bMenu()
         {
-           
+
             // CatPageViewModel model = new CatPageViewModel();
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -325,7 +325,7 @@ namespace banimo.Controllers
         }
         public ActionResult Menu()
         {
-           
+
             // CatPageViewModel model = new CatPageViewModel();
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -392,7 +392,7 @@ namespace banimo.Controllers
         }
         public ActionResult getfilters(string catID)
         {
-            
+
             if (catID != null)
             {
 
@@ -440,7 +440,7 @@ namespace banimo.Controllers
 
         public ActionResult delNewRangFilter(string id)
         {
-            
+
             if (id != null)
             {
 
@@ -487,7 +487,7 @@ namespace banimo.Controllers
         }
         public ActionResult addNewFilter(string name, string catid)
         {
-          
+
             if (name != null)
             {
                 string catID = catid;
@@ -538,7 +538,7 @@ namespace banimo.Controllers
         }
         public ActionResult addNewRangFilter(string rangeFieldSelected, string FromSelected, string ToSelected, string catID, string Vahed)
         {
-          
+
             if (rangeFieldSelected != null & FromSelected != null & ToSelected != null)
             {
                 string device = RandomString(10);
@@ -585,7 +585,7 @@ namespace banimo.Controllers
 
         public ActionResult delFilter(string name, string catid)
         {
-            
+
             string catID = catid;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -619,7 +619,7 @@ namespace banimo.Controllers
         }
         public ActionResult editFilter(string name, string newvalue)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -653,7 +653,7 @@ namespace banimo.Controllers
 
         public ActionResult Orders()
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -679,7 +679,7 @@ namespace banimo.Controllers
         }
         public ActionResult ChangeOrderList(string type, string order)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -704,7 +704,7 @@ namespace banimo.Controllers
         }
         public ActionResult doclonefilter(string mainval, string cloneval)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -738,7 +738,7 @@ namespace banimo.Controllers
         }
         public ActionResult doclonefeature(string mainval, string cloneval)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -808,7 +808,7 @@ namespace banimo.Controllers
         }
         public ActionResult deleteFeature(string subf, string mainf)
         {
-          
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -846,7 +846,7 @@ namespace banimo.Controllers
         }
         public ActionResult getfeature(string catID)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -875,7 +875,7 @@ namespace banimo.Controllers
 
         public ActionResult addNewTimeOfDeliver(string DayOfWeek, string TimeFrom, string TimeTo)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -909,7 +909,7 @@ namespace banimo.Controllers
         }
         public PartialViewResult GetTheListOfDeliveryTime(int? page)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -937,7 +937,7 @@ namespace banimo.Controllers
         }
         public PartialViewResult goGetOrderList()
         {
-           
+
             string token = Session["token"].ToString();
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -966,7 +966,7 @@ namespace banimo.Controllers
         }
         public PartialViewResult goGetOrderDetail(string id)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
 
@@ -999,7 +999,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_gogetOrderDetail.cshtml", log2);
 
         }
-        public void finalizeOrderAndDeliver(string id, string type, string deliverID)
+        public void finalizeOrderAndDeliver(string id, string type, string deliverID, string desc)
         {
             if (true)
             {
@@ -1018,8 +1018,9 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("status", type);
                     collection.Add("ID", id);
+                    collection.Add("desc", desc);
                     collection.Add("deliverID", deliverID);
-                    
+
 
 
                     byte[] response =
@@ -1034,7 +1035,7 @@ namespace banimo.Controllers
         }
         public ActionResult DeleteDeliveryTime(string id)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1057,7 +1058,7 @@ namespace banimo.Controllers
             return Content("");
         }
 
-        public ActionResult ActiveDeliveryTime(string id,string value)
+        public ActionResult ActiveDeliveryTime(string id, string value)
         {
 
             string device = RandomString(10);
@@ -1085,7 +1086,7 @@ namespace banimo.Controllers
         }
         public ActionResult getsubcatlistlevel3(string subcatid, string levelfinder)
         {
-          
+
             if (subcatid == "")
             {
                 return PartialView("/Views/Shared/AdminShared/_SubCatVoid.cshtml");
@@ -1140,7 +1141,7 @@ namespace banimo.Controllers
 
         public ActionResult setglobalsubcatid(string subcatid)
         {
-            
+
             //GlobalVariables.subcatid = subcatid;
             //GlobalVariables.subcatidfordef = subcatid;
             return Content("dd");
@@ -1148,7 +1149,7 @@ namespace banimo.Controllers
         }
         public ActionResult setglobalsubcatid2(string subcatid2, string levelfinder)
         {
-           
+
             //GlobalVariables.subcatid2 = subcatid2;
             //GlobalVariables.subcatidfordef2 = subcatid2;
             return Content("sss");
@@ -1272,7 +1273,7 @@ namespace banimo.Controllers
         }
         public ActionResult setnewfilter(string filterid, string detailtitle)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1309,7 +1310,7 @@ namespace banimo.Controllers
         }
         public ActionResult delfilterdetail(string detailid)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1341,7 +1342,7 @@ namespace banimo.Controllers
         }
         public ActionResult editfilterdetail(string detailid, string newvalue)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1406,7 +1407,7 @@ namespace banimo.Controllers
         }
         public ActionResult addallcolor(string catID)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1445,7 +1446,7 @@ namespace banimo.Controllers
 
         public ActionResult setnewcat(string cattitle, string banimo)
         {
-           
+
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1464,8 +1465,8 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
-             }
-              
+            }
+
 
             if (result.Contains("1"))
             {
@@ -1483,7 +1484,7 @@ namespace banimo.Controllers
         }
         public ActionResult delnewcat(string catid)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1514,7 +1515,7 @@ namespace banimo.Controllers
         }
         public ActionResult changecatname(string ID, string newname, string level)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1549,7 +1550,7 @@ namespace banimo.Controllers
         }
         public ActionResult setnewsubcat(string catid, string subcattitle, string banimo)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1586,7 +1587,7 @@ namespace banimo.Controllers
         }
         public ActionResult setnewsubcat2(string subcatid, string subcat2, string catid, string banimo)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1624,7 +1625,7 @@ namespace banimo.Controllers
         }
         public ActionResult deletsubcat2(string ID)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1656,7 +1657,7 @@ namespace banimo.Controllers
         }
         public ActionResult deletsubcat(string ID)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1690,7 +1691,7 @@ namespace banimo.Controllers
         }
         public ActionResult getsubcatlist(string catid, string levelfinder, string layer)
         {
-            
+
             if (catid == "")
             {
                 return PartialView("/Views/Shared/AdminShared/_SubCatVoid.cshtml");
@@ -1766,7 +1767,7 @@ namespace banimo.Controllers
         }
         public ActionResult getsubcatlist2(string catid, string levelfinder)
         {
-           
+
             //if (levelfinder == "list")
             //{
             //    GlobalVariables.subcatid = catid;
@@ -1842,8 +1843,8 @@ namespace banimo.Controllers
 
         public ActionResult setnewbcat(string cattitle)
         {
-           
-            string  token = Session["LogedInUser2"] as string;
+
+            string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1879,7 +1880,7 @@ namespace banimo.Controllers
         }
         public ActionResult delnewbcat(string catid)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1910,7 +1911,7 @@ namespace banimo.Controllers
         }
         public ActionResult changebcatname(string ID, string newname, string level)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1945,7 +1946,7 @@ namespace banimo.Controllers
         }
         public ActionResult setnewbsubcat(string catid, string subcattitle)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1980,7 +1981,7 @@ namespace banimo.Controllers
         }
         public ActionResult setnewbsubcat2(string subcatid, string subcat2, string catid)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2017,7 +2018,7 @@ namespace banimo.Controllers
         }
         public ActionResult deletbsubcat2(string ID)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2049,7 +2050,7 @@ namespace banimo.Controllers
         }
         public ActionResult deletbsubcat(string ID)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2084,7 +2085,7 @@ namespace banimo.Controllers
 
         public ActionResult getbsubcatlist(string catid, string levelfinder, string layer)
         {
-            
+
             if (catid == "")
             {
                 return PartialView("/Views/Shared/AdminShared/_SubCatVoid.cshtml");
@@ -2160,7 +2161,7 @@ namespace banimo.Controllers
         }
         public ActionResult getbsubcatlist2(string catid, string levelfinder)
         {
-            
+
             //if (levelfinder == "list")
             //{
             //    GlobalVariables.subcatid = catid;
@@ -2241,7 +2242,7 @@ namespace banimo.Controllers
 
         public ActionResult setnewcolor(string colortitle, string colorcode, string catID)
         {
-           
+
             string catIDD = catID;
             colorcode = colorcode.Substring(1, colorcode.Count() - 1);
             string device = RandomString(10);
@@ -2283,7 +2284,7 @@ namespace banimo.Controllers
 
         public ActionResult delnewcolor(string colorcode, string catID)
         {
-            
+
             string json = "";
             colorcode = colorcode.Substring(1, colorcode.Count() - 1);
             string device = RandomString(10);
@@ -2334,7 +2335,7 @@ namespace banimo.Controllers
 
         public ActionResult bringFilterForProductSet(string catid)
         {
-            
+
 
             if (catid != null)
             {
@@ -2391,7 +2392,7 @@ namespace banimo.Controllers
         }
         public ActionResult bringFeatureforproduct(string catid)
         {
-           
+
 
             if (catid != null)
             {
@@ -2431,7 +2432,7 @@ namespace banimo.Controllers
 
         public ActionResult bringFilterForServer(string catid)
         {
-           
+
 
             if (catid != null)
             {
@@ -2488,7 +2489,7 @@ namespace banimo.Controllers
         }
         public ActionResult bringFeatureforServer(string catid)
         {
-            
+
 
             if (catid != null)
             {
@@ -2531,10 +2532,10 @@ namespace banimo.Controllers
             if (true)
             {
 
-                string token  = Session["LogedInUser2"] as string;
-               
+                string token = Session["LogedInUser2"] as string;
 
-               
+
+
                 string device = RandomString(10);
                 string code = MD5Hash(device + "ncase8934f49909");
                 string result = "";
@@ -2585,7 +2586,7 @@ namespace banimo.Controllers
 
         public ActionResult blog()
         {
-            
+
             Session["imageListAdd"] = "";
             Session["imageListEdit"] = "";
             string device = RandomString(10);
@@ -2623,7 +2624,7 @@ namespace banimo.Controllers
         }
         public string getArticleList(string id, string search)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2646,7 +2647,7 @@ namespace banimo.Controllers
 
         public ActionResult setNewArticle(ViewModel.newArcticelVM model)
         {
-           
+
             if (model.description.Contains("script"))
             {
                 return RedirectToAction("blog", "Admin");
@@ -2687,7 +2688,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult setNewCatArticle(string image, string title)
         {
-            
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -2725,7 +2726,7 @@ namespace banimo.Controllers
         }
         public ActionResult updateArticle(ViewModel.updateArticleVM model)
         {
-            
+
             model.tagupdate = model.tagupdate.Replace(",", "-");
 
             string device = RandomString(10);
@@ -2761,7 +2762,7 @@ namespace banimo.Controllers
 
         public ActionResult updatePages(ViewModel.updatePagesVM model)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2907,7 +2908,7 @@ namespace banimo.Controllers
         }
         public PartialViewResult getNewListArticle(string search, string cat)
         {
-           
+
 
             banimo.ViewModel.articlesListAdmin log = JsonConvert.DeserializeObject<banimo.ViewModel.articlesListAdmin>(getArticleList(cat, search));
             return PartialView("/Views/Shared/AdminShared/_ListOfArticles.cshtml", log);
@@ -2915,7 +2916,7 @@ namespace banimo.Controllers
 
         public ActionResult Users()
         {
-           
+
 
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -2940,7 +2941,7 @@ namespace banimo.Controllers
         }
         public ActionResult setNewUser(string address, string email, string phone, string fullname, string UserList, string password)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -2969,7 +2970,7 @@ namespace banimo.Controllers
         }
         public ActionResult updateUser(string IDupdate, string addressupdate, string emailupdate, string phoneupdate, string fullnameUpdate, string UserListUpdate)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3023,7 +3024,7 @@ namespace banimo.Controllers
         }
         public PartialViewResult getNewListUser(string search)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3078,7 +3079,7 @@ namespace banimo.Controllers
         }
         public ActionResult GetTheListOfItems(string page, string value, string query, string partner)
         {
-            
+
 
             if (page == "" || page == null)
             {
@@ -3128,7 +3129,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult ExportToExcel(string SelectedlistProduct, string SearchQuery, string partner)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3156,12 +3157,13 @@ namespace banimo.Controllers
             EcxelLists log = JsonConvert.DeserializeObject<EcxelLists>(result);
 
             DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[9] {
+            dt.Columns.AddRange(new DataColumn[10] {
 
                                           new DataColumn("ID"),
                                           new DataColumn("Onvan"),
                                            new DataColumn("Tedad"),
                                             new DataColumn("Faal"),
+                                             new DataColumn("Available"),
                                             new DataColumn("Pishnahadevije"),
                                             new DataColumn("Porforoosh"),
                                             new DataColumn("GheymateMahsool"),
@@ -3176,7 +3178,7 @@ namespace banimo.Controllers
             {
                 foreach (var item in log.ecxelList.OrderByDescending(x => x.ID))
                 {
-                    dt.Rows.Add(item.ID, item.Onvan, item.Tedad, item.Faal, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
+                    dt.Rows.Add(item.ID, item.Onvan, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
                 }
 
             }
@@ -3202,7 +3204,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult UploadExcel(HttpPostedFileBase myfile)
         {
-           
+
             DataTable dt = new DataTable();
             //Checking file content length and Extension must be .xlsx  
             if (myfile != null && myfile.ContentLength > 0 && (System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xlsx" || System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xls"))
@@ -3260,6 +3262,7 @@ namespace banimo.Controllers
                         string id = row["ID"].ToString();
                         string onvan = row["Onvan"].ToString();
                         string Faal = row["Faal"].ToString();
+                        string Available = row["Available"].ToString();
                         string Pishnahadevije = row["Pishnahadevije"].ToString();
                         string Porforoosh = row["Porforoosh"].ToString();
                         string GheymateMahsool = row["GheymateMahsool"].ToString();
@@ -3269,6 +3272,7 @@ namespace banimo.Controllers
                         EcxelList item = new EcxelList()
                         {
                             Faal = Faal,
+                            Available = Available,
                             GheymateHamkar = GheymateHamkar,
                             GheymateMahsool = GheymateMahsool,
                             ID = id,
@@ -3313,9 +3317,150 @@ namespace banimo.Controllers
 
             return RedirectToAction("product");
         }
+
+        [HttpPost]
+        public ActionResult UploadExcelNew(HttpPostedFileBase myfile, string level)
+        {
+            // وب سرویسش باید رنگ کالرو بگیره کد دربیاره برای رنگ ها هنوز درست نشده و کلا  تست نشده
+            DataTable dt = new DataTable();
+            //Checking file content length and Extension must be .xlsx  
+            if (myfile != null && myfile.ContentLength > 0 && (System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xlsx" || System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xls"))
+            {
+                string pathString = "~/UploadFile";
+                if (!Directory.Exists(Server.MapPath(pathString)))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+                }
+                string path = Path.Combine(Server.MapPath(pathString), Path.GetFileName(myfile.FileName));
+
+                //Saving the file  
+                myfile.SaveAs(path);
+                //Started reading the Excel file.  
+                using (XLWorkbook workbook = new XLWorkbook(path))
+                {
+                    IXLWorksheet worksheet = workbook.Worksheet(1);
+                    bool FirstRow = true;
+                    //Range for reading the cells based on the last cell used.  
+                    string readRange = "1:1";
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        //If Reading the First Row (used) then add them as column name  
+                        if (FirstRow)
+                        {
+                            //Checking the Last cellused for column generation in datatable  
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Columns.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+                            //Adding a Row in datatable  
+                            dt.Rows.Add();
+                            int cellIndex = 0;
+                            //Updating the values of datatable  
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                cellIndex++;
+                            }
+                        }
+                    }
+                    //If no data in Excel file  
+                    if (FirstRow)
+                    {
+                        ViewBag.Message = "Empty Excel File!";
+                    }
+                    List<EcxelListNew> listIIEM = new List<EcxelListNew>();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string id = row["ID"].ToString();
+                        string onvan = row["Onvan"].ToString();
+                        string Faal = row["Faal"].ToString();
+                        string Available = row["Available"].ToString();
+                        string Pishnahadevije = row["Pishnahadevije"].ToString();
+                        string Porforoosh = row["Porforoosh"].ToString();
+                        string GheymateMahsool = row["GheymateMahsool"].ToString();
+                        string Takhfif = row["Takhfif"].ToString();
+                        string Tedad = row["Tedad"].ToString();
+                        string GheymateHamkar = row["GheymateHamkar"].ToString();
+                        string tozihat = row["tozihat"].ToString();
+                        string hashtags = row["hashtags"].ToString();
+                        string filter = row["filter"].ToString();
+                        string feature = row["feature"].ToString();
+                        string imagelist = row["imagelist"].ToString();
+                        string unit = row["unit"].ToString();
+                        string setid = row["setid"].ToString();
+                        string selectedFilter = row["selectedFilter"].ToString();
+
+
+
+
+                        EcxelListNew item = new EcxelListNew()
+                        {
+                            imagelist = imagelist,
+                            selectedFilter = selectedFilter,
+                            setid = setid,
+                            unit = unit,
+                            Faal = Faal,
+                            Available = Available,
+                            GheymateHamkar = GheymateHamkar,
+                            GheymateMahsool = GheymateMahsool,
+                            ID = id,
+                            Onvan = onvan,
+                            Pishnahadevije = Pishnahadevije,
+                            Porforoosh = Porforoosh,
+                            Takhfif = Takhfif,
+                            Tedad = Tedad,
+                            feature = feature,
+                            filter = filter,
+                            hashtags = hashtags,
+                            tozihat = tozihat
+                        };
+                        listIIEM.Add(item);
+
+                    }
+
+                    string device = RandomString(10);
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    string json = "";
+                    EcxelNewLists model = new EcxelNewLists();
+                    model.ecxelList = listIIEM;
+                    string jsonstring = JsonConvert.SerializeObject(model).Replace("\\", "");
+                    string token = Session["LogedInUser2"] as string;
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection = new NameValueCollection();
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("ID", code);
+                        collection.Add("servername", servername);
+                        collection.Add("model", jsonstring);
+                        collection.Add("level", level);
+                        collection.Add("token", token);
+                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/updateByExcel.php", collection);
+                        json = System.Text.Encoding.UTF8.GetString(response);
+                    }
+
+                }
+            }
+            else
+            {
+                //If file extension of the uploaded file is different then .xlsx  
+                ViewBag.Message = "Please select file with .xlsx extension!";
+            }
+
+
+
+            return RedirectToAction("product");
+        }
+
         public ActionResult product(int? page, int? MSG)
         {
-            
+
 
             if (true)
             {
@@ -3339,7 +3484,7 @@ namespace banimo.Controllers
                     Session["imageList"] = "";
                 }
 
-               
+
 
                 productinfoviewdetail productmodel = new productinfoviewdetail();
 
@@ -3348,7 +3493,7 @@ namespace banimo.Controllers
                 string code = MD5Hash(device + "ncase8934f49909");
 
                 string newjson = "";
-                
+
 
                 using (WebClient client = new WebClient())
                 {
@@ -3364,7 +3509,7 @@ namespace banimo.Controllers
                     newjson = System.Text.Encoding.UTF8.GetString(response);
                 }
 
-               
+
 
                 partnerVM newlog = JsonConvert.DeserializeObject<partnerVM>(newjson);
                 ViewBag.msg = MSG;
@@ -3390,8 +3535,8 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult setproduct(productinfoviewdetail detail)
         {
-            
-           
+
+
 
             if (detail.inputallfeatureid == "")
             {
@@ -3432,7 +3577,7 @@ namespace banimo.Controllers
 
 
 
-           
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -3702,7 +3847,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult GetImage(string filename, HttpPostedFileBase blob)
         {
-           
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -3720,7 +3865,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult GetImageForMCE(string filename, HttpPostedFileBase blob)
         {
-           
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -3742,7 +3887,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult GetImageForMCEEditUpload(string filename, HttpPostedFileBase blob)
         {
-            
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -3762,7 +3907,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult GetImageForPages(string filename, HttpPostedFileBase blob)
         {
-            
+
             ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
@@ -3797,7 +3942,7 @@ namespace banimo.Controllers
         }
         public ActionResult GetImageForMCEEditContext(string srt, string image)
         {
-           
+
             srt = srt.Replace("../images/panelimages/", "").Replace(image + ",", "");
             Session["imageListEdit"] = (Session["imageListEdit"] as string) + srt;
             string session = Session["imageListEdit"] as string;
@@ -3812,7 +3957,7 @@ namespace banimo.Controllers
         }
         public ActionResult GetContentImageForMCEPages(string srt, string type)
         {
-           
+
             string cookie = "";
             banimo.ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             model.data = "";
@@ -3841,7 +3986,7 @@ namespace banimo.Controllers
 
         public ActionResult DelImage(string filename)
         {
-            
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -3866,7 +4011,7 @@ namespace banimo.Controllers
         }
         public ActionResult DelImageForMCE(string filename, string type, string image)
         {
-           
+
             string filestring = filename.Replace("../images/panelimages/", "");
             if (type == "edit")
             {
@@ -3983,7 +4128,7 @@ namespace banimo.Controllers
 
         public JsonResult UploadNew()
         {
-            
+
             for (int i = 0; i < Request.Files.Count; i++)
             {
                 HttpPostedFileBase file = Request.Files[i]; //Uploaded file
@@ -4000,7 +4145,7 @@ namespace banimo.Controllers
 
         public ActionResult Delete(string id)
         {
-            
+
             ViewBag.Message = "Your application description page.";
 
 
@@ -4045,7 +4190,7 @@ namespace banimo.Controllers
 
         public ActionResult Edit(int id, string catID, string message)
         {
-           
+
             ViewBag.message = message;
 
 
@@ -4117,7 +4262,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult Edit(productinfoforedit detail)
         {
-            
+
             if (detail.productdesc != null && detail.productdesc != "")
             {
                 if (detail.productdesc.Contains("script"))
@@ -4126,7 +4271,7 @@ namespace banimo.Controllers
                 }
             }
 
-           
+
             if (detail.addnew == "True")
             {
                 if (detail.inputallfeatureid == "")
@@ -4224,7 +4369,7 @@ namespace banimo.Controllers
 
                     range = range != null ? range.Substring(0, range.Length - 1) : "";
 
-                 
+
 
                     string device = RandomString(10);
                     string code = MD5Hash(device + "ncase8934f49909");
@@ -4447,7 +4592,7 @@ namespace banimo.Controllers
                     {
                         filter = finalfilter;
                     }
-                  
+
                     string device = RandomString(10);
                     string code = MD5Hash(device + "ncase8934f49909");
 
@@ -4537,7 +4682,7 @@ namespace banimo.Controllers
         }
         public ActionResult Slider(string message)
         {
-           
+
             if (message == "1")
             {
                 ViewBag.mess = "1";
@@ -4580,10 +4725,10 @@ namespace banimo.Controllers
         public ActionResult Slider(sliderforedit detail)
         {
 
-           
+
 
             string tobeaddedtosliderimage = RandomString(5);
-          
+
 
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
@@ -4625,7 +4770,7 @@ namespace banimo.Controllers
 
 
 
-               
+
                 string device = RandomString(10);
                 string code = MD5Hash(device + "ncase8934f49909");
                 string result = "";
@@ -4671,7 +4816,7 @@ namespace banimo.Controllers
         }
         public ActionResult myProfile(int? num)
         {
-           
+
             if (num == 1)
             {
                 ViewBag.num = 1;
@@ -4694,7 +4839,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("token",token);
+                collection.Add("token", token);
                 collection.Add("servername", servername);
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfoTest.php", collection);
@@ -4721,8 +4866,8 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult myProfile(userinfo detail)
         {
-            
-            string  token = Session["LogedInUser2"] as string;
+
+            string token = Session["LogedInUser2"] as string;
             try
             {
                 string device = RandomString(10);
@@ -4779,7 +4924,7 @@ namespace banimo.Controllers
         }
         public ActionResult comment()
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -4804,7 +4949,7 @@ namespace banimo.Controllers
         }
         public ActionResult banner()
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -4851,7 +4996,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult editbanner(string content, string type, string image, string title)
         {
-           
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -4908,7 +5053,7 @@ namespace banimo.Controllers
         }
         public ActionResult slide()
         {
-          
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -4956,7 +5101,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult editslide(string content, string type, string image, string title)
         {
-           
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -5079,7 +5224,7 @@ namespace banimo.Controllers
 
         public ActionResult Discount()
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5109,7 +5254,7 @@ namespace banimo.Controllers
             {
                 title = RandomString(6);
             }
-           
+
             if (!ModelState.IsValid)
             {
                 // TODO: Captcha validation failed, show error message
@@ -5117,7 +5262,7 @@ namespace banimo.Controllers
             }
             else
             {
-               
+
                 string device = RandomString(10);
                 string code = MD5Hash(device + "ncase8934f49909");
                 string result = "";
@@ -5134,7 +5279,7 @@ namespace banimo.Controllers
                     collection.Add("mobile", user);
                     collection.Add("token", token);
                     collection.Add("servername", servername);
-                    
+
 
                     byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewDiscount.php", collection);
 
@@ -5152,7 +5297,7 @@ namespace banimo.Controllers
         public string deleteDiscount(string id)
         {
 
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5172,7 +5317,7 @@ namespace banimo.Controllers
         }
         public ActionResult deleteimage(string id, string title)
         {
-            
+
             string str = id;
             str = str.Substring(9, str.Length - 9);
             ViewBag.Message = "Your application description page.";
@@ -5247,8 +5392,8 @@ namespace banimo.Controllers
 
         public ActionResult partner()
         {
-           
-        
+
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5273,7 +5418,7 @@ namespace banimo.Controllers
         public ActionResult GetListOfPartner(string id)
         {
 
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5300,7 +5445,7 @@ namespace banimo.Controllers
         public ActionResult sendEmail(string siteLogo, string productImage, string siteName, string productName, string productLink, string emailpass, string emailto, string url, string subject)
 
         {
-            
+
             try
             {
                 List<string> recipient = emailto.Substring(0, emailto.Length - 1).Split(',').ToList();
@@ -5364,9 +5509,9 @@ namespace banimo.Controllers
 
 
 
-        public ContentResult UpdatePartnerForCat(string partner,string catP)
+        public ContentResult UpdatePartnerForCat(string partner, string catP)
         {
-            
+
             if (partner != "" && catP != "")
             {
                 string device = RandomString(10);
@@ -5397,7 +5542,7 @@ namespace banimo.Controllers
         }
         public ContentResult UpdatePartner(string price, string partner, string product, string cat)
         {
-            
+
             if (partner != "" && price != "")
             {
                 string device = RandomString(10);
@@ -5454,7 +5599,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult updatePartnerInfo(string Ctitleupdate, string CPhoneupdate, string CIDupdate)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5548,10 +5693,10 @@ namespace banimo.Controllers
 
                 string strHtml = string.Empty;
                 string filename = RandomString(5);
-                string pdfFileName = Server.MapPath("/files/"+ filename + ".pdf");
+                string pdfFileName = Server.MapPath("/files/" + filename + ".pdf");
                 CreatePDFFromHTMLFile("", pdfFileName, data, type, result, date);
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", filename+".pdf"));
+                Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", filename + ".pdf"));
                 Response.ContentEncoding = Encoding.UTF8;
                 Response.WriteFile(pdfFileName);
                 Response.HeaderEncoding = Encoding.UTF8;
@@ -6445,7 +6590,7 @@ namespace banimo.Controllers
 
         public ActionResult portfolio()
         {
-           
+
             banimo.ViewModel.articlesListAdmin log2 = JsonConvert.DeserializeObject<banimo.ViewModel.articlesListAdmin>(getPortfolioList("", ""));
 
             //viewModel.AdminBlogVM model = new viewModel.AdminBlogVM()
@@ -6458,7 +6603,7 @@ namespace banimo.Controllers
         [HttpPost]
         public ActionResult setNewPortfolio(string image, string title, string desc, string url)
         {
-            
+
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -6498,7 +6643,7 @@ namespace banimo.Controllers
         }
         public string getPortfolioList(string id, string search)
         {
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -6520,7 +6665,7 @@ namespace banimo.Controllers
 
         public ActionResult updatePortfolio(string CIDupdate, string Cimageupdate, string Ctitleupdate, string Cdescupdate, string CAddressupdate)
         {
-           
+
             string imagename = "";
             string pathString = "~/images/panelimages";
             if (Cimageupdate != "")

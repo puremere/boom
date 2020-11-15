@@ -239,6 +239,7 @@ namespace AdminPanel.ViewModel
         public string ID { get; set; }
         public string Onvan { get; set; }
         public string Faal { get; set; }
+        public string Available { get; set; }
         public string Porforoosh { get; set; }
         public string Pishnahadevije { get; set; }
         public string Tedad { get; set; }
@@ -247,9 +248,30 @@ namespace AdminPanel.ViewModel
         public string GheymateHamkar { get; set; }
     }
 
+    public class EcxelListNew : EcxelList
+    {
+        public string tozihat { get; set; }
+        public string hashtags { get; set; }
+        public string filter { get; set; }
+        public string feature { get; set; }
+        public string selectedFilter { get; set; }
+        public string setid { get; set; }
+        public string unit { get; set; }
+        public string imagelist { get; set; }
+        
+            
+            
+            
+
+    }
+
     public class EcxelLists
     {
         public List<EcxelList> ecxelList { get; set; }
+    }
+    public class EcxelNewLists
+    {
+        public List<EcxelListNew> ecxelList { get; set; }
     }
 
 

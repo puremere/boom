@@ -42,7 +42,7 @@ namespace banimo.Controllers
 
         private void SetCookie(string mymodel, string name)
         {
-
+           
             Response.Cookies[name].Value = Encrypt(mymodel);
 
         }
@@ -279,10 +279,10 @@ namespace banimo.Controllers
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
-                                collection2.Add("servername", servername);
+                                collection2.Add("mbrand", servername);
 
                                 byte[] response =
-                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doWalletFinalCheck.php", collection2);
+                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
                             }
@@ -290,15 +290,23 @@ namespace banimo.Controllers
 
 
                             string fromOrder = "";
-                            if (TempData["VerifyWalletZarin"] != null) {
-                                fromOrder = TempData["VerifyWalletZarin"] as string;
+                            if (TempData["addFromOrder"] != null) {
+                                fromOrder = TempData["addFromOrder"] as string;
                             }
                             
                             if (fromOrder == "1")
                             {
-                                string modelstring = TempData["orderModel"] as string;
-                                ViewModelPost.ReqestForPaymentViewModel finalModle = JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
-                                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", new { model = finalModle });
+                               
+                                ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                                finalModle.payment = "1";
+
+                                if (finalModle != null)
+                                {
+                                    
+                                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", new { model = finalModle });
+
+                                }
+                                // return View(finalModle);
                             }
                             else
                             {
@@ -346,6 +354,16 @@ namespace banimo.Controllers
 
 
         public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model) {
+
+            if (TempData["orderModel"] != null)
+            {
+                string modelstring = TempData["orderModel"] as string;
+                model = JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                model.payment = "1";
+            }
+           
+            
+
             string srt = getCookie("cartModel");
             if (srt != "")
             {
@@ -363,7 +381,7 @@ namespace banimo.Controllers
                     ids = ids + "," + (item.productid);
                     nums = nums + "," + (item.quantity);
                 }
-
+               
                 userdata user = Session["LogedInUser"] as userdata;
 
 
@@ -1577,7 +1595,9 @@ namespace banimo.Controllers
             if (status == 1)
             {
                 ViewBag.message = "موفق";
-                SetCookie("cartModel", "");
+                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
+                SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
+                SetCookie("", "cartModel");
             }
             CookieVM cookieModel = new CookieVM();
             cookieModel.cartmodel = "";
@@ -1644,7 +1664,7 @@ namespace banimo.Controllers
             }
 
         }
-
+       
 
 
 

@@ -38,7 +38,7 @@ var _mediaStream;
 audioSelect.onchange = getStream;
 videoSelect.onchange = getStream;
 
-getStream().then(getDevices).then(gotDevices);
+//getStream().then(getDevices).then(gotDevices);
 
 function getDevices() {
     // AFAICT in Safari this only gets default devices until gUM is called :/
@@ -183,15 +183,12 @@ var WebRtcDemo = WebRtcDemo || {};
 
 WebRtcDemo.App = (function (viewModel, connectionManager) {
     var   _hub,
-        STes = [],
-        _screenStream,
-        _finalStream,
+      
         _geustStream = "0",
         _slaveNumber = 1,
         _streamType = 'blank',
-        _guestConnectionID,
         _IAMDone,
-        _width,_height,
+     
 
         _connect = function (username, onSuccess, onFailure) {
             // Set Up SignalR Signaler
@@ -201,13 +198,16 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
 
             };
             hub.client.setMessage = function (message, connectionID, name) {
-                    if (connectionID == viewModel.MyConnectionId()) {
-                        var ul = $(".messages ul");
-                        const li = document.createElement('li');
-                        li.className = 'sent';
-                        li.innerHTML = `<p>` + name +": " + message + `</p> `;
-                        // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
-                        ul.append(li);
+
+               
+                  
+                   if (connectionID == viewModel.MyConnectionId()) {
+                        //var ul = $(".messages ul");
+                        //const li = document.createElement('li');
+                        //li.className = 'sent';
+                        //li.innerHTML = `<p>` + name +": " + message + `</p> `;
+                        //// var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+                        //ul.append(li);
 
                     }
                     else {
@@ -216,10 +216,14 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                         li.className = 'replies';
                         li.innerHTML = `<p>` + name + ": " + message + `</p> `;
                         // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
-                        ul.append(li);
-                        togglePlay();
+                       ul.append(li);
+                       var objDiv = document.getElementsByClassName("messages");
+                       objDiv.scrollTop = objDiv.scrollHeight;
+                        //togglePlay();
 
-                    }
+                    } 
+
+               
             };
             hub.client.callEveryOne = function (connectionID) {
                 console.log("i am called");
@@ -239,7 +243,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     console.log(responser);
                     console.log("i am waiting please send stream");
 
-                    hub.server.streamRequest(responser);
+                    hub.server.streamRequest(responser,_requestT);
                    
                 }
             };
@@ -263,6 +267,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 else {
                     _streamType = "blank"
                 }
+                _adminConnectionID = callingUser.ConnectionId;
                 hub.server.answerCall(true, callingUser.ConnectionId);
                 viewModel.Mode('incall');
 
@@ -490,40 +495,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
             //};
             
            
-            //getUserMedia(
-            //    {
-            //        // Permissions to request
-            //        video: {
-            //            facingMode: "environment",
-                       
-            //        },
-            //        audio: true,
-            //    },
-            //    function (stream) { // succcess callback gives us a media stream
-
-            //        //var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            //        //if (!isMobile) {
-            //        //     var audioTrack = stream.getAudioTracks()[0];
-            //        //     _screenStream.addTrack(audioTrack);
-            //        //}
-                   
-            //        $('.instructions').hide();
-            //        _mediaStream = stream;
-            //        _finalStream = stream;
-            //        var videoElement = document.querySelector('.video.mine');
-            //        attachMediaStream(videoElement, stream);
-            //        $(".audio.mine").css("display", "none");
-                 
-
-            //        //blackSilence());//
-
-            //        viewModel.Loading(false);
-            //    },
-            //    function (error) { // error callback
-            //        alertify.alert('<h4>Failed to get hardware access!</h4> Do you have another browser type open and using your cam/mic?<br/><br/>You were not connected to the server, because I didn\'t code to make browsers without media access work well. <br/><br/>Actual Error: ' + JSON.stringify(error));
-            //        viewModel.Loading(false);
-            //    }
-            //);
+            
           
             $('.instructions').hide();
             _finalStream = _mediaStream;
@@ -753,25 +725,155 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     viewModel.Mode('idle');
                 }
             });
-            $('.requst').click(function () {
+            $('.requstSoti').click(function () {
+                _requestType = 0;
                 $(".master").css("height", "100%");
                 //$(".slave").css("width", "30%");
                 //$(".slave").css("height", "30%");
                 //$(".slave").css("position", "absolute");
                 _IAMDone = "";
                 _geustStream = "0";
-                _hub.server.hangUp("");
-                connectionManager.closeAllConnections(viewModel.guestConnectionId());
-                _hub.server.callEveryOne(viewModel.guestConnectionId());
-                $(".callingSection").show();
-                togglePlay();
-                alertify.success("درخواست شما ارسال شد");
-                waitTenSec();
+                // Only allow hangup if we are not idle
+                $(".requst").css("display", "inline-block")
+                $(".hangup").css("display", "none")
+                if (viewModel.Mode() != 'idle') {
+                    _hub.server.hangUp("");
+                    connectionManager.closeAllConnections();
+                    viewModel.Mode('idle');
+                }
+
+
+
+                getUserMedia(
+                    {
+                        // Permissions to request
+                        video: false,
+                        audio: true,
+                    },
+                    function (stream) { // succcess callback gives us a media stream
+
+                        //var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                        //if (!isMobile) {
+                        //     var audioTrack = stream.getAudioTracks()[0];
+                        //     _screenStream.addTrack(audioTrack);
+                        //}
+                        
+                        $('.instructions').hide();
+                        let videoTrack = stream.getVideoTracks()[0];
+                        let audioTrack = stream.getAudioTracks()[0];
+                        
+                        _mediaStream =  stream;//new MediaStream([black(), audioTrack]); 
+                        //_finalStream = new MediaStream([black(...args), silence()]);;
+                        var videoElement = document.querySelector('.video.mine');
+                        attachMediaStream(videoElement, _mediaStream);
+                        $(".audio.mine").css("display", "none");
+
+
+                        //blackSilence());//
+
+                        viewModel.Loading(false);
+                        $(".master").css("height", "100%");
+                        //$(".slave").css("width", "30%");
+                        //$(".slave").css("height", "30%");
+                        //$(".slave").css("position", "absolute");
+                        _IAMDone = "";
+                        _geustStream = "0";
+                        _hub.server.hangUp("");
+                        connectionManager.closeAllConnections(viewModel.guestConnectionId());
+                        _hub.server.callEveryOne(viewModel.guestConnectionId());
+                        $(".callingSection").show();
+                        togglePlay();
+                        alertify.success("درخواست شما ارسال شد");
+                        waitTenSec();
+                    },
+                    function (error) { // error callback
+                        alertify.alert('<h4>Failed to get hardware access!</h4> Do you have another browser type open and using your cam/mic?<br/><br/>You were not connected to the server, because I didn\'t code to make browsers without media access work well. <br/><br/>Actual Error: ' + JSON.stringify(error));
+                        viewModel.Loading(false);
+                    }
+                );
               
+              
+            });
+            $('.requstTasviri').click(function () {
+                _requestType = 1;
+                $(".master").css("height", "100%");
+                //$(".slave").css("width", "30%");
+                //$(".slave").css("height", "30%");
+                //$(".slave").css("position", "absolute");
+                _IAMDone = "";
+                _geustStream = "0";
+                // Only allow hangup if we are not idle
+                $(".requst").css("display", "inline-block")
+                $(".hangup").css("display", "none")
+                if (viewModel.Mode() != 'idle') {
+                    _hub.server.hangUp("");
+                    connectionManager.closeAllConnections();
+                    viewModel.Mode('idle');
+                }
+                getUserMedia(
+                    {
+                        // Permissions to request
+                        video: true,
+                        audio: true,
+                    },
+                    function (stream) { // succcess callback gives us a media stream
+
+                        //var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                        //if (!isMobile) {
+                        //     var audioTrack = stream.getAudioTracks()[0];
+                        //     _screenStream.addTrack(audioTrack);
+                        //}
+
+                        $('.instructions').hide();
+                        let videoTrack = stream.getVideoTracks()[0];
+                        let audioTrack = stream.getAudioTracks()[0];
+
+                        _mediaStream = stream;//new MediaStream([black(), audioTrack]); 
+                        //_finalStream = new MediaStream([black(...args), silence()]);;
+                        var videoElement = document.querySelector('.video.mine');
+                        attachMediaStream(videoElement, _mediaStream);
+                        $(".audio.mine").css("display", "none");
+
+
+                        //blackSilence());//
+
+                        viewModel.Loading(false);
+                        $(".master").css("height", "100%");
+                        //$(".slave").css("width", "30%");
+                        //$(".slave").css("height", "30%");
+                        //$(".slave").css("position", "absolute");
+                        _IAMDone = "";
+                        _geustStream = "0";
+                        _hub.server.hangUp("");
+                        connectionManager.closeAllConnections(viewModel.guestConnectionId());
+                        _hub.server.callEveryOne(viewModel.guestConnectionId());
+                        $(".callingSection").show();
+                        togglePlay();
+                        alertify.success("درخواست شما ارسال شد");
+                        waitTenSec();
+                    },
+                    function (error) { // error callback
+                        alertify.alert('<h4>Failed to get hardware access!</h4> Do you have another browser type open and using your cam/mic?<br/><br/>You were not connected to the server, because I didn\'t code to make browsers without media access work well. <br/><br/>Actual Error: ' + JSON.stringify(error));
+                        viewModel.Loading(false);
+                    }
+                );
+               
+               
+
             });
             $(".submit").click(function () {
                 var message = $("#chatMessage").val();
-                _hub.server.sendMessage(message);
+                var Username = $("#chatname").text();
+                _hub.server.sendMessage(message, 'admin');
+                $("#chatMessage").val('');
+                var ul = $(".messages ul");
+                const li = document.createElement('li');
+                li.className = 'sent';
+                li.innerHTML = `<p>` + Username + ": " + message + `</p> `;
+                // var li = ' <li class="sent"> <img src = "http://emilcarlsson.se/assets/mikeross.png" alt = "" /> </li >';
+                ul.append(li);
+                //var objDiv = document.getElementsByClassName("messages");
+                //objDiv.scrollTop = objDiv.scrollHeight;
             })
 
         },
