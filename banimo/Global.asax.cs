@@ -25,16 +25,31 @@ namespace banimo
             AuthConfig.RegisterAuth();
 
         }
+        //protected void Application_BeginRequest(Object sender, EventArgs e)
+        //{
+        //    if (!HttpContext.Current.Request.IsSecureConnection)
+        //    {
+        //        var builder = new UriBuilder
+        //        {
+        //            Scheme = "https",
+        //            Host = Request.Url.Host,
+        //            // use the RawUrl since it works with URL Rewriting
+        //            Path = Request.RawUrl
+        //        };
+        //        Response.Status = "301 Moved Permanently";
+        //        Response.AddHeader("Location", builder.ToString());
+        //    }
+        //}
 
-        protected void Application_BeginRequest(Object sender, EventArgs e)
-        {
-            if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
-            {
-                string url = Request.ServerVariables["HTTP_HOST"];
-                Response.Redirect("https://" + url
-              + HttpContext.Current.Request.RawUrl);
-            }
-        }
+        //protected void Application_BeginRequest(Object sender, EventArgs e)
+        //{
+        //    if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
+        //    {
+        //        string url = Request.ServerVariables["HTTP_HOST"];
+        //        Response.Redirect("https://" + url
+        //      + HttpContext.Current.Request.RawUrl);
+        //    }
+        //}
 
         //protected void Application_Error(object sender, EventArgs e)
         //{

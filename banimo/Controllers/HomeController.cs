@@ -1430,12 +1430,14 @@ namespace banimo.Controllers
 
                 ProductDetail newitem = new ViewModel.ProductDetail();
 
-
+                bool boolian = false;
+                int lastindex = 0;
                 foreach (var item in data)
                 {
+                    lastindex = data.IndexOf(item);
                     if (item.productid == Convert.ToInt32(str))
                     {
-                        if (item.quantity > 1)
+                        if (item.quantity > 0)
                         {
                             item.quantity -= 1;
                         }
@@ -1443,7 +1445,17 @@ namespace banimo.Controllers
 
                     }
 
+                    if (item.quantity == 0)
+                    {
+                        boolian = true;
+                    }
                 }
+
+                if (boolian)
+                {
+                    data.Remove(data[lastindex]);
+                }
+                
                 var json = new JavaScriptSerializer().Serialize(data);
                 SetCookie(json, "cartModel");
                 
@@ -1699,16 +1711,18 @@ namespace banimo.Controllers
             
             List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
             string srt = getCookie("cartModel");
+            string cartmodel = ",";
             if (srt!= "")
             {
                 List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
 
-
+               
                 if (data != null && data.Count > 0)
                 {
 
                     if (data != null)
                     {
+                        
                         foreach (var item in data)
                         {
                             CheckoutViewModel j = new CheckoutViewModel();
@@ -1720,7 +1734,10 @@ namespace banimo.Controllers
                             j.quantity = item.quantity;
                             j.imageaddress = item.imagethum;
                             finalmodel.Add(j);
+
+                             cartmodel =  item.productid+"-"+ item.quantity+",";
                         }
+                       
                     }
 
 
