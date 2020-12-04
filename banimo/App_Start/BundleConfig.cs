@@ -34,14 +34,32 @@ namespace banimo
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
+            bundles.Add(new ScriptBundle("~/Scripts/js").Include(
+                      "~/Scripts/jquery-2.1.4.min.js",
+                      "~/Scripts/jquery.flexslider2.js",
+                      "~/Scripts/bootstrap-3.1.1.min.js",
+                      "~/Scripts/imagezoom.js",
+                      "~/Scripts/toastr.js",
+                      "~/Scripts/jquery-ui.js"
+                    
+                      ));
+
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
-                 "~/Content//pignose.layerslider.css",
+                 "~/Content/pignose.layerslider.css",
                   "~/Content/flexslider2.css",
                    "~/Content/style.css",
                     "~/Content/sm-core-css.css",
-                     "~/Content/sm-mint.css"
+                     "~/Content/sm-mint.css",
+                     "~/Content/resCarousel.css",
+                     "~/Content/all.css",
+                     "~/Content/toastr.css",
+                      "~/Content/custom.css",
+                       "~/Content/jquery-ui.css",
+                        "~/Content/fontawesome-all.css"
+
+
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

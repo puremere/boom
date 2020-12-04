@@ -189,37 +189,41 @@ namespace banimo.Controllers
             }
 
             ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
-            if(log2 == null)
-            {
-                return Content("");
-            }
            
-            int Status = zp.PaymentRequest(zarinCode, log2.mytransaction.First().price, log2.mytransaction.First().description, "info@banimo.com", "", callB, out Authority);
-
-            if (Status == 100)
+            if (log2 != null && log2.mytransaction != null)
             {
-              
-                string result2 = "";
-                using (WebClient client = new WebClient())
+                int zarinprice = log2.mytransaction.First().price;
+                string zarindesc = log2.mytransaction.First().description;
+                int Status = zp.PaymentRequest(zarinCode, zarinprice, zarindesc, "info@banimo.com", "", callB, out Authority);
+
+                if (Status == 100)
                 {
 
-
-                    var collection2 = new NameValueCollection();
-                    collection2.Add("device", device);
-                    collection2.Add("code", code);
-                    collection2.Add("auth", Authority);
-                    collection2.Add("timestamp", log2.mytransaction.First().timestamp);
-                    collection2.Add("mbrand", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setWalletAuth.php", collection2);
-                    result2 = System.Text.Encoding.UTF8.GetString(response);
+                    string result2 = "";
+                    using (WebClient client = new WebClient())
+                    {
 
 
+                        var collection2 = new NameValueCollection();
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("auth", Authority);
+                        collection2.Add("timestamp", log2.mytransaction.First().timestamp);
+                        collection2.Add("mbrand", servername);
+                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setWalletAuth.php", collection2);
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+
+
+                    }
+
+                    //banimo.ViewModelPost.buyRequest log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+                    Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
                 }
-
-                //banimo.ViewModelPost.buyRequest log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
-
-                Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
+                //return Content("");
             }
+           
+            
             return Content("");
 
         }
@@ -446,35 +450,39 @@ namespace banimo.Controllers
                 {
                     return RedirectToAction("endorder", "Home", new { error = "5" });
                 }
-                string result2 = "";
-                string paymentstatus = "2";
-                if (model.payment == "1")
+                else
                 {
-                    paymentstatus = "1";
+                    string result2 = "";
+                    string paymentstatus = "2";
+                    if (model.payment == "1")
+                    {
+                        paymentstatus = "1";
+                    }
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection2 = new NameValueCollection();
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("amount", log2.amount.ToString());
+                        collection2.Add("token", user.token);
+                        collection2.Add("refID", log2.peigiry);
+                        collection2.Add("paymentStatus", paymentstatus);
+                        collection2.Add("mbrand", servername);
+                        collection2.Add("auth", log2.auth);
+                        collection2.Add("payment", model.payment);
+
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+                    }
+                    ViewBag.message = "موفق";
+                    return RedirectToAction("verifyAtHome", "Connection", new { refID = log2.peigiry, status = 1 });
+
                 }
-                using (WebClient client = new WebClient())
-                {
 
-                    var collection2 = new NameValueCollection();
-                    collection2.Add("device", device);
-                    collection2.Add("code", code);
-                    collection2.Add("amount", log2.amount.ToString());
-                    collection2.Add("token", user.token);
-                    collection2.Add("refID", log2.peigiry);
-                    collection2.Add("paymentStatus", paymentstatus);
-                    collection2.Add("mbrand", servername);
-                    collection2.Add("auth", log2.auth);
-                    collection2.Add("payment", model.payment);
 
-                    byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
-
-                    result2 = System.Text.Encoding.UTF8.GetString(response);
-                }
-                ViewBag.message = "موفق";
-                return RedirectToAction("verifyAtHome", "Connection", new { refID = log2.peigiry, status = 1 });
-
-                
             }
 
             //string json = "";
@@ -621,9 +629,15 @@ namespace banimo.Controllers
 
                             }
 
-                            //banimo.ViewModelPost.buyRequest log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
-
-                            Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
+                            banimo.ViewModelPost.responseModel log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+                            if(log3.status == "200")
+                            {
+                                Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
+                            }
+                            else
+                            {
+                                Response.Write("خطا مجددا تلاش کنید");
+                            }
                         }
                         else
                         {

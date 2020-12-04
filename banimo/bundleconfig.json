@@ -1,0 +1,53 @@
+[
+  {
+    "outputFileName": "Content/all.min.css",
+    "inputFiles": [
+      "Content/all.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/bootstrap.min.css",
+    "inputFiles": [
+      "Content/bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/pignose.layerslider.min.css",
+    "inputFiles": [
+      "Content/pignose.layerslider.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/flexslider2.min.css",
+    "inputFiles": [
+      "Content/flexslider2.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/bundle.css",
+    "inputFiles": [
+      "Content/bootstrap.css",
+      "Content/all.css",
+      "Content/pignose.layerslider.css",
+      "Content/style.css",
+      "Content/sm-core-css.css",
+      "Content/sm-mint.css",
+      "Content/resCarousel.css",
+      "Content/custom.css",
+      "Content/toastr.css",
+      "Content/jquery-ui.css",
+      "Content/fontawesome-all.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bundle.js",
+    "inputFiles": [
+      "Scripts/bootstrap-3.1.1.min.js",
+      "Scripts/jquery-ui.js",
+      "Scripts/jquery-2.1.4.min.js",
+      "Scripts/jquery.flexslider2.js",
+      "Scripts/toastr.js",
+      "Scripts/imagezoom.js"
+    ]
+  }
+]

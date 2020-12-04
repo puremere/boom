@@ -5,6 +5,11 @@ using System.Web;
 
 namespace banimo.ViewModelPost
 {
+    public class responseModel
+    {
+        public string status { get; set; }
+        public string message { get; set; }
+    }
     public class buyRequest
     {
         public int status { get; set; }

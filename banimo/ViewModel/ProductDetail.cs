@@ -31,6 +31,7 @@ namespace banimo.ViewModel
         public string credit { get; set; }
         public string baseDeliver { get; set; }
         public string priceDeliver { get; set; }
+        public string poly { get; set; }
     }
      public class commentModel
     {

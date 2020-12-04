@@ -987,6 +987,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
+
             ViewModelPost.ListOfProductOrder log2 = JsonConvert.DeserializeObject<ViewModelPost.ListOfProductOrder>(result);
             foreach (var item in log2.myProducts)
             {
@@ -996,8 +997,95 @@ namespace banimo.Controllers
                 }
             }
 
-            return PartialView("/Views/Shared/_gogetOrderDetail.cshtml", log2);
+            return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", log2);
 
+        }
+        public ActionResult getNewListProduct(string val)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("value", val);
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProduct.php", collection);
+
+                result = Encoding.UTF8.GetString(response);
+            }
+            List<ViewModel.pList> model = JsonConvert.DeserializeObject<List<ViewModel.pList>>(result);
+            string resultstring =JsonConvert.SerializeObject (model);
+            return Content(resultstring);
+
+          
+        }
+        public ContentResult addNewTtemToOrder(string ID, string quantity,string OrderId)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("ID", ID);
+                collection.Add("quantity", quantity);
+                collection.Add("OrderId", OrderId);
+                
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToOrder.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+            return Content("");
+        }
+        public ContentResult deletFromOrder(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("id", id);
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromOrder.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model= JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
         }
         public void finalizeOrderAndDeliver(string id, string type, string deliverID, string desc)
         {

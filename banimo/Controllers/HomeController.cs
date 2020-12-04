@@ -2051,9 +2051,35 @@ namespace banimo.Controllers
                 
                
         }
+        
+        public ActionResult inInArea(string lat, string log)
+        {
 
+            string token = Session["token"] as string;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("longitude", log);
+                collection.Add("latitude", lat);
+                collection.Add("token", token);
+                collection.Add("mbrand", servername);
 
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/isInArea.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModelPost.responseModel model = JsonConvert.DeserializeObject<ViewModelPost.responseModel>(result);
+            return Content(model.message);
+        }
         [HomeSessionCheck]
         public ActionResult TicketList()
         {
@@ -3046,6 +3072,7 @@ namespace banimo.Controllers
             string code = MD5Hash(device + "ncase8934f49909");
             string id = "";
             string result = "";
+            DiscountVM model = new DiscountVM() ;
             using (WebClient client = new WebClient())
             {
 
@@ -3060,8 +3087,16 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getDiscount.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
+                try
+                {
+                    model = JsonConvert.DeserializeObject<DiscountVM>(result);
+                }
+                catch (Exception e)
+                {
+                }
+               
             }
-            DiscountVM model = JsonConvert.DeserializeObject<DiscountVM>(result);
+        
             if (model.message.Length == 0)
             {
                 cookieModel.discount = val;
