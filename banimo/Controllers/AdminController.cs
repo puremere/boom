@@ -1058,7 +1058,7 @@ namespace banimo.Controllers
             }
             banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
-            return Content("");
+           
         }
         public ContentResult deletFromOrder(string id)
         {

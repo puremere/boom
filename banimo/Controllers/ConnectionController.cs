@@ -1590,10 +1590,9 @@ namespace banimo.Controllers
             string result = TempData["message"] as string;
             if (result == "موفق")
             {
-                CookieVM cookieModel = new CookieVM();
-                cookieModel.cartmodel = "";
-                TempData["cookieToSave"] = JsonConvert.SerializeObject(cookieModel);
-                SetCookie("cartModel","");
+
+                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
+                SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
 
                 var saleorder = TempData["message2"] as string;
 
@@ -1611,73 +1610,16 @@ namespace banimo.Controllers
                 ViewBag.message = "موفق";
                 List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
                 SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
-                SetCookie("", "cartModel");
+               
             }
-            CookieVM cookieModel = new CookieVM();
-            cookieModel.cartmodel = "";
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(cookieModel);
+        
            
 
             ViewBag.message2 = refID;
             ViewBag.message3 = "CHR-" + refID;
             return View();
         }
-        public void test(string auth)
-        {
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("auth", auth);
-                collection.Add("servername", servername);
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getorderdetail.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            string json2 = "";
-
-            var log = JsonConvert.DeserializeObject<List<OrderIdModel>>(result);
-            ViewBag.message = "موفق";
-            ViewBag.message2 = "225";
-            ViewBag.message3 = log[0].ID;
-
-            HttpCookie productides = new HttpCookie("cartmodel");
-            productides = Request.Cookies["cartmodel"];
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(Request.Cookies["cartmodel"].Value);
-
-            if (data != null && data.Count > 0)
-            {
-                foreach (var item in data)
-                {
-
-                    using (WebClient client = new WebClient())
-                    {
-
-                        var collection = new NameValueCollection();
-                        collection.Add("device", device);
-                        collection.Add("code", code);
-                        collection.Add("orderid", log[0].ID);
-                        collection.Add("productid", item.productid.ToString());
-                        collection.Add("quantity", item.quantity.ToString());
-                        collection.Add("servername", servername);
-                        byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/addOrderProduct.php", collection);
-
-                        result = System.Text.Encoding.UTF8.GetString(response);
-                    }
-
-                }
-            }
-
-        }
+     
        
 
 

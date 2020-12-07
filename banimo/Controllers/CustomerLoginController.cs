@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using Newtonsoft.Json;
-using System.Net.Mail;
 using banimo.ViewModel;
 using banimo.Classes;
 using System.Collections.Specialized;
@@ -15,6 +14,8 @@ using System.Configuration;
 using BotDetect.Web.Mvc;
 using System.IO;
 using System.Web.Routing;
+using System.Security.Claims;
+
 
 namespace banimo.Controllers
 {
@@ -27,47 +28,29 @@ namespace banimo.Controllers
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
 
-        private void SetCookie(string Value)
+        private void SetCookie(string mymodel, string name)
         {
-            var encodedCookie = new HttpCookie("token", Value);
-            encodedCookie.HttpOnly = true;
-            encodedCookie.Expires = DateTime.Now.AddDays(1);
-            System.Web.HttpContext.Current.Response.Cookies.Add(encodedCookie);
 
+            Response.Cookies[name].Value = Encrypt(mymodel);
 
         }
-        private CookieVM getCookie()
+        private string getCookie(string name)
         {
-            if (System.Web.HttpContext.Current.Request.Cookies["token"] != null)
+
+
+            string req2 = "";
+            if (Request.Cookies[name] != null)
             {
-                string value = string.Empty;
-                HttpCookie cookie = System.Web.HttpContext.Current.Request.Cookies["token"];
-
-                if (cookie != null)
-                {
-                    // For security purpose, we need to encrypt the value.
-                    HttpCookie decodedCookie = cookie;
-                    value = decodedCookie.Value;
-                }
-
-                return JsonConvert.DeserializeObject<CookieVM>(Decrypt(value));
+                req2 = Decrypt(Request.Cookies[name].Value);
             }
-            else
+            if (name == "token" && req2 == "")
             {
-                CookieVM model = new CookieVM();
-                string srt = JsonConvert.SerializeObject(model);
-                SetCookie(Encrypt(srt));
-                return model;
-                //if (Request.Cookies["token"] == null )
-                //{
-
-                //}
-                //else
-                //{
-                //    return JsonConvert.DeserializeObject<CookieVM>(Decrypt(Request.Cookies["token"].Value));
-                //}
-
+                CookieVM cookieModel = new CookieVM();
+                string srt = JsonConvert.SerializeObject(cookieModel);
+                SetCookie(srt, "token");
+                return srt;
             }
+            return req2;
 
 
         }
@@ -111,14 +94,14 @@ namespace banimo.Controllers
             cryptoStream.Close();
             return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
         }
-     
+
         public static string MD5Hash(string input)
         {
             StringBuilder hash = new StringBuilder();
             MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
             byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(input));
 
-            for (int i = 0; i <bytes.Length; i++)
+            for (int i = 0; i < bytes.Length; i++)
             {
                 hash.Append(bytes[i].ToString("x2"));
             }
@@ -136,16 +119,16 @@ namespace banimo.Controllers
         {
             return View();
         }
-       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
-        public ActionResult CustomerVerification(string registertext, string email,string registerpassword, string CaptchaCode,string registerMoaref)
+        public ActionResult CustomerVerification(string registertext, string email, string registerpassword, string CaptchaCode, string registerMoaref)
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             if (!ModelState.IsValid)
             {
-                foreach(var item in ModelState.Values)
+                foreach (var item in ModelState.Values)
                 {
                     if (item.Errors.Count() > 0)
                     {
@@ -154,7 +137,7 @@ namespace banimo.Controllers
                             return RedirectToAction("Register", "Home", new { message = "1" });
                         }
                     }
-                    
+
                 }
 
             }
@@ -162,7 +145,7 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-           
+
             using (WebClient client = new WebClient())
             {
 
@@ -179,7 +162,7 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doSignUp.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
-          }
+            }
             signeupViewModel mymodel = JsonConvert.DeserializeObject<signeupViewModel>(result);
 
 
@@ -187,7 +170,7 @@ namespace banimo.Controllers
             {
                 cookieModel.id = registertext;
                 cookieModel.pass = registerpassword;
-                SetCookie(Encrypt(JsonConvert.SerializeObject(cookieModel)));
+                SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
                 return RedirectToAction("confirm", "Home");
 
             }
@@ -201,20 +184,20 @@ namespace banimo.Controllers
                 return RedirectToAction("Register", "Home", new { message = "3" });
 
             }
-           
-          
 
 
-            
+
+
+
         }
 
-      
-        
+
+
         public ContentResult CustomerRegister(string email, string pass, string phone, string val)
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
-            string currentpage = cookieModel.currentpage ;
+            string currentpage = cookieModel.currentpage;
 
 
             string json;
@@ -242,19 +225,19 @@ namespace banimo.Controllers
             }
             userdata log = JsonConvert.DeserializeObject<userdata>(result);
             userdata user = new userdata();
-              Session["LogedInUser"] = log;
-         //   Session["UserLogedIn"] = log;
+            Session["LogedInUser"] = log;
+            //   Session["UserLogedIn"] = log;
             Session["token"] = log.token;
             return Content(log.status + "*" + currentpage);
 
-           
+
         }
 
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
         public ActionResult CustomerLogInWC(string registerpassword, string registertext, string register, string CaptchaCode)
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel =JsonConvert.DeserializeObject< CookieVM >( getCookie("token"));
             if (!ModelState.IsValid)
             {
                 if (ModelState.Values.Last().Errors.Count > 0)
@@ -267,18 +250,18 @@ namespace banimo.Controllers
                     {
                         Session["LoginTime"] = Convert.ToInt32(Session["LoginTime"]) + 1;
                     }
-                    
-                    
+
+
                 }
                 else
                 {
-                    
+
                 }
 
             }
 
 
-            string currentpage =cookieModel.currentpage;
+            string currentpage = cookieModel.currentpage;
 
 
             string json;
@@ -309,17 +292,33 @@ namespace banimo.Controllers
             {
                 cookieModel.id = registertext;
                 cookieModel.pass = registerpassword;
-                SetCookie(Encrypt(JsonConvert.SerializeObject(cookieModel)));
+                SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
                 return RedirectToAction("confirm", "Home");
             }
             else if (log.status == "400")
             {
-                
-                return RedirectToAction("login", "Home" , new { message = "error"});
+
+                return RedirectToAction("login", "Home", new { message = "error" });
             }
             else
             {
-              
+
+
+           //     var identity = new ClaimsIdentity(new[] {
+           //     new Claim(ClaimTypes.Name, "Esmaeil"),
+           //     new Claim(ClaimTypes.Email, "a@b.com"),
+           //     new Claim(ClaimTypes.Country, "Iran")
+           // },
+           //"ApplicationCookie");
+
+           //     var ctx = Request.GetOwinContext();
+           //     var authManager = ctx.Authentication;
+
+           //     authManager.SignIn(identity);
+
+
+           //     return RedirectToAction("MySecretAction", "Home");
+
                 Session["LogedInUser"] = log;
                 Session["token"] = log.token;
 
@@ -327,11 +326,11 @@ namespace banimo.Controllers
 
                 if (currentpage.Contains("?"))
                 {
-                     RouteValueDictionary obj= new RouteValueDictionary();
-                  
+                    RouteValueDictionary obj = new RouteValueDictionary();
+
                     List<string> lst = currentpage.Split('?').ToList();
                     List<string> argList = lst[1].Split('&').ToList();
-                    foreach(var valueitem in argList)
+                    foreach (var valueitem in argList)
                     {
                         List<string> finalLst = valueitem.Split('=').ToList();
                         obj[finalLst[0]] = finalLst[1];
@@ -350,9 +349,21 @@ namespace banimo.Controllers
 
 
         }
+
+
+        private string GetRedirectUrl(string returnUrl)
+        {
+            if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+            {
+                return Url.Action("index", "home");
+            }
+
+            return returnUrl;
+        }
+
         public ActionResult CustomerLogIn(string registerpassword, string registertext, string register)
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel =JsonConvert.DeserializeObject<CookieVM>( getCookie("token"));
             Session["LoginTime"] = Convert.ToInt32(Session["LoginTime"]) + 1;
             if (!ModelState.IsValid)
             {
@@ -394,24 +405,24 @@ namespace banimo.Controllers
             }
             else
             {
-               
+
                 Session["LogedInUser"] = log;
                 //  Session["UserLogedIn"] = log;
                 Session["token"] = log.token;
                 return RedirectToAction("Index", "Home");
-               
-            }
-           
-            
 
-           
+            }
+
+
+
+
 
 
         }
-        public ContentResult checkConfirmCode( string phone, string register)
+        public ContentResult checkConfirmCode(string phone, string register)
         {
-            CookieVM cookieModel = getCookie();
-            string currentpage =cookieModel.currentpage;
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            string currentpage = cookieModel.currentpage;
 
 
             string json;
@@ -439,14 +450,14 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             var log = JsonConvert.DeserializeObject<signeInViewModel>(result);
-           
-           // Session["LogedInUser"] = log;
+
+            // Session["LogedInUser"] = log;
             Session["token"] = log.token;
             return Content(log.status);
 
 
         }
-        
+
         public ActionResult ResendCode(string phone)
         {
             string json;
@@ -472,12 +483,12 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             var log = JsonConvert.DeserializeObject<signeupViewModel>(result);
-            return Content(log.status+"");
+            return Content(log.status + "");
             //return Content("");
         }
         public ContentResult ForgetPass(string phone)
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -501,12 +512,12 @@ namespace banimo.Controllers
             var log = JsonConvert.DeserializeObject<userdata>(result);
             cookieModel.id = phone;
             cookieModel.pass = "";
-            SetCookie(Encrypt(JsonConvert.SerializeObject(cookieModel)));
+            SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
             //Session["LogedInUser"] = log;
             // Session["UserLogedIn"] = log;
             Session["token"] = log.token;
-            return Content(log.status+"");
-           
+            return Content(log.status + "");
+
 
         }
 
@@ -536,21 +547,21 @@ namespace banimo.Controllers
             var log = JsonConvert.DeserializeObject<userdata>(result);
 
             Session["LogedInUser"] = log;
-           // Session["UserLogedIn"] = log;
+            // Session["UserLogedIn"] = log;
             Session["token"] = log.token;
             return Content(log.status + "");
         }
-      
-       
+
+
         public ActionResult LogOff()
         {
-            CookieVM cookieModel = getCookie();
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             cookieModel.cartmodel = "";
-            SetCookie(Encrypt(JsonConvert.SerializeObject(cookieModel)));
+            SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
             Session["LogedInUser"] = null;
-           // Session["UserLogedIn"] = null;
-           
-           
+            // Session["UserLogedIn"] = null;
+
+
             Session["token"] = null;
             return RedirectToAction("Index", "Home");
         }

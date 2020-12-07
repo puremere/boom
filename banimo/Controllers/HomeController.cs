@@ -24,11 +24,14 @@ using BotDetect.Web.Mvc;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Owin;
+using System.Security.Claims;
+using System.Threading;
 
 namespace banimo.Controllers
 {
 
-
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         string servername = ConfigurationManager.AppSettings["serverName"];
@@ -59,18 +62,25 @@ namespace banimo.Controllers
         }
         private void SetCookie(string mymodel,string name)
         {
-           
+            
             Response.Cookies[name].Value = Encrypt(mymodel) ;
             
         }
         private string getCookie(string name)
         {
 
-
+           
             string req2 = "";
-            if (System.Web.HttpContext.Current.Request.Cookies[name] != null )
+            if (Request.Cookies[name] != null )
             {
                 req2 =Decrypt(Request.Cookies[name].Value);
+            }
+            if (name == "token" && req2 == "" )
+            {
+                CookieVM cookieModel = new CookieVM();
+                string srt = JsonConvert.SerializeObject(cookieModel);
+                SetCookie(srt, "token");
+                return srt;
             }
             return req2;
 
@@ -123,14 +133,45 @@ namespace banimo.Controllers
         public ActionResult test() {
             return View();
         }
+
+       
+      
         public ActionResult Index(string partnerID)
         {
+            //string urlid = "0";
+            //string device = "";
+            //string code = "";
+            //string result = "";
+            //string serverAddress = "";
+            //if (Session["fist"] == null)
+            //{
+            //    device = RandomString();
+            //    code = MD5Hash(device + "ncase8934f49909");
+            //    productinfoviewdetail model = new productinfoviewdetail();
+            //    result = "";
+            //    serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataWithMenuContact.php";
+            //    using (WebClient client = new WebClient())
+            //    {
 
-            CookieVM cookieModel;
+            //        var collection = new NameValueCollection();
+            //        collection.Add("device", device);
+            //        collection.Add("code", code);
+            //        collection.Add("servername", servername);
+            //        collection.Add("partnerID", urlid.ToString());
+            //        byte[] response = client.UploadValues(serverAddress, collection);
+
+            //        result = System.Text.Encoding.UTF8.GetString(response);
+            //    }
+
+            //    getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
+            //}
+
+
+                CookieVM cookieModel;
             if (Session["fist"] ==  null) {
                 Session["fist"] = "true";
                 cookieModel = new CookieVM();
-                SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+                //SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
 
                 string dev = RandomString();
                 string cod = MD5Hash(dev + "ncase8934f49909");
@@ -151,7 +192,7 @@ namespace banimo.Controllers
                 contactSectionVM conmodel = JsonConvert.DeserializeObject<contactSectionVM>(resu);
                 TempData["phone"] = conmodel.phone;
                 TempData["analyticID"] = conmodel.analytic;
-
+               
             }
             else
             {
@@ -163,7 +204,7 @@ namespace banimo.Controllers
 
             }
            
-            SetCookie("", "menuCookie");
+          
 
            
 
@@ -179,7 +220,7 @@ namespace banimo.Controllers
 
            
           
-            SetCookie(result, "contactUs");
+            //SetCookie(result, "contactUs");
 
             if (partnerID != null)
             {
@@ -257,8 +298,8 @@ namespace banimo.Controllers
             }
            
 
-            TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
-            //SetCookie(Encrypt(JsonConvert.SerializeObject(cookieModel)));
+            //TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
+            SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
             return View(log2);
 
 
@@ -372,6 +413,9 @@ namespace banimo.Controllers
         }
         public ActionResult login(string message)
         {
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            ViewBag.username = cookieModel.Username;
+            ViewBag.password = cookieModel.Password;
             if (Session["LoginTime"] == null)
             {
                 Session["LoginTime"] = 0;
@@ -570,16 +614,17 @@ namespace banimo.Controllers
         }
         public ActionResult ProductList(string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
-            CookieVM prodVM;
-            if (TempData["cookieToSave"] == null)
-            {
-                prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                prodVM = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
-            }
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    prodVM = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+
+            //}
             prodVM.pagenumberactive = "1";
             prodVM.filterIds = filter;
             prodVM.tag = tag;
@@ -618,7 +663,8 @@ namespace banimo.Controllers
             }
 
             //SetCookie(Encrypt(JsonConvert.SerializeObject(prodVM)));
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(prodVM);
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(prodVM);
+            SetCookie(JsonConvert.SerializeObject(prodVM), "token");
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -663,113 +709,230 @@ namespace banimo.Controllers
 
             return View(model);
         }
-        public void changecolorides(string ID)
+        public PartialViewResult gogetproductlist()
         {
+            //CookieVM jsonModel;
 
-            CookieVM jsonModel;
-          
-            if (TempData["cookieToSave"] == null)
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+
+            //}
+            //TempData.Keep("cookieToSave");
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            string urlid = "0";
+            if (jsonModel.partnerID != "")
             {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+                urlid = jsonModel.partnerID;
+            }
+            string Available = jsonModel.Available;
+            string tag = jsonModel.tag;
+            string sortID = jsonModel.sortID;
+            string page = jsonModel.pagenumberactive;
+            string colorIds = jsonModel.colorIds;
+            string filterIds = jsonModel.filterIds;
+            string min = jsonModel.min;
+            string max = jsonModel.max;
+            string query = jsonModel.query;
+            string catID = jsonModel.catID;
+            string catLevel = jsonModel.catLevel;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("sortID", sortID);
+                collection.Add("page", page);
+                collection.Add("colorIds", colorIds);
+                collection.Add("filterIds", filterIds);
+                collection.Add("min", min);
+                collection.Add("max", max);
+                collection.Add("query", query);
+                collection.Add("catID", catID);
+                collection.Add("catLevel", catLevel);
+                collection.Add("tag", tag);
+                collection.Add("servername", servername);
+                collection.Add("isAvailable", Available);
+                collection.Add("partnerID", urlid.ToString());
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataProductListTest.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModelPost.ProductListViewModel log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.ProductListViewModel>(result);
+            if (page == null)
+            {
+                log2.currentPage = "1";
             }
             else
             {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
-
+                log2.currentPage = page;
             }
+            if (Convert.ToInt32(log2.productsCounts) % 12 > 0)
+            {
+                log2.pageNumber = ((Convert.ToInt32(log2.productsCounts) / 12) + 1).ToString();
+            }
+            else
+            {
+                log2.pageNumber = (Convert.ToInt32(log2.productsCounts) / 12).ToString();
+            }
+            if (log2.products != null)
+            {
+                foreach (var product in log2.products)
+                {
+                    string myString = product.color;
+                    string[] splitString = myString.Split('$');
+                    List<string> colors = new List<string>();
+                    foreach (var color in splitString)
+                    {
+                        colors.Add(color);
+                    }
+                    product.colors = colors;
+                    product.desc = Regex.Replace(product.desc, @"<[^>]*>", String.Empty);
+                }
+            }
+            else
+            {
+                log2.products = new List<ViewModelPost.Product>();
+            }
+
+
+            return PartialView("/Views/Shared/_ProductListForBUTFULImage.cshtml", log2);
+        }
+        public void changecolorides(string ID)
+        {
+
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            //CookieVM jsonModel;
+
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+
+            //}
             jsonModel.colorIds = ID;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
-           
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+
 
         }
 
         public void changefilterides(string ID)
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+           
             jsonModel.filterIds = ID;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
 
 
         }
         public void changeAvailableStatus(string status)
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
             jsonModel.Available = status;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
 
         }
         public void changetag(string tag)
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
             jsonModel.tag = tag;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
 
         }
         public void changesortid(string ID)
         {
             ID = ID.Substring(0, 1);
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
             jsonModel.sortID = ID;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
         }
         public void changeRangeIDes(string min, string max)
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
             jsonModel.min = min;
             jsonModel.max = max;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
 
         }
@@ -887,102 +1050,7 @@ namespace banimo.Controllers
             }
 
         }
-        public PartialViewResult gogetproductlist()
-        {
-            CookieVM jsonModel;
-
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
-
-            }
-            TempData.Keep("cookieToSave");
-            string urlid = "0";
-            if (jsonModel.partnerID != "")
-            {
-                urlid = jsonModel.partnerID;
-            }
-            string Available = jsonModel.Available;
-            string tag = jsonModel.tag;
-            string sortID = jsonModel.sortID;
-            string page = jsonModel.pagenumberactive;
-            string colorIds = jsonModel.colorIds;
-            string filterIds = jsonModel.filterIds;
-            string min = jsonModel.min;
-            string max = jsonModel.max;
-            string query = jsonModel.query;
-            string catID = jsonModel.catID;
-            string catLevel = jsonModel.catLevel;
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("sortID", sortID);
-                collection.Add("page", page);
-                collection.Add("colorIds", colorIds);
-                collection.Add("filterIds", filterIds);
-                collection.Add("min", min);
-                collection.Add("max", max);
-                collection.Add("query", query);
-                collection.Add("catID", catID);
-                collection.Add("catLevel", catLevel);
-                collection.Add("tag", tag);
-                collection.Add("servername", servername);
-                collection.Add("isAvailable", Available);
-                collection.Add("partnerID", urlid.ToString());
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataProductListTest.php", collection);
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            banimo.ViewModelPost.ProductListViewModel log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.ProductListViewModel>(result);
-            if (page == null)
-            {
-                log2.currentPage = "1";
-            }
-            else
-            {
-                log2.currentPage = page;
-            }
-            if (Convert.ToInt32(log2.productsCounts) % 12 > 0)
-            {
-                log2.pageNumber = ((Convert.ToInt32(log2.productsCounts) / 12) + 1).ToString();
-            }
-            else
-            {
-                log2.pageNumber = (Convert.ToInt32(log2.productsCounts) / 12).ToString();
-            }
-            if (log2.products != null)
-            {
-                foreach (var product in log2.products)
-                {
-                    string myString = product.color;
-                    string[] splitString = myString.Split('$');
-                    List<string> colors = new List<string>();
-                    foreach (var color in splitString)
-                    {
-                        colors.Add(color);
-                    }
-                    product.colors = colors;
-                    product.desc = Regex.Replace(product.desc, @"<[^>]*>", String.Empty);
-                }
-            }
-            else
-            {
-                log2.products = new List<ViewModelPost.Product>();
-            }
-
-
-            return PartialView("/Views/Shared/_ProductListForBUTFULImage.cshtml", log2);
-        }
+     
 
         [HomeSessionCheck]
         public ActionResult myProfile(string type)
@@ -1192,26 +1260,26 @@ namespace banimo.Controllers
             SetCookie(JsonConvert.SerializeObject(jsonModel),"token");
             return "1";
         }
-        public string allpaginationid(string id)
-        {
+        //public string allpaginationid(string id)
+        //{
 
-            CookieVM jsonModel;
+        //    CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+        //    if (TempData["cookieToSave"] == null)
+        //    {
+        //        jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+        //    }
+        //    else
+        //    {
+        //        jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
-            jsonModel.pagenumberactive = id;
+        //    }
+        //    jsonModel.pagenumberactive = id;
 
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+        //    TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
 
-            return "1";
-        }
+        //    return "1";
+        //}
 
         public ActionResult ProductDetail(string id)
         {
@@ -1226,7 +1294,8 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             jsonModel.currentpage = "/productdetail?id="+id;
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            // TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             //SetCookie(jsonModel);
 
             string ID = "";
@@ -1516,47 +1585,7 @@ namespace banimo.Controllers
 
         }
 
-        public string gogetfinalprice()
-        {
-
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            if (data != null && data.Count > 0)
-            {
-
-
-                int j = 0;
-                int basej = 0;
-                int number = 0;
-                if (data != null)
-                {
-                    foreach (var item in data)
-                    {
-                        j += (int)(item.price * item.quantity);
-                        basej += (int)(item.baseprice * item.quantity);
-                        number += item.quantity;
-
-                    }
-                }
-
-                int discountfinal = (basej - j);
-                if (j != 0)
-                {
-                    int discountpercent = (discountfinal * 100) / j;
-                    return j.ToString() + "," + basej + "," + number + "," + discountfinal + "," + discountpercent + "%";
-                }
-                else
-                {
-                    return "0,0,0,0,0";
-                }
-
-            }
-            else
-            {
-                return "0,0,0,0,0";
-            }
-
-
-        }
+      
 
         //public string gogetfinalquantity()
         //{
@@ -1602,23 +1631,25 @@ namespace banimo.Controllers
         [NoCache]
         public ActionResult checkout()
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
-           
+            //}
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
             jsonModel.currentpage = "checkout";
 
             //SetCookie(jsonModel);
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
-            TempData.Keep("cookieToSave");
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            //TempData.Keep("cookieToSave");
             List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
             
             List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
@@ -1691,64 +1722,9 @@ namespace banimo.Controllers
 
             return View(finalmodel);
         }
-        public PartialViewResult checkoutsummery()
-        {
 
-            string jsonModel;
+       
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = getCookie("token");
-            }
-            else
-            {
-                jsonModel = TempData["cookieToSave"] as string;
-
-            }
-            SetCookie(jsonModel, "token");
-
-
-            
-            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
-            string srt = getCookie("cartModel");
-            string cartmodel = ",";
-            if (srt!= "")
-            {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
-
-               
-                if (data != null && data.Count > 0)
-                {
-
-                    if (data != null)
-                    {
-                        
-                        foreach (var item in data)
-                        {
-                            CheckoutViewModel j = new CheckoutViewModel();
-                            j.price = item.price;
-                            j.baseprice = item.baseprice;
-                            j.discount = item.discount;
-                            j.productid = item.productid;
-                            j.productname = Server.UrlDecode(item.name);
-                            j.quantity = item.quantity;
-                            j.imageaddress = item.imagethum;
-                            finalmodel.Add(j);
-
-                             cartmodel =  item.productid+"-"+ item.quantity+",";
-                        }
-                       
-                    }
-
-
-                }
-            }
-
-
-
-
-            return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
-        }
 
         public PartialViewResult getothercoitem(string id)
         {
@@ -1907,8 +1883,7 @@ namespace banimo.Controllers
                 }
               
             }
-            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+           
             
             if (Session["LogedInUser"] == null)
             {
@@ -2170,22 +2145,23 @@ namespace banimo.Controllers
 
         public ActionResult compare(int id, string cat)
         {
-            CookieVM jsonModel;
+            //CookieVM jsonModel;
 
-            if (TempData["cookieToSave"] == null)
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
+            //if (TempData["cookieToSave"] == null)
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //}
+            //else
+            //{
+            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
-            }
-          
-          
-           
+            //}
 
-            
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+
+
+
             ViewBag.id = id;
             string cattree = cat.Replace("%", " / ");
             string lastOfTree = cat.Split('/').ToList().Last();
@@ -2230,8 +2206,9 @@ namespace banimo.Controllers
             log.ID = ID;
             jsonModel.countCompareB = "";
             jsonModel.countCompareH = "";
-            TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
-           
+
+            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             return View(log);
         }
         public PartialViewResult getComparedataH(int id, string type)
@@ -2654,107 +2631,9 @@ namespace banimo.Controllers
 
         }
 
-        public PartialViewResult contactSection()
-        {
-            string contactInfo = getCookie("contactUs");
-            string result = "";
-            contactSectionVM model;
-            if (contactInfo == "")
-            {
-                string device = RandomString();
-                string code = MD5Hash(device + "ncase8934f49909");
+      
 
-                string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
-                using (WebClient client = new WebClient())
-                {
-
-                    var collection = new NameValueCollection();
-                    collection.Add("device", device);
-                    collection.Add("code", code);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(serverAddress, collection);
-
-                    result = System.Text.Encoding.UTF8.GetString(response);
-                }
-                model = JsonConvert.DeserializeObject<contactSectionVM>(result);
-                TempData["phone"] = model.phone;
-                TempData["analyticID"] = model.analytic;
-                SetCookie(result, "contactUs");
-            }
-            else
-            {
-                 model = JsonConvert.DeserializeObject<contactSectionVM>(contactInfo);
-            }
-
-           
-            return PartialView("/Views/Shared/_contactSection.cshtml", model);
-
-        }
-
-
-        public PartialViewResult getmenue()
-        {
-
-
-            string Fresult = getCookie("menuCookie");
-            if (Fresult == "")
-            {
-                CookieVM cookieModel = new CookieVM();
-                if (getCookie("token") != "")
-                {
-                    cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-                }
-
-                string device = RandomString();
-                string code = MD5Hash(device + "ncase8934f49909");
-                string result = "";
-                string serverAddress = ConfigurationManager.AppSettings["server"] + "/getcatlistTest.php";
-                using (WebClient client = new WebClient())
-                {
-
-                    var collection = new NameValueCollection();
-                    collection.Add("device", device);
-                    collection.Add("code", code);
-                    collection.Add("servername", servername);
-                    collection.Add("partnerID", cookieModel.partnerID);
-                    byte[] response = client.UploadValues(serverAddress, collection);
-                    Fresult = System.Text.Encoding.UTF8.GetString(response);
-                }
-                SetCookie(Fresult, "menuCookie");
-            }
-
-            MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(Fresult);
-          
-
-            return PartialView("/Views/Shared/_Menu.cshtml", catsCollection);
-        }
-
-
-
-        public PartialViewResult getmenueforapp()
-        {
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string server = ConfigurationManager.AppSettings["server"] + "/getcatlist.php";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response =
-                client.UploadValues(server, collection);
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-
-
-            MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(result);
-
-            return PartialView("/Views/Shared/_MenuForApp.cshtml", catsCollection);
-        }
+      
 
         public PartialViewResult getListOfComments(int? page, string ProductID)
         {
@@ -3231,6 +3110,197 @@ namespace banimo.Controllers
         {
             return View();
         }
+
+
+
+        public string gogetfinalprice()
+        {
+
+            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+            if (data != null && data.Count > 0)
+            {
+
+
+                int j = 0;
+                int basej = 0;
+                int number = 0;
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        j += (int)(item.price * item.quantity);
+                        basej += (int)(item.baseprice * item.quantity);
+                        number += item.quantity;
+
+                    }
+                }
+
+                int discountfinal = (basej - j);
+                if (j != 0)
+                {
+                    int discountpercent = (discountfinal * 100) / j;
+                    return j.ToString() + "," + basej + "," + number + "," + discountfinal + "," + discountpercent + "%";
+                }
+                else
+                {
+                    return "0,0,0,0,0";
+                }
+
+            }
+            else
+            {
+                return "0,0,0,0,0";
+            }
+
+
+        }
+     
+        public PartialViewResult getmenueforapp()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string server = ConfigurationManager.AppSettings["server"] + "/getcatlist.php";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response =
+                client.UploadValues(server, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(result);
+
+            return PartialView("/Views/Shared/_MenuForApp.cshtml", catsCollection);
+        }
+        public PartialViewResult checkoutsummery()
+        {
+
+            
+
+
+
+            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
+            string srt = getCookie("cartModel");
+            string cartmodel = ",";
+            if (srt != "")
+            {
+                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
+
+
+                if (data != null && data.Count > 0)
+                {
+
+                    if (data != null)
+                    {
+
+                        foreach (var item in data)
+                        {
+                            CheckoutViewModel j = new CheckoutViewModel();
+                            j.price = item.price;
+                            j.baseprice = item.baseprice;
+                            j.discount = item.discount;
+                            j.productid = item.productid;
+                            j.productname = Server.UrlDecode(item.name);
+                            j.quantity = item.quantity;
+                            j.imageaddress = item.imagethum;
+                            finalmodel.Add(j);
+
+                            cartmodel = item.productid + "-" + item.quantity + ",";
+                        }
+
+                    }
+
+
+                }
+            }
+
+
+
+
+            return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
+        }
+        public PartialViewResult getmenue()
+        {
+
+
+            string Fresult = "";
+            //if (Fresult == "")
+            //{
+               
+               
+            //    SetCookie(Fresult, "menuCookie");
+            //}
+
+            string tokenCookie = getCookie("token");
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(tokenCookie);
+
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string serverAddress = ConfigurationManager.AppSettings["server"] + "/getcatlistTest.php";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                collection.Add("partnerID", cookieModel.partnerID);
+                byte[] response = client.UploadValues(serverAddress, collection);
+                Fresult = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(Fresult);
+
+
+            return PartialView("/Views/Shared/_Menu.cshtml", catsCollection);
+        }
+        public PartialViewResult contactSection()
+        {
+            //string contactInfo = getCookie("contactUs");
+            String result = "";
+            contactSectionVM model;
+            //if (contactInfo == "")
+            //{
+
+            //}
+            //else
+            //{
+            //    model = JsonConvert.DeserializeObject<contactSectionVM>(contactInfo);
+            //}
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(serverAddress, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            model = JsonConvert.DeserializeObject<contactSectionVM>(result);
+            TempData["phone"] = model.phone;
+            TempData["analyticID"] = model.analytic;
+         
+
+            return PartialView("/Views/Shared/_contactSection.cshtml", model);
+
+        }
+
+
+        #region 
         public ActionResult imageUrl(string filename, string type)
         {
             int width = 0;
@@ -3311,5 +3381,6 @@ namespace banimo.Controllers
 
             return true;
         }
+        #endregion
     }
 }
