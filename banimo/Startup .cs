@@ -6,6 +6,10 @@ using Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using banimo.Models;
+using Microsoft.Owin.Security.WsFederation;
+using Microsoft.Owin.Security;
 
 [assembly: OwinStartup(typeof(banimo.Startup))]
 namespace banimo
@@ -16,9 +20,11 @@ namespace banimo
         {
             // Any connection or hub wire up and configuration should go here
             app.MapSignalR();
-
-           
+          
         }
+
+
     }
+
 }
 

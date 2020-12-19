@@ -15,6 +15,11 @@ using BotDetect.Web.Mvc;
 using System.IO;
 using System.Web.Routing;
 using System.Security.Claims;
+using banimo.Models;
+using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 
 namespace banimo.Controllers
@@ -22,6 +27,8 @@ namespace banimo.Controllers
 
     public class CustomerLoginController : Controller
     {
+      
+
         string servername = ConfigurationManager.AppSettings["serverName"];
         //
         static readonly string PasswordHash = "P@@Sw0rd";
@@ -249,13 +256,14 @@ namespace banimo.Controllers
                     else
                     {
                         Session["LoginTime"] = Convert.ToInt32(Session["LoginTime"]) + 1;
+                        //return RedirectToAction("login", "home");
                     }
 
 
                 }
                 else
                 {
-
+                    return RedirectToAction("login", "home");
                 }
 
             }
@@ -303,21 +311,17 @@ namespace banimo.Controllers
             else
             {
 
+                //var claims = new List<Claim>();
+                //claims.Add(new Claim(ClaimTypes.Name, "Brock"));
+                //claims.Add(new Claim(ClaimTypes.Email, "brockallen@gmail.com"));
+                //var id = new ClaimsIdentity(claims,
+                //                            DefaultAuthenticationTypes.ApplicationCookie);
 
-           //     var identity = new ClaimsIdentity(new[] {
-           //     new Claim(ClaimTypes.Name, "Esmaeil"),
-           //     new Claim(ClaimTypes.Email, "a@b.com"),
-           //     new Claim(ClaimTypes.Country, "Iran")
-           // },
-           //"ApplicationCookie");
-
-           //     var ctx = Request.GetOwinContext();
-           //     var authManager = ctx.Authentication;
-
-           //     authManager.SignIn(identity);
+                //var ctx = Request.GetOwinContext();
+                //var authenticationManager = ctx.Authentication;
+                //authenticationManager.SignIn(id);
 
 
-           //     return RedirectToAction("MySecretAction", "Home");
 
                 Session["LogedInUser"] = log;
                 Session["token"] = log.token;
@@ -555,6 +559,10 @@ namespace banimo.Controllers
 
         public ActionResult LogOff()
         {
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignOut();
+
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             cookieModel.cartmodel = "";
             SetCookie(JsonConvert.SerializeObject(cookieModel),"token");

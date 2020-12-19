@@ -147,7 +147,31 @@ namespace banimo.ViewModelPost
     public class MyProductList
     {
         public List<MyProduct> myProducts { get; set; }
+       
     }
+
+
+    public class Data
+    {
+        public string orderNumber { get; set; }
+        public string totalPrice { get; set; }
+        public string registerDate { get; set; }
+        public string registerDay { get; set; }
+        public string deliveryDate { get; set; }
+        public string dayText { get; set; }
+        public string timeFrom { get; set; }
+        public string timeTo { get; set; }
+        public string phoneNumber { get; set; }
+        public string address { get; set; }
+        public string fullname { get; set; }
+        public string gift { get; set; }
+    }
+    public class orderINFOVM
+    {
+        public string deliver { get; set; }
+        public Data data { get; set; }
+    }
+ 
 }
 
    

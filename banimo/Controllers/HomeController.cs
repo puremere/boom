@@ -130,12 +130,24 @@ namespace banimo.Controllers
         {
             return PartialView("/View/Shared/_map.cshtml");
         }
+
+        [Authorize(Roles = "members")]
         public ActionResult test() {
+            OwinContext ctx = (OwinContext)Request.GetOwinContext();
+            ClaimsPrincipal user = ctx.Authentication.User;
+            IEnumerable<Claim> claims = user.Claims;
             return View();
         }
 
-       
-      
+        [Authorize]
+        public ActionResult test2()
+        {
+            OwinContext ctx = (OwinContext)Request.GetOwinContext();
+            ClaimsPrincipal user = ctx.Authentication.User;
+            IEnumerable<Claim> claims = user.Claims;
+            return View();
+        }
+
         public ActionResult Index(string partnerID)
         {
             //string urlid = "0";
@@ -1258,6 +1270,14 @@ namespace banimo.Controllers
             jsonModel.pagenumberactive = id;
 
             SetCookie(JsonConvert.SerializeObject(jsonModel),"token");
+            return "1";
+        }
+        public string allpaginationid(string id)
+        {
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            jsonModel.pagenumberactive = id;
+
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             return "1";
         }
         //public string allpaginationid(string id)

@@ -144,7 +144,7 @@ namespace banimo.Controllers
                 if (log != null)
                 {
                     userdata user = log[0];
-                    if (user.ID != "" && (user.userTypeID == 1 || user.userTypeID == 2))
+                    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1))
                     {
                         Session["LogedInUser2"] = user.token;
                         if (Request.Cookies["productcookiie"] != null)
@@ -2320,6 +2320,28 @@ namespace banimo.Controllers
             }
 
         }
+
+
+
+        public ActionResult money() {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAdminMoneyStatus.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.adminMoneyVM model = JsonConvert.DeserializeObject<ViewModel.adminMoneyVM>(result);
+            return View(model);
+        }
+
         //section  bmenu-------------
 
 
@@ -5736,7 +5758,7 @@ namespace banimo.Controllers
 
         [HttpPost]
 
-        public void createUserReport(string data, string type, string id, string date)
+        public void createUserReport(string data, string type, string id, string date,string orderID)
         {
             if (true)
             {
@@ -5757,6 +5779,7 @@ namespace banimo.Controllers
                         collection.Add("code", code);
                         collection.Add("ID", id);
                         collection.Add("servername", servername);
+
                         byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/GetPartnerInfo.php", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
@@ -6137,7 +6160,7 @@ namespace banimo.Controllers
                 else
                 {
                     List<ViewModelPost.ReportMyProduct> list = JsonConvert.DeserializeObject<List<ViewModelPost.ReportMyProduct>>(data);
-                    ViewModelPost.ReportOrderInfo log2 = JsonConvert.DeserializeObject<ViewModelPost.ReportOrderInfo>(info);
+                    ViewModelPost.orderINFOVM log2 = JsonConvert.DeserializeObject<ViewModelPost.orderINFOVM>(info);
                     int finalItemTotal = list.Select(x => x.nums).Sum();
                     PdfPCell cell = new PdfPCell(new Phrase("فاکتور فروش", fontbig))
                     {
@@ -6158,7 +6181,7 @@ namespace banimo.Controllers
 
                     int final = 0;
 
-                    PdfPCell fullname = new PdfPCell(new Phrase("نام شخص : آقا/ خانم " + log2.fullname, fontSMALL));
+                    PdfPCell fullname = new PdfPCell(new Phrase("نام شخص : آقا/ خانم " + log2.data.fullname, fontSMALL));
                     fullname.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     fullname.NoWrap = false;
                     fullname.SetLeading(14, 0);
@@ -6168,7 +6191,7 @@ namespace banimo.Controllers
                     fullname.HorizontalAlignment = Element.ALIGN_CENTER;
                     table.AddCell(fullname);
 
-                    PdfPCell phone = new PdfPCell(new Phrase("شماره تماس : " + log2.phoneNumber, fontSMALL));
+                    PdfPCell phone = new PdfPCell(new Phrase("شماره تماس : " + log2.data.phoneNumber, fontSMALL));
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
@@ -6178,7 +6201,7 @@ namespace banimo.Controllers
                     phone.HorizontalAlignment = Element.ALIGN_CENTER;
                     table.AddCell(phone);
 
-                    fullname = new PdfPCell(new Phrase("شماره سفارش : " + log2.orderNumber, fontSMALL));
+                    fullname = new PdfPCell(new Phrase("شماره سفارش : " + log2.data.orderNumber, fontSMALL));
                     fullname.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     fullname.NoWrap = false;
                     fullname.SetLeading(14, 0);
@@ -6202,7 +6225,7 @@ namespace banimo.Controllers
                     phone.HorizontalAlignment = Element.ALIGN_RIGHT;
                     table.AddCell(phone);
 
-                    phone = new PdfPCell(new Phrase(log2.registerDate, fontSMALL))
+                    phone = new PdfPCell(new Phrase(log2.data.registerDate, fontSMALL))
                     {
                         Border = PdfPCell.BOTTOM_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
 
@@ -6219,7 +6242,7 @@ namespace banimo.Controllers
 
 
 
-                    phone = new PdfPCell(new Phrase("مبلغ کل سفارش : " + log2.totalPrice + " تومان", fontSMALL));
+                    phone = new PdfPCell(new Phrase("مبلغ کل سفارش : " + log2.data.totalPrice + " تومان", fontSMALL));
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
@@ -6230,7 +6253,7 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    phone = new PdfPCell(new Phrase("زمان ارسال : " + log2.dayText + " - ساعت : " + log2.timeFrom + "-" + log2.timeTo + " ", fontSMALL))
+                    phone = new PdfPCell(new Phrase("زمان ارسال : " + log2.data.dayText + " - ساعت : " + log2.data.timeFrom + "-" + log2.data.timeTo + " ", fontSMALL))
                     {
                         Border = PdfPCell.BOTTOM_BORDER | PdfPCell.RIGHT_BORDER | PdfPCell.TOP_BORDER,
 
@@ -6245,7 +6268,7 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    phone = new PdfPCell(new Phrase("(" + log2.deliveryDate + ")", fontSMALL))
+                    phone = new PdfPCell(new Phrase("(" + log2.data.deliveryDate + ")", fontSMALL))
                     {
                         Border = PdfPCell.BOTTOM_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
                         HorizontalAlignment = Element.ALIGN_RIGHT
@@ -6260,7 +6283,7 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    phone = new PdfPCell(new Phrase(" آدرس : " + log2.address, fontSMALL));
+                    phone = new PdfPCell(new Phrase(" آدرس : " + log2.data.address, fontSMALL));
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
@@ -6414,7 +6437,7 @@ namespace banimo.Controllers
                     }
                     int i = 1;
 
-                    if (log2.gift != null)
+                    if (log2.data.gift != null)
                     {
                         PdfPCell counthaz0 = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
                         counthaz0.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -6423,7 +6446,7 @@ namespace banimo.Controllers
                         table.AddCell(counthaz0);
                         i++;
 
-                        PdfPCell TITLE = new PdfPCell(new Phrase(log2.gift, fontSMALL));
+                        PdfPCell TITLE = new PdfPCell(new Phrase(log2.data.gift, fontSMALL));
                         TITLE.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                         TITLE.NoWrap = false;
                         TITLE.SetLeading(14, 0);
@@ -6472,27 +6495,12 @@ namespace banimo.Controllers
                     ersal.PaddingBottom = 15;
                     ersal.VerticalAlignment = Element.ALIGN_MIDDLE;
                     table.AddCell(ersal);
-                    int hersaL = 0;
-                    if (final < 100000)
-                    {
-                        hersaL = 10000;
-                        PdfPCell ersalhezar = new PdfPCell(new Phrase(hersaL.ToString() + " تومان", fontSMALL));
-                        ersalhezar.HorizontalAlignment = Element.ALIGN_CENTER;
-                        ersalhezar.VerticalAlignment = Element.ALIGN_MIDDLE;
-                        ersalhezar.Colspan = 4;
-                        table.AddCell(ersalhezar);
-
-                    }
-                    else
-                    {
-                        hersaL = 0;
-                        PdfPCell ersalsefr = new PdfPCell(new Phrase(hersaL + " ", fontSMALL));
-                        ersalsefr.HorizontalAlignment = Element.ALIGN_CENTER;
-                        ersalsefr.VerticalAlignment = Element.ALIGN_MIDDLE;
-                        ersalsefr.Colspan = 4;
-                        table.AddCell(ersalsefr);
-
-                    }
+                   
+                    PdfPCell ersalhezar = new PdfPCell(new Phrase(log2.deliver.ToString() + " تومان", fontSMALL));
+                    ersalhezar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    ersalhezar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    ersalhezar.Colspan = 4;
+                    table.AddCell(ersalhezar);
 
                     table.AddCell(tozihatEmpty);
 
@@ -6516,9 +6524,9 @@ namespace banimo.Controllers
                     table.AddCell(takhfif);
 
                     string takhfifstring = "";
-                    if (list.First().discount == "")
+                    if (list.First().discount == null)
                     {
-                        takhfifstring = "0 ";
+                        takhfifstring = "0 تومان";
                     }
                     else
                     {
@@ -6583,7 +6591,7 @@ namespace banimo.Controllers
 
                     string dis = list.First().discount == null ? "0" : list.First().discount;
 
-                    int phrase = final - Int32.Parse(dis) + hersaL;
+                    int phrase = final - Int32.Parse(dis) + Int32.Parse(log2.deliver);
 
                     PdfPCell afterDiscount = new PdfPCell(new Phrase(phrase.ToString() + " تومان", fontbigBold));
                     afterDiscount.HorizontalAlignment = Element.ALIGN_CENTER;
