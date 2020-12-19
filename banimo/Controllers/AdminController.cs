@@ -177,12 +177,12 @@ namespace banimo.Controllers
                 }
                 else
                 {
-                    return Content("2/Admin/dashboard");
+                    return Content("2/Admin/index");
                 }
             }
             catch (Exception e)
             {
-
+                return Content("2/Admin/index");
                 return Content(e.InnerException.ToString());
             }
 
