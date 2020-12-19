@@ -169,35 +169,35 @@
                     },
                     success: function (data) {
 
-                        alert(data);
-                        //var srt = data.substring(0, 1);
-                        //var URL = data.substring(1, data.length);
+                       
+                        var srt = data.substring(0, 1);
+                        var URL = data.substring(1, data.length);
 
 
-                        //if (srt === "1") {
+                        if (srt === "1") {
 
 
-                        //    window.location.href = "/Admin/dashboard";
+                            window.location.href = "/Admin/dashboard";
 
 
-                        //}
+                        }
 
-                        //else {
-                        //    toastr.options = {
-                        //        "debug": false,
-                        //        "positionClass": "toast-top-center",
-                        //        "onclick": null,
-                        //        "fadeIn": 300,
-                        //        "fadeOut": 1000,
-                        //        "timeOut": 8000,
-                        //        "extendedTimeOut": 1000,
+                        else {
+                            toastr.options = {
+                                "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 300,
+                                "fadeOut": 1000,
+                                "timeOut": 8000,
+                                "extendedTimeOut": 1000,
 
 
-                        //    }
-                        //    toastr.error("نام کاربری یا رمز عبور اشتباه است")
-                        //    //toastr.error(data)
+                            }
+                            toastr.error("نام کاربری یا رمز عبور اشتباه است")
+                            //toastr.error(data)
 
-                        //}
+                        }
 
 
                     },
