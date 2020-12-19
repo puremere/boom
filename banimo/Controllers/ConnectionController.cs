@@ -595,6 +595,7 @@ namespace banimo.Controllers
                                 collection2.Add("partnerID", cookieModel.partnerID);
                                 collection2.Add("servername", servername);
 
+
                                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getZarin.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
