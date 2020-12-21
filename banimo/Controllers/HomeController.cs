@@ -1359,8 +1359,7 @@ namespace banimo.Controllers
         public string addtocart(string id, string price)
         {
 
-          
-           
+                         
             //SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
 

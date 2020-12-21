@@ -1550,7 +1550,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("banimo", banimo);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatTest.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
