@@ -309,6 +309,7 @@
     <Compile Include="Classes\CookieExtensions.cs" />
     <Compile Include="Classes\ImageResult.cs" />
     <Compile Include="Classes\NoCacheAttribute .cs" />
+    <Compile Include="Classes\requestClassVM.cs" />
     <Compile Include="Classes\SessionAuthorizeAttribute .cs" />
     <Compile Include="Classes\SessionCheck.cs" />
     <Compile Include="Classes\Upload.cs" />

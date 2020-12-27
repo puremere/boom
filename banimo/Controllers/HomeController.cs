@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using System.Security.Claims;
 using System.Threading;
+using banimo.Classes.requestClassVM;
 
 namespace banimo.Controllers
 {
@@ -148,37 +149,9 @@ namespace banimo.Controllers
             return View();
         }
 
-        public ActionResult Index(string partnerID)
+        public async Task <ActionResult> Index(string partnerID)
         {
-            //string urlid = "0";
-            //string device = "";
-            //string code = "";
-            //string result = "";
-            //string serverAddress = "";
-            //if (Session["fist"] == null)
-            //{
-            //    device = RandomString();
-            //    code = MD5Hash(device + "ncase8934f49909");
-            //    productinfoviewdetail model = new productinfoviewdetail();
-            //    result = "";
-            //    serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataWithMenuContact.php";
-            //    using (WebClient client = new WebClient())
-            //    {
-
-            //        var collection = new NameValueCollection();
-            //        collection.Add("device", device);
-            //        collection.Add("code", code);
-            //        collection.Add("servername", servername);
-            //        collection.Add("partnerID", urlid.ToString());
-            //        byte[] response = client.UploadValues(serverAddress, collection);
-
-            //        result = System.Text.Encoding.UTF8.GetString(response);
-            //    }
-
-            //    getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
-            //}
-
-
+          
                 CookieVM cookieModel;
             if (Session["fist"] ==  null) {
                 Session["fist"] = "true";
@@ -188,18 +161,15 @@ namespace banimo.Controllers
                 string dev = RandomString();
                 string cod = MD5Hash(dev + "ncase8934f49909");
 
-                string resu = "";
-                using (WebClient client = new WebClient())
+                mainField contactusmodel = new mainField()
                 {
-
-                    var collection = new NameValueCollection();
-                    collection.Add("device", dev);
-                    collection.Add("code", cod);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/contactUsData.php", collection);
-
-                    resu = System.Text.Encoding.UTF8.GetString(response);
-                }
+                    code = cod,
+                    device = dev,
+                    servername = servername
+                };
+                string contactpayload = JsonConvert.SerializeObject(contactusmodel);
+                string resu = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/contactUsDataDemo.php", contactpayload);
+       
                 SetCookie(resu, "contactUs");
                 contactSectionVM conmodel = JsonConvert.DeserializeObject<contactSectionVM>(resu);
                 TempData["phone"] = conmodel.phone;
@@ -228,34 +198,23 @@ namespace banimo.Controllers
             string code ="";
             string result = "";
             string serverAddress = "";
-           
 
-           
-          
-            //SetCookie(result, "contactUs");
-
+            Classes.requestClassVM.getMainDataModel payloadModel = new Classes.requestClassVM.getMainDataModel()
+            {
+                code = code,
+                device = device,
+                partnerID = partnerID,
+                servername = servername
+            };
+            var payload = JsonConvert.SerializeObject(payloadModel);
             if (partnerID != null)
             {
                 urlid = partnerID.ToString();
-                //cookieModel.partnerID = partnerID;
                 string partnerName = "";
                 if (partnerID != "0")
                 {
-                    device = RandomString();
-                    code = MD5Hash(device + "ncase8934f49909");
-                    using (WebClient client = new WebClient())
-                    {
-                        var collection2 = new NameValueCollection();
-                        collection2.Add("device", device);
-                        collection2.Add("code", code);
-                        collection2.Add("partnerID", partnerID);
-                        collection2.Add("servername", servername);
-
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getPartnerName.php", collection2);
-
-                        result = System.Text.Encoding.UTF8.GetString(response);
-                    }
-                     partnerName = result.Replace("\n", "");
+                    result = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/getPartnerNameDemo.php",payload);
+                    partnerName = result.Replace("\n", "");
                 }
                 else
                 {
@@ -263,11 +222,6 @@ namespace banimo.Controllers
                 }
 
                 TempData["partnerName"] = partnerName;
-
-
-
-
-
             }
           
 
@@ -276,39 +230,18 @@ namespace banimo.Controllers
             device = RandomString();
             code = MD5Hash(device + "ncase8934f49909");
             productinfoviewdetail model = new productinfoviewdetail();
-            result = "";
-            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataTest.php";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                collection.Add("partnerID", urlid.ToString());
-                byte[] response = client.UploadValues(serverAddress, collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemo.php";
+            payloadModel.device = device;
+            payloadModel.code = code;
+            payload = JsonConvert.SerializeObject(payloadModel);
+            result = await wb.doPostData(serverAddress,payload);
             getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
-         
             log2.iosCookie = cookieModel.iosCookie;
-
             cookieModel.currentpage = "index";
             cookieModel.partnerID = urlid.ToString();
+            TempData["logo"] = cookieModel.partnerID == "0" ? "logo.png" : "logo" + cookieModel.partnerID + ".png";
 
-            if (cookieModel.partnerID == "0")
-            {
-                TempData["logo"] = "logo.png";
 
-            }
-            else
-            {
-                TempData["logo"] = "logo" + cookieModel.partnerID + ".png";
-
-            }
-           
 
             //TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
             SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
@@ -3245,43 +3178,33 @@ namespace banimo.Controllers
 
             return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
         }
-        public PartialViewResult getmenue()
+        public async Task<PartialViewResult> getmenue()
         {
 
 
             string Fresult = "";
-            //if (Fresult == "")
-            //{
-               
-               
-            //    SetCookie(Fresult, "menuCookie");
-            //}
-
             string tokenCookie = getCookie("token");
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(tokenCookie);
 
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-            string serverAddress = ConfigurationManager.AppSettings["server"] + "/getcatlistTest.php";
-            using (WebClient client = new WebClient())
+            string serverAddress = ConfigurationManager.AppSettings["server"] + "/getcatlistDemo.php";
+            Classes.requestClassVM.getMainDataModel payloadModel = new Classes.requestClassVM.getMainDataModel()
             {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                collection.Add("partnerID", cookieModel.partnerID);
-                byte[] response = client.UploadValues(serverAddress, collection);
-                Fresult = System.Text.Encoding.UTF8.GetString(response);
-            }
-
+                code = code,
+                device = device,
+                partnerID = cookieModel.partnerID,
+                servername = servername
+            };
+            var payload = JsonConvert.SerializeObject(payloadModel);
+            Fresult = await wb.doPostData(serverAddress, payload);
             MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(Fresult);
 
 
             return PartialView("/Views/Shared/_Menu.cshtml", catsCollection);
         }
-        public PartialViewResult contactSection()
+        public async Task<PartialViewResult> contactSection()
         {
             //string contactInfo = getCookie("contactUs");
             String result = "";
@@ -3298,17 +3221,15 @@ namespace banimo.Controllers
             string code = MD5Hash(device + "ncase8934f49909");
 
             string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
-            using (WebClient client = new WebClient())
+            mainField contactusmodel = new mainField()
             {
+                code = code,
+                device = device,
+                servername = servername
+            };
+            string contactpayload = JsonConvert.SerializeObject(contactusmodel);
+            result = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/contactUsDataDemo.php", contactpayload);
 
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(serverAddress, collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
             model = JsonConvert.DeserializeObject<contactSectionVM>(result);
             TempData["phone"] = model.phone;
             TempData["analyticID"] = model.analytic;
