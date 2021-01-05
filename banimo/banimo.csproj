@@ -587,6 +587,7 @@
     <Content Include="Content\Content\Site.css" />
     <Content Include="Content\Content\userDisplay.css" />
     <Content Include="Content\croppie.css" />
+    <Content Include="Content\css-circular-prog-bar.css" />
     <Content Include="Content\cubeportfolio.min.css" />
     <Content Include="Content\downloadAppStyle.css" />
     <Content Include="Content\easy-autocomplete.min.css" />

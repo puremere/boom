@@ -269,7 +269,7 @@ namespace education2
 
             }
         }
-        public void SendMessage(string message,string partner)
+        public void SendMessage(string message,string partner,string type)
         {
             string partnerID = partner;
             if (partner == "admin")
@@ -278,8 +278,8 @@ namespace education2
             }
             string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
             string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
-            Clients.Client(partnerID).setMessage(message, Context.ConnectionId,name);
-            Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name);
+            Clients.Client(partnerID).setMessage(message, Context.ConnectionId,name,type);
+            Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name,type);
         }
        
         public void HangUp(string partnerClientId)
