@@ -473,7 +473,12 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 }
             });
 
-
+        $.connection.hub.disconnected(function () {
+            setTimeout(function () {
+                $.connection.hub.start();
+                console.log("restart connection");
+            }, 5000); // Restart connection after 5 seconds.
+        });
         // Setup client SignalR operations
         //_setupHubCallbacks(hub);
 

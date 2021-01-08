@@ -1,6 +1,8 @@
-﻿using System;
+﻿using banimo.Classes;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -68,7 +70,13 @@ namespace education2.Controllers
                     continue;
                 filename = RandomString(7) + "_" + hpf.FileName; ;
                 string savedFileName = Path.Combine(Server.MapPath(pathString), filename );
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0"+filename );
                 hpf.SaveAs(savedFileName);
+
+
+                UploadImage.CreateThumbnail(20, savedFileName, savedFileNameThumb);
+
+
             }
             return Content(filename);
         }

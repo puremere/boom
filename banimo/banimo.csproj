@@ -313,6 +313,7 @@
     <Compile Include="Classes\SessionAuthorizeAttribute .cs" />
     <Compile Include="Classes\SessionCheck.cs" />
     <Compile Include="Classes\Upload.cs" />
+    <Compile Include="Classes\UploadImage.cs" />
     <Compile Include="Classes\UserSessionModel.cs" />
     <Compile Include="Classes\Variables.cs" />
     <Compile Include="Classes\webservise.cs" />
