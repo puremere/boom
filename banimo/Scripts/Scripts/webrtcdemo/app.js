@@ -316,7 +316,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                         console.log(url);
                         li2 = document.createElement('li');
                         li2.className = 'replies ' + connectionID;
-                        li2.innerHTML = `<img style="width:150px; float:left; border-radius:0" src="/Files/` + url + `" />`;
+                        li2.innerHTML = `<div style="width:150px;height:150px; object-fit:scale-down; float:left; border-radius:0"><span>` + url + `</span> <img  src="/Files/"/></div>`;// `<img style="width:150px; float:left; border-radius:0" src="/Files/` + url + `" />`;
                         hasobject = true;
                     }
                     else if (type == "audio") {
@@ -336,8 +336,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     console.log(hastext);
                     if (ismainListempty == 2  ) {   
 
-                       
-
+                        
                         if (isBackIsHitInItem == 2)// اینجوری لازم نیست مستر تغییر کنه و فقط آیتم داخل مستر تغییر میکنن
                         {
                             console.log("2")
@@ -447,7 +446,6 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                                 const li2 = document.createElement('li');
                                 li2.className = 'replies ' + connectionID;
                                 li2.style.display = display;
-                                url = message;
                                 li2.innerHTML = `<img style="width:150px; float:left; border-radius:0" src="/Files/` + url + `"/>`;
                                 ul.append(li2);
 
@@ -465,7 +463,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                                 li2.className = 'replies ' + connectionID;
                                 li2.style.display = display;
                                 url = message;
-                                li2.innerHTML = `<img style="width:150px; float:left; border-radius:0" src="/Files/` + url + `"/>`;
+                                li2.innerHTML = `<div style="width:150px;height:150px; object-fit:scale-down; float:left; border-radius:0"><span>` + url+`</span> <img  src="/Files/"/></div>`;
                                 ul.append(li2);
                             }
                         }
@@ -490,8 +488,6 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                        
 
                         ul.append(ulInnerHtml);
-
-
                         var firstnum = $("#" + connectionID).find(".num");
                         var numtext = firstnum.text();
                         if (numtext == '') {
@@ -1068,7 +1064,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 var message = $("#chatMessage").val();
                 let count = 0;
                 $.each(_Attachment, function (key,value) {
-                  
+                    
                     count += 1;
                 })
                 if (count != 0) {
@@ -1329,7 +1325,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     let messageType;
                     let rsp = request.response;
                     var ext = rsp.substring(rsp.lastIndexOf('.') + 1).toLowerCase();
-                    const li = document.createElement('li');
+                    messageType = 'image';
                     if ((ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
 
                         li.className = "sent";
@@ -1338,7 +1334,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                         li.innerHTML = htmlsrt;
                         var ul = $(".messages ul");
                         ul.append(li);
-                        messageType = 'image';
+                        
                     }
 
 
@@ -1347,9 +1343,10 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
 
                     $("#attachmentDiv").hide();
 
-
+                  
                     if (counter == total) {
-
+                        
+                        var ul = $(".messages ul");
                         if (message != '') {
                             const li2 = document.createElement('li');
                             li2.className = "sent";
