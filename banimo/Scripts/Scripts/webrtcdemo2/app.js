@@ -469,13 +469,29 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
             .fail(function (event) {
 
                 if (onFailure) {
-                    onFailure(event);
+                    //onFailure(event);
                 }
             });
 
         $.connection.hub.disconnected(function () {
             setTimeout(function () {
-                $.connection.hub.start();
+                $.connection.hub.start().done(function () {
+                    //alert('connected to SignalR hub... connection id: ' + _hub.connection.id);
+
+                    // Tell the hub what our username is
+                    console.log(viewModel.Groupname());
+                    console.log(username);
+                    hub.server.join(viewModel.Groupname(), username, 'client');
+                    $("#chatname").text(username)
+                    if (onSuccess) {
+                        onSuccess(hub);
+                    }
+                }).fail(function (event) {
+
+                        if (onFailure) {
+                            onFailure(event);
+                        }
+                    });
                 console.log("restart connection");
             }, 5000); // Restart connection after 5 seconds.
         });

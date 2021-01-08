@@ -272,14 +272,19 @@ namespace education2
         public void SendMessage(string message,string partner,string type)
         {
             string partnerID = partner;
+            List<User> partnerIDlist = new List<User>();
             if (partner == "admin")
             {
-                partnerID = Users.Where(x => x.Type == "admin").Last().ConnectionId;
+                 partnerIDlist = Users.Where(x => x.Type == "admin").ToList();
             }
-            string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
-            string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
-            Clients.Client(partnerID).setMessage(message, Context.ConnectionId,name,type);
-            Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name,type);
+            foreach(var item in partnerIDlist)
+            {
+                string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
+                string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
+                Clients.Client(item.ConnectionId).setMessage(message, Context.ConnectionId, name, type);
+                Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name, type);
+            }
+            
         }
        
         public void HangUp(string partnerClientId)
