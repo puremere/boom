@@ -595,6 +595,7 @@
     <Content Include="Content\flexslider2.min.css">
       <DependentUpon>flexslider2.css</DependentUpon>
     </Content>
+    <Content Include="Content\green-audio-player.min.css" />
     <Content Include="Content\layoutStyleApp.css" />
     <Content Include="Content\magDetailStyle.css" />
     <Content Include="Content\main.css" />
@@ -686,6 +687,7 @@
     <Content Include="images\Error404.jpg" />
     <Content Include="images\Error500.jpg" />
     <Content Include="images\failedP.png" />
+    <Content Include="images\fileicon.png" />
     <Content Include="images\googlePlay.png" />
     <Content Include="images\granttee.png" />
     <Content Include="images\header_background.jpg" />
@@ -1395,6 +1397,7 @@
     </Content>
     <Content Include="Scripts\choices.min.js" />
     <Content Include="Scripts\downloadAppScript.js" />
+    <Content Include="Scripts\green-audio-player.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.js" />

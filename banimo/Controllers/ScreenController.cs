@@ -72,9 +72,13 @@ namespace education2.Controllers
                 string savedFileName = Path.Combine(Server.MapPath(pathString), filename );
                 string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0"+filename );
                 hpf.SaveAs(savedFileName);
+                string ext = Path.GetExtension(hpf.FileName);
+                if ((ext == ".gif" || ext == ".png" || ext == ".jpeg" || ext == ".jpg"))
+                {
+                    UploadImage.CreateThumbnail(20, savedFileName, savedFileNameThumb);
+                }
 
-
-                UploadImage.CreateThumbnail(20, savedFileName, savedFileNameThumb);
+                
 
 
             }
