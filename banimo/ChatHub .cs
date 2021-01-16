@@ -269,24 +269,37 @@ namespace education2
 
             }
         }
-        public void SendMessage(string message,string partner,string type)
+        public void SendMessage(string message,string partner,string type,string progressID)
         {
             string partnerID = partner;
             List<User> partnerIDlist = new List<User>();
             if (partner == "admin")
             {
                  partnerIDlist = Users.Where(x => x.Type == "admin").ToList();
+                foreach (var item in partnerIDlist)
+                {
+                    string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
+                    string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
+                    Clients.Client(item.ConnectionId).setMessage(message, Context.ConnectionId, name, type,progressID);
+                    Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name, type, progressID);
+                }
             }
-            foreach(var item in partnerIDlist)
+            else
             {
                 string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
                 string name = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).Username;
-                Clients.Client(item.ConnectionId).setMessage(message, Context.ConnectionId, name, type);
-                Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name, type);
+                Clients.Client(partner).setMessage(message, Context.ConnectionId, name, type, progressID);
+                Clients.Client(Context.ConnectionId).setMessage(message, Context.ConnectionId, name, type, progressID);
             }
+           
             
         }
        
+
+        public void MessageRcieved(string connectionID, string progressID)
+        {
+            Clients.Client(connectionID).messageRecived(progressID);
+        }
         public void HangUp(string partnerClientId)
         {
            // string groupname = Users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId).GroupName;
