@@ -159,12 +159,10 @@
                     <div class="partnerholder" style="background-color:black ">
                         <div class="master" style="display:flex">
                             <video controls style=" margin:auto" class="video partner cool-background" autoplay="autoplay"></video>
+                            <video  style="position:absolute; width:"  muted id="1" class="video mine cool-background slaveVideo" autoplay="autoplay"></video>
 
                         </div>
-                        <div class="slave" style=" ">
-                            <video muted id="1" class="video mine cool-background" autoplay="autoplay"></video>
-
-                        </div>
+                        
 
                     </div>
                     @*<div class="partnerholder2">
@@ -374,18 +372,7 @@
     <script>
         downlodFile = function (element) {
             var id = element.id;
-            $.ajax({
-                url: "/screen/GetFileAsync",
-                data: {
-                    fileId: id,
-                },
-                success: function () {
-                    alert(success)
-                }
-            })
-     
-          
-
+            window.location.href = "/screen/GetFileAsync?fileId="+id;
         }
         downlodIMG = function (element, type) {
          

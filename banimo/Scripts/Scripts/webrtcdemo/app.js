@@ -337,7 +337,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                     else if (type == "file") {
                         li2 = document.createElement('li');
                         li2.className = 'replies ' + connectionID;
-                        li2.innerHTML = `<div class='fileUploadParent  ' onclick="downlodFile(this)"  style=""><div class="row" style="margin:0"><img  src="/images/fileicon.png" /><span  >` + url + `</span></div></div>` + `<i class="fa fa-download" style="font-size: 14px;position: absolute;bottom: 20px;right: 10px;color: #1c1c1c;"></i>`;
+                        li2.innerHTML = `<div class='fileUploadParent  '  style=""><div class="row" style="margin:0"><img  src="/images/fileicon.png" /><span  >` + url + `</span></div></div>` + `<i id="` + url +`" class="fa fa-download" style="font-size: 14px;position: absolute;bottom: 20px;right: 10px;color: #1c1c1c;cursor:pointer " onclick = downlodFile(this)></i>`;
                         hasobject = true;
                     }
                     else {
@@ -1646,6 +1646,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
 
                 final.srcObject = event.stream;
 
+                $(".hangup").css("display", "inline-block");
 
                 //var i = new MediaStream();
                 //if (event.streams != null) {

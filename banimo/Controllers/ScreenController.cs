@@ -5,8 +5,10 @@ using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -78,51 +80,24 @@ namespace education2.Controllers
                     UploadImage.CreateThumbnail(20, savedFileName, savedFileNameThumb);
                 }
 
-                
-
-
             }
             return Content(filename);
         }
-        public async Task<FileResult> GetFileAsync(string fileId)
+        
+        public void GetFileAsync(string fileId)
         {
-            string xte = fileId.Substring(fileId.LastIndexOf(".") +1);
-            using (var client = new HttpClient())
-            {
-                var uri = new System.Uri("~/Files/" + fileId);
-                var response = await client.GetAsync(new System.Uri("http://localhost/downloads/front_view.jpg"));
-                var contentStream = await response.Content.ReadAsStreamAsync();
-
-                return this.File(contentStream,"application/"+ xte, fileId);
-            }
+            var path = System.Web.HttpContext.Current.Server.MapPath("~/Files/"+ fileId);
+            string ext = Path.GetExtension(path).Replace(".", "");
+            string filename = Path.GetFileName(path);
+            Response.ContentType = "application/"+ ext;
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", filename));
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.WriteFile(path);
+            Response.HeaderEncoding = Encoding.UTF8;
+            Response.Flush();
+            Response.End();
         }
        
-        //[HttpPost]
-        //public async Task<JsonResult> uploadFile()
-        //{
-        //    bool Status = false;
-        //    try
-        //    {
-        //        foreach (string file in Request.Files)
-        //        {
-        //            var fileContent = Request.Files[file];
-        //            if (fileContent != null && fileContent.ContentLength > 0)
-        //            {
-        //                var stream = fileContent.InputStream;
-        //               // var fileName = GetFileName();
-        //                var fileExt = Path.GetExtension(fileContent.FileName);
-        //                var path = Path.Combine(Server.MapPath("~/App_Data/StaticResource"), fileName + fileExt);
-        //                using (var fileStream = System.IO.File.Create(path))
-        //                {
-        //                    stream.CopyTo(fileStream);
-        //                    Status = true;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch { }
-        //    return Json(Status);
-        //}
 
     }
 }

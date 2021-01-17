@@ -310,7 +310,7 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
                 console.log(responser);
                 console.log("i am waiting please send stream");
 
-                hub.server.streamRequest(responser, _requestT);
+                hub.server.streamRequest(responser, _requestType);
 
             }
         };
