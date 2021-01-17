@@ -327,6 +327,9 @@ WebRtcDemo.App = (function (viewModel, connectionManager) {
 
                        
                     }
+
+
+
                     
                     else if (type == "audio") {
                         li2 = document.createElement('li');
