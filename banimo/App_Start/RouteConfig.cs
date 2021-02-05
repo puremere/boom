@@ -11,6 +11,11 @@ namespace banimo
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            // BotDetect requests must not be routed
+            routes.IgnoreRoute("{*botdetect}",
+            new { botdetect = @"(.*)BotDetectCaptcha\.ashx" });
+
+
             routes.IgnoreRoute("{*botdetect}",
                new { botdetect = @"(.*)BotDetectCaptcha\.ashx" });
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

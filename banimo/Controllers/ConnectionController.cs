@@ -819,8 +819,6 @@ namespace banimo.Controllers
                 auth = RandomString();
             }
 
-            //ids = ids.Substring(1, ids.Count() - 1);
-            //nums = ids.Substring(1, nums.Count() - 1);
             using (WebClient client = new WebClient())
             {
 

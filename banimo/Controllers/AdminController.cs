@@ -3219,7 +3219,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlistTest.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlist.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3708,7 +3708,6 @@ namespace banimo.Controllers
 
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
-
 
                     HttpPostedFileBase hpf = Request.Files[i];
                     string tobeaddedtoimagename = RandomString(7);
