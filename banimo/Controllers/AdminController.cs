@@ -197,7 +197,7 @@ namespace banimo.Controllers
                 Session["imageList"] = "";
 
 
-            BaseViewModel basemodel = new BaseViewModel();
+            banimo.ViewModel.BaseViewModel basemodel = new banimo.ViewModel.BaseViewModel();
 
             return View(basemodel);
         }
@@ -2365,7 +2365,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", colortitle);
-                collection.Add("code", colorcode);
+                collection.Add("ColorCode", colorcode);
                 collection.Add("catID", catID);
                 collection.Add("servername", servername);
 
@@ -6161,6 +6161,21 @@ namespace banimo.Controllers
                     List<ViewModelPost.ReportMyProduct> list = JsonConvert.DeserializeObject<List<ViewModelPost.ReportMyProduct>>(data);
                     ViewModelPost.orderINFOVM log2 = JsonConvert.DeserializeObject<ViewModelPost.orderINFOVM>(info);
                     int finalItemTotal = list.Select(x => x.nums).Sum();
+                    PdfPCell cell2 = new PdfPCell(new Phrase(@System.Configuration.ConfigurationManager.AppSettings["siteName"], fontbig))
+                    {
+                        Border = PdfPCell.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_RIGHT
+                    };
+                    cell2.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                    cell2.NoWrap = false;
+
+                    cell2.Padding = 5;
+                    cell2.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    cell2.HorizontalAlignment = Element.ALIGN_CENTER;
+                    toptable.AddCell(cell2);
+
+
+
                     PdfPCell cell = new PdfPCell(new Phrase("فاکتور فروش", fontbig))
                     {
                         Border = PdfPCell.NO_BORDER,
