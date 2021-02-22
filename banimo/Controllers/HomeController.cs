@@ -2940,7 +2940,24 @@ namespace banimo.Controllers
 
         public ActionResult TermsOfService()
         {
-            return View();
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/privacy.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            aboutVM model = JsonConvert.DeserializeObject<aboutVM>(result);
+
+
+            return View(model);
 
         }
 

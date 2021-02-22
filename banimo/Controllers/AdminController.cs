@@ -1000,11 +1000,11 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", log2);
 
         }
-        public ActionResult getNewListProduct(string val)
+        public ActionResult getNewListProduct(string val,string server)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-
+            servername = server != "" ? server : servername;
             string result = "";
             string token = Session["LogedInUser2"] as string;
             using (WebClient client = new WebClient())
@@ -1029,6 +1029,38 @@ namespace banimo.Controllers
             return Content(resultstring);
 
           
+        }
+
+        public ActionResult getNewListProductFromServer(string val)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            string nodeID = ConfigurationManager.AppSettings["nodeID"];
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", "banimo");
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("value", val);
+                collection.Add("nodeID", nodeID);
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProductFromServer.php", collection);
+
+                result = Encoding.UTF8.GetString(response);
+            }
+            List<ViewModel.pList> model = JsonConvert.DeserializeObject<List<ViewModel.pList>>(result);
+            string resultstring = JsonConvert.SerializeObject(model);
+            return Content(resultstring);
+
+
         }
         public ContentResult addNewTtemToOrder(string ID, string quantity,string OrderId)
         {
@@ -3161,6 +3193,7 @@ namespace banimo.Controllers
 
             Response.Cookies["imageAboutUs"].Value = "";
             Response.Cookies["imageContactUs"].Value = "";
+            Response.Cookies["imagePrivacy"].Value = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -4039,6 +4072,12 @@ namespace banimo.Controllers
                 Response.Cookies["imageContactUs"].Value = ss;
                 model.type = "contactus";
             }
+            else if (filename == "privacy")
+            {
+                ss = Request.Cookies["imagePrivacy"].Value + tobeaddedtoimagename + ".jpg,";
+                Response.Cookies["imagePrivacy"].Value = ss;
+                model.type = "privacy";
+            }
 
 
             //ss = ss ;
@@ -4085,8 +4124,14 @@ namespace banimo.Controllers
                     cookie = Request.Cookies["imageContactUs"].Value.Replace(srt, "") + srt;
                     Response.Cookies["imageContactUs"].Value = cookie;
                 }
+                else if (type == "privacy")
+                {
+                    srt = srt.Replace("../images/panelimages/", "");
+                    cookie = Request.Cookies["imagePrivacy"].Value.Replace(srt, "") + srt;
+                    Response.Cookies["imagePrivacy"].Value = cookie;
+                }
 
-                model.data = cookie.Substring(0, cookie.Length - 1);
+                    model.data = cookie.Substring(0, cookie.Length - 1);
                 model.type = type;
             }
 
@@ -4224,6 +4269,12 @@ namespace banimo.Controllers
                     string srt = Request.Cookies["imageContactUs"].Value;
                     srt = srt.Replace(filename + ",", "").Replace(",,", ",");
                     Response.Cookies["imageContactUs"].Value = srt;
+                }
+                else if (type == "privacy")
+                {
+                    string srt = Request.Cookies["imagePrivacy"].Value;
+                    srt = srt.Replace(filename + ",", "").Replace(",,", ",");
+                    Response.Cookies["imagePrivacy"].Value = srt;
                 }
                 string pathString = "~/images/panelimages";
 
@@ -5479,7 +5530,8 @@ namespace banimo.Controllers
         {
             Response.Cookies["imageAboutUs"].Value = "";
             Response.Cookies["imageContactUs"].Value = "";
-
+            Response.Cookies["imagePrivacy"].Value = "";
+            
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
