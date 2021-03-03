@@ -1279,7 +1279,7 @@ namespace banimo.Controllers
             log.ID = ID;
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
-                                                            select new ViewModelPost.imageGallery { src = "/images/panelimages/" + L.image, thumb = "/images/panelimages/" + L.image }).ToList();
+                                                            select new ViewModelPost.imageGallery { src =  L.image, thumb =  L.image }).ToList();
             log.imgGallery = galleryList;
             log.cattree = log.cattree.Replace("-->", " / ");
             log.tag = log.tag.Replace("-", ",");
@@ -1945,7 +1945,7 @@ namespace banimo.Controllers
                 }
                 orderprice -= discount;
 
-                if (credit > orderprice)
+                if (credit >= orderprice)
                 {
                     model.payment = "1";
                     return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
@@ -2950,7 +2950,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/privacy.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/terms.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
@@ -2997,8 +2997,7 @@ namespace banimo.Controllers
                             body = body.Replace("{productName}", productName);
                             body = body.Replace("{productLink}", url + "/Home/ProductDetail?ID=N" + productLink);
 
-
-
+                            
                             mm.Body = body;
                             mm.IsBodyHtml = true;
                             //foreach (HttpPostedFileBase attachment in attachments)

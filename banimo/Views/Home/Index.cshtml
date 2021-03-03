@@ -134,6 +134,8 @@
                         else
                         {
                             <li data-target="#myCarousel" data-slide-to="@index"></li>
+
+
                         }
 
                     }
@@ -145,7 +147,7 @@
                 <div class="carousel-inner">
                     @foreach (var item in Model.slides)
                     {
-                        string src = "/images/panelimages/" + item.image;
+                        string src ="/images/panelimages/"+  item.image;
                         if (Model.slides.IndexOf(item) == 0)
                         {
                             <div class="item active">
@@ -252,7 +254,7 @@
                         string addtocartid = "addtocart" + ID;
                         string price = item.price;
 
-                        string src = "/images/panelimages/" + imagefile;
+                        string src =  imagefile;
 
                         <div class="item showmedetail" id=@ID style="cursor:pointer; ">
 
@@ -522,7 +524,7 @@
                             string addtocartid = "addtocart" + ID;
                             string price = item.price;
 
-                            string src = "/images/panelimages/" + imagefile;
+                            string src =  imagefile;
 
                             <div class="item showmedetail" id=@ID style="cursor:pointer;  max-width:34%">
 
@@ -672,7 +674,7 @@
                             string addtocartid = "addtocart" + ID;
                             string price = item.price;
 
-                            string src = "/images/panelimages/" + imagefile;
+                            string src =  imagefile;
 
                             <div class="item showmedetail" id=@ID style="cursor:pointer; ; max-width:34%">
 
@@ -815,7 +817,7 @@
                                 <ol class="carousel-indicators">
                                     @foreach (var item in Model.slides)
                                     {
-                                        string src = "/images/panelimages/" + item.image;
+                                        string src =  item.image;
                                         var index = Model.slides.IndexOf(item);
                                         if (index == 0)
                                         {
@@ -835,7 +837,7 @@
                                 <div class="carousel-inner">
                                     @foreach (var item in Model.slides)
                                     {
-                                        string src = "/images/panelimages/" + item.image;
+                                        string src = "/images/panelimages/"+  item.image;
                                         if (Model.slides.IndexOf(item) == 0)
                                         {
                                             <div class="item active">
@@ -935,7 +937,7 @@
                                     string addtocartid = "addtocart" + ID;
                                     string price = item.price;
 
-                                    string src = "/images/panelimages/" + imagefile;
+                                    string src =  imagefile;
 
                                     <div class="item showmedetail" id=@ID style="cursor:pointer">
 
@@ -1144,7 +1146,7 @@
                                     string addtocartid = "addtocart" + ID;
                                     string price = item.price;
 
-                                    string src = "/images/panelimages/" + imagefile;
+                                    string src =  imagefile;
 
                                     <div class="item showmedetail" id=@ID style="cursor:pointer">
 
@@ -1341,7 +1343,7 @@
                                     string addtocartid = "addtocart" + ID;
                                     string price = item.price;
 
-                                    string src = "/images/panelimages/" + imagefile;
+                                    string src =  imagefile;
 
                                     <div class="item showmedetail" id=@ID style="cursor:pointer">
 

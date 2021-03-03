@@ -3651,7 +3651,20 @@ namespace banimo.Controllers
 
                     newjson = System.Text.Encoding.UTF8.GetString(response);
                 }
+                string json2 = "";
+                using (WebClient client = new WebClient())
+                {
 
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", "banimo");
+
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
+
+                    json2 = System.Text.Encoding.UTF8.GetString(response);
+                }
+                partnerVM serverlog = JsonConvert.DeserializeObject<partnerVM>(json2);
 
 
                 partnerVM newlog = JsonConvert.DeserializeObject<partnerVM>(newjson);
@@ -3661,6 +3674,7 @@ namespace banimo.Controllers
 
                 AdminProductVM model = new AdminProductVM()
                 {
+                    serverCat = serverlog,
                     log = newlog,
                     page = page == null ? "1" : page.ToString(),
 
@@ -4499,9 +4513,16 @@ namespace banimo.Controllers
                     else
                     {
                         imglst = detail.ImageList;
+                      
                         imglst = imglst.Substring(0, imglst.Length - 1);
+                        List<string> lst = imglst.Split(',').ToList();
+                        imglst = "";
+                        foreach (var item in lst)
+                        {
+                            imglst += Path.GetFileName(item)+",";
+                        }
                     }
-
+                    imglst = imglst.Trim(',');
 
                     string json;
                     string title = detail.title;
@@ -4535,7 +4556,7 @@ namespace banimo.Controllers
                     string code = MD5Hash(device + "ncase8934f49909");
                     //string MezonId = USER.ID;
                     string result = "";
-
+                    string token = Session["LogedInUser2"] as string;
                     using (WebClient client = new WebClient())
                     {
 
@@ -4552,7 +4573,7 @@ namespace banimo.Controllers
                         collection.Add("color", color);
                         collection.Add("filter", filter);
                         collection.Add("range", range);
-
+                        collection.Add("token", token);
                         collection.Add("feature", detail.inputallfeatureid);
                         collection.Add("imaglist", imglst);
                         collection.Add("count", count);
@@ -4565,7 +4586,7 @@ namespace banimo.Controllers
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -6911,7 +6932,9 @@ namespace banimo.Controllers
             }
 
         }
-
+        public void logout() {
+            Session["logedInUser2"] = null;
+        }
 
         public void imageUrl(string filename, string type)
         {

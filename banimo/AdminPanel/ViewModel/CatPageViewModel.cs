@@ -9,6 +9,7 @@ namespace AdminPanel.ViewModel
     public class AdminProductVM
     {
         public partnerVM log { get; set; }
+        public partnerVM serverCat { get; set; }
         public string page { get; set; }
         public string SelectedlistProduct { get; set; }
         public string SelectedaddProduct { get; set; }
