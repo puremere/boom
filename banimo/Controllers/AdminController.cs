@@ -5929,6 +5929,12 @@ namespace banimo.Controllers
                 toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                 toptable.PaddingTop = 200;
 
+                PdfPTable bottomable = new PdfPTable(1);
+                bottomable.DefaultCell.NoWrap = false;
+                bottomable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                bottomable.PaddingTop = 200;
+
+
                 PdfContentByte content = writer.DirectContent;
                 Rectangle rectangle = new Rectangle(document.PageSize);
                 rectangle.Left += document.LeftMargin - 10;
@@ -6254,7 +6260,7 @@ namespace banimo.Controllers
 
 
 
-                    PdfPCell cell = new PdfPCell(new Phrase("فاکتور فروش", fontbig))
+                    PdfPCell cell = new PdfPCell(new Phrase("فاکتور فروش", fontSMALL))
                     {
                         Border = PdfPCell.NO_BORDER,
                         HorizontalAlignment = Element.ALIGN_RIGHT
@@ -6262,10 +6268,25 @@ namespace banimo.Controllers
                     cell.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     cell.NoWrap = false;
 
-                    cell.Padding = 35;
+                    cell.Padding = 20;
                     cell.VerticalAlignment = Element.ALIGN_MIDDLE;
                     cell.HorizontalAlignment = Element.ALIGN_CENTER;
                     toptable.AddCell(cell);
+
+                  
+
+                    //PdfPCell cell3 = new PdfPCell(new Phrase("آدرس فروشگاه : "+ @System.Configuration.ConfigurationManager.AppSettings["address"], fontSMALL))
+                    //{
+                    //    Border = PdfPCell.NO_BORDER,
+                    //    HorizontalAlignment = Element.ALIGN_LEFT
+                    //};
+                    //cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
+                    //cell3.NoWrap = false;
+                   
+                    //cell3.Padding = 10;
+                    //cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    //cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    //toptable.AddCell(cell3);
 
                     document.Add(toptable);
 
@@ -6709,7 +6730,22 @@ namespace banimo.Controllers
 
 
                 //Add the table to the document
-                document.Add(table);
+                  document.Add(table);
+
+                   PdfPCell cell3 = new PdfPCell(new Phrase("آدرس فروشگاه : "+ @System.Configuration.ConfigurationManager.AppSettings["address"], fontSMALL))
+                    {
+                        Border = PdfPCell.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_LEFT
+                    };
+                    cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
+                    cell3.NoWrap = false;
+                   
+                    cell3.Padding = 10;
+                    cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    bottomable.AddCell(cell3);
+
+                    document.Add(bottomable);
 
 
 
