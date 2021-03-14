@@ -54,8 +54,6 @@ namespace banimo.ViewModelPost
         public string description { get; set; }
         public string timestamp { get; set; }
         public string transactionType { get; set; }
-
-
         
 
     }

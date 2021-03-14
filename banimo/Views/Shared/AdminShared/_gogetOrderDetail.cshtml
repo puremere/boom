@@ -50,7 +50,7 @@
                             <div style="width:100%; display:flex">
                                 <input style="width:100%; display:inline-block" id="addItemToOrderInput" class="form-control" />
                                 <input value="1" id="quntityInput" style="width:20%; display:inline-block" class="form-control" />
-                                <input id="IDholder"  hidden/>
+                                <input id="index-holder" hidden />
                                 <i id="refreshList" style="font-size:22px ; padding:5px" class="fa fa-refresh"></i>
                             </div>
 
@@ -111,7 +111,7 @@
                     <input name="data" hidden />
                     <input name="id" hidden />
                     <input value="user" name="type" hidden />
-                    <input hidden name="orderID" value="@Model.myProducts.First().orderID" />
+                    <input hidden name="orderID" value="@Model.myProducts.First().orderID"/>
                     <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> شرح سفارش    <i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>  <i id="addItemToOrderIcon" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus"></i></h3>
 
                 </form>
@@ -144,7 +144,7 @@
                                 {
 
                                     int i = Model.myProducts.IndexOf(item) + 1;
-                                    string image = item.image;
+                                    string image = "/images/panelimages/" + item.image;
 
                                     <div class="Itemholderr" id="@item.orderID">
 
@@ -200,7 +200,7 @@
                                             {
                                                 foreach (var item in Model.myProducts)
                                                 {
-                                                    string image = item.image;
+                                                    string image = "/images/panelimages/" + item.image;
                                                     int i = Model.myProducts.IndexOf(item) + 1;
                                                     string deleteid = item.id + "-" + item.orderID;
                                                     <tr style=" ">
@@ -304,38 +304,23 @@
             dataType: 'html',
             data: {
                 val: $("#addItemToOrderInput").val(),
-                server: ""
+                server: "";
             },
             success: function (data) {
 
-                var productItems = {
+                var products = {
                     data: JSON.parse(data),
-                    getValue: "title",
-                    list: {
-                        maxNumberOfElements: 100,
+                    getValue: "ID",
 
-                        onSelectItemEvent: function () {
-                            var value = $("#addItemToOrderInput").getSelectedItemData().ID;
-                        
-                            $("#IDholder").val(value).trigger("change");
+                    template: {
+                        type: "custom",
+                        method: function (value, item) {
+                            return   item.title + " | <div style='background-color:#ddd; border-radius:50%; width:30px'></div> "
                         }
-                    }
-                    //  list: {
-                    //    maxNumberOfElements: 100,
-                    //    match: {
-                    //        enabled: true
-                    //    }
-                    //},
-                    //template: {
-                    //    type: "custom",
-                    //    method: function (value, item) {
-                    //        return   item.title + " | <div style='background-color:#ddd; border-radius:50%; width:30px'></div> "
-                    //    }
-                    //},
-
+                    },
 
                 };
-                $("#addItemToOrderInput").easyAutocomplete(productItems);
+                $("#addItemToOrderInput").easyAutocomplete(products);
                 //$("#addItemToOrderInput").parent.css("width", "100%")
             }
 
@@ -347,7 +332,7 @@
             url: '/Admin/addNewTtemToOrder',
             dataType: 'html',
             data: {
-                ID: $("#IDholder").val(),
+                ID: $("#addItemToOrderInput").val(),
                 quantity: $("#quntityInput").val(),
                 OrderId: '@Model.myProducts.First().orderID'
 
