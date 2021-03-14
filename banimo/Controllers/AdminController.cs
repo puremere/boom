@@ -6740,12 +6740,25 @@ namespace banimo.Controllers
                     cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
                     cell3.NoWrap = false;
                    
-                    cell3.Padding = 10;
+                    cell3.Padding = 7;
                     cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
                     cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
                     bottomable.AddCell(cell3);
 
-                    document.Add(bottomable);
+                PdfPCell cell4 = new PdfPCell(new Phrase("شماره تلفن : " + @System.Configuration.ConfigurationManager.AppSettings["phone"], fontSMALL))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_LEFT
+                };
+                cell4.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
+                cell4.NoWrap = false;
+
+                cell4.Padding = 10;
+                cell4.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell4.HorizontalAlignment = Element.ALIGN_RIGHT;
+                bottomable.AddCell(cell4);
+
+                document.Add(bottomable);
 
 
 
