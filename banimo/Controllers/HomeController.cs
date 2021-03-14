@@ -2334,6 +2334,9 @@ namespace banimo.Controllers
 
             return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
         }
+
+
+
         public string gogetfinalprice()
         {
             string cartModelString = Request.Cookies["cartModel"] != null ? Request.Cookies["cartModel"].Value : "";
