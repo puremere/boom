@@ -27,15 +27,15 @@ namespace banimo.ViewModel
     {
         public List<Time> times { get; set; }
         public string latitiude { get; set; }
-        public string longitude{ get; set; }
+        public string longitude { get; set; }
         public string credit { get; set; }
         public string baseDeliver { get; set; }
         public string priceDeliver { get; set; }
         public string poly { get; set; }
     }
-     public class commentModel
+    public class commentModel
     {
-        
+
         public string id { get; set; }
         public string img { get; set; }
         public string title { get; set; }
@@ -47,7 +47,12 @@ namespace banimo.ViewModel
 
         public string id { get; set; }
         public string img { get; set; }
-      
+
+    }
+
+    public class ProductDetailCookie{
+        public int productid { get; set; }
+        public int quantity { get; set; }
     }
 
     public class ProductDetail 
