@@ -173,6 +173,8 @@ namespace banimo.Controllers
             }
             string result = "";
             string token = Session["token"] as string;
+
+
             using (WebClient client = new WebClient())
             {
 
@@ -181,6 +183,7 @@ namespace banimo.Controllers
                 collection2.Add("code", code);
                 collection2.Add("id", id);
                 collection2.Add("servername", servername);
+                collection2.Add("auth", "null");
                 collection2.Add("token", token);
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
@@ -224,7 +227,7 @@ namespace banimo.Controllers
             }
            
             
-            return Content("");
+            return Content("nocontent");
 
         }
         public ActionResult VerifyWalletZarin()
@@ -246,7 +249,6 @@ namespace banimo.Controllers
                             collection2.Add("device", device);
                             collection2.Add("code", code);
                             collection2.Add("auth", Request.QueryString["Authority"]);
-                           
                             collection2.Add("servername", servername);
                        
 
@@ -1163,11 +1165,12 @@ namespace banimo.Controllers
                                     collection2.Add("code", code);
                                     collection2.Add("refID", rr);
                                     collection2.Add("paymentStatus", "1");
+                                    collection2.Add("payment", "3");
                                     collection2.Add("servername", servername);
 
 
                                     byte[] response =
-                                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doFinalCheckMellat.php", collection2);
+                                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                                     result2 = System.Text.Encoding.UTF8.GetString(response);
                                 }

@@ -152,7 +152,10 @@ namespace banimo.Controllers
         public async Task <ActionResult> Index(string partnerID)
         {
           
-                CookieVM cookieModel;
+            
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            ViewBag.cookie = cartModelString;
+            CookieVM cookieModel;
             if (Session["fist"] ==  null) {
                 Session["fist"] = "true";
                 cookieModel = new CookieVM();
@@ -1292,72 +1295,29 @@ namespace banimo.Controllers
         public string addtocart(string id, string price)
         {
 
-                         
-            //SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
-
+           
             string str = id;
             str = str.Substring(10, str.Length - 10);
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
 
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                //collection.Add("token", token);
-                collection.Add("servername", servername);
-                collection.Add("id", str);
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetail.php", collection);
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-            var log = JsonConvert.DeserializeObject<earlyRoot>(result);
-
-            Datum productdetail = new Datum();
-            if (log != null)
-            {
-                foreach (var myvar in log.data)
-                {
-                    productdetail = myvar;
-
-                }
-            }
-            string cartModelString = getCookie("cartModel");
-            List<ProductDetail> data;
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+           
+            List<ProductDetailCookie> data;
             if (cartModelString == "")
             {
-                ProductDetail newitem = new ViewModel.ProductDetail();
-                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
-
-
+                ProductDetailCookie newitem = new ViewModel.ProductDetailCookie();
+                List<ProductDetailCookie> data2 = new List<ViewModel.ProductDetailCookie>();
                 newitem.productid = Convert.ToInt32(str);
                 newitem.quantity = 1;
-                newitem.name = Server.UrlEncode(productdetail.title);
-                newitem.price = Convert.ToInt32(productdetail.PriceNow);
-                newitem.baseprice = Convert.ToInt32(productdetail.productprice);
-                newitem.discount = Convert.ToInt32(productdetail.discount);
-                if (productdetail.imagelist == null)
-                {
-                    newitem.imagethum = "placeholder.jpg";
-                }
-                else
-                {
-                    newitem.imagethum = productdetail.imagelist.First().title;
-
-                }
                 data2.Add(newitem);
                 var json = new JavaScriptSerializer().Serialize(data2);
-                SetCookie(json, "cartModel");
+                Response.Cookies["Modelcart"].Value = json;
                 return "1";
             }
             else
             {
-                data = JsonConvert.DeserializeObject<List<ProductDetail>>(cartModelString);
-                ProductDetail newitem = new ViewModel.ProductDetail();
+                data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+                ProductDetailCookie newitem = new ViewModel.ProductDetailCookie();
 
                 int j = 0;
                 foreach (var item in data)
@@ -1375,21 +1335,15 @@ namespace banimo.Controllers
                 {
                     newitem.productid = Convert.ToInt32(str);
                     newitem.quantity = 1;
-                    newitem.name = Server.UrlEncode(productdetail.title);
-                    newitem.price = Convert.ToInt32(productdetail.PriceNow);
-                    newitem.baseprice = Convert.ToInt32(productdetail.productprice);
-                    newitem.discount = Convert.ToInt32(productdetail.discount);
-
-                    newitem.imagethum = productdetail.imagelist.First().title;
                     data.Add(newitem);
                     var json = new JavaScriptSerializer().Serialize(data);
-                    SetCookie(json, "cartModel");
+                    Response.Cookies["Modelcart"].Value = json;
                     return "1";
                 }
                 else
                 {
                     var json = new JavaScriptSerializer().Serialize(data);
-                    SetCookie(json, "cartModel");
+                    Response.Cookies["Modelcart"].Value = json;
                     return "10";
                 }
 
@@ -1403,28 +1357,21 @@ namespace banimo.Controllers
 
         public void deletefromcart(string id)
         {
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+            string CookieModel = Request.Cookies["Modelcart"].Value;
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(CookieModel);
             string str = id;
             str = str.Substring(3, str.Length - 3);
-
+            int intstr = Convert.ToInt32(str);
 
             if (data != null && data.Count > 0)
             {
 
-                ProductDetail newitem = new ViewModel.ProductDetail();
+                ProductDetailCookie newitem = data.SingleOrDefault(x => x.productid == intstr); //new ViewModel.ProductDetail();
 
-                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
-
-                foreach (var item in data)
-                {
-                    if (item.productid != Convert.ToInt32(str))
-                    {
-                        data2.Add(item);
-                    }
-
-                }
-                var json = new JavaScriptSerializer().Serialize(data2);
-                SetCookie(json, "cartModel");
+              
+                data.Remove(newitem);
+                var json = new JavaScriptSerializer().Serialize(data);
+                Response.Cookies["Modelcart"].Value = json;
 
 
 
@@ -1436,20 +1383,28 @@ namespace banimo.Controllers
 
         public void emptycart()
         {
-            SetCookie("", "cartModel");
+           
+          
+           
+            Response.Cookies["Modelcart"].Value = "";
+            //SetCookie("", "cartModel");
 
         }
 
         public void minusfromcart(string id)
         {
+
+
            
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+
+            string CookieModel = Request.Cookies["Modelcart"].Value;
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(CookieModel);
             string str = id;
             str = str.Substring(5, str.Length - 5);
             if (data != null && data.Count > 0)
             {
 
-                ProductDetail newitem = new ViewModel.ProductDetail();
+                ProductDetailCookie newitem = new ViewModel.ProductDetailCookie();
 
                 bool boolian = false;
                 int lastindex = 0;
@@ -1478,7 +1433,8 @@ namespace banimo.Controllers
                 }
                 
                 var json = new JavaScriptSerializer().Serialize(data);
-                SetCookie(json, "cartModel");
+                Response.Cookies["Modelcart"].Value = json;
+               // SetCookie(json, "cartModel");
                 
 
             }
@@ -1486,12 +1442,12 @@ namespace banimo.Controllers
         }
         public void addtocart2(string id)
         {
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+
+            
+            string CookieModel = Request.Cookies["Modelcart"].Value;
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(CookieModel);
             string str = id;
             str = str.Substring(3, str.Length - 3);
-
-
-            ProductDetail newitem = new ViewModel.ProductDetail();
             foreach (var item in data)
             {
                 if (item.productid == Convert.ToInt32(str))
@@ -1502,7 +1458,8 @@ namespace banimo.Controllers
 
             }
             var json = new JavaScriptSerializer().Serialize(data);
-            SetCookie(json, "cartModel");
+            Response.Cookies["Modelcart"].Value = json;
+            //SetCookie(json, "cartModel");
 
 
 
@@ -1580,100 +1537,7 @@ namespace banimo.Controllers
 
 
 
-        [NoCache]
-        public ActionResult checkout()
-        {
-            //CookieVM jsonModel;
-
-            //if (TempData["cookieToSave"] == null)
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            //}
-            //else
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
-
-            //}
-            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-
-            jsonModel.currentpage = "checkout";
-
-            //SetCookie(jsonModel);
-            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
-            //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
-            //TempData.Keep("cookieToSave");
-            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
-            
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            if (data != null && data.Count > 0)
-            {
-
-                //if (jsonModel.partnerID != "0")
-                //{
-                //    string ides = "";
-                //    foreach (var item in data)
-                //    {
-                //        ides = ides + item.productid + ",";
-                //    }
-                //    ides = ides.TrimEnd(',');
-                //    string device = RandomString();
-                //    string code = MD5Hash(device + "ncase8934f49909");
-                //    string result = "";
-                //    string serverAddress = ConfigurationManager.AppSettings["server"] + "/checkBasketForPartner.php";
-                //    using (WebClient client = new WebClient())
-                //    {
-
-                //        var collection = new NameValueCollection();
-                //        collection.Add("device", device);
-                //        collection.Add("code", code);
-                //        collection.Add("servername", servername);
-                //        collection.Add("pIDES", ides);
-                //        collection.Add("partnerID", jsonModel.partnerID);
-                //        byte[] response = client.UploadValues(serverAddress, collection);
-
-                //        result = System.Text.Encoding.UTF8.GetString(response);
-                //    }
-                //}
-                //else
-                //{
-                //    foreach (var item in data)
-                //    {
-                //        CheckoutViewModel j = new CheckoutViewModel();
-                //        j.price = item.price;
-                //        j.baseprice = item.baseprice;
-                //        j.discount = item.discount;
-                //        j.productid = item.productid;
-                //        j.productname = Server.UrlDecode(item.name);
-                //        j.quantity = item.quantity;
-                //        j.imageaddress = item.imagethum;
-                //        finalmodel.Add(j);
-                //    }
-                //}
-
-                foreach (var item in data)
-                {
-                    CheckoutViewModel j = new CheckoutViewModel();
-                    j.price = item.price;
-                    j.baseprice = item.baseprice;
-                    j.discount = item.discount;
-                    j.productid = item.productid;
-                    j.productname = Server.UrlDecode(item.name);
-                    j.quantity = item.quantity;
-                    j.imageaddress = item.imagethum;
-                    finalmodel.Add(j);
-                }
-
-
-            }
-
-
-
-
-
-            //ViewBag.Message = "Your contact page.";
-
-            return View(finalmodel);
-        }
+      
 
        
 
@@ -2352,6 +2216,192 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_UserDataPanel.cshtml", user);
 
         }
+
+
+
+
+
+
+        [NoCache]
+        public ActionResult checkout()
+        {
+
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            jsonModel.currentpage = "checkout";
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
+
+            string cartModelString = Request.Cookies["cartModel"] != null ? Request.Cookies["cartModel"].Value : "";
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+            if (data != null && data.Count > 0)
+            {
+                string idlist = "";
+                foreach (var item in data)
+                {
+                    idlist += item.productid.ToString() + ",";
+                }
+                string result = "";
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", servername);
+                    collection.Add("idlist", cartModelString);
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
+
+                foreach (var productItem in log.data)
+                {
+                    int prid = int.Parse(productItem.ID);
+                    CheckoutViewModel j = new CheckoutViewModel();
+                    j.price = decimal.Parse(productItem.PriceNow);
+                    j.baseprice = decimal.Parse(productItem.productprice);
+                    j.discount = decimal.Parse(productItem.discount);
+                    j.productid = prid;
+                    j.productname = Server.UrlDecode(productItem.title);
+                    j.quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                    j.imageaddress = productItem.imagelist[0] != null ? productItem.imagelist[0].title : "placeholder.png";
+                    finalmodel.Add(j);
+                }
+
+
+
+
+            }
+
+
+
+
+
+            //ViewBag.Message = "Your contact page.";
+
+            return View(finalmodel);
+        }
+        public PartialViewResult checkoutsummery()
+        {
+
+
+
+
+
+            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
+
+            string srt = getCookie("cartModel");
+            string cartmodel = ",";
+            if (srt != "")
+            {
+                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
+
+
+                if (data != null && data.Count > 0)
+                {
+
+                    if (data != null)
+                    {
+
+                        foreach (var item in data)
+                        {
+                            CheckoutViewModel j = new CheckoutViewModel();
+                            j.price = item.price;
+                            j.baseprice = item.baseprice;
+                            j.discount = item.discount;
+                            j.productid = item.productid;
+                            j.productname = Server.UrlDecode(item.name);
+                            j.quantity = item.quantity;
+                            j.imageaddress = item.imagethum;
+                            finalmodel.Add(j);
+
+                            cartmodel = item.productid + "-" + item.quantity + ",";
+                        }
+
+                    }
+
+
+                }
+            }
+
+
+
+
+            return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
+        }
+        public string gogetfinalprice()
+        {
+            string cartModelString = Request.Cookies["cartModel"] != null ? Request.Cookies["cartModel"].Value : "";
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+          
+            if (data != null && data.Count > 0)
+            {
+                string idlist = "";
+                foreach (var item in data)
+                {
+                    idlist += item.productid.ToString() + ",";
+                }
+                string result = "";
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", servername);
+                    collection.Add("idlist", idlist);
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
+
+
+                int j = 0;
+                int basej = 0;
+                int number = 0;
+                if (data != null)
+                {
+                   
+                    foreach (var item in log.data)
+                    {
+                        int itemID = Int32.Parse(item.ID);
+                        int quantity = data.SingleOrDefault(x => x.productid == itemID).quantity;
+                        j += (int)( Int32.Parse(item.PriceNow) * quantity);
+                        basej += (int)(Int32.Parse(item.productprice) * quantity);
+                        number += quantity;
+
+                    }
+                }
+
+                int discountfinal = (basej - j);
+                if (j != 0)
+                {
+                    int discountpercent = (discountfinal * 100) / j;
+                    return j.ToString() + "," + basej + "," + number + "," + discountfinal + "," + discountpercent + "%";
+                }
+                else
+                {
+                    return "0,0,0,0,0";
+                }
+
+            }
+            else
+            {
+                return "0,0,0,0,0";
+            }
+
+
+        }
+
         public PartialViewResult shopsummery()
         {
             CookieVM jsonModel = new CookieVM();
@@ -3082,48 +3132,7 @@ namespace banimo.Controllers
 
 
 
-        public string gogetfinalprice()
-        {
-
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            if (data != null && data.Count > 0)
-            {
-
-
-                int j = 0;
-                int basej = 0;
-                int number = 0;
-                if (data != null)
-                {
-                    foreach (var item in data)
-                    {
-                        j += (int)(item.price * item.quantity);
-                        basej += (int)(item.baseprice * item.quantity);
-                        number += item.quantity;
-
-                    }
-                }
-
-                int discountfinal = (basej - j);
-                if (j != 0)
-                {
-                    int discountpercent = (discountfinal * 100) / j;
-                    return j.ToString() + "," + basej + "," + number + "," + discountfinal + "," + discountpercent + "%";
-                }
-                else
-                {
-                    return "0,0,0,0,0";
-                }
-
-            }
-            else
-            {
-                return "0,0,0,0,0";
-            }
-
-
-        }
-     
+      
         public PartialViewResult getmenueforapp()
         {
             string device = RandomString();
@@ -3148,53 +3157,7 @@ namespace banimo.Controllers
 
             return PartialView("/Views/Shared/_MenuForApp.cshtml", catsCollection);
         }
-        public PartialViewResult checkoutsummery()
-        {
-
-            
-
-
-
-            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
-            string srt = getCookie("cartModel");
-            string cartmodel = ",";
-            if (srt != "")
-            {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
-
-
-                if (data != null && data.Count > 0)
-                {
-
-                    if (data != null)
-                    {
-
-                        foreach (var item in data)
-                        {
-                            CheckoutViewModel j = new CheckoutViewModel();
-                            j.price = item.price;
-                            j.baseprice = item.baseprice;
-                            j.discount = item.discount;
-                            j.productid = item.productid;
-                            j.productname = Server.UrlDecode(item.name);
-                            j.quantity = item.quantity;
-                            j.imageaddress = item.imagethum;
-                            finalmodel.Add(j);
-
-                            cartmodel = item.productid + "-" + item.quantity + ",";
-                        }
-
-                    }
-
-
-                }
-            }
-
-
-
-
-            return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
-        }
+      
         public async Task<PartialViewResult> getmenue()
         {
 

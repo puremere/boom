@@ -1021,7 +1021,6 @@ namespace banimo.Controllers
 
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProduct.php", collection);
-
                 result = Encoding.UTF8.GetString(response);
             }
             List<ViewModel.pList> model = JsonConvert.DeserializeObject<List<ViewModel.pList>>(result);
@@ -3601,6 +3600,32 @@ namespace banimo.Controllers
             return RedirectToAction("product");
         }
 
+
+        public void copyFromServer(string itemName, string websiteCat, string baseCat)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["LogedInUser2"] as string;
+            string newjson = "";
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                collection.Add("token", token);
+                collection.Add("websiteCat", websiteCat);
+                collection.Add("serverCat", baseCat);
+                collection.Add("serverTitle", itemName);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductFromServer.php", collection);
+
+                newjson = System.Text.Encoding.UTF8.GetString(response);
+            }
+        }
         public ActionResult product(int? page, int? MSG)
         {
 
@@ -3647,7 +3672,7 @@ namespace banimo.Controllers
                     collection.Add("servername", servername);
                     collection.Add("token", token);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPartnerVMTest.php", collection);
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPartnerVM.php", collection);
 
                     newjson = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4354,7 +4379,8 @@ namespace banimo.Controllers
             ViewBag.message = message;
 
 
-            string device = RandomString(10);
+
+            string device = RandomString(8);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
 
