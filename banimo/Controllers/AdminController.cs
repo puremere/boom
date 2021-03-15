@@ -989,15 +989,27 @@ namespace banimo.Controllers
 
 
             ViewModelPost.ListOfProductOrder log2 = JsonConvert.DeserializeObject<ViewModelPost.ListOfProductOrder>(result);
-            foreach (var item in log2.myProducts)
+            if (log2 != null )
             {
-                if (item.image == null)
+                if (log2.myProducts != null)
                 {
-                    item.image = "placeholder.jpg";
+                    foreach (var item in log2.myProducts)
+                    {
+                        if (item.image == null)
+                        {
+                            item.image = "placeholder.jpg";
+                        }
+                    }
                 }
+                
             }
 
-            return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", log2);
+            ViewModel.orderDetailVM model = new ViewModel.orderDetailVM()
+            {
+                list = log2,
+                id = id
+            };
+            return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", model);
 
         }
         public ActionResult getNewListProduct(string val,string server)
@@ -4465,7 +4477,7 @@ namespace banimo.Controllers
 
                     return RedirectToAction("Edit", "Admin", new { id = detail.ID, catid = detail.catID, message = 2 });
                 }
-                string pathString = "~/images/panelimages";
+                string pathString = "/images/panelimages";
                 if (!Directory.Exists(Server.MapPath(pathString)))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
@@ -4488,9 +4500,10 @@ namespace banimo.Controllers
                             if (hpf.ContentLength == 0)
                                 continue;
                             string tobeaddedtoimagename = RandomString(7);
-                            imagelist.Add(tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
-
-
+                            string  imagepath =  tobeaddedtoimagename + Path.GetExtension(hpf.FileName);
+                            string savedFileName = Path.Combine(Server.MapPath(pathString), imagepath);
+                            imagelist.Add(imagepath);
+                            hpf.SaveAs(savedFileName);
                         }
 
 
@@ -4561,7 +4574,7 @@ namespace banimo.Controllers
                     string code = MD5Hash(device + "ncase8934f49909");
                     //string MezonId = USER.ID;
                     string result = "";
-
+                    
                     using (WebClient client = new WebClient())
                     {
 
@@ -4571,6 +4584,8 @@ namespace banimo.Controllers
                         collection.Add("code", code);
                         collection.Add("title", title);
                         collection.Add("id", detail.catID);
+                        collection.Add("secondid", detail.ID);
+
                         collection.Add("SetID", setid);
                         collection.Add("desc", desc);
                         collection.Add("price", detail.productprice);
@@ -4591,7 +4606,7 @@ namespace banimo.Controllers
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -4614,7 +4629,7 @@ namespace banimo.Controllers
                                 string savedFileName = Path.Combine(Server.MapPath(pathString), imagename);
                                 // int k = 1;
                                 hpf.SaveAs(savedFileName);
-                                imageUrl(savedFileName, "product");
+                                //imageUrl(savedFileName, "product");
                             }
 
 
@@ -4716,7 +4731,7 @@ namespace banimo.Controllers
 
                             string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
                             hpf.SaveAs(savedFileName); // Save the file
-                            imageUrl(savedFileName, "product");
+                            //imageUrl(savedFileName, "product");
                         }
 
 

@@ -370,10 +370,10 @@ namespace banimo.Controllers
            
             
 
-            string srt = getCookie("cartModel");
+            string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
             if (srt != "")
             {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
+                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(srt);
                 CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
                 model.hourid = model.hourid.Replace("final", "");
                 string device = RandomString();
@@ -492,10 +492,10 @@ namespace banimo.Controllers
         }
         public ActionResult ReqestForPaymentZarin(ViewModelPost.ReqestForPaymentViewModel model)
         {
-            string srt = getCookie("cartModel");
+            string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
             if (srt != "")
             {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
+                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(srt);
                 CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
                 model.hourid = model.hourid.Replace("final", "");
                 string device = RandomString();
@@ -656,6 +656,59 @@ namespace banimo.Controllers
 
 
         }
+
+        public ActionResult verifyByAdmin(string payment , string id)
+        {
+
+
+
+            string result2 = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("ID", id);
+                collection2.Add("servername", servername);
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
+
+                result2 = System.Text.Encoding.UTF8.GetString(response);
+                result2 = result2.Replace("\n", "").Trim();
+            }
+
+
+
+            string res = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("auth", "");
+                collection2.Add("amount", "");
+                collection2.Add("token", "");
+                collection2.Add("refID", result2);
+                collection2.Add("paymentStatus", "1");
+                collection2.Add("payment", payment);
+                collection2.Add("mbrand", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
+
+                res = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content("200");
+
+        }
         public ActionResult VerifyZarin()
         {
             try
@@ -789,8 +842,11 @@ namespace banimo.Controllers
 
             string ids = "";
             string nums = "";
-            List<ProductDetail> dataList = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            foreach (var item in dataList)
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+
+            //List<ProductDetail> dataList = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+            foreach (var item in data)
             {
                 ids = ids + "," + (item.productid);
                 nums = nums + "," + (item.quantity);
@@ -1593,9 +1649,9 @@ namespace banimo.Controllers
             if (result == "موفق")
             {
 
-                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
-                SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
-
+                //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
+                //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
+                Response.Cookies["Modelcart"].Value = "";
                 var saleorder = TempData["message2"] as string;
 
             }
@@ -1610,9 +1666,9 @@ namespace banimo.Controllers
             if (status == 1)
             {
                 ViewBag.message = "موفق";
-                List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
-                SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
-               
+                //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
+                //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
+                Response.Cookies["Modelcart"].Value = "";
             }
         
            

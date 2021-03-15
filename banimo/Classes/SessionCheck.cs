@@ -43,4 +43,21 @@ namespace banimo.Classes
 
         }
     }
+
+    public class doForAll : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+            if (session["LogedInUser"] == null)
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary {
+                                { "Controller", "Home" },
+                                { "Action", "login" }
+                                });
+            }
+
+        }
+    }
 }

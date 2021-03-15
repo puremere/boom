@@ -33,7 +33,7 @@ namespace banimo.Controllers
 {
 
     [AllowAnonymous]
-    public class HomeController : Controller
+    public class HomeController : baseController
     {
         string servername = ConfigurationManager.AppSettings["serverName"];
         static readonly string PasswordHash = "P@@Sw0rd";
@@ -151,10 +151,9 @@ namespace banimo.Controllers
 
         public async Task <ActionResult> Index(string partnerID)
         {
-          
-            
+
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
-            ViewBag.cookie = cartModelString;
+            this.ViewBag.cookie = cartModelString;
             CookieVM cookieModel;
             if (Session["fist"] ==  null) {
                 Session["fist"] = "true";
@@ -418,6 +417,8 @@ namespace banimo.Controllers
         }
         public ActionResult aboutus()
         {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
             ViewBag.Message = "Your app description page.";
             string result = "";
             string device = RandomString();
@@ -440,6 +441,8 @@ namespace banimo.Controllers
         }
         public ActionResult contactUs(string message)
         {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
             if (message == "1")
             {
                 ViewBag.message = "1";
@@ -560,8 +563,12 @@ namespace banimo.Controllers
             //}
             return RedirectToAction("contactus", "Home", new { message = "2" });
         }
+
+   
         public ActionResult ProductList(string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
             CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             //if (TempData["cookieToSave"] == null)
@@ -573,7 +580,7 @@ namespace banimo.Controllers
             //    prodVM = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
 
             //}
-            prodVM.pagenumberactive = "1";
+            
             prodVM.filterIds = filter;
             prodVM.tag = tag;
             prodVM.Available = Available;
@@ -605,6 +612,10 @@ namespace banimo.Controllers
                 catLevelforuse = catmode.Substring(0, 1);
                 catidforuse = catmode.Substring(1, catmode.Count() - 1);
 
+                if (catidforuse != prodVM.catID)
+                {
+                    prodVM.pagenumberactive = "1";
+                }
                 prodVM.catID = catidforuse;
                 prodVM.catLevel = catLevelforuse;
 
@@ -657,20 +668,13 @@ namespace banimo.Controllers
 
             return View(model);
         }
+
+       
         public PartialViewResult gogetproductlist()
         {
-            //CookieVM jsonModel;
-
-            //if (TempData["cookieToSave"] == null)
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            //}
-            //else
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
-
-            //}
-            //TempData.Keep("cookieToSave");
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
+            
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             string urlid = "0";
@@ -844,24 +848,23 @@ namespace banimo.Controllers
         public void changesortid(string ID)
         {
             ID = ID.Substring(0, 1);
-            //CookieVM jsonModel;
-
-            //if (TempData["cookieToSave"] == null)
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            //}
-            //else
-            //{
-            //    jsonModel = JsonConvert.DeserializeObject<CookieVM>(TempData["cookieToSave"] as string);
-
-            //}
+          
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             jsonModel.sortID = ID;
             //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
             SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
+           
         }
+        public ActionResult getquntitiy()
+        {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            //List<ProductDetailCookie> model = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+            //int final = model != null ?  model.Sum(x => x.quantity) : 0;
+            return Content(cartModelString);
+        }
+
         public void changeRangeIDes(string min, string max)
         {
             //CookieVM jsonModel;
@@ -1239,6 +1242,8 @@ namespace banimo.Controllers
 
         public ActionResult ProductDetail(string id)
         {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             
             string token = "";
@@ -1282,7 +1287,7 @@ namespace banimo.Controllers
             log.ID = ID;
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
-                                                            select new ViewModelPost.imageGallery { src = "/images/panelimages/" + L.image, thumb = "/images/panelimages/" + L.image }).ToList();
+                                                            select new ViewModelPost.imageGallery { src =  L.image, thumb =  L.image }).ToList();
             log.imgGallery = galleryList;
             log.cattree = log.cattree.Replace("-->", " / ");
             log.tag = log.tag.Replace("-", ",");
@@ -1688,161 +1693,7 @@ namespace banimo.Controllers
         {
             return PartialView("");
         }
-        [HomeSessionCheck]
-        public ActionResult EndOrder(string error)
-        {
-            if(error != "" && error != null)
-            {
-                if (error == "5")
-                {
-                    ViewBag.error = "پرداخت با کیف پول امکان پذیر نیست!";
-                }
-              
-            }
-           
-            
-            if (Session["LogedInUser"] == null)
-            {
-                return RedirectToAction("login");
-            }
-            string token = Session["token"] as string;
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("token", token);
-                collection.Add("mbrand", servername);
-
-                //foreach (var myvalucollection in imaglist) {
-                //    collection.Add("imaglist[]", myvalucollection);
-                //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTime.php?", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
-            TempData["deliverybase"] = log.baseDeliver;
-            TempData["deliveryprice"] = log.priceDeliver;
-            TempData["credit"] = log.credit;
-
-            return View(log);
-        }
-        [HomeSessionCheck]
-        [HttpPost]
-
-        public ActionResult EndOrder(string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment, string lat, string lon)
-        {
-            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            string disC = jsonModel.discount;
-
-
-            
-
-            ViewModelPost.ReqestForPaymentViewModel model = new ViewModelPost.ReqestForPaymentViewModel()
-            {
-                city = city,
-                address = address,
-                country = country,
-                fullname = fullname,
-                hourid = hourid,
-                phonenumber = phonenumber,
-                postalcode = postalcode,
-                payment = payment,
-                newdiscount = disC,
-                lat = lat,
-                lon = lon
-            };
-            if (payment == "3")
-            {
-                return RedirectToAction("ReqestForPaymentMellat", "Connection", model);
-
-            }
-            else if (payment == "4")
-            {
-                return RedirectToAction("ReqestForPaymentPasargad", "Connection", model);
-            }
-            else if (payment == "1" || payment == "2") {
-
-                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
-            }
-
-
-            else if(payment == "5")
-            {
-                return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
-            }
-
-            else
-            {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-
-                int orderprice = 0;
-                int discount = 0;
-                int deliverybase = 0;
-                int deliveryprice = 0;
-                int credit = 0;
-                if (data != null)
-                {
-                    foreach (var item in data)
-                    {
-                        orderprice += (int)(item.price * item.quantity);
-                    }
-                }
-
-                if (TempData["discount"] != null)
-                {
-                    discount = Int32.Parse(TempData["discount"] as string);
-                }
-                deliverybase = Int32.Parse(TempData["deliverybase"] as string);
-                deliveryprice = Int32.Parse(TempData["deliveryprice"] as string);
-                credit = Int32.Parse(TempData["credit"] as string);
-
-                if (orderprice < deliverybase)
-                {
-                    orderprice += deliveryprice;
-                }
-                orderprice -= discount;
-
-                if (credit > orderprice)
-                {
-                    model.payment = "1";
-                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
-                }
-                else
-                {
-                    string price = (orderprice - credit).ToString();
-                    string token = Session["token"] as string;
-                    string device = RandomString();
-                    string code = MD5Hash(device + "ncase8934f49909");
-                    string result = wb.addTransaction(token, device, code, price, servername);
-                    addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(result);
-
-                    if (Rmodel.status == 200)
-                    {
-                        TempData["addFromOrder"] = "1";
-                        TempData["orderModel"] = JsonConvert.SerializeObject(model);
-                        return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
-                    }
-
-                    else
-                    {
-                        return Content("");
-                    }
-                  
-                    
-                }
-               
-            }
-                
-               
-        }
-        
+       
         public ActionResult inInArea(string lat, string log)
         {
 
@@ -1961,6 +1812,8 @@ namespace banimo.Controllers
 
         public ActionResult compare(int id, string cat)
         {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
             //CookieVM jsonModel;
 
             //if (TempData["cookieToSave"] == null)
@@ -2225,14 +2078,15 @@ namespace banimo.Controllers
         [NoCache]
         public ActionResult checkout()
         {
-
+            
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             jsonModel.currentpage = "checkout";
             SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
 
-            string cartModelString = Request.Cookies["cartModel"] != null ? Request.Cookies["cartModel"].Value : "";
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+            ViewBag.cookie = cartModelString;
             List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
             if (data != null && data.Count > 0)
             {
@@ -2241,6 +2095,7 @@ namespace banimo.Controllers
                 {
                     idlist += item.productid.ToString() + ",";
                 }
+                idlist = idlist.Trim(',');
                 string result = "";
                 string device = RandomString();
                 string code = MD5Hash(device + "ncase8934f49909");
@@ -2251,7 +2106,7 @@ namespace banimo.Controllers
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("servername", servername);
-                    collection.Add("idlist", cartModelString);
+                    collection.Add("idlist", idlist);
                     byte[] response =
                     client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
@@ -2286,6 +2141,246 @@ namespace banimo.Controllers
 
             return View(finalmodel);
         }
+
+
+        [HomeSessionCheck]
+        public ActionResult EndOrder(string error)
+        {
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+            ViewBag.cookie = cartModelString;
+            if (error != "" && error != null)
+            {
+                if (error == "5")
+                {
+                    ViewBag.error = "پرداخت با کیف پول امکان پذیر نیست!";
+                }
+
+            }
+
+
+            if (Session["LogedInUser"] == null)
+            {
+                return RedirectToAction("login");
+            }
+            string token = Session["token"] as string;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTime.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
+            TempData["deliverybase"] = log.baseDeliver;
+            TempData["deliveryprice"] = log.priceDeliver;
+            TempData["credit"] = log.credit;
+            int finalAmount = 0;
+           
+
+            
+           
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+            if (data != null && data.Count > 0)
+            {
+                string idlist = "";
+                foreach (var item in data)
+                {
+                    idlist += item.productid.ToString() + ",";
+                }
+                idlist = idlist.Trim(',');
+                result = "";
+                device = RandomString();
+                code = MD5Hash(device + "ncase8934f49909");
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", servername);
+                    collection.Add("idlist", idlist);
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                earlyRoot log2 = JsonConvert.DeserializeObject<earlyRoot>(result);
+             
+                foreach (var productItem in log2.data)
+                {
+                    int prid = int.Parse(productItem.ID);
+                    int price = int.Parse(productItem.PriceNow);
+                    int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+
+                    finalAmount += quantity * price;
+                }
+
+
+
+
+            }
+            log.finalAmount = finalAmount.ToString() ;
+            return View(log);
+        }
+        [HomeSessionCheck]
+        [HttpPost]
+
+        public ActionResult EndOrder(string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment, string lat, string lon)
+        {
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            string disC = jsonModel.discount;
+
+
+
+
+            ViewModelPost.ReqestForPaymentViewModel model = new ViewModelPost.ReqestForPaymentViewModel()
+            {
+                city = city,
+                address = address,
+                country = country,
+                fullname = fullname,
+                hourid = hourid,
+                phonenumber = phonenumber,
+                postalcode = postalcode,
+                payment = payment,
+                newdiscount = disC,
+                lat = lat,
+                lon = lon
+            };
+            if (payment == "3")
+            {
+                return RedirectToAction("ReqestForPaymentMellat", "Connection", model);
+
+            }
+            else if (payment == "4")
+            {
+                return RedirectToAction("ReqestForPaymentPasargad", "Connection", model);
+            }
+            else if (payment == "1" || payment == "2")
+            {
+
+                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+            }
+
+
+            else if (payment == "5")
+            {
+                return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
+            }
+
+            else
+            {
+                int orderprice = 0;
+                int discount = 0;
+                int deliverybase = 0;
+                int deliveryprice = 0;
+                int credit = 0;
+                string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+                ViewBag.cookie = cartModelString;
+                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+                if (data != null && data.Count > 0)
+                {
+                    string idlist = "";
+                    foreach (var item in data)
+                    {
+                        idlist += item.productid.ToString() + ",";
+                    }
+                    idlist = idlist.Trim(',');
+                    string result = "";
+                    string device = RandomString();
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection = new NameValueCollection();
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("servername", servername);
+                        collection.Add("idlist", idlist);
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                        result = System.Text.Encoding.UTF8.GetString(response);
+                    }
+
+                    earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
+
+                    foreach (var productItem in log.data)
+                    {
+                        int prid = int.Parse(productItem.ID);
+                        int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                        int price = Int32.Parse(productItem.PriceNow);
+
+                        orderprice += (int)(price * quantity);
+                    }
+
+
+
+
+                }
+
+
+
+                if (TempData["discount"] != null)
+                {
+                    discount = Int32.Parse(TempData["discount"] as string);
+                }
+                deliverybase = Int32.Parse(TempData["deliverybase"] as string);
+                deliveryprice = Int32.Parse(TempData["deliveryprice"] as string);
+                credit = Int32.Parse(TempData["credit"] as string);
+
+                if (orderprice < deliverybase)
+                {
+                    orderprice += deliveryprice;
+                }
+                orderprice -= discount;
+
+                if (credit > orderprice)
+                {
+                    model.payment = "1";
+                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+                }
+                else
+                {
+                    string price = (orderprice - credit).ToString();
+                    string token = Session["token"] as string;
+                    string device = RandomString();
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    string result = wb.addTransaction(token, device, code, price, servername);
+                    addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(result);
+
+                    if (Rmodel.status == 200)
+                    {
+                        TempData["addFromOrder"] = "1";
+                        TempData["orderModel"] = JsonConvert.SerializeObject(model);
+                        return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
+                    }
+
+                    else
+                    {
+                        return Content("");
+                    }
+
+
+                }
+
+            }
+
+
+        }
+
         public PartialViewResult checkoutsummery()
         {
 

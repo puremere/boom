@@ -318,6 +318,7 @@
     <Compile Include="Classes\Variables.cs" />
     <Compile Include="Classes\webservise.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\baseController.cs" />
     <Compile Include="Controllers\CustomerLoginController.cs" />
     <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="ViewModel\confrimVM.cs" />
     <Compile Include="ViewModel\contactSectionVM.cs" />
     <Compile Include="ViewModel\DownloadAppVM.cs" />
+    <Compile Include="ViewModel\orderDetailVM.cs" />
     <Compile Include="ViewModel\orderProductListVM.cs" />
     <Compile Include="ViewModel\PartnerInfo.cs" />
     <Compile Include="ViewModel\PartnerOrders.cs" />

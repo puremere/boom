@@ -76,6 +76,7 @@ namespace banimo.ViewModelPost
         public string TimeTo { get; set; }
         public string DayText { get; set; }
         public string deliver { get; set; }
+    
 
 
     }
@@ -103,6 +104,8 @@ namespace banimo.ViewModelPost
         public string id { get; set; }
         public string discount { get; set; }
         public string orderID { get; set; }
+        public string active { get; set; }
+
     }
     public class ListOfProductOrder
     {
