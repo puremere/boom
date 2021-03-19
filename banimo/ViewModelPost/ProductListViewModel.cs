@@ -77,7 +77,8 @@ namespace banimo.ViewModelPost
         public string TimeTo { get; set; }
         public string DayText { get; set; }
         public string deliver { get; set; }
-    
+        public string postalcode { get; set; }
+        public string desc { get; set; }
 
 
     }

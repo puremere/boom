@@ -4175,6 +4175,23 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/AdminShared/_imageForMCEPages.cshtml", model);
         }
 
+
+        [HttpPost]
+        public ActionResult setImageForDescription(string filename, HttpPostedFileBase blob)
+        {
+
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string tobeaddedtoimagename = RandomString(7);
+            string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtoimagename + ".jpg");
+            blob.SaveAs(savedFileName);
+            return Content("/images/panelimages/" + tobeaddedtoimagename + ".jpg");
+            // return Content(tobeaddedtoimagename);
+        }
+
         public ActionResult DelImage(string filename)
         {
 
@@ -5520,6 +5537,19 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             return result;
+        }
+        public void deleteimageDesc( string title)
+        {
+            
+            string pathString2 = "~/images/panelimages/";
+
+            string savedFileName = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
+            if (System.IO.File.Exists(savedFileName))
+            {
+                System.IO.File.Delete(savedFileName);
+            }
+
+            
         }
         public ActionResult deleteimage(string id, string title)
         {
