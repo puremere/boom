@@ -4537,8 +4537,13 @@ namespace banimo.Controllers
                     }
                     else
                     {
-                        imglst = detail.ImageList;
-                        imglst = imglst.Substring(0, imglst.Length - 1);
+
+                        List<string> lst = detail.ImageList.Trim(',').Split(',').ToList();
+                        foreach (var item in lst)
+                        {
+                            imglst += Path.GetFileName(item);
+                        }
+                       
                     }
 
 
@@ -4606,7 +4611,7 @@ namespace banimo.Controllers
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }

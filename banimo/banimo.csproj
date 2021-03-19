@@ -348,6 +348,9 @@
     <Compile Include="ViewModel\confrimVM.cs" />
     <Compile Include="ViewModel\contactSectionVM.cs" />
     <Compile Include="ViewModel\DownloadAppVM.cs" />
+    <Compile Include="ViewModel\finalCheckVM.cs" />
+    <Compile Include="ViewModel\getCredit.cs" />
+    <Compile Include="ViewModel\getOrderRefID.cs" />
     <Compile Include="ViewModel\orderDetailVM.cs" />
     <Compile Include="ViewModel\orderProductListVM.cs" />
     <Compile Include="ViewModel\PartnerInfo.cs" />
@@ -409,6 +412,7 @@
     <Compile Include="ViewModel\userdata.cs" />
     <Compile Include="ViewModel\VerificationViewModel.cs" />
     <Compile Include="ViewModel\VerifyViewModel.cs" />
+    <Compile Include="ViewModel\walletUpdate.cs" />
     <Compile Include="Web References\bankMellat\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

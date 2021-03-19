@@ -1062,8 +1062,8 @@ namespace banimo.Controllers
         {
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
-            string token = Session["token"] as string ;
-            string result = wb.addTransaction(token, device, code, price, servername);
+            string token = Session["token"] as string;
+            string result = wb.addTransaction(token, device, code, price, servername,"1","واریز به کیف پول", "0","0");
             addTransactionVM model = JsonConvert.DeserializeObject<addTransactionVM>(result);
             return Content(model.timestamp);
         }
@@ -2269,112 +2269,24 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("ReqestForPaymentPasargad", "Connection", model);
             }
-            else if (payment == "1" || payment == "2")
-            {
-
-                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
-            }
+           
 
 
             else if (payment == "5")
             {
                 return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
             }
+            else if (payment == "1" || payment == "2")
+            {
+
+                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+            }
 
             else
             {
-                int orderprice = 0;
-                int discount = 0;
-                int deliverybase = 0;
-                int deliveryprice = 0;
-                int credit = 0;
-                string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
-                ViewBag.cookie = cartModelString;
-                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
-                if (data != null && data.Count > 0)
-                {
-                    string idlist = "";
-                    foreach (var item in data)
-                    {
-                        idlist += item.productid.ToString() + ",";
-                    }
-                    idlist = idlist.Trim(',');
-                    string result = "";
-                    string device = RandomString();
-                    string code = MD5Hash(device + "ncase8934f49909");
-                    using (WebClient client = new WebClient())
-                    {
-
-                        var collection = new NameValueCollection();
-                        collection.Add("device", device);
-                        collection.Add("code", code);
-                        collection.Add("servername", servername);
-                        collection.Add("idlist", idlist);
-                        byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
-                        result = System.Text.Encoding.UTF8.GetString(response);
-                    }
-
-                    earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
-
-                    foreach (var productItem in log.data)
-                    {
-                        int prid = int.Parse(productItem.ID);
-                        int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
-                        int price = Int32.Parse(productItem.PriceNow);
-
-                        orderprice += (int)(price * quantity);
-                    }
-
-
-
-
-                }
-
-
-
-                if (TempData["discount"] != null)
-                {
-                    discount = Int32.Parse(TempData["discount"] as string);
-                }
-                deliverybase = Int32.Parse(TempData["deliverybase"] as string);
-                deliveryprice = Int32.Parse(TempData["deliveryprice"] as string);
-                credit = Int32.Parse(TempData["credit"] as string);
-
-                if (orderprice < deliverybase)
-                {
-                    orderprice += deliveryprice;
-                }
-                orderprice -= discount;
-
-                if (credit > orderprice)
-                {
-                    model.payment = "1";
-                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
-                }
-                else
-                {
-                    string price = (orderprice - credit).ToString();
-                    string token = Session["token"] as string;
-                    string device = RandomString();
-                    string code = MD5Hash(device + "ncase8934f49909");
-                    string result = wb.addTransaction(token, device, code, price, servername);
-                    addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(result);
-
-                    if (Rmodel.status == 200)
-                    {
-                        TempData["addFromOrder"] = "1";
-                        TempData["orderModel"] = JsonConvert.SerializeObject(model);
-                        return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
-                    }
-
-                    else
-                    {
-                        return Content("");
-                    }
-
-
-                }
+                model.payment = "1";
+                return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", model);
+                
 
             }
 

@@ -39,7 +39,8 @@ namespace banimo.Classes
         static  string device = RandomString();
         static string code = MD5Hash(device + "ncase8934f49909");
         static string servername = ConfigurationManager.AppSettings["serverName"];
-        public string addTransaction(string token,string device,string code,string price, string servername) {
+        public string addTransaction(string token,string device,string code,string price, string servername, string type,string desc,string orderID,string status)
+        {
            
             
 
@@ -52,7 +53,10 @@ namespace banimo.Classes
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("price", price);
-                collection.Add("status", "0");
+                collection.Add("type", type);
+                collection.Add("desc", desc);
+                collection.Add("orderID", orderID);
+                collection.Add("status", status);
                 collection.Add("mbrand", servername);
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/addTransaction.php", collection);

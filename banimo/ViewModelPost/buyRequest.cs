@@ -17,6 +17,7 @@ namespace banimo.ViewModelPost
         public int amount { get; set; }
         public string peigiry { get; set; }
         public string auth { get; set; }
+        public string ID { get; set; }
     }
     public class ReqestForPaymentViewModel
     {

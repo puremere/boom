@@ -34,7 +34,7 @@ namespace banimo.Controllers
 
     public class ConnectionController : Controller
     {
-
+        webservise wb = new webservise();
         string servername = ConfigurationManager.AppSettings["serverName"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
@@ -125,249 +125,9 @@ namespace banimo.Controllers
         //public ActionResult ReqestForPayment(string newdiscount, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment)
 
 
-        public ActionResult ReqestForWallet(string id)
-        {
-
-
-            
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-
-            System.Net.ServicePointManager.Expect100Continue = false;
-            ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
-
-
-
-            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-
-            //e65379be-81d0-11e9-8cda-000c29344814
-            //9e9d57bc-07e1-11e8-ad17-000c295eb8fc
-            string callB = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyWalletZarin";
-            string zarinCode = "";
-            string Authority;
-          
-           // string srt = getCookie("cartModel");
-
-            if (cookieModel.partnerID != "0")
-            {
-                string result2 = "";
-                using (WebClient client = new WebClient())
-                {
-
-                    var collection2 = new NameValueCollection();
-                    collection2.Add("device", device);
-                    collection2.Add("code", code);
-                    collection2.Add("partnerID", cookieModel.partnerID);
-                    collection2.Add("servername", servername);
-
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getZarin.php", collection2);
-
-                    result2 = System.Text.Encoding.UTF8.GetString(response);
-                }
-                zarinCode = result2.Replace(@"\n", "");
-            }
-            else
-            {
-                zarinCode = ConfigurationManager.AppSettings["zarin"];
-            }
-            string result = "";
-            string token = Session["token"] as string;
-
-
-            using (WebClient client = new WebClient())
-            {
-
-                var collection2 = new NameValueCollection();
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("id", id);
-                collection2.Add("servername", servername);
-                collection2.Add("auth", "null");
-                collection2.Add("token", token);
-
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
-           
-            if (log2 != null && log2.mytransaction != null)
-            {
-                int zarinprice = log2.mytransaction.First().price;
-                string zarindesc = log2.mytransaction.First().description;
-                int Status = zp.PaymentRequest(zarinCode, zarinprice, zarindesc, "info@banimo.com", "", callB, out Authority);
-
-                if (Status == 100)
-                {
-
-                    string result2 = "";
-                    using (WebClient client = new WebClient())
-                    {
-
-
-                        var collection2 = new NameValueCollection();
-                        collection2.Add("device", device);
-                        collection2.Add("code", code);
-                        collection2.Add("auth", Authority);
-                        collection2.Add("timestamp", log2.mytransaction.First().timestamp);
-                        collection2.Add("mbrand", servername);
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setWalletAuth.php", collection2);
-                        result2 = System.Text.Encoding.UTF8.GetString(response);
-
-
-                    }
-
-                    //banimo.ViewModelPost.buyRequest log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
-
-                    Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
-                }
-                //return Content("");
-            }
-           
-            
-            return Content("nocontent");
-
-        }
-        public ActionResult VerifyWalletZarin()
-        {
-            try
-            {
-
-                if (Request.QueryString["Status"] != "" && Request.QueryString["Status"] != null && Request.QueryString["Authority"] != "" && Request.QueryString["Authority"] != null)
-                {
-                    if (Request.QueryString["Status"].ToString().Equals("OK"))
-                    {
-                        string device = RandomString();
-                        string code = MD5Hash(device + "ncase8934f49909");
-                        string result;
-                        using (WebClient client = new WebClient())
-                        {
-
-                            var collection2 = new NameValueCollection();
-                            collection2.Add("device", device);
-                            collection2.Add("code", code);
-                            collection2.Add("auth", Request.QueryString["Authority"]);
-                            collection2.Add("servername", servername);
-                       
-
-                            byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
-
-                            result = System.Text.Encoding.UTF8.GetString(response);
-                        }
-
-                        ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
-
-                        int Amount = Convert.ToInt32(log2.mytransaction.First().price);
-
-
-                        long RefID;
-                        System.Net.ServicePointManager.Expect100Continue = false;
-                        ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
-
-
-
-
-                        int Status = zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
-                        userdata user = Session["LogedInUser"] as userdata;
-
-                        if ( Status == 100)
-                        {
-
-
-
-                            string result2 = "";
-                            using (WebClient client = new WebClient())
-                            {
-
-                                var collection2 = new NameValueCollection();
-                                collection2.Add("device", device);
-                                collection2.Add("code", code);
-                                collection2.Add("auth", Request.QueryString["Authority"]);
-                                collection2.Add("mbrand", servername);
-
-                                byte[] response =
-                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
-
-                                result2 = System.Text.Encoding.UTF8.GetString(response);
-                            }
-
-
-
-                            string fromOrder = "";
-                            if (TempData["addFromOrder"] != null) {
-                                fromOrder = TempData["addFromOrder"] as string;
-                            }
-                            
-                            if (fromOrder == "1")
-                            {
-                               
-                                ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
-                                finalModle.payment = "1";
-
-                                if (finalModle != null)
-                                {
-                                    
-                                    return RedirectToAction("ReqestForPaymentInplaceAndWallet", "Connection", new { model = finalModle });
-
-                                }
-                                // return View(finalModle);
-                            }
-                            else
-                            {
-                                return RedirectToAction("myprofile", "Home", new { type = 4 });
-                            }
-                            
-                           
-
-
-
-
-                        }
-                        else
-                        {
-                            return RedirectToAction("myprofile", "Home", new { type = 4 });
-                        }
-
-                    }
-                    else
-                    {
-                        return RedirectToAction("myprofile", "Home", new { type = 4 });
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("Home", "myprofile", new { type = 4 });
-                }
-            }
-            catch (Exception ex)
-            {
-                // Get stack trace for the exception with source file information
-                var st = new StackTrace(ex, true);
-                // Get the top stack frame
-                var frame = st.GetFrame(0);
-                // Get the line number from the stack frame
-                var line = frame.GetFileLineNumber();
-                int linenum = Convert.ToInt32(ex.StackTrace.Substring(ex.StackTrace.LastIndexOf(' ')));
-                Response.Write(ex.Message + "-" + linenum);
-                return RedirectToAction("myprofile", "Home", new { type = 4 });
-            }
-
-
-            return RedirectToAction("Home", "myprofile", new { type = 4 });
-        }
-
-
+       
         public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model) {
 
-            if (TempData["orderModel"] != null)
-            {
-                string modelstring = TempData["orderModel"] as string;
-                model = JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
-                model.payment = "1";
-            }
-           
             
 
             string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
@@ -454,34 +214,50 @@ namespace banimo.Controllers
                 }
                 else
                 {
-                    string result2 = "";
-                    string paymentstatus = "2";
-                    if (model.payment == "1")
+
+                    if (model.payment == "2")
                     {
-                        paymentstatus = "1";
+                        return RedirectToAction("verifyByAdmin", new { payment  = "2", id= log2.peigiry, fromUser = 1 });
                     }
-                    using (WebClient client = new WebClient())
+                    else
                     {
+                        // اینجا باید کردیت یارو گرفته بشه و با مقدار فاکتور زده شده مقایسه بشه 
+                        using (WebClient client = new WebClient())
+                        {
+                            var collection = new NameValueCollection();
+                            collection.Add("device", device);
+                            collection.Add("code", code);
+                            collection.Add("token", token);
+                            collection.Add("mbrand", servername);
+                            //foreach (var myvalucollection in imaglist) {
+                            //    collection.Add("imaglist[]", myvalucollection);
+                            //}
+                            byte[] response =
+                            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getCredit.php", collection);
 
-                        var collection2 = new NameValueCollection();
-                        collection2.Add("device", device);
-                        collection2.Add("code", code);
-                        collection2.Add("amount", log2.amount.ToString());
-                        collection2.Add("token", user.token);
-                        collection2.Add("refID", log2.peigiry);
-                        collection2.Add("paymentStatus", paymentstatus);
-                        collection2.Add("mbrand", servername);
-                        collection2.Add("auth", log2.auth);
-                        collection2.Add("payment", model.payment);
+                            result = System.Text.Encoding.UTF8.GetString(response);
+                        }
+                        getCredit creditmodel = JsonConvert.DeserializeObject<getCredit>(result);
+                        if (creditmodel.credit >= log2.amount)
+                        {
+                            return RedirectToAction("verifyByAdmin", new { payment = "1", id = log2.peigiry , fromUser  = 1});
+                        }
+                        else
+                        {
+                            
+                            string varizdesc = " واریز بابت تصویه سفارش شماره " + log2.ID;
+                            int famount = log2.amount - creditmodel.credit;
+                            string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID,"0");
+                            addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
+                            TempData["addFromOrder"] = "1";
+                            return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
 
-                        byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
-                        result2 = System.Text.Encoding.UTF8.GetString(response);
+
+
+                        }
                     }
-                    ViewBag.message = "موفق";
-                    return RedirectToAction("verifyAtHome", "Connection", new { refID = log2.peigiry, status = 1 });
-
+                   
                 }
 
 
@@ -490,6 +266,297 @@ namespace banimo.Controllers
             //string json = "";
             return Content("");
         }
+        public ActionResult ReqestForWallet(string id)
+        {
+
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            System.Net.ServicePointManager.Expect100Continue = false;
+            ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
+
+
+
+            List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            //e65379be-81d0-11e9-8cda-000c29344814
+            //9e9d57bc-07e1-11e8-ad17-000c295eb8fc
+            string callB = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyWalletZarin";
+            string zarinCode = "";
+            string Authority;
+
+            // string srt = getCookie("cartModel");
+
+            if (cookieModel.partnerID != "0")
+            {
+                string result2 = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection2 = new NameValueCollection();
+                    collection2.Add("device", device);
+                    collection2.Add("code", code);
+                    collection2.Add("partnerID", cookieModel.partnerID);
+                    collection2.Add("servername", servername);
+
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getZarin.php", collection2);
+
+                    result2 = System.Text.Encoding.UTF8.GetString(response);
+                }
+                zarinCode = result2.Replace(@"\n", "");
+            }
+            else
+            {
+                zarinCode = ConfigurationManager.AppSettings["zarin"];
+            }
+            string result = "";
+            string token = Session["token"] as string;
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("id", id);
+                collection2.Add("servername", servername);
+                collection2.Add("auth", "null");
+                collection2.Add("token", token);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
+
+            if (log2 != null && log2.mytransaction != null)
+            {
+                int zarinprice = log2.mytransaction.First().price;
+                string zarindesc = log2.mytransaction.First().description;
+                int Status = zp.PaymentRequest(zarinCode, zarinprice, zarindesc, "info@banimo.com", "", callB, out Authority);
+
+                if (Status == 100)
+                {
+
+                    string result2 = "";
+                    using (WebClient client = new WebClient())
+                    {
+
+
+                        var collection2 = new NameValueCollection();
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("auth", Authority);
+                        collection2.Add("timestamp", log2.mytransaction.First().timestamp);
+                        collection2.Add("mbrand", servername);
+                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setWalletAuth.php", collection2);
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+
+
+                    }
+
+                    //banimo.ViewModelPost.buyRequest log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+                    Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
+                }
+                //return Content("");
+            }
+
+
+            return Content("nocontent");
+
+        }
+        public ActionResult VerifyWalletZarin()
+        {
+            try
+            {
+
+                if (Request.QueryString["Status"] != "" && Request.QueryString["Status"] != null && Request.QueryString["Authority"] != "" && Request.QueryString["Authority"] != null)
+                {
+                    if (Request.QueryString["Status"].ToString().Equals("OK"))
+                    {
+                        string device = RandomString();
+                        string code = MD5Hash(device + "ncase8934f49909");
+                        string result;
+                        using (WebClient client = new WebClient())
+                        {
+
+                            var collection2 = new NameValueCollection();
+                            collection2.Add("device", device);
+                            collection2.Add("code", code);
+                            collection2.Add("auth", Request.QueryString["Authority"]);
+                            collection2.Add("servername", servername);
+
+
+                            byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
+
+                            result = System.Text.Encoding.UTF8.GetString(response);
+                        }
+
+                        ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
+
+                        int Amount = Convert.ToInt32(log2.mytransaction.First().price);
+
+
+                        long RefID;
+                        System.Net.ServicePointManager.Expect100Continue = false;
+                        ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
+
+
+
+
+                        int Status = 100;// zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
+                        //userdata user = Session["LogedInUser"] as userdata;
+
+                        if (Status == 100)
+                        {
+
+
+
+                            string result2 = "";
+                            using (WebClient client = new WebClient())
+                            {
+
+                                var collection2 = new NameValueCollection();
+                                collection2.Add("device", device);
+                                collection2.Add("code", code);
+                                collection2.Add("auth", Request.QueryString["Authority"]);
+                                collection2.Add("mbrand", servername);
+
+                                byte[] response =
+                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
+
+                                result2 = System.Text.Encoding.UTF8.GetString(response);
+                            }
+
+                            walletUpdate modelwallet = JsonConvert.DeserializeObject<walletUpdate>(result2);
+
+                            string fromOrder = "";
+                            if (TempData["addFromOrder"] != null)
+                            {
+                                fromOrder = TempData["addFromOrder"] as string;
+                            }
+
+                            if (fromOrder == "1")
+                            {
+
+                                string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
+                                string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1");
+
+
+
+                                ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                                finalModle.payment = "1";
+                                return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1", fromUser = 1 });
+
+                            }
+                            else
+                            {
+                                return RedirectToAction("myprofile", "Home", new { type = 4 });
+                            }
+
+
+
+
+
+
+                        }
+                        else
+                        {
+                            return RedirectToAction("myprofile", "Home", new { type = 4 });
+                        }
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("myprofile", "Home", new { type = 4 });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Home", "myprofile", new { type = 4 });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Get stack trace for the exception with source file information
+                var st = new StackTrace(ex, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame.GetFileLineNumber();
+                int linenum = Convert.ToInt32(ex.StackTrace.Substring(ex.StackTrace.LastIndexOf(' ')));
+                Response.Write(ex.Message + "-" + linenum);
+                return RedirectToAction("myprofile", "Home", new { type = 4 });
+            }
+
+
+            return RedirectToAction("Home", "myprofile", new { type = 4 });
+        }
+        public ActionResult verifyByAdmin(string payment, string id, string isPayed, string fromUser)
+        {
+
+
+            isPayed = isPayed == null ? "" : isPayed;
+            string result2 = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("ID", id);
+                collection2.Add("servername", servername);
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
+
+                result2 = System.Text.Encoding.UTF8.GetString(response);
+
+            }
+
+            getOrderRefID refModel = JsonConvert.DeserializeObject<getOrderRefID>(result2);
+
+            string res = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("auth", refModel.auth);
+                collection2.Add("amount", "");
+                collection2.Add("token", refModel.token);
+                collection2.Add("refID", refModel.refID);
+                collection2.Add("paymentStatus", "1");
+                collection2.Add("payment", payment);
+                collection2.Add("isPayed", isPayed);
+
+                collection2.Add("mbrand", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
+
+                res = System.Text.Encoding.UTF8.GetString(response);
+            }
+            finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(res);
+            if (fromUser != null)
+            {
+                ViewBag.message = "موفق";
+
+                return RedirectToAction("verifyAtHome", "Connection", new { refID = finalmodel.orderNumber, status = 1 });
+            }
+            return Content("200");
+
+        }
+
+
         public ActionResult ReqestForPaymentZarin(ViewModelPost.ReqestForPaymentViewModel model)
         {
             string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
@@ -657,58 +724,7 @@ namespace banimo.Controllers
 
         }
 
-        public ActionResult verifyByAdmin(string payment , string id)
-        {
-
-
-
-            string result2 = "";
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-
-            using (WebClient client = new WebClient())
-            {
-
-                var collection2 = new NameValueCollection();
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("ID", id);
-                collection2.Add("servername", servername);
-
-
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
-
-                result2 = System.Text.Encoding.UTF8.GetString(response);
-                result2 = result2.Replace("\n", "").Trim();
-            }
-
-
-
-            string res = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection2 = new NameValueCollection();
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("auth", "");
-                collection2.Add("amount", "");
-                collection2.Add("token", "");
-                collection2.Add("refID", result2);
-                collection2.Add("paymentStatus", "1");
-                collection2.Add("payment", payment);
-                collection2.Add("mbrand", servername);
-
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
-
-                res = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            return Content("200");
-
-        }
+      
         public ActionResult VerifyZarin()
         {
             try
