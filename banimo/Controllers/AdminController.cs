@@ -1012,6 +1012,54 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", model);
 
         }
+        public PartialViewResult goGetFactorDetail(string id)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                //collection.Add("token", token);
+                collection.Add("ID", id);
+                collection.Add("servername", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataMyFactorDetails.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            ViewModel.factorDetailVM log2 = JsonConvert.DeserializeObject<ViewModel.factorDetailVM>(result);
+            if (log2 != null)
+            {
+                if (log2.factorDetail != null)
+                {
+                    foreach (var item in log2.factorDetail)
+                    {
+                        if (item.imagetiltle == null)
+                        {
+                            item.imagetiltle = "placeholder.jpg";
+                        }
+                    }
+                }
+
+            }
+
+            ViewModel.ftdetailVM model = new ViewModel.ftdetailVM()
+            {
+                list = log2,
+                id = id
+            };
+            return PartialView("/Views/Shared/AdminShared/_gogetFactorDetail.cshtml", model);
+
+        }
         public ActionResult getNewListProduct(string val,string server)
         {
             string device = RandomString(10);
@@ -1130,6 +1178,39 @@ namespace banimo.Controllers
             banimo.ViewModelPost.responseModel model= JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
+
+        public ContentResult addNewTtemToFactor(string ID, string quantity, string FactorId,string price)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("ID", ID);
+                collection.Add("quantity", quantity);
+                collection.Add("factorID", FactorId);
+                collection.Add("price", price);
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToFactor.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+
+        }
+
         public void finalizeOrderAndDeliver(string id, string type, string deliverID, string desc)
         {
             if (true)
@@ -5649,6 +5730,31 @@ namespace banimo.Controllers
             }
 
             partnerVM log = JsonConvert.DeserializeObject<partnerVM>(result);
+
+            return View(log);
+        }
+        public ActionResult factor()
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getFactorVM.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ViewModel.factorVM log = JsonConvert.DeserializeObject<ViewModel.factorVM>(result);
 
             return View(log);
         }

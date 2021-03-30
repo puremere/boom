@@ -201,7 +201,7 @@ namespace banimo.Controllers
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -524,6 +524,7 @@ namespace banimo.Controllers
             getOrderRefID refModel = JsonConvert.DeserializeObject<getOrderRefID>(result2);
 
             string res = "";
+            string paymentstatus = payment == "2" ? "2" : "1";
             using (WebClient client = new WebClient())
             {
 
@@ -534,14 +535,14 @@ namespace banimo.Controllers
                 collection2.Add("amount", "");
                 collection2.Add("token", refModel.token);
                 collection2.Add("refID", refModel.refID);
-                collection2.Add("paymentStatus", "1");
+                collection2.Add("paymentStatus", paymentstatus);
                 collection2.Add("payment", payment);
                 collection2.Add("isPayed", isPayed);
 
                 collection2.Add("mbrand", servername);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest0.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -785,9 +786,10 @@ namespace banimo.Controllers
                                 collection2.Add("refID", RefID.ToString());
                                 collection2.Add("paymentStatus", "1");
                                 collection2.Add("mbrand", servername);
+                                collection2.Add("payment", "5");
 
                                 byte[] response =
-                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest0.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
                             }

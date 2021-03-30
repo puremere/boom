@@ -2994,6 +2994,14 @@ namespace banimo.Controllers
                 SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
                
             }
+            else
+            {
+                if(cookieModel.discount != "")
+                {
+                    cookieModel.discount = "";
+                    SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+                }
+            }
             TempData["discount"] = model.price;
             return Content(result);
         }

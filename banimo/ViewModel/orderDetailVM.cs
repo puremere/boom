@@ -10,4 +10,9 @@ namespace banimo.ViewModel
         public ViewModelPost.ListOfProductOrder list { get; set; }
         public string  id { get; set; }
     }
+    public class ftdetailVM
+    {
+        public ViewModel.factorDetailVM list { get; set; }
+        public string id { get; set; }
+    }
 }

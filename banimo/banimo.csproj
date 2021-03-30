@@ -348,6 +348,8 @@
     <Compile Include="ViewModel\confrimVM.cs" />
     <Compile Include="ViewModel\contactSectionVM.cs" />
     <Compile Include="ViewModel\DownloadAppVM.cs" />
+    <Compile Include="ViewModel\factorDetail.cs" />
+    <Compile Include="ViewModel\factorVM.cs" />
     <Compile Include="ViewModel\finalCheckVM.cs" />
     <Compile Include="ViewModel\getCredit.cs" />
     <Compile Include="ViewModel\getOrderRefID.cs" />
@@ -1929,6 +1931,8 @@
     <Content Include="Views\Ticket\newTicket.cshtml" />
     <Content Include="Views\Shared\AdminShared\_gogetOrderDetail.cshtml" />
     <Content Include="Views\Admin\money.cshtml" />
+    <Content Include="Views\Admin\factor.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_gogetFactorDetail.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
