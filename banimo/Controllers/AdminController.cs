@@ -1179,7 +1179,39 @@ namespace banimo.Controllers
             return Content(model.status);
         }
 
-        public ContentResult addNewTtemToFactor(string ID, string quantity, string FactorId,string price)
+        public ContentResult addNewFactorParent(string number, string partner, string description, string partnerID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("number", number);
+                collection.Add("partnerID", partner);
+                collection.Add("description", description);
+              
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewFactorParent.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+
+        }
+        
+       public ContentResult addNewTtemToFactor(string ID, string quantity, string FactorId,string price)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1236,7 +1268,7 @@ namespace banimo.Controllers
 
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/FinalizeOrder.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliver.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }

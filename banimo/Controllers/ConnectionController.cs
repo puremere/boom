@@ -201,7 +201,7 @@ namespace banimo.Controllers
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -495,6 +495,32 @@ namespace banimo.Controllers
 
             return RedirectToAction("Home", "myprofile", new { type = 4 });
         }
+        public ActionResult finalizeOrder( string id)
+        {
+
+            string result2 = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("ID", id);
+                collection2.Add("servername", servername);
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/FinalizeOrder.php", collection2);
+
+                result2 = System.Text.Encoding.UTF8.GetString(response);
+                return Content("200");
+            }
+        }
         public ActionResult verifyByAdmin(string payment, string id, string isPayed, string fromUser)
         {
 
@@ -503,6 +529,8 @@ namespace banimo.Controllers
             string result2 = "";
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
+
+
 
             using (WebClient client = new WebClient())
             {
@@ -539,10 +567,10 @@ namespace banimo.Controllers
                 collection2.Add("payment", payment);
                 collection2.Add("isPayed", isPayed);
 
-                collection2.Add("mbrand", servername);
+                collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest0.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -789,7 +817,7 @@ namespace banimo.Controllers
                                 collection2.Add("payment", "5");
 
                                 byte[] response =
-                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest0.php", collection2);
+                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
                             }

@@ -234,6 +234,18 @@
                                                 <td><div id="@deleteid" class="btn btn-danger deletItem">حذف</div> </td>
                                             </tr>
                                             }
+                                            @{ 
+                                               
+                                            }
+
+                                            <tr>
+                                                <td></td>
+                                                <td>جمع کل فاکتور</td>
+                                                <td>@Model.list.factorDetail.Sum(c=>c.price * c.count)</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
 
 
 
@@ -392,7 +404,7 @@
                     toastr.success('با موقیت ثبت شد');
 
                     $.ajax({
-                        url: '/Admin/goGetOrderDetail',
+                        url: '/Admin/goGetFactorDetail',
                         dataType: 'html',
                         data: {
                             id: '@Model.id',

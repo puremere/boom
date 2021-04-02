@@ -17,6 +17,13 @@ namespace banimo.ViewModel
     public class factorVM
     {
         public List<FactorList> factorList { get; set; }
+        public List<PartnerList> partnerList { get; set; }
     }
-   
+    public class PartnerList
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string phone { get; set; }
+    }
+
 }

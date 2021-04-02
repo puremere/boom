@@ -9,10 +9,10 @@ namespace banimo.ViewModel
     public class FactorDetail
     {
         public string ID { get; set; }
-        public string count { get; set; }
-        public string sold { get; set; }
-        public string paid { get; set; }
-        public string price { get; set; }
+        public int count { get; set; }
+        public int sold { get; set; }
+        public int paid { get; set; }
+        public int price { get; set; }
         public string title { get; set; }
         public string imagetiltle { get; set; }
         public string parentID { get; set; }

@@ -274,82 +274,63 @@
    
         <div id="menu2" class="tab-pane fade" style="padding-top:20px">
             <div class="form-group ">
+
+
                 <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    روز
+                    شماره فاکتور
+                </label>
+                <div class="component ">
+                    <input type="text" id="number" class="form-control" />
+                </div>
+                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                    تامین کننده
                 </label>
                 @{
-                    List<SelectListItem> listItems = new List<SelectListItem>();
-                    listItems.Add(new SelectListItem
+                    List<SelectListItem> partnerList = new List<SelectListItem>();
+                    if (Model.partnerList != null && Model.partnerList != null)
                     {
-                        Text = "شنبه",
-                        Value = "1"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "یک شنبه",
-                        Value = "2"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "دو شنبه",
-                        Value = "3"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "سه شنبه",
-                        Value = "4"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "چهار شنبه",
-                        Value = "5"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "پنچ شنبه",
-                        Value = "6"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "جمعه",
-                        Value = "7"
-                    });
 
+                        foreach (var item in Model.partnerList)
+                        {
+
+                            partnerList.Add(new SelectListItem
+                            {
+                                Text = item.title,
+                                Value = item.ID
+                            });
+                        }
+
+
+                    }
+                    <div class="component" >
+                        @Html.DropDownList("partnerList", partnerList, "-- انتخاب کنید --", new { id = "partnerList", style = "width:100%; min-height:43px", @class = "form-control" })
+                    </div>
                 }
-                <div class="component ">
-                    @Html.DropDownList("daysOfWeek", listItems, "-- Select Status --", new { id = "daysOfWeek", style = "width:100%", @class = "DRPd form-control" })
-                </div>
                 <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    از ساعت
+                    توضیحات
                 </label>
                 <div class="component ">
-                    <input type="text" id="timefrom" class="form-control" />
-                </div>
-                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    تا ساعت
-                </label>
-                <div class="component ">
-                    <input type="text" id="timeto" class="form-control" />
+                    <textarea style="height:250px" id="description"></textarea>
                 </div>
                 <div class="component " style="direction: rtl; ">
-                    <button id="addTimeOfDeliver" class="btn btn-success">تایید</button>
+                    <button id="addfactorParent" class="btn btn-success">تایید</button>
                     <script>
                         $(document).ready(function () {
-                            $("#addTimeOfDeliver").click(function () {
+                            $("#addfactorParent").click(function () {
 
-                                var DayOfWeek = $("#daysOfWeek").val();
-                                var TimeFrom = $("#timefrom").val();
-                                var TimeTo = $("#timeto").val();
+                                var number = $("#number").val();
+                                var partner = $("#partnerList").val();
+                                var description = $("#description").val();
                                 $.ajax({
-                                    url: '/Admin/addNewTimeOfDeliver',
+                                    url: '/Admin/addNewFactorParent',
                                     dataType: 'html',
                                     data: {
-                                        DayOfWeek: DayOfWeek,
-                                        TimeFrom: TimeFrom,
-                                        TimeTo: TimeTo
+                                        number: number,
+                                        partner: partner,
+                                        description: description
                                     },
                                     success: function (data) {
-                                        if (data === "success") {
+                                        if (data === "200") {
                                             toastr.options = {
                                                 "debug": false,
                                                 "positionClass": "toast-top-center",
