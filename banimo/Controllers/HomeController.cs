@@ -35,6 +35,7 @@ namespace banimo.Controllers
     [AllowAnonymous]
     public class HomeController : baseController
     {
+       
         string servername = ConfigurationManager.AppSettings["serverName"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
@@ -565,8 +566,9 @@ namespace banimo.Controllers
         }
 
    
-        public ActionResult ProductList(string catmode, string sortID, string newquery, string tag, string filter, string Available)
+        public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
+            ViewBag.Title = value;
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
             this.ViewBag.cookie = cartModelString;
             CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -2121,6 +2123,8 @@ namespace banimo.Controllers
                     j.price = decimal.Parse(productItem.PriceNow);
                     j.baseprice = decimal.Parse(productItem.productprice);
                     j.discount = decimal.Parse(productItem.discount);
+                    j.count = decimal.Parse(productItem.count);
+                    j.limit = decimal.Parse(productItem.limit);
                     j.productid = prid;
                     j.productname = Server.UrlDecode(productItem.title);
                     j.quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
@@ -3175,7 +3179,9 @@ namespace banimo.Controllers
 
             return PartialView("/Views/Shared/_MenuForApp.cshtml", catsCollection);
         }
-      
+
+
+        [ChildActionOnly]
         public async Task<PartialViewResult> getmenue()
         {
 

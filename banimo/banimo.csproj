@@ -291,6 +291,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\adminBankVM.cs" />
     <Compile Include="AdminPanel\ViewModel\producDetailPageViewModel.cs" />
     <Compile Include="AdminPanel\ViewModel\CatPageViewModel.cs" />
     <Compile Include="AdminPanel\ViewModel\productinfoviewdetail.cs" />
@@ -1934,6 +1935,7 @@
     <Content Include="Views\Admin\money.cshtml" />
     <Content Include="Views\Admin\factor.cshtml" />
     <Content Include="Views\Shared\AdminShared\_gogetFactorDetail.cshtml" />
+    <Content Include="Views\Admin\bank.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

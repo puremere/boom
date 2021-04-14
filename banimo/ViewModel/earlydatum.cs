@@ -41,6 +41,7 @@ namespace banimo.ViewModel
         public string ID { get; set; }
         public string count { get; set; }
         public string vahed { get; set; }
+        public string limit { get; set; }
 
         public string discount { get; set; }
         public string title { get; set; }
@@ -54,6 +55,7 @@ namespace banimo.ViewModel
         public string IsOffer { get; set; }
         public string PriceNow { get; set; }
         public string isActive { get; set; }
+        
     }
 
     public class earlydatumfinal

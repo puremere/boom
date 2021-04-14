@@ -120,12 +120,8 @@ namespace banimo.Controllers
             return new string(Enumerable.Repeat(chars, 16)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-
         //public ActionResult ReqestForPayment(string newdiscount, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment)
-
-
-       
+        
         public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model) {
 
             

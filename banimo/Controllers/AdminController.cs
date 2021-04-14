@@ -1178,7 +1178,62 @@ namespace banimo.Controllers
             banimo.ViewModelPost.responseModel model= JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
+        public ContentResult deletFromFactor(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
 
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("id", id);
+
+
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromFactor.php";
+                byte[] response =
+                client.UploadValues(url, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+        }
+        public ContentResult editItemInFactor(string id,string newval)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("id", id);
+                collection.Add("count", newval);
+
+
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/editItemInFactor.php";
+                byte[] response =
+                client.UploadValues(url, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+        }
+        
         public ContentResult addNewFactorParent(string number, string partner, string description, string partnerID)
         {
             string device = RandomString(10);
@@ -2477,8 +2532,71 @@ namespace banimo.Controllers
 
         }
 
+        public ActionResult bank() {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getBank.php", collection);
 
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ViewModel.adminBankVM model = JsonConvert.DeserializeObject<ViewModel.adminBankVM>(result);
+            return View(model);
+
+        }
+        public void setNewAccount(string typeID, string daramadTitle, string hazineTitle, string sandoghTitle,string bankTitle,string bankshobe,string bankShomare)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+            string title = "";
+            switch (typeID)
+            {
+                case "1":
+                    title = daramadTitle;
+                    break;
+                case "2":
+                    title = hazineTitle;
+                    break;
+                case "3":
+                    title = sandoghTitle;
+                    break;
+                case "4":
+                    title = bankTitle;
+                    break;
+
+            }
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("title", title);
+                collection.Add("type", typeID);
+                collection.Add("shobe", bankshobe);
+                collection.Add("shomare", bankShomare);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/createNewAccount.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+         
+        }
         public ActionResult money() {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -3807,12 +3925,31 @@ namespace banimo.Controllers
                 partnerVM newlog = JsonConvert.DeserializeObject<partnerVM>(newjson);
                 ViewBag.msg = MSG;
 
+                string json2 = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", "banimo");
+
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
+
+                    json2 = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+
+                partnerVM serverlog = JsonConvert.DeserializeObject<partnerVM>(json2);
+
+
 
 
                 AdminProductVM model = new AdminProductVM()
                 {
                     log = newlog,
                     page = page == null ? "1" : page.ToString(),
+                    basecat = serverlog
 
                 };
                 return View(model);
@@ -3931,7 +4068,7 @@ namespace banimo.Controllers
                 string desc = detail.productdesc;
                 string Count = detail.productCount;
                 string unit = detail.productunit;
-
+                string limit = detail.productLimit.ToString();
                 string discount = detail.productdiscount;
                 string color = "";
                 if (detail.inputallcolid != null)
@@ -3982,6 +4119,7 @@ namespace banimo.Controllers
                     collection.Add("imaglist", imglst);
                     collection.Add("count", Count);
                     collection.Add("unit", unit);
+                    collection.Add("limit", limit);
                     collection.Add("tag", detail.tag);
                     collection.Add("selectedFilter", selectedFilter);
                     collection.Add("token", token);
@@ -4535,7 +4673,7 @@ namespace banimo.Controllers
                 collection.Add("catID", catID);
                 collection.Add("servername", servername);
                 collection.Add("ID", id.ToString());
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderdetail.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ProductdetailForEdit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             EditViewModel log = JsonConvert.DeserializeObject<EditViewModel>(result);
@@ -4544,6 +4682,7 @@ namespace banimo.Controllers
             {
                 tag = log.data.First().tag,
                 vahed = log.data.First().vahed,
+                limit = log.data.First().limit,
                 featureList = log.featurDataDetail,
                 color = log.data.First().color,
                 count = log.data.First().count,
@@ -4683,6 +4822,7 @@ namespace banimo.Controllers
                     string discount = detail.discount;
                     string count = detail.count;
                     string vahed = detail.vahed;
+                    string limit = detail.limit;
                     string color = "";
                     if (detail.inputallcolid != null)
                     {
@@ -4733,6 +4873,7 @@ namespace banimo.Controllers
                         collection.Add("imaglist", imglst);
                         collection.Add("count", count);
                         collection.Add("vahed", vahed);
+                        collection.Add("limit", limit);
                         collection.Add("tag", detail.tagupdate);
                         collection.Add("selectedFilter", detail.Selectedfilters);
 
@@ -4954,6 +5095,7 @@ namespace banimo.Controllers
                         collection.Add("color", color);
                         collection.Add("count", count);
                         collection.Add("vahed", vahed);
+                        collection.Add("limit", detail.limit);
                         collection.Add("tag", detail.tagupdate);
                         collection.Add("imaglist", imglst);
                         collection.Add("isOffer", detail.isOffer);// محصولات پرفروش

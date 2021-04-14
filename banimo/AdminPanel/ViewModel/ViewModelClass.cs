@@ -144,6 +144,7 @@ namespace AdminPanel.ViewModel
         public string PriceNow { get; set; }
         public string isActive { get; set; }
         public string vahed { get; set; }
+        public string limit { get; set; }
     }
     public class Datum
     {
@@ -165,6 +166,7 @@ namespace AdminPanel.ViewModel
         public string PriceNow { get; set; }
         public string isActive { get; set; }
         public string vahed { get; set; }
+        public string limit { get; set; }
         public string tag { get; set; }
     }
     public class earlyRoot

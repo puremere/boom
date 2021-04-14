@@ -13,6 +13,7 @@ namespace AdminPanel.ViewModel
         public string productname { get; set; }
         public string  producttag { get; set; }
         public string productunit { get; set; }
+        public string productLimit { get; set; }
         public string SelectedColor { get; set; }
         public string SelectedCat { get; set; }
         public string Selectedfilters { get; set; }
@@ -48,6 +49,7 @@ namespace AdminPanel.ViewModel
         public string catID { get; set; }
         public string count { get; set; }
         public string vahed { get; set; }
+        public string limit { get; set; }
         public string tagupdate { get; set; }
 
         public string ID { get; set; }

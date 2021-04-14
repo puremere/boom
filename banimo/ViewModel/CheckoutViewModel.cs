@@ -8,6 +8,8 @@ namespace banimo.ViewModel
     public class CheckoutViewModel : BaseViewModel
     {
         public decimal price { get; set; }
+        public decimal count { get; set; }
+        public decimal limit { get; set; }
         public decimal baseprice { get; set; }
         public decimal discount { get; set; }
         public int quantity { get; set; }

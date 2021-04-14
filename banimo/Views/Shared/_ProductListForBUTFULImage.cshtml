@@ -7,14 +7,6 @@
 <script>
       $("#productCount").text('@Model.productsCounts کالا');
 
-    $('.showmedetail').click(function () {
-
-
-        var ID = this.id;
-        var url = "/Home/ProductDetail?id=" + ID;
-        window.location.href = url;
-    })
-
 
 </script>
 <style>
@@ -487,7 +479,7 @@
                                 }
                             </style>
                             <div id=@ID class="col-md-3 product-men showmedetail" style=" z-index:99;cursor:pointer; padding:5px">
-
+                              
                                 <div id="detailholdermain" style="background-color:white;">
                                     <div class="badgeholder" style=" min-height: 38px">
                                         @{
@@ -501,10 +493,12 @@
                                     <div id="contentholderofAll" style="padding:3px">
 
 
-
-                                        <div id="productlistimageholder" style="height:225px; width:100%">
-                                            <img src="@src" alt="" class="pro-image-front" style="max-width:100%; max-height:100%; object-fit:scale-down; padding:5px">
-                                        </div>
+                                        <a style="cursor:pointer" href="/Home/ProductDetail?id=@ID&title=@item.title">
+                                            <div id="productlistimageholder" style="height:225px; width:100%">
+                                                <img src="@src" alt="" class="pro-image-front" style="max-width:100%; max-height:100%; object-fit:scale-down; padding:5px">
+                                            </div>
+                                        </a>
+                                       
                                         <div id="maintitleholder" style="padding:10px; border-bottom:1px solid #ddd">
 
                                             <div class="titleholder">
@@ -526,17 +520,17 @@
                                             </div>
                                         </div>
                                         @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
-                                                {
-                                                    string valueID = "value" + item.ID;
-                                                    string iconcolor = "#36CDDF";
-                                                    string iconcurson = "pointer";
-                                                    string pointer = "";
-                                                    if (item.isAvailable == 0)
-                                                    {
-                                                        iconcolor = "gray";
-                                                        iconcurson = "auto";
-                                                        pointer = "pointer-events: none;";
-                                                    }
+                                        {
+                                            string valueID = "value" + item.ID;
+                                            string iconcolor = "#36CDDF";
+                                            string iconcurson = "pointer";
+                                            string pointer = "";
+                                            if (item.isAvailable == 0)
+                                            {
+                                                iconcolor = "gray";
+                                                iconcurson = "auto";
+                                                pointer = "pointer-events: none;";
+                                            }
                                             <div class="addholder" style="margin:5px">
                                                 <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; cursor :@iconcurson ; color: @iconcolor;height:20px; @pointer "></i>
 
