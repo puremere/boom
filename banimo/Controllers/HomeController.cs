@@ -568,11 +568,20 @@ namespace banimo.Controllers
    
         public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
+
+
+            
+
             ViewBag.Title = value;
             TempData["query"] = newquery;
             TempData["page"] = "1";
-            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
-            this.ViewBag.cookie = cartModelString;
+            TempData["catmode"] = catmode;
+            TempData["sortID"] = sortID;
+            TempData["newquery"] = newquery;
+            TempData["tag"] = tag;
+            TempData["filter"] = filter;
+            TempData["Available"] = Available;
+
             CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             //if (TempData["cookieToSave"] == null)
@@ -607,7 +616,8 @@ namespace banimo.Controllers
 
                 prodVM.catID = "0";
                 prodVM.catLevel = "0";
-
+                TempData["catID"] = "0";
+                TempData["catLevel"] = "0";
 
 
             }
@@ -622,8 +632,11 @@ namespace banimo.Controllers
                 }
                 prodVM.catID = catidforuse;
                 prodVM.catLevel = catLevelforuse;
+                TempData["catID"] = catidforuse;
+                TempData["catLevel"] = catLevelforuse;
 
             }
+            
 
             //SetCookie(Encrypt(JsonConvert.SerializeObject(prodVM)));
             //TempData["cookieToSave"] = JsonConvert.SerializeObject(prodVM);
@@ -674,20 +687,33 @@ namespace banimo.Controllers
         }
 
        
-        public PartialViewResult gogetproductlist()
+        public ActionResult gogetproductlist(string fromList)
         {
-            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
-            this.ViewBag.cookie = cartModelString;
-            CookieVM jsonModel = new CookieVM();
-            if (Response.Cookies["token"].Value != null)
+            //string srt = Request.Cookies["test"].Value as string;
+            //string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            //this.ViewBag.cookie = cartModelString;
+         
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            string Available = jsonModel.Available;
+            string tag = jsonModel.tag;
+            string sortID = jsonModel.sortID;
+            string page = jsonModel.pagenumberactive;
+            string catID = jsonModel.catID;
+            string catLevel = jsonModel.catLevel;
+            string query = jsonModel.query;
+            string filterIds = jsonModel.filterIds;
+            if (fromList != null)
             {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>(Decrypt(Response.Cookies["token"].Value));
 
-            }
-            else
-            {
-                jsonModel = JsonConvert.DeserializeObject<CookieVM>( getCookie("token"));
-
+                page = "1";
+                catLevel = TempData["catLevel"] as string ;
+                catID =  TempData["catID"] as string ;
+                sortID =  TempData["sortID"] as string ;
+                query =  TempData["query"] as string;
+                tag =  TempData["tag"] as string ;
+                filterIds =  TempData["filter"] as string ;
+                Available =  TempData["Available"] as string ;
+                TempData.Keep("query");
             }
             string urlid = "0";
             if (jsonModel.partnerID != "")
@@ -696,18 +722,10 @@ namespace banimo.Controllers
             }
 
             
-            string Available = jsonModel.Available;
-            string tag = jsonModel.tag;
-            string sortID = jsonModel.sortID;
-            string page = TempData["page"] as string; // jsonModel.pagenumberactive;
-            string colorIds = jsonModel.colorIds;
-            string filterIds = jsonModel.filterIds;
-            string min = jsonModel.min;
+           
+            // TempData["page"] as string; // jsonModel.pagenumberactive;
+            string colorIds = jsonModel.colorIds;            string min = jsonModel.min;
             string max = jsonModel.max;
-            string query = TempData["query"] != null ? TempData["query"] as string: "";
-            TempData.Keep("query");
-            string catID = jsonModel.catID;
-            string catLevel = jsonModel.catLevel;
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -771,7 +789,7 @@ namespace banimo.Controllers
                 log2.products = new List<ViewModelPost.Product>();
             }
 
-
+            //return Content("");
             return PartialView("/Views/Shared/_ProductListForBUTFULImage.cshtml", log2);
         }
         public void changecolorides(string ID)
@@ -1228,7 +1246,9 @@ namespace banimo.Controllers
         }
         public string allpaginationid(string id)
         {
-            TempData["page"] = id;
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            jsonModel.pagenumberactive = id;
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
 
             return "1";
         }

@@ -16,6 +16,12 @@ namespace banimo.ViewModel
         public string  catid { get; set; }
         public string subcatid { get; set; }
         public ProductListFilterViewModel filtergroup { get; set; }
-        
+        public string filterIds { get; set; }
+        public string tag { get; set; }
+        public string Available { get; set; }
+        public string newquery { get; set; }
+        public string sortID { get; set; }
+        public string catmode { get; set; }
+
     }
 }
