@@ -22,6 +22,7 @@ namespace banimo.ViewModel
         public string samanLink { get; set; }
         public string samanLink2 { get; set; }
         public string samanCode { get; set; }
+        public string etehadie { get; set; }
         
         public string keywords { get; set; }
 
