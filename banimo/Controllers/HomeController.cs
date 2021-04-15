@@ -569,6 +569,8 @@ namespace banimo.Controllers
         public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
             ViewBag.Title = value;
+            TempData["query"] = newquery;
+            TempData["page"] = "1";
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
             this.ViewBag.cookie = cartModelString;
             CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -591,7 +593,7 @@ namespace banimo.Controllers
             prodVM.max = "";
             prodVM.query = newquery;
             prodVM.sortID = sortID;
-
+            prodVM.pagenumberactive = "1";
 
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
@@ -676,23 +678,34 @@ namespace banimo.Controllers
         {
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
             this.ViewBag.cookie = cartModelString;
-            
-            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            CookieVM jsonModel = new CookieVM();
+            if (Response.Cookies["token"].Value != null)
+            {
+                jsonModel = JsonConvert.DeserializeObject<CookieVM>(Decrypt(Response.Cookies["token"].Value));
 
+            }
+            else
+            {
+                jsonModel = JsonConvert.DeserializeObject<CookieVM>( getCookie("token"));
+
+            }
             string urlid = "0";
             if (jsonModel.partnerID != "")
             {
                 urlid = jsonModel.partnerID;
             }
+
+            
             string Available = jsonModel.Available;
             string tag = jsonModel.tag;
             string sortID = jsonModel.sortID;
-            string page = jsonModel.pagenumberactive;
+            string page = TempData["page"] as string; // jsonModel.pagenumberactive;
             string colorIds = jsonModel.colorIds;
             string filterIds = jsonModel.filterIds;
             string min = jsonModel.min;
             string max = jsonModel.max;
-            string query = jsonModel.query;
+            string query = TempData["query"] != null ? TempData["query"] as string: "";
+            TempData.Keep("query");
             string catID = jsonModel.catID;
             string catLevel = jsonModel.catLevel;
             string device = RandomString();
@@ -1215,10 +1228,8 @@ namespace banimo.Controllers
         }
         public string allpaginationid(string id)
         {
-            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            jsonModel.pagenumberactive = id;
+            TempData["page"] = id;
 
-            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             return "1";
         }
         //public string allpaginationid(string id)
@@ -2225,11 +2236,17 @@ namespace banimo.Controllers
              
                 foreach (var productItem in log2.data)
                 {
+                  
                     int prid = int.Parse(productItem.ID);
                     int price = int.Parse(productItem.PriceNow);
                     int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                    if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
+                    {
+                        return RedirectToAction("checkout");
+                    }
 
-                    finalAmount += quantity * price;
+
+                        finalAmount += quantity * price;
                 }
 
 
@@ -2245,6 +2262,57 @@ namespace banimo.Controllers
         public ActionResult EndOrder(string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment, string lat, string lon)
         {
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            jsonModel.currentpage = "checkout";
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
+            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
+
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+            ViewBag.cookie = cartModelString;
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+            if (data != null && data.Count > 0)
+            {
+                string idlist = "";
+                foreach (var item in data)
+                {
+                    idlist += item.productid.ToString() + ",";
+                }
+                idlist = idlist.Trim(',');
+                string result = "";
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("servername", servername);
+                    collection.Add("idlist", idlist);
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
+
+                foreach (var productItem in log.data)
+                {
+                    int prid = int.Parse(productItem.ID);
+                    int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                    if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
+                    {
+                        return RedirectToAction("checkout");
+                    }
+                }
+
+
+
+
+            }
+
+
+        
             string disC = jsonModel.discount;
 
 
