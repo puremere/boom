@@ -42,6 +42,7 @@ namespace banimo.ViewModel
         public string count { get; set; }
         public string vahed { get; set; }
         public string limit { get; set; }
+        public string tag { get; set; }
 
         public string discount { get; set; }
         public string title { get; set; }

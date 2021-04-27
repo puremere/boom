@@ -13,9 +13,17 @@ namespace banimo.ViewModel
         public string timestamp { get; set; }
         public string description { get; set; }
     }
-
+    public class MyProduct
+    {
+        public string title { get; set; }
+        public string colorTitle { get; set; }
+        public string image { get; set; }
+        public string id { get; set; }
+        public string count { get; set; }
+    }
     public class factorVM
     {
+        public List<MyProduct> myProducts { get; set; }
         public List<FactorList> factorList { get; set; }
         public List<PartnerList> partnerList { get; set; }
     }

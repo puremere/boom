@@ -10,11 +10,14 @@ namespace banimo.ViewModel
     {
         public int ID { get; set; }
         public string title { get; set; }
+        public string shobe { get; set; }
+        public string shomare { get; set; }
         public string type { get; set; }
     }
 
     public class adminBankVM
     {
         public List<accountList> List { get; set; }
+        public List<PartnerList> partnerList { get; set; }
     }
 }

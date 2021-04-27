@@ -76,6 +76,23 @@ namespace banimo.ViewModePost
 
     }
 
+    public class Value
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string price { get; set; }
+        public string image { get; set; }
+        public string oldPrice { get; set; }
+        public string isActive { get; set; }
+        public string isAvailable { get; set; }
+    }
+
+    public class GourpList
+    {
+        public string title { get; set; }
+        public string image { get; set; }
+        public List<Value> value { get; set; }
+    }
     public class getMaindataViewModel
     {
         public string iosCookie { get; set; }
@@ -86,6 +103,7 @@ namespace banimo.ViewModePost
         public List<Newest> newest { get; set; }
         public List<Bestseller> bestseller { get; set; }
         public List<SpecialOffer> specialOffers { get; set; }
+        public List<GourpList> gourpList { get; set; }
         //public List<CatsParent> catsParents { get; set; }
     }
 }

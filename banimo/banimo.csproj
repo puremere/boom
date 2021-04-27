@@ -291,6 +291,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminPanel\ViewModel\catAll.cs" />
+    <Compile Include="AdminPanel\ViewModel\productGroupcsVM.cs" />
     <Compile Include="ViewModel\adminBankVM.cs" />
     <Compile Include="AdminPanel\ViewModel\producDetailPageViewModel.cs" />
     <Compile Include="AdminPanel\ViewModel\CatPageViewModel.cs" />
@@ -1202,6 +1204,7 @@
     <Content Include="images\plus-gray.png" />
     <Content Include="images\successPayment.png" />
     <Content Include="images\support.png" />
+    <Content Include="images\trash.png" />
     <Content Include="Kalimba.mp3" />
     <Content Include="key.txt" />
     <Content Include="map\app\css\app.css" />
@@ -1406,8 +1409,11 @@
       <DependentUpon>bundle.js</DependentUpon>
     </Content>
     <Content Include="Scripts\choices.min.js" />
+    <Content Include="Scripts\createItem.js" />
     <Content Include="Scripts\downloadAppScript.js" />
+    <Content Include="Scripts\editItem.js" />
     <Content Include="Scripts\green-audio-player.min.js" />
+    <Content Include="Scripts\download.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.js" />
@@ -1936,6 +1942,9 @@
     <Content Include="Views\Admin\factor.cshtml" />
     <Content Include="Views\Shared\AdminShared\_gogetFactorDetail.cshtml" />
     <Content Include="Views\Admin\bank.cshtml" />
+    <Content Include="Views\Home\EndOrder0.cshtml" />
+    <Content Include="Views\Admin\MenuNew.cshtml" />
+    <Content Include="Views\Admin\productGroup.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

@@ -233,11 +233,12 @@ namespace banimo.Controllers
             device = RandomString();
             code = MD5Hash(device + "ncase8934f49909");
             productinfoviewdetail model = new productinfoviewdetail();
-            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemo.php";
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest.php";
             payloadModel.device = device;
             payloadModel.code = code;
             payload = JsonConvert.SerializeObject(payloadModel);
             result = await wb.doPostData(serverAddress,payload);
+
             getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
             log2.iosCookie = cookieModel.iosCookie;
             cookieModel.currentpage = "index";
@@ -572,7 +573,7 @@ namespace banimo.Controllers
 
             
 
-            ViewBag.Title = value;
+            ViewBag.Title = " مجموعه محصولات " +value  + " | " + ConfigurationManager.AppSettings["siteName2"];
             TempData["query"] = newquery;
             TempData["page"] = "1";
             TempData["catmode"] = catmode;
@@ -2121,6 +2122,8 @@ namespace banimo.Controllers
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
             ViewBag.cookie = cartModelString;
             List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+            string check = "";
+            string checkfinal = "";
             if (data != null && data.Count > 0)
             {
                 string idlist = "";
@@ -2141,14 +2144,34 @@ namespace banimo.Controllers
                     collection.Add("servername", servername);
                     collection.Add("idlist", idlist);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookie.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
                 earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
-
+               
                 foreach (var productItem in log.data)
                 {
+                    if (productItem.tag.Contains("محدودیت در تعداد"))
+                    {
+                        List<string> taglist = productItem.tag.Split(',').ToList();
+                        foreach (var item in taglist)
+                        {
+                            if (item.Contains("محدودیت در تعداد"))
+                            {
+
+                                if (check.Contains(item))
+                                {
+                                    checkfinal += item + ",";
+                                }
+                                else
+                                {
+                                    check += item + ",";
+                                }
+                            }
+
+                        }
+                    }
                     int prid = int.Parse(productItem.ID);
                     CheckoutViewModel j = new CheckoutViewModel();
                     j.price = decimal.Parse(productItem.PriceNow);
@@ -2172,12 +2195,60 @@ namespace banimo.Controllers
 
 
 
-            //ViewBag.Message = "Your contact page.";
+            ViewBag.Message = checkfinal.Trim(',');
 
             return View(finalmodel);
         }
 
 
+        public ActionResult setAddress(string lat, string lng, string address, string postalCode, string title,string city, string id)
+        {
+
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["token"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("address", address);
+                collection.Add("postalCode", postalCode);
+                collection.Add("title", title);
+                collection.Add("lat", lat);
+                collection.Add("lng", lng);
+                collection.Add("city", city);
+                collection.Add("id", id);
+                collection.Add("token", token);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content ("200");
+        }
+        public void removeAddress(string id)
+        {
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["token"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("id", id);
+                collection.Add("token", token);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/removeAddress.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+        }
         [HomeSessionCheck]
         public ActionResult EndOrder(string error)
         {
@@ -2213,7 +2284,7 @@ namespace banimo.Controllers
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTime.php?", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2279,7 +2350,7 @@ namespace banimo.Controllers
         [HomeSessionCheck]
         [HttpPost]
 
-        public ActionResult EndOrder(string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment, string lat, string lon)
+        public ActionResult EndOrder(string addressID, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment, string lat, string lon)
         {
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
@@ -2342,6 +2413,7 @@ namespace banimo.Controllers
             {
                 city = city,
                 address = address,
+                addressID = addressID,
                 country = country,
                 fullname = fullname,
                 hourid = hourid,

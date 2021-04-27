@@ -24,7 +24,7 @@ using System.Xml;
 using System.Diagnostics;
 
 
-//using banimo.ServiceReference1;
+//using banimo.ServiceReference1;  1618834939
 
 
 
@@ -180,6 +180,7 @@ namespace banimo.Controllers
                     collection.Add("state", state);
                     collection.Add("city", model.city);
                     collection.Add("address", model.address);
+                    collection.Add("addressID", model.addressID);
                     collection.Add("ids", ids);
                     collection.Add("nums", nums);
                     collection.Add("token", token);
@@ -197,7 +198,7 @@ namespace banimo.Controllers
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -396,7 +397,7 @@ namespace banimo.Controllers
                         int Amount = Convert.ToInt32(log2.mytransaction.First().price);
 
 
-                        long RefID;
+                       // long RefID;
                         System.Net.ServicePointManager.Expect100Continue = false;
                         ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
 
@@ -638,6 +639,7 @@ namespace banimo.Controllers
                     collection.Add("state", state);
                     collection.Add("city", model.city);
                     collection.Add("address", model.address);
+                    collection.Add("addressID", model.addressID);
                     collection.Add("ids", ids);
                     collection.Add("nums", nums);
                     collection.Add("token", token);
@@ -931,6 +933,7 @@ namespace banimo.Controllers
                 collection.Add("state", state);
                 collection.Add("city", model.city);
                 collection.Add("address", model.address);
+                collection.Add("addressID", model.addressID);
                 collection.Add("ids", ids);
                 collection.Add("nums", nums);
                 collection.Add("token", token);
@@ -1066,6 +1069,7 @@ namespace banimo.Controllers
                 collection.Add("state", state);
                 collection.Add("city", model.city);
                 collection.Add("address", model.address);
+                collection.Add("addressID", model.addressID);
                 collection.Add("ids", ids);
                 collection.Add("nums", nums);
                 collection.Add("token", token);

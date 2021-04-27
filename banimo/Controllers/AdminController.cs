@@ -34,12 +34,13 @@ using Font = iTextSharp.text.Font;
 using iTextSharp.text.html;
 using Rectangle = iTextSharp.text.Rectangle;
 
+
 namespace banimo.Controllers
 {
     [SessionCheck]
     public class AdminController : Controller
     {
-
+      
 
         string servername = ConfigurationManager.AppSettings["serverName"];
         public static string MD5Hash(string input)
@@ -390,6 +391,147 @@ namespace banimo.Controllers
 
             return View(model);
         }
+        public ActionResult MenuNew()
+        {
+           
+            // CatPageViewModel model = new CatPageViewModel();
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("lan", lan);
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatlistAll.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            var log = JsonConvert.DeserializeObject<AdminPanel.ViewModel.catAll>(result);
+            return View(log);
+          
+        }
+
+
+
+        public ContentResult sendToServerByJS()
+        {
+            string pathString = "~/images";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString(7) + hpf.FileName; ;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+
+            }
+            return Content(filename);
+        }
+        public ContentResult sendToServer(string srt)
+        {
+
+            string pathString = "~/images";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString(7) + hpf.FileName; ;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+                ViewModel.CookieVM model = JsonConvert.DeserializeObject<ViewModel.CookieVM>(Request.Cookies["adminimages"].Value);
+                model.images += filename + ",";
+
+                Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
+               
+
+
+
+            }
+            return Content(filename);
+
+        }
+        public void removeImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            System.IO.File.Delete(savedFileName);
+            if (Request.Cookies["adminimages"] != null)
+            {
+                ViewModel.CookieVM model = JsonConvert.DeserializeObject<ViewModel.CookieVM>(Request.Cookies["adminimages"].Value);
+                if (model.images != null)
+                {
+                    model.images = model.images.Replace(id + ",", "");
+                }
+                Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
+            }
+            
+
+
+          
+
+
+        }
+        public void deleteImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            //System.IO.File.Delete(savedFileName);
+
+        }
+        public ActionResult getCatDetail(string catid)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatsItem.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            return Content(result);
+        }
+
+
         public ActionResult getfilters(string catID)
         {
 
@@ -1781,6 +1923,129 @@ namespace banimo.Controllers
                 return Content("3");
             }
         }
+        public ActionResult setnewcatNew(string catID, string title, string image)
+        {
+
+
+            string fname = image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(image);
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("token", token);
+                collection.Add("catID", catID);
+                collection.Add("servername", servername);
+                collection.Add("image", finalimage.Trim(','));
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        public ActionResult editcatNew(string catID, string title, string image)
+        {
+            string fname = image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(fname);
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("token", token);
+                collection.Add("catID", catID);
+                collection.Add("servername", servername);
+                collection.Add("image", finalimage);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        public ActionResult delnewcatNew(string catid)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid);
+                collection.Add("servername", servername);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ResponseFromServer Serverresponse = JsonConvert.DeserializeObject<ResponseFromServer>(result);
+            if (Serverresponse.status == 200)
+            {
+
+                string pathString = "~/images";
+                string savedFileName = Path.Combine(Server.MapPath(pathString), Serverresponse.message);
+                System.IO.File.Delete(savedFileName);
+                return Content("1");
+            }
+            else
+            {
+                return Content(Serverresponse.message);
+            }
+
+        }
+
         public ActionResult delnewcat(string catid)
         {
 
@@ -2551,10 +2816,12 @@ namespace banimo.Controllers
             }
 
             ViewModel.adminBankVM model = JsonConvert.DeserializeObject<ViewModel.adminBankVM>(result);
+
+            model.List = model.List != null ? model.List : new List<ViewModel.accountList>();
             return View(model);
 
         }
-        public void setNewAccount(string typeID, string daramadTitle, string hazineTitle, string sandoghTitle,string bankTitle,string bankshobe,string bankShomare)
+        public ActionResult setNewAccount(string typeID, string daramadTitle, string hazineTitle, string sandoghTitle,string bankTitle,string bankshobe,string bankShomare)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -2595,7 +2862,33 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-         
+            return RedirectToAction("bank");
+        }
+
+        public void setCustomTransaction (string fromSource , string toSource, string price,  string desc,string typeto)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("from", fromSource);
+                collection.Add("to", toSource);
+                collection.Add("price", price);
+                collection.Add("desc", desc);
+                collection.Add("typeto", typeto);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setCustomTransaction.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
         }
         public ActionResult money() {
             string device = RandomString(10);
@@ -2616,7 +2909,110 @@ namespace banimo.Controllers
             return View(model);
         }
 
+
+        public ActionResult getTransactionList(string userList)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("userList", userList);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getTransactionList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.ProfileVM log2 = JsonConvert.DeserializeObject<ViewModel.ProfileVM>(result);
+            return Content("s");
+        }
         //section  bmenu-------------
+
+        public ActionResult productGroup()
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataProductGroup.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            AdminPanel.ViewModel.productGroupcsVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.productGroupcsVM>(result);
+            return View(model);
+        }
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult setNewProductGroup(string catidOrLink,string title, string catTitle, string catID, string type,string image, string ID,string priority)
+        {
+            if (!ModelState.IsValid)
+            {
+                // TODO: Captcha validation failed, show error message
+                return RedirectToAction("productGroup", "Admin");
+            }
+            else
+            {
+
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                string token = Session["LogedInUser2"] as string;
+
+                string imagename = image;
+                string pathString = "~/images/panelimages";
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+
+                    HttpPostedFileBase hpf = Request.Files[i];
+
+                    if (hpf.ContentLength == 0)
+                        continue;
+                    if (!image.Contains(hpf.FileName))
+                        continue;
+                    imagename = RandomString(7) + ".jpg";
+                    string savedFileName = Path.Combine(Server.MapPath(pathString), imagename);
+                    hpf.SaveAs(savedFileName);
+                }
+                catID = catID == "" ? "0" : catID;
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("catidOrLink", catidOrLink);
+                    collection.Add("title", title);
+                    collection.Add("catTitle", catTitle);
+                    collection.Add("type", type);
+                    collection.Add("catID", catID);
+                    collection.Add("image", imagename);
+                    collection.Add("ID", ID);
+                    collection.Add("priority", priority);
+                    collection.Add("servername", servername);
+
+
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"]  + "/Admin/addProductGroup.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                // Reset the captcha if your app's workflow continues with the same view
+                MvcCaptcha.ResetCaptcha("ExampleCaptcha");
+                return RedirectToAction("productGroup", "Admin");
+
+            }
+        }
+
 
 
 
@@ -3867,7 +4263,28 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductFromServer.php", collection);
 
                 newjson = System.Text.Encoding.UTF8.GetString(response);
-            }
+            }// http://www.supectco.com/webs/base/administrative/addProductImageFromServer.php?servername=perfume&servercatID=23
+        }
+        public void copyImageFromServer(string itemName, string websiteCat, string baseCat)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["LogedInUser2"] as string;
+            string newjson = "";
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("servercatID", "23");
+               
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/administrative/addProductImageFromServer.php", collection);
+
+                newjson = System.Text.Encoding.UTF8.GetString(response);
+            }// http://www.supectco.com/webs/base/administrative/addProductImageFromServer.php?servername=perfume&servercatID=23
         }
         public ActionResult product(int? page, int? MSG)
         {

@@ -23,8 +23,19 @@ namespace banimo.ViewModel
         public bool isChecked { get; set; }
     }
 
+    public class Address
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string city { get; set; }
+        public string address { get; set; }
+        public string postalCode { get; set; }
+        public string lat { get; set; }
+        public string lng { get; set; }
+    }
     public class TimeList
     {
+        public List<Address> address { get; set; }
         public List<Time> times { get; set; }
         public string latitiude { get; set; }
         public string longitude { get; set; }

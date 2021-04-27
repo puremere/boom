@@ -7,6 +7,7 @@ namespace banimo.ViewModel
 {
     public class CookieVM
     {
+        public string images = "";
         public string partnerID = "0";
         public string invite = "";
         public string pagenumberactive = "1";
