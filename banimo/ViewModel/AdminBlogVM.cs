@@ -9,6 +9,8 @@ namespace banimo.ViewModel
     {
         public string price { get; set; }
         public string title { get; set; }
+        public string oneTime { get; set; }
+        public string  isFirst { get; set; }
         public string ID { get; set; }
     }
     

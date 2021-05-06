@@ -240,6 +240,7 @@ namespace banimo.Controllers
             result = await wb.doPostData(serverAddress,payload);
 
             getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
+
             log2.iosCookie = cookieModel.iosCookie;
             cookieModel.currentpage = "index";
             cookieModel.partnerID = urlid.ToString();
@@ -249,6 +250,7 @@ namespace banimo.Controllers
 
             //TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
             SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
+          
             return View(log2);
 
 
@@ -566,6 +568,33 @@ namespace banimo.Controllers
             return RedirectToAction("contactus", "Home", new { message = "2" });
         }
 
+
+        public ActionResult submenu (string catmode)
+        {
+            string json;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", catmode);
+                collection.Add("servername", servername);
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getSubcatData.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            subMenuVM model = JsonConvert.DeserializeObject<subMenuVM>(result);
+            return View(model);
+        }
    
         public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available)
         {
@@ -749,7 +778,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("isAvailable", Available);
                 collection.Add("partnerID", urlid.ToString());
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataProductListTest.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataProductListTest0.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
@@ -2141,7 +2170,7 @@ namespace banimo.Controllers
                     var collection = new NameValueCollection();
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", servername);
+                    collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
                     byte[] response =
                     client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookie.php", collection);
@@ -2203,7 +2232,7 @@ namespace banimo.Controllers
 
         public ActionResult setAddress(string lat, string lng, string address, string postalCode, string title,string city, string id)
         {
-
+            //ALTER TABLE `mbd_discount` ADD `darsad` INT NOT NULL DEFAULT '0' AFTER `oneTime`, ADD `infinit` INT NOT NULL DEFAULT '0' AFTER `darsad`;
             string result = "";
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
@@ -3307,6 +3336,53 @@ namespace banimo.Controllers
 
         }
 
+        public ActionResult getsearch(string val)
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string id = "";
+            string result = "";
+          
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("key", val);
+                
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getSearch.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+              
+
+            }
+            searchVM model = JsonConvert.DeserializeObject<searchVM>(result);
+            model.lst = new List<caITem>(); 
+            if(model.data != null)
+            {
+                foreach (var item in model.data)
+                {
+                    caITem itemModel = JsonConvert.DeserializeObject<caITem>(item);
+                    if (item != null)
+                    {
+                        int first = itemModel.title.IndexOf(val);
+                        int spaceIndex = itemModel.title.IndexOf(" ", first);
+
+                        string final = itemModel.title.Substring(first, spaceIndex - first);
+                        itemModel.title = final;
+
+                        model.lst.Add(itemModel);
+                    }
+
+                }
+            }
+            model.key = val; 
+            return PartialView("/Views/Shared/_SearchPartial.cshtml", model);
+
+        }
         public ActionResult namad()
         {
             return View();

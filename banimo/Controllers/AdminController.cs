@@ -354,7 +354,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", "banimo");
+                collection.Add("servername", "manmarket");
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
 
@@ -1347,6 +1347,33 @@ namespace banimo.Controllers
             banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
+        public ContentResult deletFromWonder(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("id", id);
+
+
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromWonder.php";
+                byte[] response =
+                client.UploadValues(url, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+        }
         public ContentResult editItemInFactor(string id,string newval)
         {
             string device = RandomString(10);
@@ -1432,6 +1459,35 @@ namespace banimo.Controllers
 
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToFactor.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            return Content(model.status);
+
+        }
+
+        public ContentResult addNewTtemToWonder(string ID, string hour,  string discount)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("ID", ID);
+                collection.Add("hour", hour);
+                collection.Add("discount", discount);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewItemToWonder.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2955,6 +3011,7 @@ namespace banimo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult setNewProductGroup(string catidOrLink,string title, string catTitle, string catID, string type,string image, string ID,string priority)
         {
+
             if (!ModelState.IsValid)
             {
                 // TODO: Captcha validation failed, show error message
@@ -2990,7 +3047,7 @@ namespace banimo.Controllers
                     var collection = new NameValueCollection();
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("catidOrLink", catidOrLink);
+                    collection.Add("catidOrLink", catidOrLink.Trim(','));
                     collection.Add("title", title);
                     collection.Add("catTitle", catTitle);
                     collection.Add("type", type);
@@ -5575,6 +5632,9 @@ namespace banimo.Controllers
 
 
         }
+
+      
+
         public ActionResult Slider(string message)
         {
 
@@ -5946,9 +6006,9 @@ namespace banimo.Controllers
             }
             return RedirectToAction("banner");
         }
-        public ActionResult slide()
+        public ActionResult slide(string catmode)
         {
-
+            catmode = catmode == null ? "0" : catmode;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -5959,6 +6019,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("servername", servername);
+                collection.Add("catmode", catmode);
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataSlide.php", collection);
 
@@ -5990,11 +6051,11 @@ namespace banimo.Controllers
                 BannerListModel.subcats2 = BannerListModel.subcats2.Substring(1, BannerListModel.subcats2.Length - 1);
 
             }
-
+            BannerListModel.selectedcat = catmode;
             return View(BannerListModel);
         }
         [HttpPost]
-        public ActionResult editslide(string content, string type, string image, string title)
+        public ActionResult editslide(string ID, string content, string type, string image, string title,string catmode)
         {
 
             string pathString = "~/images/panelimages";
@@ -6031,6 +6092,8 @@ namespace banimo.Controllers
                 collection.Add("content", content);
                 collection.Add("type", type);
                 collection.Add("title", title);
+                collection.Add("ID", ID);
+                collection.Add("catmode", catmode);
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setSlideDetail.php", collection);
 
@@ -6142,7 +6205,7 @@ namespace banimo.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
-        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user)
+        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user,string oneTime,string firstTime,string darsad,string infinit)
         {
 
             if (title == "")
@@ -6173,6 +6236,11 @@ namespace banimo.Controllers
                     collection.Add("minPrice", minPrice.ToString());
                     collection.Add("mobile", user);
                     collection.Add("token", token);
+                    collection.Add("ontime", oneTime);
+                    collection.Add("firstTime", firstTime);
+                    collection.Add("darsad", darsad);
+                    collection.Add("infinit", infinit);
+
                     collection.Add("servername", servername);
 
 
@@ -6207,6 +6275,34 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteDiscount.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return result;
+        }
+        public string deleteProductGroup(string id)
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteProductGroup.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            string path = "~/images/panelimages";
+            string filepath = Path.Combine(Server.MapPath(path), result);
+            if (System.IO.File.Exists(filepath))
+            {
+                System.IO.File.Delete(filepath);
+                result = "success";
             }
             return result;
         }
@@ -7735,7 +7831,34 @@ namespace banimo.Controllers
 
         }
 
+        public ActionResult wonderProduct()
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["token"] as string;
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                
+                collection.Add("servername", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataMyWonderDetails.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            ViewModel.wonderProductVM log2 = JsonConvert.DeserializeObject<ViewModel.wonderProductVM>(result);
+            
+            //return PartialView("/Views/Shared/AdminShared/_gogetFactorDetail.cshtml", model);
+            return View(log2);
+        }
         public void imageUrl(string filename, string type)
         {
 

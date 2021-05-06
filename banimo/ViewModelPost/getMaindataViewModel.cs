@@ -36,6 +36,7 @@ namespace banimo.ViewModePost
         public string title { get; set; }
         public string price { get; set; }
         public string image { get; set; }
+        public string discount { get; set; }
         public string oldPrice { get; set; }
         public string isActive { get; set; }
         public string isAvailable { get; set; }
@@ -47,6 +48,7 @@ namespace banimo.ViewModePost
         public string title { get; set; }
         public string price { get; set; }
         public string image { get; set; }
+        public string discount { get; set; }
         public string oldPrice { get; set; }
         public string isActive { get; set; }
         public string isAvailable { get; set; }
@@ -57,6 +59,7 @@ namespace banimo.ViewModePost
         public string ID { get; set; }
         public string title { get; set; }
         public string price { get; set; }
+        public string discount { get; set; }
         public string image { get; set; }
         public string oldPrice { get; set; }
         public string isActive { get; set; }
@@ -84,6 +87,7 @@ namespace banimo.ViewModePost
         public string image { get; set; }
         public string oldPrice { get; set; }
         public string isActive { get; set; }
+        public string discount { get; set; }
         public string isAvailable { get; set; }
     }
 
@@ -91,7 +95,21 @@ namespace banimo.ViewModePost
     {
         public string title { get; set; }
         public string image { get; set; }
+        public string type { get; set; }
+        public string catIDOrLink { get; set; }
         public List<Value> value { get; set; }
+    }
+    public class WonderList
+    {
+        public string ID { get; set; }
+        public string discount { get; set; }
+        public string title { get; set; }
+        public string time { get; set; }
+        public string image { get; set; }
+        public string price { get; set; }
+        public string oldPrice { get; set; }
+        public string isAvailable { get; set; }
+
     }
     public class getMaindataViewModel
     {
@@ -104,6 +122,7 @@ namespace banimo.ViewModePost
         public List<Bestseller> bestseller { get; set; }
         public List<SpecialOffer> specialOffers { get; set; }
         public List<GourpList> gourpList { get; set; }
+        public List<WonderList> wonderList { get; set; }
         //public List<CatsParent> catsParents { get; set; }
     }
 }

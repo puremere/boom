@@ -411,8 +411,10 @@
     <Compile Include="ViewModel\productlistclass.cs" />
     <Compile Include="ViewModel\productviewmodel.cs" />
     <Compile Include="ViewModel\ProfileVM.cs" />
+    <Compile Include="ViewModel\searchVM.cs" />
     <Compile Include="ViewModel\sendEmailVM.cs" />
     <Compile Include="ViewModel\slider.cs" />
+    <Compile Include="ViewModel\subMenuVM.cs" />
     <Compile Include="ViewModel\TicketViewModel\InfoForNewTicket.cs" />
     <Compile Include="ViewModel\TicketViewModel\ticketStremVM.cs" />
     <Compile Include="ViewModel\userdata.cs" />
@@ -1205,6 +1207,7 @@
     <Content Include="images\successPayment.png" />
     <Content Include="images\support.png" />
     <Content Include="images\trash.png" />
+    <Content Include="images\wonder.png" />
     <Content Include="Kalimba.mp3" />
     <Content Include="key.txt" />
     <Content Include="map\app\css\app.css" />
@@ -1419,6 +1422,7 @@
     <Content Include="Scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery.simple.timer.js" />
     <Content Include="Scripts\mapir.js" />
     <Content Include="Scripts\map\mapp.env.js" />
     <Content Include="Scripts\map\mapp.min.js" />
@@ -1945,6 +1949,11 @@
     <Content Include="Views\Home\EndOrder0.cshtml" />
     <Content Include="Views\Admin\MenuNew.cshtml" />
     <Content Include="Views\Admin\productGroup.cshtml" />
+    <Content Include="Views\Home\submenu.cshtml" />
+    <Content Include="Views\Shared\_Menu0.cshtml" />
+    <Content Include="Views\Admin\slideNew.cshtml" />
+    <Content Include="Views\Admin\wonderProduct.cshtml" />
+    <Content Include="Views\Shared\_SearchPartial.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

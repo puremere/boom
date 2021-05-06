@@ -567,7 +567,7 @@ namespace banimo.Controllers
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
             }

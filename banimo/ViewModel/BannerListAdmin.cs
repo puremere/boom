@@ -17,6 +17,9 @@ namespace banimo.ViewModel
 
     public class BannerListAdmin
     {
+
+        public string selectedcat { get; set; }
+        public List<AdminPanel.ViewModel.FiltercatsAll> filtercatsAll { get; set; }
         public List<Banner> banners { get; set; }
         public string products { get; set; }
         public string filters { get; set; }
