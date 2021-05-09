@@ -9,17 +9,19 @@ namespace banimo.ViewModel
     {
         public string title { get; set; }
         public string ID { get; set; }
-        public object image { get; set; }
+        public string image { get; set; }
+        public int isFinal { get; set; }
     }
 
     public class Value
     {
         public string ID { get; set; }
+        public string discount { get; set; }
         public string title { get; set; }
-        public string price { get; set; }
+        public string time { get; set; }
         public string image { get; set; }
+        public string price { get; set; }
         public string oldPrice { get; set; }
-        public string isActive { get; set; }
         public string isAvailable { get; set; }
     }
 

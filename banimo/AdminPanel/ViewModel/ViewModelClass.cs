@@ -118,6 +118,7 @@ namespace AdminPanel.ViewModel
 
     public class NewDatumm
     {
+        public List<FiltercatsAll> filtercatsAll { get; set; }
         public string  tag { get; set; }
         public string  catid { get; set; }
         public List<FeaturDataDetail> featureList { get; set; }
@@ -145,6 +146,7 @@ namespace AdminPanel.ViewModel
         public string isActive { get; set; }
         public string vahed { get; set; }
         public string limit { get; set; }
+        public string catmode { get; set; }
     }
     public class Datum
     {
@@ -423,8 +425,21 @@ namespace AdminPanel.ViewModel
     }
 
 
+
+    public class FiltercatsAll
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string image { get; set; }
+        public List<Filtersubcat> filtersubcat { get; set; }
+        public string level { get; set; }
+        public int setID { get; set; }
+    }
+
+
     public class EditViewModel
     {
+        public List<FiltercatsAll> filtercatsAll { get; set; }
         public List<Productfilterlist> productfilterlist { get; set; }
         public List<FeaturDataDetail> featurDataDetail { get; set; }
         public List<Filter> filters { get; set; }

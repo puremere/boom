@@ -4354,7 +4354,7 @@ namespace banimo.Controllers
                 {
                     Response.Cookies["lastpage"].Value = "1";
                 }
-                if (Session["imageList"] as string != "")
+                if (Session["imageList"] as string != null && Session["imageList"] as string != "")
                 {
                     string ss = Session["imageList"] as string;
                     ss = ss.Substring(0, ss.Length - 1);
@@ -4598,7 +4598,7 @@ namespace banimo.Controllers
                     collection.Add("selectedFilter", selectedFilter);
                     collection.Add("token", token);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                     banimo.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<banimo.ViewModelPost.addProductRespond>(result);
@@ -5105,9 +5105,11 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-
-
-            banimo.ViewModel.imagelistViwModel log = JsonConvert.DeserializeObject<banimo.ViewModel.imagelistViwModel>(result);
+            banimo.ViewModel.imagelistViwModel log = new ViewModel.imagelistViwModel();
+            if (result != "")
+            {
+                log = JsonConvert.DeserializeObject<banimo.ViewModel.imagelistViwModel>(result);
+            }
 
             if (log.List != null)
             {
@@ -5121,7 +5123,7 @@ namespace banimo.Controllers
             }
             else
             {
-                return Content("2");
+                return Content("error");
             }
 
 
@@ -5154,6 +5156,8 @@ namespace banimo.Controllers
             log.data.First().ID = id.ToString();
             NewDatumm model = new NewDatumm()
             {
+                catmode = catID,
+                filtercatsAll = log.filtercatsAll,
                 tag = log.data.First().tag,
                 vahed = log.data.First().vahed,
                 limit = log.data.First().limit,
@@ -5333,8 +5337,8 @@ namespace banimo.Controllers
                         collection.Add("code", code);
                         collection.Add("title", title);
                         collection.Add("id", detail.catID);
+                      
                         collection.Add("secondid", detail.ID);
-
                         collection.Add("SetID", setid);
                         collection.Add("desc", desc);
                         collection.Add("price", detail.productprice);
@@ -5564,6 +5568,7 @@ namespace banimo.Controllers
                         collection.Add("setid", detail.SetID);
                         collection.Add("discount", detail.discount);
                         collection.Add("filter", filter);
+                        collection.Add("catmode", detail.catmode);
                         collection.Add("range", range);
                         collection.Add("feature", detail.inputallfeatureid);
                         collection.Add("color", color);
@@ -5608,7 +5613,7 @@ namespace banimo.Controllers
 
                     ViewBag.message = "تغییرات انجام شد";
 
-                    return RedirectToAction("Edit", "Admin", new { id = detail.ID, catID = detail.catID });
+                    return RedirectToAction("Edit", "Admin", new { id = detail.ID, catID = detail.catmode });
                 }
                 catch (WebException exception)
                 {

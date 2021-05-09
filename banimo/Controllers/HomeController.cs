@@ -569,7 +569,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult submenu (string catmode)
+        public ActionResult submenu (string catmode,string value)
         {
             string json;
             string device = RandomString();
@@ -2229,8 +2229,13 @@ namespace banimo.Controllers
             return View(finalmodel);
         }
 
+        public ActionResult NewAddress(string id)
+        {
+            addressVM model = new addressVM();
+            return PartialView("/Views/Shared/_addAddress.cshtml",model);
+        }
 
-        public ActionResult setAddress(string lat, string lng, string address, string postalCode, string title,string city, string id)
+        public ActionResult setAddress(string lat, string lng, string address, string postalCode, string title,string city,string state, string id)
         {
             //ALTER TABLE `mbd_discount` ADD `darsad` INT NOT NULL DEFAULT '0' AFTER `oneTime`, ADD `infinit` INT NOT NULL DEFAULT '0' AFTER `darsad`;
             string result = "";
@@ -2250,6 +2255,7 @@ namespace banimo.Controllers
                 collection.Add("lat", lat);
                 collection.Add("lng", lng);
                 collection.Add("city", city);
+                collection.Add("state", state);
                 collection.Add("id", id);
                 collection.Add("token", token);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);

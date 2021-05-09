@@ -28,8 +28,10 @@ namespace banimo.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string city { get; set; }
+        public string state { get; set; }
         public string address { get; set; }
         public string postalCode { get; set; }
+        public string active { get; set; }
         public string lat { get; set; }
         public string lng { get; set; }
     }

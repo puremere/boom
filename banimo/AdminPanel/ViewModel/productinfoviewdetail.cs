@@ -42,6 +42,7 @@ namespace AdminPanel.ViewModel
     }
     public class productinfoforedit
     {
+        public string catmode { get; set; }
         public  string isOffer { get; set; }
         public  string isAvalible { get; set; }
         public string isActive { get; set; }

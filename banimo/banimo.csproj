@@ -293,6 +293,7 @@
   <ItemGroup>
     <Compile Include="AdminPanel\ViewModel\catAll.cs" />
     <Compile Include="AdminPanel\ViewModel\productGroupcsVM.cs" />
+    <Compile Include="ViewModel\addressVM.cs" />
     <Compile Include="ViewModel\adminBankVM.cs" />
     <Compile Include="AdminPanel\ViewModel\producDetailPageViewModel.cs" />
     <Compile Include="AdminPanel\ViewModel\CatPageViewModel.cs" />
@@ -651,6 +652,15 @@
     <Content Include="downloadApp\js\modernizr.js" />
     <Content Include="downloadApp\js\pace.min.js" />
     <Content Include="downloadApp\js\plugins.js" />
+    <Content Include="Extra\leaflet\images\layers-2x.png" />
+    <Content Include="Extra\leaflet\images\layers.png" />
+    <Content Include="Extra\leaflet\images\marker-icon-2x.png" />
+    <Content Include="Extra\leaflet\images\marker-icon.png" />
+    <Content Include="Extra\leaflet\images\marker-shadow.png" />
+    <Content Include="Extra\leaflet\leaflet-src.esm.js" />
+    <Content Include="Extra\leaflet\leaflet-src.js" />
+    <Content Include="Extra\leaflet\leaflet.css" />
+    <Content Include="Extra\leaflet\leaflet.js" />
     <Content Include="fonts\webfonts\fa-duotone-900.svg" />
     <Content Include="images\404.png" />
     <Content Include="images\505.png" />
@@ -1447,6 +1457,9 @@
     <Content Include="fonts\woff2\IRANSansWeb%28FaNum%29_Medium.woff2" />
     <Content Include="fonts\woff2\IRANSansWeb%28FaNum%29_UltraLight.woff2" />
     <None Include="bundleconfig.json" />
+    <Content Include="Extra\leaflet\leaflet-src.esm.js.map" />
+    <Content Include="Extra\leaflet\leaflet-src.js.map" />
+    <Content Include="Extra\leaflet\leaflet.js.map" />
     <None Include="Scripts\Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\Scripts\jquery-1.7.1.min.js" />
@@ -1954,6 +1967,9 @@
     <Content Include="Views\Admin\slideNew.cshtml" />
     <Content Include="Views\Admin\wonderProduct.cshtml" />
     <Content Include="Views\Shared\_SearchPartial.cshtml" />
+    <Content Include="Views\Home\NewAddress.cshtml" />
+    <Content Include="Views\Shared\Partial1.cshtml" />
+    <Content Include="Views\Shared\_addAddress.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
