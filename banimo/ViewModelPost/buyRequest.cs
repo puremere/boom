@@ -33,5 +33,8 @@ namespace banimo.ViewModelPost
         public string hourid { get; set; }
         public string lat { get; set; }
         public string lon { get; set; }
+        public string ids { get; set; }
+        public string nums { get; set; }
+        public string token { get; set; }
     }
 }

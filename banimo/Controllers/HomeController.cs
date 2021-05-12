@@ -3376,9 +3376,12 @@ namespace banimo.Controllers
                     {
                         int first = itemModel.title.IndexOf(val);
                         int spaceIndex = itemModel.title.IndexOf(" ", first);
-
-                        string final = itemModel.title.Substring(first, spaceIndex - first);
-                        itemModel.title = final;
+                        if (spaceIndex != -1)
+                        {
+                            string final = itemModel.title.Substring(first, spaceIndex - first);
+                            itemModel.title = final;
+                        }
+                        
 
                         model.lst.Add(itemModel);
                     }

@@ -567,7 +567,7 @@ namespace banimo.Controllers
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckTest.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -886,30 +886,33 @@ namespace banimo.Controllers
 
             string ids = "";
             string nums = "";
-            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
-            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
-
-            //List<ProductDetail> dataList = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
-            foreach (var item in data)
-            {
-                ids = ids + "," + (item.productid);
-                nums = nums + "," + (item.quantity);
-            }
-
-            userdata user = Session["LogedInUser"] as userdata;
-
-
-
             string email = "";
-            if (user.email != null)
+            string token = "";
+            if (string.IsNullOrEmpty(model.ids))
             {
-                email = user.email;
+                string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+
+                //List<ProductDetail> dataList = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+                foreach (var item in data)
+                {
+                    ids = ids + "," + (item.productid);
+                    nums = nums + "," + (item.quantity);
+                }
+
+                userdata user = Session["LogedInUser"] as userdata;
+
+
+
+               
+                if (user.email != null)
+                {
+                    email = user.email;
+                }
+                 token = user.token;
             }
-            string token = user.token;
-
-
-
-            string userid = user.ID;
+            
+            
             string state = "";
 
             string discount = model.newdiscount;
@@ -968,6 +971,7 @@ namespace banimo.Controllers
 
 
                 long orderId = Convert.ToInt64(log2.peigiry);
+               
                 long amount = log2.amount * 10;
                 string additionalData = txtDescription;
 
@@ -1195,7 +1199,7 @@ namespace banimo.Controllers
             long saleOrderId = -999;
             string resultCode_bpPayRequest;
 
-            string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/Verify";
+            string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyMellat";
             long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
             string userName = ConfigurationManager.AppSettings["userName"];
             string userPassword = ConfigurationManager.AppSettings["userPassword"];
@@ -1203,11 +1207,14 @@ namespace banimo.Controllers
             BankMellatImplement bankMellatImplement = new BankMellatImplement(callBackUrl, terminalId, userName, userPassword);
             try
             {
+                
+                string result2 = "";
                 saleReferenceId = long.Parse(Request.Params["SaleReferenceId"].ToString());
                 saleOrderId = long.Parse(Request.Params["SaleOrderId"].ToString());
                 resultCode_bpPayRequest = Request.Params["ResCode"].ToString();
 
                 TempData["saleOrderId"] = Request.Params["SaleOrderId"].ToString();
+
 
 
                 //Result Code
@@ -1220,6 +1227,9 @@ namespace banimo.Controllers
                     #region Success
 
                     resultCode_bpVerifyRequest = bankMellatImplement.VerifyRequest(saleOrderId, saleOrderId, saleReferenceId);
+
+
+
 
                     if (string.IsNullOrEmpty(resultCode_bpVerifyRequest))
                     {
@@ -1235,77 +1245,86 @@ namespace banimo.Controllers
 
                         #endregion
                     }
-
-                    if ((int.Parse(resultCode_bpVerifyRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
-                        ||
-                        (int.Parse(resultCode_bpinquiryRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ))
+                    else
                     {
 
-                        #region SettleRequest
-
-                        resultCode_bpSettleRequest = bankMellatImplement.SettleRequest(saleOrderId, saleOrderId, saleReferenceId);
-                        if ((int.Parse(resultCode_bpSettleRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
-                            || (int.Parse(resultCode_bpSettleRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_Settle_ﺷﺪه_اﺳﺖ))
+                        
+                        if ((int.Parse(resultCode_bpVerifyRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                        ||
+                        (int.Parse(resultCode_bpinquiryRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ))
                         {
-                            string rr = "" + saleOrderId;
-                            TempData["Message"] = "موفق";
-                            TempData["Message2"] = "CH-" + saleOrderId;
-                            //TempData["Message3"] = " لطفا شماره پیگیری را یادداشت نمایید" + saleReferenceId;
 
-                            try
+                            #region SettleRequest
+
+                            resultCode_bpSettleRequest = bankMellatImplement.SettleRequest(saleOrderId, saleOrderId, saleReferenceId);
+                            if ((int.Parse(resultCode_bpSettleRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                                || (int.Parse(resultCode_bpSettleRequest) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_Settle_ﺷﺪه_اﺳﺖ))
                             {
-                                string result2 = "";
 
-                                string device = RandomString();
-                                string code = MD5Hash(device + "ncase8934f49909");
-                                userdata user = Session["LogedInUser"] as userdata;
-                                using (WebClient client = new WebClient())
+                               
+                                string rr = "" + saleOrderId;
+                                TempData["Message"] = "موفق";
+                                TempData["Message2"] = "CH-" + saleOrderId;
+                                //TempData["Message3"] = " لطفا شماره پیگیری را یادداشت نمایید" + saleReferenceId;
+
+                                try
+                                {
+                                    string device = RandomString();
+                                    string code = MD5Hash(device + "ncase8934f49909");
+                                 
+                                    using (WebClient client = new WebClient())
+                                    {
+
+                                        var collection2 = new NameValueCollection();
+                                        collection2.Add("device", device);
+                                        collection2.Add("code", code);
+                                        collection2.Add("refID", rr);
+                                        collection2.Add("paymentStatus", "1");
+                                        collection2.Add("payment", "3");
+                                        collection2.Add("mbrand", servername);
+                                    
+
+
+
+
+                                        byte[] response =
+                                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+
+                                        result2 = System.Text.Encoding.UTF8.GetString(response);
+                                    }
+
+                                }
+                                catch (Exception e)
                                 {
 
-                                    var collection2 = new NameValueCollection();
-                                    collection2.Add("device", device);
-                                    collection2.Add("code", code);
-                                    collection2.Add("refID", rr);
-                                    collection2.Add("paymentStatus", "1");
-                                    collection2.Add("payment", "3");
-                                    collection2.Add("servername", servername);
-
-
-                                    byte[] response =
-                                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
-
-                                    result2 = System.Text.Encoding.UTF8.GetString(response);
+                                    TempData["Message"] = e.InnerException.Message;
+                                    TempData["Message2"] = "" + saleOrderId;
                                 }
 
+
+
+
                             }
-                            catch (Exception e)
+                            else
                             {
-
-                                TempData["Message"] = e.InnerException.Message;
+                                TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpSettleRequest.Replace("_", " ")));
                                 TempData["Message2"] = "" + saleOrderId;
+                                Run_bpReversalRequest = true;
                             }
 
+                            // Save information to Database...
 
-
-
+                            #endregion
                         }
                         else
                         {
-                            TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpSettleRequest.Replace("_", " ")));
+                            TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpVerifyRequest.Replace("_", " ")));
                             TempData["Message2"] = "" + saleOrderId;
                             Run_bpReversalRequest = true;
                         }
-
-                        // Save information to Database...
-
-                        #endregion
                     }
-                    else
-                    {
-                        TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpVerifyRequest.Replace("_", " ")));
-                        TempData["Message2"] = "" + saleOrderId;
-                        Run_bpReversalRequest = true;
-                    }
+
+                    
 
                     #endregion
                 }
@@ -1321,7 +1340,7 @@ namespace banimo.Controllers
             catch (Exception Error)
             {
                 TempData["Message"] = "خطا";
-                TempData["Message2"] = "" + saleOrderId;
+                TempData["Message2"] = "" + saleOrderId + "-"+ Error.Message;
                 // Save and send Error for admin user
                 Run_bpReversalRequest = true;
                 return RedirectToAction("verifyAtBase", "Connection");

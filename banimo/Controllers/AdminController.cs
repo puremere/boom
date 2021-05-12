@@ -6765,7 +6765,7 @@ namespace banimo.Controllers
                 string pathString = "~/fonts/ttf";
                 string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
                 BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
-                Font font = new Font(bfTimes, 12);
+                Font font = new Font(bfTimes, 8);
                 Font fontbig = new Font(bfTimes, 14);
                 Font fontSMALL = new Font(bfTimes, 10);
                 Font fontSMALLHeader = new Font(bfTimes);
@@ -6921,7 +6921,7 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    PdfPCell radif = new PdfPCell(new Phrase("ردیف", fontSMALLHeader));
+                    PdfPCell radif = new PdfPCell(new Phrase("ردیف", font));
                     radif.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     radif.NoWrap = false;
                     radif.SetLeading(14, 0);
@@ -6934,7 +6934,7 @@ namespace banimo.Controllers
 
                     table.AddCell(radif);
 
-                    PdfPCell nam = new PdfPCell(new Phrase("نام محصول", fontSMALLHeader));
+                    PdfPCell nam = new PdfPCell(new Phrase("نام محصول", font));
                     nam.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     nam.NoWrap = false;
                     nam.SetLeading(14, 0);
@@ -6947,7 +6947,7 @@ namespace banimo.Controllers
                     nam.BackgroundColor = WebColors.GetRGBColor("#ddd");
                     table.AddCell(nam);
 
-                    PdfPCell tedad = new PdfPCell(new Phrase("تعداد", fontSMALLHeader));
+                    PdfPCell tedad = new PdfPCell(new Phrase("تعداد", font));
                     tedad.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     tedad.NoWrap = false;
                     tedad.SetLeading(14, 0);
@@ -6961,7 +6961,7 @@ namespace banimo.Controllers
 
                     table.AddCell(tedad);
 
-                    PdfPCell gheymat = new PdfPCell(new Phrase("قیمت واحد", fontSMALLHeader));
+                    PdfPCell gheymat = new PdfPCell(new Phrase("قیمت واحد", font));
                     gheymat.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     gheymat.NoWrap = false;
                     gheymat.SetLeading(14, 0);
@@ -6975,7 +6975,7 @@ namespace banimo.Controllers
 
                     table.AddCell(gheymat);
 
-                    PdfPCell gheymatkol = new PdfPCell(new Phrase("قیمت کل", fontSMALLHeader));
+                    PdfPCell gheymatkol = new PdfPCell(new Phrase("قیمت کل", font));
                     gheymatkol.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     gheymatkol.NoWrap = false;
                     gheymatkol.SetLeading(14, 0);
@@ -6989,7 +6989,7 @@ namespace banimo.Controllers
 
                     table.AddCell(gheymatkol);
 
-                    PdfPCell tozihat = new PdfPCell(new Phrase("توضیحات", fontSMALLHeader));
+                    PdfPCell tozihat = new PdfPCell(new Phrase("توضیحات", font));
                     tozihat.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     tozihat.NoWrap = false;
                     tozihat.SetLeading(14, 0);
@@ -7002,7 +7002,7 @@ namespace banimo.Controllers
                     tozihat.BackgroundColor = WebColors.GetRGBColor("#ddd");
                     table.AddCell(tozihat);
 
-                    PdfPCell tozihatEmpty = new PdfPCell(new Phrase("", fontSMALLHeader));
+                    PdfPCell tozihatEmpty = new PdfPCell(new Phrase("", font));
                     tozihatEmpty.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     tozihatEmpty.NoWrap = false;
                     tozihatEmpty.SetLeading(14, 0);
@@ -7022,7 +7022,7 @@ namespace banimo.Controllers
 
 
 
-                        PdfPCell title = new PdfPCell(new Phrase(item.title, fontSMALL));
+                        PdfPCell title = new PdfPCell(new Phrase(item.title, font));
                         title.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                         title.NoWrap = false;
                         title.SetLeading(14, 0);
@@ -7034,13 +7034,13 @@ namespace banimo.Controllers
                         table.AddCell(title);
 
 
-                        PdfPCell amountTot = new PdfPCell(new Phrase(item.quantity.ToString(), fontSMALL));
+                        PdfPCell amountTot = new PdfPCell(new Phrase(item.quantity.ToString(), font));
                         amountTot.HorizontalAlignment = Element.ALIGN_CENTER;
                         amountTot.VerticalAlignment = Element.ALIGN_MIDDLE;
                         amountTot.Colspan = 1;
                         table.AddCell(amountTot);
 
-                        PdfPCell price = new PdfPCell(new Phrase(item.Price.ToString(), fontSMALL));
+                        PdfPCell price = new PdfPCell(new Phrase(item.Price.ToString(), font));
                         price.HorizontalAlignment = Element.ALIGN_CENTER;
                         price.VerticalAlignment = Element.ALIGN_MIDDLE;
                         price.Colspan = 2;
@@ -7050,7 +7050,7 @@ namespace banimo.Controllers
 
 
                         //final = final + (item.quantity * item.Price);
-                        PdfPCell priceToT = new PdfPCell(new Phrase((item.quantity * item.Price).ToString(), fontSMALL));
+                        PdfPCell priceToT = new PdfPCell(new Phrase((item.quantity * item.Price).ToString(), font));
                         priceToT.HorizontalAlignment = Element.ALIGN_CENTER;
                         priceToT.VerticalAlignment = Element.ALIGN_MIDDLE;
                         priceToT.Colspan = 2;
@@ -7142,7 +7142,7 @@ namespace banimo.Controllers
 
 
                     int final = 0;
-
+                    int oldfinal = 0;
                     PdfPCell fullname = new PdfPCell(new Phrase("نام شخص : آقا/ خانم " + log2.data.fullname, fontSMALL));
                     fullname.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     fullname.NoWrap = false;
@@ -7203,8 +7203,8 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-
-                    phone = new PdfPCell(new Phrase("مبلغ کل سفارش : " + log2.data.totalPrice + " تومان", fontSMALL));
+                    string kollstring = String.Format("{0:n0}", Int64.Parse(log2.data.totalPrice));
+                    phone = new PdfPCell(new Phrase("مبلغ کل سفارش : " + kollstring + " تومان", fontSMALL));
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
@@ -7245,7 +7245,14 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    phone = new PdfPCell(new Phrase(" آدرس : " + log2.data.address, fontSMALL));
+                    string addresss = " آدرس : " + log2.data.address;
+                    if (log2.data.postalCode != "")
+                    {
+                        addresss = addresss + " - " + " کدپستی : " + log2.data.postalCode; 
+                    }
+
+
+                    phone = new PdfPCell(new Phrase(addresss, fontSMALL));
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
@@ -7256,24 +7263,25 @@ namespace banimo.Controllers
                     table.AddCell(phone);
 
 
-                    PdfPCell radif = new PdfPCell(new Phrase("ردیف", fontSMALLHeader));
+                    PdfPCell radif = new PdfPCell(new Phrase("ردیف", font));
                     radif.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     radif.NoWrap = false;
                     radif.SetLeading(14, 0);
                     radif.PaddingBottom = 15;
                     radif.PaddingTop = 5;
-                    radif.PaddingRight = 2;
+                    radif.PaddingRight = 1;
+                    radif.Colspan = 1;
                     radif.VerticalAlignment = Element.ALIGN_MIDDLE;
                     radif.HorizontalAlignment = Element.ALIGN_CENTER;
                     radif.BackgroundColor = WebColors.GetRGBColor("#ddd");
 
                     table.AddCell(radif);
 
-                    PdfPCell nam = new PdfPCell(new Phrase("نام محصول", fontSMALLHeader));
+                    PdfPCell nam = new PdfPCell(new Phrase("نام محصول", font));
                     nam.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     nam.NoWrap = false;
                     nam.SetLeading(14, 0);
-                    nam.Colspan = 4;
+                    nam.Colspan = 5;
                     nam.PaddingBottom = 15;
                     nam.PaddingTop = 5;
                     nam.PaddingRight = 2;
@@ -7282,7 +7290,7 @@ namespace banimo.Controllers
                     nam.BackgroundColor = WebColors.GetRGBColor("#ddd");
                     table.AddCell(nam);
 
-                    PdfPCell tedad = new PdfPCell(new Phrase("تعداد", fontSMALLHeader));
+                    PdfPCell tedad = new PdfPCell(new Phrase("تعداد", font));
                     tedad.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     tedad.NoWrap = false;
                     tedad.SetLeading(14, 0);
@@ -7296,7 +7304,20 @@ namespace banimo.Controllers
 
                     table.AddCell(tedad);
 
-                    PdfPCell gheymat = new PdfPCell(new Phrase("قیمت واحد", fontSMALLHeader));
+                    PdfPCell gheymat0 = new PdfPCell(new Phrase("قیمت قبل از تخفیف", font));
+                    gheymat0.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                    gheymat0.NoWrap = false;
+                    gheymat0.SetLeading(14, 0);
+                    gheymat0.PaddingBottom = 15;
+                    gheymat0.PaddingTop = 5;
+                    gheymat0.PaddingRight = 2;
+                    gheymat0.Colspan = 2;
+                    gheymat0.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    gheymat0.HorizontalAlignment = Element.ALIGN_CENTER;
+                    gheymat0.BackgroundColor = WebColors.GetRGBColor("#ddd");
+                    table.AddCell(gheymat0);
+
+                    PdfPCell gheymat = new PdfPCell(new Phrase("قیمت بعد از تخفیف", font));
                     gheymat.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     gheymat.NoWrap = false;
                     gheymat.SetLeading(14, 0);
@@ -7310,7 +7331,7 @@ namespace banimo.Controllers
 
                     table.AddCell(gheymat);
 
-                    PdfPCell gheymatkol = new PdfPCell(new Phrase("قیمت کل", fontSMALLHeader));
+                    PdfPCell gheymatkol = new PdfPCell(new Phrase("قیمت کل", font));
                     gheymatkol.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     gheymatkol.NoWrap = false;
                     gheymatkol.SetLeading(14, 0);
@@ -7324,21 +7345,21 @@ namespace banimo.Controllers
 
                     table.AddCell(gheymatkol);
 
-                    PdfPCell tozihat = new PdfPCell(new Phrase("توضیحات", fontSMALLHeader));
-                    tozihat.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
-                    tozihat.NoWrap = false;
-                    tozihat.SetLeading(14, 0);
-                    tozihat.Colspan = 3;
-                    tozihat.PaddingBottom = 15;
-                    tozihat.PaddingTop = 5;
-                    tozihat.PaddingRight = 2;
-                    tozihat.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    tozihat.HorizontalAlignment = Element.ALIGN_CENTER;
-                    tozihat.BackgroundColor = WebColors.GetRGBColor("#ddd");
-                    table.AddCell(tozihat);
+                    //PdfPCell tozihat = new PdfPCell(new Phrase("توضیحات", font));
+                    //tozihat.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                    //tozihat.NoWrap = false;
+                    //tozihat.SetLeading(14, 0);
+                    //tozihat.Colspan = 3;
+                    //tozihat.PaddingBottom = 15;
+                    //tozihat.PaddingTop = 5;
+                    //tozihat.PaddingRight = 2;
+                    //tozihat.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    //tozihat.HorizontalAlignment = Element.ALIGN_CENTER;
+                    //tozihat.BackgroundColor = WebColors.GetRGBColor("#ddd");
+                    //table.AddCell(tozihat);
 
 
-                    PdfPCell tozihatEmpty = new PdfPCell(new Phrase("", fontSMALLHeader));
+                    PdfPCell tozihatEmpty = new PdfPCell(new Phrase("", font));
                     tozihatEmpty.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     tozihatEmpty.NoWrap = false;
                     tozihatEmpty.SetLeading(14, 0);
@@ -7352,7 +7373,7 @@ namespace banimo.Controllers
 
                     foreach (var item in list)
                     {
-                        PdfPCell countIN = new PdfPCell(new Phrase((list.IndexOf(item) + 1).ToString(), fontSMALL));
+                        PdfPCell countIN = new PdfPCell(new Phrase((list.IndexOf(item) + 1).ToString(), font));
                         countIN.HorizontalAlignment = Element.ALIGN_CENTER;
                         countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
                         countIN.Colspan = 1;
@@ -7361,11 +7382,11 @@ namespace banimo.Controllers
 
 
 
-                        PdfPCell title = new PdfPCell(new Phrase(item.title, fontSMALL));
+                        PdfPCell title = new PdfPCell(new Phrase(item.title, font));
                         title.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                         title.NoWrap = false;
                         title.SetLeading(14, 0);
-                        title.Colspan = 4;
+                        title.Colspan = 5;
                         title.PaddingBottom = 15;
                         title.PaddingTop = 5;
                         title.PaddingRight = 2;
@@ -7373,13 +7394,20 @@ namespace banimo.Controllers
                         table.AddCell(title);
 
 
-                        PdfPCell amountTot = new PdfPCell(new Phrase(item.nums.ToString(), fontSMALL));
+                        PdfPCell amountTot = new PdfPCell(new Phrase(item.nums.ToString(), font));
                         amountTot.HorizontalAlignment = Element.ALIGN_CENTER;
                         amountTot.VerticalAlignment = Element.ALIGN_MIDDLE;
                         amountTot.Colspan = 1;
                         table.AddCell(amountTot);
 
-                        PdfPCell price = new PdfPCell(new Phrase(item.price.ToString(), fontSMALL));
+                        PdfPCell oldprice = new PdfPCell(new Phrase(String.Format("{0:n0}", Int64.Parse(item.oldprice.ToString())), font));
+                        oldprice.HorizontalAlignment = Element.ALIGN_CENTER;
+                        oldprice.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        oldprice.Colspan = 2;
+
+                        table.AddCell(oldprice);
+
+                        PdfPCell price = new PdfPCell(new Phrase(String.Format("{0:n0}", Int64.Parse(item.price.ToString()))  , font));
                         price.HorizontalAlignment = Element.ALIGN_CENTER;
                         price.VerticalAlignment = Element.ALIGN_MIDDLE;
                         price.Colspan = 2;
@@ -7389,13 +7417,14 @@ namespace banimo.Controllers
 
 
                         final = final + (item.nums * item.price);
-                        PdfPCell priceToT = new PdfPCell(new Phrase((item.nums * item.price).ToString(), fontSMALL));
+                        oldfinal = oldfinal + (item.nums * item.oldprice);
+                        PdfPCell priceToT = new PdfPCell(new Phrase(String.Format("{0:n0}", (item.nums * item.price)), font));
                         priceToT.HorizontalAlignment = Element.ALIGN_CENTER;
                         priceToT.VerticalAlignment = Element.ALIGN_MIDDLE;
                         priceToT.Colspan = 2;
                         table.AddCell(priceToT);
 
-                        table.AddCell(tozihatEmpty);
+                        //table.AddCell(tozihatEmpty);
                     }
                     int i = 1;
 
@@ -7412,7 +7441,7 @@ namespace banimo.Controllers
                         TITLE.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                         TITLE.NoWrap = false;
                         TITLE.SetLeading(14, 0);
-                        TITLE.Colspan = 4;
+                        TITLE.Colspan = 5;
                         TITLE.PaddingBottom = 15;
                         TITLE.VerticalAlignment = Element.ALIGN_MIDDLE;
                         table.AddCell(TITLE);
@@ -7428,10 +7457,10 @@ namespace banimo.Controllers
                         PdfPCell priceToT = new PdfPCell(new Phrase("هدیه دارچین", fontSMALL));
                         priceToT.HorizontalAlignment = Element.ALIGN_CENTER;
                         priceToT.VerticalAlignment = Element.ALIGN_MIDDLE;
-                        priceToT.Colspan = 4;
+                        priceToT.Colspan = 7;
                         table.AddCell(priceToT);
 
-                        table.AddCell(tozihatEmpty);
+                        
 
                     }
 
@@ -7453,18 +7482,18 @@ namespace banimo.Controllers
                     ersal.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     ersal.NoWrap = false;
                     ersal.SetLeading(14, 0);
-                    ersal.Colspan = 5;
+                    ersal.Colspan = 6;
                     ersal.PaddingBottom = 15;
                     ersal.VerticalAlignment = Element.ALIGN_MIDDLE;
                     table.AddCell(ersal);
                    
-                    PdfPCell ersalhezar = new PdfPCell(new Phrase(log2.deliver.ToString() + " تومان", fontSMALL));
+                    PdfPCell ersalhezar = new PdfPCell(new Phrase(String.Format("{0:n0}", log2.deliver)  + " تومان", fontSMALL));
                     ersalhezar.HorizontalAlignment = Element.ALIGN_CENTER;
                     ersalhezar.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    ersalhezar.Colspan = 4;
+                    ersalhezar.Colspan = 7;
                     table.AddCell(ersalhezar);
 
-                    table.AddCell(tozihatEmpty);
+                    
 
 
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
@@ -7479,7 +7508,7 @@ namespace banimo.Controllers
                     takhfif.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     takhfif.NoWrap = false;
                     takhfif.SetLeading(14, 0);
-                    takhfif.Colspan = 5;
+                    takhfif.Colspan = 6;
                     takhfif.PaddingBottom = 15;
                     takhfif.VerticalAlignment = Element.ALIGN_MIDDLE;
 
@@ -7492,18 +7521,40 @@ namespace banimo.Controllers
                     }
                     else
                     {
-                        takhfifstring = list.First().discount + " تومان";
+                        takhfifstring = String.Format("{0:n0}", Int64.Parse(list.First().discount))  + " تومان";
                     }
                     PdfPCell takh = new PdfPCell(new Phrase(takhfifstring, fontSMALL));
                     takh.HorizontalAlignment = Element.ALIGN_CENTER;
                     takh.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    takh.Colspan = 4;
+                    takh.Colspan = 7;
                     table.AddCell(takh);
 
-                    table.AddCell(tozihatEmpty);
+
+                    counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
+                    counthaz.HorizontalAlignment = Element.ALIGN_CENTER;
+                    counthaz.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    counthaz.Colspan = 1;
+                    table.AddCell(counthaz);
+                    i++;
+                    PdfPCell profit = new PdfPCell(new Phrase("سود شما از خرید", fontSMALL));
+                    profit.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                    profit.NoWrap = false;
+                    profit.Colspan = 6;
+                    profit.PaddingBottom = 15;
+                    profit.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                    table.AddCell(profit);
 
 
 
+                    int profitint = oldfinal - final;
+
+                    PdfPCell profitcell = new PdfPCell(new Phrase(String.Format("{0:n0}", profitint) + " تومان", fontbigBold));
+                    profitcell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    profitcell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    profitcell.Colspan = 7;
+                    table.AddCell(profitcell);
+                    
 
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
                     counthaz.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -7514,28 +7565,27 @@ namespace banimo.Controllers
                     PdfPCell totalsrt = new PdfPCell(new Phrase("جمع کل", fontSMALL));
                     totalsrt.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     totalsrt.NoWrap = false;
-                    totalsrt.Colspan = 4;
+                    totalsrt.Colspan = 5;
                     totalsrt.PaddingBottom = 15;
                     totalsrt.VerticalAlignment = Element.ALIGN_MIDDLE;
 
 
                     table.AddCell(totalsrt);
 
-                    PdfPCell finalItemTotalCell = new PdfPCell(new Phrase(finalItemTotal.ToString(), fontSMALL));
+                    PdfPCell finalItemTotalCell = new PdfPCell(new Phrase(String.Format("{0:n0}", finalItemTotal), fontSMALL));
                     finalItemTotalCell.HorizontalAlignment = Element.ALIGN_CENTER;
                     finalItemTotalCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                     finalItemTotalCell.Colspan = 1;
                     table.AddCell(finalItemTotalCell);
 
 
-                    PdfPCell amount = new PdfPCell(new Phrase(final.ToString() + " تومان", fontbigBold));
+                    PdfPCell amount = new PdfPCell(new Phrase(String.Format("{0:n0}", final)  + " تومان", fontbigBold));
                     amount.HorizontalAlignment = Element.ALIGN_CENTER;
                     amount.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    amount.Colspan = 4;
+                    amount.Colspan = 7;
 
                     table.AddCell(amount);
-                    table.AddCell(tozihatEmpty);
-
+                    
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
                     counthaz.HorizontalAlignment = Element.ALIGN_CENTER;
                     counthaz.VerticalAlignment = Element.ALIGN_MIDDLE;
@@ -7545,7 +7595,7 @@ namespace banimo.Controllers
                     PdfPCell totalpay = new PdfPCell(new Phrase("مبلغ قابل پرداخت", fontSMALL));
                     totalpay.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                     totalpay.NoWrap = false;
-                    totalpay.Colspan = 5;
+                    totalpay.Colspan = 6;
                     totalpay.PaddingBottom = 15;
                     totalpay.VerticalAlignment = Element.ALIGN_MIDDLE;
 
@@ -7555,14 +7605,13 @@ namespace banimo.Controllers
 
                     int phrase = final - Int32.Parse(dis) + Int32.Parse(log2.deliver);
 
-                    PdfPCell afterDiscount = new PdfPCell(new Phrase(phrase.ToString() + " تومان", fontbigBold));
+                    PdfPCell afterDiscount = new PdfPCell(new Phrase(String.Format("{0:n0}", phrase)  + " تومان", fontbigBold));
                     afterDiscount.HorizontalAlignment = Element.ALIGN_CENTER;
                     afterDiscount.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    afterDiscount.Colspan = 4;
+                    afterDiscount.Colspan = 7;
                     table.AddCell(afterDiscount);
 
-                    table.AddCell(tozihatEmpty);
-
+                    
 
 
 

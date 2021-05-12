@@ -101,6 +101,7 @@ namespace banimo.ViewModelPost
         public string colorCode { get; set; }
         public string colorTitle { get; set; }
         public string price { get; set; }
+        public string oldprice { get; set; }
         public string image { get; set; }
         public string nums { get; set; }
         public string id { get; set; }
@@ -126,6 +127,7 @@ namespace banimo.ViewModelPost
         public string colorCode { get; set; }
         public string colorTitle { get; set; }
         public int price { get; set; }
+        public int oldprice { get; set; }
         public string image { get; set; }
         public int nums { get; set; }
         public string id { get; set; }
@@ -170,6 +172,7 @@ namespace banimo.ViewModelPost
         public string timeTo { get; set; }
         public string phoneNumber { get; set; }
         public string address { get; set; }
+        public string  postalCode { get; set; }
         public string fullname { get; set; }
         public string gift { get; set; }
     }

@@ -26,9 +26,6 @@ namespace education2
             }
            
         }
-
-
-
         private static readonly List<User> Users = new List<User>();
         private static readonly List<UserCall> UserCalls = new List<UserCall>();
         private static readonly List<CallOffer> CallOffers = new List<CallOffer>();
