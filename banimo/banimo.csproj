@@ -293,6 +293,9 @@
   <ItemGroup>
     <Compile Include="AdminPanel\ViewModel\catAll.cs" />
     <Compile Include="AdminPanel\ViewModel\productGroupcsVM.cs" />
+    <Compile Include="apiViewModel\addToWishList.cs" />
+    <Compile Include="apiViewModel\getCats.cs" />
+    <Compile Include="Controllers\appController.cs" />
     <Compile Include="ViewModel\addressVM.cs" />
     <Compile Include="ViewModel\adminBankVM.cs" />
     <Compile Include="AdminPanel\ViewModel\producDetailPageViewModel.cs" />

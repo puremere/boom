@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title =  @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+@{
+    string srt = ViewBag.package + "://" + @ViewBag.id;
+    <script>
+        window.location.href = '@srt';
+        window.location.href = "/home/productdetail?id=N" + @ViewBag.id;
+    </script>
+}
