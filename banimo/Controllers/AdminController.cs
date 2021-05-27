@@ -1106,7 +1106,51 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_gogetOrderList.cshtml", log2);
 
         }
-        public PartialViewResult goGetOrderDetail(string id)
+        public ActionResult handoverItem(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/admin/handoverItem.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+        }
+        public ActionResult returnItem(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/admin/returnFromDeliver.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+        }
+        public PartialViewResult goGetOrderDetail(string id,string type)
         {
 
             string device = RandomString(10);
@@ -1149,7 +1193,8 @@ namespace banimo.Controllers
             ViewModel.orderDetailVM model = new ViewModel.orderDetailVM()
             {
                 list = log2,
-                id = id
+                id = id,
+                type = type
             };
             return PartialView("/Views/Shared/AdminShared/_gogetOrderDetail.cshtml", model);
 
@@ -2921,7 +2966,7 @@ namespace banimo.Controllers
             return RedirectToAction("bank");
         }
 
-        public void setCustomTransaction (string fromSource , string toSource, string price,  string desc,string typeto)
+        public void setCustomTransaction (string fromSource , string toSource, string price,  string desc,string typeto,string typefrom,string sourseID)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");

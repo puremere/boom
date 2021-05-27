@@ -9,6 +9,7 @@ namespace banimo.ViewModel
     {
         public ViewModelPost.ListOfProductOrder list { get; set; }
         public string  id { get; set; }
+        public string type { get; set; }
     }
     public class ftdetailVM
     {

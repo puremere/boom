@@ -108,7 +108,8 @@ namespace banimo.ViewModelPost
         public string discount { get; set; }
         public string orderID { get; set; }
         public string active { get; set; }
-
+        public int delivered { get; set; }
+        
     }
     public class ListOfProductOrder
     {

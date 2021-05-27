@@ -21,8 +21,14 @@ namespace banimo.ViewModel
         public string id { get; set; }
         public string count { get; set; }
     }
+    public class DeliverList
+    {
+        public string purchaseID { get; set; }
+        public string fullname { get; set; }
+    }
     public class factorVM
     {
+        public List<DeliverList> deliverList { get; set; }
         public List<MyProduct> myProducts { get; set; }
         public List<FactorList> factorList { get; set; }
         public List<PartnerList> partnerList { get; set; }

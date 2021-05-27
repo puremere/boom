@@ -1,4 +1,5 @@
 ﻿using banimo.apiViewModel;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -45,7 +46,7 @@ namespace banimo.Controllers
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getMainData()
+        public async Task<JObject> getMainData()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -62,11 +63,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return (result);
+            JObject jObject = JObject.Parse(result); return jObject;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> aboutUs()
+        public async Task<JObject> aboutUs()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -83,11 +84,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/aboutUs.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> addToWishList([FromBody] addToWishList model)
+        public async Task<JObject> addToWishList([FromBody] addToWishList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -107,11 +108,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/addToWishList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> addTransaction([FromBody] addTransaction model)
+        public async Task<JObject> addTransaction([FromBody] addTransaction model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -132,11 +133,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/addTransaction.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> buyRequest([FromBody] buyRequest model)
+        public async Task<JObject> buyRequest([FromBody] buyRequest model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -172,12 +173,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/buyRequest.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> callMe([FromBody] callMe model)
+        public async Task<JObject> callMe([FromBody] callMe model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -198,12 +199,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/callMe.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> changePass([FromBody] changePass model)
+        public async Task<JObject> changePass([FromBody] changePass model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -226,12 +227,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/changePass.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> commentArticleProduct([FromBody] commentArticleProduct model)
+        public async Task<JObject> commentArticleProduct([FromBody] commentArticleProduct model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -258,12 +259,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/commentArticleProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> commentProduct([FromBody] commentProduct model)
+        public async Task<JObject> commentProduct([FromBody] commentProduct model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -288,12 +289,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/commentProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> compare([FromBody] compare model)
+        public async Task<JObject> compare([FromBody] compare model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -315,12 +316,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/compare.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> compareSearch([FromBody] compareSearch model)
+        public async Task<JObject> compareSearch([FromBody] compareSearch model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -342,11 +343,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/compareSearch.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> completeProfile([FromBody] completeProfile model)
+        public async Task<JObject> completeProfile([FromBody] completeProfile model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -375,11 +376,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/completeProfile.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> confirmUser([FromBody] confirmUser model)
+        public async Task<JObject> confirmUser([FromBody] confirmUser model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -398,11 +399,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/confirmUser.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> contactUs()
+        public async Task<JObject> contactUs()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -420,12 +421,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/contactUs.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> defaultAddress([FromBody] defaultAddress model)
+        public async Task<JObject> defaultAddress([FromBody] defaultAddress model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -445,14 +446,14 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/defaultAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> doFinalCheck([FromBody] doFinalCheck model)
+        public async Task<JObject> doFinalCheck([FromBody] doFinalCheck model)
 
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
@@ -479,13 +480,13 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> doSignIn([FromBody] doSignIn model)
+        public async Task<JObject> doSignIn([FromBody] doSignIn model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -505,12 +506,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doSignIn.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> doSignUp([FromBody] doSignUp model)
+        public async Task<JObject> doSignUp([FromBody] doSignUp model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -531,11 +532,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doSignUp.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> doWalletFinalCheck([FromBody] doWalletFinalCheck model)
+        public async Task<JObject> doWalletFinalCheck([FromBody] doWalletFinalCheck model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -554,12 +555,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doWalletFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> editProduct([FromBody] editProduct model)
+        public async Task<JObject> editProduct([FromBody] editProduct model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -588,11 +589,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/editProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> FinalizeOrder([FromBody] FinalizeOrder model)
+        public async Task<JObject> FinalizeOrder([FromBody] FinalizeOrder model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -614,7 +615,7 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/FinalizeOrder.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
@@ -622,7 +623,7 @@ namespace banimo.Controllers
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getCredit([FromBody] getCredit model)
+        public async Task<JObject> getCredit([FromBody] getCredit model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -643,11 +644,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCredit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getCode([FromBody] getCode model)
+        public async Task<JObject> getCode([FromBody] getCode model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -668,11 +669,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataArticleComment([FromBody] getDataArticleComment model)
+        public async Task<JObject> getDataArticleComment([FromBody] getDataArticleComment model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -692,11 +693,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataArticleComment.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataArticlesDetail([FromBody] getDataArticlesDetail model)
+        public async Task<JObject> getDataArticlesDetail([FromBody] getDataArticlesDetail model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -716,11 +717,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataArticlesDetail.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataCatArticle([FromBody] getDataCatArticle model)
+        public async Task<JObject> getDataCatArticle([FromBody] getDataCatArticle model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -740,11 +741,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataCatArticle.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataCatArticlesList([FromBody] getDataCatArticlesList model)
+        public async Task<JObject> getDataCatArticlesList([FromBody] getDataCatArticlesList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -766,11 +767,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataCatArticlesList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataComment([FromBody] getDataComment model)
+        public async Task<JObject> getDataComment([FromBody] getDataComment model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -792,11 +793,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataComment.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataMyOrderDetails([FromBody] getDataMyOrderDetails model)
+        public async Task<JObject> getDataMyOrderDetails([FromBody] getDataMyOrderDetails model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -818,12 +819,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataMyOrderDetails.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataMyOrders([FromBody] getDataMyOrders model)
+        public async Task<JObject> getDataMyOrders([FromBody] getDataMyOrders model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -845,12 +846,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataMyOrders.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataProductList0([FromBody] getDataProductList0 model)
+        public async Task<JObject> getDataProductList0([FromBody] getDataProductList0 model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -885,12 +886,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProductList0.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataProfile([FromBody] getDataProfile model)
+        public async Task<JObject> getDataProfile([FromBody] getDataProfile model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -911,11 +912,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProfile.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDataWishList([FromBody] getDataWishList model)
+        public async Task<JObject> getDataWishList([FromBody] getDataWishList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -936,12 +937,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataWishList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDeliverCode([FromBody] getDeliverCode model)
+        public async Task<JObject> getDeliverCode([FromBody] getDeliverCode model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -965,11 +966,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverCode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDeliverList([FromBody] getDeliverList model)
+        public async Task<JObject> getDeliverList([FromBody] getDeliverList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -991,11 +992,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getDiscount([FromBody] getDiscount model)
+        public async Task<JObject> getDiscount([FromBody] getDiscount model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1019,11 +1020,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDiscount.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getListOfDeliveryTimeWeb()
+        public async Task<JObject> getListOfDeliveryTimeWeb()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1043,11 +1044,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/GetListOfDeliveryTimeWeb.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getListOfFeaturesCombinWithValue([FromBody] getListOfFeaturesCombinWithValue model)
+        public async Task<JObject> getListOfFeaturesCombinWithValue([FromBody] getListOfFeaturesCombinWithValue model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1067,11 +1068,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getListOfFeaturesCombinWithValue.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getproductdetailForCookie([FromBody] getproductdetailForCookie model)
+        public async Task<JObject> getproductdetailForCookie([FromBody] getproductdetailForCookie model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1091,11 +1092,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getproductdetailForCookie.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getSubcatData([FromBody] getSubcatData model)
+        public async Task<JObject> getSubcatData([FromBody] getSubcatData model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1116,11 +1117,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getSubcatData.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getTime([FromBody] getTime model)
+        public async Task<JObject> getTime([FromBody] getTime model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1141,11 +1142,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getTime.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getTypeList([FromBody] getTypeList model)
+        public async Task<JObject> getTypeList([FromBody] getTypeList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1166,11 +1167,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getTypeList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> isInArea([FromBody] isInArea model)
+        public async Task<JObject> isInArea([FromBody] isInArea model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1193,11 +1194,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/isInArea.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> removeAddress([FromBody] removeAddress model)
+        public async Task<JObject> removeAddress([FromBody] removeAddress model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1220,11 +1221,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/removeAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> sendCodeAgain([FromBody] sendCodeAgain model)
+        public async Task<JObject> sendCodeAgain([FromBody] sendCodeAgain model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1247,11 +1248,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/sendCodeAgain.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> sendSMS([FromBody] sendSMS model)
+        public async Task<JObject> sendSMS([FromBody] sendSMS model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1267,12 +1268,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/sendSMS.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> setAddress([FromBody] setAddress model)
+        public async Task<JObject> setAddress([FromBody] setAddress model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1301,12 +1302,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> setAUTcode([FromBody] setAUTcode model)
+        public async Task<JObject> setAUTcode([FromBody] setAUTcode model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1327,11 +1328,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setAUTcode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> setauth([FromBody] setauth model)
+        public async Task<JObject> setauth([FromBody] setauth model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1352,12 +1353,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setauth.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> setWalletAuth([FromBody] setWalletAuth model)
+        public async Task<JObject> setWalletAuth([FromBody] setWalletAuth model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1377,12 +1378,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setWalletAuth.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> update([FromBody] update model)
+        public async Task<JObject> update([FromBody] update model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1411,11 +1412,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/update.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> viewArticle([FromBody] viewArticle model)
+        public async Task<JObject> viewArticle([FromBody] viewArticle model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1435,11 +1436,11 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewArticle.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
         [System.Web.Http.HttpPost]
-        public async Task<string> viewProduct([FromBody] viewProduct model)
+        public async Task<JObject> viewProduct([FromBody] viewProduct model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1459,12 +1460,12 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           JObject jObject = JObject.Parse(result); return jObject ;
         }
 
 
         [System.Web.Http.HttpPost]
-        public async Task<string> getCats([FromBody] getCats model)
+        public async Task<JObject> getCats([FromBody] getCats model)
         {
 
 
@@ -1488,7 +1489,9 @@ namespace banimo.Controllers
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCats.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            return result;
+           
+            JObject jObject = JObject.Parse(result);
+            return jObject;
         }
 
 

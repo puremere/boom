@@ -15,7 +15,7 @@
 
 
 
-    <link href="~/AdminPanel/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/AdminPanel/Content/bootstrap.min.css" rel="stylesheet" />
 
 
 
@@ -95,10 +95,10 @@
 
                             <ul class="nav side-menu" style="padding-right:0px">
                                 <li>
-                                    <a href="@Url.Action("index", "ticket")"><i class="fa fa-dashboard"></i>لیست تیکت ها </a>
+                                    <a href="@Url.Action("index", "Admin")"><i class="fa fa-dashboard"></i>داشبورد </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("newTicket", "ticket")"><i class="fa fa-edit"></i> تیکت جدید </a>
+                                    <a href="@Url.Action("newTicket", "Admin")"><i class="fa fa-edit"></i> مدیریت مطالب </a>
                                 </li>
                                 
 
@@ -145,9 +145,9 @@
                         <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                     </div>
                     <div>
-                        @*<a>
+                        <a>
                             <i class="glyphicon glyphicon-log-out" style="font-size: 22px;"></i>
-                        </a>*@
+                        </a>
                     </div>
                 </div>
             </div>
