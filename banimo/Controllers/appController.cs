@@ -477,7 +477,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheckTest.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
