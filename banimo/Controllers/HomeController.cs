@@ -1360,6 +1360,12 @@ namespace banimo.Controllers
             }
             return View(log);
         }
+
+        public ActionResult ProductDetailApp(string id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
         public string addtocart(string id, string price)
         {
 
@@ -2293,7 +2299,7 @@ namespace banimo.Controllers
             {
                 if (error == "5")
                 {
-                    ViewBag.error = "پرداخت با کیف پول امکان پذیر نیست!";
+                    ViewBag.error = "خطا لطفا مجددا تلاش کنید";
                 }
 
             }

@@ -179,6 +179,7 @@ namespace banimo.apiViewModel
     }
     public class getDataProductList0
     {
+        public string wonder { get; set; }
         public string page{get; set;} public string colorIds{get; set;} public string filterIds{get; set;} public string min
            {get; set;} public string max{get; set;} public string hashtag{get; set;} public string sortID{get; set;} public string priorityID{get; set;} public string specificItem{get; set;} public string query{get; set;} public string catID{get; set;} public string catLevel{get; set;} public string isAvalible{get; set;}
     }

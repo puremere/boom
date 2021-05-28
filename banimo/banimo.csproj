@@ -1973,6 +1973,7 @@
     <Content Include="Views\Home\NewAddress.cshtml" />
     <Content Include="Views\Shared\Partial1.cshtml" />
     <Content Include="Views\Shared\_addAddress.cshtml" />
+    <Content Include="Views\Home\productDetailApp.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

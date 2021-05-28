@@ -477,7 +477,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheckTest.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
@@ -872,6 +872,7 @@ namespace banimo.Controllers
                 collection.Add("priorityID", model.priorityID);
                 collection.Add("specificItem", model.specificItem);
                 collection.Add("query", model.query);
+                collection.Add("wonder", model.wonder);
                 collection.Add("catID", model.catID);
                 collection.Add("catLevel", model.catLevel);
                 collection.Add("isAvalible", model.isAvalible);
@@ -1490,6 +1491,34 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getInfo()
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+              
+
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getInfo.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
             JObject jObject = JObject.Parse(result);
             return jObject;
         }

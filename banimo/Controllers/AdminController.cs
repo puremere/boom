@@ -1110,7 +1110,7 @@ namespace banimo.Controllers
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-
+            string token = Session["LogedInUser2"] as string;
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -1119,10 +1119,11 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
+                collection.Add("token", token);
                 collection.Add("servername", servername);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/admin/handoverItem.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/handoverItem.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1132,7 +1133,7 @@ namespace banimo.Controllers
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-
+            string token = Session["LogedInUser2"] as string;
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -1141,10 +1142,11 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
+                collection.Add("token", token);
                 collection.Add("servername", servername);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/admin/returnFromDeliver.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/returnFromDeliver.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
