@@ -575,11 +575,11 @@ namespace banimo.Controllers
                 collection.Add("newPrice", model.newPrice);
                 collection.Add("newTitle", model.newTitle);
                 collection.Add("newDesc", model.newDesc);
-                collection.Add("newDiscount", model.newDiscount);
-                collection.Add("newCount", model.newCount);
+                collection.Add("newDiscount", model.newDiscount );
+                collection.Add("newCount", model.newCount );
                 collection.Add("isOffer", model.isOffer);
                 collection.Add("isSpecial", model.isSpecial);
-                collection.Add("isAvalible", model.isAvalalible);
+                collection.Add("isAvalible", model.isAvalible);
                 collection.Add("isActive", model.isActive);
 
                 collection.Add("device", device);

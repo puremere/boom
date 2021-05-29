@@ -172,9 +172,13 @@ namespace banimo.Controllers
                             //Response.Cookies.Add(Username);
                             //Response.Cookies.Add(Password);
                         }
-
+                        return Content("1/Admin/dashboard");
                     }
-                    return Content("1/Admin/dashboard");
+                    else
+                    {
+                        return Content("2/Admin/index");
+                    }
+
                 }
                 else
                 {
@@ -190,6 +194,12 @@ namespace banimo.Controllers
 
 
 
+        }
+
+        public ActionResult CustomerLogout()
+        {
+            Session.Remove("LogedInUser2");
+            return RedirectToAction("index");
         }
         public ActionResult Index()
         {
@@ -819,7 +829,7 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult ChangeOrderList(string type, string order)
+        public ActionResult ChangeOrderList(string type, string order,string search)
         {
 
             string device = RandomString(10);
@@ -832,6 +842,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("search", search);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php", collection);

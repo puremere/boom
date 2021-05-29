@@ -14,6 +14,7 @@ namespace banimo.Classes
             if (actionName != "Index" && actionName != "CustomerLogin" && actionName != "createUserReport")
             {
                 HttpSessionStateBase session = filterContext.HttpContext.Session;
+                string val = session["LogedInUser2"] == null ? "" : session["LogedInUser2"] as string;
                 if (session["LogedInUser2"] == null)
                 {
                     filterContext.Result = new RedirectToRouteResult(

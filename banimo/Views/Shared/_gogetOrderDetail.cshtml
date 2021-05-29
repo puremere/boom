@@ -111,8 +111,8 @@
                         }
                         else
                         {
-                            <div style="overflow:auto">
-                                <table class="table table-bordered table-hover table-striped">
+                            <div style="overflow:auto;direction:rtl; margin-right:1px">
+                                <table  class="table table-bordered table-hover table-striped">
                                     <thead>
                                         <tr>
                                             <th>ردیف</th>
@@ -124,13 +124,13 @@
 
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style="">
                                         @foreach (var item in Model.myProducts)
                                         {
                                             string image = item.image;
                                             int i = Model.myProducts.IndexOf(item) + 1;
 
-                                            <tr style=" ">
+                                            <tr id="@item.id" class="itemdetail" style="cursor:pointer ">
                                                 <td>@i</td>
                                                 <td>@item.title</td>
                                                 <td>@item.price</td>
@@ -155,3 +155,11 @@
     </div>
 </div>
 
+<script>
+    $(".itemdetail").click(function () {
+        var id = this.id;
+        var url = "/Home/ProductDetail?id=N" + id;
+        window.open(url)
+        //window.location.href = url
+    })
+</script>

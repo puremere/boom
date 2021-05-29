@@ -128,7 +128,7 @@ namespace banimo.apiViewModel
     public class editProduct
     {
         public string id{get; set;} public string token{get; set;} public string newPrice{get; set;} public string newTitle{get; set;} public string newDesc{get; set;} public string newDiscount{get; set;}
-            public string newCount{get; set;} public string isOffer{get; set;} public string isSpecial{get; set;} public string isAvalalible{get; set;} public string isActive{get; set;}
+            public string newCount{get; set;} public string isOffer{get; set;} public string isSpecial{get; set;} public string isAvalible { get; set;} public string isActive{get; set;}
     }
     public class FinalizeOrder
     {

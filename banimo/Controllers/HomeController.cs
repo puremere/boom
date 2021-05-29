@@ -3387,6 +3387,10 @@ namespace banimo.Controllers
                             string final = itemModel.title.Substring(first, spaceIndex - first);
                             itemModel.title = final;
                         }
+                        else
+                        {
+                            itemModel.title = val;
+                        }
                         
 
                         model.lst.Add(itemModel);

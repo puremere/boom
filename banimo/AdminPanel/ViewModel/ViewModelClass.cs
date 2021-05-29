@@ -220,15 +220,18 @@ namespace AdminPanel.ViewModel
     {
         public string ID { get; set; }
         public string title { get; set; }
-        public string color { get; set; }
         public string description { get; set; }
-        public string count { get; set; }
+        public string color { get; set; }
         public string isActive { get; set; }
-        public string isOffer { get; set; }
         public string IsAvailable { get; set; }
+        public string count { get; set; }
+        public string isOffer { get; set; }
         public string specialOffer { get; set; }
-        public string serverRowID { get; set; }
-        
+        public object serverRowID { get; set; }
+        public string catid { get; set; }
+        public string subcatid { get; set; }
+        public string subcatid2 { get; set; }
+
     }
 
     public class oderdetaillist
