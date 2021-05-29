@@ -3008,12 +3008,14 @@ namespace banimo.Controllers
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            string token = Session["LogedInUser2"] as string;
             using (WebClient client = new WebClient())
             {
 
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("token", token);
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAdminMoneyStatus.php", collection);
 
@@ -3024,11 +3026,12 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult getTransactionList(string userList)
+        public ActionResult getTransactionList(string userList,string datefrom,string dateTo,string transactionType,string databaseType)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            string token = Session["LogedInUser2"] as string;
             using (WebClient client = new WebClient())
             {
 
@@ -3036,13 +3039,19 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("userList", userList);
+                collection.Add("trantype", transactionType);
+                collection.Add("dateto", dateTo);
+                collection.Add("datefrom", datefrom);
+                collection.Add("databaseType", databaseType);
+                
                 collection.Add("servername", servername);
+                collection.Add("token", token);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getTransactionList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             ViewModel.ProfileVM log2 = JsonConvert.DeserializeObject<ViewModel.ProfileVM>(result);
-            return Content("s");
+            return PartialView("/Views/Shared/AdminShared/_ListOfTransaction.cshtml",log2);
         }
         //section  bmenu-------------
 
@@ -3051,6 +3060,7 @@ namespace banimo.Controllers
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            string token = Session["LogedInUser2"] as string;
             using (WebClient client = new WebClient())
             {
 
@@ -3058,6 +3068,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("servername", servername);
+                collection.Add("token", token);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataProductGroup.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
