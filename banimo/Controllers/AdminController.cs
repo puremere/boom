@@ -512,13 +512,7 @@ namespace banimo.Controllers
 
 
         }
-        public void deleteImage(string id)
-        {
-            string pathString = "~/images";
-            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
-            //System.IO.File.Delete(savedFileName);
-
-        }
+     
         public ActionResult getCatDetail(string catid)
         {
             string device = RandomString(10);
@@ -2997,6 +2991,8 @@ namespace banimo.Controllers
                 collection.Add("price", price);
                 collection.Add("desc", desc);
                 collection.Add("typeto", typeto);
+                collection.Add("typefrom", typefrom);
+                collection.Add("sourceID", sourseID);
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setCustomTransaction.php", collection);
 

@@ -884,10 +884,10 @@ namespace banimo.Controllers
             string code = MD5Hash(device + "ncase8934f49909");
             List<string> finalmodel = new List<string>();
 
-            string ids = "";
-            string nums = "";
+            string ids = model.ids;
+            string nums = model.nums;
             string email = "";
-            string token = "";
+            string token = model.token;
             if (string.IsNullOrEmpty(model.ids))
             {
                 string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
@@ -1340,7 +1340,7 @@ namespace banimo.Controllers
             catch (Exception Error)
             {
                 TempData["Message"] = "خطا";
-                TempData["Message2"] = "" + saleOrderId + "-"+ Error.Message;
+                TempData["Message2"] = "" + saleOrderId ;
                 // Save and send Error for admin user
                 Run_bpReversalRequest = true;
                 return RedirectToAction("verifyAtBase", "Connection");
