@@ -4013,7 +4013,6 @@ namespace banimo.Controllers
 
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlist.php", collection);
-
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 

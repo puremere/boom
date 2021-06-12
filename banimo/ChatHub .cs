@@ -243,7 +243,6 @@ namespace education2
                 foreach ( User guest in UserList )
                 {
                     Clients.Client(guest.ConnectionId).callEveryOne(user.ConnectionId);
-                   
                 }
                 //User Admin = Users.SingleOrDefault(x => x.GroupName == user.GroupName && x.Type == "admin");
                 //Clients.Client(Admin.ConnectionId).callEveryOne(user.ConnectionId);

@@ -483,7 +483,36 @@ namespace banimo.Controllers
            JObject jObject = JObject.Parse(result); return jObject ;
         }
 
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> isOrderDone([FromBody] doFinalCheck model)
 
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("auth", model.auth);
+                collection.Add("amount", model.amount);
+                collection.Add("token", model.token);
+                collection.Add("refID", model.refID);
+                collection.Add("paymentStatus", model.paymentStatus);
+                collection.Add("payment", model.payment);
+                collection.Add("isPayed", model.isPayed);
+
+
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
 
         [System.Web.Http.HttpPost]
         public async Task<JObject> doSignIn([FromBody] doSignIn model)
@@ -884,7 +913,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProductList0.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProductList0Test.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
@@ -1516,6 +1545,30 @@ namespace banimo.Controllers
                 collection.Add("mbrand", servername);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getInfo.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> terms()
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/terms.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
