@@ -291,6 +291,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminPanel\ViewModel\AddressVM.cs" />
     <Compile Include="AdminPanel\ViewModel\catAll.cs" />
     <Compile Include="AdminPanel\ViewModel\productGroupcsVM.cs" />
     <Compile Include="apiViewModel\addToWishList.cs" />
@@ -1975,6 +1976,7 @@
     <Content Include="Views\Shared\_addAddress.cshtml" />
     <Content Include="Views\Home\productDetailApp.cshtml" />
     <Content Include="Views\Shared\AdminShared\_ListOfTransaction.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_addressPartial.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

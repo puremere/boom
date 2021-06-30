@@ -797,9 +797,13 @@ namespace banimo.Controllers
             }
         }
 
-        public ActionResult Orders()
+        public ActionResult Orders(string page)
         {
 
+            if (page == null)
+            {
+                page = "1";
+            }
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -810,6 +814,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("page", page);
                 collection.Add("order", "");
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php", collection);
 
@@ -823,9 +828,10 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult ChangeOrderList(string type, string order,string search)
+        public ActionResult ChangeOrderList(string type, string order,string search, string page)
         {
 
+            page = page == null ? "1" : page;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -837,6 +843,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("search", search);
+                collection.Add("page", page);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php", collection);
@@ -847,6 +854,7 @@ namespace banimo.Controllers
             banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
 
+            
             return PartialView("/Views/Shared/AdminShared/_OrderList.cshtml", log);
         }
         public ActionResult doclonefilter(string mainval, string cloneval)
@@ -3924,6 +3932,29 @@ namespace banimo.Controllers
 
 
         }
+
+        public ActionResult AddressUser(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAddressUser.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            AdminPanel.ViewModel.AddressVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.AddressVM>(result);
+            return PartialView("/Views/Shared/AdminShared/_addressPartial.cshtml", model);
+
+
+        }
         public PartialViewResult getNewListUser(string search)
         {
 
@@ -3980,6 +4011,9 @@ namespace banimo.Controllers
         {
             Response.Cookies["lastpage"].Value = "1";
         }
+
+
+
         public ActionResult GetTheListOfItems(string page, string value, string query, string partner)
         {
 

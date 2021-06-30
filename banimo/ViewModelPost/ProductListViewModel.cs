@@ -85,6 +85,8 @@ namespace banimo.ViewModelPost
 
     public class OrderList
     {
+        public int count { get; set; }
+        public int current { get; set; }
         public List<MyOrder> myOrder { get; set; }
         public List<MyUser> myUsers { get; set; }
     }

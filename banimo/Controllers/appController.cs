@@ -1576,6 +1576,29 @@ namespace banimo.Controllers
             return jObject;
         }
 
+        public async Task<JObject> getProducts(string page)
+        {
+            page = page == null ? "1" : page;
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("page", page);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/productListAPI.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+
 
 
     }
