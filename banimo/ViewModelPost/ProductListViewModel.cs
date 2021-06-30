@@ -106,8 +106,10 @@ namespace banimo.ViewModelPost
         public string nums { get; set; }
         public string id { get; set; }
         public string discount { get; set; }
+        public string darsad { get; set; }
         public string orderID { get; set; }
         public string active { get; set; }
+        public string postalCode { get; set; }
         public int delivered { get; set; }
         
     }
@@ -133,6 +135,8 @@ namespace banimo.ViewModelPost
         public int nums { get; set; }
         public string id { get; set; }
         public string discount { get; set; }
+        public string darsad { get; set; }
+        public string postalCode { get; set; }
         public string orderID { get; set; }
         
     }

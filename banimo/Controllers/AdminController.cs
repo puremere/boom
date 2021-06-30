@@ -7312,12 +7312,12 @@ namespace banimo.Controllers
                     string addresss = " آدرس : " + log2.data.address;
                     if (log2.data.postalCode != "")
                     {
-                        addresss = addresss + " - " + " کدپستی : " + log2.data.postalCode; 
+                        addresss = (addresss + " - " + " کدپستی : " + log2.data.postalCode).Replace("/", " - ").Replace("پلاک", " پلاک ").Replace("واحد", " واحد ");
                     }
 
 
                     phone = new PdfPCell(new Phrase(addresss, fontSMALL));
-                    phone.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                    phone.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);
                     phone.Colspan = 13;
@@ -7585,7 +7585,15 @@ namespace banimo.Controllers
                     }
                     else
                     {
-                        takhfifstring = String.Format("{0:n0}", Int64.Parse(list.First().discount))  + " تومان";
+                        if(list.First().darsad == "1")
+                        {
+                            takhfifstring = String.Format("{0:n0}", (final* Int64.Parse(list.First().discount))/100) + " تومان";
+                        }
+                        else
+                        {
+                            takhfifstring = String.Format("{0:n0}", Int64.Parse(list.First().discount)) + " تومان";
+                        }
+                        
                     }
                     PdfPCell takh = new PdfPCell(new Phrase(takhfifstring, fontSMALL));
                     takh.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -7664,10 +7672,18 @@ namespace banimo.Controllers
                     totalpay.VerticalAlignment = Element.ALIGN_MIDDLE;
 
                     table.AddCell(totalpay);
+                    int dis = 0;
+                    if (list.First().darsad == "1")
+                    {
+                        dis = (final * Int32.Parse(list.First().discount)) / 100;
+                    }
+                    else
+                    {
+                         dis = list.First().discount == null ? 0 : Int32.Parse(list.First().discount);
+                    }
+                    
 
-                    string dis = list.First().discount == null ? "0" : list.First().discount;
-
-                    int phrase = final - Int32.Parse(dis) + Int32.Parse(log2.deliver);
+                    int phrase = final - dis + Int32.Parse(log2.deliver);
 
                     PdfPCell afterDiscount = new PdfPCell(new Phrase(String.Format("{0:n0}", phrase)  + " تومان", fontbigBold));
                     afterDiscount.HorizontalAlignment = Element.ALIGN_CENTER;
