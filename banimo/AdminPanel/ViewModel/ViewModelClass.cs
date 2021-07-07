@@ -118,6 +118,7 @@ namespace AdminPanel.ViewModel
 
     public class NewDatumm
     {
+        public List<Partner> partners { get; set; }
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public string  tag { get; set; }
         public string  catid { get; set; }

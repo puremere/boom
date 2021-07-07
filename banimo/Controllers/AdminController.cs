@@ -4704,7 +4704,7 @@ namespace banimo.Controllers
                     collection.Add("SelectedAnbar", SelectedAnbar);
                     collection.Add("token", token);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                     banimo.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<banimo.ViewModelPost.addProductRespond>(result);
@@ -5262,6 +5262,7 @@ namespace banimo.Controllers
             log.data.First().ID = id.ToString();
             NewDatumm model = new NewDatumm()
             {
+                partners = log.partners,
                 catmode = catID,
                 filtercatsAll = log.filtercatsAll,
                 tag = log.data.First().tag,
@@ -5284,7 +5285,7 @@ namespace banimo.Controllers
                 title = log.data.First().title,
                 brand = log.data.First().brand,
                 type = log.data.First().type,
-                
+                anbar = log.data.First().anbar,
                 filters = log.filters,
                 productfilterlist = log.productfilterlist,
                 catid = catID,
@@ -5467,7 +5468,7 @@ namespace banimo.Controllers
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -5909,7 +5910,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfoTest.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfo.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -5958,7 +5959,7 @@ namespace banimo.Controllers
 
                 using (var client = new WebClient())
                 {
-                    json = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/Admin/editprofileTest.php?token=" + token + "&fullname=" + detail.fullname + "&aboutus=" + detail.aboutus + "&phobe=" + detail.phone + "&mobile=" + detail.mobile + "&instagram=" + detail.instagram + "&telegram=" + detail.telegram + "&address=" + detail.address);
+                    json = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/Admin/editprofile.php?token=" + token + "&fullname=" + detail.fullname + "&aboutus=" + detail.aboutus + "&phobe=" + detail.phone + "&mobile=" + detail.mobile + "&instagram=" + detail.instagram + "&telegram=" + detail.telegram + "&address=" + detail.address);
 
                 }
 
