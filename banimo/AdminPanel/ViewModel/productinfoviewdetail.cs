@@ -17,6 +17,8 @@ namespace AdminPanel.ViewModel
         public string SelectedColor { get; set; }
         public string SelectedCat { get; set; }
         public string Selectedfilters { get; set; }
+        public string SelectedAnbar { get; set; }
+        
         public string SelectedaddProduct { get; set; }
         public string SelectedaddProductServer { get; set; }
         public string SelectedlistProduct { get; set; }
@@ -71,6 +73,7 @@ namespace AdminPanel.ViewModel
         public string inputallfeatureid { get; set; }
         public string inputallcolid { get; set; }
         public string Selectedfilters { get; set; }
+        public string SelectedAnbars { get; set; }
         
 
     }

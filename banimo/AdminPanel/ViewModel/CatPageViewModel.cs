@@ -11,6 +11,7 @@ namespace AdminPanel.ViewModel
         public partnerVM log { get; set; }
         public partnerVM basecat { get; set; }
         public string page { get; set; }
+        public string selectedAnbar { get; set; }
         public string SelectedlistProduct { get; set; }
         public string SelectedaddProduct { get; set; }
         public string SelectedaddProductServer { get; set; }

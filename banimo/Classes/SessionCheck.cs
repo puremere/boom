@@ -23,6 +23,20 @@ namespace banimo.Classes
                                 { "Action", "Index" }
                                     });
                 }
+                else
+                {
+                    if (session["partner"] as string != "0")
+                    {
+                        if (actionName != "Edit" && actionName != "product" && actionName != "resetAdminProductPage" && actionName != "GetTheListOfItems" && actionName != "CustomerLogout")
+                        {
+                            filterContext.Result = new RedirectToRouteResult(
+                      new RouteValueDictionary {
+                                { "Controller", "Admin" },
+                                { "Action", "product" }
+                                  });
+                        }
+                    }
+                }
             }
            
         }

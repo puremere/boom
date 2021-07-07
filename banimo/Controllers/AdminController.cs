@@ -145,8 +145,13 @@ namespace banimo.Controllers
                 if (log != null)
                 {
                     userdata user = log[0];
-                    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1))
+                    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1 || user.userTypeID == 2))
                     {
+                        Session["partner"] = "0";
+                        if (user.userTypeID == 2)
+                        {
+                            Session["partner"] = user.moaref;
+                        }
                         Session["LogedInUser2"] = user.token;
                         if (Request.Cookies["productcookiie"] != null)
                         {
@@ -853,8 +858,6 @@ namespace banimo.Controllers
 
             banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
-
-            
             return PartialView("/Views/Shared/AdminShared/_OrderList.cshtml", log);
         }
         public ActionResult doclonefilter(string mainval, string cloneval)
@@ -4445,6 +4448,8 @@ namespace banimo.Controllers
         {
 
 
+         
+
             if (true)
             {
                 string token = Session["LogedInUser2"] as string;
@@ -4521,9 +4526,10 @@ namespace banimo.Controllers
                 {
                     log = newlog,
                     page = page == null ? "1" : page.ToString(),
-                    basecat = serverlog
+                    basecat = serverlog,
+                    selectedAnbar = Session["partner"] as string
 
-                };
+            };
                 return View(model);
 
 
@@ -4671,6 +4677,7 @@ namespace banimo.Controllers
 
                 string token = Session["LogedInUser2"] as string;
                 string selectedFilter = detail.Selectedfilters;
+                string SelectedAnbar = detail.SelectedAnbar;
                 using (WebClient client = new WebClient())
                 {
 
@@ -4694,9 +4701,10 @@ namespace banimo.Controllers
                     collection.Add("limit", limit);
                     collection.Add("tag", detail.tag);
                     collection.Add("selectedFilter", selectedFilter);
+                    collection.Add("SelectedAnbar", SelectedAnbar);
                     collection.Add("token", token);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                     banimo.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<banimo.ViewModelPost.addProductRespond>(result);
@@ -5276,7 +5284,7 @@ namespace banimo.Controllers
                 title = log.data.First().title,
                 brand = log.data.First().brand,
                 type = log.data.First().type,
-
+                
                 filters = log.filters,
                 productfilterlist = log.productfilterlist,
                 catid = catID,
@@ -5452,13 +5460,14 @@ namespace banimo.Controllers
                         collection.Add("limit", limit);
                         collection.Add("tag", detail.tagupdate);
                         collection.Add("selectedFilter", detail.Selectedfilters);
+                        collection.Add("SelectedAnbar", detail.SelectedAnbars);
 
 
                         //foreach (var myvalucollection in imaglist) {
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPostTest.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -7344,13 +7353,19 @@ namespace banimo.Controllers
 
 
                     string addresss = " آدرس : " + log2.data.address;
+                   
                     if (log2.data.postalCode != "")
                     {
                         addresss = (addresss + " - " + " کدپستی : " + log2.data.postalCode).Replace("/", " - ").Replace("پلاک", " پلاک ").Replace("واحد", " واحد ");
                     }
+                    if (log2.data.city != "")
+                    {
+                        addresss = addresss.Replace(" آدرس : ", " آدرس : " + log2.data.city + " ");
+                    }
 
 
                     phone = new PdfPCell(new Phrase(addresss, fontSMALL));
+
                     phone.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
                     phone.NoWrap = false;
                     phone.SetLeading(14, 0);

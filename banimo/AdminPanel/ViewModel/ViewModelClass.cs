@@ -147,10 +147,13 @@ namespace AdminPanel.ViewModel
         public string vahed { get; set; }
         public string limit { get; set; }
         public string catmode { get; set; }
+        public string  anbar { get; set; }
     }
     public class Datum
     {
+        
         public string ID { get; set; }
+        public string  anbar { get; set; }
         public string count { get; set; }
         public string SetId { get; set; }
         public string discount { get; set; }
@@ -328,6 +331,7 @@ namespace AdminPanel.ViewModel
         public string phone { get; set; }
         public string address { get; set; }
         public int userTypeID { get; set; }
+        public string moaref { get; set; }
         public string token { get; set; }
     }
     public class userinfo
@@ -439,9 +443,14 @@ namespace AdminPanel.ViewModel
         public int setID { get; set; }
     }
 
-
+    public class Partner
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+    }
     public class EditViewModel
     {
+        public List<Partner> partners { get; set; }
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public List<Productfilterlist> productfilterlist { get; set; }
         public List<FeaturDataDetail> featurDataDetail { get; set; }
