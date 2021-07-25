@@ -47,8 +47,8 @@ namespace banimo.ViewModelPost
     }
     public class viewProductViewModel
     {
-        public string  vahed { get; set; }
-        public string  tag { get; set; }
+        public string vahed { get; set; }
+        public string tag { get; set; }
         public string cattree { get; set; }
         public string ID { get; set; }
         public List<Slide> slides { get; set; }
@@ -56,6 +56,7 @@ namespace banimo.ViewModelPost
         public List<OtherColor> otherColors { get; set; }
         public string title { get; set; }
         public string desc { get; set; }
+        public string wonderDiscount{ get; set; }
         public string price { get; set; }
         public string oldPrice { get; set; }
         public string discount { get; set; }

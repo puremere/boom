@@ -270,7 +270,7 @@
 
     .resCarousel-inner {
         width: 100%;
-        overflow-x:scroll;
+        /*overflow-x:scroll;*/
     }
 
     .bannerrow1 {

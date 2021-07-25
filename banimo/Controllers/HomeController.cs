@@ -596,7 +596,7 @@ namespace banimo.Controllers
             return View(model);
         }
    
-        public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available)
+        public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available,string wonder)
         {
 
 
@@ -633,7 +633,7 @@ namespace banimo.Controllers
             prodVM.query = newquery;
             prodVM.sortID = sortID;
             prodVM.pagenumberactive = "1";
-
+            prodVM.wonder = wonder;
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string catLevelforuse = "";
@@ -732,6 +732,7 @@ namespace banimo.Controllers
             string catLevel = jsonModel.catLevel;
             string query = jsonModel.query;
             string filterIds = jsonModel.filterIds;
+            string wonder = jsonModel.wonder;
             if (fromList != null)
             {
 
@@ -777,6 +778,7 @@ namespace banimo.Controllers
                 collection.Add("tag", tag);
                 collection.Add("servername", servername);
                 collection.Add("isAvailable", Available);
+                collection.Add("wonder", wonder); 
                 collection.Add("partnerID", urlid.ToString());
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataProductListTest0.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1352,7 +1354,11 @@ namespace banimo.Controllers
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
                                                             select new ViewModelPost.imageGallery { src =  L.image, thumb =  L.image }).ToList();
             log.imgGallery = galleryList;
-            log.cattree = log.cattree.Replace("-->", " / ");
+            if (log.cattree != null)
+            {
+                log.cattree = log.cattree.Replace("-->", " / ");
+            }
+           
             log.tag = log.tag.Replace("-", ",");
             if (log.filter == null)
             {
