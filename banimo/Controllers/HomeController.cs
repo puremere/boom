@@ -611,6 +611,7 @@ namespace banimo.Controllers
             TempData["tag"] = tag;
             TempData["filter"] = filter;
             TempData["Available"] = Available;
+            TempData["wonder"] = wonder;
 
             CookieVM  prodVM = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
@@ -743,6 +744,7 @@ namespace banimo.Controllers
                 query =  TempData["query"] as string;
                 tag =  TempData["tag"] as string ;
                 filterIds =  TempData["filter"] as string ;
+                wonder = TempData["wonder"] as string;
                 Available =  TempData["Available"] as string ;
                 TempData.Keep("query");
             }
