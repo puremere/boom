@@ -284,16 +284,12 @@
         direction: var(--titleDirection) !important;
     }
     .topHolder {
-        display: inherit
+        margin: 0 25px;
+        display: flex;
+        direction: rtl;
     }
 
-    .bannerSectionPrent {
-        width: 100%;
-    }
-
-    .slidesectionParent {
-        width: 100%;
-    }
+   
 
     .indexbanner {
         height: 200px !important;
