@@ -79,6 +79,7 @@ namespace banimo.ViewModelPost
         public string deliver { get; set; }
         public string postalcode { get; set; }
         public string desc { get; set; }
+        public string code { get; set; }
 
 
     }

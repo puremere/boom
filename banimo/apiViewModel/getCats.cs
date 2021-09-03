@@ -11,6 +11,10 @@ namespace banimo.apiViewModel
 
         public string catLevel { get; set; }
     }
+    public class getSearch
+    {
+        public string val { get; set; }
+    }
     public class addTransaction
     {
         public string price { get; set; }

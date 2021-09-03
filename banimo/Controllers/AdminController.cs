@@ -6410,14 +6410,19 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            string path = "~/images/panelimages";
-            string filepath = Path.Combine(Server.MapPath(path), result);
-            if (System.IO.File.Exists(filepath))
+            if (result != "")
             {
-                System.IO.File.Delete(filepath);
-                result = "success";
+                string path = "~/images/panelimages";
+                string filepath = Path.Combine(Server.MapPath(path), result);
+                if (System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Delete(filepath);
+                    result = "success";
+                }
+               
             }
-            return result;
+            return "success";
+
         }
         public void deleteimageDesc( string title)
         {

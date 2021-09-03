@@ -1,4 +1,5 @@
 ﻿using banimo.apiViewModel;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -1599,6 +1600,60 @@ namespace banimo.Controllers
             return jObject;
         }
 
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getSearch([FromBody] getSearch serchModel )
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("key", serchModel.val);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getSearch.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.searchVM model = JsonConvert.DeserializeObject<ViewModel.searchVM>(result);
+            model.lst = new List<ViewModel.caITem>();
+            if (model.data != null)
+            {
+                foreach (var item in model.data)
+                {
+                    ViewModel.caITem itemModel = JsonConvert.DeserializeObject<ViewModel.caITem>(item);
+                    if (item != null)
+                    {
+                        int first = itemModel.title.IndexOf(serchModel.val);
+                        int spaceIndex = itemModel.title.IndexOf(" ", first);
+                        if (spaceIndex != -1)
+                        {
+                            string final = itemModel.title.Substring(first, spaceIndex - first);
+                            itemModel.title = final;
+                        }
+                        else
+                        {
+                            itemModel.title = serchModel.val;
+                        }
+
+
+                        model.lst.Add(itemModel);
+                    }
+
+                }
+            }
+            model.key = serchModel.val;
+
+            string searchModel = JsonConvert.SerializeObject(model);
+            JObject jObject = JObject.Parse(searchModel);
+            return jObject;
+        }
 
 
     }
