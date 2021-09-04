@@ -1647,9 +1647,16 @@ namespace banimo.Controllers
                     }
 
                 }
+                ViewModel.caITem itemModel0 = new ViewModel.caITem() { 
+                      cattitle = "",
+                      ID = "0",
+                      title = serchModel.val
+                };
+                model.lst.Add(itemModel0);
+
             }
             model.key = serchModel.val;
-
+            model.data = null;
             string searchModel = JsonConvert.SerializeObject(model);
             JObject jObject = JObject.Parse(searchModel);
             return jObject;

@@ -1003,6 +1003,7 @@ namespace banimo.Controllers
                 }
 
                 TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(StatusSendRequest[0].Replace("_", " ")));
+                string srt = TempData["Message"].ToString();
                 return RedirectToAction("verifyAtBase", "Connection");
 
 
