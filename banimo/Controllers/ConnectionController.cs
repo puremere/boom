@@ -967,9 +967,6 @@ namespace banimo.Controllers
                 string timestamp = log2.orderID;
                 string message = "";
 
-
-
-
                 long orderId = Convert.ToInt64(log2.peigiry);
                
                 long amount = log2.amount * 10;

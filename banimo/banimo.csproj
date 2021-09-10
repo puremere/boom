@@ -1096,6 +1096,7 @@
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
     <Content Include="Scripts\jquery.simple.timer.js" />
+    <Content Include="Scripts\jquery_swipe.js" />
     <Content Include="Scripts\mapir.js" />
     <Content Include="Scripts\map\mapp.env.js" />
     <Content Include="Scripts\map\mapp.min.js" />
