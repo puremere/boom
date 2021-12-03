@@ -615,6 +615,7 @@
       <DependentUpon>flexslider2.css</DependentUpon>
     </Content>
     <Content Include="Content\green-audio-player.min.css" />
+    <Content Include="Content\jquery.md.bootstrap.datetimepicker.style.css" />
     <Content Include="Content\layoutStyleApp.css" />
     <Content Include="Content\magDetailStyle.css" />
     <Content Include="Content\main.css" />
@@ -1092,6 +1093,7 @@
     <Content Include="Scripts\download.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Scripts\jquery.md.bootstrap.datetimepicker.js" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />

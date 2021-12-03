@@ -21,7 +21,7 @@ namespace banimo.Controllers
 
        
 
-         public static string appserver = "http://www.supectco.com/apps/base/handler";
+        public static string appserver = "http://www.supectco.com/apps/base/handler";
         public string RandomString()
         {
             Random random = new Random();
@@ -1091,7 +1091,6 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
 
                 collection.Add("productID", model.productID);
-
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
@@ -1511,8 +1510,6 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("catLevel", model.catLevel);
                 collection.Add("ID", model.ID.ToString());
-
-
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);

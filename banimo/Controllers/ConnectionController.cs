@@ -783,7 +783,7 @@ namespace banimo.Controllers
                         var log2 = JsonConvert.DeserializeObject<List<AUTHModel>>(result);
                         int Amount = Convert.ToInt32(log2[0].TotalPrice);
 
-
+                       
                         long RefID;
                         System.Net.ServicePointManager.Expect100Continue = false;
                         ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
@@ -792,13 +792,11 @@ namespace banimo.Controllers
 
 
                         int Status = zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
-                        userdata user = Session["LogedInUser"] as userdata;
+
+                        
 
                         if (Status == 100)
                         {
-
-
-
                             string result2 = "";
                             using (WebClient client = new WebClient())
                             {
@@ -808,7 +806,7 @@ namespace banimo.Controllers
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
                                 collection2.Add("amount", Amount.ToString());
-                                collection2.Add("token", user.token);
+                                //collection2.Add("token", "12d69ee0da796ad0fa64154b29cb0d0f");// user.token);
                                 collection2.Add("refID", RefID.ToString());
                                 collection2.Add("paymentStatus", "1");
                                 collection2.Add("mbrand", servername);
@@ -849,14 +847,14 @@ namespace banimo.Controllers
             }
             catch (Exception ex)
             {
-                // Get stack trace for the exception with source file information
-                var st = new StackTrace(ex, true);
-                // Get the top stack frame
-                var frame = st.GetFrame(0);
-                // Get the line number from the stack frame
-                var line = frame.GetFileLineNumber();
-                int linenum = Convert.ToInt32(ex.StackTrace.Substring(ex.StackTrace.LastIndexOf(' ')));
-                Response.Write(ex.Message + "-" + linenum);
+                //// Get stack trace for the exception with source file information
+                //var st = new StackTrace(ex, true);
+                //// Get the top stack frame
+                //var frame = st.GetFrame(0);
+                //// Get the line number from the stack frame
+                //var line = frame.GetFileLineNumber();
+                //int linenum = Convert.ToInt32(ex.StackTrace.Substring(ex.StackTrace.LastIndexOf(' ')));
+                //Response.Write(ex.Message + "-" + linenum);
             }
 
 
