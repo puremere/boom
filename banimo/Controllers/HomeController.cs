@@ -3381,7 +3381,7 @@ namespace banimo.Controllers
             }
             searchVM model = JsonConvert.DeserializeObject<searchVM>(result);
             model.lst = new List<caITem>(); 
-            if(model.data != null)
+          if(model.data != null)
             {
                 foreach (var item in model.data)
                 {
