@@ -122,6 +122,94 @@ namespace banimo.Controllers
         }
         //public ActionResult ReqestForPayment(string newdiscount, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment)
         
+
+
+        public  ContentResult copyRequest(int num, string orderNum)
+        {
+
+            for(int i=1; i<=num; i++)
+            {
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                string auth = "";
+                auth = RandomString();
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("orderID", orderNum);
+                    collection.Add("auth", auth);
+                    collection.Add("mbrand", servername);
+
+
+                    //foreach (var myvalucollection in imaglist) {
+                    //    collection.Add("imaglist[]", myvalucollection);
+                    //}
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/copyRequest.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+
+
+
+                string result2 = "";
+
+
+
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection2 = new NameValueCollection();
+                    collection2.Add("device", device);
+                    collection2.Add("code", code);
+                    collection2.Add("ID", log2.peigiry);
+                    collection2.Add("servername", servername);
+
+
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
+
+                    result2 = System.Text.Encoding.UTF8.GetString(response);
+
+                }
+
+                getOrderRefID refModel = JsonConvert.DeserializeObject<getOrderRefID>(result2);
+
+                string res = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection2 = new NameValueCollection();
+                    collection2.Add("device", device);
+                    collection2.Add("code", code);
+                    collection2.Add("auth", refModel.auth);
+                    collection2.Add("amount", "");
+                    collection2.Add("token", refModel.token);
+                    collection2.Add("refID", refModel.refID);
+                    collection2.Add("paymentStatus", "2");
+                    collection2.Add("payment", "2");
+                    collection2.Add("isPayed", "");
+
+                    collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
+
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+
+                    res = System.Text.Encoding.UTF8.GetString(response);
+                }
+            }
+
+
+
+            return Content("200");
+
+        }
         public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model) {
 
             
@@ -248,8 +336,6 @@ namespace banimo.Controllers
                             addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
                             TempData["addFromOrder"] = "1";
                             return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
-
-
 
 
                         }
@@ -492,7 +578,7 @@ namespace banimo.Controllers
 
             return RedirectToAction("Home", "myprofile", new { type = 4 });
         }
-        public ActionResult finalizeOrder( string id)
+        public ActionResult finalizeOrder( string id,string payment)
         {
 
             string result2 = "";
@@ -508,6 +594,7 @@ namespace banimo.Controllers
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("ID", id);
+                collection2.Add("payment", payment);
                 collection2.Add("servername", servername);
 
 

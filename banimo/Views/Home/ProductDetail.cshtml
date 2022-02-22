@@ -423,7 +423,7 @@
 
         int w = Request.Browser.ScreenPixelsWidth;
         int h = Request.Browser.ScreenPixelsHeight;
-        if (!Request.Browser.IsMobileDevice || !(w < 720 && h > 720))
+        if (!Request.Browser.IsMobileDevice || !(w < 820 && h > 820))
         {
             <div id="dataholder" class="col-md-8 col-lg-8 col-sm-12 single-right-left simpleCart_shelfItem animated wow slideInRight animated" style="border-right:1px solid #dedede; padding-bottom: 10px; direction: rtl; float: left; background-color: #fdfdfd; visibility: visible; animation-delay: 0.5s; animation-name: slideInRight;" data-wow-delay=".5s">
                 <div class="col-lg-4 mustbehide">
@@ -716,10 +716,10 @@
 </div>
 @{
 
-    if (Request.Browser.IsMobileDevice || (w < 720 && h > 720))
+    if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
     {
         <div id="appp" style="margin-bottom:45px">
-            <script>
+            @*<script>
                 try {
                     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                     var recognition = new SpeechRecognition();
@@ -765,7 +765,7 @@
                 $('#start-record-btn').on('click', function (e) {
                     recognition.start();
                 });
-            </script>
+            </script>*@
             <div class="mustbeshown appsection" style="display:none">
                 <div style="background-color:white;text-align:center;border-bottom:1px solid #eee; margin:-5px 0 10px 0" class="col-sm-12">
                     <div style="width:100% ; text-align:center; padding:0px; ">
@@ -934,12 +934,12 @@
                                 if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
                                 {
 
-                                    <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
+                                    <p style="margin:10px;  text-align:right" class="descriptSection numEn">@Html.Raw(Model.desc)</p>
 
                                 }
                                 else
                                 {
-                                    <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
+                                    <p style="margin:10px;  text-align:right" class="descriptSection">@Html.Raw(Model.desc)</p>
                                 }
 
 
@@ -1157,9 +1157,11 @@
 
                                             <div class="showmedetailx">
                                                 <div style="padding:2px  ">
+                                                   
                                                     <div class="imageholderindex" style="width:100%; ">
                                                         <img class="imageitself" src="@src" style="width:100%;height:100%; object-fit:fill" />
                                                     </div>
+
                                                     <div class="titleholder" style=" ">
                                                         @{
                                                             if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
@@ -1590,9 +1592,12 @@
 
                                             <div class="showmedetailFirstDiv showmedetailx">
                                                 <div style="padding:15px">
-                                                    <div class="imageholderindex">
-                                                        <img class="imageitself" src="@src" />
-                                                    </div>
+                                                    <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                        <div class="imageholderindex">
+                                                            <img class="imageitself" src="@src" />
+                                                        </div>
+                                                    </a>
+                                                    
                                                     <div class="titleholder">
                                                         @{
                                                             if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
@@ -1666,6 +1671,7 @@
 
 
 
+
                                 </div>
                                 <button class='btn btn-default leftRs'><</button>
                                 <button class='btn btn-default rightRs'>></button>
@@ -1689,7 +1695,10 @@
 <script>
     $(document).ready(function () {
         // setting one image slider vertically middl
-
+        $(".showmedetail").click(function () {
+            window.location.href = "/Home/ProductDetail?id="+ this.id
+           
+        })
         if (window.outerWidth > 950) {
 
             $(".slidone").height($(".contentholder").height());

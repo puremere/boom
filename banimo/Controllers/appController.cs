@@ -21,7 +21,8 @@ namespace banimo.Controllers
 
        
 
-        public static string appserver = "http://www.supectco.com/apps/base/handler";
+        public static string appserver = "http://supectlinserver.ir/apps/base/handler";
+        public static string appserver2 = "http://supectlinserver.ir/webs/base";
         public string RandomString()
         {
             Random random = new Random();
@@ -392,7 +393,7 @@ namespace banimo.Controllers
 
                 var collection = new NameValueCollection();
                 collection.Add("mobile", model.mobile);
-
+                collection.Add("isRegister", model.isRegister);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
@@ -866,9 +867,6 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
 
                 collection.Add("token", model.token);
-
-
-
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
@@ -883,6 +881,9 @@ namespace banimo.Controllers
         [System.Web.Http.HttpPost]
         public async Task<JObject> getDataProductList0([FromBody] getDataProductList0 model)
         {
+
+            string url = model.isNew == "true"? appserver + "/getDataProductList.php": appserver + "/getDataProductList0Test.php";
+            
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
             string device = RandomString();
@@ -906,6 +907,7 @@ namespace banimo.Controllers
                 collection.Add("catID", model.catID);
                 collection.Add("catLevel", model.catLevel);
                 collection.Add("isAvalible", model.isAvalible);
+                collection.Add("partnerID", "0");
 
 
 
@@ -914,7 +916,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProductList0Test.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
@@ -1001,6 +1003,32 @@ namespace banimo.Controllers
         }
 
         [System.Web.Http.HttpPost]
+        public async Task<JObject> getCustomerList([FromBody] getDeliverList model)
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+
+                collection.Add("token", model.token);
+
+
+
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCustomerList.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
+
+        [System.Web.Http.HttpPost]
         public async Task<JObject> getDeliverList([FromBody] getDeliverList model)
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
@@ -1025,6 +1053,33 @@ namespace banimo.Controllers
             }
            JObject jObject = JObject.Parse(result); return jObject ;
         }
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getDeliverListWait([FromBody] getDeliverList model)
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+
+                collection.Add("token", model.token);
+
+
+
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverListWait.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
+
 
         [System.Web.Http.HttpPost]
         public async Task<JObject> getDiscount([FromBody] getDiscount model)
@@ -1659,6 +1714,114 @@ namespace banimo.Controllers
             return jObject;
         }
 
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> setDificit([FromBody] setDific deficitModel)
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("num", deficitModel.num);
+                collection.Add("orderID", deficitModel.orderID);
+                collection.Add("userID", deficitModel.userID);
+                collection.Add("productID", deficitModel.productID);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeficit.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getDeficit([FromBody] getDeficit deficitModel)
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("orderID", deficitModel.orderID);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeficit.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> setDeliverWait([FromBody] deliverWait deliverWaittModel)
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("IDs", deliverWaittModel.IDs);
+                collection.Add("desc", deliverWaittModel.desc);
+                collection.Add("deliverID", deliverWaittModel.deliverID);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeliverWait.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
+
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> setDeliverPast([FromBody] deliverPast deliverWaittModel)
+        {
+
+
+
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", deliverWaittModel.ID);
+                collection.Add("desc", deliverWaittModel.desc);
+                collection.Add("deliverID", deliverWaittModel.deliverID);
+                collection.Add("mbrand", servername);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeliverPast.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result);
+            return jObject;
+        }
 
     }
 

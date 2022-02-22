@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
-using AdminPanel.ViewModel;
+using AdminPanelBoom.ViewModel;
 using ClosedXML.Excel;
 using PagedList;
 using System.Web.Helpers;
@@ -369,7 +369,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", "manmarket");
+                collection.Add("servername", servername); // "banimo"
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
 
@@ -434,7 +434,7 @@ namespace banimo.Controllers
 
 
 
-            var log = JsonConvert.DeserializeObject<AdminPanel.ViewModel.catAll>(result);
+            var log = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.catAll>(result);
             return View(log);
           
         }
@@ -833,9 +833,13 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult ChangeOrderList(string type, string order,string search, string page)
+        public ActionResult ChangeOrderList(string type, string order,string search, string page,string dateFrom,string dateTo, string priceTo, string priceFrom)
         {
 
+            DateTime from = dateFrom != "" ? dateFrom.ToGeorgianDateTime() : DateTime.Now;
+            string timefrom = dateFrom != "" ? dateTimeConvert.ConvertDateTimeToTimestamp(dateFrom.ToGeorgianDateTime()).ToString() : "";
+
+            string timeto = dateTo != "" ? dateTimeConvert.ConvertDateTimeToTimestamp(dateTo.ToGeorgianDateTime()).ToString() : "";
             page = page == null ? "1" : page;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -849,9 +853,15 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("search", search);
                 collection.Add("page", page);
+                collection.Add("timeFrom", timefrom);
+                collection.Add("timeTo", timeto);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("page", page);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php", collection);
+                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrdersTest.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1377,8 +1387,8 @@ namespace banimo.Controllers
 
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromOrder.php", collection);
-
                 result = System.Text.Encoding.UTF8.GetString(response);
+
             }
             banimo.ViewModelPost.responseModel model= JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
@@ -1584,7 +1594,7 @@ namespace banimo.Controllers
 
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliver.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliverTest.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1716,6 +1726,29 @@ namespace banimo.Controllers
         }
 
 
+        public void ChangeProductPrice(string ID, string count, string price)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", ID);
+                collection.Add("count", count);
+                collection.Add("price", price);
+                collection.Add("servername", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductPrice.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+        }
         public void ChangeProductAvailable(string id, string value)
         {
             if (true)
@@ -2021,8 +2054,8 @@ namespace banimo.Controllers
                 collection.Add("token", token);
                 collection.Add("servername", servername);
                 collection.Add("banimo", banimo);
-
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcat.php", collection);
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/setnewcat.php";
+                byte[] response = client.UploadValues(url, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2240,6 +2273,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
+
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
@@ -2248,9 +2282,10 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("banimo", banimo);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat.php", collection);
 
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
+
             }
 
 
@@ -3080,7 +3115,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            AdminPanel.ViewModel.productGroupcsVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.productGroupcsVM>(result);
+            AdminPanelBoom.ViewModel.productGroupcsVM model = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.productGroupcsVM>(result);
             return View(model);
         }
         [AllowAnonymous]
@@ -3872,6 +3907,8 @@ namespace banimo.Controllers
                 collection.Add("type", "add");
                 collection.Add("UserType", UserList);
                 collection.Add("servername", servername);
+                collection.Add("token", RandomString(18));
+                
 
 
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateUsers.php", collection);
@@ -3936,8 +3973,112 @@ namespace banimo.Controllers
 
         }
 
-        public ActionResult AddressUser(string id)
+
+        public ActionResult getTimeForAddOrder()
         {
+            string token = Session["token"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.TimeList log = JsonConvert.DeserializeObject<ViewModel.TimeList>(result);
+
+            return PartialView("/Views/Shared/AdminShared/_getTimeForOrder.cshtml", log);
+
+        }
+
+        public ActionResult createOrderFromPanel(string userID, string userAddress, string userTime)
+        {
+            string token = Session["token"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", userID);
+                collection.Add("servername", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfo.php";
+                byte[] response = client.UploadValues(url, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+        
+            userinfolist log = JsonConvert.DeserializeObject<userinfolist>(result);
+
+            string postalCode = "";
+          
+            string auth = RandomString(10) ;
+
+            //ids = ids.Substring(1, ids.Count() - 1);
+            //nums = ids.Substring(1, nums.Count() - 1);
+            string fullname = log.data.First().fullname != null ? log.data.First().fullname : "";
+            string phone = log.data.First().phone != null ? log.data.First().phone  : log.data.First().mobile;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("fullname", fullname);
+                collection.Add("mobile", phone);
+                collection.Add("email", "");
+                collection.Add("state", "");
+                collection.Add("city", "");
+                collection.Add("address","");
+                collection.Add("addressID", userAddress);
+                collection.Add("ids", "");
+                collection.Add("nums", "");
+                collection.Add("token", log.data.First().token);
+                collection.Add("discount", "");
+                collection.Add("postalCode", postalCode);
+                collection.Add("hourID", userTime);
+                collection.Add("comment", "");
+                collection.Add("payment", "2");
+                collection.Add("auth", auth);
+                collection.Add("latitude", "");
+                collection.Add("longitude","");
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+            return RedirectToAction("verifyByAdmin","Connection", new { payment = "2", id = log2.peigiry});
+            //return Content("");
+        }
+        public ActionResult AddressUser(string id,string type)
+        {
+           
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3953,9 +4094,75 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            AdminPanel.ViewModel.AddressVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.AddressVM>(result);
-            return PartialView("/Views/Shared/AdminShared/_addressPartial.cshtml", model);
+            AdminPanelBoom.ViewModel.AddressVM model = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.AddressVM>(result);
+            ViewModel.addressPartialVM final = new ViewModel.addressPartialVM()
+            {
+                 MyProperty = model,
+                  ID = id
+            };
+            if (type == "addOrder")
+            {
+                return PartialView("/Views/Shared/AdminShared/_addressPartialAlone.cshtml", final);
+            }
+            else
+            {
+                return PartialView("/Views/Shared/AdminShared/_addressPartial.cshtml", final);
+            }
+           
 
+
+        }
+        public ContentResult setAddress(string lat, string lng, string address, string postalCode, string title, string city, string state, string id, string userID)
+        {
+            //ALTER TABLE `mbd_discount` ADD `darsad` INT NOT NULL DEFAULT '0' AFTER `oneTime`, ADD `infinit` INT NOT NULL DEFAULT '0' AFTER `darsad`;
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+           
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("address", address);
+                collection.Add("postalCode", postalCode);
+                collection.Add("title", title);
+                collection.Add("lat", lat);
+                collection.Add("lng", lng);
+                collection.Add("city", city);
+                collection.Add("state", state);
+                collection.Add("id", id);
+                collection.Add("token", "");
+                collection.Add("userID", userID);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            };
+            ViewModel.reponsVM model = JsonConvert.DeserializeObject<ViewModel.reponsVM>(result);
+            return Content(model.status);
+        }
+
+        public ContentResult removeAddress(string id)
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                collection.Add("id", id);
+                string url = ConfigurationManager.AppSettings["server"] + "/Home/removeAddress.php";
+                byte[] response = client.UploadValues(url, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            };
+
+            return Content("");
 
         }
         public PartialViewResult getNewListUser(string search)
@@ -4055,9 +4262,9 @@ namespace banimo.Controllers
 
 
 
-            oderdetaillist log = JsonConvert.DeserializeObject<oderdetaillist>(result);
+            banimo.AdminPanelBoom.ViewModel.oderdetaillistNew log = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.oderdetaillistNew>(result);
 
-            List<orderdetail> data = new List<orderdetail>();
+            List<banimo.AdminPanelBoom.ViewModel.orderdetailNew> data = new List<banimo.AdminPanelBoom.ViewModel.orderdetailNew>();
 
             return PartialView("/Views/Shared/AdminShared/_ProductList.cshtml", log);
 
@@ -4086,7 +4293,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlistFullTest.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlistFull.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4096,10 +4303,11 @@ namespace banimo.Controllers
             EcxelLists log = JsonConvert.DeserializeObject<EcxelLists>(result);
 
             DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[10] {
+            dt.Columns.AddRange(new DataColumn[11] {
 
                                           new DataColumn("ID"),
                                           new DataColumn("Onvan"),
+                                          new DataColumn("color"),
                                            new DataColumn("Tedad"),
                                             new DataColumn("Faal"),
                                              new DataColumn("Available"),
@@ -4117,7 +4325,7 @@ namespace banimo.Controllers
             {
                 foreach (var item in log.ecxelList.OrderByDescending(x => x.ID))
                 {
-                    dt.Rows.Add(item.ID, item.Onvan, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
+                    dt.Rows.Add(item.ID, item.Onvan,item.color, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
                 }
 
             }
@@ -4509,7 +4717,7 @@ namespace banimo.Controllers
                     var collection = new NameValueCollection();
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", "banimo");
+                    collection.Add("servername", servername); //"banimo");
 
                     byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
 
@@ -5170,7 +5378,6 @@ namespace banimo.Controllers
 
 
         }
-
         public JsonResult UploadNew()
         {
 
@@ -5187,7 +5394,6 @@ namespace banimo.Controllers
             }
             return Json("Uploaded " + Request.Files.Count + " files");
         }
-
         public ActionResult Delete(string id)
         {
 
@@ -5577,9 +5783,6 @@ namespace banimo.Controllers
                 try
                 {
                     List<string> imagelist = new List<string>();
-
-
-
                     for (int i = 0; i < Request.Files.Count; i++)
                     {
                         HttpPostedFileBase hpf = Request.Files[i];

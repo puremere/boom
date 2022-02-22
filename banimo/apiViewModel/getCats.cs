@@ -15,6 +15,29 @@ namespace banimo.apiViewModel
     {
         public string val { get; set; }
     }
+    public class getDeficit
+    {
+        public string orderID { get; set; }
+    }
+    public class setDific
+    {
+        public string num { get; set; }
+        public string productID { get; set; }
+        public string orderID { get; set; }
+        public string userID { get; set; }
+    }
+    public class deliverPast
+    {
+        public string deliverID { get; set; }
+        public string desc { get; set; }
+        public string ID { get; set; }
+    }
+    public class deliverWait
+    {
+        public string deliverID { get; set; }
+        public string desc { get; set; }
+        public string IDs { get; set; }
+    }
     public class addTransaction
     {
         public string price { get; set; }
@@ -107,6 +130,8 @@ namespace banimo.apiViewModel
     public class confirmUser
     {
         public  string mobile { get; set; }
+        public string isRegister { get; set; }
+        
     }
     public   class defaultAddress
     {
@@ -183,6 +208,7 @@ namespace banimo.apiViewModel
     }
     public class getDataProductList0
     {
+        public string isNew { get; set; }
         public string wonder { get; set; }
         public string page{get; set;} public string colorIds{get; set;} public string filterIds{get; set;} public string min
            {get; set;} public string max{get; set;} public string hashtag{get; set;} public string sortID{get; set;} public string priorityID{get; set;} public string specificItem{get; set;} public string query{get; set;} public string catID{get; set;} public string catLevel{get; set;} public string isAvalible{get; set;}

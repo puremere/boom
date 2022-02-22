@@ -46,7 +46,7 @@
 </script>
 
 
-<div id="filterAndSortButt" class="row minwidth" style="display:none">
+<div id="filterAndSortButt" class="row minwidth" style="display:none ">
     @if (Model.filtergroup.filters != null || Model.filtergroup.ranges != null || Model.filtergroup.colors != null)
     {
         <div id="filterBut" class="filtersortmenu" style="width:44%; float:right"> <i style=" margin-left: 10px" class="fal fa-filter"></i><span style="font-size:11px">فیلتر</span> </div>
@@ -214,7 +214,6 @@
     $("#sortholder #horizontalTab").click(function (e) {
         e.stopPropagation();
     });
-
     $(".fa-th-large").click(function () {
         $(".showmedetail").css("width", "50%");
         $(".c-price__discount-oval").hide();
@@ -234,6 +233,8 @@
         $(this).css("display", "none");
         $(".fa-th-large").css("display", "block");
     })
+
+
 </script>
 
 <div>
@@ -432,7 +433,7 @@
         @{
             int w = Request.Browser.ScreenPixelsWidth;
             int h = Request.Browser.ScreenPixelsHeight;
-            if (Request.Browser.IsMobileDevice || (w < 720 && h > 720))
+            if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
             {
                 <div id="FLTholderForApp" style="display:none; height: 100%;display:none; position: fixed;top: 0;z-index: 999991;background-color:white;width: 100%;right: 0">
 

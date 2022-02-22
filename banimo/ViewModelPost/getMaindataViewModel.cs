@@ -119,8 +119,8 @@ namespace banimo.ViewModePost
        
         public List <Banner>  banners { get; set; }
         public List<Newest> newest { get; set; }
-        public List<Bestseller> bestseller { get; set; }
-        public List<SpecialOffer> specialOffers { get; set; }
+        public List<Newest> bestseller { get; set; }
+        public List<Newest> specialOffers { get; set; }
         public List<GourpList> gourpList { get; set; }
         public List<WonderList> wonderList { get; set; }
         //public List<CatsParent> catsParents { get; set; }

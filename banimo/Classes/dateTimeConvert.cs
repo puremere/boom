@@ -25,21 +25,22 @@ namespace banimo.Classes
         {
 
             List<string> list = persianDate.Split('/').ToList();
+            
             int year = 0;
             int month = 01;
             int day = 01;
             
             if (list.Count() >0)
             {
-               year = Convert.ToInt32(list[0]);
+               year = Convert.ToInt32( customMethodes.PersianToEnglish(list[0]));
             }
             if ((list.Count() > 1))
             {
-                month = Convert.ToInt32(list[1]);
+                month = Convert.ToInt32(customMethodes.PersianToEnglish(list[1]));
             }
             if (list.Count() > 2)
             {
-                day = Convert.ToInt32(list[2]);
+                day = Convert.ToInt32(customMethodes.PersianToEnglish(list[2]));
             }
             DateTime georgianDateTime = new DateTime(year, month, day, new System.Globalization.PersianCalendar());
             return georgianDateTime;

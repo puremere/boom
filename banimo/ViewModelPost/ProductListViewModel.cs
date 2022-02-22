@@ -8,6 +8,10 @@ namespace banimo.ViewModelPost
 
     public class Product
     {
+        public string catID { get; set; }
+        public string subcatID { get; set; }
+        public string subcatID2 { get; set; }
+        public int SetId { get; set; }
         public int ID { get; set; }
         public string title { get; set; }
         public int price { get; set; }
@@ -63,6 +67,7 @@ namespace banimo.ViewModelPost
     
     public class MyOrder
     {
+        public string payment { get; set; }
         public string ID { get; set; }
         public string orderNumber { get; set; }
         public string date { get; set; }

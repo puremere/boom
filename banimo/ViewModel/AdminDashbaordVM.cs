@@ -16,9 +16,9 @@ namespace banimo.ViewModel
 
     public class LastProduct
     {
-        public object title { get; set; }
-        public object priceNow { get; set; }
-        public object oldPrice { get; set; }
+        public string title { get; set; }
+        public string priceNow { get; set; }
+        public string oldPrice { get; set; }
         public string date { get; set; }
         public string cat { get; set; }
         public string ID { get; set; }

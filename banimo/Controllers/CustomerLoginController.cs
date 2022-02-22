@@ -433,7 +433,8 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-
+            string fromChangePass = TempData["changePass"] as string;
+            TempData.Keep("changePass");
             using (WebClient client = new WebClient())
             {
 
@@ -443,6 +444,8 @@ namespace banimo.Controllers
                 collection.Add("phone", phone);
                 collection.Add("verifyCode", register);
                 collection.Add("servername", servername);
+                collection.Add("fromChangePass", fromChangePass);
+
 
 
                 //foreach (var myvalucollection in imaglist) {
@@ -453,9 +456,9 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            var log = JsonConvert.DeserializeObject<signeInViewModel>(result);
+            userdata log = JsonConvert.DeserializeObject<userdata>(result);
 
-            // Session["LogedInUser"] = log;
+            Session["LogedInUser"] = log;
             Session["token"] = log.token;
             return Content(log.status);
 
@@ -490,12 +493,15 @@ namespace banimo.Controllers
             return Content(log.status + "");
             //return Content("");
         }
-        public ContentResult ForgetPass(string phone)
+        public ContentResult ForgetPass(string phone, string isRegister)
         {
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            
+            
+          
             using (WebClient client = new WebClient())
             {
 
@@ -504,6 +510,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("phone", phone);
                 collection.Add("servername", servername);
+                collection.Add("isRegister", isRegister);
 
 
                 //foreach (var myvalucollection in imaglist) {
@@ -519,6 +526,7 @@ namespace banimo.Controllers
             SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
             //Session["LogedInUser"] = log;
             // Session["UserLogedIn"] = log;
+            //Session["LogedInUser"] = log;
             Session["token"] = log.token;
             return Content(log.status + "");
 

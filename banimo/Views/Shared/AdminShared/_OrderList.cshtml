@@ -42,6 +42,36 @@
     </div>
 </div>
 
+<div id="myModal2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin:0">
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>تعداد تکرار سفارش</p>
+                        <div style="display:flex">
+                            <input id="repeatNumber" name="repeatNumber" class="form-control" />
+                            <div id="setRepeat" style="display:inline-block" class="btn  btn-default">تایید</div>
+                        </div>
+                    </div>
+                </div>
+
+
+               
+               
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
 <div class="modal fade" id="endOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -51,6 +81,7 @@
                 <select id="payment" class="form-control">
 
                     <option value="5">زرین پال</option>
+                    <option value="3"> بانک ملت</option>
                     <option value="1"> کیف پول</option>
 
 
@@ -90,7 +121,8 @@
                                     <th>روز تحویل</th>
                                     <th>ساعت تحویل</th>
                                     <th>آدرس</th>
-                                    <th>وضعیت</th>
+                                    <th>وضعیت سفارش</th>
+                                    <th>وضعیت پرداخت</th>
                                     <th>توضیحات</th>
                                     <th>کد پستی</th>
 
@@ -98,6 +130,7 @@
                                     <th>اقدامات</th>
                                     <th>کد دلیور</th>
                                     <th>دلیور</th>
+                                    <th>تکرار سفارش</th>
 
                                 </tr>
                             </thead>
@@ -110,60 +143,75 @@
 
                                             int i = Model.myOrder.IndexOf(item) + 1;
 
-                                            <tr style=" ">
-                                                <td>@i</td>
-                                                <td>@item.orderNumber</td>
-                                                <td style="white-space: nowrap;">@item.fullname</td>
-                                                <td>@item.phone</td>
-                                                <td>@item.price</td>
-                                                <td>@item.date</td>
-                                                <td>@item.Rdate</td>
-                                                <td>@item.DayText</td>
-                                                <td>@item.TimeFrom  - @item.TimeTo</td>
-                                                <td>@item.address</td>
-                                                <td>@item.statusTitle</td>
-                                                <td> @item.desc</td>
-                                                <td>@item.postalcode</td>
-                                                @{
-                                                    if (item.statusTitle == "پرداخت نشده")
-                                                    {
-                                                        <td><div class="btn btn-default endOrder" id="@item.ID">اتمام سفارش</div></td>
+                                <tr style=" ">
+                                    <td>@i</td>
+                                    <td>@item.orderNumber</td>
+                                    <td style="white-space: nowrap;">@item.fullname</td>
+                                    <td>@item.phone</td>
+                                    <td>@String.Format("{0:n0}", Int32.Parse(@item.price)) </td>
+                                    <td>@item.date</td>
+                                    <td>@item.Rdate</td>
+                                    <td>@item.DayText</td>
+                                    <td>@item.TimeFrom  - @item.TimeTo</td>
+                                    <td style="min-width:200px">@item.address</td>
+                                    <td>@item.statusTitle</td>
+                                    <td>
+                                        @if (item.payment == "1")
+                                        {
+                                            <span>پرداخت شده</span>
+                                        }
+                                        else if (item.payment == "2")
+                                        {
+                                            <span>پرداخت در محل</span>
+                                        }
+                                    </td>
+                                   
+                                    <td> @item.desc</td>
+                                    <td>@item.postalcode</td>
+                                    @{
+                                        if (item.statusTitle == "پرداخت نشده")
+                                        {
+                                            <td><div class="btn btn-default endOrder" id="@item.ID">اتمام سفارش</div></td>
 
-                                                    }
-                                                    else
-                                                    {
-                                                        <td><div class="btn btn-default orderdetail" id="@item.ID">مشاهده جزئیات</div></td>
+                                        }
+                                        else
+                                        {
+                                            <td><div class="btn btn-default orderdetail" id="@item.ID">مشاهده جزئیات</div></td>
 
-                                                    }
-                                                }
-                                                <td>
-                                                    @{
-                                                        if (item.statusTitle == "ارسال شده")
-                                                        {
-                                                            <div class="btn btn-default deliverorder" id="@item.ID">تحویل سفارش</div>
-
-
-                                                        }
-                                                        else if (item.statusTitle == "تحویل شده")
-                                                        {
+                                        }
+                                    }
+                                    <td>
+                                        @{
+                                            if (item.statusTitle == "ارسال شده")
+                                            {
+                                                <div class="btn btn-default deliverorder" id="@item.ID">تحویل سفارش</div>
 
 
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="btn btn-default finalorder" id="@item.ID">ارسال سفارش</div>
-                                                        }
+                                            }
+                                            else if (item.statusTitle == "تحویل شده")
+                                            {
 
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @item.code
-                                                </td>
-                                                <td class="deliver" id="@item.ID" style="cursor:pointer">
-                                                    @item.deliver
-                                                </td>
 
-                                            </tr>
+                                            }
+                                            else
+                                            {
+                                                <div class="btn btn-default finalorder" id="@item.ID">ارسال سفارش</div>
+                                            }
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.code
+                                    </td>
+                                    <td class="deliver" id="@item.ID" style="cursor:pointer">
+                                        @item.deliver
+                                    </td>
+
+                                    <td class="repeat" style="cursor:pointer">
+                                        <div class="btn btn-default repeateOrder" id="@item.ID">تکرار سفارش</div>
+                                    </td>
+
+                                </tr>
                                         }
                                     }
                                 }
@@ -420,6 +468,8 @@
 
         });
     })
+
+
     $(".deliverorder").click(function () {
         var ID = $(this).attr('id');
 
@@ -443,6 +493,12 @@
         $("#myModal").modal('toggle');
         idselected = $(this).attr('id');
     })
+    $(".repeateOrder").click(function () {
+        $("#myModal2").modal('toggle');
+        idselected = $(this).attr('id');
+       
+    })
+
     $("#setDeliver").click(function () {
         $("#myModal").modal('toggle');
         var deliverID = $("#deliverDromdown").val();
@@ -455,6 +511,27 @@
                 deliverID: deliverID,
                 type: "4",
                 desc: description
+            },
+
+            success: function (data) {
+
+                window.location.reload();
+            }
+
+
+
+        });
+    })
+    $("#setRepeat").click(function () {
+        $("#myModal2").modal('toggle');
+        var number = $("#repeatNumber").val();
+        
+        $.ajax({
+            url: '/Connection/copyRequest',
+            dataType: 'html',
+            data: {
+                num: number,
+                orderNum: idselected
             },
 
             success: function (data) {

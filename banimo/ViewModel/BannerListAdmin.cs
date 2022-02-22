@@ -19,7 +19,7 @@ namespace banimo.ViewModel
     {
 
         public string selectedcat { get; set; }
-        public List<AdminPanel.ViewModel.FiltercatsAll> filtercatsAll { get; set; }
+        public List<AdminPanelBoom.ViewModel.FiltercatsAll> filtercatsAll { get; set; }
         public List<Banner> banners { get; set; }
         public string products { get; set; }
         public string filters { get; set; }

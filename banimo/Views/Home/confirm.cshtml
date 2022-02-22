@@ -209,7 +209,14 @@
                                                         }
                                                         if (data === "200") {
 
-                                                            var url = '@Url.Action("ChangePass", "Home")';
+                                                            if ('@ViewBag.changPass' != "") {
+                                                                var url = '@Url.Action("ChangePass", "Home")';
+                                                            }
+                                                            else {
+                                                                 var url = '@Url.Action("index", "Home")';
+                                                            }
+
+                                                           
                                                             window.location.href = url;
                                                         }
 
@@ -301,7 +308,7 @@
                 @{
                     int w = Request.Browser.ScreenPixelsWidth;
                     int h = Request.Browser.ScreenPixelsHeight;
-                    if (Request.Browser.IsMobileDevice || (w < 720 && h > 720))
+                    if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
                     {
                     }
                     else

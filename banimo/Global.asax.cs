@@ -18,39 +18,72 @@ namespace banimo
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            MvcHandler.DisableMvcResponseHeader = true;
 
         }
-        //protected void Application_BeginRequest(object sender, EventArgs e)
-        //{
-        //    // Implement HTTP compression  
-        //    HttpApplication app = (HttpApplication)sender;
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            
+            // gzip
+            // Implement HTTP compression  
+            HttpApplication app = (HttpApplication)sender;
 
 
-        //    // Retrieve accepted encodings  
-        //    string encodings = app.Request.Headers.Get("Accept-Encoding");
-        //    if (encodings != null)
-        //    {
-        //        // Check the browser accepts deflate or gzip (deflate takes preference)  
-        //        encodings = encodings.ToLower();
-        //        if (encodings.Contains("gzip"))
-        //        {
-        //            app.Response.Filter = new GZipStream(app.Response.Filter, CompressionMode.Compress);
-        //            app.Response.AppendHeader("Content-Encoding", "gzip");
-        //        }
-        //        else if
-        //            (encodings.Contains("deflate"))
-        //        {
-        //            app.Response.Filter = new DeflateStream(app.Response.Filter, CompressionMode.Compress);
-        //            app.Response.AppendHeader("Content-Encoding", "deflate");
-        //        }
-        //    }
-        //}
+            // Retrieve accepted encodings  
+            //string encodings = app.Request.Headers.Get("Accept-Encoding");
+            //if (encodings != null)
+            //{
+            //    // Check the browser accepts deflate or gzip (deflate takes preference)  
+            //    encodings = encodings.ToLower();
+            //    if (encodings.Contains("gzip"))
+            //    {
+            //        app.Response.Filter = new GZipStream(app.Response.Filter, CompressionMode.Compress);
+            //        app.Response.AppendHeader("Content-Encoding", "gzip");
+            //    }
+            //    else if
+            //        (encodings.Contains("deflate"))
+            //    {
+            //        app.Response.Filter = new DeflateStream(app.Response.Filter, CompressionMode.Compress);
+            //        app.Response.AppendHeader("Content-Encoding", "deflate");
+            //    }
+            //}
+
+            // ریدایرکت کردن از www
+            if (HttpContext.Current.Request.Url.ToString().ToLower().Contains("www"))
+            {
+                Response.RedirectPermanent(Request.Url.AbsoluteUri.Replace("www.", string.Empty), true);
+            }
+            // حذف اطلاعات سرور از روی هدر
+            if (app != null && app.Context != null)
+            {
+                app.Context.Response.Headers.Remove("Server");
+            }
+            // 
+            if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
+            {
+                Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"]
+            + HttpContext.Current.Request.RawUrl);
+            }
+            //if (!HttpContext.Current.Request.IsSecureConnection)
+            //{
+            //    var builder = new UriBuilder
+            //    {
+            //        Scheme = "https",
+            //        Host = Request.Url.Host,
+            //        // use the RawUrl since it works with URL Rewriting
+            //        Path = Request.RawUrl
+            //    };
+            //    Response.Status = "301 Moved Permanently";
+            //    Response.AddHeader("Location", builder.ToString());
+            //}
+
+
+        }
         //protected void Application_BeginRequest(Object sender, EventArgs e)
         //{
         //    if (!HttpContext.Current.Request.IsSecureConnection)
