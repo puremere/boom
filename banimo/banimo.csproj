@@ -624,6 +624,7 @@
     <Content Include="Content\horizontalvertical.css" />
     <Content Include="Content\app_min.css" />
     <Content Include="Content\app_critical_min.css" />
+    <Content Include="fonts\webfonts\fa-solid-900.svg" />
     <Content Include="images\1.png" />
     <Content Include="images\2.png" />
     <Content Include="images\404.png" />
@@ -1268,6 +1269,10 @@
     <Content Include="fonts\icomoon\icomoon.eot" />
     <Content Include="fonts\icomoon\icomoon.ttf" />
     <Content Include="fonts\icomoon\icomoon.woff" />
+    <Content Include="fonts\webfonts\fa-solid-900.eot" />
+    <Content Include="fonts\webfonts\fa-solid-900.ttf" />
+    <Content Include="fonts\webfonts\fa-solid-900.woff" />
+    <Content Include="fonts\webfonts\fa-solid-900.woff2" />
     <None Include="Scripts\Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\Scripts\jquery-1.7.1.min.js" />

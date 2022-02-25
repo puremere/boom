@@ -3611,7 +3611,6 @@ namespace banimo.Controllers
             model = JsonConvert.DeserializeObject<contactSectionVM>(result);
             TempData["phone"] = model.phone;
             TempData["analyticID"] = model.analytic;
-
             string srt = ConfigurationManager.AppSettings["design"] as string;
             string action = "/Views/Shared/_contactSection" + srt + ".cshtml";
             return PartialView(action, model);
