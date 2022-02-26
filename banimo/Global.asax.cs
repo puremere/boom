@@ -64,11 +64,11 @@ namespace banimo
                 app.Context.Response.Headers.Remove("Server");
             }
             // 
-            if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
-            {
-                Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"]
-            + HttpContext.Current.Request.RawUrl);
-            }
+            //if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
+            //{
+            //    Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"]
+            //   HttpContext.Current.Request.RawUrl);
+            //}
             //if (!HttpContext.Current.Request.IsSecureConnection)
             //{
             //    var builder = new UriBuilder

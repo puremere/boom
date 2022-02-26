@@ -21,8 +21,8 @@ namespace banimo.Controllers
 
        
 
-        public static string appserver = "http://supectlinserver.ir/apps/base/handler";
-        public static string appserver2 = "http://supectlinserver.ir/webs/base";
+        public static string appserver = "http://supectco.com/apps/base/handler";
+        public static string appserver2 = "http://supectco.com/webs/base";
         public string RandomString()
         {
             Random random = new Random();
