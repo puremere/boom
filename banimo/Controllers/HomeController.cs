@@ -169,7 +169,7 @@ namespace banimo.Controllers
         public async Task <ActionResult> Index(string partnerID)
         {
 
-            
+            Response.Cookies["lastAction"].Value = "index";
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
             this.ViewBag.cookie = cartModelString;
             CookieVM cookieModel;
@@ -415,6 +415,10 @@ namespace banimo.Controllers
         }
         public ActionResult confirm()
         {
+            
+            string lastAction = Request.Cookies["lastAction"] != null ? Request.Cookies["lastAction"].Value as string : "index";
+
+            ViewBag.last = lastAction != "" ? lastAction : "index";
             CookieVM cookieModel = JsonConvert.DeserializeObject< CookieVM > (getCookie("token"));
 
             ViewBag.changPass = TempData["changePass"] != null ? TempData["changePass"] as string : "";
@@ -624,7 +628,7 @@ namespace banimo.Controllers
         {
 
 
-            
+           
 
             ViewBag.Title = " مجموعه محصولات " +value  + " | " + ConfigurationManager.AppSettings["siteName2"];
             TempData["query"] = newquery;
@@ -2261,7 +2265,8 @@ namespace banimo.Controllers
         [NoCache]
         public ActionResult checkout()
         {
-            
+
+            Response.Cookies["lastAction"].Value = "checkout";
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             jsonModel.currentpage = "checkout";
@@ -2381,8 +2386,20 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
              };
-            ViewModel.reponsVM model = JsonConvert.DeserializeObject<reponsVM>(result); 
-            return Content (model.status);
+            try
+            {
+                ViewModel.reponsVM model = JsonConvert.DeserializeObject<reponsVM>(result);
+                return Content(model.status);
+
+            }
+            catch (Exception)
+            {
+
+                return Content(result);
+            }
+           
+
+           
         }
         public void removeAddress(string id)
         {
@@ -2490,9 +2507,7 @@ namespace banimo.Controllers
                     {
                         return RedirectToAction("checkout");
                     }
-
-
-                        finalAmount += quantity * price;
+                    finalAmount += quantity * price;
                 }
 
 
@@ -3495,7 +3510,7 @@ namespace banimo.Controllers
                     if (item != null)
                     {
                         int first = itemModel.title.IndexOf(val);
-                        int spaceIndex = itemModel.title.IndexOf(" ", first);
+                        int spaceIndex = itemModel.title.IndexOf(" ", first+ val.Count());
                         if (spaceIndex != -1)
                         {
                             string final = itemModel.title.Substring(first, spaceIndex - first);

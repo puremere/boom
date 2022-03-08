@@ -54,10 +54,10 @@ namespace banimo
             //}
 
             // ریدایرکت کردن از www
-            if (HttpContext.Current.Request.Url.ToString().ToLower().Contains("www"))
-            {
-                Response.RedirectPermanent(Request.Url.AbsoluteUri.Replace("www.", string.Empty), true);
-            }
+            //if (HttpContext.Current.Request.Url.ToString().ToLower().Contains("www"))
+            //{
+            //    Response.RedirectPermanent(Request.Url.AbsoluteUri.Replace("www.", string.Empty), true);
+            //}
             // حذف اطلاعات سرور از روی هدر
             if (app != null && app.Context != null)
             {
@@ -110,47 +110,47 @@ namespace banimo
         //    }
         //}
 
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            Exception exception = Server.GetLastError();
-            Response.Clear();
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    Exception exception = Server.GetLastError();
+        //    Response.Clear();
 
-            var httpException = exception as HttpException;
+        //    var httpException = exception as HttpException;
 
-            if (httpException != null)
-            {
-                string action;
+        //    if (httpException != null)
+        //    {
+        //        string action;
 
-                switch (httpException.GetHttpCode())
-                {
-                    case 404:
-                        // page not found
-                        action = "/Error404";
-                        break;
-                    case 403:
-                        // forbidden
-                        action = "/Error403";
-                        break;
-                    case 500:
-                        // server error
-                        action = "/Error500";
-                        break;
-                    default:
+        //        switch (httpException.GetHttpCode())
+        //        {
+        //            case 404:
+        //                // page not found
+        //                action = "/Error404";
+        //                break;
+        //            case 403:
+        //                // forbidden
+        //                action = "/Error403";
+        //                break;
+        //            case 500:
+        //                // server error
+        //                action = "/Error500";
+        //                break;
+        //            default:
 
-                        action = "/Error500";
-                        break;
-                }
+        //                action = "/Error500";
+        //                break;
+        //        }
 
-                // clear error on server
-                Server.ClearError();
+        //        // clear error on server
+        //        Server.ClearError();
 
-                Response.Redirect(String.Format("~/Error/{0}", action));
-            }
-            else
-            {
-                // this is my modification, which handles any type of an exception.
-                Response.Redirect(String.Format("~/Errors/Unknown"));
-            }
-        }
+        //        Response.Redirect(String.Format("~/Error/{0}", action));
+        //    }
+        //    else
+        //    {
+        //        // this is my modification, which handles any type of an exception.
+        //        Response.Redirect(String.Format("~/Errors/Unknown"));
+        //    }
+        //}
     }
 }

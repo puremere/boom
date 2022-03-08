@@ -21,8 +21,8 @@ namespace banimo.Controllers
 
        
 
-        public static string appserver = "http://supectco.com/apps/base/handler";
-        public static string appserver2 = "http://supectco.com/webs/base";
+        public static string appserver = ConfigurationManager.AppSettings["appserver"];
+        public static string appserver2 = ConfigurationManager.AppSettings["server"];
         public string RandomString()
         {
             Random random = new Random();
@@ -882,7 +882,7 @@ namespace banimo.Controllers
         public async Task<JObject> getDataProductList0([FromBody] getDataProductList0 model)
         {
 
-            string url = model.isNew == "true"? appserver + "/getDataProductList.php": appserver + "/getDataProductList0Test.php";
+            string url = model.isNew == "true"? appserver + "/getDataProductList.php": appserver + "/getDataProductList0.php";
             
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1706,7 +1706,7 @@ namespace banimo.Controllers
                     if (item != null)
                     {
                         int first = itemModel.title.IndexOf(serchModel.val);
-                        int spaceIndex = itemModel.title.IndexOf(" ", first);
+                        int spaceIndex = itemModel.title.IndexOf(" ", first + serchModel.val.Count());
                         if (spaceIndex != -1)
                         {
                             string final = itemModel.title.Substring(first, spaceIndex - first);
