@@ -49,6 +49,8 @@ namespace banimo.Classes
             HttpSessionStateBase session = filterContext.HttpContext.Session;
             if (session["LogedInUser"] == null)
             {
+
+              
                 filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary {
                                 { "Controller", "Home" },

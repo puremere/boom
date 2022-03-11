@@ -270,9 +270,10 @@ namespace banimo.Controllers
 
             string srt = ConfigurationManager.AppSettings["design"] as string;
             string action = "index"+ srt;
-          
+
             //return RedirectToAction( "Index",boom.Controllers.HomeController);
-                
+
+
             return View(action,log2);
 
 
@@ -2363,6 +2364,8 @@ namespace banimo.Controllers
         public ContentResult setAddress(string lat, string lng, string address, string postalCode, string title,string city,string state, string id)
         {
             //ALTER TABLE `mbd_discount` ADD `darsad` INT NOT NULL DEFAULT '0' AFTER `oneTime`, ADD `infinit` INT NOT NULL DEFAULT '0' AFTER `darsad`;
+
+            postalCode = String.IsNullOrEmpty(postalCode) ? "" : postalCode;
             string result = "";
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");

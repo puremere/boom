@@ -554,6 +554,7 @@
     <Content Include="webAsset\3\assets\css\bundle.css" />
     <Content Include="webAsset\3\assets\css\chosen.min.css" />
     <Content Include="webAsset\3\assets\css\easyzoom.css" />
+    <Content Include="webAsset\3\assets\css\ionicons.css" />
     <Content Include="webAsset\3\assets\css\ionicons.min.css" />
     <Content Include="webAsset\3\assets\css\jquery-ui.css" />
     <Content Include="webAsset\3\assets\css\meanmenu.min.css" />
@@ -2028,6 +2029,8 @@
     <Content Include="Views\Home\_contactSection2.cshtml" />
     <Content Include="Views\Home\Index3.cshtml" />
     <Content Include="Views\Home\ProductList3.cshtml" />
+    <Content Include="Views\Shared\_ProductListForBUTFULImage3.cshtml" />
+    <Content Include="Views\Home\ProductDetail3.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

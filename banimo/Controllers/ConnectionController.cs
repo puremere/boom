@@ -946,16 +946,16 @@ namespace banimo.Controllers
 
 
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            ViewBag.logo = "logo.png";
 
-
-            if (jsonModel.partnerID == "0")
-            {
-                ViewBag.logo = "logo.png";
-            }
-            else
-            {
-                ViewBag.logo = "logo" + jsonModel.partnerID + ".png";
-            }
+            //if (jsonModel.partnerID == "0")
+            //{
+                
+            //}
+            //else
+            //{
+            //    ViewBag.logo = "logo" + jsonModel.partnerID + ".png";
+            //}
             return View();
         }
 
