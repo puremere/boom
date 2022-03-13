@@ -2351,8 +2351,15 @@ namespace banimo.Controllers
 
 
             ViewBag.Message = checkfinal.Trim(',');
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "checkout" + srt;
 
-            return View(finalmodel);
+            //return RedirectToAction( "Index",boom.Controllers.HomeController);
+
+
+            return View(action, finalmodel);
+
+            
         }
 
         public ActionResult NewAddress(string id)

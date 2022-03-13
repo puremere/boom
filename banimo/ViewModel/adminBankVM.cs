@@ -6,18 +6,17 @@ using System.Web;
 namespace banimo.ViewModel
 {
 
-    public class accountList
+    public class CodingList
     {
         public int ID { get; set; }
+        public string parentID { get; set; }
         public string title { get; set; }
-        public string shobe { get; set; }
-        public string shomare { get; set; }
-        public string type { get; set; }
+        public string codeHesab { get; set; }
+        public string codingType { get; set; }
     }
 
     public class adminBankVM
     {
-        public List<accountList> List { get; set; }
-        public List<PartnerList> partnerList { get; set; }
+        public List<CodingList> CodingList { get; set; }
     }
 }

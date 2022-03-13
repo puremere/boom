@@ -10,6 +10,14 @@ namespace banimo.Classes
     public static class dateTimeConvert
     {
 
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+
+            // Unix timestamp is seconds past epoch
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dateTime;
+        }
         public static double ConvertDateTimeToTimestamp(DateTime value)
         {
             TimeSpan epoch = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());

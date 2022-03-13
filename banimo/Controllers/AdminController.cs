@@ -2971,34 +2971,17 @@ namespace banimo.Controllers
 
             ViewModel.adminBankVM model = JsonConvert.DeserializeObject<ViewModel.adminBankVM>(result);
 
-            model.List = model.List != null ? model.List : new List<ViewModel.accountList>();
+            model.CodingList = model.CodingList != null ? model.CodingList : new List<ViewModel.CodingList>();
             return View(model);
 
         }
-        public ActionResult setNewAccount(string typeID, string daramadTitle, string hazineTitle, string sandoghTitle,string bankTitle,string bankshobe,string bankShomare)
+        public ActionResult DelAccount(string deleteID)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             string token = Session["LogedInUser2"] as string;
 
-            string title = "";
-            switch (typeID)
-            {
-                case "1":
-                    title = daramadTitle;
-                    break;
-                case "2":
-                    title = hazineTitle;
-                    break;
-                case "3":
-                    title = sandoghTitle;
-                    break;
-                case "4":
-                    title = bankTitle;
-                    break;
-
-            }
             using (WebClient client = new WebClient())
             {
 
@@ -3006,12 +2989,38 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                collection.Add("title", title);
-                collection.Add("type", typeID);
-                collection.Add("shobe", bankshobe);
-                collection.Add("shomare", bankShomare);
+                collection.Add("ID", deleteID);
                 collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/createNewAccount.php", collection);
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteCoding.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return RedirectToAction("bank");
+        }
+        public ActionResult setNewAccount(string typeID, string parentID, string codeTitle)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("title", codeTitle);
+                collection.Add("type", typeID);
+                collection.Add("parent", parentID);
+                collection.Add("servername", servername);
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/createNewCoding.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3019,6 +3028,88 @@ namespace banimo.Controllers
             return RedirectToAction("bank");
         }
 
+        public ActionResult addCodingTransaction(string M2, string M3, string M4, string M12, string M13, string M14, string dateFrom, string price, string description,string abserver)
+        {
+
+            price = price.Replace(",", "");
+            string fromID = M4;
+            if (M4 == "0")
+                fromID = M3;
+            if (M3 == "0")
+                fromID = M2;
+
+
+            string ToID = M14;
+            if (M14 == "0")
+                ToID = M13;
+            if (M13 == "0")
+                ToID = M12;
+
+            //double datetime = dateTimeConvert.ConvertDateTimeToTimestamp( dateFrom.ToGeorgianDateTime());
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("time", abserver);
+                collection.Add("price", price);
+                collection.Add("description", description);
+                collection.Add("fromID", fromID);
+                collection.Add("ToID", ToID);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setCodingTransaction.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content(result);
+        }
+
+        public ActionResult ChangeRecietList(string type, string page, string dateFrom, string dateTo)
+        {
+
+              page = page == null ? "1" : page;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("page", page);
+                collection.Add("timeFrom", dateFrom);
+                collection.Add("timeTo", dateTo);
+                collection.Add("type", type == null ? "" : type);
+                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataRecietInfo.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.RecietVM log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietVM>(result);
+            if (log.recietList != null)
+            {
+                foreach (var item in log.recietList)
+                {
+                    long lng = Int64.Parse(item.date) / 1000;
+                    DateTime dt = dateTimeConvert.UnixTimeStampToDateTime(lng);
+                    item.date = dateTimeConvert.ToPersianDateString(dt);
+                }
+            }
+            
+            log.current = page;
+            return PartialView("/Views/Shared/AdminShared/_RecitList.cshtml", log);
+        }
         public void setCustomTransaction (string fromSource , string toSource, string price,  string desc,string typeto,string typefrom,string sourseID)
         {
             string device = RandomString(10);
@@ -3067,7 +3158,47 @@ namespace banimo.Controllers
             return View(model);
         }
 
+        public ActionResult getCodingTranList(string M22, string M33, string M44, string datefrom, string dateTo, string transactionType)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
 
+            string destinID = M44;
+            if (M44 == "0")
+                destinID = M33;
+            if (M33 == "0")
+                destinID = M22;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("destinID", destinID);
+                collection.Add("trantype", transactionType);
+                collection.Add("dateto", dateTo);
+                collection.Add("datefrom", datefrom);
+
+                collection.Add("servername", servername);
+                collection.Add("token", token);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getCodingTranList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.ProfileVM log2 = JsonConvert.DeserializeObject<ViewModel.ProfileVM>(result);
+            if (log2.mytransaction != null)
+            {
+                foreach (var item in log2.mytransaction)
+                {
+                    long lng = Int64.Parse(item.date) / 1000;
+                    DateTime dt = dateTimeConvert.UnixTimeStampToDateTime(lng);
+                    item.date = dateTimeConvert.ToPersianDateString(dt);
+                }
+            }
+            return PartialView("/Views/Shared/AdminShared/_ListOfTransaction.cshtml", log2);
+        }
         public ActionResult getTransactionList(string userList,string datefrom,string dateTo,string transactionType,string databaseType)
         {
             string device = RandomString(10);

@@ -420,6 +420,7 @@
     <Compile Include="ViewModel\productlistclass.cs" />
     <Compile Include="ViewModel\productviewmodel.cs" />
     <Compile Include="ViewModel\ProfileVM.cs" />
+    <Compile Include="ViewModel\RecietVM.cs" />
     <Compile Include="ViewModel\reponsVM.cs" />
     <Compile Include="ViewModel\searchVM.cs" />
     <Compile Include="ViewModel\sendEmailVM.cs" />
@@ -549,6 +550,7 @@
     <Content Include="AdminPanelBoom\Scripts\bootstrap.min.js" />
     <Content Include="AdminPanelBoom\Scripts\date.js" />
     <Content Include="AdminPanelBoom\Scripts\fastclick.js" />
+    <Content Include="Content\ionicons.css" />
     <Content Include="webAsset\3\assets\css\animate.css" />
     <Content Include="webAsset\3\assets\css\bootstrap.min.css" />
     <Content Include="webAsset\3\assets\css\bundle.css" />
@@ -2031,6 +2033,8 @@
     <Content Include="Views\Home\ProductList3.cshtml" />
     <Content Include="Views\Shared\_ProductListForBUTFULImage3.cshtml" />
     <Content Include="Views\Home\ProductDetail3.cshtml" />
+    <Content Include="Views\Home\checkout3.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_RecitList.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
