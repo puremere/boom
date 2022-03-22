@@ -1726,7 +1726,7 @@ namespace banimo.Controllers
         }
 
 
-        public void ChangeProductPrice(string ID, string count, string price)
+        public ActionResult ChangeProductPrice(string ID, string count, string price,string discount)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1740,6 +1740,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("id", ID);
                 collection.Add("count", count);
+                collection.Add("discount", discount);
                 collection.Add("price", price);
                 collection.Add("servername", servername);
 
@@ -1748,6 +1749,9 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
+
+            string final = result.Replace("\r\n", "");
+            return Content(final);
         }
         public void ChangeProductAvailable(string id, string value)
         {
@@ -3254,6 +3258,7 @@ namespace banimo.Controllers
         public ActionResult setNewProductGroup(string catidOrLink,string title, string catTitle, string catID, string type,string image, string ID,string priority)
         {
 
+            string result = "";
             if (!ModelState.IsValid)
             {
                 // TODO: Captcha validation failed, show error message
@@ -3264,7 +3269,7 @@ namespace banimo.Controllers
 
                 string device = RandomString(10);
                 string code = MD5Hash(device + "ncase8934f49909");
-                string result = "";
+              
                 string token = Session["LogedInUser2"] as string;
 
                 string imagename = image;
@@ -3304,12 +3309,13 @@ namespace banimo.Controllers
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
-
                 // Reset the captcha if your app's workflow continues with the same view
-                MvcCaptcha.ResetCaptcha("ExampleCaptcha");
-                return RedirectToAction("productGroup", "Admin");
+                //MvcCaptcha.ResetCaptcha("ExampleCaptcha");
+                //return RedirectToAction("productGroup", "Admin");
 
             }
+            return RedirectToAction("productGroup", "Admin");
+
         }
 
 
@@ -5732,7 +5738,7 @@ namespace banimo.Controllers
                         List<string> lst = detail.ImageList.Trim(',').Split(',').ToList();
                         foreach (var item in lst)
                         {
-                            imglst += Path.GetFileName(item);
+                            imglst += Path.GetFileName(item)+",";
                         }
                        
                     }
@@ -5740,6 +5746,7 @@ namespace banimo.Controllers
 
                     string json;
                     string title = detail.title;
+                    
                     string desc = detail.productdesc;
                     string discount = detail.discount;
                     string count = detail.count;
@@ -5792,7 +5799,7 @@ namespace banimo.Controllers
                         collection.Add("range", range);
 
                         collection.Add("feature", detail.inputallfeatureid);
-                        collection.Add("imaglist", imglst);
+                        collection.Add("imaglist", imglst.Trim(','));
                         collection.Add("count", count);
                         collection.Add("vahed", vahed);
                         collection.Add("limit", limit);
@@ -5893,9 +5900,9 @@ namespace banimo.Controllers
                                           group p by first into g
                                           select g.Last()).ToList();
 
-                    foreach (var filter in query)
+                    foreach (var filtertt in query)
                     {
-                        finalfilter += filter + ";";
+                        finalfilter += filtertt + ";";
                     }
                     finalfilter = finalfilter.Substring(0, finalfilter.Length - 1);
 
@@ -5909,130 +5916,130 @@ namespace banimo.Controllers
                 }
 
 
+                List<string> imagelist = new List<string>();
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    HttpPostedFileBase hpf = Request.Files[i];
 
+                    if (hpf.FileName != "")
+                    {
+                        if (hpf.ContentLength == 0)
+                            continue;
+                        string tobeaddedtoimagename = RandomString(7);
+                        imagelist.Add(tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
+
+                        string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
+                        hpf.SaveAs(savedFileName); // Save the file
+                                                   //imageUrl(savedFileName, "product");
+                    }
+
+
+                    //using (WebClient client = new WebClient())
+                    //{
+                    //    string ftpUsername = @"meri@banimoco.com";
+                    //    string ftpPassword = @"!)lAx3_-h43s";
+                    //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
+                    //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
+                    //}
+                }
+                string imglst = "";
+                if (imagelist.Count() > 0)
+                {
+                    foreach (var item in imagelist)
+                    {
+
+                        if (imagelist.IndexOf(item) == 0)
+                        {
+                            imglst += item;
+                        }
+                        else
+                        {
+                            imglst += "," + item;
+                        }
+
+                    }
+                }
+                else
+                {
+                    //imglst = detail.ImageList;
+                    //imglst = imglst.Substring(0, imglst.Length - 1);
+
+                }
+
+
+                string json;
+                string title = detail.title;
+                string desc = detail.productdesc;
+                string id = detail.ID;
+                string type = detail.type;
+                string brand = detail.ImageList;
+                string count = detail.count;
+                string vahed = detail.vahed;
+                string color = "";
+                string range = detail.inputallrangeid;
+                if (range != null)
+                {
+                    range = range.Substring(0, range.Length - 1);
+                }
+
+                if (detail.inputallcolid != null)
+                {
+                    color = detail.inputallcolid;
+                    color = color.Substring(0, color.Length - 1);
+                }
+                string filter = "";
+                if (finalfilter != "")
+                {
+                    filter = finalfilter;
+                }
+
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+
+
+                string result = "";
+                string nodeID = ConfigurationManager.AppSettings["nodeID"];
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("servername", servername);
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("title", title);
+                    collection.Add("description", desc);
+                    collection.Add("id", id);
+                    collection.Add("price", detail.productprice);
+                    collection.Add("setid", detail.SetID);
+                    collection.Add("discount", detail.discount);
+                    collection.Add("filter", filter);
+                    collection.Add("catmode", detail.catmode);
+                    collection.Add("range", range);
+                    collection.Add("feature", detail.inputallfeatureid);
+                    collection.Add("color", color);
+                    collection.Add("count", count);
+                    collection.Add("vahed", vahed);
+                    collection.Add("limit", detail.limit);
+                    collection.Add("tag", detail.tagupdate);
+                    collection.Add("imaglist", imglst);
+                    collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
+                    collection.Add("isAvalible", detail.isAvalible);
+                    collection.Add("isActive", detail.isActive);
+                    collection.Add("nodeID", nodeID);
+
+
+                    //foreach (var myvalucollection in imaglist) {
+                    //    collection.Add("imaglist[]", myvalucollection);
+                    //}
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editproductPost.php?", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
 
                 try
                 {
-                    List<string> imagelist = new List<string>();
-                    for (int i = 0; i < Request.Files.Count; i++)
-                    {
-                        HttpPostedFileBase hpf = Request.Files[i];
-
-                        if (hpf.FileName != "")
-                        {
-                            if (hpf.ContentLength == 0)
-                                continue;
-                            string tobeaddedtoimagename = RandomString(7);
-                            imagelist.Add(tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
-
-                            string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtoimagename + Path.GetExtension(hpf.FileName));
-                            hpf.SaveAs(savedFileName); // Save the file
-                            //imageUrl(savedFileName, "product");
-                        }
-
-
-                        //using (WebClient client = new WebClient())
-                        //{
-                        //    string ftpUsername = @"meri@banimoco.com";
-                        //    string ftpPassword = @"!)lAx3_-h43s";
-                        //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-                        //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
-                        //}
-                    }
-                    string imglst = "";
-                    if (imagelist.Count() > 0)
-                    {
-                        foreach (var item in imagelist)
-                        {
-
-                            if (imagelist.IndexOf(item) == 0)
-                            {
-                                imglst += item;
-                            }
-                            else
-                            {
-                                imglst += "," + item;
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        //imglst = detail.ImageList;
-                        //imglst = imglst.Substring(0, imglst.Length - 1);
-
-                    }
-
-
-                    string json;
-                    string title = detail.title;
-                    string desc = detail.productdesc;
-                    string id = detail.ID;
-                    string type = detail.type;
-                    string brand = detail.ImageList;
-                    string count = detail.count;
-                    string vahed = detail.vahed;
-                    string color = "";
-                    string range = detail.inputallrangeid;
-                    if (range != null)
-                    {
-                        range = range.Substring(0, range.Length - 1);
-                    }
-
-                    if (detail.inputallcolid != null)
-                    {
-                        color = detail.inputallcolid;
-                        color = color.Substring(0, color.Length - 1);
-                    }
-                    string filter = "";
-                    if (finalfilter != "")
-                    {
-                        filter = finalfilter;
-                    }
-
-                    string device = RandomString(10);
-                    string code = MD5Hash(device + "ncase8934f49909");
-
-
-                    string result = "";
-                    string nodeID = ConfigurationManager.AppSettings["nodeID"];
-                    using (WebClient client = new WebClient())
-                    {
-
-                        var collection = new NameValueCollection();
-                        collection.Add("servername", servername);
-                        collection.Add("device", device);
-                        collection.Add("code", code);
-                        collection.Add("title", title);
-                        collection.Add("description", desc);
-                        collection.Add("id", id);
-                        collection.Add("price", detail.productprice);
-                        collection.Add("setid", detail.SetID);
-                        collection.Add("discount", detail.discount);
-                        collection.Add("filter", filter);
-                        collection.Add("catmode", detail.catmode);
-                        collection.Add("range", range);
-                        collection.Add("feature", detail.inputallfeatureid);
-                        collection.Add("color", color);
-                        collection.Add("count", count);
-                        collection.Add("vahed", vahed);
-                        collection.Add("limit", detail.limit);
-                        collection.Add("tag", detail.tagupdate);
-                        collection.Add("imaglist", imglst);
-                        collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
-                        collection.Add("isAvalible", detail.isAvalible);
-                        collection.Add("isActive", detail.isActive);
-                        collection.Add("nodeID", nodeID);
-
-
-                        //foreach (var myvalucollection in imaglist) {
-                        //    collection.Add("imaglist[]", myvalucollection);
-                        //}
-                        byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editproductPost.php?", collection);
-
-                        result = System.Text.Encoding.UTF8.GetString(response);
-                    }
+                   
                     //ViewModel.sendEmailVM model = JsonConvert.DeserializeObject<ViewModel.sendEmailVM>(result);
                     //if (model != null)
                     //{

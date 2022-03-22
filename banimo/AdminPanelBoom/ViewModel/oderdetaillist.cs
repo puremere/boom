@@ -10,6 +10,9 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string price { get; set; }
+        public string oldPrice { get; set; }
+        
+        public string discount { get; set; }
         public string description { get; set; }
         public string color { get; set; }
         public string isActive { get; set; }

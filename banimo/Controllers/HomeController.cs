@@ -3271,7 +3271,7 @@ namespace banimo.Controllers
         {
             List<string> list = val.Split('-').ToList();
 
-            switch (list[0])
+            switch (list[0].Trim())
             {
                 case "link":
                     if (list[1].Contains("http://"))
