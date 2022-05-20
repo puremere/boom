@@ -49,8 +49,11 @@
     </script>
     <script>
         $(document).ready(function () {
-            $(".datePicker").val("");
-        })
+            $("#moreFilter").click();
+           
+            $("#dateTo").val("");
+
+        });
     </script>
 }
 
@@ -219,7 +222,7 @@
                     getlofo(1)
                 });
                 $("#loading").show();
-                getlofo(1)
+               //getlofo(1)
 
             </script>
 
@@ -261,6 +264,45 @@
         </div>
         <div id="menu1" class="tab-pane fade" style="padding-top:20px">
             <script>
+                //$("#userID").onclick()
+                //$("#userID").on('keyup', function (e) {
+                //    if (e.key === 'Enter' || e.keyCode === 13) {
+
+                //        $.ajax({
+                //            url: '/Admin/getUserName',
+                //            dataType: 'html',
+                //            data: {
+                //                val: $("#addItemToOrderInput").val(),
+                //                server: ""
+                //            },
+                //            success: function (data) {
+
+                //                var productItems = {
+                //                    data: JSON.parse(data),
+
+                //                    getValue: "title",
+                //                    list: {
+                //                        maxNumberOfElements: 100,
+                //                        match: {
+                //                            enabled: true
+                //                        },
+                //                        onSelectItemEvent: function () {
+                //                            var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                //                            $("#IDholder").val(value).trigger("change");
+                //                        }
+                //                    }
+                                 
+
+                //                };
+                //            }
+
+                //        })
+                //    }
+                //    else {
+
+                //    }
+                //});
+
                 $.ajax({
                     url: '/Admin/GetTheListOfDeliveryTime',
                     dataType: 'html',
@@ -427,7 +469,7 @@
             $.ajax({
                 url: "/admin/AddressUser",
                 data: {
-                    id: id,
+                    phone: id,
                     type: "addOrder"
                 },
                 success: function (data) {

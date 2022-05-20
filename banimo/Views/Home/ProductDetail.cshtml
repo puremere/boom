@@ -459,15 +459,27 @@
                 </div>
                 <div class="col-lg-8 mustbehide">
                     <div style="width:100%; padding:20px 0 40px 0 ; border-bottom: 1px solid #eee; ">
-                        @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
-                        {
+                        <div style="display:flex">
+                            @if (Model.BrandInfo != null)
+                            {
+                                <div>
+                                    <img src="~/images/brands/@Model.BrandInfo.First().title" style="width:50px"/>
+                                </div>
+                            }
 
-                            <h4 style="padding:15px" class="numEn">@Model.title</h4>
-                        }
-                        else
-                        {
-                            <h4 style="padding:15px">@Model.title</h4>
-                        }
+                            <div style="flex:1">
+                                @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                                {
+
+                                    <h4 style="padding:15px" class="numEn">@Model.title</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="padding:15px">@Model.title</h4>
+                                }
+                            </div>
+                        </div>
+                       
                     </div>
                     <div style="width:100%; padding:20px 0 20px 0; border-bottom: 1px solid #eee; ">
                         <h5 style="display:inline-block;font-weight: 600;">دسته بندی:</h5>

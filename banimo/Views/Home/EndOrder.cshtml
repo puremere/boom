@@ -145,7 +145,7 @@
                 if (houid != "") {
                     if (addressID != "") {
 
-                        if (payment != "" && value != "") {
+                        if (payment != "" && value != "0") {
                             $("form#endOrderForm").submit();
                         }
                         else {
@@ -822,7 +822,7 @@
                             }
                         }
                     }
-                    <div id="addAddressHolder" style="display:none; position:fixed; top:0; left:0;bottom:0; overflow:scroll; width:100%;z-index:9">
+                    <div id="addAddressHolder" style="display:none; position:fixed; top:0; left:0;bottom:0; overflow:scroll; width:100%;z-index:9999">
                         <div style="min-height:100%; width:100%; background-color:rgba(0,0,0,0.5)">
                             <div class="modal-bodyy">
                                 <div class="row" style="width:100%">

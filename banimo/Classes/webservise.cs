@@ -39,7 +39,7 @@ namespace banimo.Classes
         static  string device = RandomString();
         static string code = MD5Hash(device + "ncase8934f49909");
         static string servername = ConfigurationManager.AppSettings["serverName"];
-        public string addTransaction(string token,string device,string code,string price, string servername, string type,string desc,string orderID,string status)
+        public string addTransaction(string token,string device,string code,string price, string servername, string type,string desc,string orderID,string status, string referenceID)
         {
            
             

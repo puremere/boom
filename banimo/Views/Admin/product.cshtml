@@ -450,9 +450,9 @@
 
                                         @{
                                             List<SelectListItem> serverListItem = new List<SelectListItem>();
-                                            if (Model.log.filtersModel != null)
+                                            if (Model.basecat != null)
                                             {
-                                                foreach (var item in Model.log.filtersModel)
+                                                foreach (var item in Model.basecat.filtersModel)
                                                 {
                                                     serverListItem.Add(new SelectListItem
                                                     {
@@ -619,6 +619,23 @@
                                                 alert("featurefail")
                                             }
                                         });
+                                        $.ajax({
+                                            url: '/Admin/bringBrandforproduct',
+                                            dataType: 'html',
+                                            data:
+                                            {
+                                                catid: sentitem
+                                            },
+                                            success: function (data) {
+
+                                               
+                                                $('#brandHolder').html(data);
+
+                                            },
+                                            error: function () {
+                                                alert("featurefail")
+                                            }
+                                        });
                                     })
 
 
@@ -706,6 +723,50 @@
 
 
 
+
+
+                            <div class="row fieldholder col-lg-3" style="min-height:70px">
+
+                                <label style="text-align: right">
+                                    تگ ها :
+                                </label>
+
+                                <div>
+                                    <span style="color:red; display:none">*</span>
+                                    <input data-role="tagsinput" id="tag" name="tag" required="required" class="form-control REM">
+                                </div>
+
+
+                            </div>
+                            <div class="row fieldholder col-lg-3" style="float:right">
+                                <label for="first-name" style="text-align: right">
+                                    تعداد :
+                                </label>
+                                <div>
+                                    <input value="0" type="text" id="productCount" name="productCount" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="row fieldholder col-lg-3" style="float:right">
+                                <label for="first-name" style="text-align: right">
+                                    هشدار انبار :
+                                </label>
+                                <div>
+                                    @{
+                                        if (Model.productmodel != null)
+                                        {
+                                            <div>
+                                                <input value=@Model.productmodel.productunit type="text" id="productunit" name="productunit" required="required" class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div>
+                                                <input value="10" type="text" id="productunit" name="productunit" required="required" class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
                             <div class="row fieldholder  col-lg-3">
                                 <label style="text-align: right">
                                     شماره گروه :
@@ -754,48 +815,6 @@
                                 </script>
                             </div>
 
-                            <div class="row fieldholder col-lg-3" style="min-height:70px">
-
-                                <label style="text-align: right">
-                                    تگ ها :
-                                </label>
-
-                                <div>
-                                    <span style="color:red; display:none">*</span>
-                                    <input data-role="tagsinput" id="tag" name="tag" required="required" class="form-control REM">
-                                </div>
-
-
-                            </div>
-                            <div class="row fieldholder col-lg-3" style="float:right">
-                                <label for="first-name" style="text-align: right">
-                                    تعداد :
-                                </label>
-                                <div>
-                                    <input value="0" type="text" id="productCount" name="productCount" required="required" class="form-control col-md-7 col-xs-12">
-                                </div>
-                            </div>
-                            <div class="row fieldholder col-lg-3" style="float:right">
-                                <label for="first-name" style="text-align: right">
-                                    هشدار انبار :
-                                </label>
-                                <div>
-                                    @{
-                                        if (Model.productmodel != null)
-                                        {
-                                            <div>
-                                                <input value=@Model.productmodel.productunit type="text" id="productunit" name="productunit" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div>
-                                                <input value="10" type="text" id="productunit" name="productunit" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                            </div>
                             <div class="row fieldholder col-lg-3" style="float:right">
                                 <label for="first-name" style="text-align: right">
                                     محدودیت خرید :
@@ -815,6 +834,22 @@
                                             </div>
                                         }
                                     }
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="row fieldholder col-lg-3" style="float:right">
+                                <label for="first-name" style="text-align: right">
+                                    برند :
+                                </label>
+                                <div id="brandHolder">
+                                    <select class="form-control">
+
+                                    </select>
                                 </div>
                             </div>
 
@@ -1046,7 +1081,7 @@
                                         </script>
                                     </div>
                                 </div>
-                                <div class="fieldholder col-lg-3" style="float:right">
+                                <div class="fieldholder col-lg-3" style="float:right ; display:flex">
 
                                     <div style="display:inline-block">
                                         <button style="margin:0" type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
@@ -1134,6 +1169,7 @@
                                         $("#CRprocuct").click(function () {
 
                                             var value = $("#addproduct").val();
+                                            var brand = $("#productBrand").val();
                                             var FF = document.getElementById("istrueimage").innerHTML;
                                             var name = productname.value;
                                             var desc = productdesc.value;

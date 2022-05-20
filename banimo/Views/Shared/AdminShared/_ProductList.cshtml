@@ -497,30 +497,30 @@
                         });
                 </script>
             }
-        </td>
-        <td>
-            @{
-                if (item.serverRowID != null)
-                {
-                    string removeID = item.ID + "-" + item.serverRowID;
-                    <button type="button" class="btn btn-danger removeFromserver" data-toggle="modal" data-target="#myModal" id="@removeID">حذف از سرور </button>
-
-                }
-                else
-                {
-                    <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">افزودن به سرور</button>
-
-                }
-            }
-            <script>
-                $(".removeFromserver").click(function () {
-                    var id = $(this).attr('id');
-                    $("#modalValue").text("banimo" + id);
-                    $("#modalmessage").text("  آیا از حذف محصول از سررور اطمینان دارید؟ ")
-
-                })
-            </script>
         </td>*@
+                                            <td>
+                                                @{
+                                                    if (item.serverRowID != null)
+                                                    {
+                                                        string removeID = item.ID + "-" + item.serverRowID;
+                                                        <button type="button" class="btn btn-danger removeFromserver" data-toggle="modal" data-target="#myModal" id="@removeID">حذف از سرور </button>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">افزودن به سرور</button>
+
+                                                    }
+                                                }
+                                                <script>
+                                                    $(".removeFromserver").click(function () {
+                                                        var id = $(this).attr('id');
+                                                        $("#modalValue").text("banimo" + id);
+                                                        $("#modalmessage").text("  آیا از حذف محصول از سررور اطمینان دارید؟ ")
+
+                                                    })
+                                                </script>
+                                            </td>
                                         </tr>
                                         }
 

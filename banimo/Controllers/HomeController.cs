@@ -36,7 +36,7 @@ namespace banimo.Controllers
     [AllowAnonymous]
     public class HomeController : baseController
     {
-       
+        
         string servername = ConfigurationManager.AppSettings["serverName"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
@@ -142,7 +142,19 @@ namespace banimo.Controllers
         }
         public ActionResult GetSitemap()
         {
-            return File(Server.MapPath("~/sitemap.txt"), "text");
+            return File(Server.MapPath("~/sitemap.xml"), "text");
+        }
+        public void GetApp()
+        {
+            FileInfo fileInfo = new FileInfo(Server.MapPath("~/apk/app.apk"));
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Clear();
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", "attachment;filename=" + fileInfo.Name);
+            Response.AddHeader("Content-Length", fileInfo.Length.ToString());
+            Response.Flush();
+            Response.WriteFile(fileInfo.FullName);
+            Response.End();
         }
         public PartialViewResult getMap()
         {
@@ -250,7 +262,7 @@ namespace banimo.Controllers
             device = RandomString();
             code = MD5Hash(device + "ncase8934f49909");
             productinfoviewdetail model = new productinfoviewdetail();
-            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest.php";
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest1.php";
             payloadModel.device = device;
             payloadModel.code = code;
             payload = JsonConvert.SerializeObject(payloadModel);
@@ -258,6 +270,9 @@ namespace banimo.Controllers
 
             getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
 
+            
+             
+            
             log2.iosCookie = cookieModel.iosCookie;
             cookieModel.currentpage = "index";
             cookieModel.partnerID = urlid.ToString();
@@ -272,7 +287,18 @@ namespace banimo.Controllers
             string action = "index"+ srt;
 
             //return RedirectToAction( "Index",boom.Controllers.HomeController);
+            //if (Variables.menu.Count() == 0)
+            //{
 
+
+            //}
+
+            if (log2.catsdata != null)
+            {
+                Variables.menu = JsonConvert.SerializeObject(log2.catsdata);
+            }
+
+            this.ViewData["MenuViewModel"] = Variables.menu;
 
             return View(action,log2);
 
@@ -325,7 +351,8 @@ namespace banimo.Controllers
             finalmodel.googlePlayLink = info.googlePlayLink;
             finalmodel.instaLink = info.instaLink;
             finalmodel.sibappLink = info.sibappLink;
-            finalmodel.name = ConfigurationManager.AppSettings["siteName"]+ ConfigurationManager.AppSettings["siteName2"];
+            finalmodel.cafeBazarLink = info.cafeBazarLink;
+            finalmodel.name = ConfigurationManager.AppSettings["siteName"];
             return View(finalmodel);
         }
 
@@ -622,10 +649,103 @@ namespace banimo.Controllers
             }
 
             subMenuVM model = JsonConvert.DeserializeObject<subMenuVM>(result);
-            return View(model);
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "submenu" + srt;
+            return View(action,model);
         }
    
-        public ActionResult ProductList(string value, string catmode, string sortID, string newquery, string tag, string filter, string Available,string wonder)
+        public ActionResult subMenuNew(string catname,string subcatName, string subcat2Name)
+        {
+
+            string baseurl = "/" + catname;
+            baseurl = subcatName != null ? baseurl + "/" + subcatName: baseurl;
+            baseurl = subcat2Name != null ? baseurl + "/" + subcat2Name : baseurl;
+
+
+            string json;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catname", catname);
+                collection.Add("subcatName", subcatName);
+                collection.Add("subcat2Name", subcat2Name);
+                collection.Add("id", "");
+                collection.Add("servername", servername);
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getSubcatDataTest.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            subMenuVM model = JsonConvert.DeserializeObject<subMenuVM>(result);
+            model.baseUrl = baseurl;
+            if (model.mycat == null)
+            {
+                return RedirectToAction("ProductList", new { catmode = model.catID });
+            }
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "submenu" + srt;
+            this.ViewData["MenuViewModel"] =  Variables.menu;
+            return View(action, model);
+        }
+        public ActionResult brandMenu(string name)
+        {
+
+            
+
+            string json;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("brandName", name);
+                collection.Add("id", "");
+                collection.Add("servername", servername);
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getBrandMenuData.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            subMenuVM model = JsonConvert.DeserializeObject<subMenuVM>(result);
+            //model.baseUrl = baseurl;
+            if (model.mycat == null)
+            {
+                return RedirectToAction("ProductList", new { catmode = model.catID });
+            }
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "brandmenu" + srt;
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View(action, model);
+        }
+
+        public ActionResult ProductList(string brand,string value, string catmode, string sortID, string newquery, string tag, string filter, string Available,string wonder)
         {
 
 
@@ -635,6 +755,7 @@ namespace banimo.Controllers
             TempData["query"] = newquery;
             TempData["page"] = "1";
             TempData["catmode"] = catmode;
+            TempData["mybrand"] = brand;
             TempData["sortID"] = sortID;
             TempData["newquery"] = newquery;
             TempData["tag"] = tag;
@@ -659,6 +780,7 @@ namespace banimo.Controllers
             prodVM.Available = Available;
             prodVM.colorIds = "";
             prodVM.min = "";
+            prodVM.brand = brand;
             prodVM.max = "";
             prodVM.query = newquery;
             prodVM.sortID = sortID;
@@ -744,6 +866,7 @@ namespace banimo.Controllers
 
             string srt = ConfigurationManager.AppSettings["design"] as string;
             string action = "ProductList" + srt;
+            this.ViewData["MenuViewModel"] =  Variables.menu;
 
             return View(action, model);
         }
@@ -835,12 +958,14 @@ namespace banimo.Controllers
             string query = jsonModel.query;
             string filterIds = jsonModel.filterIds;
             string wonder = jsonModel.wonder;
+            string brand = jsonModel.brand;
             if (fromList != null)
             {
 
                 page = "1";
                 catLevel = TempData["catLevel"] as string ;
                 catID =  TempData["catID"] as string ;
+                brand = TempData["mybrand"] as string;
                 sortID =  TempData["sortID"] as string ;
                 query =  TempData["query"] as string;
                 tag =  TempData["tag"] as string ;
@@ -874,6 +999,7 @@ namespace banimo.Controllers
                 collection.Add("colorIds", colorIds);
                 collection.Add("filterIds", filterIds);
                 collection.Add("min", min);
+                collection.Add("brand", brand);
                 collection.Add("max", max);
                 collection.Add("query", query);
                 collection.Add("catID", catID);
@@ -883,7 +1009,7 @@ namespace banimo.Controllers
                 collection.Add("isAvailable", Available);
                 collection.Add("wonder", wonder); 
                 collection.Add("partnerID", urlid.ToString());
-                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductList.php";
+                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductListTest.php";
                 byte[] response = client.UploadValues(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -912,7 +1038,7 @@ namespace banimo.Controllers
             {
                 foreach (var product in log2.products)
                 {
-                    string myString = product.color;
+                    string myString = product.imagestring;
                     string[] splitString = myString.Split('$');
                     List<string> colors = new List<string>();
                     foreach (var color in splitString)
@@ -976,6 +1102,13 @@ namespace banimo.Controllers
             //TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
 
 
+        }
+        public void changeBrand(string brand)
+        {
+            CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            jsonModel.brand = brand;
+            SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
         }
         public void changeAvailableStatus(string status)
         {
@@ -1237,7 +1370,7 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string token = Session["token"] as string;
-            string result = wb.addTransaction(token, device, code, price, servername,"1","واریز به کیف پول", "0","0");
+            string result = wb.addTransaction(token, device, code, price, servername,"1","واریز به کیف پول", "0","0","");
             addTransactionVM model = JsonConvert.DeserializeObject<addTransactionVM>(result);
             return Content(model.timestamp);
         }
@@ -1415,8 +1548,20 @@ namespace banimo.Controllers
         //    return "1";
         //}
 
-        public ActionResult ProductDetail(string id)
+        public ActionResult ProductDetail(string name )
         {
+            string id = "";
+            if (TempData["lastNumber"] != null)
+            {
+                id = TempData["lastNumber"].ToString();
+            }
+            else
+            {
+                TempData["lastNumber"] = null;
+            }
+           
+
+
             string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
             this.ViewBag.cookie = cartModelString;
             CookieVM jsonModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -1433,9 +1578,13 @@ namespace banimo.Controllers
             // TempData["cookieToSave"] = JsonConvert.SerializeObject(jsonModel);
             SetCookie(JsonConvert.SerializeObject(jsonModel), "token");
             //SetCookie(jsonModel);
-
             string ID = "";
-            ID = id.Substring(1, id.Length - 1);
+            if (id != "")
+            {
+                ID = id.Substring(1, id.Length - 1);
+            }
+           
+           
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -1444,6 +1593,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
+                collection.Add("name", name);
                 collection.Add("token", token);
                 collection.Add("servername", servername);
 
@@ -1452,14 +1602,18 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProduct.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
             banimo.ViewModelPost.viewProductViewModel log = JsonConvert.DeserializeObject<banimo.ViewModelPost.viewProductViewModel>(result);
 
-            log.ID = ID;
+            if (ID != "")
+            {
+                log.ID = ID;
+            }
+            
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
                                                             select new ViewModelPost.imageGallery { src =  L.image, thumb =  L.image }).ToList();
@@ -1468,8 +1622,8 @@ namespace banimo.Controllers
             {
                 log.cattree = log.cattree.Replace("-->", " / ");
             }
-           
-            log.tag = log.tag.Replace("-", ",");
+            
+            log.tag = log.tag != null? log.tag.Replace("-", ","): "";
             if (log.filter == null)
             {
                 log.filter = new List<ViewModelPost.Filter>();
@@ -1477,7 +1631,14 @@ namespace banimo.Controllers
 
             string srt = ConfigurationManager.AppSettings["design"] as string;
             string action = "ProductDetail" + srt;
+            this.ViewData["MenuViewModel"] = Variables.menu;
             return View(action,log);
+        }
+
+        public ActionResult changeLastNumber (string value)
+        {
+            TempData["lastNumber"] = value;
+            return Content("dd");
         }
 
         public ActionResult ProductDetailApp(string id)
@@ -2368,7 +2529,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_addAddress.cshtml",model);
         }
 
-        public ContentResult setAddress(string lat, string lng, string address, string postalCode, string title,string city,string state, string id)
+        public ContentResult setAddress(string UID,string lat, string lng, string address, string postalCode, string title,string city,string state, string id)
         {
             //ALTER TABLE `mbd_discount` ADD `darsad` INT NOT NULL DEFAULT '0' AFTER `oneTime`, ADD `infinit` INT NOT NULL DEFAULT '0' AFTER `darsad`;
 
@@ -2377,6 +2538,7 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string token = Session["token"] as string;
+            string userID = UID == null ? "": UID;
             using (WebClient client = new WebClient())
             {
 
@@ -2393,6 +2555,8 @@ namespace banimo.Controllers
                 collection.Add("state", state);
                 collection.Add("id", id);
                 collection.Add("token", token);
+                collection.Add("userID", userID);
+
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
              };

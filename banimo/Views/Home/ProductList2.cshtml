@@ -69,19 +69,19 @@
 
 
 
-<div id="filterAndSortButt" class="row minwidth" style="display:none">
+<div id="filterAndSortButt" class="row minwidth" style="display:none;">
     @if (Model.filtergroup.filters != null || Model.filtergroup.ranges != null || Model.filtergroup.colors != null)
     {
-        <div id="filterBut" class="filtersortmenu" style="width:44%; float:right"> <i style=" margin-left: 10px" class="fal fa-filter"></i><span style="font-size:11px">فیلتر</span> </div>
+        <div id="filterBut" class="filtersortmenu" ><span style="font-size:11px">فیلتر</span> </div>
 
-        <div id="sortholderBut" class="filtersortmenu" style="width:44%; float:right">  <i style=" margin-left: 10px" class="fal fa-sort-amount-up"></i><span style="font-size:11px" id="textOfSort">پرفروش ترین ها</span></div>
+        @*<div id="sortholderBut" class="filtersortmenu" >  <i style=" margin-left: 10px" class="fal fa-sort-amount-up"></i><span style="font-size:11px" id="textOfSort">پرفروش ترین ها</span></div>*@
     }
     else
     {
-        <div id="sortholderBut" class="filtersortmenu" style="width:88%; float:right">  <i style=" margin-left: 10px" class="fal fa-sort-amount-up"></i><span style="font-size:11px" id="textOfSort">پرفروش ترین ها</span></div>
+        @*<div id="sortholderBut" class="filtersortmenu" >  <i style=" margin-left: 10px" class="fal fa-sort-amount-up"></i><span style="font-size:11px" id="textOfSort">پرفروش ترین ها</span></div>*@
 
     }
-    <div id="iconholder" class="filtersortmenu" style="width:12% ; float:right">
+    <div id="iconholder" class="filtersortmenu" >
         <i class="fal fa-list" style="font-weight:400; font-size:16px"> </i>
         <i class="fal fa-th-large" style="display:none ; font-weight:400;font-size:16px"> </i>
     </div>
@@ -252,7 +252,7 @@
 <div>
     <div class="row devidfromheader" style="margin:0px; background-color:white; border-right:1px solid #eee;position:relative">
 
-        <div id="SIBdiv" class="col-lg-12 col-lg-12 col-sm-12" style="direction:rtl; width:100%; margin-top:100px">
+        <div id="SIBdiv" class="col-lg-12 col-lg-12 col-sm-12" style="">
             <span id="filterButton" style="text-align:right; padding:2px 5px; cursor:pointer; padding-right:20px" >فیلترها</span>
             <div id="contentholder" class="row" style=" margin:10px; margin-top:0">
                 @*<div id="sortholdermax" class="row" style="    display: flex; text-align: right;  direction: rtl; align-items: center;margin:5px; border:1px solid #eee; border-right:0px; background-color:white">
@@ -733,12 +733,15 @@
 
                             $("#filterBut").click(function () {
 
+
+                                $(".mainTopper").hide();
                                 $("#FLTholderForApp").css("display", "block");
                                 $("#FLTholderForApp").animate({
                                     'margin-right': '0px'
                                 }, function () {
 
                                     $("body").css("overflow", "hidden");
+                                    
                                 });
 
 
@@ -747,12 +750,14 @@
                             })
 
                             $(".returnbutt").click(function () {
+                               
                                 var parent = $(this).parent();
                                 parent.animate({
                                     'margin-right': number
                                 }, function () {
                                     parent.css("display", "block");
                                     $("body").css("overflow", "scroll")
+                                    $(".mainTopper").show();
                                 });
 
                             })

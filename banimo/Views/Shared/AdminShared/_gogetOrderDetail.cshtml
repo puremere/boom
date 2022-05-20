@@ -506,6 +506,61 @@
 </style>
 
 <script>
+    $("#addItemToOrderInput").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        //if (value.length >= 2) {
+            
+        //}
+        if (e.key === 'Enter' || e.keyCode === 13) {
+         
+            $.ajax({
+                url: '/Admin/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    server: ""
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+                        //  list: {
+                        //    maxNumberOfElements: 100,
+                        //    match: {
+                        //        enabled: true
+                        //    }
+                        //},
+                        //template: {
+                        //    type: "custom",
+                        //    method: function (value, item) {
+                        //        return   item.title + " | <div style='background-color:#ddd; border-radius:50%; width:30px'></div> "
+                        //    }
+                        //},
+
+
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+           
+        }
+    });
     $("#refreshList").click(function () {
 
         $.ajax({
@@ -608,6 +663,19 @@
                     }
 
                     toastr.error('موجودی کیف پول کافی نیست');
+                }
+                else if (data == 600) {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000
+                    }
+
+                    toastr.error('آیتم مد نظر در فاکتور وجود دارد');
                 }
                 else if (data == 300) {
                     toastr.options = {

@@ -41,12 +41,20 @@
 
 
     @{
+        string package = System.Configuration.ConfigurationManager.AppSettings["package"];
+        int item = Int32.Parse((@ViewBag.message3 as string).Replace("CH-","")) / 1000000;
+
+        if (item == 111)
+        {
+            package = System.Configuration.ConfigurationManager.AppSettings["package2"];
+        }
 
         int w = Request.Browser.ScreenPixelsWidth;
         int h = Request.Browser.ScreenPixelsHeight;
         if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
         {
-            string srt = @System.Configuration.ConfigurationManager.AppSettings["package"] + "://mellatgate-" + "OK" + "-" + @ViewBag.message3;
+
+            string srt = package + "://mellatgate-" + "OK" + "-" + @ViewBag.message3;
             <script>
            window.location.href = '@srt';
             </script>
@@ -71,11 +79,19 @@
 
     <div class="btn btn-default" style="margin:25px"><a href="/Home/index">بازگشت به صفحه اول</a> </div>
     @{
+        string package = System.Configuration.ConfigurationManager.AppSettings["package"];
+
+        int item =(int) Int32.Parse((@ViewBag.message3 as string).Replace("CH-", "")) / 1000000;
+
+        if (item == 111)
+        {
+            package = System.Configuration.ConfigurationManager.AppSettings["package2"];
+        }
         int w = Request.Browser.ScreenPixelsWidth;
         int h = Request.Browser.ScreenPixelsHeight;
         if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
         {
-            string srt = @System.Configuration.ConfigurationManager.AppSettings["package"] + "://mellatgate-" + "NOTOK" + "-" + @ViewBag.message2;
+            string srt = package + "://mellatgate-" + "NOTOK" + "-" + @ViewBag.message3;
             <script>
             try {
                 window.location.href = '@srt';

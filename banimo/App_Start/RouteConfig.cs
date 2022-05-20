@@ -21,17 +21,34 @@ namespace banimo
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-              
+               name: "Default",
+               url: "{controller}/{action}/{id}",
+               defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+               constraints: new { controller = "Home|Admin|Connection" }
+
+           );
+
+            routes.MapRoute(
+              name: "Default1",
+              url: "{catname}/{subcatName}/{subcat2Name}",
+              defaults: new { controller = "Home", action = "subMenuNew", subcatName = UrlParameter.Optional, subcat2Name = UrlParameter.Optional },
+              constraints: new { catname = "digital|projection|history|store-35" }
             );
             routes.MapRoute(
-               name: "Default1",
-               url: "{action}/{id}",
-               defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-              
+           name: "DisplayBrand",
+           url: "{name}/{id}",
+           defaults: new { controller = "Home", action = "brandMenu", id = UrlParameter.Optional },
+            constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
            );
+
+            routes.MapRoute(
+            name: "DisplayKombak",
+            url: "{name}/{id}",
+            defaults: new { controller = "Home", action = "productDetail", id = UrlParameter.Optional }
+            );
+
+
+
 
 
 

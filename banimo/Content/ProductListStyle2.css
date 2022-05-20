@@ -1,6 +1,6 @@
 ﻿@import url('siteColor.css');
 #filterAndSortButt {
-    box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);
+    /*box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);*/
 }
 
 .resp-tabs-list li.selected {
@@ -546,7 +546,7 @@ accordion-blocks .card {
         }
     .filtersortmenu {
         padding: 10px;
-        border-left: 1px solid #ddd;
+       
         text-align: center;
     }
 
@@ -572,7 +572,8 @@ accordion-blocks .card {
     }
 
     #filterAndSortButt {
-        display: block !important;
+        display: flex !important;
+        padding-top:100px
     }
 
     #sortholdermax {
@@ -834,6 +835,14 @@ accordion-blocks .card {
             min-height:57px;
         }
 }
+    html,body{
+        background-color:white
+    }
+#SIBdiv {
+    direction: rtl;
+    width: 100%;
+    margin-top: 100px
+}
 @media (max-width: 768px) {
     .priceSection {
         min-height: 59px;
@@ -847,5 +856,17 @@ accordion-blocks .card {
         font-size: 12px !important;
         font-weight: 500;
         min-height: 55px;
+    }
+    #SIBdiv {
+        margin-top: 10px
+    }
+    #filterButton{
+        display:none
+    }
+    #filterAndSortButt {
+        border-right:1px solid #eee
+    }
+    #menuDiv {
+        padding: 25px 5px 50px 5px !important
     }
 }

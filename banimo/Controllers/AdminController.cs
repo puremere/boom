@@ -33,7 +33,7 @@ using banimo.Classes;
 using Font = iTextSharp.text.Font;
 using iTextSharp.text.html;
 using Rectangle = iTextSharp.text.Rectangle;
-
+using banimo.AdminPanelBoom.ViewModel;
 
 namespace banimo.Controllers
 {
@@ -406,6 +406,8 @@ namespace banimo.Controllers
 
             return View(model);
         }
+
+
         public ActionResult MenuNew()
         {
            
@@ -427,7 +429,7 @@ namespace banimo.Controllers
                 collection.Add("lan", lan);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatlistAll.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatlistAllTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -438,6 +440,8 @@ namespace banimo.Controllers
             return View(log);
           
         }
+
+
 
 
 
@@ -541,6 +545,8 @@ namespace banimo.Controllers
         }
 
 
+
+        
         public ActionResult getfilters(string catID)
         {
 
@@ -860,7 +866,7 @@ namespace banimo.Controllers
                 collection.Add("page", page);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
-                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrdersTest.php";
+                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php";
                 byte[] response = client.UploadValues(serveraddress, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1358,7 +1364,7 @@ namespace banimo.Controllers
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToOrder.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToOrderTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1603,6 +1609,40 @@ namespace banimo.Controllers
 
 
         }
+
+
+        //public void removeOrder (string id)
+        //{
+        //    if (true)
+        //    {
+
+
+        //        string device = RandomString(10);
+        //        string code = MD5Hash(device + "ncase8934f49909");
+
+        //        string result = "";
+        //        using (WebClient client = new WebClient())
+        //        {
+
+        //            var collection = new NameValueCollection();
+        //            collection.Add("servername", servername);
+        //            collection.Add("device", device);
+        //            collection.Add("code", code);
+        //            collection.Add("status", type);
+        //            collection.Add("ID", id);
+        //            collection.Add("desc", desc);
+        //            collection.Add("deliverID", deliverID);
+
+
+
+        //            byte[] response =
+        //            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliverTest.php", collection);
+
+        //            result = System.Text.Encoding.UTF8.GetString(response);
+        //        }
+
+        //    }
+        //}
         public ActionResult DeleteDeliveryTime(string id)
         {
 
@@ -2039,8 +2079,6 @@ namespace banimo.Controllers
 
 
         //section  menu-------------
-
-
         public ActionResult setnewcat(string cattitle, string banimo)
         {
 
@@ -2079,12 +2117,16 @@ namespace banimo.Controllers
                 return Content("3");
             }
         }
-        public ActionResult setnewcatNew(string catID, string title, string image)
+
+
+
+
+        public ActionResult setnewcatNew(banimo.ViewModel.newMenuVM  model)
         {
 
 
-            string fname = image.Trim(',').Split(',').ToList().First();
-            string finalimage = Path.GetFileName(image);
+            string fname = model.image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(model.image);
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -2097,13 +2139,17 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("title", title);
+                collection.Add("title", model.title);
+                collection.Add("entitle", model.entitle);
+                collection.Add("description", model.description);
+                collection.Add("priority", model.priority);
                 collection.Add("token", token);
-                collection.Add("catID", catID);
+                collection.Add("catID", model.catID);
+                collection.Add("brands", model.brandID);
                 collection.Add("servername", servername);
                 collection.Add("image", finalimage.Trim(','));
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatNew.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatNewTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2123,9 +2169,9 @@ namespace banimo.Controllers
                 return Content("3");
             }
         }
-        public ActionResult editcatNew(string catID, string title, string image)
+        public ActionResult editcatNew(ViewModel.newMenuVM model)
         {
-            string fname = image.Trim(',').Split(',').ToList().First();
+            string fname = model.image.Trim(',').Split(',').ToList().First();
             string finalimage = Path.GetFileName(fname);
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -2139,13 +2185,17 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("title", title);
+                collection.Add("title", model.title);
+                collection.Add("entitle", model.entitle);
+                collection.Add("priority", model.priority);
+                collection.Add("description", model.description);
                 collection.Add("token", token);
-                collection.Add("catID", catID);
+                collection.Add("catID", model.catID);
+                collection.Add("brandID", model.brandID);
                 collection.Add("servername", servername);
                 collection.Add("image", finalimage);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editcatNew.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editcatNewTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2201,6 +2251,8 @@ namespace banimo.Controllers
             }
 
         }
+
+
 
         public ActionResult delnewcat(string catid)
         {
@@ -3514,6 +3566,46 @@ namespace banimo.Controllers
 
 
         }
+        public ActionResult bringBrandforproduct(string catid)
+        {
+
+
+            if (catid != null)
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("CatID", catid);
+                    collection.Add("servername", servername);
+
+                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getListOfBrands.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+
+
+                //var log = JsonConvert.DeserializeObject<catslist>(filters);
+                brandRoot log1 = JsonConvert.DeserializeObject<brandRoot>(result);
+
+
+                return PartialView("/Views/Shared/AdminShared/_brandPartial.cshtml", log1);
+            }
+            else
+            {
+                productDetailPageViewModel model = new productDetailPageViewModel();
+                return PartialView("/Views/Shared/AdminShared/_filterHolder.cshtml", model);
+            }
+
+
+        }
+        
 
         public ActionResult bringFilterForServer(string catid)
         {
@@ -4151,14 +4243,14 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("id", userID);
+                collection.Add("phone", userID);
                 collection.Add("servername", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
 
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfo.php";
+                string url = ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfoTest.php";
                 byte[] response = client.UploadValues(url, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -4196,15 +4288,15 @@ namespace banimo.Controllers
                 collection.Add("comment", "");
                 collection.Add("payment", "2");
                 collection.Add("auth", auth);
-                collection.Add("latitude", "");
-                collection.Add("longitude","");
+                collection.Add("latitude", "0");
+                collection.Add("longitude","0");
                 collection.Add("mbrand", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTestt.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4213,7 +4305,7 @@ namespace banimo.Controllers
             return RedirectToAction("verifyByAdmin","Connection", new { payment = "2", id = log2.peigiry});
             //return Content("");
         }
-        public ActionResult AddressUser(string id,string type)
+        public ActionResult AddressUser(string id,string type,string phone)
         {
            
             string device = RandomString(10);
@@ -4226,6 +4318,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("ID", id);
+                collection.Add("phone", phone);
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAddressUser.php", collection);
 
@@ -4854,7 +4947,7 @@ namespace banimo.Controllers
                     var collection = new NameValueCollection();
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", servername); //"banimo");
+                    collection.Add("servername", servername  ); //);"banimo"
 
                     byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
 
@@ -5175,7 +5268,7 @@ namespace banimo.Controllers
             string json = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-            string nodeID = ConfigurationManager.AppSettings["nodeID"];
+            string nodeID = "5";//ConfigurationManager.AppSettings["nodeID"];
             using (WebClient client = new WebClient())
             {
 
@@ -5660,7 +5753,7 @@ namespace banimo.Controllers
 
             if (detail.productdesc != null && detail.productdesc != "")
             {
-                if (detail.productdesc.Contains("script"))
+                if (detail.productdesc.Contains("<script>"))
                 {
                     return RedirectToAction("Product", "Admin");
                 }
@@ -6460,6 +6553,8 @@ namespace banimo.Controllers
             }
             return RedirectToAction("banner");
         }
+
+
         public ActionResult slide(string catmode)
         {
             catmode = catmode == null ? "0" : catmode;
@@ -6555,6 +6650,109 @@ namespace banimo.Controllers
             }
             return RedirectToAction("slide");
         }
+
+
+        public ActionResult newBanner(string catmode)
+        {
+            catmode = catmode == null ? "0" : catmode;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                collection.Add("catmode", catmode);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataBaner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.BannerListAdmin BannerListModel = JsonConvert.DeserializeObject<banimo.ViewModel.BannerListAdmin>(result);
+            if (BannerListModel.filters != "")
+            {
+                BannerListModel.filters = BannerListModel.filters.Substring(1, BannerListModel.filters.Length - 1);
+
+            }
+            if (BannerListModel.products != "")
+            {
+                BannerListModel.products = BannerListModel.products.Substring(1, BannerListModel.products.Length - 1);
+
+            }
+            if (BannerListModel.cats != "")
+            {
+                BannerListModel.cats = BannerListModel.cats.Substring(1, BannerListModel.cats.Length - 1);
+
+            }
+            if (BannerListModel.subcats != "")
+            {
+                BannerListModel.subcats = BannerListModel.subcats.Substring(1, BannerListModel.subcats.Length - 1);
+
+            }
+            if (BannerListModel.subcats2 != "")
+            {
+                BannerListModel.subcats2 = BannerListModel.subcats2.Substring(1, BannerListModel.subcats2.Length - 1);
+
+            }
+            BannerListModel.selectedcat = catmode;
+            return View(BannerListModel);
+        }
+        [HttpPost]
+        public ActionResult editbaner(string ID, string content, string type, string image, string title, string catmode)
+        {
+
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string imagename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                if (!image.Contains(hpf.FileName))
+                    continue;
+                imagename = RandomString(7) + Path.GetExtension(hpf.FileName);
+                string savedFileName = Path.Combine(Server.MapPath(pathString), imagename);
+                hpf.SaveAs(savedFileName);
+                imageUrl(savedFileName, "banerr");
+            }
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("imagename", imagename);
+                collection.Add("content", content);
+                collection.Add("type", type);
+                collection.Add("title", title);
+                collection.Add("ID", ID);
+                collection.Add("catmode", catmode);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setBanerDetail.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return RedirectToAction("newBanner");
+        }
+
+
+
+        
+
+
         public void changeCommnetActive(string id, string value)
         {
 
@@ -8420,27 +8618,28 @@ namespace banimo.Controllers
                     DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathStringApp));
                 }
                 string savedFileNameApp = Path.Combine(Server.MapPath(pathStringApp), Path.GetFileName(filename));
-                if (System.IO.File.Exists(savedFileNameApp))
-                {
-                    // return Content(savedFileNameApp);
-                }
-                else
-                {
-                    string extension = "";
-                    if (Path.GetExtension(filename) == ".jpg")
-                    {
-                        extension = "JPEG";
-                    }
-                    else
-                    {
-                        extension = "PNG";
-                    }
-                    img = new WebImage(savedFileName)
-                   .Resize(width, height, false, true);
-                    img.Save(savedFileNameApp, extension);
-                    //return File(savedFileNameApp);
-                    // return Content(savedFileNameApp);
-                }
+                
+                //app section
+                //if (System.IO.File.Exists(savedFileNameApp))
+                //{
+                //    // return Content(savedFileNameApp);
+                //}
+                //else
+                //{
+                //    string extension = "";
+                //    if (Path.GetExtension(filename) == ".jpg")
+                //    {
+                //        extension = "JPEG";
+                //    }
+                //    else
+                //    {
+                //        extension = "PNG";
+                //    }
+                //    img = new WebImage(savedFileName);//.Resize(width, height, false, true);
+                //    img.Save(savedFileNameApp, extension);
+                //    //return File(savedFileNameApp);
+                //    // return Content(savedFileNameApp);
+                //}
 
             }
             else

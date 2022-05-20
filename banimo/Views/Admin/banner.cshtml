@@ -214,7 +214,7 @@ new { enctype = "multipart/form-data", id = "editbanner" }))
 
                                             <div id="contentHolder">
                                                 @{
-                                                    if ((item.type == "tag") || (item.type == "link"))
+                                                    if ((item.type == "tag") || (item.type == "link") || (item.type == "image"))
                                                     {
                                                         <input value="@item.catIDOrLink" type="text" id=@content name=@content required="required" class="form-control  @classname ">
 

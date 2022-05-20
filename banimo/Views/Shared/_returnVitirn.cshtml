@@ -1,0 +1,163 @@
+﻿@model IEnumerable<banimo.ViewModePost.Newest>
+@using Newtonsoft.Json;
+
+
+
+@foreach (var item in Model)
+{
+    string addID = "addtocarto" + item.ID;
+    string minusID = "minus" + item.ID;
+    string imagefile = "/images/placeholder.jpg";
+    string src2 = "";
+    List<string> srtlist = new List<string>();
+
+    if (item.title != null)
+    {
+        srtlist = item.image.Trim(',').Split(',').ToList();
+        imagefile = srtlist[0];
+        if (srtlist.Count == 2)
+        {
+            src2 = srtlist[1];
+        }
+    }
+    string ID = "N" + item.ID.ToString();
+    string addtocartid = "addtocart" + ID;
+    string price = item.price;
+
+    string src = imagefile;
+
+
+    <div class="item showmedetail" id=@ID style="cursor:pointer">
+
+        <div class="showmedetailFirstDiv showmedetailx">
+            @{
+                string newurl = "/Home/ProductDetail?id=" + ID;
+                if (item.meta != null)
+                {
+                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                    newurl = metaModel.curl;
+                }
+                else
+                {
+
+                }
+            }
+            <div style="padding:15px">
+                <a href="@newurl" onclick="newProductDetail('@newurl')">
+                    <div class="imageholderindex">
+                        <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
+                    </div>
+
+                    <div class="titleholder">
+                        @{
+                            if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                            {
+                                <p class="numEn"> @item.title</p>
+                            }
+                            else
+                            {
+                                <p>@item.title</p>
+                            }
+
+                        }
+                    </div>
+                </a>
+
+
+
+                <div style="margin-top:10px">
+                    @{
+                        if (item.isAvailable == "0")
+                        {
+                            <div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>
+                        }
+                        else
+                        {
+                            if (item.price == "0")
+                            {
+                                <div class="row" style="margin:0px 15px;min-height: 49px;margin-bottom: 10px;">
+                                    <p style="display:inline-block"> تماس بگیرید</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="display:flex; align-items:center; margin-bottom:10px">
+                                    <div style="width:20%;margin-right:5px">
+                                        @if (@item.discount != "0")
+                                        {
+                                            <span style="color: white;font-size:18px;font-weight:600;background-color: red;border-radius: 15px;padding: 5px 10px;">
+                                                @item.discount%
+                                            </span>
+                                        }
+
+                                    </div>
+                                    <div style="flex:1">
+                                        <div>
+                                            <div class="" style="margin:0px 15px; min-height:20px;text-align:left">
+                                                <div class="">
+                                                    <div class="">
+                                                        @if (item.price != item.oldPrice)
+                                                        {
+                                                            <p style="display: inline-block; "> تومان </p> <del style="font-size:15px"> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)) </del>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin:0px 15px; text-align:left">
+                                                <p style="display: inline-block; color: black"> تومان </p> <p style="color:black; display:inline-block;font-size:20px; font-weight:600">@string.Format("{0:n0}", Convert.ToInt32(@item.price))</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+
+
+                </div>
+
+                @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
+                {
+                    string valueID = "value" + item.ID;
+                    
+                    <div class="addButton " style="height:40px">
+                        <div id="@addID" class="value-plus" style="font-size:12px; direction:rtl;color:white; width:100%;  text-align:center; background-color:#FF4500; display:flex; justify-content:center;align-items:center;border-radius:5px; border:unset">
+                            <i class="fa fa-shopping-basket" style="margin:0 10px;"></i>
+                            <p style="color:white">افزودن به سبد خرید</p>
+                        </div>
+                    </div>
+                    <div class="addholder" style="display:none; min-height:40px">
+                        <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; color: #FF4500;height:20px "></i>
+                        <div class="entry value @valueID " style=";height:20px;margin:0; border:0px; padding:0; width:10px"><span>0</span></div>
+                        <i id="@addID" class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #FF4500;height:20px "></i>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+
+
+    </div>
+
+}
+
+<script>
+    var newProductDetail = function (e) {
+        window.location.href = "/" + e;
+
+    }
+    $(".imageitself").hover(function () {
+        var url = $(this).attr('srt2');
+        if (url != "") {
+            $(this).attr('src', url);
+        }
+       
+        
+    }, function () {
+            var url = $(this).attr('srt1');
+            $(this).attr('src', url);
+    });
+</script>

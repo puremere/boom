@@ -276,43 +276,46 @@
         let state = $(this).parent().parent().find(".state");
         let city = $(this).parent().parent().find(".city");
         let postalCode = $(this).parent().parent().find(".postalcode");
-        
+        let UID = '@Model.ID';
        
         let ID = $(this).parent().parent().find(".ID");
         $.ajax({
             url: "/Home/setAddress",
             data: {
+             
                 address: address.val(),
                 postalCode: postalCode.val(),
                 title: title.val(),
                 city: city.val(),
                 state: state.val(),
-                id: ID.val()
+                id: ID.val(),
+                UID: UID
             },
             success: function (data) {
-                
+
+                address.siblings().text(address.val());
+                address.siblings().show();
+                address.hide();
+
+                postalCode.siblings().text(postalCode.val());
+                postalCode.siblings().show();
+                postalCode.hide();
+
+                title.siblings().text(title.val());
+                title.siblings().show();
+                title.hide();
+
+                city.siblings().text(city.val());
+                city.siblings().show();
+                city.hide();
+
+                state.siblings().text(state.val());
+                state.siblings().show();
+                state.hide();
                 if (data === "200") {
                   
 
-                    address.siblings().text(address.val());
-                    address.siblings().show();
-                    address.hide(); 
-
-                    postalCode.siblings().text(postalCode.val());
-                    postalCode.siblings().show();
-                    postalCode.hide();
-
-                    title.siblings().text(title.val());
-                    title.siblings().show();
-                    title.hide();
-
-                    city.siblings().text(city.val());
-                    city.siblings().show();
-                    city.hide();
-
-                    state.siblings().text(state.val());
-                    state.siblings().show();
-                    state.hide();
+                    
                 }
             }
         })

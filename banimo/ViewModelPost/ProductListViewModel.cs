@@ -12,11 +12,13 @@ namespace banimo.ViewModelPost
         public string subcatID { get; set; }
         public string subcatID2 { get; set; }
         public int SetId { get; set; }
+        public string meta { get; set; }
         public int ID { get; set; }
         public string title { get; set; }
         public int price { get; set; }
         public string image { get; set; }
         public int oldPrice { get; set; }
+        public string imagestring { get; set; }
         public string discount { get; set; }
         public string desc { get; set; }
         public string type { get; set; }

@@ -153,6 +153,9 @@ namespace banimo.apiViewModel
     public class doWalletFinalCheck
     {
         public string auth{get; set;}
+        public string time{get; set;}
+        public string price{get; set;}
+       
     }
     public class editProduct
     {

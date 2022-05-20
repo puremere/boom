@@ -77,46 +77,184 @@
         </div>
     </div>
 </div>
+
+
+
 <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
-    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
-        <label> طبقه بندی </label>
-        <div style="width:100%">
-            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
-        </div>
-    </div>
-    <div class="component" style="display:none">
-        <label> عنوان </label>
-        <input type="text" id="title" required="required" class="form-control INP">
-    </div>
-    <div class="component">
-        <label> عکس  </label>
-        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
-    </div>
-    <div class="component classshow">
-        <div id="edit" class="btn btn-success">ویرایش</div>
-    </div>
-    <div style="display:none">
-        <div class="component classshow">
-            <div id="addCat" class="btn btn-success">افزودن</div>
-        </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#layer1def" style=" color: #8d8d8d; ">تعریف </a></li>
+        <li><a data-toggle="tab" href="#layer1edit" style=" color: #8d8d8d; ">ویرایش </a></li>
+        <li><a data-toggle="tab" href="#layer1del" style=" color: #8d8d8d; ">حذف </a></li>
 
-        <div class="component classshow">
-            <div id="removeButt" class="btn btn-success">حذف</div>
-        </div>
-    </div>
-    
-    <div class="component classhide">
-        <div id="verifEdit" class="btn btn-success">تایید  </div>
-    </div>
-    <div class="component classhide">
-        <div id="cancelEdit" class="btn btn-success">لغو</div>
-    </div>
-    <p hidden class="imageName"></p>
-    <div style="width:100%">
-        <div id="imageHolder" style="display:flex; ">
+    </ul>
+
+    <div class="tab-content">
+        <div id="layer1def" class="tab-pane fade in active" style="padding-top:20px">
+           
+            <div class="row addParent">
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> طبقه بندی </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatAdd", @class = "form-control" })
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> عنوان </label>
+                    <div style="width:100%">
+                        <input type="text" id="titleAdd" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> عنوان انگلیسی </label>
+                    <div style="width:100%">
+                        <input type="text" id="entitleAdd" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> اولویت </label>
+                    <div style="width:100%">
+                        <input type="text" id="priorityAdd" required="required" class="form-control INP">
+                    </div>
+                </div>
+
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> توضیحات </label>
+                    <div style="width:100%">
+                        <input type="text" id="descAdd" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label>عکس </label>
+                    <div style="width:100%">
+                        <input id="imageFileHolderAdd" type="file" required="required" class="form-control INP">
+                    </div>
+                </div>
+
+
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> انتخاب برند </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <p hidden class="imageNameEdit"></p>
+                    <div style="width:100%">
+                        <div id="imageHolderAdd" style="display:flex; ">
+
+                        </div>
+                    </div>
+                </div>
+                <p hidden class="imageNameAdd"></p>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <div class="component classshow">
+                        <div id="addCat" class="btn btn-success">تایید</div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
 
         </div>
+        <div id="layer1del" class="tab-pane fade" style="padding-top:20px">
+            <div class=" component col-md-6 col-sm-6 col-xs-12" style="min-width:250px">
+                <label> طبقه بندی </label>
+                <div style="width:100%">
+                    @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatDel", @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="component classshow" style="margin-top:35px">
+                <div id="removeButt" class="btn btn-success">حذف</div>
+            </div>
+        </div>
+        <div id="layer1edit" class="tab-pane fade" style="padding-top:20px">
+            <div class="row editParent">
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> طبقه بندی </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> عنوان </label>
+                    <div style="width:100%">
+                        <input type="text" id="titleEdit" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> عنوان انگلیسی </label>
+                    <div style="width:100%">
+                        <input type="text" id="entitleEdit" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> اولویت </label>
+                    <div style="width:100%">
+                        <input type="text" id="priorityEdit" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> توضیحات </label>
+                    <div style="width:100%">
+                        <input type="text" id="descEdit" required="required" class="form-control INP">
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> عکس </label>
+                    <div style="width:100%">
+                        <input id="imageFileHolderEdit" type="file" required="required" class="form-control INP">
+                    </div>
+                </div>
+
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <label> انتخاب برند </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+                    </div>
+                </div>
+
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <div class="component ">
+                        <div id="verifEdit" class="btn btn-success">تایید  </div>
+                    </div>
+                </div>
+                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                    <p hidden class="imageNameEdit"></p>
+                    <div style="width:100%">
+                        <div id="imageHolderEdit" style="display:flex; ">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+
+   
+
+   
+
+  
+
+
+
+    <div>
+        
+
+      
+
+        
+        <div class="component classhide">
+            <div id="cancelEdit" class="btn btn-success">لغو</div>
+        </div>
+    </div>
+
+
+
 </div>
 
 
@@ -125,35 +263,53 @@
 <script src="~/Scripts/download.js"></script>
 
 <script>
-    $("#imageFileHolder").on('change', function () {
+    
+    $("#imageFileHolderAdd").on('change', function () {
 
-        uploadImage("imageHolder", "imageName", this)
+        uploadImage("imageHolderAdd", "imageNameAdd", this)
+    });
+    $("#imageFileHolderEdit").on('change', function () {
+
+        uploadImage("imageHolderEdit", "imageNameEdit", this)
     });
     $("#addCat").click(function () {
-
-        var catname = $("#listofcat").val();
+        var brandID = $("#listOfBrands").val();
+        var catname = $("#listofcatAdd").val();
         if (catname == "") {
             catname = "00";
         }
-        var name = $("#title").val();
-        var image = $(".imageName").text();
+        var name = $("#titleAdd").val();
+        var entitle = $("#entitleAdd").val();
+        var priority = $("#priorityAdd").val();
+        var description = $("#descAdd").val();
+        var image = $(".imageNameAdd").text();
 
-        if (catname != "" && name != "" && image != "") {
-            $.ajax({
-                url: "/admin/setnewcatNew",
-                dataType: "html",
-                data: {
+        if (brandID != "" && catname != "" && name != "" && image != "" && entitle != "" && priority != "" && description != "") {
+           
+            var br = brandID.toString();
+            $.post(
+                '/admin/setnewcatNew',
+                {
                     catID: catname,
+                    brandID: br,
                     title: name,
-                    image: image
+                    entitle: entitle,
+                    description: description,
+                    priority: priority,
+                    image: image,
+                   
                 },
-                success: function (data) {
+                function (data) {
                     if (data == "1") {
                         location.reload();
 
                     }
-                }
-            })
+                });
+
+
+        }
+        else {
+            alert("همه موارد را کامل کنید")
         }
     })
     $("#removeButt").click(function () {
@@ -162,7 +318,7 @@
     })
     $("#remove").click(function () {
 
-        var catname = $("#listofcat").val();
+        var catname = $("#listofcatDel").val();
         if (catname != "") {
             $.ajax({
                 url: "/admin/delnewcatNew",
@@ -185,8 +341,12 @@
         }
     })
 
-    $("#edit").click(function () {
-        var catname = $("#listofcat").val();
+
+
+    $("#listofcatEdit").change(function () {
+        $("#imageHolderEdit").html('');
+        var catname = $("#listofcatEdit").val();
+
         if (catname != "") {
             $.ajax({
                 url: "/admin/getCatDetail",
@@ -196,22 +356,28 @@
 
                 },
                 success: function (data) {
-                    $(".classhide").css("display","inline-block");
-                    $(".classshow").css("display", "none");
+
                     var obj = JSON.parse(data);
-                    var image =  obj[0]["image"];
+                    var image = obj[0]["image"];
                     var title = obj[0]["title"];
-                    $("#title").val(title);
+                    var entitle = obj[0]["entitle"];
+                    var priority = obj[0]["priority"];
+                    var description = obj[0]["description"];
 
-                    if (image != null) {
+                    $("#titleEdit").val(title);
+                    $("#entitleEdit").val(entitle);
+                    $("#priorityEdit").val(priority);
+                    $("#descEdit").val(description);
+
+                    if (image != null && image != "") {
                         var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
-                        $("#imageHolder").append(htmldiv);
+                        $("#imageHolderEdit").append(htmldiv);
 
 
-                        var srt = $(".imageName").text();
-                        $(".imageName").text(obj[0]["image"] + "," + srt);
+                        var srt = $(".imageNameEdit").text();
+                        $(".imageNameEdit").text(obj[0]["image"] + "," + srt);
                     }
-                   
+
 
                 }
             })
@@ -233,34 +399,40 @@
         })
     }
     $("#verifEdit").click(function () {
-        var catname = $("#listofcat").val();
-        var name = $("#title").val();
-        var image = $(".imageName").text();
+        var brandID = $("#listOfBrandsEdit").val();
+        var catname = $("#listofcatEdit").val();
+        var name = $("#titleEdit").val();
+        var enname = $("#entitleEdit").val();
+        var priority = $("#priorityEdit").val();
+        var desc = $("#descEdit").val();
+        var image = $(".imageNameEdit").text();
+        var br = brandID.toString();
+        if (catname != "" && name != "" && image != "" && desc != "") {
 
-        if (catname != "" && name != "" && image != "") {
-            $.ajax({
-                url: "/admin/editcatNew",
-                dataType: "html",
-                data: {
+
+
+
+            
+            $.post(
+                '/admin/editcatNew',
+                {
                     catID: catname,
                     title: name,
-                    image: image
+                    entitle: enname,
+                    priority: priority,
+                    image: image,
+                    description: desc,
+                    brandID : br
                 },
-                success: function (data) {
+                function (data) {
                     if (data == "1") {
                         location.reload();
 
                     }
-                }
-            })
+                });
         }
     })
-    $("#cancelEdit").click(function () {
-        $(".classhide").css("display", "none");
-        $(".classshow").css("display", "inline-block");
-        $("#imageHolder").css("display", "none");
-        $("#title").val("");
-    })
+
     $(".ImageDelete").click(function () {
 
         var name = $(".imageName").text();
@@ -271,8 +443,8 @@
             },
             success: function () {
                 var srt = $(".imageName").text();
-                $(".imageName2").text(srt.replace(name+ ","),"" );
-                $("#imageHolder0").css("display","none")
+                $(".imageName2").text(srt.replace(name + ","), "");
+                $("#imageHolder0").css("display", "none")
             }
         })
 

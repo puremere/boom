@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>حسون نامی مطمئن در صنعت پوشاک</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -41,8 +41,8 @@
     @{
         banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
     }
-    <div class="row">
-        <div style="z-index:9; position:fixed; right:70px; top:25px; width:150px">
+    <div class="row mainTopper" >
+        <div style="z-index:9; position:absolute; right:70px; top:25px; width:150px">
             @if (userApp != null)
             {
                 string name = userApp.fullname != "" ? userApp.fullname : userApp.phone;
@@ -70,19 +70,26 @@
                 </a>
             }
         </div>
-        <div style="z-index:9; position:fixed; right:180px; top:25px;">
+        @*<div style="z-index:9; position:fixed; right:180px; top:25px;">
             <a href="/Home/Login">
                 <div class="menuAppHeader" style="direction: rtl;color: white;">
 
                     <span style="color:black">جستجو</span>
                 </div>
             </a>
-        </div>
+        </div>*@
 
-        <img src="~/images/logo.png" style="z-index:9; position:fixed; left:30px; top:30px; width:150px" />
-        <i id="barsformenu" style="z-index:9; position:fixed; right:30px; top:30px; cursor:pointer" class="fal fa-bars"> </i>
+        <img class="logo" src="~/images/logo.png" style="" />
+        <i id="barsformenu" style="z-index:9; position:absolute; right:30px; top:30px; cursor:pointer" class="fal fa-bars"> </i>
 
         <style>
+            .logo {
+                z-index: 9;
+                position: absolute;
+                left: 30px;
+                top: 30px;
+                width: 150px
+            }
             #menuDiv {
                 width: 100%;
                 padding: 25px 5px 50px 50px;
@@ -90,11 +97,28 @@
                 height: 100%;
                 overflow-y: auto
             }
+            #barmenu {
+                height: 100%;
+                width: 25%;
+                position: fixed;
+                top: 0;
+                background-color: white;
+                right: 0
+            }
+            @@media only screen and (max-width: 1200px){
+                #barmenu {
+                    width: 50%;
+                }
+                .logo {
+                    width: 100px
+                }
+
+            }
         </style>
     </div>
 
    
-    <div id="barmenu" class="menuParent" style=" height: 100%; width : 25% ; position: fixed;top: 0;background-color:white;right: 0">
+    <div id="barmenu" class="menuParent" style="">
         <div id="menuDiv" style="">
             @{ Html.RenderAction("getmenue", "Home"); }
         </div>
@@ -106,7 +130,16 @@
 
   
     <script>
-        var width = screen.width / 4;
+        var windowsWidth = screen.width;
+       
+        if (windowsWidth < 1200) {
+            var width = screen.width / 2;
+         
+        }
+        else {
+            var width = screen.width / 4;
+        }
+       
         var number = width + "px";
 
         $("#barsformenu").click(function () {

@@ -31,8 +31,16 @@ namespace banimo.AdminPanelBoom.ViewModel
         public int setID { get; set; }
     }
 
+    public class Brand
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string image { get; set; }
+    }
     public class catAll
     {
         public List<FiltercatsAll> filtercatsAll { get; set; }
+        public List<Brand> brands { get; set; }
     }
+
 }

@@ -6,6 +6,19 @@ using System.Web.Mvc;
 
 namespace banimo.ViewModel
 {
+
+    public class newMenuVM
+    {
+       
+        public string image { get; set; }
+        public string catID { get; set; }
+        public string brandID { get; set; }
+        public string title { get; set; }
+        [AllowHtml]
+        public string description { get; set; }
+        public string entitle { get; set; }
+        public string priority { get; set; }
+    }
     public class newArcticelVM
     {
         public string image { get; set; }

@@ -141,6 +141,9 @@ namespace AdminPanelBoom.ViewModel
         public List<FeaturDataDetail> featurDataDetail { get; set; }
     }
 
+    
+
+
 
 
 

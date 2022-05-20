@@ -45,8 +45,23 @@ namespace banimo.ViewModelPost
         public string ID { get; set; }
         public string selectedFilter { get; set; }
     }
+    public class CatTreeList
+    {
+        public int level { get; set; }
+        public string title { get; set; }
+        public string entitle { get; set; }
+    }
+    public class BrandInfo
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string image { get; set; }
+        public string meta { get; set; }
+    }
     public class viewProductViewModel
     {
+        public List<BrandInfo> BrandInfo { get; set; }
+        public List<CatTreeList> catTreeList { get; set; }
         public string vahed { get; set; }
         public string tag { get; set; }
         public string cattree { get; set; }
@@ -55,6 +70,7 @@ namespace banimo.ViewModelPost
         public List<SimilarProduct> similarProduct { get; set; }
         public List<OtherColor> otherColors { get; set; }
         public string title { get; set; }
+        public string meta { get; set; }
         public string desc { get; set; }
         public string wonderDiscount{ get; set; }
         public string price { get; set; }

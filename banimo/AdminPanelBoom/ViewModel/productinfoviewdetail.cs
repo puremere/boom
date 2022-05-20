@@ -11,6 +11,7 @@ namespace AdminPanelBoom.ViewModel
        
         public string productCount { get; set; }
         public string productname { get; set; }
+        public string brand { get; set; }
         public string  producttag { get; set; }
         public string productunit { get; set; }
         public string productLimit { get; set; }

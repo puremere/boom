@@ -578,6 +578,8 @@ namespace banimo.Controllers
 
                 var collection = new NameValueCollection();
                 collection.Add("auth", model.auth);
+                collection.Add("time", model.time);
+                collection.Add("price", model.price);
 
                 collection.Add("device", device);
                 collection.Add("code", code);

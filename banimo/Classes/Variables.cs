@@ -8,10 +8,10 @@ namespace banimo.Classes
     public static class Variables
     {
 
-        public static string domain = "";
-        public static string serverName = "";
-        public static string logo = "";
-        
+        public static string domain;
+        public static string serverName;
+        public static string logo;
+        public static string menu;
         public static string getServerName(string url)
         {
            

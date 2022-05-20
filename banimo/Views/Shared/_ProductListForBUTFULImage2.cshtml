@@ -265,50 +265,23 @@
                                         </div>
                                     </a>
 
-
-                                    <div id="maintitleholder" >
-                                        <div class="titleholder">
-                                            @{
-                                                if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
-                                                {
-
-                                                    <p class="title numEn" style="font-weight:500">@item.title</p>
-
-                                                }
-                                                else
-                                                {
-                                                    <p class="title" style="font-weight:500">@item.title</p>
-                                                }
-
-                                            }
-
-                                        </div>
-                                        @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
-                                        {
-                                            string valueID = "value" + item.ID;
-                                            string iconcolor = "#36CDDF";
-                                            string iconcurson = "pointer";
-                                            string pointer = "";
-                                            if (item.isAvailable == 0)
+                                    <div class="titleholder">
+                                        @{
+                                            if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
                                             {
-                                                iconcolor = "gray";
-                                                iconcurson = "auto";
-                                                pointer = "pointer-events: none;";
+
+                                                <p class="title numEn" style="font-weight:500">@item.title</p>
+
                                             }
-                                            <div class="addholder" style="margin:5px;display: flex;justify-content: center;align-items:center">
-                                                <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; color: #36CDDF; margin:10px"></i>
-                                                <div class="entry value @valueID " style="margin:0; border:0px; padding:0; width:10px; height:unset"><span>0</span></div>
-                                                <i id="@addID" class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #36CDDF;margin:10px "></i>
-                                            </div>
+                                            else
+                                            {
+                                                <p class="title" style="font-weight:500">@item.title</p>
+                                            }
 
                                         }
-                                        @*<div class="descriptionSection" style="min-width:25px">
-                                                <p class="title" style="color:#605c5c">@Html.Raw(item.desc)</p>
-                                            </div>*@
-                                        @*<div class="descholder">
-                                                <p class="titledesc"> </p>
-                                            </div>*@
+
                                     </div>
+                                  
 
 
                                     <div class="priceSection" style="margin-top: 10px; border-top:1px solid #eee">

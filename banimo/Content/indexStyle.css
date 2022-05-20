@@ -360,9 +360,13 @@
     }
 
     .titleholder h6 {
-        overflow: hidden;
+        /*overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        direction: var(--titleDirection) !important;
+        direction: var(--titleDirection) !important;*/
+        line-height: 1.5em;
+        height: 3em;
+        overflow: hidden;
+        white-space: pre-wrap;
     }
 }

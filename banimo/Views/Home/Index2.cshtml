@@ -7,7 +7,7 @@
     /**/
 
 
-    ViewBag.Title = @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    ViewBag.Title ="حسون نامی مطمئن در صنعت پوشاک";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 
 }
@@ -351,21 +351,63 @@
                     }, 1500);
                 }
             });
+            //$('.main').bind('touchmove', function (e) {
+            //    if (e.originalEvent.wheelDelta / 120 > 0) {
+            //        $(".C-carousel-navigation-button--prev").click();
+            //        var btn = $(".C-carousel-navigation-button--prev");
+            //        btn.prop('disabled', true);
+            //        setTimeout(function () {
+            //            btn.prop('disabled', false);
+            //        }, 1500);
+            //    }
+            //    else {
+            //        $(".C-carousel-navigation-button--next").click();
+            //        var btn = $(".C-carousel-navigation-button--next");
+            //        btn.prop('disabled', true);
+            //        setTimeout(function () {
+            //            btn.prop('disabled', false);
+            //        }, 1500);
+            //    }
+            //});
+            
         })
     </script>
     <script>
         $(".arrowLeft").click(function () {
             var id = $(this).attr('nametype2');
-            var nameType = $(this).attr('nametype');
-            $("." + nameType).hide();
-            $("." + id).fadeIn();
+            $(".aimItem").each(function () {
+                var url = $(this).attr(id);
+                $(this).attr('src', url);
+                if (this.tagName != 'IMG') {
+                    $(this)[0].load();
+                }
+                $(".arrowItem").hide();
+                $("." + id).show();
+
+
+               
+               
+            })
+
+            //$("." + nameType).hide();
+            //$("." + id).fadeIn();
 
         })
         $(".arrowRight").click(function () {
             var id = $(this).attr('nametype2');
-            var nameType = $(this).attr('nametype');
-            $("." + nameType).hide();
-            $("." + id).fadeIn();
+            $(".aimItem").each(function () {
+                var url = $(this).attr(id);
+                $(this).attr('src', url);
+                if (this.tagName != 'IMG') {
+                    $(this)[0].load();
+                }
+                $(".arrowItem").hide();
+                $("." + id).show();
+
+
+
+
+            })
 
         })
     </script>
@@ -473,6 +515,7 @@
         .C-carousel--horizontal .C-navigation {
             bottom: 50px;
         }
+        
     }
 
     .C-navigation__dot {
@@ -645,6 +688,25 @@
         font-size:40px;
         color:black
     }
+    @@media (max-width: 800px) {
+        .arrowLeft i {
+            font-size: 20px;
+            font-weight:600;
+            color: black
+        }
+
+        .arrowRight i {
+            font-size: 20px;
+            font-weight: 600;
+            color: black
+        }
+        .arrowRight{
+            right:0
+        }
+        .arrowLeft{
+            left:0
+        }
+    }
 </style>
 
 
@@ -652,66 +714,38 @@
     <div class="C-carousel">
         <div class="C-slide">
 
-            <video class="a1" style="width:100%;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+            <video a1="~/video/menVideo.mp4" a2="~/video/clip.mp4" a3="~/video/k1-video.mp4" class="aimItem" style="width:100%;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
                 <source src="~/video/menVideo.mp4" type="video/mp4">
             </video>
-            <video class="a2" style="display:none; width:100%;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-                <source src="~/video/clip.mp4" type="video/mp4">
-            </video>
-            <video class="a3" style="display:none; width:100%;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-                <source src="~/video/k1-video.mp4" type="video/mp4">
-            </video>
+           
         </div>
         <div class="C-slide">
-            <div class="a1 bannerHoder">
-                <img src="~/images/m1-min.jpg" />
+            <div  class="a1 bannerHoder">
+                <img class="aimItem" a1="~/images/m1-min.jpg" a2="~/images/w1-min.jpg" a3="~/images/k1-min.jpg" src="~/images/m1-min.jpg" />
             </div>
-            <div style="display:none;" class="a2 bannerHoder">
-                <img src="~/images/w1-min.jpg" />
-            </div>
-            <div style="display:none;" class="a3 bannerHoder">
-                <img src="~/images/k1-min.jpg" />
-
-            </div>
+           
         </div>
         <div class="C-slide">
 
-            <video class="a1" style="" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+            <video class="aimItem" a1="~/video/m2-video.mp4" a3="~/video/k2-video.mp4"  a2="~/video/w2-vieo.mp4"  style="" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
                 <source src="~/video/m2-video.mp4" type="video/mp4">
             </video>
-            <video class="a2" style="display:none; " playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-                <source src="~/video/w2-vieo.mp4" type="video/mp4">
-            </video>
-            <video class="a3" style="display:none;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-                <source src="~/video/k2-video.mp4" type="video/mp4">
-            </video>
+           
         </div>
 
         <div class="C-slide">
-            <div class="a1 bannerHoder">
-                <img src="~/images/m2-min.jpg" />
+            <div  class="a1 bannerHoder">
+                <img class="aimItem" a1="~/images/m2-min.jpg" a2="~/images/w2-min.jpg" a3="~/images/k2-min.jpg" src="~/images/m2-min.jpg" />
 
             </div>
-            <div style="display:none;" class="a2 bannerHoder">
-                <img src="~/images/w2-min.jpg" />
-            </div>
-            <div style="display:none;" class="a3 bannerHoder">
-                <img src="~/images/k2-min.jpg" />
-
-            </div>
+            
         </div>
         <div class="C-slide">
             <div class="a1 bannerHoder">
-                <img src="~/images/m3-min.jpg" />
+                <img class="aimItem" a1="~/images/m3-min.jpg" a2="~/images/w3-min.jpg" a3="~/images/k3-min.jpg" src="~/images/m3-min.jpg" />
 
             </div>
-            <div style="display:none;" class="a2 bannerHoder">
-                <img src="~/images/w3-min.jpg" />
-            </div>
-            <div style="display:none;" class="a3 bannerHoder">
-                <img src="~/images/k3-min.jpg" />
-
-            </div>
+           
         </div>
        
         <div class="C-slide">
@@ -719,14 +753,14 @@
         </div>
 
     </div>
-    <div class="a1 arrowLeft" nametype="a1" nametype2="a2" style=" "><i class="  fal fa-chevron-left"> </i><p>زنانه</p> </div>
-    <div class="a2 arrowLeft" nametype="a2" nametype2="a3" style="display:none;"><i class=" fal fa-chevron-left"> </i> <p>بچه گانه</p></div>
-    <div class="a3 arrowLeft" nametype="a3" nametype2="a1" style="display:none;"><i class=" fal fa-chevron-left"> </i> <p>مردانه</p> </div>
+    <div class="a1 arrowLeft arrowItem" nametype="a1" nametype2="a2" style=" "><i class="  fal fa-chevron-left"> </i><p>زنانه</p> </div>
+    <div class="a2 arrowLeft arrowItem" nametype="a2" nametype2="a3" style="display:none;"><i class=" fal fa-chevron-left"> </i> <p>بچه گانه</p></div>
+    <div class="a3 arrowLeft arrowItem" nametype="a3" nametype2="a1" style="display:none;"><i class=" fal fa-chevron-left"> </i> <p>مردانه</p> </div>
 
 
-    <div class="a1 arrowRight" nametype="a1" nametype2="a3" style=" "><p> بچه گانه</p><i class="  fal fa-chevron-right"> </i></div>
-    <div class="a3 arrowRight" nametype="a3" nametype2="a2" style="display:none;"><p>زنانه</p><i class=" fal fa-chevron-right"> </i></div>
-    <div class="a2 arrowRight" nametype="a2" nametype2="a1" style="display:none;"><p>مردانه</p><i class=" fal fa-chevron-right"> </i></div>
+    <div class="a1 arrowRight arrowItem" nametype="a1" nametype2="a3" style=" "><p> بچه گانه</p><i class="  fal fa-chevron-right"> </i></div>
+    <div class="a3 arrowRight arrowItem" nametype="a3" nametype2="a2" style="display:none;"><p>زنانه</p><i class=" fal fa-chevron-right"> </i></div>
+    <div class="a2 arrowRight arrowItem" nametype="a2" nametype2="a1" style="display:none;"><p>مردانه</p><i class=" fal fa-chevron-right"> </i></div>
 
 </div>
 

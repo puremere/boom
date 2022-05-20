@@ -1,4 +1,5 @@
-﻿using System;
+﻿using banimo.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -30,10 +31,18 @@ namespace banimo.ViewModePost
         public int parentID { get; set; }
     }
 
+    public class metaData
+    {
+        public string curl { get; set; }
+        public string desctag { get; set; }
+        public string titletag { get; set; }
+
+    }
     public class Newest
     {
         public int ID { get; set; }
         public string title { get; set; }
+        public string meta { get; set; }
         public string price { get; set; }
         public string image { get; set; }
         public string discount { get; set; }
@@ -104,6 +113,7 @@ namespace banimo.ViewModePost
         public string ID { get; set; }
         public string discount { get; set; }
         public string title { get; set; }
+        public string meta { get; set; }
         public string time { get; set; }
         public string image { get; set; }
         public string price { get; set; }
@@ -111,8 +121,16 @@ namespace banimo.ViewModePost
         public string isAvailable { get; set; }
 
     }
+    public class Brand
+    {
+        public int ID { get; set; }
+        public object title { get; set; }
+        public object image { get; set; }
+        public string meta { get; set; }
+    }
     public class getMaindataViewModel
     {
+        public List<Brand> brands { get; set; }
         public string iosCookie { get; set; }
         public List<Slide> slides { get; set; }
         public List<Cat> cats { get; set; }
@@ -123,6 +141,9 @@ namespace banimo.ViewModePost
         public List<Newest> specialOffers { get; set; }
         public List<GourpList> gourpList { get; set; }
         public List<WonderList> wonderList { get; set; }
+
+        public List<Catsdata> catsdata { get; set; }
+        public List<CatsParent> catsParents { get; set; }
         //public List<CatsParent> catsParents { get; set; }
     }
 }

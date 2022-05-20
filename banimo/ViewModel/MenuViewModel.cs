@@ -14,6 +14,9 @@ namespace banimo.ViewModel
     {
         public string ID { get; set; }
         public string title { get; set; }
+        public string entitle { get; set; }
+        public string description { get; set; }
+
         public string image { get; set; }
         public string IsFinal { get; set; }
         public string parentID { get; set; }
@@ -23,6 +26,8 @@ namespace banimo.ViewModel
     {
         public string ID { get; set; }
         public string title { get; set; }
+        public string entitle { get; set; }
+        public string description { get; set; }
         public string image { get; set; }
         public string CatID { get; set; }
         public string IsFinal { get; set; }
@@ -32,6 +37,8 @@ namespace banimo.ViewModel
     {
         public string ID { get; set; }
         public string title { get; set; }
+        public string entitle { get; set; }
+        public string description { get; set; }
         public string image { get; set; }
         public string subcatid { get; set; }
         public string IsFinal { get; set; }

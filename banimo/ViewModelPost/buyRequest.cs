@@ -37,4 +37,10 @@ namespace banimo.ViewModelPost
         public string nums { get; set; }
         public string token { get; set; }
     }
+    public class ReqestWalletViewModel
+    {
+        public long price { get; set; }
+        public string orderNumberWeb { get; set; }
+
+    }
 }
