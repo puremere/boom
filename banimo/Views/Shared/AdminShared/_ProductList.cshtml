@@ -498,29 +498,36 @@
                 </script>
             }
         </td>*@
-                                            <td>
-                                                @{
-                                                    if (item.serverRowID != null)
-                                                    {
-                                                        string removeID = item.ID + "-" + item.serverRowID;
-                                                        <button type="button" class="btn btn-danger removeFromserver" data-toggle="modal" data-target="#myModal" id="@removeID">حذف از سرور </button>
+                                            @if (string.IsNullOrEmpty(item.parentID))
+                                            {
+                                                <td>
+                                                    <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
+                                                </td>
+                                            }
 
-                                                    }
-                                                    else
-                                                    {
-                                                        <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">افزودن به سرور</button>
+                                            @*<td>
+            @{
+                if (item.serverRowID != null)
+                {
+                    string removeID = item.ID + "-" + item.serverRowID;
+                    <button type="button" class="btn btn-danger removeFromserver" data-toggle="modal" data-target="#myModal" id="@removeID">حذف از سرور </button>
 
-                                                    }
-                                                }
-                                                <script>
-                                                    $(".removeFromserver").click(function () {
-                                                        var id = $(this).attr('id');
-                                                        $("#modalValue").text("banimo" + id);
-                                                        $("#modalmessage").text("  آیا از حذف محصول از سررور اطمینان دارید؟ ")
+                }
+                else
+                {
+                    <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">افزودن به سرور</button>
 
-                                                    })
-                                                </script>
-                                            </td>
+                }
+            }
+            <script>
+                $(".removeFromserver").click(function () {
+                    var id = $(this).attr('id');
+                    $("#modalValue").text("banimo" + id);
+                    $("#modalmessage").text("  آیا از حذف محصول از سررور اطمینان دارید؟ ")
+
+                })
+            </script>
+        </td>*@
                                         </tr>
                                         }
 
@@ -595,6 +602,7 @@
             $(".addtoserver").click(function () {
 
                 $("#selectedForServer").text($(this).attr('id'));
+             
 
             })
             $(".specialOffer").click(function () {

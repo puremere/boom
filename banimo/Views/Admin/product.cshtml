@@ -150,7 +150,7 @@
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">لیست محصولات </a></li>
-        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> تعریف محصول</a></li>
+        @*<li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> تعریف محصول</a></li>*@
 
 
     </ul>
@@ -437,18 +437,18 @@
                 </div>
 
                 <div id="serverModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
 
                         <!-- Modal content-->
                         <div class="modal-content">
 
                             <div class="modal-body">
                                 <div id="serverDataHolder" style="display:block;  ">
-                                    <label> انتخاب دسته بندی :</label>
+                                    
                                     <div class="form-group " style="display:inline-block">
 
 
-                                        @{
+                                        @*@{
                                             List<SelectListItem> serverListItem = new List<SelectListItem>();
                                             if (Model.basecat != null)
                                             {
@@ -487,12 +487,46 @@
                                             }
 
 
-                                        }
-                                        <div class="component ">
-                                            @Html.DropDownListFor(m => m.SelectedaddProductServer, serverListItem, "-- Select Status --", new { id = "serverCates", style = "width:150px", @class = "form-control" })
+                                        }*@
+                                        <div style="display : flex; align-items:center">
+                                            <div class="component ">
+                                                @Html.DropDownListFor(m => m.SelectedaddProductServer, new SelectList(Model.maincat, "ID", "title"), "-- انتخاب دسته بندی --", new { id = "serverCates", style = "width:150px", @class = "form-control" })
+                                            </div>
+                                            <div>
+                                                <input id="titleTosearch" class="form-control" />
+                                            </div>
+                                            <div id="getmainproduct" class=" btn btn-success"> تایید</div>
                                         </div>
-
                                         <script>
+                                            $("#getmainproduct").click(function () {
+                                               
+                                                var selectedProduct = $("#selectedForServer").text();
+                                               
+                                                var title = $("#titleTosearch").val();
+                                                var cat = $("#serverCates").val();
+                                                $.ajax({
+                                                    url: '/Admin/bringProductMain',
+                                                    dataType: 'html',
+                                                    data:
+                                                    {
+                                                        catid: cat,
+                                                        title: title,
+                                                        page: 1,
+                                                        productChosen: selectedProduct
+                                                    },
+                                                    success: function (data) {
+
+                                                        $('#filterholderforserver').html(data);
+
+                                                    },
+                                                    error: function () {
+                                                        alert("filterfail")
+                                                    }
+                                                });
+                                            })
+                                        </script>
+
+                                        @*<script>
                                             $("#serverCates").change(function () {
                                                 var value = $("#serverCates").val();
 
@@ -531,7 +565,7 @@
 
                                             })
 
-                                        </script>
+                                        </script>*@
 
 
 
@@ -653,7 +687,7 @@
                                 <input id="inputallfilteridServer" name="inputallfilteridServer" type="hidden" />
                                 <input id="inputallrangeidServer" name="inputallrangeidServer" type="hidden" />
                                 <input id="inputallfeatureid" name="inputallfeatureid" type="hidden" />
-                                @* <input id="inputallfeatureidServer" name="inputallfeatureidServer" type="hidden" />*@
+                           
                                 <input id="inputallcolid" name="inputallcolid" type="hidden" />
                                 <input id="Selectedfilters" name="Selectedfilters" type="hidden" />
                                 <input value="@Model.selectedAnbar" id="SelectedAnbar" name="SelectedAnbar" type="hidden" />
@@ -1490,7 +1524,7 @@
 
                     }
                 </div>
-                <div id="add2" class="tab-pane fade in " style="padding-top:20px">
+                @*<div id="add2" class="tab-pane fade in " style="padding-top:20px">
                     <div class="row">
                         <div style="display:flex" class="col-lg-4">
                             <div style="width:100%">
@@ -1591,7 +1625,7 @@
                             })
                         </script>
                     </div>
-                </div>
+                </div>*@
             </div>
 
 

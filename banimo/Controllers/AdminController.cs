@@ -38,11 +38,71 @@ using banimo.AdminPanelBoom.ViewModel;
 namespace banimo.Controllers
 {
     [SessionCheck]
+    [doForAll]
     public class AdminController : Controller
     {
-      
+
 
         string servername = ConfigurationManager.AppSettings["serverName"];
+        string server = ConfigurationManager.AppSettings["server"];
+        string nodeID = ConfigurationManager.AppSettings["nodeID"];
+        public List<Cat> getParentsNumber(string ID, List<Cat> grp, List<Cat> res)
+        {
+
+            Cat model = grp.SingleOrDefault(x => x.ID == ID);
+            if (model != null)
+            {
+                res.Add(model);
+                if (model.ID != model.parent)
+                {
+                    getParentsNumber(model.parent, grp, res);
+
+                }
+            }
+
+            return res;
+        }
+        public List<catVM> GetGroup(List<catVM> grpResult, List<Cat> grp, string ID)
+        {
+            int count = 0;
+
+
+
+
+            List<Cat> baseList = grp;
+            if (ID != null)
+            {
+                baseList = grp.Where(c => c.parent == ID && c.parent != c.ID).ToList();
+            }
+            else
+            {
+                baseList = grp.Where(c => c.parent == c.ID).ToList();
+
+            }
+
+            foreach (Cat Item in baseList)
+            {
+                string srt = "";
+                if (Item.ID != Item.parent)
+                {
+                    List<Cat> lst = new List<Cat>();
+                    lst = getParentsNumber(Item.parent, grp, lst);
+                    for (int i = 1; i <= lst.Count(); i++)
+                    {
+                        srt = srt + "---";
+                    }
+                }
+
+                grpResult.Add(new catVM
+                {
+                    ID = Item.ID,
+                    title = srt + Item.title
+                });
+                grpResult = GetGroup(grpResult, grp, Item.ID);
+            }
+
+            return grpResult;
+        }
         public static string MD5Hash(string input)
         {
             StringBuilder hash = new StringBuilder();
@@ -116,6 +176,10 @@ namespace banimo.Controllers
             }
             return deserializedPerson;
         }
+
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 10)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 50)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 200)]
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
         {
 
@@ -129,14 +193,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("mobile", phone);
                     collection.Add("pass", pass);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getuserid.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getuserid.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -152,6 +216,7 @@ namespace banimo.Controllers
                         {
                             Session["partner"] = user.moaref;
                         }
+
                         Session["LogedInUser2"] = user.token;
                         if (Request.Cookies["productcookiie"] != null)
                         {
@@ -167,33 +232,40 @@ namespace banimo.Controllers
 
                         if (ischecked == "checked")
                         {
-                            //HttpCookie Username = new HttpCookie("Username");
-                            //HttpCookie Password = new HttpCookie("Password");
-                            //DateTime now = DateTime.Now;
-                            //Username.Value = phone;
-                            //Username.Expires = now.AddMonths(1);
-                            //Password.Value = pass;
-                            //Password.Expires = now.AddMonths(1);
-                            //Response.Cookies.Add(Username);
-                            //Response.Cookies.Add(Password);
+                            HttpCookie Username = new HttpCookie("Username");
+                            HttpCookie Password = new HttpCookie("Password");
+                            DateTime now = DateTime.Now;
+                            Username.Value = phone;
+                            Username.Expires = now.AddMonths(1);
+                            Password.Value = pass;
+                            Password.Expires = now.AddMonths(1);
+                            Response.Cookies.Add(Username);
+                            Response.Cookies.Add(Password);
                         }
-                        return Content("1/Admin/dashboard");
+                        if (user.userTypeID == 10)
+                        {
+                            Session["CoreUser"] = user.token;
+                            return RedirectToAction("index", "core");
+
+                        }
+                        return RedirectToAction("dashboard", "admin");
+                        //return Content("1/Admin/dashboard");
                     }
                     else
                     {
-                        return Content("2/Admin/index");
+                        return RedirectToAction("index", "admin", new { error = 1 });
+                        //return Content("2/Admin/index");
                     }
 
                 }
                 else
                 {
-                    return Content("2/Admin/index");
+                    return RedirectToAction("index", "admin", new { error = 2 });
                 }
             }
             catch (Exception e)
             {
-                return Content("2/Admin/index");
-                return Content(e.InnerException.ToString());
+                return RedirectToAction("index", "admin", new { error = 2 });
             }
 
 
@@ -206,9 +278,10 @@ namespace banimo.Controllers
             Session.Remove("LogedInUser2");
             return RedirectToAction("index");
         }
-        public ActionResult Index()
+        public ActionResult Index(string error)
         {
-
+            Variables.menu = "";
+            ViewBag.error = error;
             if (Session["imageList"] == null)
                 Session["imageList"] = "";
 
@@ -247,13 +320,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslistforfilter.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -276,13 +349,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslistforfilter.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -307,14 +380,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbcatslist.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getbcatslist.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -351,14 +424,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslist.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getcatslist.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -366,12 +439,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername); // "banimo"
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID); // "banimo"
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getbaseCat.php", collection);
 
                 json = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -410,7 +483,7 @@ namespace banimo.Controllers
 
         public ActionResult MenuNew()
         {
-           
+
             // CatPageViewModel model = new CatPageViewModel();
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -421,15 +494,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("lan", lan);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatlistAllTest.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getcatlistAllTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -438,15 +511,66 @@ namespace banimo.Controllers
 
             var log = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.catAll>(result);
             return View(log);
-          
+
         }
 
 
 
 
 
-        public ContentResult sendToServerByJS()
+        public ContentResult sendToServerByJSIMG(FormCollection formCollection)// download product img
         {
+
+            string productID = formCollection["productID"];
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString(7) + hpf.FileName; ;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+
+            }
+
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+                string iamgeTITLE = ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + filename;
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("productID", productID);
+                collection.Add("title", iamgeTITLE);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/addImageToProduct.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content(filename);
+        }
+        public ContentResult sendToServerByJS(FormCollection formCollection)
+        {
+
+            string path = formCollection["path"];
             string pathString = "~/images";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -492,7 +616,7 @@ namespace banimo.Controllers
                 model.images += filename + ",";
 
                 Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
-               
+
 
 
 
@@ -514,14 +638,14 @@ namespace banimo.Controllers
                 }
                 Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
             }
-            
 
 
-          
+
+
 
 
         }
-     
+
         public ActionResult getCatDetail(string catid)
         {
             string device = RandomString(10);
@@ -531,12 +655,34 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catid);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatsItem.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getcatsItem.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            return Content(result);
+        }
+
+        public ActionResult getBrandDetail(string brandID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("brandID", brandID);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getBrandItem.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
@@ -545,8 +691,6 @@ namespace banimo.Controllers
         }
 
 
-
-        
         public ActionResult getfilters(string catID)
         {
 
@@ -560,15 +704,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catID", catID);
                     collection.Add("aim", "admin");
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getfilterslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getfilterslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -610,13 +754,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", id);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/delRangeFilter.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/delRangeFilter.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -656,15 +800,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catID", catID);
                     collection.Add("filterName", name);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewFilter.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/addNewFilter.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -704,8 +848,8 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("rangeFieldSelected", rangeFieldSelected);
@@ -713,7 +857,7 @@ namespace banimo.Controllers
                     collection.Add("FromSelected", FromSelected);
                     collection.Add("ToSelected", ToSelected);
                     collection.Add("catID", catID);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewRangeFilter.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/addNewRangeFilter.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -750,14 +894,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", name);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefilter.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefilter.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -783,14 +927,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", name);
                 collection.Add("newvalue", newvalue);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editfilter.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/editfilter.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -821,25 +965,48 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("page", page);
                 collection.Add("order", "");
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataAdminOrders.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
             banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
+           
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/GetListOfPaymentType.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.PaymentTypeVM deliverType = new ViewModel.PaymentTypeVM();
+            try
+            {
+                deliverType = JsonConvert.DeserializeObject<banimo.ViewModel.PaymentTypeVM>(result);
+            }
+            catch (Exception)
+            {
+            }
+            log.deliverList = deliverType;
+          
 
             return View(log);
 
 
         }
-        public ActionResult ChangeOrderList(string type, string order,string search, string page,string dateFrom,string dateTo, string priceTo, string priceFrom)
+        public ActionResult ChangeOrderList(string type, string order, string search, string page, string dateFrom, string dateTo, string priceTo, string priceFrom)
         {
 
             DateTime from = dateFrom != "" ? dateFrom.ToGeorgianDateTime() : DateTime.Now;
@@ -853,8 +1020,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("search", search);
@@ -866,7 +1033,7 @@ namespace banimo.Controllers
                 collection.Add("page", page);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
-                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataAdminOrders.php";
+                string serveraddress = server + "/Admin/getDataAdminOrders.php";
                 byte[] response = client.UploadValues(serveraddress, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -885,15 +1052,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mainval", mainval);
                 collection.Add("cloneval", cloneval);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/doCloneFilter.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/doCloneFilter.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -919,15 +1086,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mainval", mainval);
                 collection.Add("cloneval", cloneval);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/doCloneFeature.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/doCloneFeature.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -954,15 +1121,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", level1title);
                 collection.Add("catID", catID);
                 collection.Add("mainF", mainF);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/createFeature.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/createFeature.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -989,15 +1156,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("subf", subf);
                 collection.Add("mainf", mainf);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteFeature.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deleteFeature.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1027,14 +1194,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("CatID", catID);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getListOfFeatures.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getListOfFeatures.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1047,9 +1214,9 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult addNewTimeOfDeliver(string DayOfWeek, string TimeFrom, string TimeTo)
+        public ActionResult addNewPaymentType(string typeDesc, string typeprice, string typeTitle,string ID,string takhir)
         {
-
+           
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1057,15 +1224,17 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("DayOfWeek", DayOfWeek);
-                collection.Add("TimeFrom", TimeFrom);
-                collection.Add("TimeTo", TimeTo);
+                collection.Add("typeDesc", typeDesc.Trim());
+                collection.Add("typeprice", typeprice.Trim());
+                collection.Add("typeTitle", typeTitle.Trim());
+                collection.Add("takhir", takhir.Trim());
+                collection.Add("ID", ID.Trim());
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewDeliveryTime.php?", collection);
+                client.UploadValues(server + "/Admin/addNewPaymentType.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1081,6 +1250,70 @@ namespace banimo.Controllers
             }
 
         }
+        public ActionResult addNewTimeOfDeliver(string DayOfWeek, string TimeFrom, string TimeTo, string planID)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("DayOfWeek", DayOfWeek);
+                collection.Add("TimeFrom", TimeFrom);
+                collection.Add("TimeTo", TimeTo);
+                collection.Add("planID", planID);
+                byte[] response =
+                client.UploadValues(server + "/Admin/addNewDeliveryTime.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            if (result.Contains("success"))
+            {
+                return Content("success");
+            }
+
+            else
+            {
+                return Content("error");
+            }
+
+        }
+
+
+        
+        public PartialViewResult GetTheListOfPaymentType()
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/GetListOfPaymentType.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            ViewModel.PaymentTypeVM log = JsonConvert.DeserializeObject<banimo.ViewModel.PaymentTypeVM>(result);
+
+
+
+            return PartialView("/Views/Shared/AdminShared/_ListOfPaymentType.cshtml", log);
+        }
         public PartialViewResult GetTheListOfDeliveryTime(int? page)
         {
 
@@ -1090,14 +1323,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/GetListOfDeliveryTime.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/GetListOfDeliveryTime.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1120,14 +1353,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataMyOrders.php", collection);
+                client.UploadValues(server + "/getDataMyOrders.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1147,15 +1380,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/handoverItem.php", collection);
+                client.UploadValues(server + "/Admin/handoverItem.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1170,21 +1403,21 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/returnFromDeliver.php", collection);
+                client.UploadValues(server + "/Admin/returnFromDeliver.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             return Content("200");
         }
-        public PartialViewResult goGetOrderDetail(string id,string type)
+        public PartialViewResult goGetOrderDetail(string id, string type)
         {
 
             string device = RandomString(10);
@@ -1194,22 +1427,22 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 //collection.Add("token", token);
                 collection.Add("ID", id);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getDataMyOrderDetails.php", collection);
+                client.UploadValues(server + "/getDataMyOrderDetails.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
 
             ViewModelPost.ListOfProductOrder log2 = JsonConvert.DeserializeObject<ViewModelPost.ListOfProductOrder>(result);
-            if (log2 != null )
+            if (log2 != null)
             {
                 if (log2.myProducts != null)
                 {
@@ -1221,7 +1454,7 @@ namespace banimo.Controllers
                         }
                     }
                 }
-                
+
             }
 
             ViewModel.orderDetailVM model = new ViewModel.orderDetailVM()
@@ -1243,15 +1476,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 //collection.Add("token", token);
                 collection.Add("ID", id);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataMyFactorDetails.php", collection);
+                client.UploadValues(server + "/Admin/getDataMyFactorDetails.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1281,7 +1514,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/AdminShared/_gogetFactorDetail.cshtml", model);
 
         }
-        public ActionResult getNewListProduct(string val,string server)
+        public ActionResult getNewListProduct(string val, string server)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1291,8 +1524,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1305,10 +1538,10 @@ namespace banimo.Controllers
                 result = Encoding.UTF8.GetString(response);
             }
             List<ViewModel.pList> model = JsonConvert.DeserializeObject<List<ViewModel.pList>>(result);
-            string resultstring =JsonConvert.SerializeObject (model);
+            string resultstring = JsonConvert.SerializeObject(model);
             return Content(resultstring);
 
-          
+
         }
 
         public ActionResult getNewListProductFromServer(string val)
@@ -1321,18 +1554,18 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("servername", "banimo");
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("value", val);
-                collection.Add("nodeID", nodeID);
+                collection.Add("nodeID", finalNodeID);
 
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProductFromServer.php", collection);
+                client.UploadValues(server + "/Admin/getNewListProductFromServer.php", collection);
 
                 result = Encoding.UTF8.GetString(response);
             }
@@ -1342,7 +1575,7 @@ namespace banimo.Controllers
 
 
         }
-        public ContentResult addNewTtemToOrder(string ID, string quantity,string OrderId)
+        public ContentResult addNewTtemToOrder(string ID, string quantity, string OrderId)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1352,25 +1585,25 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("ID", ID);
                 collection.Add("quantity", quantity);
                 collection.Add("OrderId", OrderId);
-                
+
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToOrderTest.php", collection);
+                client.UploadValues(server + "/Admin/addNewTtemToOrderTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
-           
+
         }
         public ContentResult deletFromOrder(string id)
         {
@@ -1382,8 +1615,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1392,11 +1625,11 @@ namespace banimo.Controllers
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromOrder.php", collection);
+                client.UploadValues(server + "/Admin/deleteItemFromOrder.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
 
             }
-            banimo.ViewModelPost.responseModel model= JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
         public ContentResult deletFromFactor(string id)
@@ -1409,15 +1642,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("id", id);
 
 
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromFactor.php";
+                string url = server + "/Admin/deleteItemFromFactor.php";
                 byte[] response =
                 client.UploadValues(url, collection);
 
@@ -1436,15 +1669,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("id", id);
 
 
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/deleteItemFromWonder.php";
+                string url = server + "/Admin/deleteItemFromWonder.php";
                 byte[] response =
                 client.UploadValues(url, collection);
 
@@ -1453,7 +1686,7 @@ namespace banimo.Controllers
             banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
-        public ContentResult editItemInFactor(string id,string newval)
+        public ContentResult editItemInFactor(string id, string newval)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1463,8 +1696,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1472,7 +1705,7 @@ namespace banimo.Controllers
                 collection.Add("count", newval);
 
 
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/editItemInFactor.php";
+                string url = server + "/Admin/editItemInFactor.php";
                 byte[] response =
                 client.UploadValues(url, collection);
 
@@ -1481,7 +1714,7 @@ namespace banimo.Controllers
             banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
-        
+
         public ContentResult addNewFactorParent(string number, string partner, string description, string partnerID)
         {
             string device = RandomString(10);
@@ -1492,20 +1725,20 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("number", number);
                 collection.Add("partnerID", partner);
                 collection.Add("description", description);
-              
+
 
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewFactorParent.php", collection);
+                client.UploadValues(server + "/Admin/addNewFactorParent.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1513,8 +1746,8 @@ namespace banimo.Controllers
             return Content(model.status);
 
         }
-        
-       public ContentResult addNewTtemToFactor(string ID, string quantity, string FactorId,string price)
+
+        public ContentResult addNewTtemToFactor(string ID, string quantity, string FactorId, string price)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1524,8 +1757,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1537,7 +1770,7 @@ namespace banimo.Controllers
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewTtemToFactor.php", collection);
+                client.UploadValues(server + "/Admin/addNewTtemToFactor.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1546,7 +1779,7 @@ namespace banimo.Controllers
 
         }
 
-        public ContentResult addNewTtemToWonder(string ID, string hour,  string discount)
+        public ContentResult addNewTtemToWonder(string ID, string hour, string discount)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1556,8 +1789,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1566,7 +1799,7 @@ namespace banimo.Controllers
                 collection.Add("discount", discount);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addNewItemToWonder.php", collection);
+                client.UploadValues(server + "/Admin/addNewItemToWonder.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1588,8 +1821,8 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("status", type);
@@ -1600,7 +1833,7 @@ namespace banimo.Controllers
 
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliverTest.php", collection);
+                    client.UploadValues(server + "/Admin/setDeliverTest.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1624,8 +1857,8 @@ namespace banimo.Controllers
         //        using (WebClient client = new WebClient())
         //        {
 
-        //            var collection = new NameValueCollection();
-        //            collection.Add("servername", servername);
+        //            var collection = new NameValueCollection();string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+        //            collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
         //            collection.Add("device", device);
         //            collection.Add("code", code);
         //            collection.Add("status", type);
@@ -1636,7 +1869,7 @@ namespace banimo.Controllers
 
 
         //            byte[] response =
-        //            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setDeliverTest.php", collection);
+        //            client.UploadValues(server + "/Admin/setDeliverTest.php", collection);
 
         //            result = System.Text.Encoding.UTF8.GetString(response);
         //        }
@@ -1653,15 +1886,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteDeliveryTime.php?", collection);
+                client.UploadValues(server + "/Admin/deleteDeliveryTime.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1679,8 +1912,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
@@ -1688,7 +1921,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/updateDeliveryTime.php?", collection);
+                client.UploadValues(server + "/Admin/updateDeliveryTime.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1723,7 +1956,7 @@ namespace banimo.Controllers
                 //string json = "";
                 //using (var client = new WebClient())
                 //{
-                //    json = client.DownloadString(ConfigurationManager.AppSettings["server"]+ "/Admin/getsubcatslist.php?id=" + subcatid);
+                //    json = client.DownloadString(server+ "/Admin/getsubcatslist.php?id=" + subcatid);
                 //}
 
                 //var log = JsonConvert.DeserializeObject<catslist>(json);
@@ -1766,7 +1999,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult ChangeProductPrice(string ID, string count, string price,string discount)
+        public ActionResult ChangeProductPrice(string ID, string count, string price, string discount)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1775,17 +2008,43 @@ namespace banimo.Controllers
 
             using (WebClient client = new WebClient())
             {
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
                 collection.Add("count", count);
                 collection.Add("discount", discount);
                 collection.Add("price", price);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductPrice.php?", collection);
+                client.UploadValues(server + "/Admin/ChangeProductPrice.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            string final = result.Replace("\r\n", "");
+            return Content(final);
+        }
+        public ActionResult ChangeProductPriceForEdit(string ID,  string price, string finalprice)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", ID);
+                collection.Add("finalprice", finalprice);
+                collection.Add("price", price);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response =
+                client.UploadValues(server + "/Admin/ChangeProductPriceEdit.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1805,15 +2064,15 @@ namespace banimo.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("value", value);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductAvailable.php?", collection);
+                    client.UploadValues(server + "/Admin/ChangeProductAvailable.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1834,15 +2093,15 @@ namespace banimo.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("value", value);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductActive.php?", collection);
+                    client.UploadValues(server + "/Admin/ChangeProductActive.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1863,15 +2122,15 @@ namespace banimo.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("value", value);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductOffer.php?", collection);
+                    client.UploadValues(server + "/Admin/ChangeProductOffer.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1891,15 +2150,15 @@ namespace banimo.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("value", value);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeProductSpecialOffer.php?", collection);
+                    client.UploadValues(server + "/Admin/ChangeProductSpecialOffer.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1917,14 +2176,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", detailtitle);
                 collection.Add("filterID", filterid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1954,13 +2213,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", detailid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1986,14 +2245,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", detailid);
                 collection.Add("newvalue", newvalue);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/editfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2019,13 +2278,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcolor.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcolor.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2051,13 +2310,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addAllColor.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/addAllColor.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2089,14 +2348,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", cattitle);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("banimo", banimo);
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/setnewcat.php";
+                string url = server + "/Admin/setnewcat.php";
                 byte[] response = client.UploadValues(url, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -2121,7 +2380,7 @@ namespace banimo.Controllers
 
 
 
-        public ActionResult setnewcatNew(banimo.ViewModel.newMenuVM  model)
+        public ActionResult setnewcatNew(banimo.ViewModel.newMenuVM model)
         {
 
 
@@ -2136,7 +2395,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", model.title);
@@ -2146,16 +2405,62 @@ namespace banimo.Controllers
                 collection.Add("token", token);
                 collection.Add("catID", model.catID);
                 collection.Add("brands", model.brandID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("image", finalimage.Trim(','));
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcatNewTest.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewcatNew.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
 
             if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        public ActionResult setnewBrand(banimo.ViewModel.newMenuVM model)
+        {
+
+
+            string fname = model.image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(model.image);
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", model.title);
+                collection.Add("brandID", model.brandID);
+                collection.Add("prtitle", model.entitle);
+                collection.Add("description", model.description);
+                collection.Add("token", token);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("image", finalimage.Trim(','));
+
+                byte[] response = client.UploadValues(server + "/Admin/setnewBrand.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1") || result.Contains("200"))
             {
                 return Content("1");
             }
@@ -2182,7 +2487,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", model.title);
@@ -2192,10 +2497,10 @@ namespace banimo.Controllers
                 collection.Add("token", token);
                 collection.Add("catID", model.catID);
                 collection.Add("brandID", model.brandID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("image", finalimage);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editcatNewTest.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/editcatNewTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2225,13 +2530,49 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcatNew.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ResponseFromServer Serverresponse = JsonConvert.DeserializeObject<ResponseFromServer>(result);
+            if (Serverresponse.status == 200)
+            {
+
+                string pathString = "~/images";
+                string savedFileName = Path.Combine(Server.MapPath(pathString), Serverresponse.message);
+                System.IO.File.Delete(savedFileName);
+                return Content("1");
+            }
+            else
+            {
+                return Content(Serverresponse.message);
+            }
+
+        }
+        public ActionResult delnewBrand(string catid)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/deletefromBrand.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2263,13 +2604,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2294,15 +2635,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
                 collection.Add("level", level);
                 collection.Add("newname", newname);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/changecatname.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/changecatname.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2330,16 +2671,16 @@ namespace banimo.Controllers
             {
 
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", subcattitle);
                 collection.Add("id", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("banimo", banimo);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewsubcat.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
 
             }
@@ -2368,16 +2709,16 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", subcat2);
                 collection.Add("subcatid", subcatid);
                 collection.Add("catid", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("banimo", banimo);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat2.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewsubcat2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2406,13 +2747,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromsubcat2.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromsubcat2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2438,13 +2779,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromsubcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromsubcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2502,14 +2843,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", catid);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getsubcatslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getsubcatslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -2576,14 +2917,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", catid);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getsubcats2list.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getsubcats2list.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -2625,14 +2966,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", cattitle);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewbcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewbcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2661,13 +3002,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2692,15 +3033,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
                 collection.Add("level", level);
                 collection.Add("newname", newname);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/changecatname.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/changecatname.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2727,13 +3068,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", subcattitle);
                 collection.Add("id", catid);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setnewsubcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2762,15 +3103,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", subcat2);
                 collection.Add("subcatid", subcatid);
                 collection.Add("catid", catid);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewsubcat2.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewsubcat2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2799,13 +3140,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromsubcat2.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromsubcat2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2831,13 +3172,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", ID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromsubcat.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromsubcat.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2896,14 +3237,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", catid);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getsubcatslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getsubcatslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -2970,14 +3311,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", catid);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getsubcats2list.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getsubcats2list.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3007,7 +3348,8 @@ namespace banimo.Controllers
 
         }
 
-        public ActionResult bank() {
+        public ActionResult bank()
+        {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3015,12 +3357,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getBank.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getBank.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3041,42 +3383,45 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("ID", deleteID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteCoding.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deleteCoding.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
             return RedirectToAction("bank");
         }
-        public ActionResult setNewAccount(string typeID, string parentID, string codeTitle)
+        public ActionResult setNewAccount(string typeID, string parentID, string codeTitle, string codeHesab)
+
+
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             string token = Session["LogedInUser2"] as string;
-            
+
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("title", codeTitle);
                 collection.Add("type", typeID);
+                collection.Add("codeHesab", codeHesab);
                 collection.Add("parent", parentID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/createNewCoding.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/createNewCoding.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3084,7 +3429,7 @@ namespace banimo.Controllers
             return RedirectToAction("bank");
         }
 
-        public ActionResult addCodingTransaction(string M2, string M3, string M4, string M12, string M13, string M14, string dateFrom, string price, string description,string abserver)
+        public ActionResult addCodingTransaction(string M2, string M3, string M4, string M12, string M13, string M14, string dateFrom, string price, string description, string abserver)
         {
 
             price = price.Replace(",", "");
@@ -3109,7 +3454,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -3119,8 +3464,8 @@ namespace banimo.Controllers
                 collection.Add("fromID", fromID);
                 collection.Add("ToID", ToID);
 
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setCodingTransaction.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setCodingTransaction.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3131,22 +3476,22 @@ namespace banimo.Controllers
         public ActionResult ChangeRecietList(string type, string page, string dateFrom, string dateTo)
         {
 
-              page = page == null ? "1" : page;
+            page = page == null ? "1" : page;
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("page", page);
                 collection.Add("timeFrom", dateFrom);
                 collection.Add("timeTo", dateTo);
                 collection.Add("type", type == null ? "" : type);
-                string serveraddress = ConfigurationManager.AppSettings["server"] + "/Admin/getDataRecietInfo.php";
+                string serveraddress = server + "/Admin/getDataRecietInfo.php";
                 byte[] response = client.UploadValues(serveraddress, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -3162,11 +3507,11 @@ namespace banimo.Controllers
                     item.date = dateTimeConvert.ToPersianDateString(dt);
                 }
             }
-            
+
             log.current = page;
             return PartialView("/Views/Shared/AdminShared/_RecitList.cshtml", log);
         }
-        public void setCustomTransaction (string fromSource , string toSource, string price,  string desc,string typeto,string typefrom,string sourseID)
+        public void setCustomTransaction(string fromSource, string toSource, string price, string desc, string typeto, string typefrom, string sourseID)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -3175,7 +3520,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -3186,14 +3531,15 @@ namespace banimo.Controllers
                 collection.Add("typeto", typeto);
                 collection.Add("typefrom", typefrom);
                 collection.Add("sourceID", sourseID);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setCustomTransaction.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setCustomTransaction.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
         }
-        public ActionResult money() {
+        public ActionResult money()
+        {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -3201,12 +3547,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAdminMoneyStatus.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getAdminMoneyStatus.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3229,7 +3575,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("destinID", destinID);
@@ -3237,9 +3583,9 @@ namespace banimo.Controllers
                 collection.Add("dateto", dateTo);
                 collection.Add("datefrom", datefrom);
 
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getCodingTranList.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTranList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3255,7 +3601,7 @@ namespace banimo.Controllers
             }
             return PartialView("/Views/Shared/AdminShared/_ListOfTransaction.cshtml", log2);
         }
-        public ActionResult getTransactionList(string userList,string datefrom,string dateTo,string transactionType,string databaseType)
+        public ActionResult getTransactionList(string userList, string datefrom, string dateTo, string transactionType, string databaseType)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -3264,7 +3610,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("userList", userList);
@@ -3272,15 +3618,15 @@ namespace banimo.Controllers
                 collection.Add("dateto", dateTo);
                 collection.Add("datefrom", datefrom);
                 collection.Add("databaseType", databaseType);
-                
-                collection.Add("servername", servername);
+
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getTransactionList.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getTransactionList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             ViewModel.ProfileVM log2 = JsonConvert.DeserializeObject<ViewModel.ProfileVM>(result);
-            return PartialView("/Views/Shared/AdminShared/_ListOfTransaction.cshtml",log2);
+            return PartialView("/Views/Shared/AdminShared/_ListOfTransaction.cshtml", log2);
         }
         //section  bmenu-------------
 
@@ -3293,12 +3639,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataProductGroup.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataProductGroup.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3307,7 +3653,7 @@ namespace banimo.Controllers
         }
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult setNewProductGroup(string catidOrLink,string title, string catTitle, string catID, string type,string image, string ID,string priority)
+        public ActionResult setNewProductGroup(string catidOrLink, string title, string catTitle, string catID, string type, string image, string ID, string priority)
         {
 
             string result = "";
@@ -3321,7 +3667,7 @@ namespace banimo.Controllers
 
                 string device = RandomString(10);
                 string code = MD5Hash(device + "ncase8934f49909");
-              
+
                 string token = Session["LogedInUser2"] as string;
 
                 string imagename = image;
@@ -3343,7 +3689,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catidOrLink", catidOrLink.Trim(','));
@@ -3354,10 +3700,10 @@ namespace banimo.Controllers
                     collection.Add("image", imagename);
                     collection.Add("ID", ID);
                     collection.Add("priority", priority);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"]  + "/Admin/addProductGroup.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/addProductGroup.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3388,15 +3734,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", colortitle);
                 collection.Add("ColorCode", colorcode);
                 collection.Add("catID", catID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setnewcolor.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewcolor.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3417,8 +3763,6 @@ namespace banimo.Controllers
             }
         }
 
-
-
         public ActionResult delnewcolor(string colorcode, string catID)
         {
 
@@ -3430,14 +3774,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("colorCode", colorcode);
                 collection.Add("catID", catID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletefromcolor.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcolor.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3486,13 +3830,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catID", catid);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getfilterslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getfilterslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3539,13 +3883,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("CatID", catid);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getListOfFeaturesCombine.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getListOfFeaturesCombine.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3578,13 +3922,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("CatID", catid);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getListOfBrands.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getListOfBrands.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3605,8 +3949,56 @@ namespace banimo.Controllers
 
 
         }
-        
 
+
+        public ActionResult linkProdut(string id, string productSelected)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); 
+                collection.Add("device", device);
+                collection.Add("nodeID", ConfigurationManager.AppSettings["nodeID"]);
+                collection.Add("productID", productSelected);
+                collection.Add("mainProductID", id);
+                byte[] response = client.UploadValues(server + "/Admin/linkProduct.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("");
+        }
+        public ActionResult bringProductMain(string catid, string title, string productChosen, int page)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("query", title);
+                collection.Add("pcode", "");
+                collection.Add("cat", catid);
+                collection.Add("brand", "");
+                collection.Add("filter", "");
+                collection.Add("page", page.ToString());
+                collection.Add("paddress", "");
+                collection.Add("code", code);
+                byte[] response = client.UploadValues(server + "/Admin/getProductMainTest.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            productMainVM log = JsonConvert.DeserializeObject<productMainVM>(result);
+            log.productChosen = productChosen;
+            log.current = page;
+
+            return PartialView("/Views/Shared/AdminShared/_mainProductList.cshtml", log);
+
+        }
         public ActionResult bringFilterForServer(string catid)
         {
 
@@ -3623,13 +4015,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catID", catid);
                     collection.Add("servername", "banimo");
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getfilterslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getfilterslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3676,13 +4068,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("CatID", catid);
                     collection.Add("servername", "banimo");
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getListOfFeaturesCombine.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getListOfFeaturesCombine.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3719,13 +4111,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("token", token);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getcatslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -3734,7 +4126,7 @@ namespace banimo.Controllers
                 using (var client = new WebClient())
                 {
 
-                    newjson = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslistforfilter.php?");
+                    newjson = client.DownloadString(server + "/Admin/getcatslistforfilter.php?");
 
                 }
                 RootObjectFilter newlog = JsonConvert.DeserializeObject<RootObjectFilter>(newjson);
@@ -3772,11 +4164,11 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataCatArticle.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDataCatArticle.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3808,13 +4200,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
                 collection.Add("search", search);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataCatArticlesList.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDataCatArticlesList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3845,7 +4237,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imagename);
@@ -3855,8 +4247,8 @@ namespace banimo.Controllers
                 collection.Add("content", model.description);
                 collection.Add("type", "add");
                 collection.Add("ID", "");
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateArticles.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/UpdateArticles.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3889,13 +4281,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imagename);
                 collection.Add("title", title);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewCatArticle.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setNewCatArticle.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3916,8 +4308,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imaglist[0]);
@@ -3928,7 +4320,7 @@ namespace banimo.Controllers
                 collection.Add("type", "update");
                 collection.Add("ID", model.IDupdate);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateArticles.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdateArticles.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3948,15 +4340,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("content", content);
                 collection.Add("name", model.name);
-
-
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdatePages.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdatePages.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4006,15 +4396,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imagename);
                 collection.Add("title", Ctitleupdate);
                 collection.Add("ID", CIDupdate);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateCArticles.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdateCArticles.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4031,12 +4421,12 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", id);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/DeleteArticles.php", collection);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteArticles.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4064,12 +4454,12 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", id);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/DeleteCArticles.php", collection);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteCArticles.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4101,12 +4491,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataUserList.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataUserList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4125,7 +4515,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("address", address);
@@ -4135,12 +4525,12 @@ namespace banimo.Controllers
                 collection.Add("password", MD5Hash(password));
                 collection.Add("type", "add");
                 collection.Add("UserType", UserList);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", RandomString(18));
-                
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateUsers.php", collection);
+
+                byte[] response = client.UploadValues(server + "/Admin/UpdateUsers.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4156,7 +4546,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("address", addressupdate);
@@ -4167,10 +4557,10 @@ namespace banimo.Controllers
                 collection.Add("type", "update");
                 collection.Add("ID", IDupdate);
                 collection.Add("UserType", UserListUpdate);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdateUsers.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdateUsers.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4188,12 +4578,12 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", id);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/DeleteUsers.php", collection);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteUsers.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4212,7 +4602,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -4221,7 +4611,7 @@ namespace banimo.Controllers
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
+                byte[] response = client.UploadValues(server + "/Home/getTimeTest.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4240,36 +4630,36 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", userID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
 
-                string url = ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfoTest.php";
+                string url = server + "/Admin/getuserinfoTest.php";
                 byte[] response = client.UploadValues(url, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-        
+
             userinfolist log = JsonConvert.DeserializeObject<userinfolist>(result);
 
             string postalCode = "";
-          
-            string auth = RandomString(10) ;
+
+            string auth = RandomString(10);
 
             //ids = ids.Substring(1, ids.Count() - 1);
             //nums = ids.Substring(1, nums.Count() - 1);
             string fullname = log.data.First().fullname != null ? log.data.First().fullname : "";
-            string phone = log.data.First().phone != null ? log.data.First().phone  : log.data.First().mobile;
+            string phone = log.data.First().phone != null ? log.data.First().phone : log.data.First().mobile;
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("fullname", fullname);
@@ -4277,7 +4667,7 @@ namespace banimo.Controllers
                 collection.Add("email", "");
                 collection.Add("state", "");
                 collection.Add("city", "");
-                collection.Add("address","");
+                collection.Add("address", "");
                 collection.Add("addressID", userAddress);
                 collection.Add("ids", "");
                 collection.Add("nums", "");
@@ -4289,46 +4679,46 @@ namespace banimo.Controllers
                 collection.Add("payment", "2");
                 collection.Add("auth", auth);
                 collection.Add("latitude", "0");
-                collection.Add("longitude","0");
+                collection.Add("longitude", "0");
                 collection.Add("mbrand", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTestt.php", collection);
+                client.UploadValues(server + "/Home/buyRequestTestt.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
 
-            return RedirectToAction("verifyByAdmin","Connection", new { payment = "2", id = log2.peigiry});
+            return RedirectToAction("verifyByAdmin", "Connection", new { payment = "2", id = log2.peigiry });
             //return Content("");
         }
-        public ActionResult AddressUser(string id,string type,string phone)
+        public ActionResult AddressUser(string id, string type, string phone)
         {
-           
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("ID", id);
                 collection.Add("phone", phone);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getAddressUser.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getAddressUser.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             AdminPanelBoom.ViewModel.AddressVM model = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.AddressVM>(result);
             ViewModel.addressPartialVM final = new ViewModel.addressPartialVM()
             {
-                 MyProperty = model,
-                  ID = id
+                MyProperty = model,
+                ID = id
             };
             if (type == "addOrder")
             {
@@ -4338,7 +4728,7 @@ namespace banimo.Controllers
             {
                 return PartialView("/Views/Shared/AdminShared/_addressPartial.cshtml", final);
             }
-           
+
 
 
         }
@@ -4348,11 +4738,11 @@ namespace banimo.Controllers
             string result = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-           
+
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
@@ -4366,7 +4756,7 @@ namespace banimo.Controllers
                 collection.Add("id", id);
                 collection.Add("token", "");
                 collection.Add("userID", userID);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/setAddress.php", collection);
+                byte[] response = client.UploadValues(server + "/Home/setAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             };
             ViewModel.reponsVM model = JsonConvert.DeserializeObject<ViewModel.reponsVM>(result);
@@ -4382,12 +4772,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
                 collection.Add("id", id);
-                string url = ConfigurationManager.AppSettings["server"] + "/Home/removeAddress.php";
+                string url = server + "/Home/removeAddress.php";
                 byte[] response = client.UploadValues(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             };
@@ -4404,13 +4794,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("search", search);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataUserList.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataUserList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4431,11 +4821,11 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDashboard.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDashboard.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4452,7 +4842,54 @@ namespace banimo.Controllers
             Response.Cookies["lastpage"].Value = "1";
         }
 
+        public ActionResult GetTheListOfItemsForEdit(string page, string value, string query, string partner)
+        {
 
+
+            if (page == "" || page == null)
+            {
+                page = Request.Cookies["lastpage"].Value;
+            }
+            else
+            {
+                Response.Cookies["lastpage"].Value = page;
+            }
+
+
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", value);
+                collection.Add("page", page);
+                collection.Add("query", query);
+                collection.Add("partner", partner);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("token", token);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/getorderlistTestForEdit.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            banimo.AdminPanelBoom.ViewModel.oderdetaillistNew log = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.oderdetaillistNew>(result);
+
+            List<banimo.AdminPanelBoom.ViewModel.orderdetailNew> data = new List<banimo.AdminPanelBoom.ViewModel.orderdetailNew>();
+
+            return PartialView("/Views/Shared/AdminShared/_ProductListForEdit.cshtml", log);
+
+
+
+
+        }
 
         public ActionResult GetTheListOfItems(string page, string value, string query, string partner)
         {
@@ -4475,18 +4912,18 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", value);
                 collection.Add("page", page);
                 collection.Add("query", query);
                 collection.Add("partner", partner);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlist.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getorderlistTest2.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
@@ -4513,17 +4950,17 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", SelectedlistProduct);
                 collection.Add("query", SearchQuery);
                 collection.Add("partner", partner);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getorderlistFull.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getorderlistFull.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -4555,7 +4992,7 @@ namespace banimo.Controllers
             {
                 foreach (var item in log.ecxelList.OrderByDescending(x => x.ID))
                 {
-                    dt.Rows.Add(item.ID, item.Onvan,item.color, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
+                    dt.Rows.Add(item.ID, item.Onvan, item.color, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
                 }
 
             }
@@ -4672,13 +5109,13 @@ namespace banimo.Controllers
                     using (WebClient client = new WebClient())
                     {
 
-                        var collection = new NameValueCollection();
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                         collection.Add("device", device);
                         collection.Add("code", code);
                         collection.Add("ID", code);
-                        collection.Add("servername", servername);
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                         collection.Add("model", jsonstring);
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/updateByExcel.php", collection);
+                        byte[] response = client.UploadValues(server + "/Admin/updateByExcel.php", collection);
                         json = System.Text.Encoding.UTF8.GetString(response);
                     }
 
@@ -4810,15 +5247,15 @@ namespace banimo.Controllers
                     using (WebClient client = new WebClient())
                     {
 
-                        var collection = new NameValueCollection();
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                         collection.Add("device", device);
                         collection.Add("code", code);
                         collection.Add("ID", code);
-                        collection.Add("servername", servername);
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                         collection.Add("model", jsonstring);
                         collection.Add("level", level);
                         collection.Add("token", token);
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/updateByExcel.php", collection);
+                        byte[] response = client.UploadValues(server + "/Admin/updateByExcel.php", collection);
                         json = System.Text.Encoding.UTF8.GetString(response);
                     }
 
@@ -4847,16 +5284,16 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("token", token);
                 collection.Add("websiteCat", websiteCat);
                 collection.Add("serverCat", baseCat);
                 collection.Add("serverTitle", itemName);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductFromServer.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/addProductFromServer.php", collection);
 
                 newjson = System.Text.Encoding.UTF8.GetString(response);
             }// http://www.supectco.com/webs/base/administrative/addProductImageFromServer.php?servername=perfume&servercatID=23
@@ -4872,12 +5309,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("servercatID", "23");
-               
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/administrative/addProductImageFromServer.php", collection);
+
+                byte[] response = client.UploadValues(server + "/administrative/addProductImageFromServer.php", collection);
 
                 newjson = System.Text.Encoding.UTF8.GetString(response);
             }// http://www.supectco.com/webs/base/administrative/addProductImageFromServer.php?servername=perfume&servercatID=23
@@ -4886,7 +5323,7 @@ namespace banimo.Controllers
         {
 
 
-         
+
 
             if (true)
             {
@@ -4924,13 +5361,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("token", token);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPartnerVM.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getPartnerVM.php", collection);
 
                     newjson = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4940,16 +5377,40 @@ namespace banimo.Controllers
                 partnerVM newlog = JsonConvert.DeserializeObject<partnerVM>(newjson);
                 ViewBag.msg = MSG;
 
+
+
+
+
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    byte[] response = client.UploadValues(server + "/Admin/getMainCat.php", collection);
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                catVMList log = JsonConvert.DeserializeObject<catVMList>(result);
+                List<catVM> catmodel = new List<catVM>();
+
+                if (log.cats != null)
+                {
+                    catmodel = GetGroup(catmodel, log.cats, null);
+                }
+
+
                 string json2 = "";
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", servername  ); //);"banimo"
+                    collection.Add("servername", servername); //);"banimo"
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getbaseCat.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getbaseCat.php", collection);
 
                     json2 = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -4965,9 +5426,10 @@ namespace banimo.Controllers
                     log = newlog,
                     page = page == null ? "1" : page.ToString(),
                     basecat = serverlog,
+                    maincat = catmodel,
                     selectedAnbar = Session["partner"] as string
 
-            };
+                };
                 return View(model);
 
 
@@ -5119,8 +5581,8 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("title", title);
@@ -5142,7 +5604,7 @@ namespace banimo.Controllers
                     collection.Add("SelectedAnbar", SelectedAnbar);
                     collection.Add("token", token);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                    client.UploadValues(server + "/Admin/addProductPost.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                     banimo.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<banimo.ViewModelPost.addProductRespond>(result);
@@ -5272,18 +5734,18 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("productID", productID);
                 collection.Add("selectedfilter", selectedfilter);
                 collection.Add("filter", filter);
                 collection.Add("range", range);
                 collection.Add("banimoCat", banimoCat);
-                collection.Add("nodeID", nodeID);
+                collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addtoserver.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/addtoserver.php", collection);
 
                 json = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -5437,7 +5899,7 @@ namespace banimo.Controllers
                     Response.Cookies["imagePrivacy"].Value = cookie;
                 }
 
-                    model.data = cookie.Substring(0, cookie.Length - 1);
+                model.data = cookie.Substring(0, cookie.Length - 1);
                 model.type = type;
             }
 
@@ -5637,13 +6099,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id.ToString());
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteproduct.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deleteproduct.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -5685,19 +6147,31 @@ namespace banimo.Controllers
 
             using (WebClient client = new WebClient())
             {
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catID);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("ID", id.ToString());
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ProductdetailForEdit.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/ProductdetailForEditTest2.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             EditViewModel log = JsonConvert.DeserializeObject<EditViewModel>(result);
+            metaVM metaModel = new metaVM();
+            log.data.First().meta = log.data.First().meta == "null" ? "" : log.data.First().meta;
+            if (!String.IsNullOrEmpty(log.data.First().meta))
+            {
+                metaModel = JsonConvert.DeserializeObject<metaVM>(log.data.First().meta);
+            }
+
             log.data.First().ID = id.ToString();
+           
             NewDatumm model = new NewDatumm()
             {
+
+                domain = ConfigurationManager.AppSettings["domain"] + "/" ,
+                brands = log.brand,
+                meta = log.data.First().meta,
                 partners = log.partners,
                 catmode = catID,
                 filtercatsAll = log.filtercatsAll,
@@ -5725,7 +6199,9 @@ namespace banimo.Controllers
                 filters = log.filters,
                 productfilterlist = log.productfilterlist,
                 catid = catID,
-                range = log.ranges
+                range = log.ranges,
+                metaDescription = metaModel.desctag == null ? "" : metaModel.desctag,
+                metaTitle = metaModel.titletag == null ? "" : metaModel.titletag
 
 
             };
@@ -5736,14 +6212,24 @@ namespace banimo.Controllers
             }
             if (model.range != null)
             {
-                model.range.Remove(model.range.Where(x => x.title.Contains("قیمت")).SingleOrDefault());
+
+                List<Range> itemlist = model.range.Where(x => x.title.Contains("قیمت")).ToList();
+                if (itemlist != null)
+                {
+                    foreach (var item in itemlist)
+                    {
+                        model.range.Remove(item);
+                    }
+                }
+
+
                 if (model.range.Count == 0)
                 {
                     model.range = null;
                 }
             }
 
-           return View(model);
+            return View(model);
         }
 
 
@@ -5751,6 +6237,10 @@ namespace banimo.Controllers
         public ActionResult Edit(productinfoforedit detail)
         {
 
+            metaVM metamodel = String.IsNullOrEmpty(detail.meta) ? new metaVM() : JsonConvert.DeserializeObject<metaVM>(detail.meta);
+            metamodel.titletag = String.IsNullOrEmpty(detail.titleTag) ? "" : detail.titleTag;
+            metamodel.desctag = String.IsNullOrEmpty(detail.descTag) ? "" : detail.descTag;
+            string finalMeta = JsonConvert.SerializeObject(metamodel);
             if (detail.productdesc != null && detail.productdesc != "")
             {
                 if (detail.productdesc.Contains("<script>"))
@@ -5790,7 +6280,7 @@ namespace banimo.Controllers
                             if (hpf.ContentLength == 0)
                                 continue;
                             string tobeaddedtoimagename = RandomString(7);
-                            string  imagepath =  tobeaddedtoimagename + Path.GetExtension(hpf.FileName);
+                            string imagepath = tobeaddedtoimagename + Path.GetExtension(hpf.FileName);
                             string savedFileName = Path.Combine(Server.MapPath(pathString), imagepath);
                             imagelist.Add(imagepath);
                             hpf.SaveAs(savedFileName);
@@ -5831,15 +6321,15 @@ namespace banimo.Controllers
                         List<string> lst = detail.ImageList.Trim(',').Split(',').ToList();
                         foreach (var item in lst)
                         {
-                            imglst += Path.GetFileName(item)+",";
+                            imglst += Path.GetFileName(item) + ",";
                         }
-                       
+
                     }
 
 
                     string json;
                     string title = detail.title;
-                    
+
                     string desc = detail.productdesc;
                     string discount = detail.discount;
                     string count = detail.count;
@@ -5871,17 +6361,17 @@ namespace banimo.Controllers
                     string code = MD5Hash(device + "ncase8934f49909");
                     //string MezonId = USER.ID;
                     string result = "";
-                    
+
                     using (WebClient client = new WebClient())
                     {
 
-                        var collection = new NameValueCollection();
-                        collection.Add("servername", servername);
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                         collection.Add("device", device);
                         collection.Add("code", code);
                         collection.Add("title", title);
                         collection.Add("id", detail.catID);
-                      
+
                         collection.Add("secondid", detail.ID);
                         collection.Add("SetID", setid);
                         collection.Add("desc", desc);
@@ -5889,6 +6379,7 @@ namespace banimo.Controllers
                         collection.Add("discount", discount);
                         collection.Add("color", color);
                         collection.Add("filter", filter);
+                        collection.Add("meta", finalMeta);
                         collection.Add("range", range);
 
                         collection.Add("feature", detail.inputallfeatureid);
@@ -5896,6 +6387,7 @@ namespace banimo.Controllers
                         collection.Add("count", count);
                         collection.Add("vahed", vahed);
                         collection.Add("limit", limit);
+
                         collection.Add("tag", detail.tagupdate);
                         collection.Add("selectedFilter", detail.Selectedfilters);
                         collection.Add("SelectedAnbar", detail.SelectedAnbars);
@@ -5905,7 +6397,7 @@ namespace banimo.Controllers
                         //    collection.Add("imaglist[]", myvalucollection);
                         //}
                         byte[] response =
-                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addProductPost.php?", collection);
+                        client.UploadValues(server + "/Admin/addProductPost.php?", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -6095,13 +6587,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("title", title);
                     collection.Add("description", desc);
                     collection.Add("id", id);
+                    collection.Add("brandx", detail.brand);
                     collection.Add("price", detail.productprice);
                     collection.Add("setid", detail.SetID);
                     collection.Add("discount", detail.discount);
@@ -6110,6 +6603,9 @@ namespace banimo.Controllers
                     collection.Add("range", range);
                     collection.Add("feature", detail.inputallfeatureid);
                     collection.Add("color", color);
+                    collection.Add("gallGroup", detail.allGroup);
+                    
+                    collection.Add("meta", finalMeta);
                     collection.Add("count", count);
                     collection.Add("vahed", vahed);
                     collection.Add("limit", detail.limit);
@@ -6118,21 +6614,21 @@ namespace banimo.Controllers
                     collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
                     collection.Add("isAvalible", detail.isAvalible);
                     collection.Add("isActive", detail.isActive);
-                    collection.Add("nodeID", nodeID);
+                    collection.Add("nodeID", finalNodeID);
 
 
                     //foreach (var myvalucollection in imaglist) {
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/editproductPost.php?", collection);
+                    client.UploadValues(server + "/Admin/editproductPostTest2.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
                 try
                 {
-                   
+
                     //ViewModel.sendEmailVM model = JsonConvert.DeserializeObject<ViewModel.sendEmailVM>(result);
                     //if (model != null)
                     //{
@@ -6148,9 +6644,9 @@ namespace banimo.Controllers
                     //using (var client = new WebClient())
                     //{
 
-                    //    json = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/Admin/editproduct.php?title=" + title + "&description=" + desc + "&id=" + id + "&price=" + detail.productprice + "&setid=" + detail.SetID + "&discount=" + detail.discount + "&filter=" + filter + " &brandx=" + brand + "&color=" + color + imglst);
+                    //    json = client.DownloadString(server + "/Admin/editproduct.php?title=" + title + "&description=" + desc + "&id=" + id + "&price=" + detail.productprice + "&setid=" + detail.SetID + "&discount=" + detail.discount + "&filter=" + filter + " &brandx=" + brand + "&color=" + color + imglst);
                     //    int i = 0;
-                    //    // json = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/addProduct.php?title=" + title + "&parentid=" + parentid + "&setid=" + setid + "&price=" + price + "&imagethum=" + imagethum + "&image1=" + image1 + "&image2=" + image2 + "&image3=" + image3 + "&image4=" + image4 + "&image5=" + image5 + "&desc=" + desc + "&mezonid=" + MezonId + "&discount=" + discount + "&color=" + color);
+                    //    // json = client.DownloadString(server + "/addProduct.php?title=" + title + "&parentid=" + parentid + "&setid=" + setid + "&price=" + price + "&imagethum=" + imagethum + "&image1=" + image1 + "&image2=" + image2 + "&image3=" + image3 + "&image4=" + image4 + "&image5=" + image5 + "&desc=" + desc + "&mezonid=" + MezonId + "&discount=" + discount + "&color=" + color);
                     //}
 
                     ViewBag.message = "تغییرات انجام شد";
@@ -6180,7 +6676,7 @@ namespace banimo.Controllers
 
         }
 
-      
+
 
         public ActionResult Slider(string message)
         {
@@ -6197,12 +6693,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getsliderlist.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getsliderlist.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6279,13 +6775,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("imaglist", imglst);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/addslider.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/addslider.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6338,13 +6834,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getuserinfo.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getuserinfo.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6378,13 +6874,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", token);
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getcatslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getcatslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6393,7 +6889,7 @@ namespace banimo.Controllers
 
                 using (var client = new WebClient())
                 {
-                    json = client.DownloadString(ConfigurationManager.AppSettings["server"] + "/Admin/editprofile.php?token=" + token + "&fullname=" + detail.fullname + "&aboutus=" + detail.aboutus + "&phobe=" + detail.phone + "&mobile=" + detail.mobile + "&instagram=" + detail.instagram + "&telegram=" + detail.telegram + "&address=" + detail.address);
+                    json = client.DownloadString(server + "/Admin/editprofile.php?token=" + token + "&fullname=" + detail.fullname + "&aboutus=" + detail.aboutus + "&phobe=" + detail.phone + "&mobile=" + detail.mobile + "&instagram=" + detail.instagram + "&telegram=" + detail.telegram + "&address=" + detail.address);
 
                 }
 
@@ -6433,15 +6929,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 //collection.Add("DayOfWeek", DayOfWeek);
                 //collection.Add("TimeFrom", TimeFrom);
                 //collection.Add("TimeTo", TimeTo);
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/GetComments.php?", collection);
+                client.UploadValues(server + "/Admin/GetComments.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6458,11 +6954,11 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataBanner.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDataBanner.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6524,16 +7020,16 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("imagename", imagename);
                 collection.Add("content", content);
                 collection.Add("type", type);
                 collection.Add("title", title);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setBannerDetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setBannerDetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6564,13 +7060,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("catmode", catmode);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataSlide.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataSlide.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6603,8 +7099,48 @@ namespace banimo.Controllers
             BannerListModel.selectedcat = catmode;
             return View(BannerListModel);
         }
+        public ActionResult removeSlide(string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", ID);
+
+                byte[] response = client.UploadValues(server + "/Admin/removeSlide.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+        }
+        public ActionResult removeBanner(string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", ID);
+
+                byte[] response = client.UploadValues(server + "/Admin/removeBanner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+        }
         [HttpPost]
-        public ActionResult editslide(string ID, string content, string type, string image, string title,string catmode)
+        public ActionResult editslide(string ID, string content, string type, string image, string title, string catmode,string newDes, string newHeader)
         {
 
             string pathString = "~/images/panelimages";
@@ -6633,18 +7169,23 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("imagename", imagename);
                 collection.Add("content", content);
                 collection.Add("type", type);
+                collection.Add("header", newHeader);
+                collection.Add("description", newDes);
                 collection.Add("title", title);
+                
                 collection.Add("ID", ID);
+
+
                 collection.Add("catmode", catmode);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setSlideDetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setSlideDetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6661,13 +7202,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("catmode", catmode);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataBaner.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataBaner.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6730,8 +7271,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("imagename", imagename);
@@ -6741,7 +7282,7 @@ namespace banimo.Controllers
                 collection.Add("ID", ID);
                 collection.Add("catmode", catmode);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setBanerDetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setBanerDetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6750,7 +7291,7 @@ namespace banimo.Controllers
 
 
 
-        
+
 
 
         public void changeCommnetActive(string id, string value)
@@ -6764,15 +7305,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("value", value);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/ChangeCommentStatus.php?", collection);
+                    client.UploadValues(server + "/Admin/ChangeCommentStatus.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6790,15 +7331,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
                     collection.Add("comment", comment);
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setAdminComment.php?", collection);
+                    client.UploadValues(server + "/Admin/setAdminComment.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6815,15 +7356,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("id", id);
 
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/delComment.php?", collection);
+                    client.UploadValues(server + "/Admin/delComment.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6841,11 +7382,11 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDiscountList.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDiscountList.php", collection);
 
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -6857,7 +7398,7 @@ namespace banimo.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
-        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user,string oneTime,string firstTime,string darsad,string infinit)
+        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user, string oneTime, string firstTime, string darsad, string infinit)
         {
 
             if (title == "")
@@ -6880,7 +7421,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("title", title);
@@ -6893,10 +7434,10 @@ namespace banimo.Controllers
                     collection.Add("darsad", darsad);
                     collection.Add("infinit", infinit);
 
-                    collection.Add("servername", servername);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewDiscount.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/setNewDiscount.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -6919,12 +7460,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("ID", id);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteDiscount.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/deleteDiscount.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6940,12 +7481,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("ID", id);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteProductGroup.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/deleteProductGroup.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -6958,14 +7499,14 @@ namespace banimo.Controllers
                     System.IO.File.Delete(filepath);
                     result = "success";
                 }
-               
+
             }
             return "success";
 
         }
-        public void deleteimageDesc( string title)
+        public void deleteimageDesc(string title)
         {
-            
+
             string pathString2 = "~/images/panelimages/";
 
             string savedFileName = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
@@ -6974,7 +7515,7 @@ namespace banimo.Controllers
                 System.IO.File.Delete(savedFileName);
             }
 
-            
+
         }
         public ActionResult deleteimage(string id, string title)
         {
@@ -6993,13 +7534,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", str);
-                collection.Add("servername", servername);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deleteimage.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deleteimage.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7032,18 +7573,18 @@ namespace banimo.Controllers
             Response.Cookies["imageAboutUs"].Value = "";
             Response.Cookies["imageContactUs"].Value = "";
             Response.Cookies["imagePrivacy"].Value = "";
-            
+
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPages.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getPages.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7062,13 +7603,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPartnerVM.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getPartnerVM.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7087,13 +7628,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
 
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getFactorVM.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getFactorVM.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7112,12 +7653,12 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPartnerOrders.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getPartnerOrders.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7207,15 +7748,15 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("partner", partner);
                     collection.Add("cat", catP);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdatePartnerForCat.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/UpdatePartnerForCat.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -7238,8 +7779,8 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
-                    collection.Add("servername", servername);
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("partner", partner);
@@ -7248,7 +7789,7 @@ namespace banimo.Controllers
                     collection.Add("cat", cat);
 
 
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdatePartner.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/UpdatePartner.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -7270,13 +7811,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", phone);
                 collection.Add("title", title);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewPartner.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setNewPartner.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7293,14 +7834,14 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", CPhoneupdate);
                 collection.Add("title", Ctitleupdate);
                 collection.Add("ID", CIDupdate);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewPartner.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setNewPartner.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -7318,13 +7859,13 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
 
                     collection.Add("ID", ID);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/deletePartner.php", collection);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    byte[] response = client.UploadValues(server + "/Admin/deletePartner.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -7335,7 +7876,7 @@ namespace banimo.Controllers
 
         [HttpPost]
 
-        public void createUserReport(string data, string type, string id, string date,string orderID)
+        public void createUserReport(string data, string type, string id, string date, string orderID)
         {
             if (true)
             {
@@ -7351,13 +7892,13 @@ namespace banimo.Controllers
                     using (WebClient client = new WebClient())
                     {
 
-                        var collection = new NameValueCollection();
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                         collection.Add("device", device);
                         collection.Add("code", code);
                         collection.Add("ID", id);
-                        collection.Add("servername", servername);
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/GetPartnerInfo.php", collection);
+                        byte[] response = client.UploadValues(server + "/Admin/GetPartnerInfo.php", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -7367,12 +7908,12 @@ namespace banimo.Controllers
                     using (WebClient client = new WebClient())
                     {
 
-                        var collection = new NameValueCollection();
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                         collection.Add("device", device);
                         collection.Add("code", code);
                         collection.Add("id", model.First().orderID);
-                        collection.Add("servername", servername);
-                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/GetOrderInfo.php", collection);
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                        byte[] response = client.UploadValues(server + "/Admin/GetOrderInfo.php", collection);
 
                         result = System.Text.Encoding.UTF8.GetString(response);
                     }
@@ -7774,7 +8315,7 @@ namespace banimo.Controllers
                     cell.HorizontalAlignment = Element.ALIGN_CENTER;
                     toptable.AddCell(cell);
 
-                  
+
 
                     //PdfPCell cell3 = new PdfPCell(new Phrase("آدرس فروشگاه : "+ @System.Configuration.ConfigurationManager.AppSettings["address"], fontSMALL))
                     //{
@@ -7783,7 +8324,7 @@ namespace banimo.Controllers
                     //};
                     //cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
                     //cell3.NoWrap = false;
-                   
+
                     //cell3.Padding = 10;
                     //cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
                     //cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -7898,7 +8439,7 @@ namespace banimo.Controllers
 
 
                     string addresss = " آدرس : " + log2.data.address;
-                   
+
                     if (log2.data.postalCode != "")
                     {
                         addresss = (addresss + " - " + " کدپستی : " + log2.data.postalCode).Replace("/", " - ").Replace("پلاک", " پلاک ").Replace("واحد", " واحد ");
@@ -8065,7 +8606,7 @@ namespace banimo.Controllers
 
                         table.AddCell(oldprice);
 
-                        PdfPCell price = new PdfPCell(new Phrase(String.Format("{0:n0}", Int64.Parse(item.price.ToString()))  , font));
+                        PdfPCell price = new PdfPCell(new Phrase(String.Format("{0:n0}", Int64.Parse(item.price.ToString())), font));
                         price.HorizontalAlignment = Element.ALIGN_CENTER;
                         price.VerticalAlignment = Element.ALIGN_MIDDLE;
                         price.Colspan = 2;
@@ -8118,7 +8659,7 @@ namespace banimo.Controllers
                         priceToT.Colspan = 7;
                         table.AddCell(priceToT);
 
-                        
+
 
                     }
 
@@ -8144,14 +8685,14 @@ namespace banimo.Controllers
                     ersal.PaddingBottom = 15;
                     ersal.VerticalAlignment = Element.ALIGN_MIDDLE;
                     table.AddCell(ersal);
-                   
-                    PdfPCell ersalhezar = new PdfPCell(new Phrase(String.Format("{0:n0}", log2.deliver)  + " تومان", fontSMALL));
+
+                    PdfPCell ersalhezar = new PdfPCell(new Phrase(String.Format("{0:n0}", log2.deliver) + " تومان", fontSMALL));
                     ersalhezar.HorizontalAlignment = Element.ALIGN_CENTER;
                     ersalhezar.VerticalAlignment = Element.ALIGN_MIDDLE;
                     ersalhezar.Colspan = 7;
                     table.AddCell(ersalhezar);
 
-                    
+
 
 
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
@@ -8179,15 +8720,15 @@ namespace banimo.Controllers
                     }
                     else
                     {
-                        if(list.First().darsad == "1")
+                        if (list.First().darsad == "1")
                         {
-                            takhfifstring = String.Format("{0:n0}", (final* Int64.Parse(list.First().discount))/100) + " تومان";
+                            takhfifstring = String.Format("{0:n0}", (final * Int64.Parse(list.First().discount)) / 100) + " تومان";
                         }
                         else
                         {
                             takhfifstring = String.Format("{0:n0}", Int64.Parse(list.First().discount)) + " تومان";
                         }
-                        
+
                     }
                     PdfPCell takh = new PdfPCell(new Phrase(takhfifstring, fontSMALL));
                     takh.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -8220,7 +8761,7 @@ namespace banimo.Controllers
                     profitcell.VerticalAlignment = Element.ALIGN_MIDDLE;
                     profitcell.Colspan = 7;
                     table.AddCell(profitcell);
-                    
+
 
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
                     counthaz.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -8245,13 +8786,13 @@ namespace banimo.Controllers
                     table.AddCell(finalItemTotalCell);
 
 
-                    PdfPCell amount = new PdfPCell(new Phrase(String.Format("{0:n0}", final)  + " تومان", fontbigBold));
+                    PdfPCell amount = new PdfPCell(new Phrase(String.Format("{0:n0}", final) + " تومان", fontbigBold));
                     amount.HorizontalAlignment = Element.ALIGN_CENTER;
                     amount.VerticalAlignment = Element.ALIGN_MIDDLE;
                     amount.Colspan = 7;
 
                     table.AddCell(amount);
-                    
+
                     counthaz = new PdfPCell(new Phrase((list.Count() + i).ToString(), fontSMALL));
                     counthaz.HorizontalAlignment = Element.ALIGN_CENTER;
                     counthaz.VerticalAlignment = Element.ALIGN_MIDDLE;
@@ -8273,19 +8814,19 @@ namespace banimo.Controllers
                     }
                     else
                     {
-                         dis = list.First().discount == null ? 0 : Int32.Parse(list.First().discount);
+                        dis = list.First().discount == null ? 0 : Int32.Parse(list.First().discount);
                     }
-                    
+
 
                     int phrase = final - dis + Int32.Parse(log2.deliver);
 
-                    PdfPCell afterDiscount = new PdfPCell(new Phrase(String.Format("{0:n0}", phrase)  + " تومان", fontbigBold));
+                    PdfPCell afterDiscount = new PdfPCell(new Phrase(String.Format("{0:n0}", phrase) + " تومان", fontbigBold));
                     afterDiscount.HorizontalAlignment = Element.ALIGN_CENTER;
                     afterDiscount.VerticalAlignment = Element.ALIGN_MIDDLE;
                     afterDiscount.Colspan = 7;
                     table.AddCell(afterDiscount);
 
-                    
+
 
 
 
@@ -8302,20 +8843,20 @@ namespace banimo.Controllers
 
 
                 //Add the table to the document
-                  document.Add(table);
+                document.Add(table);
 
-                   PdfPCell cell3 = new PdfPCell(new Phrase("آدرس فروشگاه : "+ @System.Configuration.ConfigurationManager.AppSettings["address"], fontSMALL))
-                    {
-                        Border = PdfPCell.NO_BORDER,
-                        HorizontalAlignment = Element.ALIGN_LEFT
-                    };
-                    cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
-                    cell3.NoWrap = false;
-                   
-                    cell3.Padding = 7;
-                    cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
-                    bottomable.AddCell(cell3);
+                PdfPCell cell3 = new PdfPCell(new Phrase("آدرس فروشگاه : " + @System.Configuration.ConfigurationManager.AppSettings["address"], fontSMALL))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_LEFT
+                };
+                cell3.RunDirection = PdfWriter.RUN_DIRECTION_LTR;
+                cell3.NoWrap = false;
+
+                cell3.Padding = 7;
+                cell3.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell3.HorizontalAlignment = Element.ALIGN_RIGHT;
+                bottomable.AddCell(cell3);
 
                 PdfPCell cell4 = new PdfPCell(new Phrase("شماره تلفن : " + @System.Configuration.ConfigurationManager.AppSettings["phone"], fontSMALL))
                 {
@@ -8396,7 +8937,36 @@ namespace banimo.Controllers
         }
 
 
+        public ActionResult Brand()
+        {
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("lan", lan);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/getBrandlistAll.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            var log = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.catAll>(result);
+            return View(log);
+
+        }
         public ActionResult portfolio()
         {
 
@@ -8436,15 +9006,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imagename);
                 collection.Add("title", title);
                 collection.Add("url", url);
                 collection.Add("desc", desc);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewPortfolio.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setNewPortfolio.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -8459,13 +9029,13 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("id", id);
                 collection.Add("search", search);
-                collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getPortfolio.php", collection);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getPortfolio.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -8512,8 +9082,8 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("image", imagename);
@@ -8522,7 +9092,7 @@ namespace banimo.Controllers
                 collection.Add("desc", Cdescupdate);
                 collection.Add("ID", CIDupdate);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/UpdatePortfo.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdatePortfo.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -8539,12 +9109,12 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("ID", id);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/DeletePortfo.php", collection);
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    byte[] response = client.UploadValues(server + "/Admin/DeletePortfo.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -8568,22 +9138,22 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                
-                collection.Add("servername", servername);
+
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDataMyWonderDetails.php", collection);
+                client.UploadValues(server + "/Admin/getDataMyWonderDetails.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
 
             ViewModel.wonderProductVM log2 = JsonConvert.DeserializeObject<ViewModel.wonderProductVM>(result);
-            
+
             //return PartialView("/Views/Shared/AdminShared/_gogetFactorDetail.cshtml", model);
             return View(log2);
         }
@@ -8618,7 +9188,7 @@ namespace banimo.Controllers
                     DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathStringApp));
                 }
                 string savedFileNameApp = Path.Combine(Server.MapPath(pathStringApp), Path.GetFileName(filename));
-                
+
                 //app section
                 //if (System.IO.File.Exists(savedFileNameApp))
                 //{

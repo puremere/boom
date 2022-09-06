@@ -1,0 +1,664 @@
+﻿@model  banimo.AdminPanelBoom.ViewModel.structureVM
+@{
+    ViewBag.Title = "structure";
+    Layout = "~/Views/Shared/_CoreLayout.cshtml";
+}
+<style>
+    li {
+        float: right !important;
+    }
+
+    .formClass {
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px -1px rgb(148 149 153);
+        padding: 20px;
+    }
+
+    .formItem {
+        width: 300px
+    }
+
+    .formParent {
+        display: flex
+    }
+
+        .formParent div {
+            margin: 3px
+        }
+
+    .buttonForm {
+        width: 150px;
+    }
+</style>
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              
+            </div>
+            <div class="modal-body">
+                آیا از حذف آیتم مورد نظر اطمینان دارید
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                <button type="button" class="btn btn-primary" id="verifyDel">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="        background-color: white;
+        padding: 10px;
+        margin: 0px;
+">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">دسته بندی  </a></li>
+        <li><a data-toggle="tab" href="#menu2" style=" color: #8d8d8d; "> شاخص </a></li>
+        <li><a data-toggle="tab" href="#menu3" style=" color: #8d8d8d; "> برند </a></li>
+        <li><a data-toggle="tab" href="#menu4" style=" color: #8d8d8d; "> رنگبندی </a></li>
+
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="menu1" class="tab-pane fade in  active" style="padding-top:20px">
+
+            <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#add1" style=" color: #8d8d8d; "> تعریف  </a></li>
+                    <li><a data-toggle="tab" href="#remove1" style=" color: #8d8d8d; "> حذف </a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="add1" class="tab-pane fade in  active" style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+                                <div>
+                                    <p>سرگروه</p>
+                                    @Html.DropDownList("cat", new SelectList(Model.catmodel, "ID", "title"), "انتخاب دسته بندی", new { @class = "form-control formItem", id="catListAdd" })
+                                </div>
+
+                                <div>
+                                    <p>عنوان جدید</p>
+                                    <input class="form-control formItem" id="addCattxt" />
+                                </div>
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm" id="addCatt"> تایید</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <script>
+                            $("#addCatt").click(function () {
+                                var title = addCattxt.value;
+                                var ID = catListAdd.value;
+                                if (title != "") {
+                                    $.ajax({
+                                        url: '/core/addCat',
+                                        dataType: 'html',
+                                        data: {
+                                            title: title,
+                                            value: ID
+                                        },
+                                        success: function (data) {
+
+                                            if (data === "200") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('آیتم مورد نظر اضافه شد')
+
+
+
+                                            }
+                                            else if (data === "exist") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('آیتم مورد نظر وجود دارد')
+
+                                            }
+                                            else {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('خطا')
+                                            }
+
+
+                                        },
+                                        error: function () {
+                                            alert("خطا")
+                                        }
+                                    });
+                                }
+
+                            })
+                        </script>
+
+
+
+                    </div>
+                    <div id="remove1" class="tab-pane fade in " style="padding-top:20px">
+
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>انتخاب دسته بندی</p>
+                                    @Html.DropDownList("Cat", new SelectList(Model.catmodel, "ID", "title"), "---", new { @class = "form-control formItem", id = "catListRemove" })
+                                </div>
+
+
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm showModal" id="removeCat"> تایید</div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div id="menu2" class="tab-pane fade in " style="padding-top:20px">
+
+            <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#add2" style=" color: #8d8d8d; "> تعریف  </a></li>
+                    <li><a data-toggle="tab" href="#remove2" style=" color: #8d8d8d; "> حذف </a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="add2" class="tab-pane fade in  active" style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>عنوان شاخص جدید</p>
+                                    <input class="form-control formItem" id="addFiltertxt" />
+                                </div>
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm" id="addFilter"> تایید</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <script>
+                            $("#addFilter").click(function () {
+                                var VALUE = addFiltertxt.value;
+                                alert(VALUE)
+                                if (VALUE != "") {
+                                    $.ajax({
+                                        url: '/core/addFilter',
+                                        dataType: 'html',
+                                        data: {
+                                            title: VALUE,
+
+                                        },
+                                        success: function (data) {
+
+                                            if (data === "200") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('آیتم مورد نظر اضافه شد')
+
+
+
+                                            }
+                                            else if (data === "exist") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('آیتم مورد نظر وجود دارد')
+
+                                            }
+                                            else {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('خطا')
+                                            }
+
+
+                                        },
+                                        error: function () {
+                                            alert("خطا")
+                                        }
+                                    });
+                                }
+
+                            })
+                            function DEFcatokclicked(DEFcatok) {
+
+                            }
+                        </script>
+
+
+                    </div>
+                    <div id="remove2" class="tab-pane fade in " style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>انتخاب شاخص</p>
+                                    @Html.DropDownList("filter", new SelectList(Model.FilterList.filters, "ID", "title"), "انتخاب شاخص", new { @class = "form-control formItem", id = "filterListRemove" })
+                                </div>
+
+
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm showModal" id="removeFilter"> تایید</div>
+
+                                </div>
+                            </div>
+                          
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+        <div id="menu3" class="tab-pane fade in " style="padding-top:20px">
+
+            <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#add3" style=" color: #8d8d8d; "> تعریف  </a></li>
+                    <li><a data-toggle="tab" href="#remove3" style=" color: #8d8d8d; "> حذف </a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="add3" class="tab-pane fade in  active" style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>عنوان برند جدید</p>
+                                    <input class="form-control formItem" id="addBrandtxt" />
+                                </div>
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm" id="addBrand"> تایید</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <script>
+                            $("#addBrand").click(function () {
+                                var VALUE = addBrandtxt.value;
+                                if (VALUE != "" ) {
+                                    $.ajax({
+                                        url: '/core/addBrand',
+                                        dataType: 'html',
+                                        data: {
+                                            title: VALUE,
+
+                                        },
+                                        success: function (data) {
+
+                                            if (data === "200") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('آیتم مورد نظر اضافه شد')
+
+
+
+                                            }
+                                            else if (data === "exist") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('آیتم مورد نظر وجود دارد')
+
+                                            }
+                                            else {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.error('خطا')
+                                            }
+
+
+                                        },
+                                        error: function () {
+                                            alert("خطا")
+                                        }
+                                    });
+                                }
+
+                            })
+                            function DEFcatokclicked(DEFcatok) {
+
+                            }
+                        </script>
+
+
+                    </div>
+                    <div id="remove3" class="tab-pane fade in " style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>انتخاب برند</p>
+                                    @Html.DropDownList("brand", new SelectList(Model.filter.filters, "ID", "title"), "انتخاب برند", new { @class = "form-control formItem", id = "brandListRemove" })
+                                </div>
+
+
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm showModal" id="removeBrand"> تایید</div>
+                                    <script>
+
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div id="menu4" class="tab-pane fade in " style="padding-top:20px">
+            <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#add4" style=" color: #8d8d8d; "> تعریف  </a></li>
+                    <li><a data-toggle="tab" href="#remove4" style=" color: #8d8d8d; "> حذف </a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="add4" class="tab-pane fade in  active" style="padding-top:20px">
+                        <div class="formClass">
+                            <div class="formParent">
+
+                            
+                                <div>
+                                    <p>عنوان رنگ جدید</p>
+                                    <input class="form-control formItem" id="addColortxt" />
+                                </div>
+                                <div style="position:relative">
+
+                                    <p>
+                                        انتخاب رنگ :
+                                    </p>
+                                    <div class="component">
+                                        <input type="text" id="colorcode" name="colorcode" required="required" class="form-control formItem">
+                                    </div>
+
+
+                                    <script src="~/Scripts/bootstrap-colorpicker.js"></script>
+                                    <script>
+                                        $(function () {
+                                            $('#colorcode').colorpicker();
+                                        });
+                                    </script>
+
+                                </div>
+
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm" id="addColor"> تایید</div>
+                                    <script>
+                                        $("#addColor").click(function () {
+                                            var VALUE = addColortxt.value;
+                                            var CODE = colorcode.value;
+                                            var catID = "0"
+                                            if (VALUE != "" & CODE != "") {
+                                                $.ajax({
+                                                    url: '/core/addColor',
+                                                    dataType: 'html',
+                                                    data: {
+                                                        title: VALUE,
+                                                        ColorCode: CODE,
+
+                                                    },
+                                                    success: function (data) {
+
+                                                        if (data === "success") {
+                                                            toastr.options = {
+                                                                "debug": false,
+                                                                "positionClass": "toast-top-center",
+                                                                "onclick": null,
+                                                                "fadeIn": 300,
+                                                                "fadeOut": 1000,
+                                                                "timeOut": 5000,
+                                                                "extendedTimeOut": 1000
+                                                            }
+
+                                                            toastr.success('رنگ مورد نظر اضافه شد')
+
+
+
+                                                        }
+                                                        else if (data === "exist") {
+                                                            toastr.options = {
+                                                                "debug": false,
+                                                                "positionClass": "toast-top-center",
+                                                                "onclick": null,
+                                                                "fadeIn": 300,
+                                                                "fadeOut": 1000,
+                                                                "timeOut": 5000,
+                                                                "extendedTimeOut": 1000
+                                                            }
+
+                                                            toastr.error('رنگ مورد نظر وجود دارد')
+
+                                                        }
+                                                        else {
+                                                            toastr.options = {
+                                                                "debug": false,
+                                                                "positionClass": "toast-top-center",
+                                                                "onclick": null,
+                                                                "fadeIn": 300,
+                                                                "fadeOut": 1000,
+                                                                "timeOut": 5000,
+                                                                "extendedTimeOut": 1000
+                                                            }
+
+                                                            toastr.error('خطا')
+                                                        }
+
+
+                                                    },
+                                                    error: function () {
+                                                        alert("خطا")
+                                                    }
+                                                });
+                                            }
+
+                                        })
+                                        function DEFcatokclicked(DEFcatok) {
+
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div id="remove4" class="tab-pane fade in " style="padding-top:20px">
+
+                        <div class="formClass">
+                            <div class="formParent">
+
+
+                                <div>
+                                    <p>انتخاب رنگ</p>
+                                    @Html.DropDownList("color",new SelectList(Model.clo.colores, "ID", "title"), "انتخاب رنگ",new { @class = "form-control formItem" , id="colorListRemove"})
+                                </div>
+                               
+
+                                <div>
+                                    <p style="height:18px"></p>
+                                    <div class="btn btn-success buttonForm showModal" id="removeColor"> تایید</div>
+                                    <script>
+                                        
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var delType = "";
+    var delID = "";
+    $("#colorcode").click(function () {
+        var top = $(this).offset().top + 40;
+        $(".colorpicker").css("top", top + "px")
+    })
+    $("#removeColor").click(function () {
+        delID = $("#colorListRemove").val();
+        delType = "color";
+
+        $("#removeModal").modal("toggle")
+    });
+    $("#removeCat").click(function () {
+        delID = $("#catListRemove").val();
+        delType = "cat";
+
+        $("#removeModal").modal("toggle")
+    });
+    $("#removeBrand").click(function () {
+        delID = $("#brandListRemove").val();
+        delType = "brand";
+
+        $("#removeModal").modal("toggle")
+    });
+    $("#removeFilter").click(function () {
+        delID = $("#filterListRemove").val();
+        delType = "filter";
+
+        $("#removeModal").modal("toggle")
+    });
+    $("#verifyDel").click(function () {
+        $.ajax({
+            url: "/Core/Delete",
+            data: {
+                mainType: delType,
+                ID: delID
+            },
+            success: function (data) {
+                if (data == "error") {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000
+                    }
+
+                    toastr.error('خطا')
+                }
+                else {
+                    window.location.reload();
+                }
+            }
+        })
+    })
+   
+</script>
+

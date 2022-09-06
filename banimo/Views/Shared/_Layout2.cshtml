@@ -23,11 +23,14 @@
             text-align: center;
             box-shadow: -1px 4px 29px 5px rgb(0 0 0 / 30%);
         }
+        .menItem{
+            margin : 0 15px
+        }
     </style>
     @RenderSection("HeadIncludes", required: false)
   
 </head>
-<body>
+<body style="background-color:white">
 
     <div class="main" style="position:relative;z-index:9; background-color:white">
 
@@ -38,37 +41,11 @@
 
 
 
-    @{
-        banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
-    }
+   
     <div class="row mainTopper" >
-        <div style="z-index:9; position:absolute; right:70px; top:25px; width:150px">
-            @if (userApp != null)
-            {
-                string name = userApp.fullname != "" ? userApp.fullname : userApp.phone;
-
-                <div class="menuAppHeader toolbarText" style="direction: rtl;padding: 15px;">
-                    <a href="/Home/myprofile?type=1">
-                        <i class="fal fa-user " style=" margin-left:10px; vertical-align:middle; color:white"></i> <span class="" style="color:white">@name</span>
-                    </a>
-                </div>
-                <div class="menuAppHeader" style="direction: rtl;background-color: #E1A52B">
-
-                    <a href="/CustomerLogin/LogOff">
-                        <i class="fal fa-sign-out " style="color:white; margin-left:10px; vertical-align:middle"></i> <span style="color:white" class="">خروج</span>
-                    </a>
-                </div>
-
-            }
-            else
-            {
-                <a href="/Home/Login">
-                    <div class="menuAppHeader" style="direction: rtl;color: white;">
-
-                        <span style="color:black">عضویت و ورود</span>
-                    </div>
-                </a>
-            }
+        <div style="z-index:9; position:absolute; right:70px; top:25px;display:flex">
+            
+          
         </div>
         @*<div style="z-index:9; position:fixed; right:180px; top:25px;">
             <a href="/Home/Login">
@@ -80,7 +57,7 @@
         </div>*@
 
         <img class="logo" src="~/images/logo.png" style="" />
-        <i id="barsformenu" style="z-index:9; position:absolute; right:30px; top:30px; cursor:pointer" class="fal fa-bars"> </i>
+        <i id="barsformenu" style="z-index:9; position:absolute; right:30px; top:30px; cursor:pointer" ><img style="width:20px"  src="~/images/ff.png"/> </i>
 
         <style>
             .logo {

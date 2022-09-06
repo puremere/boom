@@ -1,0 +1,527 @@
+﻿@using System.Web
+@model banimo.AdminPanelBoom.ViewModel.productCore
+@{
+    Layout = "~/Views/Shared/_CoreLayout.cshtml";
+    ViewBag.Title = "مدیریت مطالب";
+
+}
+
+
+
+@section scripts{
+    <link href="~/Content/croppie.css" rel="stylesheet" />
+    <script src="~/Scripts/croppie.js">
+    </script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help| link image ',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
+    <link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+}
+
+
+@{
+    if (@ViewBag.msg == 1)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.success('محصول مورد نظر با موفقیت اضافه شد')
+                     @ViewBag.msg == 4
+        </script>
+    }
+    if (@ViewBag.msg == 2)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('خطا لطفاً مجدداً تلاش کنید')
+                     @ViewBag.msg == 4
+        </script>
+    }
+    if (@ViewBag.msg == 3)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('محصول با همین مشخصات وجود دارد')
+                     @ViewBag.msg == 4
+        </script>
+    }
+}
+
+
+<input type="file" style="display:none" id="descriptionUpload" />
+<style>
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+</style>
+
+<div id="havaleModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>جهت ثبت حواله موارد زیر را کامل کنید</p>
+                <div style="display:flex">
+
+                    <div style="margin-left:20px">
+                        <p>تعداد مد نطر</p>
+                        <input id="countHavale" class="form-control" />
+                    </div>
+                    <div>
+                        <p>پروژه مد نظر</p>
+                        @Html.DropDownList("havaleNode", new SelectList(Model.nodeResult, "ID", "title"), new { id = "havaleNode", name = "havaleNode", @class = "form-control" } )
+
+                    </div>
+                    <input hidden id="havaleID" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmHavale" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+                    $("#confirmHavale").click(function () {
+                        //$("#residModal").modal('hide');
+                        var havaleNode = $("#havaleNode").val();
+                        var countHavale = $("#countHavale").val();
+                        var ID = $("#havaleID").val();
+
+                        $.ajax({
+                            url: '/Core/havale',
+                            dataType: 'html',
+                            data: {
+                                node: havaleNode+"",
+                                count: countHavale+ "",
+                                ID: ID + ""
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('محصول مورد نظر حذف شد')
+                                    window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">لیست محصولات </a></li>
+        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> تعریف محصول</a></li>
+
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in  active" style="padding-top:20px">
+
+
+            <div class="">
+                <div class="form-group " style="display:flex; align-items:center">
+
+
+
+
+                    <form method="post" action="ExportToExcel" style="display:inline-block; margin-left:8px; width:100%">
+                        <div class="row">
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label> طبقه بندی :</label>
+                                <div style="width:100%">
+                                    @Html.DropDownList("selectedCat", new SelectList(Model.catCore, "ID", "title"), "-- طبقه بندی  --", new { id = "selectedCat", name = "selectedCat", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label>شاخص :</label>
+                                <div class=" " style="width:100%">
+                                    @Html.DropDownList("selectedFilter", new SelectList(Model.filterCore, "ID", "title"), "-- شاخص  --", new { id = "selectedFilter", name = "selectedFilter", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label>برند :</label>
+                                <div class=" " style="width:100%">
+                                    @Html.DropDownList("selectedBrand", new SelectList(Model.brandCore, "ID", "title"), "-- برند  --", new { id = "selectedBrand", name = "selectedBrand", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:20px" class="row">
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label> عنوان :</label>
+                                <div style="width:100%">
+                                    <input id="SearchQuery" name="SearchQuery" type="text" placeholder="عبارت مورد نظر را جستجو کنید" class="form-control" style="padding:8px" />
+
+                                </div>
+                            </div>
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label> آدرس :</label>
+                                <div style="width:100%">
+                                    <input id="addressQuery" name="addressQuery" type="text" placeholder="عبارت مورد نظر را جستجو کنید" class="form-control" style="padding:8px" />
+
+                                </div>
+                            </div>
+                            <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
+                                <label> کد :</label>
+                                <div style="width:100%">
+                                    <input id="codeQuery" name="codeQuery" type="text" placeholder="عبارت مورد نظر را جستجو کنید" class="form-control" style="padding:8px" />
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12" style=" display:flex; margin-top:25px;margin-left:15px">
+                            <div id="Verify" class="btn btn-primary lgnsubmitt">تایید</div>
+                            <button id="getExcel" class="btn btn-primary lgnsubmitt">دریافت فایل اکسل</button>
+                        </div>
+
+
+                        <script>
+
+
+                            var getlist = function () {
+
+
+                                var cat = $("#selectedCat").val();
+
+                                var filter = $("#selectedFilter").val();
+                                var brand = $("#selectedBrand").val();
+                                var title = $("#SearchQuery").val();
+                                var code = $("#codeQuery").val();
+                                var address = $("#addressQuery").val();
+                                $.post('/Core/changeGV',
+                                    {
+                                        cat: cat,
+                                        query: title,
+                                        pcode: code,
+                                        paddress: address,
+                                        filter: filter,
+                                        brand: brand,
+                                        page: 1,
+                                    },
+                                    function (data) {
+
+                                        $('#listholder').html(data);
+                                        $('#listholder').css("display", "block");
+
+                                    });
+
+
+                            };
+
+                            $("#Verify").click(function () {
+
+
+                                $.ajax({
+                                    url: '/Admin/resetAdminProductPage',
+                                    dataType: 'html',
+                                    success: function (data) {
+                                        getlist();
+                                    },
+                                    error: function () {
+                                        alert("nashod")
+                                    }
+                                });
+
+
+                            })
+
+
+
+
+
+                            $("#getExcel").click(function () {
+                                var query = $("#SearchQuery").val();
+                                var value = $("#listofproduct").val();
+                                var partner = $("#partnerList").val();
+
+
+                                $.ajax({
+                                    url: '/Admin/ExportToExcel',
+                                    data:
+                                    {
+                                        SelectedlistProduct: value,
+                                        SearchQuery: query,
+                                        partner: partner
+                                    },
+                                    dataType: 'html',
+                                    success: function (data) {
+
+                                        //$('#listholder').html(data);
+                                        //$('#listholder').css("display", "block");
+                                    },
+                                    error: function () {
+                                        //alert("nashod")
+                                    }
+                                });
+                            });
+                        </script>
+                    </form>
+                    @*@using (Html.BeginForm("UploadExcel", "Admin", FormMethod.Post, new { id = "UploadExcelForm", enctype = "multipart/form-data" }))
+                        {
+                            <div id="upload" class="btn btn-primary lgnsubmitt" style="margin-top:25px"> بارگزاری فایل  اکسل (ادیت)</div>
+                            <input id="myfile" type="file" name="myfile" style="display: none;" />
+                            <script>
+                                $('#upload').on('click', function () {
+
+                                    $('#myfile').trigger('click');
+                                });
+                                $('#myfile').change(function () {
+                                    $("#UploadExcelForm").submit();
+                                })
+                            </script>
+                        }*@
+
+
+
+
+
+                </div>
+
+                <div class="form-group ">
+
+                </div>
+
+                <div class="form-group rowholder" id="listholder" style="display:none">
+
+                </div>
+
+                <div id="serverModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                <div id="serverDataHolder" style="display:block;  ">
+
+                                    <div class="form-group " style="display:inline-block; width:100%">
+                                        <p style="text-align:center">لطفا جهت تخصیص محصول از انبار مرکزی پروژه های مد نظر خود را انتخاب نمایید</p>
+                                        <div style="display : flex; align-items:center; justify-content:center">
+                                            <div class="component ">
+
+                                                @Html.DropDownList("selectedCadt", new SelectList(Model.nodeResult, "ID", "title"), "-- انتخاب پروژه  --", new {style="width:250px", id = "takhsisList", name = "takhsisList", @class = "form-control", multiple = "multiple" })
+
+                                            </div>
+                                            <input style="display:none" id="takhsisID" class="form-control" />
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+                                </div>
+                                <div class="row" id="filterholderforserver">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">لغو</button>
+                                <button type="button" class="btn btn-default" id="addTakhsis">تایید</button>
+
+                            </div>
+                            <script>
+                                $("#addTakhsis").click(function () {
+
+                                    var takhsislist = $("#takhsisList").val()
+                                    var IDt = $("#takhsisID").val();
+                                   
+                                    if (takhsislist != "" && IDt != "") {
+                                        
+                                        $.ajax({
+                                            url: '/Core/setTakhsis',
+                                            dataType: 'html',
+                                            data:
+                                            {
+                                               
+                                                prID: IDt,
+                                                nodeList: takhsislist + "",
+                                            },
+                                            success: function (data) {
+
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+                                                toastr.success('با موفقیت انجام شد')
+                                                $("#serverModal").modal("toggle");
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+                                    } else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('لطفا پروژه مد نظر را انتخاب کنید');
+                                    }
+                                    
+                                })
+                            </script>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
+
+
+            @Html.Partial("/Views/Shared/CoreShared/_addProduct.cshtml", Model)
+
+        </div>
+
+
+
+
+
+
+
+
+        @if (ViewBag.page != null)
+        {
+            <script>
+                var item = @ViewBag.page
+
+                    $.ajax({
+                        url: '/Admin/GetTheListOfItems',
+                        dataType: 'html',
+                        data:
+                        {
+                            page: item
+                        },
+                        success: function (data) {
+
+                            $('#listholder').html(data);
+                            $('#listholder').css("display", "block");
+
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+            </script>
+        }
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,5 @@
 ﻿using banimo.apiViewModel;
+using banimo.Classes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,6 +17,7 @@ using System.Web.Mvc;
 
 namespace banimo.Controllers
 {
+    [doForAll]
     public class appController : System.Web.Http.ApiController
     {
 
@@ -23,6 +25,7 @@ namespace banimo.Controllers
 
         public static string appserver = ConfigurationManager.AppSettings["appserver"];
         public static string appserver2 = ConfigurationManager.AppSettings["server"];
+        string nodeID = ConfigurationManager.AppSettings["nodeID"];
         public string RandomString()
         {
             Random random = new Random();
@@ -369,8 +372,6 @@ namespace banimo.Controllers
                 collection.Add("address", model.address);
                 collection.Add("latitude", model.latitude);
                 collection.Add("longitude", model.longitude);
-
-
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
@@ -693,7 +694,6 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("user", model.user);
                 collection.Add("activeCode", model.activeCode);
-
 
                 collection.Add("device", device);
                 collection.Add("code", code);
@@ -1657,6 +1657,7 @@ namespace banimo.Controllers
         public async Task<JObject> getTorob(string page)
         {
             page = page == null ? "1" : page;
+         
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
             string device = RandomString();
@@ -1668,6 +1669,9 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
                 collection.Add("page", page);
+                collection.Add("nodeID", nodeID);
+
+
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/productListAPITorob.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);

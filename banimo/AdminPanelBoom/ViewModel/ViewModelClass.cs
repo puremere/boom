@@ -8,10 +8,24 @@ using System.Web.Mvc;
 namespace AdminPanelBoom.ViewModel
 {
 
+
+    public class Cat
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string parent { get; set; }
+    }
+
+
+    class mainCatVM
+    {
+        public List<Cat> cats { get; set; }
+    }
     public class AdminProductVM
     {
         public partnerVM log { get; set; }
         public partnerVM basecat { get; set; }
+        public List<catVM> maincat { get; set; }
         public string page { get; set; }
         public string selectedAnbar { get; set; }
         public string SelectedlistProduct { get; set; }
@@ -155,9 +169,13 @@ namespace AdminPanelBoom.ViewModel
 
     public class NewDatumm
     {
+        public string domain { get; set; }
         public List<Partner> partners { get; set; }
+        public List<Brand> brands { get; set; }
+
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public string  tag { get; set; }
+        public string meta { get; set; }
         public string  catid { get; set; }
         public List<FeaturDataDetail> featureList { get; set; }
         public IEnumerable<SelectListItem> Colores { get; set; }
@@ -167,6 +185,8 @@ namespace AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string count { get; set; }
         public string SetId { get; set; }
+        public string metaTitle { get; set; }
+        public string metaDescription { get; set; }
 
         public string discount { get; set; }
         public string title { get; set; }
@@ -211,6 +231,7 @@ namespace AdminPanelBoom.ViewModel
         public string vahed { get; set; }
         public string limit { get; set; }
         public string tag { get; set; }
+        public string meta { get; set; }
     }
     public class earlyRoot
     {
@@ -413,6 +434,15 @@ namespace AdminPanelBoom.ViewModel
         public string title { get; set; }
         public int value { get; set; }
     }
+    public class FilterListMain
+    {
+        public List<fitlterItem> filters { get; set; }
+        
+    }
+    public class fitlterItem {
+        public string  ID { get; set; }
+        public string  title { get; set; }
+    }
 
     public class FilterList
     {
@@ -465,8 +495,14 @@ namespace AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
     }
+    public class Brand
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+    }
     public class EditViewModel
     {
+        public List<Brand> brand { get; set; }
         public List<Partner> partners { get; set; }
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public List<Productfilterlist> productfilterlist { get; set; }
@@ -484,6 +520,18 @@ namespace AdminPanelBoom.ViewModel
         public string title { get; set; }
         public string phone { get; set; }
     }
+    public class catVM
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+       
+    }
+  
+    class catVMList
+    {
+        public List<Cat> cats { get; set; }
+    }
+
     public class partnerVM
     {
         public List<string> productName { get; set; }
@@ -491,5 +539,29 @@ namespace AdminPanelBoom.ViewModel
         public List<FiltersModel> filtersModel { get; set; }
         public string isPartner { get; set; }
     }
+    public class Product
+    {
+        public int ID { get; set; }
+        public string title { get; set; }
+        public string catID { get; set; }
+        public string barcode { get; set; }
+        public string color { get; set; }
+        public string selectedFilter { get; set; }
+        public string count { get; set; }
+        public string productCode { get; set; }
+        public string productAddress { get; set; }
+        public string initCount { get; set; }
+        public string description { get; set; }
+        public string brand { get; set; }
+    }
+
+    public class productMainVM
+    {
+        public List<Product> products { get; set; }
+        public int count { get; set; }
+        public int current { get; set; }
+        public string productChosen { get; set; }
+    }
+    
 
 }

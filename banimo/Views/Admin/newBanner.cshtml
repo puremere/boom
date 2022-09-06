@@ -7,6 +7,25 @@
 <link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
 
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+             
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                آیا از حذف آیتم مورد نظر اطمینان دارید؟
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                <button id="confirmRemove" type="button" class="btn btn-primary">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
 
     .nav-tabs {
@@ -431,6 +450,7 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
 
                                     <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
                                         <div id=@button class=" btn btn-primary">تایید</div>
+                                        <div itemToRemove="@item.ID" class="removeSlide btn btn-primary" >حذف</div>
 
                                     </div>
 
@@ -536,7 +556,42 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
     }
 </div>
 
-<script>$("#listofcat").change(function () {
+<script>
+    var itemTORemove;
+    $("#listofcat").change(function () {
         var val = $(this).val();
         window.location.href = "/admin/newBanner?catmode=" + val;
-    })</script>
+    })
+    $("#confirmRemove").click(function () {
+        $("#removeModal").modal('toggle');
+        $.ajax({
+            url: "/admin/removeBanner",
+            data: {
+                ID: itemTORemove,
+            },
+            success: function (data) {
+                if (data = "200") {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000
+                    }
+                    toastr.success('با موفقیت انجام شد ')
+                }
+                window.location.reload();
+            }
+
+        })
+    })
+    $(".removeSlide").click(function () {
+
+        var value = $(this).attr('itemToRemove');
+        itemTORemove = value;
+        $("#removeModal").modal('toggle');
+      
+    })
+</script>

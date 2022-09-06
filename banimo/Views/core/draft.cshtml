@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "draft";
+    Layout = "~/Views/Shared/_CoreLayout.cshtml";
+}
+
+<div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
+    <div>
+        <div class="" style="margin : 0 5px">
+            <p style="display:inline-block">تاریخ سند از :</p>
+            <input id="dateFrom" style="display:inline-block" class="form-control inputForm FromdatePicker" />
+            <input name="Fromabserver" id="Fromabserver" style="display:none" class="form-control Fromabserver " />
+
+        </div>
+    </div>
+    <div>
+        <div class="" style="margin : 0 5px">
+            <p style="display:inline-block">تاریخ سند تا :</p>
+            <input id="dateTo" style="display:inline-block" class="form-control inputForm TodatePicker" />
+            <input name="Toabserver" id="Toabserver" style="display:none" class="form-control Toabserver " />
+
+        </div>
+    </div>
+
+    <div class="" style="margin : 0 5px">
+        <p style="display:inline-block">وضعیت سند :</p>
+        <select class="form-control" style=" display:inline-block" id="selectOrderType">
+            <option value="0">همه</option>
+            <option value="1">ثبت اولی</option>
+            <option value="2">ثبت نهایی</option>
+            <option value="3">ثبت دائم</option>
+
+        </select>
+    </div>
+</div>
+<div class="row " style="margin:40px 0px; display:flex">
+
+
+    <div class="" style="padding-top:30px">
+        <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> تایید</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+<p class="ORDERBUTT" style="display:none" id="dataOrder">11</p>
+<div id="OrderTableHolder">
+
+</div>
+<script>
+                var getlofo = function (page) {
+                    $("#loading").show();
+                    order = "22";
+                    type = $("#selectOrderType").val();
+                    dateFrom = $("#Fromabserver").val();
+                    dateTo = $("#Toabserver").val();
+
+                    $.ajax({
+                        url: '/Admin/ChangeRecietList',
+                        dataType: 'html',
+                        data: {
+                            type: type,
+                            page: page,
+                            dateTo: dateTo,
+                            dateFrom: dateFrom
+                        },
+
+                        success: function (data) {
+
+                            $("#OrderTableHolder").html(data);
+                            $("#loading").hide();
+                        }
+
+
+
+                    });
+
+                }
+                $("#orderFormSearch").click(function () {
+                    $("#loading").show();
+                    getlofo(1)
+                });
+
+
+</script>
+

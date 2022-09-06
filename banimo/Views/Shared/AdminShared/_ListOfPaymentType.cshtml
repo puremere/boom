@@ -1,0 +1,199 @@
+﻿@model banimo.ViewModel.PaymentTypeVM
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "لیست روش های ارسال";
+}
+
+
+
+
+@*@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }*@
+
+<style>
+
+    .editMode {
+        display: none;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست روش های ارسال </h3>
+            </div>
+            <div class="panel-body">
+                <div id="morris-area-chart">
+                    <div style="overflow:auto; padding:10px">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        ID
+                                        @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                                    </th>
+                                    <th>
+                                        عنوان
+                                    </th>
+                                    <th>
+                                        @*@Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                                        توضیحات
+                                    </th>
+                                    <th>
+                                        قیمت
+                                    </th>
+                                    <th>
+                                        تاخیر روزانه
+                                    </th>
+
+
+                                    <th>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.paymentType != null)
+                                    {
+                                        foreach (var item in Model.paymentType)
+                                        {
+                                                                <tr>
+                                                                    <td id="idHolder">
+                                                                        @Html.DisplayFor(modelItem => item.ID)
+
+                                                                    </td>
+                                                                    <td id="titleHolder">
+                                                                        <p class="normalMode">@item.typeTitle</p>
+
+                                                                        <input class="editMode form-control" />
+
+                                                                    </td>
+                                                                    <td id="descHolder">
+                                                                        <p class="normalMode">@item.typeDesc</p>
+
+                                                                        <input class="editMode form-control" />
+
+                                                                    </td>
+                                                                    <td id="priceHolder">
+                                                                        <p class="normalMode">@item.typeprice</p>
+
+                                                                        <input class="editMode form-control" />
+
+
+                                                                    </td>
+                                                                    <td id="takhirHolder">
+                                                                        <p class="normalMode">@item.takhir</p>
+
+                                                                        <input class="editMode form-control" />
+
+
+                                                                    </td>
+
+
+                                                                    <td>
+                                                                        @{
+
+                                                                            <a class="editPayment  normalMode" style="  margin:2px ; cursor: pointer; background-color: #246388; padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+                                                                            <a class="verifPayment editMode " style="  margin:2px ; cursor: pointer; background-color: #246388; padding: 5px; color: #fff; border-radius: 5px;">تایید</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+
+                                                                        }
+
+                                                                    </td>
+                                                                </tr>
+                                        }
+
+
+
+                                    }
+                                }
+
+
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".pagination-container").css("direction", "ltr")
+</script>
+<script>
+
+    $(".editPayment").click(function () {
+        var title = $(this).parent().parent().find('#titleHolder').text();
+        $(this).parent().parent().find('#titleHolder input').val(title.trim());
+        var desc = $(this).parent().parent().find('#descHolder').text();
+        $(this).parent().parent().find('#descHolder input').val(desc.trim());
+        var price = $(this).parent().parent().find('#priceHolder').text();
+        $(this).parent().parent().find('#priceHolder input').val(price.trim());
+        var takhir = $(this).parent().parent().find('#takhirHolder').text();
+        $(this).parent().parent().find('#takhirHolder input').val(takhir.trim());
+
+
+        $(this).parent().parent().find(".normalMode").toggle();
+        $(this).parent().parent().find(".editMode").toggle();
+
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".verifPayment").click(function () {
+            var title = $(this).parent().parent().find('#titleHolder input').val();
+            var desc = $(this).parent().parent().find('#descHolder input').val();
+            var price = $(this).parent().parent().find('#priceHolder input').val();
+            var takhir = $(this).parent().parent().find('#takhirHolder input').val();
+            var ID = $(this).parent().parent().find('#idHolder').text();
+            $.ajax({
+                url: '/Admin/addNewPaymentType',
+                dataType: 'html',
+                data: {
+                    typeDesc: desc,
+                    typeprice: price,
+                    typeTitle: title,
+                    ID: ID,
+                    takhir: takhir
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+
+                        toastr.success('با موقیت ثبت شد');
+                        location.reload();
+                    }
+
+                },
+                error: function () {
+                    alert("خطا")
+                }
+            });
+        })
+    })
+
+</script>

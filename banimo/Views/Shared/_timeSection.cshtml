@@ -1,0 +1,111 @@
+﻿@model  banimo.ViewModel.TimeList
+
+<div class="row ">
+    @{
+        if (Model.times != null)
+        {
+
+            foreach (var item in Model.times)
+            {
+
+                int index = Model.times.IndexOf(item);
+                string checkname = "check" + index;
+                if (index == 0)
+                {
+                    <div class="col-lg-6 col-sm-6 slave" id="@checkname">
+                        @foreach (var detail in item.hours)
+                        {
+
+                            string finalname = "final" + detail.ID;
+
+                            <div class="halfrow">
+                                @*@if (@detail.isChecked == true)
+                                    {
+                                        <i class="fa fa-check finalrow" id="@finalname"></i>
+                                    }
+                                    else
+                                    {
+
+                                    }*@
+                                <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
+                                <p>@detail.title</p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-6 col-sm-6 slave" id="@checkname" style="display:none">
+                        @foreach (var detail in item.hours)
+                        {
+
+                            string finalname = "final" + detail.ID;
+
+                            <div class="halfrow ">
+                                @*@if (@detail.isChecked == true)
+                                    {
+                                        <i class="fa fa-check finalrow" id="@finalname"></i>
+                                    }
+                                    else
+                                    {
+
+                                    }*@
+                                <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
+                                <p>@detail.title</p>
+                            </div>
+                        }
+                    </div>
+                }
+
+            }
+
+            <div class="col-lg-6 col-sm-6 Mmaster">
+                @foreach (var item in Model.times)
+                {
+                    int index = Model.times.IndexOf(item);
+                    string checkname = "check" + index;
+                    <div class="halfrow master">
+                        @*@if (@item.isChecked == true)
+                            {
+                                <i class="fa fa-check dispath" id="@checkname"></i>
+                            }
+                            else
+                            {
+
+                            }*@
+                        <i class="fa fa-check dispath" id="@checkname" style="display:none"></i>
+                        <p>@item.title</p>
+                    </div>
+                }
+            </div>
+
+        }
+    }
+
+</div>
+<script>
+        $(document).ready(function () {
+            $(".master").click(function () {
+
+                $(".dispath").css("display", "none");
+                var i = $(this).children();
+                i.css("display", "block");
+
+                var id = i.attr("id");
+
+                $(".slave").css("display", "none");
+                $("#" + id).css("display", "block");
+                $("#" + id).children().children().first().css("display", "block");
+                $("#hourid").val($("#" + id).children().children().first().attr("id"));
+
+
+            })
+            $(".slave .halfrow").click(function () {
+                $(".finalrow").css("display", "none");
+                var i = $(this).children();
+                i.css("display", "block");
+                var id = i.attr("id");
+                $("#hourid").val(id);
+            })
+        })
+</script>

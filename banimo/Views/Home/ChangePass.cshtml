@@ -75,6 +75,7 @@
 
         })
     </script>
+   
 
     <script src="~/Scripts/toastr.js"></script>
     <link href="~/Content/toastr.css" rel="stylesheet" />
@@ -90,14 +91,15 @@
                         <a href="#" class="c-account-box__logo">Digikala.com</a>
                         <div class="c-account-box__headline">تغییر رمز عبور</div>
                         <div class="c-account-box__content">
-                            <form class="c-form-account" id="changepasswordForm" method="post" data-name="changepassword" novalidate="novalidate">
-                                <input type="hidden" name="rc" value="RWZRd0RqUGVkTnBzMFlhaDFhQU5SUT09"><input type="hidden" name="rd" value="UzJ5akNsaXlLbjB6cnFTbzBvcEVLSlVrdzhvdWs2dkFiV0RPR1dKY3FHOFowYjdlcllvY2VaV0FYVGxHK2ExS25yUit0KzgzWldLZWNYenpvajJiTlE9PQ~~">
+                            <form class="c-form-account" id="changepasswordForm" method="post" data-name="changepassword" novalidate="novalidate" action="/CustomerLogin/ChangePassForLogedInUser">
+                               
+                                @Html.AntiForgeryToken()
                                 <div class="c-form-account__fieldset">
                                     <div class="c-form-account__title">رمز عبور جدید</div>
                                     <div class="c-form-account__row">
                                         <div class="c-form-account__col">
                                             <label id="changepassmain" class="c-ui-input c-ui-input--account-password has-error">
-                                                <input class="c-ui-input__field" name="changepassword[password]" id="changetxtPassword" type="password" placeholder=" رمز عبور جدید خود را وارد نمایید" aria-describedby="txtPassword-error" aria-invalid="true">
+                                                <input class="c-ui-input__field" name="pass" id="changetxtPassword" type="password" placeholder=" رمز عبور جدید خود را وارد نمایید" aria-describedby="txtPassword-error" aria-invalid="true">
                                                 <div id="txtPassword-error" class="error c-ui-feedback-hint">رمز عبور را وارد نمایید</div>
                                             </label>
                                         </div>
@@ -118,7 +120,14 @@
 
                                     </div>
                                     <p style="position: absolute; margin-top: 20px; text-align: center; display: inline-block; font-size: 18px; width: 65%; color: white; " class=" ">تغییر رمز عبور</p>
-                                    <script>
+
+
+                                    @*<p > افزودن به سبد خرید</p>*@
+                                </div>
+
+                            </form>
+
+                            <script>
                                         $("#changepassconfirm").click(function () {
 
                                             var val = $("#changetxtPassword").val();
@@ -144,7 +153,9 @@
                                             }
 
                                             if (val.length > 7 && val2.length > 7 && val === val2) {
-                                                $.ajax({
+
+                                                $("#changepasswordForm").submit();
+                                                @*$.ajax({
                                                     url: '/CustomerLogin/ChangePassForLogedInUser',
                                                     dataType: 'html',
                                                     data: {
@@ -202,7 +213,7 @@
                                                     error: function () {
                                                         $('#lblsubscribeSubmit').text("خطای سیستمی، لطفاً با اپراتور تماس بگیرید");
                                                     }
-                                                });
+                                                });*@
                                             }
 
                                             else {
@@ -234,16 +245,11 @@
                                                     }
                                                     toastr.error('تکرار رمز عبور مطابقت ندارد')
                                                 }
-                                                
+
                                             }
 
                                         })
-                                    </script>
-
-                                    @*<p > افزودن به سبد خرید</p>*@
-                                </div>
-
-                            </form>
+                            </script>
                         </div>
                     </div>
                 </section>

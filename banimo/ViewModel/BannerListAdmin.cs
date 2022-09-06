@@ -8,11 +8,13 @@ namespace banimo.ViewModel
     public class Banner
     {
         public int ID { get; set; }
+
         public string title { get; set; }
         public string catIDOrLink { get; set; }
         public string type { get; set; }
         public string image { get; set; }
         public string Ptitle { get; set; }
+
     }
 
     public class BannerListAdmin

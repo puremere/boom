@@ -17,6 +17,7 @@ using System.Text;
 
 namespace banimo.Controllers
 {
+    [doForAll]
     public class ErrorController : Controller
     {
 

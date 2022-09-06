@@ -134,7 +134,11 @@
                 <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                     <label> انتخاب برند </label>
                     <div style="width:100%">
-                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+                        @if (Model.brands != null)
+                        {
+                            @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+
+                        }
                     </div>
                 </div>
                 <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
@@ -212,21 +216,27 @@
                 <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                     <label> انتخاب برند </label>
                     <div style="width:100%">
-                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+                        @if (Model.brands != null)
+                        {
+                            @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+
+                        }
                     </div>
                 </div>
 
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <div class="component ">
-                        <div id="verifEdit" class="btn btn-success">تایید  </div>
-                    </div>
-                </div>
+
                 <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                     <p hidden class="imageNameEdit"></p>
                     <div style="width:100%">
                         <div id="imageHolderEdit" style="display:flex; ">
 
                         </div>
+                    </div>
+                </div>
+
+                <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+                    <div class="component ">
+                        <div id="verifEdit" class="btn btn-success">تایید  </div>
                     </div>
                 </div>
 

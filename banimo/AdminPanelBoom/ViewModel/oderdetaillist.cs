@@ -7,11 +7,13 @@ namespace banimo.AdminPanelBoom.ViewModel
 {
     public class orderdetailNew
     {
+        public string selectedFilter { get; set; }
         public string ID { get; set; }
         public string title { get; set; }
         public string price { get; set; }
         public string oldPrice { get; set; }
-        
+        public string parentID { get; set; }
+
         public string discount { get; set; }
         public string description { get; set; }
         public string color { get; set; }
@@ -24,11 +26,18 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string catid { get; set; }
         public string subcatid { get; set; }
         public string subcatid2 { get; set; }
+        public List<Image> images { get; set; }
 
+    }
+    public class Image
+    {
+        public string title { get; set; }
+        public string ID { get; set; }
     }
 
     public class oderdetaillistNew
     {
+        
         public string count { get; set; }
         public string current { get; set; }
         public List<orderdetailNew> data { get; set; }

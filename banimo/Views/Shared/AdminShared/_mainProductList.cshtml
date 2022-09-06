@@ -1,0 +1,296 @@
+﻿
+@model AdminPanelBoom.ViewModel.productMainVM
+
+
+
+
+<div id="removeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin:0">
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>آیا از ایجاد ارتباط  اطمینان دارید</p>
+                        <div style="display:flex">
+                            <div id="cancelRemove" style="display:inline-block" class="btn  btn-default">لغو</div>
+                            <div id="setRemove" style="display:inline-block" class="btn  btn-default">تایید</div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div style="overflow-x:auto;padding:10px">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+
+
+
+            </div>
+            @if (Model.products != null)
+            {
+
+                <div class="panel-body">
+                    <div id="morris-area-chart">
+                        @{
+                            int w = Request.Browser.ScreenPixelsWidth;
+                            int h = Request.Browser.ScreenPixelsHeight;
+                            if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                            {
+                                if (Model.products != null)
+                                {
+                                    foreach (var item in Model.products)
+                                    {
+
+                                        int i = Model.products.IndexOf(item) + 1;
+
+
+                                        <div class="Itemholderr" id="@item.ID">
+
+                                            <div class="Item">
+                                                <p class="itemtitle">ردیف :</p>
+                                                <p class="itemvalue">@i</p>
+
+                                            </div>
+                                            <div class="Item">
+                                                <p class="itemtitle">نام کالا : </p>
+                                                <p class="itemvalue">@item.title</p>
+
+                                            </div>
+                                            <div class="Item">
+                                                <p class="itemtitle">رنگ :</p>
+                                                <p class="itemvalue">@item.color</p>
+
+                                            </div>
+                                            <div class="Item">
+                                                <p class="itemtitle">شاخص :</p>
+                                                <p class="itemvalue">@item.selectedFilter</p>
+
+                                            </div>
+                                            <div class="Item">
+                                                <p class="itemtitle">برند :</p>
+                                                <p class="itemvalue">@item.brand</p>
+
+                                            </div>
+
+
+
+
+                                        </div>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div style="overflow:auto">
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ردیف</th>
+                                                <th>نام کالا</th>
+                                                <th>رنگ </th>
+                                                <th>شاخص</th>
+                                                <th>برند</th>
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                if (Model.products != null)
+                                                {
+                                                    foreach (var item in Model.products)
+                                                    {
+                                                       
+                                                        
+
+                                                        int i = Model.products.IndexOf(item) + 1;
+
+                                                        <tr style=" ">
+                                                            <td>@i</td>
+                                                            <td>@item.title</td>
+                                                            <td>@item.color</td>
+                                                            <td>@item.selectedFilter</td>
+                                                            <td>@item.brand</td>
+                                                            <td><div id="@item.ID" class="btn btn-danger removeOrder">ایجاد ارتباط</div> </td>
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+
+
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @{
+        var total = (Convert.ToInt32(Model.count) / 12);
+        var remain = (Convert.ToInt32(Model.count) % 12);
+        if (remain != 0)
+        {
+            total = total + 1;
+        }
+        var activ = Convert.ToInt32(Model.current);
+        var activminus2 = activ - 2;
+        var activminus1 = activ - 1;
+        var activplus1 = activ + 1;
+        var activplus2 = activ + 2;
+
+
+
+        if ((total - activ) > 3 & activ > 3)
+        {
+            <ul class="pagination">
+
+                <li><a>«</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                @if (activminus2 > 2)
+                {
+                    <li><a>...</a></li>
+                }
+
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                <li class="active"><a>@activ</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                <li><a> ...</a></li>
+                <li><a>@total</a></li>
+                <li><a>»</a></li>
+            </ul>
+        }
+        else if ((total - activ > 3) && !(activ > 3))
+        {
+            <ul class="pagination">
+
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li class="active"><a>@activ </a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                <li><a href="#">...</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+
+        }
+        else if (!(total - activ > 3) && activ > 3)
+        {
+            <ul class="pagination">
+
+                <li><a>«</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                <li><a>...</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                <li style="cursor:pointer" class="active"><a>@activ </a></li>
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li><a>»</a></li>
+            </ul>
+
+        }
+        else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
+        {
+
+            <ul class="pagination">
+
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li class="active"><a href="#">@activ</a></li>
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+
+            </ul>
+
+        }
+
+    }
+
+    <script>
+        $(".pagingnumberforall").click(function () {
+
+            var num = this.textContent;
+            getlofo(num);
+        })
+
+    </script>
+
+
+</div>
+<script>
+  
+
+    $(".removeOrder").click(function () {
+        $("#removeModal").modal('toggle');
+        idselected = $(this).attr('id');
+    })
+
+
+    $("#setRemove").click(function () {
+        $("#removeModal").modal('toggle');
+        var selectedProduct = $("#selectedForServer").text();
+        $.ajax({
+            url: '/Admin/linkProdut',
+            dataType: 'html',
+            data: {
+                id: idselected,
+                productSelected : selectedProduct
+            },
+
+            success: function (data) {
+                $("#serverModal").modal('toggle');
+            }
+
+
+
+        });
+    });
+
+    
+</script>
+<div class="detailHolder">
+
+</div>

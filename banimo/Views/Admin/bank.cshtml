@@ -34,6 +34,7 @@
     </ul>
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active" style="padding-top:20px">
+
             <div class="modal fade" id="delAccountModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -60,8 +61,18 @@
 
                             <div class="formsection main1" style="display:none">
                                 <div class="modal-body">
-                                    <p id="codingTitle"></p>
-                                    <input id="codeTitle" name="codeTitle" class="form-control" />
+                                    <div style="display:flex">
+                                        <div style="margin:5px">
+                                            <p id="codingTitle"></p>
+                                            <input id="codeTitle" name="codeTitle" class="form-control" />
+                                        </div>
+                                        <div  style="margin:5px">
+                                            <p>کد </p>
+                                            <input id="codeHesab" name="codeHesab" class="form-control" />
+                                        </div>
+                                    </div>
+                                    
+                                   
                                 </div>
                             </div>
 
@@ -77,7 +88,7 @@
 
                                 var typeID = $("#typeID").val();
 
-
+                               
                                 if (typeID == "1") {
                                     var title = $("#daramadTitle").val();
 
@@ -153,156 +164,271 @@
                                         $("#accountForm").submit();
                                     }
                                 }
+                                else {
+                                    var title = $("#daramadTitle").val();
+
+                                    if (title == "") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('تمامی موارد را کامل کنید')
+                                    }
+                                    else {
+                                        $("#accountForm").submit();
+                                    }
+                                }
                             })
                         </script>
                     </div>
                 </div>
             </div>
-            <div class="row" style="background-color:white; padding:10px; margin:0px;">
-                <div class="row">
-                    <div id="Listholder">
-                        <div class="row" style="padding:20px">
-                            <div style="overflow-x:auto;padding:10px">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#coding1" style=" color: #8d8d8d; ">کدینگ مبنا</a></li>
+                <li><a data-toggle="tab" href="#coding2" style=" color: #8d8d8d; ">کدینگ متغیر</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="coding1" class="tab-pane fade in active" style="padding-top:20px">
+
+                    <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                        <div class="row">
+                            <div id="Listholder">
+                                <div class="row" style="padding:20px">
+                                    <div style="overflow-x:auto;padding:10px">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                        <h3 class="panel-title"> جدول کدینگ  <i myparent="0" mytype="1" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addacount"></i></h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div id="morris-area-chart">
-                                            <div style="overflow:auto">
-                                                <table class="table table-bordered table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>
-                                                                کدینگ
-                                                            </th>
-                                                            <th>
-                                                                گروه
-                                                            </th>
-                                                            <th>
-                                                                کل
-                                                            </th>
-                                                            <th>
-                                                                معین
-                                                            </th>
-                                                            <th>
-                                                                تفصیل
-                                                            </th>
-                                                            <th>
-                                                                حذف
-                                                            </th>
-                                                            <th>
-                                                                افزودن
-                                                            </th>
-                                                            <th>
-                                                                بیشتر/کمتر
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        @if (Model.CodingList != null)
-                                                        {
-                                                            List<banimo.ViewModel.CodingList> kollList = Model.CodingList.Where(x => x.codingType == "2").ToList();
-                                                            foreach (var koll in kollList)
-                                                            {
-                                                                string kollclassname = "koll" + koll.ID;
-                                                                List<banimo.ViewModel.CodingList> moinList = Model.CodingList.Where(x => x.parentID == koll.ID.ToString()).ToList();
+                                                <h3 class="panel-title"> جدول کدینگ  </h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div id="morris-area-chart">
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-bordered table-hover table-striped">
+                                                            <thead>
                                                                 <tr>
-                                                                    <td>
-                                                                        @Html.DisplayFor(modelItem => koll.codeHesab)
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td>
-                                                                        @Html.DisplayFor(modelItem => koll.title)
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td></td>
-
-                                                                    <td style="text-align: center;">
-                                                                        @if (moinList.Count() == 0)
-                                                                        {
-                                                                            <a id=@koll.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-
-                                                                        }
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <a myparent="@koll.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن معین</a>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        @if (moinList.Count() != 0)
-                                                                        {
-                                                                            <a myparent="@koll.ID" mytype="2" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> باز/ بستن</a>
-
-                                                                        }
-                                                                    </td>
+                                                                    <th>
+                                                                        کدینگ
+                                                                    </th>
+                                                                    <th>
+                                                                        گروه
+                                                                    </th>
+                                                                    <th>
+                                                                        کل
+                                                                    </th>
+                                                                    <th>
+                                                                        معین
+                                                                    </th>
+                                                                    <th>
+                                                                        تفصیل
+                                                                    </th>
+                                                                    <th style="direction:ltr">
+                                                                        2 تفصیل
+                                                                    </th>
+                                                                    <th>
+                                                                        حذف
+                                                                    </th>
+                                                                    <th>
+                                                                        افزودن
+                                                                    </th>
+                                                                    <th>
+                                                                        بیشتر/کمتر
+                                                                    </th>
                                                                 </tr>
-                                                                foreach (var moin in moinList)
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @if (Model.CodingList != null)
                                                                 {
-                                                                    string moinclassname = "moin" + moin.ID;
-                                                                    List<banimo.ViewModel.CodingList> tafsilList = Model.CodingList.Where(x => x.parentID == moin.ID.ToString()).ToList();
 
-                                                                    <tr class="@kollclassname" style="display:none">
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => moin.codeHesab)
-                                                                        </td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => moin.title)
-                                                                        </td>
-                                                                        <td></td>
-
-                                                                        <td style="text-align: center;">
-                                                                            @if (tafsilList.Count() == 0)
-                                                                            {
-                                                                                <a id=@moin.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-
-                                                                            }
-
-                                                                        </td>
-                                                                        <td>
-                                                                            <a myparent="@moin.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن تفصیلی</a>
-
-                                                                        </td>
-                                                                        <td>
-                                                                            @if (tafsilList.Count() != 0)
-                                                                            {
-                                                                                <a myparent="@moin.ID" mytype="3" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> باز/ بستن</a>
-
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
-                                                                    foreach (var tafsil in tafsilList)
+                                                                    List<banimo.ViewModel.CodingList> groupList = Model.CodingList.Where(x => x.codingType == "1").ToList();
+                                                                    foreach (var group in groupList)
                                                                     {
+                                                                        string groupclassname = "group" + group.ID;
+                                                                        List<banimo.ViewModel.CodingList> kollList = Model.CodingList.Where(x => x.codingType == "2").ToList();
 
-                                                                        <tr class="@moinclassname" style="display:none">
+                                                                        <tr style="background-color:#f9f9f9; ">
                                                                             <td>
-                                                                                @Html.DisplayFor(modelItem => tafsil.codeHesab)
+                                                                                @Html.DisplayFor(modelItem => group.codeHesab)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => group.title)
+                                                                            </td>
+                                                                            <td>
                                                                             </td>
                                                                             <td></td>
                                                                             <td></td>
                                                                             <td></td>
-                                                                            <td>
-                                                                                @Html.DisplayFor(modelItem => tafsil.title)
-                                                                            </td>
 
                                                                             <td style="text-align: center;">
-                                                                                <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                                                                                @if (kollList.Count() == 0)
+                                                                                {
+                                                                                    <a id=@group.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                }
 
                                                                             </td>
-                                                                            <td></td>
-                                                                        </tr>
-                                                                    }
-                                                                }
+                                                                            <td>
+                                                                                <a myparent="@group.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن کل</a>
 
-                                                            }
-                                                            @*List<banimo.ViewModel.CodingList> groupList = Model.CodingList.Where(x => x.codingType == "1").ToList();
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (kollList.Count() != 0)
+                                                                                {
+                                                                                    <a myparent="@group.ID" mytype="1" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> لیست کل</a>
+
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+
+
+                                                                        foreach (var koll in kollList)
+                                                                        {
+                                                                            string kollclassname = "koll" + koll.ID;
+                                                                            List<banimo.ViewModel.CodingList> moinList = Model.CodingList.Where(x => x.parentID == koll.ID.ToString()).ToList();
+                                                                            <tr class="@groupclassname" style="background-color:#f5cbcb;display:none;">
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => koll.codeHesab)
+                                                                                </td>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => koll.title)
+                                                                                </td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+
+                                                                                <td style="text-align: center;">
+                                                                                    @if (moinList.Count() == 0)
+                                                                                    {
+                                                                                        <a id=@koll.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                    }
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a myparent="@koll.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن معین</a>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (moinList.Count() != 0)
+                                                                                    {
+                                                                                        <a myparent="@koll.ID" mytype="2" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> لیست معین</a>
+
+                                                                                    }
+                                                                                </td>
+                                                                            </tr>
+                                                                            foreach (var moin in moinList)
+                                                                            {
+                                                                                string moinclassname = "moin" + moin.ID;
+                                                                                List<banimo.ViewModel.CodingList> tafsilList = Model.CodingList.Where(x => x.parentID == moin.ID.ToString()).ToList();
+
+                                                                                <tr class="@kollclassname" style="display:none; background-color:#88e5f2">
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(modelItem => moin.codeHesab)
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(modelItem => moin.title)
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+
+                                                                                    <td style="text-align: center;">
+                                                                                        @if (tafsilList.Count() == 0)
+                                                                                        {
+                                                                                            <a id=@moin.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a myparent="@moin.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن تفصیلی</a>
+
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if (tafsilList.Count() != 0)
+                                                                                        {
+                                                                                            <a myparent="@moin.ID" mytype="3" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> لیست تفصیل 1</a>
+
+                                                                                        }
+                                                                                    </td>
+                                                                                </tr>
+                                                                                foreach (var tafsil in tafsilList)
+                                                                                {
+                                                                                    string tafsilclassname = "tafsil" + tafsil.ID;
+                                                                                    List<banimo.ViewModel.CodingList> tafsil2List = Model.CodingList.Where(x => x.parentID == tafsil.ID.ToString()).ToList();
+
+
+                                                                                    <tr class="@moinclassname" style="display:none; background-color:#b57ccc">
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => tafsil.codeHesab)
+                                                                                        </td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => tafsil.title)
+                                                                                        </td>
+                                                                                        <td></td>
+
+                                                                                        <td style="text-align: center;">
+                                                                                            <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن تفصیل 2</a>
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @if (tafsil2List.Count() != 0)
+                                                                                            {
+                                                                                                <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> لیست تفصیل 2</a>
+
+                                                                                            }
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    foreach (var tafsil2 in tafsil2List)
+                                                                                    {
+
+                                                                                        <tr class="@tafsilclassname" style="display:none; background-color:#e88baa">
+                                                                                            <td>
+                                                                                                @Html.DisplayFor(modelItem => tafsil2.codeHesab)
+                                                                                            </td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td>
+                                                                                                @Html.DisplayFor(modelItem => tafsil2.title)
+                                                                                            </td>
+
+                                                                                            <td style="text-align: center;">
+                                                                                                <a id=@tafsil2.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                            </td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                    }
+
+                                                                                }
+                                                                            }
+
+                                                                        }
+
+                                                                    }
+
+
+                                                                    @*List<banimo.ViewModel.CodingList> groupList = Model.CodingList.Where(x => x.codingType == "1").ToList();
 
                                                                 foreach (var item in groupList)
                                                                 {
@@ -343,352 +469,286 @@
 
 
                                                                 }*@
-                                                        }
+                                                                }
 
-                                                    </tbody>
-                                                </table>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+
+
                         </div>
+
+
+                    </div>
+                </div>
+                <div id="coding2" class="tab-pane fade in " style="padding-top:20px">
+
+
+
+                    <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                        <div class="row">
+                            <div id="Listholder">
+                                <div class="row" style="padding:20px">
+                                    <div style="overflow-x:auto;padding:10px">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                                                <h3 class="panel-title"> جدول کدینگ متغیر  <i myparent="0" mytype="0" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addacount"></i></h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div id="morris-area-chart">
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-bordered table-hover table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        کدینگ
+                                                                    </th>
+                                                                    <th>
+                                                                        عنوان تفصیل
+                                                                    </th>
+
+                                                                    <th style="direction:ltr">
+                                                                        جزیئات تفصیل
+                                                                    </th>
+                                                                    <th>
+                                                                        حذف
+                                                                    </th>
+                                                                    <th>
+                                                                        افزودن
+                                                                    </th>
+                                                                    <th>
+                                                                        لیست جزیئات
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @if (Model.CodingList != null)
+                                                                {
+
+                                                                    List<banimo.ViewModel.CodingList> varingTafsilList = Model.CodingList.Where(x => x.codingType == "0").ToList();
+                                                                    foreach (var variTafsilItem in varingTafsilList)
+                                                                    {
+                                                                        string variTafsilclassname = "varitafsil" + variTafsilItem.ID;
+                                                                        List<banimo.ViewModel.CodingList> detailTafsilList = Model.CodingList.Where(x => x.parentID == variTafsilItem.ID.ToString()).ToList();
+
+                                                                        <tr style="background-color:#f9f9f9; ">
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => variTafsilItem.codeHesab)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => variTafsilItem.title)
+                                                                            </td>
+                                                                            <td>
+                                                                            </td>
+
+
+                                                                            <td style="text-align: center;">
+                                                                                @if (detailTafsilList.Count() == 0)
+                                                                                {
+                                                                                    <a id=@variTafsilItem.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                }
+
+                                                                            </td>
+                                                                            <td>
+                                                                                <a myparent="@variTafsilItem.ID" mytype="6" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن جزیئات</a>
+
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (detailTafsilList.Count() != 0)
+                                                                                {
+                                                                                    <a myparent="@variTafsilItem.ID" mytype="6" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> لیست جزیئات</a>
+
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+
+
+                                                                        foreach (var detailTafsilItem in detailTafsilList)
+                                                                        {
+                                                                            <tr class="@variTafsilclassname" style="background-color:#f5cbcb;display:none;">
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => detailTafsilItem.codeHesab)
+                                                                                </td>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => detailTafsilItem.title)
+                                                                                </td>
+                                                                             
+
+                                                                                <td style="text-align: center;">
+                                                                                    <a id=@detailTafsilItem.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+
+                                                                                </td>
+                                                                                <td>
+                                                                                </td>
+                                                                                <td>
+                                                                                </td>
+                                                                            </tr>
+
+
+                                                                        }
+
+                                                                    }
+
+
+                                                                    @*List<banimo.ViewModel.CodingList> groupList = Model.CodingList.Where(x => x.codingType == "1").ToList();
+
+                                                                foreach (var item in groupList)
+                                                                {
+                                                                    string groupClassName = "group" + item.ID;
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => item.codeHesab)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => item.title)
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+
+                                                                        <td style="text-align: center;">
+                                                                            @if (kollList.Count() == 0)
+                                                                            {
+                                                                                <a class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <a myparent="@item.ID" mytype="2" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن کل</a>
+
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (kollList.Count() != 0)
+                                                                            {
+                                                                                <a myparent="@item.ID" mytype="1" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> باز/ بستن</a>
+
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                }*@
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+              
                     </div>
 
 
-
                 </div>
-                @*<ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#daramad" style=" color: #8d8d8d; ">درآمد</a></li>
-                                    <li><a data-toggle="tab" href="#hazine" style=" color: #8d8d8d; ">هزینه</a></li>
-                                    <li><a data-toggle="tab" href="#sandogh" style=" color: #8d8d8d; ">صندوق</a></li>
-                                    <li><a data-toggle="tab" href="#bank" style=" color: #8d8d8d; ">بانک</a></li>
-                                </ul>
-
-                                <div class="tab-content">
-                                    <div id="daramad" class="tab-pane fade in active" style="padding-top:20px">
-
-                                    </div>
-                                    <div id="hazine" class="tab-pane fade in " style="padding-top:20px">
-                                        <div class="row">
-
-                                            <div id="Listholder">
-                                                <div class="row" style="padding:20px">
-                                                    <div style="overflow-x:auto;padding:10px">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-                    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i>لیست هزینه ها  <i id="2" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addacount"></i></h3>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <div id="morris-area-chart">
-                                                                    <div style="overflow:auto">
-                                                                        <table class="table table-bordered table-hover table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>
-                                                                                        ID
-                                                                                    </th>
-                                                                                    <th>
-                                                                                        عنوان
-                                                                                    </th>
-
-                                                                                    <th>
-
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @{
-                                                                                    if (Model.List.Where(x => x.type == "هزینه") != null)
-                                                                                    {
-                                                                                        foreach (var item in Model.List.Where(x => x.type == "هزینه"))
-                                                                                        {
-
-                                                                                            <tr>
-                                                                                                <td>
-                                                                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    @Html.DisplayFor(modelItem => item.title)
-                                                                                                </td>
-
-
-
-                                                                                                <td style="text-align: center;">
-
-                                                                                                    @{
-                                                                                                        <a id=@item.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-                                                                                                    }
-
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        }
-
-                                                                                    }
-                                                                                }
-
-
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-
-                                        </div>
-                                    </div>
-                                    <div id="sandogh" class="tab-pane fade in " style="padding-top:20px">
-                                        <div class="row">
-
-                                            <div id="Listholder">
-                                                <div class="row" style="padding:20px">
-                                                    <div style="overflow-x:auto;padding:10px">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-                    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i>لیست صندوق ها  <i id="3" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addacount"></i></h3>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <div id="morris-area-chart">
-                                                                    <div style="overflow:auto">
-                                                                        <table class="table table-bordered table-hover table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>
-                                                                                        ID
-                                                                                    </th>
-                                                                                    <th>
-                                                                                        عنوان
-                                                                                    </th>
-
-                                                                                    <th>
-
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @{
-                                                                                    if (Model.List.Where(x => x.type == "صندوق") != null)
-                                                                                    {
-                                                                                        foreach (var item in Model.List.Where(x => x.type == "صندوق"))
-                                                                                        {
-
-                                                                                            <tr>
-                                                                                                <td>
-                                                                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    @Html.DisplayFor(modelItem => item.title)
-                                                                                                </td>
-
-
-
-                                                                                                <td style="text-align: center;">
-
-                                                                                                    @{
-                                                                                                        <a id=@item.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-                                                                                                    }
-
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        }
-
-                                                                                    }
-                                                                                }
-
-
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-
-                                        </div>
-                                    </div>
-                                    <div id="bank" class="tab-pane fade in " style="padding-top:20px">
-                                        <div class="row">
-
-                                            <div id="Listholder">
-                                                <div class="row" style="padding:20px">
-                                                    <div style="overflow-x:auto;padding:10px">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-                    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-                    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i>لیست بانک ها  <i id="4" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addacount"></i></h3>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <div id="morris-area-chart">
-                                                                    <div style="overflow:auto">
-                                                                        <table class="table table-bordered table-hover table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>
-                                                                                        ID
-                                                                                    </th>
-                                                                                    <th>
-                                                                                        عنوان
-                                                                                    </th>
-                                                                                    <th>
-                                                                                        شعبه
-                                                                                    </th>
-                                                                                    <th>
-                                                                                        شماره حساب
-                                                                                    </th>
-
-                                                                                    <th>
-
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @{
-                                                                                    if (Model.List.Where(x => x.type == "بانک") != null)
-                                                                                    {
-                                                                                        foreach (var item in Model.List.Where(x => x.type == "بانک"))
-                                                                                        {
-
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        @Html.DisplayFor(modelItem => item.ID)
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        @Html.DisplayFor(modelItem => item.title)
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        @Html.DisplayFor(modelItem => item.shobe)
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        @Html.DisplayFor(modelItem => item.shomare)
-                                                                                    </td>
-
-                                                                                    <td style="text-align: center;">
-
-                                                                                        @{
-                                                                                            <a id=@item.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-                                                                                        }
-
-                                                                                    </td>
-                                                                                </tr>
-                                                                                        }
-
-                                                                                    }
-                                                                                }
-
-
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-
-                                        </div>
-                                    </div>
-
-                                </div>*@
-                <script>
-                    $(".Dbutton").click(function () {
-                        var ID = $(this).attr('id');
-                        $("#deleteID").val(ID);
-                        $("#delAccountModal").modal('toggle')
-                    })
-                    $("#modalDelVerify").click(function () {
-                        var title = $("#daramadTitle").val();
-
-
-                        $("#delAccountForm").submit();
-                    })
-                    $(".openacount").click(function () {
-                        var parnetID = $(this).attr('myparent');
-                        var codingType = $(this).attr('mytype');
-                        switch (codingType) {
-                            case ("1"):
-                                var title = "group" + parnetID;
-                                break;
-                            case ("2"):
-                                var title = "koll" + parnetID;
-                                break;
-                            case ("3"):
-                                var title = "moin" + parnetID;
-                                break;
-                            case ("4"):
-                                var title = "tafsil" + parnetID;
-                                break;
-
-                        }
-                        $("." + title).each(function () {
-                            if ($(this).is(":visible")) {
-                                $(this).fadeOut();
-                            }
-                            else {
-                                $(this).fadeIn();
-                            }
-
-                        })
-                    })
-                    $(".addacount").click(function () {
-                        var parnetID = $(this).attr('myparent');
-                        var codingType = $(this).attr('mytype');
-                        switch (codingType) {
-                            case ("1"):
-                                var title = "";
-                                break;
-                            case ("2"):
-                                var title = "نام کل جدید";
-                                break;
-                            case ("3"):
-                                var title = "نام معین جدید";
-                                break;
-                            case ("4"):
-                                var title = "نام تفصیلی جدید";
-                                break;
-
-                        }
-                        $("#codingTitle").text(title);
-                        $("#typeID").val(codingType);
-                        $("#parentID").val(parnetID);
-                        $(".formsection").css("display", "none");
-                        $(".main1").css("display", "inline-block");
-                        $("#createAccount").modal('toggle');
-                    })
-                </script>
             </div>
+
+            <script>
+                $(".Dbutton").click(function () {
+                    var ID = $(this).attr('id');
+                    $("#deleteID").val(ID);
+                    $("#delAccountModal").modal('toggle')
+                })
+                $("#modalDelVerify").click(function () {
+                    var title = $("#daramadTitle").val();
+
+
+                    $("#delAccountForm").submit();
+                })
+                $(".openacount").click(function () {
+                    var parnetID = $(this).attr('myparent');
+                    var codingType = $(this).attr('mytype');
+                    switch (codingType) {
+                        case ("0"):
+                            var title = "variTafsil" + parnetID;
+                            break;
+                        case ("1"):
+                            var title = "group" + parnetID;
+                            break;
+                        case ("2"):
+                            var title = "koll" + parnetID;
+                            break;
+                        case ("3"):
+                            var title = "moin" + parnetID;
+                            break;
+                        case ("4"):
+                            var title = "tafsil" + parnetID;
+                            break;
+                        case ("6"):
+                            var title = "varitafsil" + parnetID;
+                            break;
+
+                    }
+                   
+                    $("." + title).each(function () {
+                        if ($(this).is(":visible")) {
+                            $(this).fadeOut();
+                        }
+                        else {
+                            $(this).fadeIn();
+                        }
+
+                    })
+                })
+                $(".addacount").click(function () {
+                    
+                   
+                    var codingType = $(this).attr('mytype');
+               
+                    switch (codingType) {
+                        case ("0"):
+                            var title = "عنوان تفصیل متغیر";
+                            break;
+                        case ("1"):
+                            var title = "";
+                            break;
+                        case ("2"):
+                            var title = "نام کل جدید";
+                            break;
+                        case ("3"):
+                            var title = "نام معین جدید";
+                            break;
+                        case ("4"):
+                            var title = "نام تفصیلی جدید";
+                            break;
+                        case ("6"):
+                            var title = "عنوان جزئیات تفصیل";
+                            break;
+
+                    }
+                    $("#codingTitle").text(title);
+                    $("#typeID").val(codingType);
+                    $("#parentID").val($(this).attr('myparent'));
+                    $(".formsection").css("display", "none");
+                    $(".main1").css("display", "inline-block");
+                    $("#createAccount").modal('toggle');
+                })
+            </script>
+
         </div>
         <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
             <div class="row" style="background-color:white; padding:10px; margin:0px; ">
@@ -1124,7 +1184,7 @@
                         </div>
 
                     </div>
-                   
+
 
                 </div>
                 <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
@@ -1188,13 +1248,13 @@
                     })
                     $("#M22").change(function () {
                         var id = $(this).val();
-                       // console.log(id)
+                        // console.log(id)
                         $("#M33 option").each(function () {
                             var val = $(this).val();
                             if (val == "0") {
                                 $(this).prop('selected', true);
                             }
-                            else{
+                            else {
                                 $(this).prop('selected', false);
                             }
                             var optionid = $(this).attr('parentValue');
@@ -1283,14 +1343,14 @@
             altField: '.PDabserver',
             autoClose: true
         });
-       
+
     });
 
 
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        
+
     });
 </script>
 <script>

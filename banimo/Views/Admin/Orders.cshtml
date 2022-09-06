@@ -1,4 +1,4 @@
-﻿@model banimo.ViewModelPost.OrderList
+﻿@model  banimo.ViewModelPost.OrderList
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -105,9 +105,10 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">آخرین سفارشات </a></li>
-        <li ><a data-toggle="tab" href="#addOrder" style=" color: #8d8d8d; ">ثبت سفارش جدید </a></li>
+        <li><a data-toggle="tab" href="#addOrder" style=" color: #8d8d8d; ">ثبت سفارش جدید </a></li>
+        <li><a data-toggle="tab" href="#menu0" style=" color: #8d8d8d; ">لیست روش های ارسال</a></li>
         <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست زمان مجاز ارسال</a></li>
-        <li><a data-toggle="tab" href="#menu2" style=" color: #8d8d8d; ">افزودن زمان جدید</a></li>
+        
     </ul>
 
     <div class="tab-content">
@@ -222,7 +223,7 @@
                     getlofo(1)
                 });
                 $("#loading").show();
-               //getlofo(1)
+                //getlofo(1)
 
             </script>
 
@@ -260,49 +261,241 @@
             <div class="btn btn-success" id="addOrderButt">
                 تایید
             </div>
-           
+
         </div>
-        <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+
+        <div id="menu0" class="tab-pane fade" style="padding-top:20px">
+
+            <div style="padding:25px; border-radius:8px; border:1px solid #ddd">
+                <p> ثبت روش جدید</p>
+                <div class="form-group ">
+
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        عنوان
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="paymentTypeTitle" class="form-control" />
+                    </div>
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        توضیحات
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="paymentTypeDesc" class="form-control" />
+                    </div>
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        قیمت ارسال
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="paymentTypePrice" class="form-control" />
+                    </div>
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        تاخیر در ارسال (روز)
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="paymentTypeTakhir" class="form-control" />
+                    </div>
+
+                    <div class="component " style="direction: rtl; ">
+                        <button id="addPaymentType" class="btn btn-success">تایید</button>
+                        <script>
+                            $(document).ready(function () {
+                                $("#addPaymentType").click(function () {
+
+                                    var typeDesc = $("#paymentTypeDesc").val();
+                                    var typeprice = $("#paymentTypePrice").val();
+                                    var typeTitle = $("#paymentTypeTitle").val();
+                                    var typeTakhir = $("#paymentTypeTakhir").val();
+                                  
+                                    $.ajax({
+                                        url: '/Admin/addNewPaymentType',
+                                        dataType: 'html',
+                                        data: {
+                                            typeDesc: typeDesc,
+                                            typeprice: typeprice,
+                                            typeTitle: typeTitle,
+                                            takhir: typeTakhir + "",
+                                            ID : ""
+                                        },
+                                        success: function (data) {
+                                            if (data === "success") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('با موقیت ثبت شد');
+                                                location.reload();
+                                            }
+
+                                        },
+                                        error: function () {
+                                            alert("خطا")
+                                        }
+                                    });
+                                })
+                            })
+
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+           
+
             <script>
-                //$("#userID").onclick()
-                //$("#userID").on('keyup', function (e) {
-                //    if (e.key === 'Enter' || e.keyCode === 13) {
+                $.ajax({
+                    url: '/Admin/GetTheListOfPaymentType',
+                    dataType: 'html',
+                    success: function (data) {
 
-                //        $.ajax({
-                //            url: '/Admin/getUserName',
-                //            dataType: 'html',
-                //            data: {
-                //                val: $("#addItemToOrderInput").val(),
-                //                server: ""
-                //            },
-                //            success: function (data) {
+                        $('#paymentList').html(data);
+                    },
+                    error: function () {
+                        alert("timeFail")
+                    }
+                });
+            </script>
+            <div id="paymentList" style="padding-top:10px">
 
-                //                var productItems = {
-                //                    data: JSON.parse(data),
+            </div>
+        </div>
 
-                //                    getValue: "title",
-                //                    list: {
-                //                        maxNumberOfElements: 100,
-                //                        match: {
-                //                            enabled: true
-                //                        },
-                //                        onSelectItemEvent: function () {
-                //                            var value = $("#addItemToOrderInput").getSelectedItemData().ID;
-                //                            $("#IDholder").val(value).trigger("change");
-                //                        }
-                //                    }
-                                 
 
-                //                };
-                //            }
 
-                //        })
-                //    }
-                //    else {
+        <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+           
+            <div style="border:1px solid #ddd; border-radius:8px; padding: 15px">
+                <p> افزودن زمان جدید</p>
+                <div class="form-group ">
+                    @if (Model.deliverList != null)
+                    {
+                        <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                            روش ارسال
+                        </label>
+                        <div class="component ">
+                            @if (Model.deliverList.paymentType != null)
+                            {
+                                @Html.DropDownList("deliverDromdown", new SelectList(Model.deliverList.paymentType, "ID", "typeTitle"), new { id = "planID", @class = "form-control", })
 
-                //    }
-                //});
+                            }
 
+                        </div>
+                    }
+
+
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        روز
+                    </label>
+                    @{
+                        List<SelectListItem> listItems = new List<SelectListItem>();
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "شنبه",
+                            Value = "1"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "یک شنبه",
+                            Value = "2"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "دو شنبه",
+                            Value = "3"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "سه شنبه",
+                            Value = "4"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "چهار شنبه",
+                            Value = "5"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "پنچ شنبه",
+                            Value = "6"
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "جمعه",
+                            Value = "7"
+                        });
+
+                    }
+                    <div class="component ">
+                        @Html.DropDownList("daysOfWeek", listItems, "-- Select Status --", new { id = "daysOfWeek", style = "width:100%", @class = "DRPd form-control" })
+                    </div>
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        از ساعت
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="timefrom" class="form-control" />
+                    </div>
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                        تا ساعت
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="timeto" class="form-control" />
+                    </div>
+                    <div class="component " style="direction: rtl; ">
+                        <button id="addTimeOfDeliver" class="btn btn-success">تایید</button>
+                        <script>
+                            $(document).ready(function () {
+                                $("#addTimeOfDeliver").click(function () {
+
+                                    var DayOfWeek = $("#daysOfWeek").val();
+                                    var planID = $("#planID").val();
+                                    var TimeFrom = $("#timefrom").val();
+                                    var TimeTo = $("#timeto").val();
+                                    $.ajax({
+                                        url: '/Admin/addNewTimeOfDeliver',
+                                        dataType: 'html',
+                                        data: {
+                                            DayOfWeek: DayOfWeek,
+                                            TimeFrom: TimeFrom,
+                                            TimeTo: TimeTo,
+                                            planID: planID
+                                        },
+                                        success: function (data) {
+                                            if (data === "success") {
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('با موقیت ثبت شد');
+                                                location.reload();
+                                            }
+
+                                        },
+                                        error: function () {
+                                            alert("خطا")
+                                        }
+                                    });
+                                })
+                            })
+
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+            
+            <script>
+                
                 $.ajax({
                     url: '/Admin/GetTheListOfDeliveryTime',
                     dataType: 'html',
@@ -325,111 +518,7 @@
 
 
         </div>
-        <div id="menu2" class="tab-pane fade" style="padding-top:20px">
-            <div class="form-group ">
-                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    روز
-                </label>
-                @{
-                    List<SelectListItem> listItems = new List<SelectListItem>();
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "شنبه",
-                        Value = "1"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "یک شنبه",
-                        Value = "2"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "دو شنبه",
-                        Value = "3"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "سه شنبه",
-                        Value = "4"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "چهار شنبه",
-                        Value = "5"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "پنچ شنبه",
-                        Value = "6"
-                    });
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "جمعه",
-                        Value = "7"
-                    });
-
-                }
-                <div class="component ">
-                    @Html.DropDownList("daysOfWeek", listItems, "-- Select Status --", new { id = "daysOfWeek", style = "width:100%", @class = "DRPd form-control" })
-                </div>
-                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    از ساعت
-                </label>
-                <div class="component ">
-                    <input type="text" id="timefrom" class="form-control" />
-                </div>
-                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                    تا ساعت
-                </label>
-                <div class="component ">
-                    <input type="text" id="timeto" class="form-control" />
-                </div>
-                <div class="component " style="direction: rtl; ">
-                    <button id="addTimeOfDeliver" class="btn btn-success">تایید</button>
-                    <script>
-                        $(document).ready(function () {
-                            $("#addTimeOfDeliver").click(function () {
-
-                                var DayOfWeek = $("#daysOfWeek").val();
-                                var TimeFrom = $("#timefrom").val();
-                                var TimeTo = $("#timeto").val();
-                                $.ajax({
-                                    url: '/Admin/addNewTimeOfDeliver',
-                                    dataType: 'html',
-                                    data: {
-                                        DayOfWeek: DayOfWeek,
-                                        TimeFrom: TimeFrom,
-                                        TimeTo: TimeTo
-                                    },
-                                    success: function (data) {
-                                        if (data === "success") {
-                                            toastr.options = {
-                                                "debug": false,
-                                                "positionClass": "toast-top-center",
-                                                "onclick": null,
-                                                "fadeIn": 300,
-                                                "fadeOut": 1000,
-                                                "timeOut": 5000,
-                                                "extendedTimeOut": 1000
-                                            }
-
-                                            toastr.success('با موقیت ثبت شد');
-                                            location.reload();
-                                        }
-
-                                    },
-                                    error: function () {
-                                        alert("خطا")
-                                    }
-                                });
-                            })
-                        })
-
-                    </script>
-                </div>
-
-            </div>
-        </div>
+       
     </div>
 </div>
 
@@ -491,4 +580,7 @@
         $("#moreFilterSection").hide();
     })
 </script>
+
+
+  
 

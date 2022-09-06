@@ -208,8 +208,12 @@ new { @class = "c-form-account", enctype = "multipart/form-data", id = "register
                                                         @Html.Captcha(registrationCaptcha)
                                                     </div>
                                                     <div class="col-lg-12" style="margin-top:10px">
-                                                        @Html.Label("کد را وارد نمایید", new { @class = "col-md-4 control-label",
-                                                         @for = "CaptchaCode" , style = "float:right; margin-top:15px"})
+                                                        @Html.Label("کد را وارد نمایید", new
+                                                        {
+                                                            @class = "col-md-4 control-label",
+                                                         @for = "CaptchaCode",
+                                                            style = "float:right; margin-top:15px"
+                                                        })
 
                                                         <div class="col-md-6" style="float:right">
                                                             @Html.TextBox("CaptchaCode", null, new { @class = "form-control captchaVal" })

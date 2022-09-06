@@ -31,15 +31,25 @@ using System.Diagnostics;
 
 namespace banimo.Controllers
 {
-
+    [doForAll]
     public class ConnectionController : Controller
     {
         webservise wb = new webservise();
         string servername = ConfigurationManager.AppSettings["serverName"];
+        string nodeID = ConfigurationManager.AppSettings["nodeID"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
 
+        private string GetIp()
+        {
+            string ip = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (string.IsNullOrEmpty(ip))
+            {
+                ip = System.Web.HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            }
+            return ip;
+        }
         private void SetCookie(string mymodel, string name)
         {
            
@@ -142,7 +152,7 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("orderID", orderNum);
                     collection.Add("auth", auth);
-                    collection.Add("mbrand", servername);
+                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
 
 
                     //foreach (var myvalucollection in imaglist) {
@@ -275,18 +285,22 @@ namespace banimo.Controllers
                     collection.Add("discount", discount);
                     collection.Add("postalCode", postalCode);
                     collection.Add("hourID", model.hourid);
+                    collection.Add("planID", model.planID);
                     collection.Add("comment", "");
                     collection.Add("payment", model.payment);
                     collection.Add("auth", auth);
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
-                    collection.Add("mbrand", servername);
+                  
+                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                    
+
 
                     //foreach (var myvalucollection in imaglist) {
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -313,7 +327,7 @@ namespace banimo.Controllers
                             collection.Add("device", device);
                             collection.Add("code", code);
                             collection.Add("token", token);
-                            collection.Add("mbrand", servername);
+                            collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
                             //foreach (var myvalucollection in imaglist) {
                             //    collection.Add("imaglist[]", myvalucollection);
                             //}
@@ -593,7 +607,53 @@ namespace banimo.Controllers
         }
 
 
-        
+        public ActionResult finalizeFromWallet(int id)
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result;
+            
+
+            string result2 = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection();
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("auth", "");
+                collection2.Add("orderID", id.ToString());
+                collection2.Add("mbrand", servername);
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
+
+                result2 = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            walletUpdate modelwallet = JsonConvert.DeserializeObject<walletUpdate>(result2);
+
+            if (modelwallet.status == "300")
+            {
+                return Content("300");
+            }
+            else
+            {
+                string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
+                string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
+
+
+
+                ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                finalModle.payment = "1";
+                return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1" });
+
+            }
+
+
+
+
+        }
         public ActionResult finalizeOrder( string id,string payment)
         {
 
@@ -756,7 +816,7 @@ namespace banimo.Controllers
                     collection.Add("auth", auth);
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
-                    collection.Add("mbrand", servername);
+                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
 
                     //foreach (var myvalucollection in imaglist) {
                     //    collection.Add("imaglist[]", myvalucollection);
@@ -1018,6 +1078,9 @@ namespace banimo.Controllers
 
             TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(StatusSendRequest[0].Replace("_", " ")));
             string srt = TempData["Message"].ToString();
+
+
+           
             return RedirectToAction("verifyAtBase", "Connection");
 
 
@@ -1100,7 +1163,7 @@ namespace banimo.Controllers
                 collection.Add("auth", auth);
                 collection.Add("latitude", model.lat);
                 collection.Add("longitude", model.lon);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
@@ -1277,13 +1340,6 @@ namespace banimo.Controllers
                                     int Amount = Convert.ToInt32(log2.mytransaction.First().price);
 
 
-                                    // long RefID;
-                                    System.Net.ServicePointManager.Expect100Continue = false;
-                                    ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
-
-
-
-
                                     int Status = 100;// zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
                                                      //userdata user = Session["LogedInUser"] as userdata;
 
@@ -1299,7 +1355,7 @@ namespace banimo.Controllers
                                             var collection2 = new NameValueCollection();
                                             collection2.Add("device", device);
                                             collection2.Add("code", code);
-                                            collection2.Add("auth", Request.QueryString["Authority"]);
+                                            collection2.Add("auth", saleOrderId.ToString());
                                             collection2.Add("mbrand", servername);
 
                                             byte[] response =
@@ -1653,7 +1709,7 @@ namespace banimo.Controllers
                 collection.Add("auth", auth);
                 collection.Add("latitude", model.lat);
                 collection.Add("longitude", model.lon);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
@@ -1996,7 +2052,13 @@ namespace banimo.Controllers
 
             ViewBag.message2 = refID;
             ViewBag.message3 = "CHR-" + refID;
-            return View();
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "verifyAtHome" + srt;
+
+            //return RedirectToAction( "Index",boom.Controllers.HomeController);
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View(action);
         }
      
        

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using banimo.ViewModePost;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,7 @@ namespace banimo.ViewModelPost
     {
         public int ID { get; set; }
         public string title { get; set; }
+        public string meta { get; set; }
         public string image { get; set; }
         public string oldPrice { get; set; }
         public string price { get; set; }
@@ -67,7 +69,7 @@ namespace banimo.ViewModelPost
         public string cattree { get; set; }
         public string ID { get; set; }
         public List<Slide> slides { get; set; }
-        public List<SimilarProduct> similarProduct { get; set; }
+        public List<Newest> similarProduct { get; set; }
         public List<OtherColor> otherColors { get; set; }
         public string title { get; set; }
         public string meta { get; set; }

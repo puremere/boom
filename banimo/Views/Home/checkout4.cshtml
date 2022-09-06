@@ -1,0 +1,587 @@
+﻿@model IEnumerable<banimo.ViewModel.CheckoutViewModel>
+
+@{
+    ViewBag.Title = "سبد خرید";
+    Layout = "~/Views/Shared/_Layout4.cshtml";
+}
+
+
+
+@{
+
+    <link href="~/Content/checkoutStyle.css" rel="stylesheet" />
+    <script>
+        function addCommas(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+    </script>
+    if (ViewBag.Message != "")
+    {
+        <script>
+         
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('@ViewBag.message' + " ، تنها یک مورد از این گروه میتواند در سبد خرید وجود داشته باشد")
+        </script>
+    }
+
+
+
+    if (@Model.Count() > 0)
+    {
+        <div class="contentSection">
+            <div>
+                <div id="headofshopcart" class="row" style="margin:25px; padding:0px">
+                    <p id="headofshopcartP" style="font-size:22px; float:right">سبد خرید</p>
+                </div>
+                <div class="row" style="direction:rtl; margin-bottom:20px">
+                    <div class="col-lg-4" id="finalpricediv" style="width:25%; margin: 0px; float: left;margin:5px; padding: 5px; padding-left:25px; background-color: #f5f5f5; display: inline-block; ">
+                        <div class="rowabove" style="width: 100%; background-color: #fff; padding: 20px; border: 1px solid #eee;">
+                            <div class="row" style="padding:15px 15px">
+                                <p style="float:right; text-align:right; font-size:12px; font-weight:700 ; color:#808080">مبلغ کل ( <i class="simpleCart_quantityy"></i>  کالا) </p>
+                                @{
+
+                                    decimal leftbaseprice = Model.Sum(x => x.baseprice * x.quantity);
+                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #808080; "><span id="basepriceholder">@String.Format("{0:n0}", @leftbaseprice)</span>  تومان</p>
+
+                                }
+
+                            </div>
+                            <div class="row discountSection" style="padding:5px 15px">
+                                <p style="float: right; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">سود شما از خرید </p>
+                                @{
+
+                                    decimal benefit = Model.Sum(x => x.baseprice * x.quantity) - Model.Sum(x => x.price * x.quantity);
+
+                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">(<span class="discountpercent">@String.Format("{0:n0}", @benefit) </span>) <span class="discountfinal"></span>   تومان </p>
+
+                                }
+                            </div>
+                        </div>
+                        <div class="rowabove" style="width: 100%; background-color: #fff; padding: 20px; border: 1px solid #eee;">
+                            <p style=" text-align:center; font-size:20px; padding:10px">مبلغ قابل پرداخت</p>
+                            @{
+                                decimal payment = Model.Sum(x => x.price * x.quantity);
+
+
+                                <p style=" font-size: 22px; color: red; text-align: center; padding: 10px"><span id="spanfortotal2">@String.Format("{0:n0}", @payment)</span> تومان</p>
+
+                            }
+                            <style>
+
+                                .mybtn {
+                                    background-image: linear-gradient(to right, #00BFD6 50%, #36CDDF 50%);
+                                    background-position: left bottom;
+                                    background-size: 200% 100%;
+                                    transition: all .2s ease-in;
+                                    /* background-color: #00BFD6;*/
+                                    width: 100%;
+                                    cursor: pointer;
+                                    margin-bottom: 25px;
+                                    border: 1px #0094ff solid;
+                                    border-radius: 5px;
+                                }
+
+                                    .mybtn:hover {
+                                        background-position: right bottom;
+                                    }
+                            </style>
+
+
+                        </div>
+                    </div>
+                    @{
+                        int w = Request.Browser.ScreenPixelsWidth;
+                        int h = Request.Browser.ScreenPixelsHeight;
+                        if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                        {
+                            <div id="tr2" class="col-lg-8" style=" display:none; width:100%; margin: 0px; float: right; padding: 5px;background-color: #f5f5f5">
+
+                                @{
+
+
+                                    foreach (var item in Model)
+                                    {
+                                        string imagefile = "placeholder.jpg";
+                                        if (item.imageaddress != null)
+                                        {
+                                            imagefile = item.imageaddress;
+                                        }
+                                        int i = item.productid;
+                                        string classremname = "rem" + i;
+                                        string classclosename = "close" + i;
+                                        string classminusname = "minus" + i;
+                                        string classaddname = "add" + i;
+                                        string tobeadded = "tobeadded" + i;
+                                        string tobeaddedbase = "tobeaddedbase" + i;
+                                        string pricesectionbase = "pricesectionbase" + i;
+                                        string pricesection = "pricesection" + i;
+                                        string finaltotal = "total" + i;
+                                        string imagesrc = imagefile;
+                                        string quantity = item.quantity.ToString();
+                                        string price = item.price.ToString();
+                                        string baseprice = item.baseprice.ToString();
+                                        string discount = item.discount.ToString();
+                                        decimal total = item.quantity * item.price;
+                                        decimal totalbase = item.quantity * item.baseprice;
+                                        string name = item.productname;
+                                        string background = "white";
+                                        string color = "black";
+                                        string message = "";
+                                        if (item.count < decimal.Parse(quantity))
+                                        {
+                                            background = "gray";
+                                            color = "white";
+                                            if (item.count != 0)
+                                            {
+                                                message = " موجود در انبار : " + item.count;
+                                            }
+                                            else
+                                            {
+                                                message = " ناموجود ";
+                                            }
+                                        }
+                                        if (item.limit < decimal.Parse(quantity))
+                                        {
+                                            background = "gray";
+                                            color = "white";
+                                            message = " محدودیت خرید : " + item.limit;
+                                        }
+                                        <div style="background-color:white; border:1px solid #ddd; margin:5px; padding:5px">
+                                            <div class="@classremname">
+                                                <div class="invert-closeb " style="position: relative; top: 15px;right:10px; z-index:999">
+                                                    <div class="rem">
+                                                        <div id=@classremname class=@classclosename> <i class="fa fa-times-circle" style="font-size:22px"></i></div>
+                                                    </div>
+                                                    <script>
+                                                        $(document).ready(function (c) {
+                                                            $('.@classclosename').on('click', function (c) {
+
+
+                                                                var ID = this.id;
+
+                                                                $.ajax({
+                                                                    url: '/Home/deletefromcart',
+                                                                    dataType: 'html',
+                                                                    data: {
+                                                                        id: ID
+
+                                                                    },
+                                                                    success: function (data) {
+                                                                        window.location.reload()
+
+                                                                    },
+                                                                    error: function () {
+
+                                                                    }
+
+
+                                                                });
+
+
+
+
+
+                                                            });
+                                                        });
+                                                    </script>
+                                                </div>
+                                                <div class="row" style="padding:0px">
+                                                    <div style="width: 40%; padding: 0px; display: inline-block;"><img style="width:110px; position:relative; top:20px" src="@imagesrc" alt=" " class="img-responsive" /></div>
+                                                    <div style="width: 55%; padding-top: 20px; display: inline-block;">
+                                                        <div class="invert" style="text-align: right; margin-bottom: 45px; font-weight:600">
+                                                            @name
+                                                        </div>
+                                                        @if (@message != "")
+                                                        {
+
+
+                                                            <div style="font-size:16px; " class=@finaltotal>@message</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (@price == "0")
+                                                            {
+                                                                <div class="invert  " style="display:none">توافقی</div>
+                                                                <div style="width: 50%" class=@finaltotal>توافقی</div>
+                                                            }
+
+                                                            else
+                                                            {
+                                                                <div class="@tobeadded" style="display: none; ">@price</div>
+                                                                <div class="@tobeaddedbase" style="display: none;">@baseprice</div>
+                                                                <div style="direction:ltr; margin-bottom:15px">
+                                                                    <div style="width:100%; text-align:right">
+                                                                        <div>
+                                                                            <del style="display: inline-block; color: red" class="@pricesectionbase">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </del>
+                                                                        </div>
+                                                                        <div>
+                                                                            <p style="display:inline-block; color:green">تومان</p>
+                                                                            <p style="display: inline-block; color: green; font-size:16px; font-weight:600" class="@pricesection">@string.Format("{0:n0}", Convert.ToInt32(total)) </p>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </div>
+                                                    <div style="width: 100%;display: inline-block; text-align:center; padding:5px" class="invert ">
+                                                        <div>
+                                                            <div class="quantity" style="">
+                                                                <div class="quantity-select row">
+                                                                    <i id=@classminusname class="fa fa-minus-circle value-minus" style="border: none;  font-size: 22px; color: #36CDDF; "></i>
+                                                                    <div style="background-color:@background; color:@color" class="entry value"><span>@quantity</span></div>
+                                                                    <i id=@classaddname class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #36CDDF; "></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                }
+
+
+
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-lg-8" id="detailpricediv" style=" width:74%; margin: 0px; float: right; padding: 5px;padding-right:25px; background-color: #f5f5f5;  display: inline-block">
+                                <div id="tableholder" style="width: 100%; background-color: #fff; border: 1px solid #eee;">
+                                    <div class="table-responsive checkout-right animated wow slideInUp" data-wow-delay=".5s">
+                                        <table class="timetable_sub">
+                                            @{
+
+
+
+
+                                                foreach (var item in Model)
+                                                {
+                                                    string imagefile = "placeholder.jpg";
+                                                    if (item.imageaddress != null)
+                                                    {
+                                                        imagefile = item.imageaddress;
+                                                    }
+                                                    int i = item.productid;
+                                                    string classremname = "rem" + i;
+                                                    string classclosename = "close" + i;
+                                                    string classminusname = "minus" + i;
+                                                    string classaddname = "add" + i;
+                                                    string tobeadded = "tobeadded" + i;
+                                                    string tobeaddedbase = "tobeaddedbase" + i;
+                                                    string pricesectionbase = "pricesectionbase" + i;
+                                                    string pricesection = "pricesection" + i;
+                                                    string finaltotal = "total" + i;
+                                                    string imagesrc = imagefile;
+                                                    string quantity = item.quantity.ToString();
+                                                    string price = item.price.ToString();
+                                                    string baseprice = item.baseprice.ToString();
+                                                    string discount = item.discount.ToString();
+                                                    decimal total = item.quantity * item.price;
+                                                    decimal totalbase = item.quantity * item.baseprice;
+                                                    string name = item.productname;
+                                                    string background = "white";
+                                                    string color = "black";
+                                                    string message = "";
+                                                    string parentback = "white";
+
+                                                    if (item.count < decimal.Parse(quantity))
+                                                    {
+                                                        background = "gray";
+                                                        parentback = "#fa5f5f";
+                                                        color = "white";
+                                                        if (item.count != 0)
+                                                        {
+                                                            message = " موجود در انبار : " + item.count;
+                                                        }
+                                                        else
+                                                        {
+                                                            message = " ناموجود ";
+                                                        }
+                                                    }
+                                                    if (item.limit < decimal.Parse(quantity))
+                                                    {
+                                                        background = "gray";
+                                                        parentback = "#fba9a9";
+                                                        color = "white";
+                                                        message = " محدودیت خرید : " + item.limit;
+                                                    }
+
+                                                    <tr class=@classremname style="background-color:@parentback">
+                                                        <td id="row1_td1" class="invert-closeb " style="width:5%">
+                                                            <div class="rem">
+                                                                <div id=@classremname class=@classclosename style="background-color:#ddd; border-radius:50%; padding:5px; width:30px"><img style="width:15px" src="~/images/del.png"> </div>
+                                                            </div>
+                                                            <script>
+                                                                $(document).ready(function (c) {
+                                                                    $('.@classclosename').on('click', function (c) {
+
+
+                                                                        var ID = this.id;
+
+                                                                        $.ajax({
+                                                                            url: '/Home/deletefromcart',
+                                                                            dataType: 'html',
+                                                                            data: {
+                                                                                id: ID
+
+                                                                            },
+                                                                            success: function (data) {
+                                                                                window.location.reload()
+
+
+                                                                            },
+                                                                            error: function () {
+
+                                                                            }
+
+
+                                                                        });
+
+
+
+
+
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </td>
+                                                        <td id="row1_td2" style="width:20%; padding:20px" class="invert-image"><img style="width:110px" src="@imagesrc" alt=" " class="img-responsive" /></td>
+                                                        <td id="row1_td3" style="width:25%" class="invert">
+                                                            @name
+                                                        </td>
+                                                        <td id="row1_td4" style="width:25%" class="invert ">
+                                                            <div class="quantity">
+                                                                <div class="quantity-select row">
+                                                                    <div id=@classminusname class="entry value-minus" style="background-color: #ddd; border-radius: 50%; border-color:#eee">&nbsp;</div>
+                                                                    <div style="background-color:@background; color:@color" class="entry value"><span>@quantity</span></div>
+                                                                    <div id=@classaddname class="entry value-plus active" style="background-color: #ddd; border-radius: 50%; border-color: #eee">&nbsp;</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        @if (@message != "")
+                                                        {
+
+
+                                                            <td style="font-size:16px">@message</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (price == "0")
+                                                            {
+                                                                <td class="invert  " style="display:none">توافقی</td>
+                                                                <td style="width: 25%" class=@finaltotal>توافقی</td>
+                                                            }
+
+                                                            else
+                                                            {
+                                                                <td class="invert @tobeadded" style="display:none">@price</td>
+                                                                <td class="invert @tobeaddedbase" style="display:none">@baseprice</td>
+                                                                <td id="" style="width: 25%; font-size:20px" class=@finaltotal><div style="color:#808080; font-size:14px"><p style="display:inline-block" class="@pricesectionbase">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </p> <p style="display:inline-block">تومان</p></div> <div><p style="display:inline-block" class="@pricesection">@string.Format("{0:n0}", Convert.ToInt32(total)) </p> <p style="display:inline-block">تومان</p></div></td>
+                                                            }
+                                                        }
+
+
+
+                                                    </tr>
+
+                                                }
+
+                                            }
+
+
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+
+                    <script>
+
+                        $('.value-plus').on('click', function () {
+                            $("#loading").show();
+                            var ID = this.id
+                            $.ajax({
+                                url: '/Home/addtocart2',
+                                dataType: 'html',
+                                data: {
+                                    id: ID
+
+                                },
+                                success: function (data) {
+                                    window.location.reload();
+
+
+
+                                },
+                                error: function () {
+                                    alert("error")
+                                }
+
+
+                            });
+
+
+
+                        });
+
+                        $('.value-minus').on('click', function () {
+                            $("#loading").show();
+                            var divUpd = $(this).siblings('.value'),
+                                newVal = parseInt(divUpd.text(), 10) - 1;
+
+                         
+                            if (newVal >= 0) {
+
+
+                                var ID = this.id
+                                $.ajax({
+                                    url: '/Home/minusfromcart',
+                                    dataType: 'html',
+                                    data: {
+                                        id: ID
+                                    },
+                                    success: function (data) {
+                                        window.location.reload();
+                                    },
+                                    error: function () {
+                                        alert("error")
+                                    }
+
+
+                                });
+
+
+
+                            }
+
+
+                        });
+                    </script>
+
+
+
+
+                </div>
+
+                <div class="row" style="margin-bottom:60px;padding:0 10px">
+                    @{
+                        List<banimo.ViewModel.CheckoutViewModel> isitemexist = Model.Where(x => x.limit < x.quantity || x.quantity > x.count).ToList();
+                        if (isitemexist.Count() == 0 && ViewBag.message == "")
+                        {
+
+                            <div class="mybtn " style="">
+                                <div style="border-radius: 50px 0 0 50px;  width: 20%; padding: 20px; display: inline-block">
+                                    <img style="display:inline-block;width:30px " src="~/images/arrleft2.png" />
+                                </div>
+                                <p id="confirmation" style="padding:10px; text-align:center; display:inline-block; font-size:15px; width:65%; color:white" class=" ">ادامه ثبت سفارش</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mybtn " style="    background-color: #4d4d4d;background-image: none; border: none;">
+                                <p style="padding:10px; text-align:center; display:inline-block; font-size:15px; width:100%;padding:20px;  color:white" class=" ">فاکتور خود را اصلاح کنید</p>
+                            </div>
+                        }
+
+                    }
+                </div>
+               
+
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $('#confirmation').click(function () {
+
+
+                        var totalquantity = $(".simpleCart_quantityy").text();
+                        if (totalquantity === "0") {
+                            toastr.options = {
+                                "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 300,
+                                "fadeOut": 1000,
+                                "timeOut": 5000,
+                                "extendedTimeOut": 1000
+                            }
+
+                            toastr.error('موردی در سبد خرید وجود ندارد')
+
+                        }
+                        else {
+
+                            if ('@Session["LogedInUser"]' !== "") {
+
+                                // alert(@Session["LogedInUser"]);
+                                var URL = "/Home/EndOrder"
+                                window.location.href = URL;
+                            }
+                            else {
+
+                                window.location.href = "/Home/loginPage"
+
+                            }
+
+                        };
+
+                    });
+
+                });
+            </script>
+        </div>
+        <div class="checkout noData" style="display:none">
+            <div class="c-profile-empty">
+
+                موردی برای نمایش وجود ندارد!
+            </div>
+        </div>
+        <!-- //banner -->
+        <!-- check out -->
+
+    }
+    else
+    {
+        <div class="checkout noData">
+            <div class="c-profile-empty">
+
+                موردی برای نمایش وجود ندارد!
+            </div>
+        </div>
+    }
+}
+
+

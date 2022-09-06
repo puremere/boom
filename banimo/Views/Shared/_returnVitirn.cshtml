@@ -32,7 +32,7 @@
         <div class="showmedetailFirstDiv showmedetailx">
             @{
                 string newurl = "/Home/ProductDetail?id=" + ID;
-                if (item.meta != null)
+                if (item.meta != "null")
                 {
                     banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
                     newurl = metaModel.curl;
@@ -42,8 +42,8 @@
 
                 }
             }
-            <div style="padding:15px">
-                <a href="@newurl" onclick="newProductDetail('@newurl')">
+            <div style="padding:15px ; background-color:white">
+                <a  onclick="newProductDetail('@newurl')">
                     <div class="imageholderindex">
                         <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
                     </div>
@@ -146,6 +146,7 @@
 
 <script>
     var newProductDetail = function (e) {
+      
         window.location.href = "/" + e;
 
     }

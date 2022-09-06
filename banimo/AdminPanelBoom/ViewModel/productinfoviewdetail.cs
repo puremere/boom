@@ -45,6 +45,10 @@ namespace AdminPanelBoom.ViewModel
     }
     public class productinfoforedit
     {
+
+        public string allGroup { get; set; }
+        public string brand { get; set; }
+        public string meta { get; set; }
         public string catmode { get; set; }
         public  string isOffer { get; set; }
         public  string isAvalible { get; set; }
@@ -75,6 +79,8 @@ namespace AdminPanelBoom.ViewModel
         public string inputallcolid { get; set; }
         public string Selectedfilters { get; set; }
         public string SelectedAnbars { get; set; }
+        public string titleTag { get; set; }
+        public string descTag { get; set; }
         
 
     }

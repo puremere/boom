@@ -130,6 +130,8 @@ namespace banimo.ViewModePost
     }
     public class getMaindataViewModel
     {
+
+        public contactSectionVM conmodel { get; set; }
         public List<Brand> brands { get; set; }
         public string iosCookie { get; set; }
         public List<Slide> slides { get; set; }

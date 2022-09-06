@@ -229,72 +229,75 @@
             <div class="form-group ">
                 <a id="FilterConfirm" class="btn btn-primary">تایید</a>
                 <script>
-                    $(document).ready(function () {
-
-                        let filter = "";
-                        $("#FilterConfirm").click(function () {
-
-                            $('input.rangeInput').each(function () {
-                                let id = $(this).attr("id");
-
-                                let ID = (id + "").replace("R", "");
-                                if ($(this).val() !== null) {
-                                    let value = "";
-                                    value = value + (ID + "-" + $(this).val() + ";");
-
-                                    $("#inputallrangeid").val(value)
-                                }
-                            })
-                            $('.filterselect').each(function () {
-                                var id = $(this).attr("id");
-                                var ID = (id + "").replace("DF", "");
-
-                                if ($(this).val() !== null) {
-                                    var value = $("#inputallfilterid").val();
-                                    value = value + (ID + "-" + $(this).val() + ";");
-                                    $("#inputallfilterid").val(value)
-                                }
-
-
-
-                            });
-
-                            var colval = "";
-                            $("#productcolor option:selected").each(function () {
-                                colval = colval + $(this).val() + ",";
-
-
-                            });
-                            if (colval == "") {
-                                toastr.options = {
-                                    "debug": false,
-                                    "positionClass": "toast-top-center",
-                                    "onclick": null,
-                                    "fadeIn": 300,
-                                    "fadeOut": 1000,
-                                    "timeOut": 5000,
-                                    "extendedTimeOut": 1000
-                                }
-                                toastr.error('رنگ محصول از قسمت فیلتر انتخاب نشده است')
-                            }
-                            else {
-                                $("#inputallcolid").val(colval);
-                                $("#Selectedfilters").val($(".selectedfilter option:selected").text());
-                                //$("#SelectedAnbar").val($(".SelectedAnbar option:selected").text());
-                                $('#filterModal').modal('toggle');
-                            }
-
-
-
-
-
-
-                        })
-
-
-
-
+                    $("#FilterConfirm").click(function () {
+                        $('#filterModal').modal('toggle');
                     })
+                    //$(document).ready(function () {
+
+                    //    let filter = "";
+                    //    $("#FilterConfirm").click(function () {
+
+                    //        $('input.rangeInput').each(function () {
+                    //            let id = $(this).attr("id");
+
+                    //            let ID = (id + "").replace("R", "");
+                    //            if ($(this).val() !== null) {
+                    //                let value = "";
+                    //                value = value + (ID + "-" + $(this).val() + ";");
+
+                    //                $("#inputallrangeid").val(value)
+                    //            }
+                    //        })
+                    //        $('.filterselect').each(function () {
+                    //            var id = $(this).attr("id");
+                    //            var ID = (id + "").replace("DF", "");
+
+                    //            if ($(this).val() !== null) {
+                    //                var value = $("#inputallfilterid").val();
+                    //                value = value + (ID + "-" + $(this).val() + ";");
+                    //                $("#inputallfilterid").val(value)
+                    //            }
+
+
+
+                    //        });
+
+                    //        var colval = "";
+                    //        $("#productcolor option:selected").each(function () {
+                    //            colval = colval + $(this).val() + ",";
+
+
+                    //        });
+                    //        if (colval == "") {
+                    //            toastr.options = {
+                    //                "debug": false,
+                    //                "positionClass": "toast-top-center",
+                    //                "onclick": null,
+                    //                "fadeIn": 300,
+                    //                "fadeOut": 1000,
+                    //                "timeOut": 5000,
+                    //                "extendedTimeOut": 1000
+                    //            }
+                    //            toastr.error('رنگ محصول از قسمت فیلتر انتخاب نشده است')
+                    //        }
+                    //        else {
+                    //            $("#inputallcolid").val(colval);
+                    //            $("#Selectedfilters").val($(".selectedfilter option:selected").text());
+                    //            //$("#SelectedAnbar").val($(".SelectedAnbar option:selected").text());
+                    //            $('#filterModal').modal('toggle');
+                    //        }
+
+
+
+
+
+
+                    //    })
+
+
+
+
+                    //})
                 </script>
             </div>
         }

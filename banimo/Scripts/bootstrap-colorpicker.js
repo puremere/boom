@@ -666,6 +666,7 @@
                 }
                 var type = this.container && this.container[0] !== document.body ? 'position' : 'offset';
                 var offset = this.component ? this.component[type]() : this.element[type]();
+               
                 this.picker.css({
                     top: offset.top + (this.component ? this.component.outerHeight() : this.element.outerHeight()),
                     left: offset.left

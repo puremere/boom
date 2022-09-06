@@ -122,12 +122,92 @@
         margin: auto;
         margin-bottom: 25px;
     }
+    .modal-backdrop{
+        display:none
+    }
 </style>
+<link href="~/Content/formstyle.css" rel="stylesheet" />
+
 <div id="idholder" style="display:none">@Model.ID</div>
+<div id="stepformHolder" style="display:none; background-color:rgba(0,0,0,0.5); width:100%; height:100%; position:fixed;z-index:999999">
+    <!-- MultiStep Form -->
+    <div style="display:none" id="shekam"></div>
+    <div style="display:none" id="shane"></div>
+    <div id="stepForm" class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form id="msform">
+                <!-- progressbar -->
+                <ul id="progressbar">
+                    <li class="active">قد و وزن</li>
+                    <li>فرم شکم</li>
+                    <li>فرم شانه</li>
+                    <li>نتیجه</li>
+                </ul>
+                <!-- fieldsets -->
+                <fieldset>
+                    <h2 class="fs-title">قد و وزن</h2>
+                    <h3 class="fs-subtitle">لطفا قد و وزن خود را وارد نمایید</h3>
+                    <input id="ghad" type="text" name="fname" placeholder="قد" />
+                    <input id="vazn" type="text" name="lname" placeholder="وزن" />
+                    <input style="text-align:center;" type="button" name="next" class="next action-button" value="بعدی" />
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">فرم شکم</h2>
+                    <h3 class="fs-subtitle">فرم شکم خود را انتخاب نمایید</h3>
+                    <div style="display:flex">
+                        <div id="sh1" class="imageHolder" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/C1.jpg" />
+                        </div>
+                        <div id="sh2" class="imageHolder" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/C2.jpg" />
+                        </div>
+                        <div id="sh3" class="imageHolder" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/C3.jpg" />
+                        </div>
+                    </div>
+                    <input style="text-align:center;" type="button" name="Next" class="next action-button" value="بعدی" />
+                    <input style="text-align:center;" type="button" name="Previous" class="previous action-button-previous" value="قبلی" />
+
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">فرم شانه</h2>
+                    <h3 class="fs-subtitle">فرم شانه خود را انتخاب کنید</h3>
+                    <div style="display:flex">
+                        <div id="s1" class="imageHolder2" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/D1.jpg" />
+                        </div>
+                        <div id="s2" class="imageHolder2" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/D2.jpg" />
+                        </div>
+                        <div id="s3" class="imageHolder2" style=" margin:20px">
+                            <img style="max-width:100%; max-height:100%; object-fit:contain" src="~/images/D3.jpg" />
+                        </div>
+                    </div>
+                    @*<input style="text-align:center;" type="submit" name="submit" class="submit action-button" value="تایید" />*@
+                    <input style="text-align:center; display:none" type="button" name="Next" class="next action-button" value="بعدی"  />
+                    <input style="text-align:center;" type="button" name="submitbull" class="submitbutt action-button" value="تایید" />
+                    <input style="text-align:center;" type="button" name="previous" class="previous action-button-previous" value="قبلی" />
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">نتیجه</h2>
+                    <h3 class="fs-subtitle">سایز پیشنهادی مناسب برای شما</h3>
+                    <div style="position:relative" >
+                        <h2 style=" margin-left:10px 20px; border-radius:8px; border:1px solid #00a002; padding:20px ; direction:rtl; text-align:center;width: 400px;margin: 20px auto;padding-top:25px " class="fs-subtitle">سایز پیشنهادی اول : <span>M</span>  می باشد</h2>
+                        <i style="padding:7px; top:-10px; background-color:white;border-radius:8px; border:2px solid ; position:absolute; color:#00a002 " class="fa fa-check"></i>
+                    </div>
+                    <h3 style="direction:rtl" class="fs-subtitle">سایز پیشنهادی دوم : <span>S</span>  می باشد</h3>
+                    <input style="text-align:center;" type="button" name="previous" class="previous action-button-previous" value="قبلی" />
+                </fieldset>
+            </form>
+         
+        </div>
+    </div>
+    <!-- /.MultiStep Form -->
+</div>
 
 
 <div class="row contentholder" style=" padding-top:180px;  background-color: #fff;  border: 1px #eee solid; border-radius: 5px ;box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);margin:0">
-    <div class="col-lg-3 mustbehide" style="text-align:right">
+    <div class="col-lg-2 mustbehide" style="text-align:right">
         <div style="width:100%; padding:20px 0px; margin-bottom:20px">
 
             <div>
@@ -182,7 +262,7 @@
                             imagefile = Model.slides.First().image;
                         }
                         string src = imagefile;
-                        <div class="thumb-image" style="width:100%;overflow:hidden; margin:auto ; padding:20px; "> <img style="height:100%; width:100%; object-fit:scale-down" src="@src" data-imagezoom="true" class="img-responsive "> </div>
+                        <div class="thumb-image" style="width: 100%; overflow: hidden; margin: auto; padding: 20px; "> <img style="height:100%; width:100%; object-fit:scale-down" src="@src" data-imagezoom="true" class="img-responsive "> </div>
 
                     }
                     <div class="gradientback" style="display:none">
@@ -203,7 +283,7 @@
                 var wishoffid = "wishoff" + @Model.ID;
                 var shareid = "share" + @Model.ID;
                 var compareid = "compare" + @Model.ID;
-                <div id="slidholder" class="col-md-12 col-sm-12 col-lg-4 slidemultiple" style="visibility: visible; animation-delay: 0.5s; animation-name: slideInUp; background-color:#fff;">
+                <div id="slidholder" class="col-md-12 col-sm-12 col-lg-5 slidemultiple" style="visibility: visible; animation-delay: 0.5s; animation-name: slideInUp; background-color:#fff;">
                     @*<style>
                             .special-deal {
                                 min-height: 70px;
@@ -221,7 +301,7 @@
                                 }
                         </style>
                           <div class="special-deal" > فروش ویژه</div>*@
-                    <div class="flexslider" style="margin-bottom:0px">
+                    <div class="flexslider" style="margin-bottom:0px; left:-30px">
                         <!-- FlexSlider -->
                         <script>
 
@@ -231,7 +311,7 @@
                                     $('.flexslider').flexslider({
                                         animation: "slide",
                                         controlNav: false,
-                                        direction: "horizontal",
+                                        direction: "vertical",
                                         reverse: false,
                                         directionNav: false,
 
@@ -241,7 +321,7 @@
                                     $('.flexslider').flexslider({
                                         animation: "slide",
                                         controlNav: "thumbnails",
-                                        direction: "horizontal",
+                                        direction: "vertical",
                                         reverse: false,
                                         directionNav: false,
 
@@ -266,7 +346,7 @@
                                         string src = imagefile;
                                         <li data-thumb="@src">
                                             <div class="thumb-image imageitself" style=" margin:auto ; padding:20px;">
-                                                <img style="width:100%; height:100%; object-fit:scale-down" src="@src" data-imagezoom="true" class="img-responsive ">
+                                                <img style="max-width:100%; max-height:100%; object-fit:scale-down" src="@src" data-imagezoom="true" class="img-responsive ">
                                             </div>
                                             @*  <div class="thumb-image imageitself" style="margin:auto ; padding:20px; "> <img src="@src" data-imagezoom="true" class="img-responsive "> </div>*@
                                         </li>
@@ -283,10 +363,12 @@
                     </div>
                 </div>
                 <i id="@wishonid" class="detailfal fal fa-heart wish_on" style="font-family:FontAwesome; cursor:pointer; font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 200px;color:red"></i>
-                <i id="@wishoffid" class="detailfal fal fa-heart" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 200px;"></i>
+                <i id="@wishoffid" class="detailfal fal fa-heart" style="cursor:pointer;font-size: 25px; z-index: 999; float: right;position: absolute; right: 50px; top: 200px;"></i>
                 <i id="@shareid" class="detailfal fal fa-share-alt" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 260px;"></i>
 
                 <i id="@compareid" class="detailfal fal fa-clone" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 320px;">
+                </i>
+                <i data-toggle="modal" data-target="#calculateModal" id="" class="calculateSize detailfal fal fa-calculator" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 380px;">
                 </i>
             }
 
@@ -457,7 +539,7 @@
         if (!Request.Browser.IsMobileDevice || !(w < 820 && h > 820))
         {
             <div id="dataholder" class="col-md-5 col-lg-5 col-sm-12 single-right-left simpleCart_shelfItem animated wow slideInRight animated" style="border-right:1px solid #dedede; padding-bottom: 10px; direction: rtl; float: left;  visibility: visible; animation-delay: 0.5s; animation-name: slideInRight;" data-wow-delay=".5s">
-
+                <div class="col-lg-2"></div>
                 <div class="col-lg-8 mustbehide">
                     <div style="width:100%; padding:20px 0 40px 0 ; border-bottom: 1px solid #eee; ">
                         @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
@@ -608,19 +690,19 @@
                         if (Model.tag != "")
                         {
                             @*<div style="width:100%; border-bottom: solid 1px #eee; padding:20px 0px; margin:0px 0px">
-                                <div style="display: inline-block;  position: relative; margin-left:20px">
-                                    <h5 style="font-weight: 600;"> هشتگ ها:</h5>
-                                </div>
-                                @{
-                                    List<string> list2 = Model.tag.Split(',').ToList();
-                                    foreach (var tag in list2)
-                                    {
-                                        <div style="cursor:pointer; padding:5px; margin:5px ; border-radius:5px; background-color:#64c4ef; color:white; display:inline-block" class="tag"><a href="/Home/productlist?tag=@tag&value=@tag" style="padding:5px; color:white; text-decoration:none">@tag</a></div>
+                                    <div style="display: inline-block;  position: relative; margin-left:20px">
+                                        <h5 style="font-weight: 600;"> هشتگ ها:</h5>
+                                    </div>
+                                    @{
+                                        List<string> list2 = Model.tag.Split(',').ToList();
+                                        foreach (var tag in list2)
+                                        {
+                                            <div style="cursor:pointer; padding:5px; margin:5px ; border-radius:5px; background-color:#64c4ef; color:white; display:inline-block" class="tag"><a href="/Home/productlist?tag=@tag&value=@tag" style="padding:5px; color:white; text-decoration:none">@tag</a></div>
+
+                                        }
 
                                     }
-
-                                }
-                            </div>*@
+                                </div>*@
                         }
                     }
 
@@ -710,6 +792,7 @@
 
 
 </div>
+
 @{
 
     if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
@@ -1296,259 +1379,260 @@
     }
     else
     {
+
         <div id="webb">
             @*<div class="row " style="box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);background-color: #fff; min-height: 50px; margin: 30px 20px 20px 20px;  border-radius: 5px;">
-                <ul class="nav nav-tabs" style="background-color: #eee; border: 1px solid #ddd; border-right:0px">
-                    <li><a data-toggle="tab" href="#home">  <span style="margin-right: 25px;">   نقد و بررسی</span> <i class="fal fa-pencil" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%;color:#808080"></i> </a></li>
-                    @{
+                    <ul class="nav nav-tabs" style="background-color: #eee; border: 1px solid #ddd; border-right:0px">
+                        <li><a data-toggle="tab" href="#home">  <span style="margin-right: 25px;">   نقد و بررسی</span> <i class="fal fa-pencil" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%;color:#808080"></i> </a></li>
+                        @{
 
-                        if (Model.feature != null)
-                        {
-                            <li><a data-toggle="tab" href="#menu1">  <span style="margin-right: 25px;"> ویژگی های محصول</span> <i class="fal fa-star" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%;color:#808080"></i> </a></li>
+                            if (Model.feature != null)
+                            {
+                                <li><a data-toggle="tab" href="#menu1">  <span style="margin-right: 25px;"> ویژگی های محصول</span> <i class="fal fa-star" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%;color:#808080"></i> </a></li>
 
+                            }
                         }
-                    }
-                    <li><a data-toggle="tab" href="#commentsection">  <span style="margin-right: 25px;">   نظرات کاربران</span> <i class="fal fa-comment" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%; color:#808080"></i> </a></li>
+                        <li><a data-toggle="tab" href="#commentsection">  <span style="margin-right: 25px;">   نظرات کاربران</span> <i class="fal fa-comment" style="font-size:25px; color:black;position: absolute;top: 35%;right: 5%; color:#808080"></i> </a></li>
 
-                </ul>
-                <div class="tab-content" style="text-align: right;">
-                    <div id="home" class="tab-pane fade in active" style="margin-bottom:10px">
-                        <div style="margin:30px">
-                            <h3 style="margin-bottom:20px">توضیح و بررسی</h3>
-                            @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
-                            {
+                    </ul>
+                    <div class="tab-content" style="text-align: right;">
+                        <div id="home" class="tab-pane fade in active" style="margin-bottom:10px">
+                            <div style="margin:30px">
+                                <h3 style="margin-bottom:20px">توضیح و بررسی</h3>
+                                @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                                {
 
-                                <h4 style="color:#808080" class="numEn">@Model.title</h4>
-                            }
-                            else
-                            {
-                                <h4 style="color:#808080">@Model.title</h4>
-                            }
-                        </div>
-                        <style>
-
-                            .c-content-expert__summary {
-                                background: #fcfcfc;
-                                color: #404040;
-                                font-size: 16px;
-                                font-size: 1.143rem;
-                                line-height: 2.25;
-                                padding: 25px 322px 27px 50px;
-                                min-height: 256px;
-                                position: relative;
-                                margin-left: 24px;
-                                margin-bottom: 24px;
-                            }
-
-                            .c-mask {
-                                position: relative;
-                                padding-bottom: 15px;
-                            }
-
-                            .c-content-expert__summary:after {
-                                width: 165px;
-                                height: 165px;
-                                position: absolute;
-                                content: "";
-                                top: 30px;
-                                right: 81px;
-                                background: url(/images/pen.jpg) no-repeat 50% 50%;
-                                background-size: 100%;
-                            }
-
-                            .c-mask__text {
-                                position: relative;
-                                overflow: hidden;
-                                max-height: 250px;
-                            }
-
-                                .c-mask__text img {
-                                    width: 60%;
-                                    margin: auto;
-                                    margin-top: 15px
+                                    <h4 style="color:#808080" class="numEn">@Model.title</h4>
                                 }
-                        </style>
-                        <section class="c-content-expert__summary">
-                            <div class="c-mask js-mask is-masked">
-                                <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
-                                    @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
-                                    {
-                                        <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
-                                    }
-                                    else
-                                    {
-                                        <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
-                                    }
-                                </div>
-                                <a id="toggledesc" style="display: none; cursor:pointer; text-align:center; float:left;margin:10px 0; padding:10px;color:blue"><span>ادامه مطلب</span></a>
-                                <script>
-                                    $(document).ready(function () {
-                                        var height = $(".c-mask__text").height();
-
-                                        if (height >= 250) {
-                                            $("#toggledesc").css("display", "inline")
-                                        }
-                                    })
-                                    $("#toggledesc").click(function () {
-                                        if ($(".c-mask__text").css("max-height") == "250px") {
-                                            $(".c-mask__text").css("max-height", "1500px");
-                                            $(".c-mask__text").css("overflow-y", "scroll");
-                                            $("#toggledesc").text("بستن");
-                                        }
-                                        else {
-                                            $(".c-mask__text").css("max-height", "250px");
-                                            $(".c-mask__text").css("overflow-y", "hidden");
-                                            $("#toggledesc").text("ادامه مطلب");
-                                        }
-                                    })
-                                </script>
+                                else
+                                {
+                                    <h4 style="color:#808080">@Model.title</h4>
+                                }
                             </div>
-                        </section>
+                            <style>
 
-                    </div>
-                    @{
+                                .c-content-expert__summary {
+                                    background: #fcfcfc;
+                                    color: #404040;
+                                    font-size: 16px;
+                                    font-size: 1.143rem;
+                                    line-height: 2.25;
+                                    padding: 25px 322px 27px 50px;
+                                    min-height: 256px;
+                                    position: relative;
+                                    margin-left: 24px;
+                                    margin-bottom: 24px;
+                                }
 
-                        if (Model.feature != null)
-                        {
-                            <div id="menu1" class="tab-pane fade">
+                                .c-mask {
+                                    position: relative;
+                                    padding-bottom: 15px;
+                                }
 
-                                <div class="c-box c-box--tabs p-tabs__content">
-                                    <div class="c-params is-active">
-                                        <article>
-                                            @{
-                                                lst2.Clear();
-                                                foreach (var item in Model.feature)
-                                                {
-                                                    if (item.value == "Master")
+                                .c-content-expert__summary:after {
+                                    width: 165px;
+                                    height: 165px;
+                                    position: absolute;
+                                    content: "";
+                                    top: 30px;
+                                    right: 81px;
+                                    background: url(/images/pen.jpg) no-repeat 50% 50%;
+                                    background-size: 100%;
+                                }
+
+                                .c-mask__text {
+                                    position: relative;
+                                    overflow: hidden;
+                                    max-height: 250px;
+                                }
+
+                                    .c-mask__text img {
+                                        width: 60%;
+                                        margin: auto;
+                                        margin-top: 15px
+                                    }
+                            </style>
+                            <section class="c-content-expert__summary">
+                                <div class="c-mask js-mask is-masked">
+                                    <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
+                                        @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                                        {
+                                            <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
+                                        }
+                                    </div>
+                                    <a id="toggledesc" style="display: none; cursor:pointer; text-align:center; float:left;margin:10px 0; padding:10px;color:blue"><span>ادامه مطلب</span></a>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var height = $(".c-mask__text").height();
+
+                                            if (height >= 250) {
+                                                $("#toggledesc").css("display", "inline")
+                                            }
+                                        })
+                                        $("#toggledesc").click(function () {
+                                            if ($(".c-mask__text").css("max-height") == "250px") {
+                                                $(".c-mask__text").css("max-height", "1500px");
+                                                $(".c-mask__text").css("overflow-y", "scroll");
+                                                $("#toggledesc").text("بستن");
+                                            }
+                                            else {
+                                                $(".c-mask__text").css("max-height", "250px");
+                                                $(".c-mask__text").css("overflow-y", "hidden");
+                                                $("#toggledesc").text("ادامه مطلب");
+                                            }
+                                        })
+                                    </script>
+                                </div>
+                            </section>
+
+                        </div>
+                        @{
+
+                            if (Model.feature != null)
+                            {
+                                <div id="menu1" class="tab-pane fade">
+
+                                    <div class="c-box c-box--tabs p-tabs__content">
+                                        <div class="c-params is-active">
+                                            <article>
+                                                @{
+                                                    lst2.Clear();
+                                                    foreach (var item in Model.feature)
                                                     {
-                                                        lst2.Add(Model.feature.IndexOf(item));
+                                                        if (item.value == "Master")
+                                                        {
+                                                            lst2.Add(Model.feature.IndexOf(item));
+                                                        }
+                                                    }
+                                                    for (int i = 0; i < lst2.Count(); i++)
+                                                    {
+                                                        int j = i + 1;
+                                                        int myindex = lst2[i];
+                                                        <section>
+                                                            <h3 class="c-params__title">@Model.feature[myindex].title</h3>
+                                                            <ul class="c-params__list">
+                                                                @if (j < lst2.Count())
+                                                                {
+                                                                    foreach (var item in Model.feature)
+                                                                    {
+                                                                        if (Model.feature.IndexOf(item) > lst2[i] && Model.feature.IndexOf(item) < lst2[j])
+                                                                        {
+                                                                            <li>
+                                                                                <div class="c-params__list-key">
+                                                                                    <span class="block">@item.title</span>
+                                                                                </div>
+                                                                                <div class="c-params__list-value">
+                                                                                    <span class="block">
+                                                                                        @item.value
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    foreach (var item in Model.feature)
+                                                                    {
+                                                                        if (Model.feature.IndexOf(item) > lst2[i])
+                                                                        {
+                                                                            <li>
+                                                                                <div class="c-params__list-key">
+                                                                                    <span class="block">@item.title</span>
+                                                                                </div>
+                                                                                <div class="c-params__list-value">
+                                                                                    <span class="block">
+                                                                                        @item.value
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            </ul>
+                                                        </section>
                                                     }
                                                 }
-                                                for (int i = 0; i < lst2.Count(); i++)
-                                                {
-                                                    int j = i + 1;
-                                                    int myindex = lst2[i];
-                                                    <section>
-                                                        <h3 class="c-params__title">@Model.feature[myindex].title</h3>
-                                                        <ul class="c-params__list">
-                                                            @if (j < lst2.Count())
-                                                            {
-                                                                foreach (var item in Model.feature)
-                                                                {
-                                                                    if (Model.feature.IndexOf(item) > lst2[i] && Model.feature.IndexOf(item) < lst2[j])
-                                                                    {
-                                                                        <li>
-                                                                            <div class="c-params__list-key">
-                                                                                <span class="block">@item.title</span>
-                                                                            </div>
-                                                                            <div class="c-params__list-value">
-                                                                                <span class="block">
-                                                                                    @item.value
-                                                                                </span>
-                                                                            </div>
-                                                                        </li>
 
-                                                                    }
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                foreach (var item in Model.feature)
-                                                                {
-                                                                    if (Model.feature.IndexOf(item) > lst2[i])
-                                                                    {
-                                                                        <li>
-                                                                            <div class="c-params__list-key">
-                                                                                <span class="block">@item.title</span>
-                                                                            </div>
-                                                                            <div class="c-params__list-value">
-                                                                                <span class="block">
-                                                                                    @item.value
-                                                                                </span>
-                                                                            </div>
-                                                                        </li>
-
-                                                                    }
-                                                                }
-                                                            }
-
-                                                        </ul>
-                                                    </section>
-                                                }
-                                            }
-
-                                        </article>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                    <div id="commentsection" class="tab-pane fade">
-
-                        <div class="c-comments ">
-                            <h2 class="c-comments__headline">
-                                نظر کاربران در مورد:   <span style="margin-right:25px;display:inline-block; font-size:19px ; font-weight:500">  @Model.title </span>
-                          
-                            </h2>
-                            <div class="c-comments__summary">
-                                <div class="c-comments__summary-note">
-                                    <span>شما هم می‌توانید در مورد این کالا نظر بدهید.</span>
-                                    <p>
-                                        اگر این محصول را قبلا خریده باشید، با وارد شدن به حساب کاربری خود،  نظر
-                                        شما به عنوان مالک محصول ثبت خواهد شد.
-                                    </p>
-                                    <div class="mybtn addingcomment" style="cursor:default">
-                                        <div style="border-radius: 50px 0 0 50px; background-color: white; width: 30%; padding: 10px; display: inline-block">
-                                            <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i> <img style="display:inline-block; width:40px " src="~/images/comments.png" />
+                                            </article>
                                         </div>
-                                        @{
-                                            string id = Model.ID;
-                                            string img = Model.slides != null ? Model.slides.First().image : "placeholder.png";
-                                            if (@Session["token"] != null)
-                                            {
-
-                                                <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "AddComment", new { id = @id, img = img }, new { style = "color:white !important;cursor:pointer" })</p>
-
-                                            }
-                                            else
-                                            {
-                                                <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "Login", new { }, new { style = "color:white !important;cursor:pointer" })</p>
-
-                                            }
-
-                                        }
                                     </div>
                                 </div>
-                            </div>
-                            <div class="c-comments__filter">
-                                <span class="c-faq__filter-title h4">نظرات کاربران</span>
-                            </div>
-                            <div id="product-comment-list">
-                                <ul id="comment" class="c-comments__list"></ul>
+                            }
+                        }
+                        <div id="commentsection" class="tab-pane fade">
+
+                            <div class="c-comments ">
+                                <h2 class="c-comments__headline">
+                                    نظر کاربران در مورد:   <span style="margin-right:25px;display:inline-block; font-size:19px ; font-weight:500">  @Model.title </span>
+
+                                </h2>
+                                <div class="c-comments__summary">
+                                    <div class="c-comments__summary-note">
+                                        <span>شما هم می‌توانید در مورد این کالا نظر بدهید.</span>
+                                        <p>
+                                            اگر این محصول را قبلا خریده باشید، با وارد شدن به حساب کاربری خود،  نظر
+                                            شما به عنوان مالک محصول ثبت خواهد شد.
+                                        </p>
+                                        <div class="mybtn addingcomment" style="cursor:default">
+                                            <div style="border-radius: 50px 0 0 50px; background-color: white; width: 30%; padding: 10px; display: inline-block">
+                                                <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i> <img style="display:inline-block; width:40px " src="~/images/comments.png" />
+                                            </div>
+                                            @{
+                                                string id = Model.ID;
+                                                string img = Model.slides != null ? Model.slides.First().image : "placeholder.png";
+                                                if (@Session["token"] != null)
+                                                {
+
+                                                    <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "AddComment", new { id = @id, img = img }, new { style = "color:white !important;cursor:pointer" })</p>
+
+                                                }
+                                                else
+                                                {
+                                                    <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "Login", new { }, new { style = "color:white !important;cursor:pointer" })</p>
+
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-comments__filter">
+                                    <span class="c-faq__filter-title h4">نظرات کاربران</span>
+                                </div>
+                                <div id="product-comment-list">
+                                    <ul id="comment" class="c-comments__list"></ul>
+                                </div>
                             </div>
                         </div>
+                        <script>
+                var id = "@Model.ID";
+                $.ajax({
+                    url: '/Home/getListOfComments',
+                    dataType: 'html',
+                    data: {
+                        ProductID: id
+
+                    },
+                    success: function (data) {
+
+                        $('#comment').html(data);
+
+                    },
+                    error: function (request, status, error) {
+
+                    }
+                });
+                        </script>
                     </div>
-                    <script>
-            var id = "@Model.ID";
-            $.ajax({
-                url: '/Home/getListOfComments',
-                dataType: 'html',
-                data: {
-                    ProductID: id
-
-                },
-                success: function (data) {
-
-                    $('#comment').html(data);
-
-                },
-                error: function (request, status, error) {
-
-                }
-            });
-                    </script>
-                </div>
-            </div>*@
+                </div>*@
             @if (Model.similarProduct != null)
             {
 
@@ -1563,144 +1647,144 @@
 
                                     @foreach (var item0 in Model.similarProduct)
                                     {
-                                    string addID = "addtocarto" + item0.ID;
-                                    string minusID = "minus" + item0.ID;
-                                    string ID = "o" + item0.ID.ToString();
-                                    string addtocartid = "addtocart" + ID;
-                                    string price = item0.oldPrice;
-                                    string imagefile = "placeholder.jpg";
-                                    if (item0.title != null)
-                                    {
-                                    imagefile = item0.image.Trim(',').Split(',').First();
-                                    }
-                                    string src = imagefile;
+                                        string addID = "addtocarto" + item0.ID;
+                                        string minusID = "minus" + item0.ID;
+                                        string ID = "o" + item0.ID.ToString();
+                                        string addtocartid = "addtocart" + ID;
+                                        string price = item0.oldPrice;
+                                        string imagefile = "placeholder.jpg";
+                                        if (item0.title != null)
+                                        {
+                                            imagefile = item0.image.Trim(',').Split(',').First();
+                                        }
+                                        string src = imagefile;
 
-                                    <div class=" item" style="">
-                                        <style>
-                                            .product-men {
-                                                float: right;
-                                                border-top: 0px;
-                                                border-right: 0px;
-                                            }
-
-                                                .product-men #detailholdermain {
-                                                    /*border: 1px solid #eee;*/
+                                        <div class=" item" style="">
+                                            <style>
+                                                .product-men {
+                                                    float: right;
+                                                    border-top: 0px;
+                                                    border-right: 0px;
                                                 }
 
-                                                    .product-men #detailholdermain:hover {
-                                                        /*box-shadow: 0px 0px 5px 5px #eee;*/
+                                                    .product-men #detailholdermain {
+                                                        /*border: 1px solid #eee;*/
                                                     }
 
-                                            .promotion__badge {
-                                                color: red;
-                                                border-bottom: 1px solid red;
-                                                padding-bottom: 15px;
-                                            }
-                                        </style>
+                                                        .product-men #detailholdermain:hover {
+                                                            /*box-shadow: 0px 0px 5px 5px #eee;*/
+                                                        }
 
-                                        <div id=@ID class=" product-men showmedetail" style=" max-width:100% !important; z-index:8;cursor:pointer; padding:5px;margin-bottom:100px">
+                                                .promotion__badge {
+                                                    color: red;
+                                                    border-bottom: 1px solid red;
+                                                    padding-bottom: 15px;
+                                                }
+                                            </style>
 
-                                            <div id="detailholdermain" style="background-color:white;">
-                                                @*<div class="badgeholder" style=" min-height: 38px">
-                        @{
-                            if (item0.oldPrice != item0.price)
-                            {
-                                <div class="c-promotion__badge" style="font-size:12px; color: red; border-bottom: 1px solid red; padding: 8px 0px 10px 0px">فروش ویژه</div>
+                                            <div id=@ID class=" product-men showmedetail" style=" max-width:100% !important; z-index:8;cursor:pointer; padding:5px;margin-bottom:100px">
 
-                            }
-                        }
-                    </div>*@
-                                                <div id="contentholderofAll">
-
-
-                                                    <a style="cursor:pointer" href="/Home/ProductDetail?id=@ID&title=@item0.title">
-                                                        <div id="productlistimageholder" style=" width:100%">
-                                                            <img src="@src" alt="" class="pro-image-front" style="max-width:100%; max-height:100%; object-fit:scale-down">
-                                                        </div>
-                                                    </a>
-
-                                                    <div id="maintitleholder" style="display:flex; align-item0s:center;">
-
-                                                        <div class="titleholder">
+                                                <div id="detailholdermain" style="background-color:white;">
+                                                    @*<div class="badgeholder" style=" min-height: 38px">
                                                             @{
-                                                                if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                                                                if (item0.oldPrice != item0.price)
                                                                 {
+                                                                    <div class="c-promotion__badge" style="font-size:12px; color: red; border-bottom: 1px solid red; padding: 8px 0px 10px 0px">فروش ویژه</div>
 
-                                                                    <p class="numEn">@item0.title</p>
+                                                                }
+                                                            }
+                                                        </div>*@
+                                                    <div id="contentholderofAll">
+
+
+                                                        <a style="cursor:pointer" href="/Home/ProductDetail?id=@ID&title=@item0.title">
+                                                            <div id="productlistimageholder" style=" width:100%">
+                                                                <img src="@src" alt="" class="pro-image-front" style="max-width:100%; max-height:100%; object-fit:scale-down">
+                                                            </div>
+                                                        </a>
+
+                                                        <div id="maintitleholder" style="display:flex; align-item0s:center;">
+
+                                                            <div class="titleholder">
+                                                                @{
+                                                                    if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                                                                    {
+
+                                                                        <p class="numEn">@item0.title</p>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>@item0.title</p>
+                                                                    }
+
+                                                                }
+
+
+                                                            </div>
+                                                            <div class="" style="text-align: right">
+
+                                                                @if (item0.price != item0.oldPrice & Int32.Parse(item0.price) > 0)
+                                                                {
+                                                                    <div class="" style="">
+
+
+                                                                        <div class="" style="display:inline-block">
+
+                                                                            <del style="color:#8e8686"> @string.Format("{0:n0}", Convert.ToInt32(@item0.oldPrice))  </del>
+
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
+                                                        {
+                                                            string valueID = "value" + item0.ID;
+                                                            string iconcolor = "#36CDDF";
+                                                            string iconcurson = "pointer";
+                                                            string pointer = "";
+                                                            if (item0.isAvailable == "0")
+                                                            {
+                                                                iconcolor = "gray";
+                                                                iconcurson = "auto";
+                                                                pointer = "pointer-events: none;";
+                                                            }
+
+
+                                                        }
+
+                                                        <div style="">
+
+                                                            @{
+                                                                if (item0.isAvailable == "0")
+                                                                {
+                                                                    <div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>
 
                                                                 }
                                                                 else
                                                                 {
-                                                                    <p>@item0.title</p>
-                                                                }
-
-                                                            }
 
 
-                                                        </div>
-                                                        <div class="" style="text-align: right">
+                                                                    <div class="" style=" text-align: right; display:flex; align-item0s:center;direction:ltr">
 
-                                                            @if (item0.price != item0.oldPrice & Int32.Parse(item0.price) > 0)
-                                                            {
-                                                                <div class="" style="">
-
-
-                                                                    <div class="" style="display:inline-block">
-
-                                                                        <del style="color:#8e8686"> @string.Format("{0:n0}", Convert.ToInt32(@item0.oldPrice))  </del>
+                                                                        <p style="width:unset; font-weight:600">@string.Format("{0:n0}", Convert.ToInt32(@item0.price))</p>
+                                                                        <p style="width:unset; padding:1px ">تومان</p>
 
                                                                     </div>
-                                                                </div>
+                                                                }
                                                             }
+
+
+
                                                         </div>
                                                     </div>
-                                                    @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
-                                                    {
-                                                        string valueID = "value" + item0.ID;
-                                                        string iconcolor = "#36CDDF";
-                                                        string iconcurson = "pointer";
-                                                        string pointer = "";
-                                                        if (item0.isAvailable == "0")
-                                                        {
-                                                            iconcolor = "gray";
-                                                            iconcurson = "auto";
-                                                            pointer = "pointer-events: none;";
-                                                        }
-
-
-                                                    }
-                                                  
-                                                    <div style="">
-
-                                                        @{
-                                                            if (item0.isAvailable == "0")
-                                                            {
-                                                                <div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>
-
-                                                            }
-                                                            else
-                                                            {
-
-
-                                                                <div class="" style=" text-align: right; display:flex; align-item0s:center;direction:ltr">
-                                                                   
-                                                                    <p style="width:unset; font-weight:600">@string.Format("{0:n0}", Convert.ToInt32(@item0.price))</p>
-                                                                    <p style="width:unset; padding:1px ">تومان</p>
-
-                                                                </div>
-                                                            }
-                                                        }
-
-
-
-                                                    </div>
                                                 </div>
+
+
+
                                             </div>
-
-
-
                                         </div>
-                                    </div>
 
 
 
@@ -2004,6 +2088,9 @@
     })
 </script>
 <script>
+    $(".calculateSize").click(function () {
+        $("#stepformHolder").toggle();
+    })
     $('.value-plus').on('click', function () {
         event.stopPropagation();
         $("#loading").fadeIn()
@@ -2137,3 +2224,24 @@
 
 
 </script>
+<script src="~/Scripts/formscript.js"></script>
+<script>
+    $("#stepformHolder").click(function () {
+        $(this).toggle();
+    })
+    $("#msform").click(function (e) {
+        e.stopPropagation();
+    })
+</script>
+<style>
+
+     .flex-control-nav {
+        position: absolute !important;
+        top: 10px;
+        right: -80px;
+        display: flex;
+        flex-direction: column;
+        max-height: unset;
+        width: 100px;
+    }
+</style>

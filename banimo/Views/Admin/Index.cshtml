@@ -47,12 +47,46 @@
 </head>
 
 <body class="login">
-   
+    @if (ViewBag.error == "1")
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 8000,
+                "extendedTimeOut": 1000,
+
+
+            }
+            toastr.error("نام کاربری یا رمز عبور اشتباه است")
+        </script>
+    }
+    @if (ViewBag.error == "2")
+    {
+        <script>
+             
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 8000,
+                            "extendedTimeOut": 1000,
+
+
+                        }
+            toastr.error("نام کاربری یا رمز عبور اشتباه است")
+        </script>
+    }
     <script>
-                    var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-                    if (true) {
-                        $('#iosModal').modal('show');
-                    }
+        var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        if (true) {
+            $('#iosModal').modal('show');
+        }
     </script>
     <div id="loading" style="display:none">
         <div style="z-index:99999; padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
@@ -72,26 +106,28 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form>
+                    <form id="adminSingUp" method="post" action="/admin/CustomerLogin">
+                      
                         <h1>سامانه مدیریت مطالب</h1>
 
                         @{
                             if (Model.username != null)
                             {
+
                                 <div>
-                                    <input value=@Model.username id="login-urser" type="text" class="form-control" placeholder="نام کاربری" required="" />
+                                    <input name="phone" value=@Model.username id="login-urser" type="text" class="form-control" placeholder="نام کاربری" required="" />
                                 </div>
                                 <div>
-                                    <input value=@Model.pass id="login-password" type="password" class="form-control" placeholder="رمز عبور" required="" />
+                                    <input name="pass" value=@Model.pass id="login-password" type="password" class="form-control" placeholder="رمز عبور" required="" />
                                 </div>
                             }
                             else
                             {
                                 <div>
-                                    <input id="login-urser" type="text" class="form-control" placeholder="نام کاربری" required="" />
+                                    <input name="phone" id="login-urser" type="text" class="form-control" placeholder="نام کاربری" required="" />
                                 </div>
                                 <div>
-                                    <input id="login-password" type="password" class="form-control" placeholder="رمز عبور" required="" />
+                                    <input name="pass" id="login-password" type="password" class="form-control" placeholder="رمز عبور" required="" />
                                 </div>
                             }
                         }
@@ -151,68 +187,68 @@
 
 
             if (Phone != "" & Pass != "") {
+                $("#adminSingUp").submit();
+                //$("#loading").css("display", "block");
+                //$.ajax({
+                //    url: '/Admin/CustomerLogin',
+                //    dataType: 'html',
+                //    data: {
 
-                $("#loading").css("display", "block");
-                $.ajax({
-                    url: '/Admin/CustomerLogin',
-                    dataType: 'html',
-                    data: {
+                //        pass: Pass,
+                //        ischecked: ischecked,
+                //        phone: Phone
 
-                        pass: Pass,
-                        ischecked: ischecked,
-                        phone: Phone
-
-                    },
-                    success: function (data) {
-
-
-                        var srt = data.substring(0, 1);
-                        var URL = data.substring(1, data.length);
+                //    },
+                //    success: function (data) {
 
 
-                        if (srt === "1") {
+                //        var srt = data.substring(0, 1);
+                //        var URL = data.substring(1, data.length);
 
 
-                            window.location.href = "/Admin/Orders";
+                //        if (srt === "1") {
 
 
-                        }
-
-                        else {
-                            toastr.options = {
-                                "debug": false,
-                                "positionClass": "toast-top-center",
-                                "onclick": null,
-                                "fadeIn": 300,
-                                "fadeOut": 1000,
-                                "timeOut": 8000,
-                                "extendedTimeOut": 1000,
+                //            window.location.href = "/Admin/Orders";
 
 
-                            }
-                            toastr.error("نام کاربری یا رمز عبور اشتباه است")
-                            //toastr.error(data)
+                //        }
 
-                        }
-
-
-                    },
-                    error: function () {
-                        toastr.options = {
-                            "debug": false,
-                            "positionClass": "toast-top-center",
-                            "onclick": null,
-                            "fadeIn": 300,
-                            "fadeOut": 1000,
-                            "timeOut": 8000,
-                            "extendedTimeOut": 1000,
+                //        else {
+                //            toastr.options = {
+                //                "debug": false,
+                //                "positionClass": "toast-top-center",
+                //                "onclick": null,
+                //                "fadeIn": 300,
+                //                "fadeOut": 1000,
+                //                "timeOut": 8000,
+                //                "extendedTimeOut": 1000,
 
 
-                        }
-                        toastr.error("خطا در سرور")
+                //            }
+                //            toastr.error("نام کاربری یا رمز عبور اشتباه است")
+                //            //toastr.error(data)
 
-                    }
-                });
+                //        }
+
+
+                //    },
+                //    error: function () {
+                //        toastr.options = {
+                //            "debug": false,
+                //            "positionClass": "toast-top-center",
+                //            "onclick": null,
+                //            "fadeIn": 300,
+                //            "fadeOut": 1000,
+                //            "timeOut": 8000,
+                //            "extendedTimeOut": 1000,
+
+
+                //        }
+                //        toastr.error("خطا در سرور")
+
+                //    }
+                //});
             }
             else {
                 toastr.options = {

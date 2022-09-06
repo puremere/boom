@@ -10,6 +10,8 @@ namespace banimo.ViewModel
         public string status { get; set; }
         public string message { get; set; }
         public string credit { get; set; }
+        public string input { get; set; }
+        public string output { get; set; }
         public string orderID { get; set; }
         public string UserId { get; set; }
     }

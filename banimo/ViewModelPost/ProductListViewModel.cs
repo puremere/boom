@@ -91,13 +91,21 @@ namespace banimo.ViewModelPost
 
     }
 
+
+    public class orderlistVM
+    {
+        public OrderList orderlist { get; set; }
+       
+    }
     public class OrderList
     {
         public int count { get; set; }
         public int current { get; set; }
         public List<MyOrder> myOrder { get; set; }
         public List<MyUser> myUsers { get; set; }
+        public ViewModel.PaymentTypeVM deliverList { get; set; }
     }
+   
 
     public class MyUser
     {

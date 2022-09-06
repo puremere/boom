@@ -1,0 +1,101 @@
+﻿@model banimo.ViewModel.MyCollectionOfCatsList
+
+
+
+
+    <style>
+    .detailNav{
+        display:none;
+    }
+        .detailNav  {
+            display: none;
+            position: absolute;
+            background-color: white;
+            width: 100%;
+            z-index:9999;
+            left:0
+
+
+        }
+            .detailNav li {
+                display: inline-block;
+                padding: 10px;
+                text-align: center;
+                width:17%;
+                float:right
+
+            }
+    .menuParent{
+        display:flex;
+        flex-direction:column;
+        text-decoration : none
+    }
+        .menuParent img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+   @@media screen and (max-width: 600px){
+        .detailNav{
+            position:relative;
+        }
+        .menuParent img {
+            width: 100%
+        }
+        .detailNav li {
+            width:30%
+        }
+   }
+    </style>
+<div class="header-main bg-black-90">
+    <div class="maxWidth">
+        <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-dark w-100" id="header-navbar">
+
+
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="تبديل التنقل">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        @foreach (var cat in Model.catsdata.First().mycatcollection)
+                        {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase" data-toggle="none">@cat.title</a>
+                                <ul class="detailNav">
+                                    @{
+                                        List<banimo.ViewModel.Mysubcatcollection> sublist = Model.catsdata.First().mysubcatcollection.Where(x => x.CatID == cat.ID).ToList();
+                                    }
+                                    @foreach (var subcat in sublist)
+                                    {
+                                        string url = "Home/ProductList/catmode=" + cat.ID;
+                                       
+                                    <li>
+                                       
+                                        <a href="@url"  class="menuParent">
+                                            <img src="https://www.digijanebi.ir/images/@subcat.image" />
+                                            <span> @subcat.title</span>
+                                        </a>
+
+                                    </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+
+                    </ul>
+                    <div class="navbar-spacer"></div>
+
+                </div>
+                <a class="navbar-brand font-weight-bold" href="index.html">AUKEY</a>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+
+

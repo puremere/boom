@@ -105,18 +105,20 @@
         }
     </script>
     <script>
-        let value = "0";
+        let value = "";
         $("#lableToggle input").click(function () {
 
 
             if ($(this).is(':checked')) {
                 $("#raveshpardakht").css("display", "none");
 
-                value = "1"
+                value = "1";
+                $("#payment").val("1");
+              
             }
             else {
                 $("#raveshpardakht").css("display", "block");
-                value = "1"
+                value = ""
             }
         })
         $(".field").on('input', function () {
@@ -145,7 +147,7 @@
                 if (houid != "") {
                     if (addressID != "") {
 
-                        if (payment != "" && value != "0") {
+                        if (payment != "" || value != "") {
                             $("form#endOrderForm").submit();
                         }
                         else {
@@ -1226,8 +1228,15 @@
                         <div id="finalPriceHolder" style="">
                             <div class="row priceitem">
                                 @{
-                                    decimal totalprice = decimal.Parse(Model.finalAmount) + decimal.Parse(Model.priceDeliver);
-                                    decimal deliverPrice = decimal.Parse(@Model.priceDeliver);
+                                    decimal totalprice = decimal.Parse(Model.finalAmount);
+                                    decimal deliverPrice = 0;
+                                    if (decimal.Parse(Model.finalAmount) < decimal.Parse(@Model.baseDeliver))
+                                    {
+                                        totalprice = decimal.Parse(Model.finalAmount) + decimal.Parse(Model.priceDeliver);
+                                        deliverPrice = decimal.Parse(@Model.priceDeliver);
+                                    }
+                                  
+                                   
                                     decimal amountPrice = decimal.Parse(@Model.finalAmount);
                                     decimal creditPrice = decimal.Parse(@Model.credit);
                                 }

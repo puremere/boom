@@ -43,13 +43,18 @@
             </div>
             <p>@item.comment</p>
 
-            <div class="header" style="margin-bottom:10px">
-                <div>
+            @if (@item.Answer != "")
+            {
+                <div class="header" style="margin-bottom:10px">
+                    <div>
 
-                    <span>توسط فروشنده در تاریخ  @item.rtime  </span>
+                        <span>توسط فروشنده در تاریخ  @item.rtime  </span>
+                    </div>
                 </div>
-            </div>
-            <p>@item.Answer</p>
+                <p>@item.Answer</p>
+            }
+
+
 
         </div>
 

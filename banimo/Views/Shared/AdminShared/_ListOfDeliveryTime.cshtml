@@ -37,6 +37,9 @@
                                         @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
                                     </th>
                                     <th>
+                                        نام طرح
+                                    </th>
+                                    <th>
                                         روز
                                     </th>
                                     <th>
@@ -49,7 +52,7 @@
                                     <th>
                                         فعال
                                     </th>
-                                  
+
                                     <th>
 
                                     </th>
@@ -61,42 +64,45 @@
                                     {
                                         foreach (var item in Model.ListOfDeliveryTime)
                                         {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.DayText)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.TimeFrom)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.TimeTo)
-                                                </td>
-                                                <td>
-                                                    @if (item.isActive == "1")
-                                                    {
-                                                        <input class="isActive" id="@item.ID" name="isActive" type="checkbox"  checked />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input class="isActive"  id="@item.ID" name="isActive" type="checkbox"  />
-                                                    }
-                                                    
+                                                                <tr>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => item.ID)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => item.planID)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => item.DayText)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => item.TimeFrom)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => item.TimeTo)
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (item.isActive == "1")
+                                                                        {
+                                                                            <input class="isActive" id="@item.ID" name="isActive" type="checkbox" checked />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input class="isActive" id="@item.ID" name="isActive" type="checkbox" />
+                                                                        }
 
-                                                </td>
-                                            
 
-                                                <td>
-                                                    @{
-                                                      
-                                                        <a id=@item.ID class="deleteTime" style="  margin:2px ; cursor: pointer; background-color: #246388; padding: 5px; color: #fff; border-radius: 5px;">حذف</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-                                                       
-                                                    }
+                                                                    </td>
 
-                                                </td>
-                                            </tr>
+
+                                                                    <td>
+                                                                        @{
+
+                                                                            <a id=@item.ID class="deleteTime" style="  margin:2px ; cursor: pointer; background-color: #246388; padding: 5px; color: #fff; border-radius: 5px;">حذف</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+
+                                                                        }
+
+                                                                    </td>
+                                                                </tr>
                                         }
 
 

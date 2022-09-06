@@ -22,6 +22,7 @@ namespace banimo.ViewModelPost
     public class ReqestForPaymentViewModel
     {
         public string newdiscount { get; set; }
+        public string planID { get; set; }
         public string payment { get; set; }
         public string address { get; set; }
         public string addressID { get; set; }

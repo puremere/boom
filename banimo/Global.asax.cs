@@ -28,7 +28,27 @@ namespace banimo
         }
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            
+
+            //if (Request.Url.Host.StartsWith("www") && !Request.Url.IsLoopback)
+            //{
+            //    UriBuilder builder = new UriBuilder(Request.Url);
+            //    builder.Host = "" + Request.Url.Host;
+            //    Response.StatusCode = 301;
+            //    Response.AddHeader("Location", builder.ToString());
+            //    Response.End();
+
+
+            //}
+
+            if (Request.Url.Host.StartsWith("www") && !Request.Url.IsLoopback)
+            {
+                UriBuilder builder = new UriBuilder(Request.Url);
+                builder.Host = Request.Url.Host.Replace("www.", "");
+                Response.StatusCode = 301;
+                Response.AddHeader("Location", builder.ToString());
+                Response.End();
+            }
+
             // gzip
             // Implement HTTP compression  
             HttpApplication app = (HttpApplication)sender;
@@ -149,7 +169,7 @@ namespace banimo
         //    else
         //    {
         //        // this is my modification, which handles any type of an exception.
-        //        Response.Redirect(String.Format("~/Errors/Unknown"));
+        //        Response.Redirect(String.Format("~/Errors/Error500"));
         //    }
         //}
     }

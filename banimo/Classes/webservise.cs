@@ -57,6 +57,7 @@ namespace banimo.Classes
                 collection.Add("desc", desc);
                 collection.Add("orderID", orderID);
                 collection.Add("status", status);
+                collection.Add("referenceID", referenceID);
                 collection.Add("mbrand", servername);
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/addTransaction.php", collection);

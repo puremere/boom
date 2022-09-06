@@ -6,8 +6,27 @@
 }
 <link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                آیا از حذف آیتم مورد نظر اطمینان دارید؟
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                <button id="confirmRemove" type="button" class="btn btn-primary">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
+
     .nav-tabs {
         padding-right: 0px;
     }
@@ -125,7 +144,7 @@
             <label> طبقه بندی </label>
             <div style="width:100% ; display:flex">
                 @Html.DropDownListFor(x => x.selectedcat, listItems0, new { id = "listofcat", @class = "form-control" })
-              
+
             </div>
         </div>
 
@@ -146,306 +165,371 @@ new { enctype = "multipart/form-data", id = "editslide" }))
         <input id="catmode" name="catmode" type="hidden" />
         <input id="ID" name="ID" type="hidden" />
         <input id="title" name="title" type="hidden" />
+        <input id="newHeader" name="newHeader" type="hidden" />
+        <input id="newDes" name="newDes" type="hidden" />
+        
 
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:25px">
+    <ul class="nav nav-tabs">
+        @{
+            <li class="active"><a data-toggle="tab" href="#NEW" style=" color: #8d8d8d; "> فزودن اسلاید جدید</a></li>
 
-        <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:25px">
-            <ul class="nav nav-tabs">
-                @{
-                    <li class="active"><a data-toggle="tab" href="#NEW" style=" color: #8d8d8d; "> فزودن اسلاید جدید</a></li>
-
-                    if (Model.banners != null)
-                    {
-                        foreach (var item in Model.banners)
-                        {
-                            int index = Model.banners.IndexOf(item);
-                            string href = "#" + item.ID;
-                            string radif = "اسلاید " + (index + 1).ToString();
-                            <li><a data-toggle="tab" href=@href style=" color: #8d8d8d; "> @radif</a></li>
-                        }
-                    }
-
+            if (Model.banners != null)
+            {
+                foreach (var item in Model.banners)
+                {
+                    int index = Model.banners.IndexOf(item);
+                    string href = "#" + item.ID;
+                    string radif = "اسلاید " + (index + 1).ToString();
+                    <li><a data-toggle="tab" href=@href style=" color: #8d8d8d; "> @radif</a></li>
                 }
-
-
-
-            </ul>
-            @{
-                List<SelectListItem> listItems = new List<SelectListItem>();
-                listItems.Add(new SelectListItem
-                {
-                    Text = "عکس",
-                    Value = "image"
-                });
-                listItems.Add(new SelectListItem
-                {
-                    Text = "لینک",
-                    Value = "link"
-                });
-                listItems.Add(new SelectListItem
-                {
-                    Text = "هشتگ",
-                    Value = "tag"
-                });
-                if (Model.filters != "")
-                {
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "فیلتر",
-                        Value = "filter"
-                    });
-                }
-                if (Model.products != "")
-                {
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "محصولات",
-                        Value = "product"
-                    });
-                }
-                if (Model.cats != "")
-                {
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "دسته بندی اول",
-                        Value = "cat"
-                    });
-                }
-                if (Model.subcats != "")
-                {
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "دسته بندی دوم",
-                        Value = "subcat"
-                    });
-                }
-                if (Model.subcats2 != "")
-                {
-                    listItems.Add(new SelectListItem
-                    {
-                        Text = "دسته بندی سوم",
-                        Value = "subcat2"
-                    });
-                }
-
-
-
-
-
-
-
             }
-            <div class="tab-content">
-                @{
-                    <div id="NEW" class="tab-pane fade in active" style="padding-top:20px">
-                        <div class="row">
 
-
-                            <div class="row fieldholder col-lg-3">
-                                <label> دسته بندی</label>
-
-
-                                <div class=" ">
-                                    <span style="color:red; display:none">*</span>
-                                    @Html.DropDownList("newlist", listItems, "-- انتخاب سرگروه --", new { id = "newlist", name = "newlist", style = "", @class = "NRM form-control" })
-                                </div>
-
-
-                            </div>
-                            <div class="row fieldholder col-lg-3">
-                                <div>
-                                    <label style="text-align: right">
-                                        محتوا :
-                                    </label>
-
-                                    <div>
-                                        <span style="color:red; display:none">*</span>
-
-                                        <div id="contentHolder">
-                                            <input value="" type="text" id="newContent" name="newContent" required="required" class="form-control NRM  ">
-                                        </div>
-
-
-                                    </div>
-                                </div>
+        }
 
 
 
-                            </div>
-                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+    </ul>
+    @{
+        List<SelectListItem> listItems = new List<SelectListItem>();
+        listItems.Add(new SelectListItem
+        {
+            Text = "عکس",
+            Value = "image"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "لینک",
+            Value = "link"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "هشتگ",
+            Value = "tag"
+        });
+        if (Model.filters != "")
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = "فیلتر",
+                Value = "filter"
+            });
+        }
+        if (Model.products != "")
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = "محصولات",
+                Value = "product"
+            });
+        }
+        if (Model.cats != "")
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = "دسته بندی اول",
+                Value = "cat"
+            });
+        }
+        if (Model.subcats != "")
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = "دسته بندی دوم",
+                Value = "subcat"
+            });
+        }
+        if (Model.subcats2 != "")
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = "دسته بندی سوم",
+                Value = "subcat2"
+            });
+        }
 
-                                <label style="text-align: right">
-                                    عکس:
-                                </label>
-
-                                <div>
-
-                                    <input type="file" id="newImage" name="newimage" required="required" class="form-control  NRM">
-                                </div>
 
 
-                            </div>
 
-                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                                <div id="addnewItem" class=" btn btn-primary">تایید</div>
 
+
+
+    }
+<div class="tab-content">
+    @{
+        <div id="NEW" class="tab-pane fade in active" style="padding-top:20px">
+            <div class="row">
+                <div class="row fieldholder col-lg-3">
+                    <label> دسته بندی</label>
+
+
+                    <div class=" ">
+                        <span style="color:red; display:none">*</span>
+                        @Html.DropDownList("newlist", listItems, "-- انتخاب سرگروه --", new { id = "newlist", name = "newlist", style = "", @class = "NRM form-control" })
+                    </div>
+
+
+                </div>
+                <div class="row fieldholder col-lg-3">
+                    <div>
+                        <label style="text-align: right">
+                            هدر :
+                        </label>
+
+                        <div>
+                            <span style="color:red; display:none">*</span>
+
+                            <div id="contentHolder">
+                                <input value="" type="text" id="HeaderNew" name="" required="required" class="form-control NRM  ">
                             </div>
 
 
                         </div>
-
-                        <script>
-
-
-
-                            //change autocomplete source based on selected type
-                            $("#newlist").change(function () {
-
-                                var val = $("#newlist option:selected").val();
-
-                                if (val === "filter") {
-                                    $("#newContent").easyAutocomplete(filters);
-                                }
-                                else if (val === "product") {
-                                    $("#newContent").easyAutocomplete(products);
-                                }
-                                else if (val == "cat") {
-                                    $("#newContent").easyAutocomplete(cats);
-                                }
-                                else if (val == "subcat") {
-                                    $("#newContent").easyAutocomplete(subcats);
-                                }
-                                else if (val == "subcat2") {
-                                    $("#newContent").easyAutocomplete(subcats2);
-                                }
-
-                            })
-                            // verify button
-                            $("#addnewItem").click(function () {
-
-                                var int = 0;
-                                $("." + "NRM").each(function () {
-
-                                    if ($(this).val() === "") {
-                                        $(this).siblings("span").css("display", "inline-block");
-                                        int = 1;
-                                    }
-
-
-
-
-                                })
-                                if (int === 0) {
-
-
-                                    $("#content").val($("#newContent").val());
-                                    $("#type").val($("#newlist option:selected").val());
-                                    $("#image").val($("#newImage").val());
-                                    $("#catmode").val($("#listofcat").val());
-                                    $("form#editslide").submit();
-                                }
-                                else {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
-                                    }
-                                    toastr.error('لطفاً تمامی موارد را کامل کنید')
-
-                                }
-
-
-                            })
-                        </script>
                     </div>
-                    if (Model.banners != null)
-                    {
-
-
-                        foreach (var item in Model.banners)
-                        {
-
-                            int index = Model.banners.IndexOf(item);
-                            string ID = item.ID + "";
-                            string bannerList = "bannerList" + ID;
-                            string content = "content" + ID;
-                            string image = "image" + ID;
-                            string button = "butt" + ID;
-                            string classname = "REM" + ID;
-                            <div id=@ID class="tab-pane fade in " style="padding-top:20px">
-                                <div class="row">
-
-
-                                    <div class="row fieldholder col-lg-3">
-                                        <label> دسته بندی</label>
-
-
-                                        <div class=" ">
-                                            <span style="color:red; display:none">*</span>
-                                            @Html.DropDownList(@bannerList, listItems, "-- انتخاب سرگروه --", new { id = @bannerList, name = @bannerList, style = "", @class = @classname + " form-control" })
-                                        </div>
-
-
-                                    </div>
-                                    <div class="row fieldholder col-lg-3">
-                                        <div>
-                                            <label style="text-align: right">
-                                                محتوا :
-                                            </label>
-
-                                            <div>
-                                                <span style="color:red; display:none">*</span>
-
-                                                <div id="contentHolder">
-                                                    @if ((item.type == "tag") || (item.type == "link"))
-                                                    {
-                                                        <input value="@item.catIDOrLink" type="text" id=@content name=@content required="required" class="form-control  @classname ">
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <input value="" type="text" id=@content name=@content required="required" class="form-control  @classname ">
-
-                                                    }
-                                                </div>
-
-
-                                            </div>
-                                        </div>
 
 
 
-                                    </div>
-                                    <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                </div>
+                <div class="row fieldholder col-lg-3">
+                    <div>
+                        <label style="text-align: right">
+                            توضیحات :
+                        </label>
 
-                                        <label style="text-align: right">
-                                            عکس:
-                                        </label>
+                        <div>
+                            <span style="color:red; display:none">*</span>
 
-                                        <div>
+                            <div id="contentHolder">
+                                <input value="" type="text" id="DesNew" name="" required="required" class="form-control NRM  ">
+                            </div>
+                        </div>
+                    </div>
 
-                                            <input type="file" id=@image name=@image required="required" class="form-control  ">
-                                        </div>
-                                        <img src='/images/panelimages/@item.image' style="max-width:150px" />
 
-                                    </div>
 
-                                    <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                                        <div id=@button class=" btn btn-primary">تایید</div>
+                </div>
+                <div class="row fieldholder col-lg-3">
+                    <div>
+                        <label style="text-align: right">
+                            محتوا :
+                        </label>
 
+                        <div>
+                            <span style="color:red; display:none">*</span>
+
+                            <div id="contentHolder">
+                                <input value="" type="text" id="newContent" name="newContent" required="required" class="form-control NRM  ">
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+
+                    <label style="text-align: right">
+                        عکس:
+                    </label>
+
+                    <div>
+
+                        <input type="file" id="newImage" name="newimage" required="required" class="form-control  NRM">
+                    </div>
+
+
+                </div>
+                <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                    <div id="addnewItem" class=" btn btn-primary">تایید</div>
+
+                </div>
+            </div>
+            <script>
+
+
+
+                //change autocomplete source based on selected type
+                $("#newlist").change(function () {
+
+                    var val = $("#newlist option:selected").val();
+
+                    if (val === "filter") {
+                        $("#newContent").easyAutocomplete(filters);
+                    }
+                    else if (val === "product") {
+                        $("#newContent").easyAutocomplete(products);
+                    }
+                    else if (val == "cat") {
+                        $("#newContent").easyAutocomplete(cats);
+                    }
+                    else if (val == "subcat") {
+                        $("#newContent").easyAutocomplete(subcats);
+                    }
+                    else if (val == "subcat2") {
+                        $("#newContent").easyAutocomplete(subcats2);
+                    }
+
+                })
+                // verify button
+                $("#addnewItem").click(function () {
+
+                    var int = 0;
+                    $("." + "NRM").each(function () {
+
+                        if ($(this).val() === "") {
+                            $(this).siblings("span").css("display", "inline-block");
+                            int = 1;
+                        }
+
+
+
+
+                    })
+                    if (int === 0) {
+
+
+                        $("#content").val($("#newContent").val());
+                        $("#type").val($("#newlist option:selected").val());
+                        $("#image").val($("#newImage").val());
+                        $("#catmode").val($("#listofcat").val());
+                        $("#newDes").val($("#DesNew").val());
+                        $("#newHeader").val($("#HeaderNew").val());
+                        $("form#editslide").submit();
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('لطفاً تمامی موارد را کامل کنید')
+
+                    }
+
+
+                })
+            </script>
+        </div>
+        if (Model.banners != null)
+        {
+            foreach (var item in Model.banners)
+            {
+
+                int index = Model.banners.IndexOf(item);
+                string ID = item.ID + "";
+                string bannerList = "bannerList" + ID;
+                string content = "content" + ID;
+                string header = "header" + ID;
+                string descrip = "descrip" + ID;
+                string image = "image" + ID;
+                string button = "butt" + ID;
+                string classname = "REM" + ID;
+                <div id=@ID class="tab-pane fade in " style="padding-top:20px">
+                    <div class="row">
+                        <div class="row fieldholder col-lg-3">
+                            <label> دسته بندی</label>
+                            <div class=" ">
+                                <span style="color:red; display:none">*</span>
+                                @Html.DropDownList(@bannerList, listItems, "-- انتخاب سرگروه --", new { id = @bannerList, name = @bannerList, style = "", @class = @classname + " form-control" })
+                            </div>
+                        </div>
+                        <div class="row fieldholder col-lg-3">
+                            <div>
+                                <label style="text-align: right">
+                                    هدر :
+                                </label>
+                            </div>
+                            <div>
+                                <span style="color:red; display:none">*</span>
+
+                                <div id="contentHolder">
+                                    <input value="@item.title" type="text" id="@header" name="" required="required" class="form-control  @classname ">
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row fieldholder col-lg-3">
+                            <div>
+                                <label style="text-align: right">
+                                    توضیحات :
+                                </label>
+                            </div>
+                            <div>
+                                <span style="color:red; display:none">*</span>
+
+                                <div id="contentHolder">
+                                    <input value="@item.Ptitle" type="text" id="@descrip" name="" required="required" class="form-control  @classname ">
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row fieldholder col-lg-3">
+                            <div>
+                                <label style="text-align: right">
+                                    محتوا :
+                                </label>
+
+                                <div>
+                                    <span style="color:red; display:none">*</span>
+
+                                    <div id="contentHolder">
+                                        @if ((item.type == "tag") || (item.type == "link"))
+                                        {
+                                            <input value="@item.catIDOrLink" type="text" id=@content name=@content required="required" class="form-control  @classname ">
+
+                                        }
+                                        else
+                                        {
+                                            <input value="" type="text" id=@content name=@content required="required" class="form-control  @classname ">
+
+                                        }
                                     </div>
 
 
                                 </div>
+                            </div>
 
-                                <script>
+
+
+                        </div>
+                        <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+
+                            <label style="text-align: right">
+                                عکس:
+                            </label>
+
+                            <div>
+
+                                <input type="file" id=@image name=@image required="required" class="form-control  ">
+                            </div>
+                            <img src='/images/panelimages/@item.image' style="max-width:150px" />
+
+                        </div>
+
+                        <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                            <div id=@button class=" btn btn-primary">تایید</div>
+                            <div itemToRemove="@item.ID" class="removeSlide btn btn-primary">حذف</div>
+                        </div>
+
+
+                    </div>
+
+                    <script>
 
                                     var cat = '@item.type'
                                     var bannerList = "bannerList" + @item.ID;
-                                    var content = "content" + @item.ID;
+                                     var content = "content" + @item.ID;
+                                     var descrip = "descrip" + @item.ID;
+                                    var header = "header" + @item.ID;
+
                                     var image = "image"+ @item.ID;
                                     var button = "butt" + @item.ID;
                                     var classname = "REM" + @item.ID;
@@ -499,8 +583,10 @@ new { enctype = "multipart/form-data", id = "editslide" }))
                                             $("#content").val($("#" + "content" +'@item.ID').val());
                                             $("#type").val($("#" + "bannerList" +'@item.ID' +" option:selected").val());
                                             $("#image").val($("#" +"image"+ '@item.ID').val());
-                                            $("#title").val('@item.title');
-                                             $("#ID").val('@item.ID');
+
+                                            $("#newHeader").val($("#" +"header"+ '@item.ID').val());
+                                            $("#newDes").val($("#" +"descrip"+ '@item.ID').val());
+                                            $("#ID").val('@item.ID');
                                             $("form#editslide").submit();
                                         }
                                         else {
@@ -519,30 +605,63 @@ new { enctype = "multipart/form-data", id = "editslide" }))
 
 
                             })
-                                </script>
-                            </div>
-                        }
-                    }
-
-
-                }
-
-
-
-
-
-            </div>
-        </div>
-
-
-
-
+                    </script>
+                </div>
+            }
+        }
     }
+
+
+
+
+
+</div>
+</div>
+
+
+
+
+}
 </div>
 
 <script>
+    var itemToremove;
     $("#listofcat").change(function () {
         var val = $(this).val();
         window.location.href = "/admin/slide?catmode=" + val;
     })
+
+    $("#confirmRemove").click(function () {
+        $("#removeModal").modal('toggle');
+        $.ajax({
+            url: "/admin/removeSlide",
+            data: {
+                ID: itemTORemove,
+            },
+            success: function (data) {
+                if (data = "200") {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000
+                    }
+                    toastr.success('با موفقیت انجام شد ')
+                }
+                window.location.reload();
+            }
+
+        })
+    })
+    $(".removeSlide").click(function () {
+
+        var value = $(this).attr('itemToRemove');
+        itemTORemove = value;
+        $("#removeModal").modal('toggle');
+
+    })
+
 </script>

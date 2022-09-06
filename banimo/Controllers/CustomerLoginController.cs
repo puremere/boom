@@ -20,11 +20,11 @@ using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-
+using MvcThrottle;
 
 namespace banimo.Controllers
 {
-
+    [doForAll]
     public class CustomerLoginController : Controller
     {
       
@@ -129,6 +129,9 @@ namespace banimo.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 20)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
         public ActionResult CustomerVerification(string registertext, string email, string registerpassword, string CaptchaCode, string registerMoaref)
         {
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -242,6 +245,9 @@ namespace banimo.Controllers
 
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 20)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
         public ActionResult CustomerLogInWC(string registerpassword, string registertext, string register, string CaptchaCode)
         {
             CookieVM cookieModel =JsonConvert.DeserializeObject< CookieVM >( getCookie("token"));
@@ -423,48 +429,89 @@ namespace banimo.Controllers
 
 
         }
-        public ContentResult checkConfirmCode(string phone, string register)
+        [ValidateAntiForgeryToken]
+        //[PreventSpam(DelayRequest = 60, ErrorMessage = "You can only create a new widget every 60 seconds.")]
+
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 20)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
+       
+        public ActionResult checkConfirmCode(string phone, string register)
         {
-            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            string currentpage = cookieModel.currentpage;
-
-
-            string json;
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string fromChangePass = TempData["changePass"] as string;
-            TempData.Keep("changePass");
-            using (WebClient client = new WebClient())
+            if (ModelState.IsValid)
             {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("phone", phone);
-                collection.Add("verifyCode", register);
-                collection.Add("servername", servername);
-                collection.Add("fromChangePass", fromChangePass);
+                CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+                string currentpage = cookieModel.currentpage;
 
 
+                string json;
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                string fromChangePass = TempData["changePass"] as string;
+                TempData.Keep("changePass");
+                using (WebClient client = new WebClient())
+                {
 
-                //foreach (var myvalucollection in imaglist) {
-                //    collection.Add("imaglist[]", myvalucollection);
-                //}
-                string address = ConfigurationManager.AppSettings["server"] + "/checkUserTokenForPass.php";
-                byte[] response = client.UploadValues(address, collection);
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("phone", phone);
+                    collection.Add("verifyCode", register);
+                    collection.Add("servername", servername);
+                    collection.Add("fromChangePass", fromChangePass);
 
-                result = System.Text.Encoding.UTF8.GetString(response);
+
+
+                    //foreach (var myvalucollection in imaglist) {
+                    //    collection.Add("imaglist[]", myvalucollection);
+                    //}
+                    string address = ConfigurationManager.AppSettings["server"] + "/checkUserTokenForPass.php";
+                    byte[] response = client.UploadValues(address, collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                userdata log = JsonConvert.DeserializeObject<userdata>(result);
+                if (log.status == "300")
+                {
+                    return RedirectToAction("confirm","Home", new { error = "300" });
+                }
+                else if (log.status == "200")
+                {
+                    Session["LogedInUser"] = log;
+                    Session["token"] = log.token;
+                    string changePass = TempData["changePass"] != null ? TempData["changePass"] as string : "";
+                    if (changePass != "")
+                    {
+                        return RedirectToAction("ChangePass", "Home");
+                    }
+                    else
+                    {
+                        string lastAction = Request.Cookies["lastAction"] != null ? Request.Cookies["lastAction"].Value as string : "index";
+                        return RedirectToAction(lastAction, "Home");
+
+                    }
+
+                }
+                else
+                {
+                    return RedirectToAction("Error500", "error");
+                }
             }
-            userdata log = JsonConvert.DeserializeObject<userdata>(result);
-
-            Session["LogedInUser"] = log;
-            Session["token"] = log.token;
-            return Content(log.status);
+            else
+            {
+                return RedirectToAction("confirm", "Home", new { error = "400" });
+            }
+            
+           
+            
 
 
         }
 
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 2)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 10)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 20)]
         public ActionResult ResendCode(string phone)
         {
             string json;
@@ -493,6 +540,11 @@ namespace banimo.Controllers
             return Content(log.status + "");
             //return Content("");
         }
+
+
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 10)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 20)]
         public ContentResult ForgetPass(string phone, string isRegister)
         {
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -533,7 +585,8 @@ namespace banimo.Controllers
 
         }
 
-        public ContentResult ChangePassForLogedInUser(string pass)
+        [ValidateAntiForgeryToken()]
+        public ActionResult ChangePassForLogedInUser(string pass)
         {
             if (Session["token"] != null)
             {
@@ -561,6 +614,14 @@ namespace banimo.Controllers
             Session["LogedInUser"] = log;
             // Session["UserLogedIn"] = log;
             Session["token"] = log.token;
+            if (log.status == "200")
+            {
+                return RedirectToAction("index","Home");
+            }
+            else
+            {
+                return RedirectToAction("ChangePass", "Home");
+            }
             return Content(log.status + "");
         }
 

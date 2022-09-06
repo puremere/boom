@@ -56,6 +56,7 @@ var sendFile = function (key, value, imageName) {
     var fileName = key
     formData.append('blob', value);
     formData.append('filename', fileName);
+    formData.append('path', "panelimages");
     let request = new XMLHttpRequest();
     request.open('POST', '/admin/sendToServerByJS');
     request.upload.addEventListener('progress', function (e) {

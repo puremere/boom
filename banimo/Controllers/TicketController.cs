@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 namespace banimo.Controllers
 {
     [HomeSessionCheck]
+    [doForAll]
     public class TicketController : Controller
     {
         //

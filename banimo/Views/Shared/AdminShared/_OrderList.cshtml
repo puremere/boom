@@ -460,15 +460,30 @@
         }
         if (payment == "1") {
             $.ajax({
-                url: "/connection/setWalletthenfinalizeOrder",
+                url: "/connection/finalizeFromWallet",
                 dataType: "html",
                 data: {
                     id: ID,
-                    payment: payment
+                   
                 },
                 success: function (data) {
                     if (data == "200") {
                         $("#endOrderModal").modal('toggle');
+                        window.location.reload();
+                    }
+                    else if (data == "300") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000,
+
+
+                        }
+                        toastr.error('سفارش مورد نظر با کیف پول پرداخت نشده است')
                     }
                 }
             })
@@ -485,6 +500,7 @@
                     if (data == "200") {
                         $("#endOrderModal").modal('toggle');
                     }
+                   
                 }
             })
         }

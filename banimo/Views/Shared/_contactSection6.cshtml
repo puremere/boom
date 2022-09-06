@@ -1,0 +1,304 @@
+﻿@model banimo.ViewModel.contactSectionVM
+
+
+
+    <footer class="bd-footer   bg-black-80">
+        <style>
+            .descSecHolder {
+                display: flex
+            }
+
+            .descSec {
+                background-color: #302e2e;
+                padding: 20px;
+                flex: 1;
+                margin: 20px
+            }
+
+                .descSec i {
+                    font-size: 24px;
+                    color: #FF4500;
+                    margin-bottom: 15px
+                }
+
+                .descSec p {
+                    margin: 10px 0;
+                }
+
+            .footerH {
+                color: #FF4500 !important;
+            }
+
+            .footerdiv p {
+                color: white;
+                margin-bottom: 12px
+            }
+
+            .footerdiv a {
+                color: white;
+                margin-bottom: 10px
+            }
+        </style>
+        <div class="footer maxwidth" style="width:100% ; background-color:#4d4d4d;color:white;  padding-top:50px ">
+
+            <div style="width: 90%; margin: auto; padding-bottom: 35px; border-bottom: 1px #ddd solid;text-align:center">
+                <h5 style="color:white;font-size:16px; margin:20px 0 30px 0 ; font-weight:500">دیجی جانبی مرکز اصلی پخش لوازم جانبی و الکترونیکی</h5>
+                <h6 style="color:white;margin:30px 0;font-size:13px; direction:rtl">مجموعه ما با هدف افزایش سطح اطلاعات عمومی درباره‌ی سیستم های صوتی بوجود آمد و اکنون مفتخریم که در قالب یک تیم حرفه‌ای بهترین محصولات صوتی از برترین برندها را به ایرانیان عزیز ارائه می‌کنیم.</h6>
+                <div class="descSecHolder" style="display:flex">
+                    <div class="descSec">
+                        <i class="fa fa-truck"></i>
+                        <p>ارسال سریع کالا به تمام نقاط ایران</p>
+                        <p>تهران 1 الی 3 ساعت | شهرستان 2 الی 3 روز</p>
+                    </div>
+                    <div class="descSec">
+                        <i class="fa fa-check-circle"></i>
+                        <p>ارسال سریع کالا به تمام نقاط ایران</p>
+                        <p>تهران 1 الی 3 ساعت | شهرستان 2 الی 3 روز</p>
+                    </div>
+                    <div class="descSec">
+                        <i class="fa fa-badge"></i>
+                        <p>ارسال سریع کالا به تمام نقاط ایران</p>
+                        <p>تهران 1 الی 3 ساعت | شهرستان 2 الی 3 روز</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div style="width: 90%; margin: auto; padding-bottom: 35px; border-bottom: 1px #ddd solid">
+                <div class="col-lg-12" style="text-align:right; direction:rtl; line-height: 2.1;margin-top:50px">
+                    @Html.Raw(@Model.aboutus)
+                </div>
+                <div style="display:flex;width:100%">
+                    <div style="width:30%">
+                        <div style=" padding:60px 40px">
+                            <div class="row" style="margin:0px; display:flex; margin:0">
+
+                                @{
+                                    if (Model.trusteeLink != "")
+                                    {
+                                        string hrefSRT = "https://trustseal.enamad.ir/?" + Model.trusteeLink;
+                                        string srcSRT = "https://Trustseal.eNamad.ir/logo.aspx?" + Model.trusteeLink;
+                                        <div class="col-lg-4 col-md-4 col-sm4" style="justify-content:center;  margin:0;padding:5px; display:inline-block; padding:7px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
+                                            <div style="padding:5px; display:flex; object-fit:cover" class="VerifyHolder">
+                                                <a target="_blank" href=@hrefSRT>
+                                                    <img src=@srcSRT alt="" style="width:100%; cursor:pointer" id=@Model.code>
+                                                </a>
+                                            </div>
+                                        </div>
+
+
+
+                                    }
+                                    if (Model.samanLink != "")
+                                    {
+                                        <div class="col-lg-4 col-md-4 col-sm-4" style="justify-content:center;  margin:0;padding:5px; display:inline-block; padding:0px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
+                                            <div style="padding:5px; display:flex; object-fit:cover">
+                                                <img id='@Model.samanCode' style='width:100%;cursor:pointer' onclick='window.open("@Model.samanLink", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src=@Model.samanLink2 />
+                                            </div>
+                                        </div>
+                                    }
+
+                                    if (Model.etehadie != "")
+                                    {
+                                        <div class="col-lg-4 col-md-4 col-sm-4" style="justify-content:center; margin:0;padding:5px; display:inline-block; padding:7px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
+
+                                            <div style="padding:5px; display:flex; object-fit:cover; justify-content:center" class="VerifyHolder">
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjM2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxwYXRoIGQ9Im0xMjAgMjQzbDk0LTU0IDAtMTA5IC05NCA1NCAwIDEwOSAwIDB6IiBmaWxsPSIjODA4Mjg1Ii8+Cgk8cGF0aCBkPSJtMTIwIDI1NGwtMTAzLTYwIDAtMTE5IDEwMy02MCAxMDMgNjAgMCAxMTkgLTEwMyA2MHoiIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS13aWR0aDo1O3N0cm9rZTojMDBhZWVmIi8+Cgk8cGF0aCBkPSJtMjE0IDgwbC05NC01NCAtOTQgNTQgOTQgNTQgOTQtNTR6IiBmaWxsPSIjMDBhZWVmIi8+Cgk8cGF0aCBkPSJtMjYgODBsMCAxMDkgOTQgNTQgMC0xMDkgLTk0LTU0IDAgMHoiIGZpbGw9IiM1ODU5NWIiLz4KCTxwYXRoIGQ9Im0xMjAgMTU3bDQ3LTI3IDAtMjMgLTQ3LTI3IC00NyAyNyAwIDU0IDQ3IDI3IDQ3LTI3IiBzdHlsZT0iZmlsbDpub25lO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6MTU7c3Ryb2tlOiNmZmYiLz4KCTx0ZXh0IHg9IjE1IiB5PSIzMDAiIGZvbnQtc2l6ZT0iMjVweCIgZm9udC1mYW1pbHk9IidCIFlla2FuJyIgc3R5bGU9ImZpbGw6IzI5Mjk1Mjtmb250LXdlaWdodDpib2xkIj7Yudi22Ygg2KfYqtit2KfYr9uM2Ycg2qnYtNmI2LHbjDwvdGV4dD4KCTx0ZXh0IHg9IjgiIHk9IjM0MyIgZm9udC1zaXplPSIyNXB4IiBmb250LWZhbWlseT0iJ0IgWWVrYW4nIiBzdHlsZT0iZmlsbDojMjkyOTUyO2ZvbnQtd2VpZ2h0OmJvbGQiPtqp2LPYqCDZiCDaqdin2LHZh9in24wg2YXYrNin2LLbjDwvdGV4dD4KPC9zdmc+ " alt="" onclick="window.open('@Model.etehadie', 'Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')" style="cursor:pointer; width: 96px;height: 144px;">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="row" style="">
+
+                            <div style="float:left" class="c-footer__address-images">
+                                @*<a href=@Model.googlePlayLink target="_blank" class="c-footer__address-appstore">
+                                    <img alt="playstore" width="150" src="~/images/googlePlay.png">
+                                </a>*@
+                                <a href=@Model.cafeBazarLink target="_blank">
+                                    <img alt="" width="150" src="~/images/cafeBazar.png">
+                                </a>
+                                @*<a href=@Model.sibappLink target="_blank">
+                                    <img alt="" width="150px" src="~/images/sibApp.png">
+                                </a>*@
+                                <a href=@Model.directLink target="_blank">
+                                    <img alt="" width="150" src="~/images/direct.png">
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="footerdiv" style="width: 70%; float: right; margin-top: 25px">
+                        <p style=" font-weight:bold;  text-align:right; margin-bottom:15px">تماس با ما</p>
+                        <p id="footerPhone" style="white-space: pre-line;    text-align: right; margin-bottom: 15px; direction:rtl; line-height:2 ">شماره تماس : <br> @Model.phone</p>
+                        <p style="white-space: pre-line;   text-align: right; margin-bottom: 15px; direction:rtl; line-height:2">  آدرس:<br> @Html.Raw(@Model.address) </p>
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+        <div class="goTop show" id="btn-back-to-top" style="display: block;"></div>
+        <div class="footer-box">
+
+            <div class="footer-social-box">
+
+                <div class="footer--social flexCenter">
+                    <p class="footer--social-title">ما را در شبکه های اجتماعی دنبال کنید</p>
+
+                    <ul class="   list-unstyled footer--social-svg">
+                        <li class="ms-3">
+                            <a class="text-muted" href="#" dideo-checked="true">
+                                <svg class="bi" width="30" height="30">
+                                    <path d="M15 30C6.71572875 30 0 23.2842712 0 15 0 6.71572875 6.71572875 0 15 0c8.2842712 0 15 6.71572875 15 15 0 8.2842712-6.7157288 15-15 15zm3.4314771-20.35648929c-.134011.01468929-.2681239.02905715-.4022367.043425-.2602865.05139643-.5083383.11526429-.7319208.20275715-.9352275.36657324-1.5727317 1.05116784-1.86618 2.00016964-.1167278.3774214-.1643635 1.0083696-.0160821 1.3982464-.5276368-.0006268-1.0383364-.0756643-1.4800457-.1737-1.7415129-.3873214-2.8258768-.9100285-4.02996109-1.7609946-.35342035-.2497018-.70016357-.5329286-.981255-.8477679-.09067071-.1012178-.23357785-.1903178-.29762142-.3113357-.00537429-.0025553-.01072822-.0047893-.0161025-.0073446-.13989429.2340643-.27121822.4879125-.35394965.7752857-.32626393 1.1332446.18958607 2.0844643.73998215 2.7026518.16682678.187441.43731214.3036696.60328392.4783178h.01608215c-.12466715.041834-.34181679-.0159589-.45040179-.0360803-.25715143-.0482143-.476235-.0919607-.69177643-.1740215-.11255464-.0482142-.22521107-.09675-.3378675-.1449642-.00525214 1.251691.69448393 2.0653071 1.55247643 2.5503267.27968679.158384.67097143.3713625 1.07780893.391484-.2176789.1657285-1.14873321.0897268-1.47198429.0581143.40392643.9397285 1.02481929 1.5652607 2.09147249 1.9056375.2750861.0874928.6108975.1650857.981255.1593482-.1965482.2107446-.6162514.3825321-.8928439.528766-.57057.3017572-1.2328489.4971697-1.97873466.6450108-.2991075.0590785-.61700464.0469446-.94113107.0941946-.35834678.0520554-.73320321-.02745-1.0537875-.0364018.09657429.053325.19312822.1063286.28958036.1596536.2939775.1615821.60135.3033482.93309.4345875.59738036.2359768 1.23392786.4144661 1.93859037.5725286 1.4209286.3186642 3.4251707.175291 4.6653278-.1740215 3.4539354-.9723053 5.6357529-3.2426035 6.459179-6.586425.1416246-.5754053.162226-1.2283875.1527803-1.9126768.1716718-.1232517.3432215-.2465035.5148729-.3697553.4251996-.3074947.8236703-.7363286 1.118055-1.1591036v-.00765c-.5604729.1583679-1.1506672.4499036-1.8661597.4566054v-.0070232c.1397925-.0495.250515-.1545429.3619908-.2321358.5021089-.3493285.8288003-.8100964 1.0697678-1.39826246-.1366982.06769286-.2734778.13506429-.4101761.20275716-.4218407.1938214-1.1381067.4719375-1.689256.5144143-.6491893-.5345357-1.3289754-.95506074-2.6061215-.93461789z" fill="currentColor" fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="ms-3">
+                            <a class="text-muted" href="#" dideo-checked="true">
+                                <svg class="bi" width="30" height="30">
+                                    <path d="M15 30C6.71572875 30 0 23.2842712 0 15 0 6.71572875 6.71572875 0 15 0c8.2842712 0 15 6.71572875 15 15 0 8.2842712-6.7157288 15-15 15zm.0000159-23.03571429c-2.1823849 0-2.4560363.00925037-3.3131306.0483571-.8553081.03901103-1.4394529.17486384-1.9505835.37352345-.52841925.20532625-.9765517.48009406-1.42331254.926823-.44672894.44676084-.72149675.89489329-.926823 1.42331254-.19865961.5111306-.33451242 1.0952754-.37352345 1.9505835-.03910673.8570943-.0483571 1.1307457-.0483571 3.3131306 0 2.1823531.00925037 2.4560045.0483571 3.3130988.03901103.8553081.17486384 1.4394529.37352345 1.9505835.20532625.5284193.48009406.9765517.926823 1.4233125.44676084.446729.89489329.7214968 1.42331254.9268549.5111306.1986278 1.0952754.3344806 1.9505835.3734916.8570943.0391067 1.1307457.0483571 3.3131306.0483571 2.1823531 0 2.4560045-.0092504 3.3130988-.0483571.8553081-.039011 1.4394529-.1748638 1.9505835-.3734916.5284193-.2053581.9765517-.4801259 1.4233125-.9268549.446729-.4467608.7214968-.8948932.9268549-1.4233125.1986278-.5111306.3344806-1.0952754.3734916-1.9505835.0391067-.8570943.0483571-1.1307457.0483571-3.3130988 0-2.1823849-.0092504-2.4560363-.0483571-3.3131306-.039011-.8553081-.1748638-1.4394529-.3734916-1.9505835-.2053581-.52841925-.4801259-.9765517-.9268549-1.42331254-.4467608-.44672894-.8948932-.72149675-1.4233125-.926823-.5111306-.19865961-1.0952754-.33451242-1.9505835-.37352345-.8570943-.03910673-1.1307457-.0483571-3.3130988-.0483571zm0 1.44787387c2.1456068 0 2.3997686.00819774 3.2471022.04685789.7834742.03572556 1.2089592.1666342 1.4921162.27668167.3750864.14577303.6427729.31990322.9239522.60111439.2812111.28117926.4553413.54886575.6011144.92395217.1100474.283157.2409561.708642.2766816 1.4921162.0386602.8473336.0468579 1.1014954.0468579 3.247134 0 2.1456068-.0081977 2.3997686-.0468579 3.2471022-.0357255.7834742-.1666342 1.2089592-.2766816 1.4921162-.1457731.3750864-.3199033.6427729-.6011144.9239522-.2811793.2812111-.5488658.4553413-.9239522.6011144-.283157.1100474-.708642.2409561-1.4921162.2766816-.847206.0386602-1.1013359.0468579-3.2471022.0468579-2.1457981 0-2.3998961-.0081977-3.247134-.0468579-.7834742-.0357255-1.2089592-.1666342-1.4921162-.2766816-.37508642-.1457731-.64277291-.3199033-.92395217-.6011144-.28117927-.2811793-.45534136-.5488658-.60111439-.9239522-.11004747-.283157-.24095611-.708642-.27668167-1.4921162-.03866015-.8473336-.04685789-1.1014954-.04685789-3.2471022 0-2.1456386.00819774-2.3998004.04685789-3.247134.03572556-.7834742.1666342-1.2089592.27668167-1.4921162.14577303-.37508642.31990322-.64277291.60111439-.92395217.28117926-.28121117.54886575-.45534136.92395217-.60111439.283157-.11004747.708642-.24095611 1.4921162-.27668167.8473336-.03866015 1.1014954-.04685789 3.247134-.04685789zm0 9.26641182c-1.479357 0-2.6785873-1.1992303-2.6785873-2.6785555 0-1.479357 1.1992303-2.6785873 2.6785873-2.6785873 1.4793252 0 2.6785555 1.1992303 2.6785555 2.6785873 0 1.4793252-1.1992303 2.6785555-2.6785555 2.6785555zm0-6.8050167c-2.2790034 0-4.1264612 1.8474578-4.1264612 4.1264612 0 2.2789716 1.8474578 4.1264294 4.1264612 4.1264294 2.2789716 0 4.1264294-1.8474578 4.1264294-4.1264294 0-2.2790034-1.8474578-4.1264612-4.1264294-4.1264612zm5.2537621-.1630297c0-.532566-.431737-.96430298-.964303-.96430298-.532534 0-.964271.43173698-.964271.96430298 0 .5325659.431737.964271.964271.964271.532566 0 .964303-.4317051.964303-.964271z" fill="currentColor" fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="ms-3">
+                            <a class="text-muted" href="#" dideo-checked="true">
+                                <svg class="bi" width="30" height="30">
+                                    <path d="M15 30C6.71572875 30 0 23.2842712 0 15 0 6.71572875 6.71572875 0 15 0c8.2842712 0 15 6.71572875 15 15 0 8.2842712-6.7157288 15-15 15zm3.2142857-17.1429611h-2.1428678v-2.1425646c0-.5852979.8203285-1.07160109 1.0714928-1.07160109h1.071375v-2.1428925h-2.1428678c-2.3564786 0-3.2142536 1.98610393-3.2142536 3.21449359v2.1425646h-1.0714822l.0032143 2.1528011 1.0682679-.0099086v7.499969h3.2142536v-7.499969h2.1428678v-2.1428925z" fill="currentColor" fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+
+            <div class="container py-5">
+                <div class="row">
+
+                    <div class="col-4 col-lg-3 mb-4 footer-menu-align">
+                        <h5>Community</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="https://github.com/twbs/bootstrap/issues" dideo-checked="true">Issues</a></li>
+                            <li class="mb-2">
+                                <a href="https://github.com/twbs/bootstrap/discussions" dideo-checked="true">Discussions</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://github.com/sponsors/twbs" dideo-checked="true">
+                                    Corporate
+                                    sponsors
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://opencollective.com/bootstrap" dideo-checked="true">
+                                    Open
+                                    Collective
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://bootstrap-slack.herokuapp.com/" dideo-checked="true">Slack</a>
+                            </li>
+                            <li class="mb-2"><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" dideo-checked="true">Stack Overflow</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4 col-lg-3 mb-4 footer-menu-align">
+                        <h5>Community</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="https://github.com/twbs/bootstrap/issues" dideo-checked="true">Issues</a></li>
+                            <li class="mb-2">
+                                <a href="https://github.com/twbs/bootstrap/discussions" dideo-checked="true">Discussions</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://github.com/sponsors/twbs" dideo-checked="true">
+                                    Corporate
+                                    sponsors
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://opencollective.com/bootstrap" dideo-checked="true">
+                                    Open
+                                    Collective
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://bootstrap-slack.herokuapp.com/" dideo-checked="true">Slack</a>
+                            </li>
+                            <li class="mb-2"><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" dideo-checked="true">Stack Overflow</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4 col-lg-3 mb-4 footer-menu-align">
+                        <h5>Community</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="https://github.com/twbs/bootstrap/issues" dideo-checked="true">Issues</a></li>
+                            <li class="mb-2">
+                                <a href="https://github.com/twbs/bootstrap/discussions" dideo-checked="true">Discussions</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://github.com/sponsors/twbs" dideo-checked="true">
+                                    Corporate
+                                    sponsors
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://opencollective.com/bootstrap" dideo-checked="true">
+                                    Open
+                                    Collective
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://bootstrap-slack.herokuapp.com/" dideo-checked="true">Slack</a>
+                            </li>
+                            <li class="mb-2"><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" dideo-checked="true">Stack Overflow</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4 col-lg-3 mb-4 footer-menu-align">
+                        <h5>Community</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="https://github.com/twbs/bootstrap/issues" dideo-checked="true">Issues</a></li>
+                            <li class="mb-2">
+                                <a href="https://github.com/twbs/bootstrap/discussions" dideo-checked="true">Discussions</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://github.com/sponsors/twbs" dideo-checked="true">
+                                    Corporate
+                                    sponsors
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://opencollective.com/bootstrap" dideo-checked="true">
+                                    Open
+                                    Collective
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://bootstrap-slack.herokuapp.com/" dideo-checked="true">Slack</a>
+                            </li>
+                            <li class="mb-2"><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" dideo-checked="true">Stack Overflow</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <p class="coryRight flexCenter">
+                <span>© 2007-2022 <a href="/" dideo-checked="true">AUKEY Online</a>. All rights reserved.</span>
+
+            </p>
+        </div>
+    </footer>
+

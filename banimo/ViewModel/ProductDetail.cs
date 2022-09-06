@@ -37,6 +37,7 @@ namespace banimo.ViewModel
     }
     public class TimeList
     {
+        public PaymentTypeVM deliverType { get; set; }
         public List<Address> address { get; set; }
         public List<Time> times { get; set; }
         public string latitiude { get; set; }

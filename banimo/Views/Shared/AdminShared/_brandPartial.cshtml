@@ -3,7 +3,7 @@
 
 @if (Model.brandList != null)
 {
-    <select class="form-control" id="productBrand">
+    <select class="form-control"  name="brand">
         @foreach (var item in Model.brandList)
         {
           <option value="@item.ID">@item.title</option>

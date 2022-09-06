@@ -1,0 +1,593 @@
+﻿
+@model banimo.ViewModelPost.viewProductViewModel
+
+
+    <div class="row contentholder" style="background-color: #fff; margin: 20px 20px 0 20px; ">
+
+
+        @{
+            List<int> lst2 = new List<int>();
+
+            if (Model.slides != null)
+            {
+
+                var wishonid = "wishon" + @Model.ID;
+                var wishoffid = "wishoff" + @Model.ID;
+                var shareid = "share" + @Model.ID;
+                var compareid = "compare" + @Model.ID;
+                <div id="slidholder" class="col-md-12 col-sm-12 col-lg-5 slidemultiple" style="float:right; visibility: visible; animation-delay: 0.5s; animation-name: slideInUp; background-color:#fff;">
+                    
+                    <div class="flexslider" style="margin-bottom:0px">
+                        <script src="~/Scripts/jquery.flexslider2.js"></script>
+                        <!-- FlexSlider -->
+                        <script>
+
+                            // Can also be used with $(document).ready()
+                            $('#flexslider').removeData("flexslider");
+                            $('.flexslider').flexslider({
+                                animation: "slide",
+                                controlNav: "thumbnails",
+                                direction: "horizontal",
+                                reverse: false,
+                                directionNav: false,
+
+                            });
+                            //$(window).load(function () {
+                            //    if ($(window).width() < 960) {
+                            //        $('.flexslider').flexslider({
+                            //            animation: "slide",
+                            //            controlNav: false,
+                            //            direction: "horizontal",
+                            //            reverse: false,
+                            //            directionNav: false,
+
+                            //        });
+                            //    }
+                            //    else {
+                            //        $('.flexslider').flexslider({
+                            //            animation: "slide",
+                            //            controlNav: "thumbnails",
+                            //            direction: "horizontal",
+                            //            reverse: false,
+                            //            directionNav: false,
+
+                            //        });
+                            //    }
+
+                            //});
+                        </script>
+                        <!-- //FlexSlider-->
+                        <ul class="slides">
+                            @{
+                                if (Model.slides != null)
+                                {
+
+                                    foreach (var item in Model.slides)
+                                    {
+                                        string imagefile = "placeholder.jpg";
+                                        if (item.title != null)
+                                        {
+                                            imagefile = item.image;
+                                        }
+                                        string src = imagefile;
+                                        <li data-thumb="@src">
+                                            <div class="thumb-image imageitself" style=" margin: auto; padding: 20px;">
+                                                <img style="width:100%; height:100%; object-fit:scale-down" src="@src" data-imagezoom="true" class="img-responsive ">
+                                            </div>
+                                            @*  <div class="thumb-image imageitself" style="margin:auto ; padding:20px; "> <img src="@src" data-imagezoom="true" class="img-responsive "> </div>*@
+                                        </li>
+
+                                    }
+
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="gradientback" style="display:none">
+                    </div>
+                </div>
+                <i id="@wishonid" class="detailfal fal fa-heart wish_on" style="font-family:FontAwesome; cursor:pointer; font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 200px;color:red"></i>
+                <i id="@wishoffid" class="detailfal fal fa-heart" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 200px;"></i>
+                <i id="@shareid" class="detailfal fal fa-share-alt" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 260px;"></i>
+
+                <i id="@compareid" class="detailfal fal fa-clone" style="cursor:pointer;font-size: 25px; z-index: 999; float: right; position: absolute; right: 50px; top: 320px;">
+                </i>
+
+            }
+
+
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="direction:rtl; margin-bottom:15px">
+                        <div class="modal-header" style="margin-bottom: 20px;">
+                            <button style="float:left; font-size:40px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5 style="float:right;margin-bottom: 15px;margin-right: 10px;" class="modal-title" id="exampleModalLabel">اشتراک گذاری از طریق ایمیل</h5>
+                            <input id="Femail" style="padding:25px;" placeholder="ایمیل مورد نظر خورد را وارد کنید" type="text" class="form-control">
+                            <i class="fa fa-envelope-open" style="position: absolute;left: 25px;bottom: 42px;font-size: 25px;"></i>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+                            <button type="button" class="btn btn-success" id="shareByEmail">تایید</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                $("#shareByEmail").click(function () {
+                    function isValidEmailAddress(emailAddress) {
+                        var pattern = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                        return pattern.test(emailAddress);
+                    };
+                    var email = $("#Femail").val();
+                    if (isValidEmailAddress(email)) {
+
+
+
+                        $.ajax({
+                            url: '/Home/sendEmail',
+                            dataType: 'html',
+                            data: {
+                                productImage: '@Model.imgGallery.First().src',
+                                siteName: '@System.Configuration.ConfigurationManager.AppSettings["siteName"]',
+                                productName: '@Model.title',
+                                productLink : '@Model.ID',
+                                emailto: email,
+                                url : '@System.Configuration.ConfigurationManager.AppSettings["serverName"]'
+                            },
+                            success: function (data) {
+                                $("#myModal").modal('toggle')
+                            },
+                            error: function (request, status, error) {
+
+                            }
+                        });
+
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('ایمیل با موفقیت برای دوست شما ارسال شد')
+
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('ایمیل صحیح وارد کنید')
+                    }
+
+                })
+                </script>
+            </div>
+            <script>
+            var wishonid = "wishon" + "@Model.ID";
+            var wishoffid = "wishoff" + "@Model.ID";
+            var shareid = "share" + "@Model.ID";
+            var compareid = "compare" + "@Model.ID";
+
+            if ("@Model.isWishList" === "isnot") {
+
+                $("#" + wishonid).css("display", "none")
+            }
+            else {
+                $("#" + wishoffid).css("display", "none")
+            }
+            $("#" + compareid).click(function () {
+                var id = '@Model.ID';
+                var cat = '@Model.cattree'
+                var url = '@Url.Action("compare", "home", new { id = "__id__", cat = "__cat__" })';
+                var URL2 = url.replace("__id__", id);
+                URL2 = URL2.replace("__cat__", cat);
+
+                window.location.href = URL2;
+            })
+            $("#" + shareid).click(function () {
+
+                $("#myModal").modal('toggle');
+            })
+            $("#" + wishonid).click(function () {
+                $(this).css("display", "none");
+                $("#" + wishoffid).css("display", "block");
+                var id = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Home/addToWishList',
+                    dataType: 'html',
+                    data: {
+                        ProductID: wishonid,
+                        isWishList: "1"
+
+                    },
+                    success: function (data) {
+
+                    },
+                    error: function (request, status, error) {
+
+                    }
+                });
+
+            })
+            $("#" + wishoffid).click(function () {
+                if ('@Session["token"]' === "") {
+
+                    var url = '@Url.Action("Login", "Home")';
+                    window.location.replace(url);
+                }
+                else {
+                    $(this).css("display", "none");
+                    $("#" + wishonid).css("display", "block");
+                    var id = $(this).attr("id");
+
+                    $.ajax({
+                        url: '/Home/addToWishList',
+                        dataType: 'html',
+                        data: {
+                            ProductID: wishonid,
+                            isWishList: "0"
+
+                        },
+                        success: function (data) {
+
+                        },
+                        error: function (request, status, error) {
+
+                        }
+                    });
+                }
+
+            })
+            </script>
+        }
+        <div id="dataholder" class="col-md-7 col-lg-7 col-sm-12 single-right-left simpleCart_shelfItem animated wow slideInRight animated" style=" padding-bottom: 10px; direction: rtl; float: left;  visibility: visible; animation-delay: 0.5s; animation-name: slideInRight;" data-wow-delay=".5s">
+            <div class="col-lg-12">
+                <div style="width:100%; padding:20px 0 10px 0 ; border-bottom: 1px solid #eee; ">
+
+                    <div style="">
+
+
+                        <div style="flex:1">
+                            @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                            {
+
+                                <h4 style="padding:15px" class="numEn">@Model.title</h4>
+                            }
+                            else
+                            {
+                                <h4 style="padding:15px">@Model.title</h4>
+                            }
+                        </div>
+                        @if (Model.BrandInfo != null)
+                        {
+                            if (Model.BrandInfo.Count() > 0)
+                            {
+                                <div>
+                                    <a style="cursor:pointer" href="/@Model.BrandInfo.First().title"><img src="~/images/brands/@Model.BrandInfo.First().image" style="width:100px" /></a>
+
+                                </div>
+                            }
+
+                        }
+                    </div>
+
+
+                    <div class="row">
+                        @if (Model.filter.Count() > 0)
+                        {
+                            foreach (var item in Model.filter.Select(x => x.filtername).Distinct())
+                            {
+                                <div style="margin-top:15px; width:100%">
+                                    <h6 style="display: inline-block; margin-right:15px;line-height:2.5">
+                                        <i class="fa fa-circle" style="font-size:8px; color:#FF4500"> </i>
+                                        <span style="font-weight:600">@item:</span>
+
+                                        @foreach (var newitem in Model.filter)
+                                        {
+                                            if (newitem.filtername == item)
+                                            {
+
+                                                <span style="">@newitem.detailname</span>
+                                            }
+                                        }
+                                    </h6>
+                                </div>
+                            }
+
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-12 mustbehide" style="margin-top:10px">
+
+
+                @{
+                    if (Model.otherProductFilter != null)
+                    {
+                        <span style="width:100%">
+                            انتخاب گارانتی:
+                        </span>
+                        if (Model.otherProductFilter.Count > 0)
+                        {
+                            <div style="width:100%; padding:20px 0 40px 0 ; border-bottom: 1px solid #eee; ">
+
+                                @foreach (var item in Model.otherProductFilter)
+                                {
+                                    if (item.ID == Model.ID)
+                                    {
+                                        <span style="background-color:#FF4500; color:white; padding:5px; border-radius:8px " value="@item.ID" selected>@item.selectedFilter</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background-color:#4d4d4d; color:white; padding:5px; border-radius:8px " value="@item.ID">@item.selectedFilter</span>
+                                    }
+
+                                }
+                                <script>
+
+                                    $("#SFlist").on('change', function () {
+                                        var REP = $(this).val()
+
+
+
+                                    })
+                                </script>
+                            </div>
+                        }
+
+                    }
+                }
+
+
+
+
+                @{
+                    if (Model.otherColors != null)
+                    {
+                        <div style="width:100%; border-bottom: solid 1px #eee; ">
+
+                            @{
+                                if (Model.otherColors != null)
+                                {
+                                    <div style="margin-top:25px">
+                                        <h5 style="font-weight: 600;">رنگبندی:</h5>
+                                        <div style="display:inline-block ">
+                                            <div class="otherColor" style="max-width:150px; border:1px solid #FF4500; cursor: pointer;height: 40px; padding: 0px 10px; display: inline-block; margin: 10px 10px 10px 0">
+                                                <img src="@Model.imgGallery.First().src" style="width:100%; height:100%; object-fit:scale-down" />
+                                            </div>
+
+                                            @{
+
+                                                List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.GroupBy(x => x.colorCode).Select(x => x.First()).ToList();
+                                                if (lst != null)
+                                                {
+                                                    int i = 1;
+                                                    int count = Convert.ToInt32(lst.Count);
+                                                    foreach (var it in lst)
+                                                    {
+
+                                                        if (i < 5)
+                                                        {
+                                                            var ID = "o" + @it.ID;
+
+                                                            <div id=@ID class="otherColor" style="max-width:150px; border:1px solid #eee; cursor: pointer;height: 40px; padding: 0px 10px; display: inline-block; margin: 10px 10px 10px 0">
+
+                                                                @if (String.IsNullOrEmpty(it.colorTitle))
+                                                                {
+                                                                    <img src="@it.imageTitle" style="width:100%; height:100%; object-fit:scale-down" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="dot" style="background-color: @it.colorCode; display: inline-block; width: 22px; height: 22px; border-radius: 50%; position: relative; top: 10px;"></span>
+                                                                    <h5 style=" display: inline-block; text-align: center; position: relative; ">@it.colorTitle</h5>
+                                                                }
+
+                                                            </div>
+
+                                                            i += 1;
+                                                        }
+                                                        else
+                                                        {
+
+                                                            var ID = "o" + @it.ID;
+                                                            <div id=@ID class="hid otherColor" style="border:1px solid #eee; cursor: pointer;height: 40px; padding: 0px 10px; display: inline-block; margin: 10px 10px 10px 0">
+
+                                                                @if (String.IsNullOrEmpty(it.colorTitle))
+                                                                {
+                                                                    <img src="@it.imageTitle" style="width:100%; height:100%; object-fit:scale-down" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="dot" style="background-color: @it.colorCode; display: inline-block; width: 22px; height: 22px; border-radius: 50%; position: relative; top: 10px;"></span>
+                                                                    <h5 style=" display: inline-block; text-align: center; position: relative; ">@it.colorTitle</h5>
+                                                                }
+
+                                                            </div>
+
+                                                        }
+
+
+                                                    }
+                                                    if (count > 4)
+                                                    {
+                                                        <a style="cursor:pointer; display: inline-block; margin-right:10px;color:blue; " id="hiddengo">بیشتر</a>
+                                                        <a class="hid" style="cursor:pointer; display: none; margin-right:10px;color:blue; " id="hiddencome">کمتر</a>
+
+                                                        <script>
+
+                                                            $("#hiddengo").click(function () {
+                                                                $(".hid").css("display", "inline-block");
+                                                                $("#hiddengo").css("display", "none");
+                                                                $("#hiddencome").css("display", "inline-block");
+                                                            })
+                                                            $("#hiddencome").click(function () {
+                                                                $(".hid").css("display", "none");
+                                                                $("#hiddencome").css("display", "none");
+                                                                $("#hiddengo").css("display", "inline-block");
+                                                            })
+                                                        </script>
+                                                    }
+
+                                                    <script>
+                                                        $('.otherColor').click(function () {
+                                                            var REP = $(this).attr('id');
+                                                            $.ajax({
+                                                                url: "/Home/changeLastNumber",
+                                                                data: {
+                                                                    value: REP
+                                                                },
+                                                                success: function (data) {
+                                                                    $.ajax({
+                                                                        url: "/Home/ProductDetailPartial",
+                                                                        success: function (data) {
+                                                                            $("#pvDataHolder").html(data)
+
+                                                                        }
+                                                                    });
+
+                                                                    //window.location.href = "/" + $("#titleHolder").text()
+
+                                                                }
+                                                            });
+                                                            //var ID = this.id;
+                                                            //var url = "/Home/ProductDetail?id=" + ID;
+                                                            //window.location.href = url;
+                                                        })
+                                                    </script>
+                                                }
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    }
+
+
+                }
+                @{
+                    if (!String.IsNullOrEmpty(Model.tag))
+                    {
+                        <div style="width:100%; border-bottom: solid 1px #eee; padding:20px 0px; margin:0px 0px">
+                            <div style="display: inline-block;  position: relative; margin-left:20px">
+                                <h5 style="font-weight: 600;"> هشتگ ها:</h5>
+                            </div>
+                            @{
+                                List<string> list2 = Model.tag.Split(',').ToList();
+                                foreach (var tag in list2)
+                                {
+                                    <div style="cursor:pointer; padding:5px; margin:5px ; border-radius:5px; background-color:#64c4ef; color:white; display:inline-block" class="tag"><a href="/Home/productlist?tag=@tag&value=@tag" style="padding:5px; color:white; text-decoration:none">@tag</a></div>
+
+                                }
+                            }
+                        </div>
+                    }
+                }
+
+                <div class="row" style="  border-radius: 10px; padding: 0 20px; margin-top:30px">
+                    <div class="row">
+                        <div style=" min-height:65px; text-align:center">
+                            @{
+                                if (Model.isAvailable == "0")
+                                {
+                                    <div class="c-product__summary js-product-summary">
+                                        <div class="c-product__stock-status c-product__stock-status--out-of-stock">
+                                            <div class="c-product-stock__title">
+                                                ناموجود
+                                            </div><div class="c-product-stock__body">
+                                                متاسفانه این کالا در حال حاضر موجود نیست. می‌توانید از طریق لیست پایین صفحه، از محصولات مشابه این کالا دیدن نمایید
+                                            </div>
+                                            <button id="khabaramkon" class="  c-product-stock__action c-product-stock__action--notify js-add-to-notify-button">
+                                                موجود شد به من اطلاع بده
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    if (Convert.ToInt32(@Model.price) > 0)
+                                    {
+
+                                        <div class="col-lg-6" style="margin:0px;height: 100%;float:right">
+                                            <div style="display:inline-block;width:100%; direction:ltr; min-height:25px">
+                                                @if (Model.discount != "0")
+                                                {
+
+                                                    if (Model.wonderDiscount != "0")
+                                                    {
+                                                        Model.discount = Model.wonderDiscount;
+                                                    }
+                                                    <h4 class="item_price" style="display: inline-block;  color: white; padding:5px 7px; border-radius:0% 35px 35px 35px; background-color:#ef3b3b;">  @Model.discount <i>% </i>    </h4>
+                                                    <p style="display:inline-block; margin-bottom:5px; font-size:18px;"><del>@string.Format("{0:n0}", Convert.ToInt32(@Model.oldPrice))  </del></p>
+
+                                                }
+                                            </div>
+
+                                            <div style="display:inline-block;width:100%; direction:ltr; text-align:right">
+                                                <p style="display: inline-block;font-size:18px;color: red;">تومان </p>
+                                                <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", Convert.ToInt32(@Model.price))   </h4>
+                                            </div>
+
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+
+                                        <div class="col-lg-6" style="margin:0px;height: 100%;">
+                                            <div style="display:inline-block;height: 100%;">
+                                                <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", Convert.ToInt32(@Model.price))   </h4>
+
+                                            </div>
+                                            <div style="display:inline-block">
+                                                <p style="font-size:18px;color: red;">تومان </p>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (Model.isAvailable != "0")
+                        {
+                            <div class="mybtn addtocart" style=" border:unset; background-color:orange;  margin:20px 0;background-image: linear-gradient(to right, #FF4500 50%, #d53c0b 50%);">
+                                <div style="border-radius: 50px 0 0 50px; background-color: #d53c0b; width: 30%; padding: 10px; display: inline-block">
+                                    <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i> <img style="display:inline-block; width:40px " src="/images/cart.png">
+                                </div>
+                                <p style="text-align:center; display:inline-block; font-size:15px; width:65%; color:white" class=" ">افزودن به سبد خرید</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>

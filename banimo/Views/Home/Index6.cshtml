@@ -1,0 +1,486 @@
+﻿
+@model banimo.ViewModePost.getMaindataViewModel
+
+@{
+    /**/
+
+
+    ViewBag.Title = @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    Layout = "~/Views/Shared/_Layout6.cshtml";
+
+}
+    <main>
+
+        <main>
+            <section>
+                <!--            /versionAsset/aukey/assets/img/01.jpg-->
+
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+                    </div>
+                    <div class="carousel-inner">
+                        @foreach (var item in Model.slides)
+                        {
+                            int index = Model.slides.IndexOf(item);
+                            string active = index == 0 ? "active" : "";
+                            <div class="carousel-item @active" data-bs-interval="1000">
+                                <img src="https://www.digijanebi.ir/images/panelimages/@item.image" class="d-block w-100" alt="...">
+                            </div>
+                        }
+
+                        @*<div class="carousel-item active">
+                            <img src="/versionAsset/aukey/assets/img/04.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/versionAsset/aukey/assets/img/03.jpg" class="d-block w-100" alt="...">
+                        </div>*@
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+
+            </section>
+        </main>
+
+        @if (Model.banners != null)
+        {
+            <div class="row bannerholder" style="">
+                <div class="row bannerrow1" style="padding:30px 5% !important">
+                    @if (Model.banners.Count >= 7)
+                    {
+
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[6].image' id='@Model.banners[6].type-@Model.banners[6].catIDOrLink' />
+                            </div>
+                        </div>
+
+
+
+                    }
+                    @if (Model.banners.Count >= 8)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[7].image' id='@Model.banners[7].type-@Model.banners[7].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 9)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[8].image' id='@Model.banners[8].type-@Model.banners[8].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 10)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[9].image' id='@Model.banners[9].type-@Model.banners[9].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <script>
+                    $(".banner").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".banner").click(function () {
+                        var val = $(this).attr('id');
+                        if (!(val.indexOf("empty") >= 0)) {
+                            window.location.href = "/Home/ManageBanner?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+
+                    $(".mySlide").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".mySlide").click(function () {
+                        var val = $(this).attr('id');
+
+                        if (!val.contain('image')) {
+                            window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+                </script>
+            </div>
+
+        }
+        <div class="album py-5 bg-white " style="margin-top:40px">
+            <div class="maxWidth" style="">
+                <h3 style="text-align:right; padding:30px">جدید ترین موارد</h3>
+                <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                    @foreach (var item in Model.newest.Take(8))
+                    {
+                        string imgURL = item.image.Trim(',').Split(',').First();
+                        <div class="col">
+
+                            <div class="card">
+
+                                <div style="width:100%; height:300px">
+                                    <img style="max-width:100%; max-height:100%; object-fit:scale-down" src="@imgURL" />
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        @item.title
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <!--                                <small class="text-muted price-small">قیمت  </small>-->
+                                        <span class="price-small-unit">قیمت</span>
+                                        <span class="price-small-number"> @string.Format(item.price) </span>
+                                        <span class="price-small-unit">تومان</span>
+
+                                    </div>
+
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="price-small-shop">خرید</span>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        @if (Model.banners != null)
+        {
+            <div class="row bannerholder" style="">
+                <div class="row bannerrow1" style="padding:30px 5% !important">
+                    @if (Model.banners.Count >= 7)
+                    {
+
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[6].image' id='@Model.banners[6].type-@Model.banners[6].catIDOrLink' />
+                            </div>
+                        </div>
+
+
+
+                    }
+                    @if (Model.banners.Count >= 8)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[7].image' id='@Model.banners[7].type-@Model.banners[7].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 9)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[8].image' id='@Model.banners[8].type-@Model.banners[8].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 10)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[9].image' id='@Model.banners[9].type-@Model.banners[9].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <script>
+                    $(".banner").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".banner").click(function () {
+                        var val = $(this).attr('id');
+                        if (!(val.indexOf("empty") >= 0)) {
+                            window.location.href = "/Home/ManageBanner?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+
+                    $(".mySlide").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".mySlide").click(function () {
+                        var val = $(this).attr('id');
+
+                        if (!val.contain('image')) {
+                            window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+                </script>
+            </div>
+
+        }
+
+
+        @if (Model.specialOffers != null)
+        {
+            <div class="album py-5 bg-white " style="margin-top:40px">
+                <div class="maxWidth" style="">
+                    <h3 style="text-align:right; padding:30px">پیشنهاد های ویژه</h3>
+                    <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                        @foreach (var item in Model.specialOffers.Take(8))
+                        {
+                            string imgURL = item.image.Trim(',').Split(',').First();
+                            <div class="col">
+
+                                <div class="card">
+
+                                    <div style="width:100%; height:300px">
+                                        <img style="max-width:100%; max-height:100%; object-fit:scale-down" src="@imgURL" />
+                                    </div>
+
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            @item.title
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+
+                                            <!--                                <small class="text-muted price-small">قیمت  </small>-->
+                                            <span class="price-small-unit">قیمت</span>
+                                            <span class="price-small-number"> @string.Format(item.price)</span>
+                                            <span class="price-small-unit">تومان</span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="price-small-shop">خرید</span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.banners != null)
+        {
+            <div class="row bannerholder" style="">
+                <div class="row bannerrow1" style="padding:30px 5% !important">
+                    @if (Model.banners.Count >= 1)
+                    {
+
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[0].image' id='@Model.banners[0].type-@Model.banners[0].catIDOrLink' />
+                            </div>
+                        </div>
+
+
+
+                    }
+                    @if (Model.banners.Count >= 4)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[3].image' id='@Model.banners[3].type-@Model.banners[3].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 11)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[10].image' id='@Model.banners[10].type-@Model.banners[10].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.banners.Count >= 12)
+                    {
+                        <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                            <div class="imageparent">
+                                <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[11].image' id='@Model.banners[11].type-@Model.banners[11].catIDOrLink' />
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <script>
+                    $(".banner").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".banner").click(function () {
+                        var val = $(this).attr('id');
+                        if (!(val.indexOf("empty") >= 0)) {
+                            window.location.href = "/Home/ManageBanner?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+
+                    $(".mySlide").each(function () {
+
+                        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+                            $(this).css("cursor", "default");
+                        }
+                    })
+                    $(".mySlide").click(function () {
+                        var val = $(this).attr('id');
+
+                        if (!val.contain('image')) {
+                            window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
+
+                        }
+                    })
+
+                </script>
+            </div>
+
+        }
+        @if (Model.bestseller != null)
+        {
+            <div class="album py-5 bg-white " style="margin-top:40px">
+                <div class="maxWidth" style="">
+                    <h3 style="text-align:right; padding:30px">پیشنهاد های ویژه</h3>
+                    <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                        @foreach (var item in Model.bestseller.Take(8))
+                        {
+                            string imgURL = item.image.Trim(',').Split(',').First();
+                            <div class="col">
+
+                                <div class="card">
+
+                                    <div style="width:100%; height:300px">
+                                        <img style="max-width:100%; max-height:100%; object-fit:scale-down" src="@imgURL" />
+                                    </div>
+
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            @item.title
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+
+                                            <!--                                <small class="text-muted price-small">قیمت  </small>-->
+                                            <span class="price-small-unit">قیمت</span>
+                                            <span class="price-small-number"> @string.Format(item.price)</span>
+                                            <span class="price-small-unit">تومان</span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="price-small-shop">خرید</span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="album py-5 bg-white ">
+            <div class="container ">
+                <div style="text-align: center;margin: 80px 40px 40px 40px ;">
+                    <h3>ویدئو AUKEY</h3>
+                </div>
+
+                <div class="embed-responsive embed-responsive-16by9">
+                    <!--                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>-->
+                    <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/6zoUOZuAP3Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+                    <!--                <iframe data-src="https://www.youtube.com/embed/6zoUOZuAP3Q?autoplay=1&amp;showinfo=0&amp;controls=1&amp;rel=0&amp;modestbranding=1"-->
+                    <!--                        frameborder="0" allowfullscreen=""-->
+                    <!--                        src="https://www.dideo.ir/extension/embed?url=aHR0cHM6Ly93d3cueW91dHViZS5jb20vZW1iZWQvNnpvVU9adUFQM1E/YXV0b3BsYXk9MSZzaG93aW5mbz0wJmNvbnRyb2xzPTEmcmVsPTAmbW9kZXN0YnJhbmRpbmc9MQ=="-->
+                    <!--                        dideo-checked="true"></iframe>-->
+                </div>
+
+            </div>
+        </div>
+
+        <div class="album  flexCenter ">
+            <div id="shopify-section-161468344319dca14b" class="shopify-section new-section">
+
+                <section class="section-wrap section-newsletter flexCenter start">
+                    <h2>عضویت در خبرنامه</h2>
+
+
+                    <form action="/contact#subscribe" method="post" name="mc-embedded-subscribe-form" id="SubscribeForm" class="contact-form" accept-charset="UTF-8" _lpchecked="1">
+
+                        <input type="email" value="" id="subscribe-email" placeholder="پست الکترونیک" name="contactemail" class="input-group-field subscribe-email-inp" aria-label="Email Address" aria-required="true" required="" pattern="^[A-Za-z0-9\u4e00-\u9fa5]+[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$">
+                        <button type="submit" style="font-weight: bold">عضویت</button>
+                    </form>
+
+                    <script>
+
+                    </script>
+
+
+                </section>
+
+            </div>
+        </div>
+
+
+    </main>

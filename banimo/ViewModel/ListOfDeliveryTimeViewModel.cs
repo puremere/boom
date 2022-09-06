@@ -5,6 +5,20 @@ using System.Web;
 
 namespace banimo.ViewModel
 {
+
+    public class PaymentType
+    {
+        public string ID { get; set; }
+        public string typeTitle { get; set; }
+        public string typeprice { get; set; }
+        public string typeDesc { get; set; }
+        public string takhir { get; set; }
+    }
+
+    public class PaymentTypeVM
+    {
+        public List<PaymentType> paymentType { get; set; }
+    }
     public class ListOfDeliveryTimeViewModel
     {
         public List<ListOfDeliveryTime> ListOfDeliveryTime { get; set; }
@@ -16,6 +30,7 @@ namespace banimo.ViewModel
         public string DayText { get; set; }
         public string TimeFrom { get; set; }
         public string TimeTo { get; set; }
+        public string planID { get; set; }
     }
     public class Comment
     {

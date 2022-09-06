@@ -9,7 +9,8 @@ namespace banimo.ViewModel
 
     public class newMenuVM
     {
-       
+
+        public string ID { get; set; }
         public string image { get; set; }
         public string catID { get; set; }
         public string brandID { get; set; }

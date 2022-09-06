@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace education2.Controllers
 {
+    [doForAll]
     public class ScreenController : Controller
     {
         private static Random random = new Random();
