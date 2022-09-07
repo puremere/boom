@@ -116,7 +116,7 @@
     border-radius: 8px;
     color: #506176;
     cursor: pointer;
-    font-family: Estedad-Medium, serif;
+    font-family: IRANSans;
     font-size: 14px;
     height: 48px;
     outline: none;
@@ -6902,7 +6902,8 @@ input[type=number] {
 }
 
 .footer-wrapper .number-phone {
-    background: #e5f1ff
+    background: #e5f1ff;
+    line-height:2.2
 }
 
 .footer-wrapper .number-phone span {
@@ -7209,7 +7210,7 @@ input[type=number] {
 }
 
 .product-card.product-card-blue {
-    background: #f6faff
+    background: #fff
 }
 
 .product-card.product-card-blue .product-price span.total-price {

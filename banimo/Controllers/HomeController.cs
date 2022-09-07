@@ -303,7 +303,7 @@ namespace banimo.Controllers
             device = RandomString();
             code = MD5Hash(device + "ncase8934f49909");
             productinfoviewdetail model = new productinfoviewdetail();
-            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemo.php";
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest2.php";
             payloadModel.device = device;
             payloadModel.code = code;
             payloadModel.nodeID = nodeID;
@@ -1075,7 +1075,7 @@ namespace banimo.Controllers
                 collection.Add("isAvailable", Available);
                 collection.Add("wonder", wonder); 
                 collection.Add("partnerID", urlid.ToString());
-                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductListTest.php";
+                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductListTest2.php";
                 byte[] response = client.UploadValues(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1084,6 +1084,7 @@ namespace banimo.Controllers
 
 
             banimo.ViewModelPost.ProductListViewModel log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.ProductListViewModel>(result);
+            
             if (page == null)
             {
                 log2.currentPage = "1";
@@ -1784,14 +1785,14 @@ namespace banimo.Controllers
             }
 
             banimo.ViewModelPost.viewProductViewModel log = JsonConvert.DeserializeObject<banimo.ViewModelPost.viewProductViewModel>(result);
-
+           
             if (ID != "")
             {
                 log.ID = ID;
             }
             if(log.title == null)
             {
-                return RedirectToAction("Error500", "Error");
+                return RedirectToAction("Error404", "Error");
             }
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides

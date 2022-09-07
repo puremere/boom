@@ -1273,57 +1273,56 @@
 
                                             <div id="@rangesliderbtn" class="btn btn-success" style="padding:10px ;width:90%; margin-left:6%;background-color:#64c4ef; border:0"> اعمال بازه</div>
                                             <script>
-                                    var rangeslider = "rangeslider" + '@range.ID';
-                                    var rangesliderbtn = "btn" + '@range.ID';
-                                    var range1a = "a" + '@range.ID';
-                                    var range1b = "b" + '@range.ID';
-                                    var min = $("#" + range1a).text();
+                                            var rangeslider = "rangeslider" + '@range.ID';
+                                            var rangesliderbtn = "btn" + '@range.ID';
+                                            var range1a = "a" + '@range.ID';
+                                            var range1b = "b" + '@range.ID';
+                                            var min = $("#" + range1a).text();
 
                                             $("#" + "btn" + '@range.ID').click(function () {
                                                 $("#loading").css("display", "block");
-                                            var ID = '@range.ID';
+                                                var ID = '@range.ID';
 
-                                            if ('@range.title' === "قیمت") {
-                                                ID = "price";
-                                            }
+                                                if ('@range.title' === "قیمت") {
+                                                    ID = "price";
+                                                }
 
+                                               min = ID + "-"+  $("#" + "a2" + '@range.ID').text() + ",";
+                                               max = ID + "-" + $("#" + "b2" + '@range.ID').text() + ",";
 
-                                        min = ID + "-"+  $("#" + "a2" + '@range.ID').text() + ",";
-                                        max = ID + "-" + $("#" + "b2" + '@range.ID').text() + ",";
-
-                                            $.ajax({
-                                            url: '/Home/changeRangeIDes',
-                                            data: {
-                                                min: min,
-                                                max: max
-
-                                            },
-                                            dataType: 'html',
-                                            success: function () {
-                                              //   فقط برای پروژه مسکن که آپدیت لحظه ای نمی خوایم
                                                 $.ajax({
-                                                    url: '/Home/gogetproductlist',
-                                                    aType: 'html',
-                                                    success: function (data) {
-                                                        $("#SIBdiv").css("height", "");
-                                                        $('#productlist').html(data);
-                                                        window.scrollTo(0, 50);
+                                                    url: '/Home/changeRangeIDes',
+                                                    data: {
+                                                        min: min,
+                                                        max: max
+
+                                                    },
+                                                    dataType: 'html',
+                                                    success: function () {
+                                                        //   فقط برای پروژه مسکن که آپدیت لحظه ای نمی خوایم
+                                                        $.ajax({
+                                                            url: '/Home/gogetproductlist',
+                                                            aType: 'html',
+                                                            success: function (data) {
+                                                                $("#SIBdiv").css("height", "");
+                                                                $('#productlist').html(data);
+                                                                window.scrollTo(0, 50);
+                                                            },
+                                                            error: function () {
+                                                                //alert("nashod")
+                                                            },
+                                                            complete: function () {
+                                                                $('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
+                                                                $('#spaceholder').css("height", '');
+
+                                                                $("#loading").fadeOut();
+                                                            }
+                                                        });
                                                     },
                                                     error: function () {
-                                                        //alert("nashod")
-                                                    },
-                                                    complete: function () {
-                                                        $('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
-                                                        $('#spaceholder').css("height", '');
-
-                                                        $("#loading").fadeOut();
+                                                        alert("nashod")
                                                     }
                                                 });
-                                            },
-                                            error: function () {
-                                                alert("nashod")
-                                            }
-                                        });
                                     })
 
                                             </script>

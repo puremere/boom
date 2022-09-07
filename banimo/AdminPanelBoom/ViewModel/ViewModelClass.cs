@@ -169,6 +169,8 @@ namespace AdminPanelBoom.ViewModel
 
     public class NewDatumm
     {
+        public string SelectedaddProductServer { get; set; }
+        public  List<catVM> anabrcatModel { get; set; }
         public string domain { get; set; }
         public List<Partner> partners { get; set; }
         public List<Brand> brands { get; set; }

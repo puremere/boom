@@ -408,10 +408,10 @@
                                                     }
                                                     else
                                                     {
-                                                        <p>@Html.DisplayFor(modelItem => item.count)</p>
+                                                        <p class="quickEditInput">@Html.DisplayFor(modelItem => item.count)</p>
 
                                                     }
-                                                    @*<input style="display:none" value="@item.count" class="quickEditInput quickCount" />*@
+                                                    <input style="display:none" value="@item.count" class="quickEditInput quickCount" />
 
                                                 }
                                             </td>
@@ -544,9 +544,12 @@
 
                                             </td>
 
-                                            <td>
-                                                <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
-                                            </td>
+                                            @if (string.IsNullOrEmpty(item.parentID))
+                                            {
+                                                <td>
+                                                    <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
+                                                </td>
+                                            }
 
                                         </tr>
                                         }
@@ -610,9 +613,11 @@
 
 
                 var price = $(this).parent().parent().find(".quickPrice");
+                var count = $(this).parent().parent().find(".quickCount");
                 var finalprice = $(this).parent().parent().find(".quickFinalPrice");
                 var discount = $(this).parent().parent().find(".discountLable");
-
+               
+               
 
 
                 var ID = $(this).parent().parent().attr('id')
@@ -622,11 +627,13 @@
                     data: {
                         ID: ID,
                         price: price.val(),
-                        finalprice: finalprice.val()
+                        finalprice: finalprice.val(), 
+                        count: count.val(), 
                     },
                     success: function (data) {
 
                         finalprice.siblings().text(finalprice.val());
+                        count.siblings().text(count.val());
                         price.siblings().text(price.val())
                         var percent = parseInt(100 - (100 * parseInt(finalprice.val())) / parseInt(price.val()));
                         discount.text(percent)

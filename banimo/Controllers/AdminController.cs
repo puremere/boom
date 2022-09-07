@@ -1033,7 +1033,7 @@ namespace banimo.Controllers
                 collection.Add("page", page);
                 collection.Add("type", type == null ? "" : type);
                 collection.Add("order", order == null ? "" : order);
-                string serveraddress = server + "/Admin/getDataAdminOrders.php";
+                string serveraddress = server + "/Admin/getDataAdminOrdersTest2.php";
                 byte[] response = client.UploadValues(serveraddress, collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -2026,7 +2026,7 @@ namespace banimo.Controllers
             string final = result.Replace("\r\n", "");
             return Content(final);
         }
-        public ActionResult ChangeProductPriceForEdit(string ID,  string price, string finalprice)
+        public ActionResult ChangeProductPriceForEdit(string ID,  string price, string finalprice, string count)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -2038,6 +2038,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("count", count);
                 collection.Add("id", ID);
                 collection.Add("finalprice", finalprice);
                 collection.Add("price", price);
@@ -6228,7 +6229,25 @@ namespace banimo.Controllers
                     model.range = null;
                 }
             }
+            
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                byte[] response = client.UploadValues(server + "/Admin/getMainCat.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            catVMList catlog = JsonConvert.DeserializeObject<catVMList>(result);
+            List<catVM> catmodel = new List<catVM>();
+
+            if (catlog.cats != null)
+            {
+                catmodel = GetGroup(catmodel, catlog.cats, null);
+            }
+            model.anabrcatModel = catmodel;
             return View(model);
         }
 

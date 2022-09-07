@@ -245,8 +245,8 @@ namespace banimo.Controllers
 
         [ValidateAntiForgeryToken]
         [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
-        [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
-        [Throttle(TimeUnit = TimeUnit.Hour, Count = 20)]
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 15)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 40)]
         [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
         public ActionResult CustomerLogInWC(string registerpassword, string registertext, string register, string CaptchaCode)
         {

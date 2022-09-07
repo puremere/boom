@@ -251,7 +251,7 @@
 }
 
 .new-products-wrapper .new-products .new-product-slide-box {
-    background: #f6faff;
+    background: #fff;
     border-radius: 16px;
     height: 184px;
     padding: 16px;
@@ -441,12 +441,12 @@
 
 .numbered-products-wrapper .numbered-products-box .numbered-products-box-product .img-numbered-products {
     align-items: center;
-    background: #f6faff;
+    background: #fff;
     border-radius: 50%;
     display: flex;
     height: 312px;
     justify-content: center;
-    padding: 16px;
+    padding: 45px;
     position: relative;
     width: 312px
 }
@@ -800,7 +800,7 @@
 }
 
 .latest-news-wrapper .latest-news-swiper .news-box .news-info {
-    background: #f6faff;
+    background: #fff;
     border-radius: 0 0 16px 16px;
     height: 232px;
     position: relative

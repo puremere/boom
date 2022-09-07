@@ -113,7 +113,160 @@
 
 
 
+<div id="serverModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div id="serverDataHolder" style="display:block;  ">
+
+                    <div class="form-group " style="display:inline-block">
+
+
+                        @*@{
+                                List<SelectListItem> serverListItem = new List<SelectListItem>();
+                                if (Model.basecat != null)
+                                {
+                                    foreach (var item in Model.basecat.filtersModel)
+                                    {
+                                        serverListItem.Add(new SelectListItem
+                                        {
+                                            Text = item.title,
+                                            Value = "1" + item.ID
+                                        });
+                                        if (item.filtersubcat != null)
+                                        {
+                                            foreach (var subcat in item.filtersubcat)
+                                            {
+                                                serverListItem.Add(new SelectListItem
+                                                {
+                                                    Text = "---------" + subcat.title,
+                                                    Value = "2" + subcat.ID
+                                                });
+                                                if (subcat.filtersubcat2 != null)
+                                                {
+                                                    foreach (var subcat2 in subcat.filtersubcat2)
+                                                    {
+                                                        serverListItem.Add(new SelectListItem
+                                                        {
+                                                            Text = "-------------------" + subcat2.title,
+                                                            Value = "3" + subcat2.ID
+                                                        });
+                                                    }
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+
+
+                            }*@
+                        <div style="display : flex; align-items:center">
+                            <div class="component ">
+                                @Html.DropDownListFor(m => m.SelectedaddProductServer, new SelectList(Model.anabrcatModel, "ID", "title"), "-- انتخاب دسته بندی --", new { id = "serverCates", style = "width:150px", @class = "form-control" })
+                            </div>
+                            <div>
+                                <input id="titleTosearch" class="form-control" />
+                            </div>
+                            <div id="getmainproduct" class=" btn btn-success"> تایید</div>
+                        </div>
+                        <script>
+                            $("#getmainproduct").click(function () {
+
+                                var selectedProduct = $("#selectedForServer").text();
+
+                                var title = $("#titleTosearch").val();
+                                var cat = $("#serverCates").val();
+                                $.ajax({
+                                    url: '/Admin/bringProductMain',
+                                    dataType: 'html',
+                                    data:
+                                    {
+                                        catid: cat,
+                                        title: title,
+                                        page: 1,
+                                        productChosen: selectedProduct
+                                    },
+                                    success: function (data) {
+
+                                        $('#filterholderforserver').html(data);
+
+                                    },
+                                    error: function () {
+                                        alert("filterfail")
+                                    }
+                                });
+                            })
+                        </script>
+
+                        @*<script>
+                                $("#serverCates").change(function () {
+                                    var value = $("#serverCates").val();
+
+                                    $.ajax({
+                                        url: '/Admin/bringFilterForServer',
+                                        dataType: 'html',
+                                        data:
+                                        {
+                                            catid: value
+                                        },
+                                        success: function (data) {
+
+                                            $('#filterholderforserver').html(data);
+
+                                        },
+                                        error: function () {
+                                            alert("filterfail")
+                                        }
+                                    });
+                                    //$.ajax({
+                                    //    url: '/Admin/bringFeatureforServer',
+                                    //    dataType: 'html',
+                                    //    data:
+                                    //    {
+                                    //        catid: value
+                                    //    },
+                                    //    success: function (data) {
+
+                                    //        $('#featureholderforproduct').html(data);
+
+                                    //    },
+                                    //    error: function () {
+                                    //        alert("featurefail")
+                                    //    }
+                                    //});
+
+                                })
+
+                            </script>*@
+
+
+
+
+
+
+
+                    </div>
+
+
+                </div>
+                <div class="row" id="filterholderforserver">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">لغو</button>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
 
 <input type="file" style="display:none" id="descriptionUpload" />
 <div class="row">
@@ -139,7 +292,7 @@
                 }
 
 
-               
+
                 <ul class="nav navbar-left panel_toolbox">
                     <li>
                         <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>

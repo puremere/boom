@@ -1,0 +1,451 @@
+﻿@model banimo.ViewModelPost.ProductListViewModel
+@using banimo.Classes;
+
+
+
+<style>
+    .product-img {
+        width: 100%
+    }
+        .product-img img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: cover;
+        }
+</style>
+
+<div class="container">
+    <div class="products-card">
+        <div id="type-card-products" class="row xpb-16 ">
+            <div id="type-card-products" class="row xpb-16" style="">
+
+                @{
+                    if (Model.products.Count() != 0)
+                    {
+                        foreach (var item in Model.products)
+                        {
+                            string addID = "addtocarto" + item.ID;
+                            string minusID = "minus" + item.ID;
+                            string ID = "o" + item.ID.ToString();
+                            string addtocartid = "addtocart" + ID;
+                            string price = item.oldPrice.ToString("###,###");
+                            string imagefile = "placeholder.jpg";
+                            if (item.title != null)
+                            {
+                                imagefile = item.image.Trim(',').Split(',').First();
+                            }
+                            string src = imagefile;
+
+                            <div class="col-6 col-lg-4 col-xl-4 col-xxl-3" style="margin-top:15px">
+                                <div class="box-cards">
+                                    <div class="product-card product-card-blue">
+                                        <a href="#/product/nokia-c30-dual-sim-64-3gb-ta-1359/"
+                                           dideo-checked="true">
+                                            <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
+                                                <div class="product-price">
+                                                    <span class="total-price priceItem">
+                                                        @string.Format("{0:n0}", item.price) ت
+                                                    </span>
+                                                </div>
+                                                <div class="product-img xmb-3">
+                                                    <img class="img-fluid rounded"
+                                                         alt="گوشی نوکیا C30 دوسیم کارت ظرفیت 64 گیگابایت رم 3 گیگابایت"
+                                                         src="@imagefile"
+                                                         loading="lazy" style="max-width: 100% !important; max-height: 100% !important; object-fit: cover;">
+                                                </div>
+                                                <div class="product-text">
+                                                    <h3 class="title">
+                                                        @item.title
+                                                    </h3>
+                                                </div>
+                                                <div class="color-range">
+                                                    @{
+                                                        List<string> colorstring = item.color.Split('$').ToList();
+                                                        foreach (var color in colorstring)
+                                                        {
+                                                            <span title="سفید" class="range" style=" background: @color; "></span>
+                                                        }
+
+                                                    }
+
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="c-profile-empty" style="text-align: center;direction: rtl;font-size: 25px;margin-bottom: 25px;background: white;border: 1px solid #ddd;padding-bottom: 40px;">
+
+                            موردی برای نمایش وجود ندارد!
+                        </div>
+                    }
+
+                }
+
+            </div>
+
+        </div>
+        <div id="type-card-products-list" class="xpb-16 d-none">
+
+            <div id="type-card-products" class="row xpb-16" style="">
+
+                @{
+                    if (Model.products.Count() != 0)
+                    {
+                        foreach (var item in Model.products)
+                        {
+                            string addID = "addtocarto" + item.ID;
+                            string minusID = "minus" + item.ID;
+                            string ID = "o" + item.ID.ToString();
+                            string addtocartid = "addtocart" + ID;
+                            string price = item.oldPrice.ToString("###,###");
+                            string imagefile = "placeholder.jpg";
+                            if (item.title != null)
+                            {
+                                imagefile = item.image.Trim(',').Split(',').First();
+                            }
+                            string src = imagefile;
+
+                            <div class="box-cards">
+                                <div class="card-list card-list-box-blue" style="background-color:white; margin:10px 0">
+                                    <a href="#/product/nokia-c30-dual-sim-64-3gb-ta-1359/" dideo-checked="true">
+                                        <div class="card-list-box xpt-8 xpb-6 xpl-5 position-relative">
+                                            <div class="card-img" style="margin-left:50px">
+                                                <img alt="@item.title" class="img-fluid rounded" src="@src" loading="lazy">
+                                            </div>
+                                            <div class="card-text">
+                                                <div class="card-price position-absolute">
+
+                                                    <span class="d-none"></span>
+                                                    <span class="total-price priceItem">  @string.Format("{0:n0}", item.price) ت</span>
+
+                                                </div>
+                                                <h3 class="title-persian">
+                                                    @item.title
+                                                </h3>
+
+
+                                                
+
+
+                                                <div class="color-range xmt-5" style="margin-top: 20px !important; border: 1px solid #eee; border-radius: 10px;">
+                                                    <h6 style="background-color: #f5f8fa; padding: 15px; border-radius: 10px;">رنگبندی</h6>
+                                                    @{
+                                                        List<string> otherColorImage = item.imagestring.Split('$').ToList();
+                                                        if (otherColorImage.Count() > 0)
+                                                        {
+                                                            foreach (var coloitem in otherColorImage)
+                                                            {
+                                                                <img src="@coloitem" style="width:70px; margin:10px" />
+                                                            }
+                                                        }
+
+                                                    }
+
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="c-profile-empty" style="text-align: center;direction: rtl;font-size: 25px;margin-bottom: 25px;background: white;border: 1px solid #ddd;padding-bottom: 40px;">
+
+                            موردی برای نمایش وجود ندارد!
+                        </div>
+                    }
+
+                }
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<div class="maxwidth">
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="col-lg-12 col-md-12">
+    @{
+        var total = Convert.ToInt32(Model.pageNumber);
+        var activ = Convert.ToInt32(Model.currentPage);
+        var activminus2 = activ - 2;
+        var activminus1 = activ - 1;
+        var activplus1 = activ + 1;
+        var activplus2 = activ + 2;
+
+
+
+        if ((total - activ) > 3 & activ > 3)
+        {
+            <ul class="pagination">
+
+                <li><a>«</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                <li><a>...</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                <li class="active"><a>@activ</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                <li> ...</li>
+                <li><a>@total</a></li>
+                <li><a>»</a></li>
+            </ul>
+        }
+        else if ((total - activ > 3) && !(activ > 3))
+        {
+            <ul class="pagination">
+
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li class="active"><a>@activ </a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                <li><a href="#">...</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+
+        }
+        else if (!(total - activ > 3) && activ > 3)
+        {
+            <ul class="pagination">
+
+                <li><a>«</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                <li><a>...</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                <li style="cursor:pointer" class="active"><a>@activ </a></li>
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li><a>»</a></li>
+            </ul>
+
+        }
+        else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
+        {
+
+            <ul class="pagination">
+
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+                <li class="active"><a href="#">@activ</a></li>
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                }
+
+            </ul>
+
+        }
+
+    }
+
+    @*<script>
+        var getquntity = function () {
+            $.ajax({
+                url: '/Home/getquntitiy',
+                dataType: 'html',
+                success: function (data) {
+                    var total = 0;
+                    var srtcookie = data;
+
+                    if (srtcookie.length > 0) {
+                        srtcookie = srtcookie.replace(/&quot;/g, '"');
+                        JSON.parse(srtcookie).forEach(function (item) {
+                            let valueID = "value" + item.productid;
+                            $("." + valueID).text(item.quantity);
+                            total += parseInt(item.quantity);
+                        });
+                        $(".simpleCart_quantityy").text(total)
+
+                    } else {
+                        $(".simpleCart_quantityy").text("0")
+                    };
+                }
+
+            })
+        };
+    </script>
+    <script>
+        $(".pagingnumberforall").click(function () {
+            var num = this.textContent;
+            $.ajax({
+                url: '/Home/allpaginationid',
+                dataType: 'html',
+                data: {
+                    id: num,
+                },
+                success: function (data) {
+                    if (data === "1") {
+                        $.ajax({
+                            url: '/Home/gogetproductlist',
+                            dataType: 'html',
+                            success: function (data) {
+
+                                $('#productlist').html(data);
+                                window.scrollTo(0, 500);
+                                getquntity();
+                            },
+                            error: function () {
+                                alert("nashod")
+                            },
+                            complete: function () {
+                                $('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
+                                $('#spaceholder').css("height", '');
+                                $('#SIBdiv').scrollTop();
+                                window.scrollTo(0, 0);
+
+                            }
+                        });
+
+                    }
+                },
+                error: function () {
+
+                }
+
+            })
+        })
+
+    </script>
+    <script>
+        $('.value-plus').on('click', function () {
+
+            event.stopPropagation();
+            $("#loading").fadeIn()
+            let newVal = $(this).parent().children(".value").text();
+            let finalVal = parseInt(newVal) + 1;
+            // $(this).parent().children(".value").text(finalVal);
+            var ID = $(this).attr('id');
+            let myid = "value" + ID.replace("addtocarto", "");
+
+            $("." + myid).text(finalVal);
+
+            $.ajax({
+                url: '/Home/addtocart',
+                dataType: 'html',
+                data: {
+                    id: ID
+
+                },
+                success: function (data) {
+                    var count = parseInt($(".simpleCart_quantityy").text());
+                    count += 1;
+                    $(".simpleCart_quantityy").text(count);
+                    $("#loading").fadeOut()
+
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
+        });
+        $('.value-minus').on('click', function () {
+            event.stopPropagation();
+            $("#loading").fadeIn()
+            var ID = $(this).attr('id');
+            let myid = "value" + ID.replace('minus', '');
+
+            let newVal = $(this).parent().children(".value").text();
+            if (newVal != "0") {
+                let finalVal = parseInt(newVal) - 1;
+                $("." + myid).text(finalVal);
+            }
+
+
+            $.ajax({
+                url: '/Home/minusfromcart',
+                dataType: 'html',
+                data: {
+                    id: ID
+                },
+                success: function (data) {
+
+                    var count = parseInt($(".simpleCart_quantityy").text());
+                    count -= 1;
+                    $(".simpleCart_quantityy").text(count);
+                    $("#loading").fadeOut()
+
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
+
+
+
+
+
+        });
+
+
+
+
+    </script>
+    <script>
+        getquntity();
+    </script>*@
+
+
+
+
+</div>

@@ -822,7 +822,7 @@ namespace banimo.Controllers
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -1169,7 +1169,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1715,7 +1715,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequest.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }

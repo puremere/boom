@@ -2235,6 +2235,14 @@
     <Content Include="Views\core\bank.cshtml" />
     <Content Include="Views\Shared\AdminShared\_ProductListForEdit.cshtml" />
     <Content Include="Views\core\structure.cshtml" />
+    <Content Include="Views\Home\ProductDetail5.cshtml" />
+    <Content Include="Views\Home\ProductList5.cshtml" />
+    <Content Include="Views\Home\Mag5.cshtml" />
+    <Content Include="Views\Home\EndOrder5.cshtml" />
+    <Content Include="Views\Home\checkout5.cshtml" />
+    <Content Include="Views\Home\confirm5.cshtml" />
+    <Content Include="Views\Home\AddComment5.cshtml" />
+    <Content Include="Views\Shared\_ProductListForBUTFULImage5.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
