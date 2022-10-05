@@ -133,11 +133,12 @@
 
                         @* <button id="DEFcatok" class="btn btn-primary " onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
                         <button id="clonefilter" class="btn btn-primary ">تایید</button>
+                       
                         <script>
                             $("#clonefilter").click(function () {
-                                 var cloneVAL = $("#clonedrop").val().toString();
-                                 var mainval = $("#maindrop").val();
-                               
+                                var cloneVAL = $("#clonedrop").val().toString();
+                                var mainval = $("#maindrop").val();
+
                                 if (cloneVAL != "" && mainval != "" && cloneVAL != "0" && mainval != "0") {
                                     alert(cloneVAL);
                                     $.ajax({

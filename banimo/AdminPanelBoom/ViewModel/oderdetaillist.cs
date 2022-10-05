@@ -26,6 +26,7 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string catid { get; set; }
         public string subcatid { get; set; }
         public string subcatid2 { get; set; }
+        public string meta { get; set; }
         public List<Image> images { get; set; }
 
     }

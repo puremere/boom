@@ -1,97 +1,208 @@
 ﻿@model banimo.ViewModel.ArticleList
 @{
-                /**/
+    /**/
 
-                Layout = "~/Views/Shared/_Layout.cshtml";
-                ViewBag.Title = "مدیریت مطالب";
+    Layout = "~/Views/Shared/_Layout5.cshtml";
+    ViewBag.Title = "مدیریت مطالب";
 
 }
 
 @if (Model.articles != null)
 {
-<link href="~/Content/cubeportfolio.min.css" rel="stylesheet" />
-                /**/
-<div style="margin:20px;padding: 70px; background-color:white;border-radius: 8px; box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);">
-    <div class="clearfix">
-        <div id="js-filters-blog-posts" class="cbp-l-filters-list cbp-l-filters-left">
-            <div data-filter="*" class="cbp-filter-item-active cbp-filter-item cbp-l-filters-list-first">همه (<div class="cbp-filter-counter"></div>)</div>
-
-            @{
-
-                List<String> CatList = (from p in Model.articles
-                                        select p.catName).Distinct().ToList();
-                List<String> CatListEn = (from p in Model.articles
-                                          select p.catNameEn).Distinct().ToList();
-
-            }
-            @for (int i = 0; i <CatListEn.Count() - 1; i++)
-            {
-                var item = CatListEn[i];
-
-                string filter = "." + @item;
-                <div data-filter=@filter class="cbp-filter-item">@CatList[i] (<div class="cbp-filter-counter"></div>)</div>
-
-            }
-            <div data-filter=".@CatListEn.Last()" class="cbp-filter-item cbp-l-filters-list-last">@CatList.Last() (<div class="cbp-filter-counter"></div>)</div>
-
-
-
-        </div>
-
-        <div class="cbp-search cbp-l-filters-right">
-            <input style="border-radius:5px" id="js-search-blog-posts" type="text" placeholder="عبارت مورد نظر خود را جستجو کنید" autocomplete="off" data-search=".cbp-l-grid-blog-title" class="cbp-search-input">
-            <div class="cbp-search-icon"></div>
-            <div class="cbp-search-nothing">نتیجه ای یافت نشد <i>{{query}}</i></div>
-        </div>
-    </div>
-
-    <div id="js-grid-blog-posts" class="cbp">
-
-        @foreach (var newitem in Model.articles)
-        {
-            string classname = "cbp-item " + newitem.catNameEn + "";
-
-            string imagaddress = newitem.image == "" ? "/images/panelimages/placeholder.jpg" : "/images/panelimages/" + newitem.image;
-        <div class="@classname" style="direction:rtl; border:1px solid #ddd;border-radius: 8px;box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);">
-         
-            <a href="/Home/magDetail?currentid=@newitem.ID" target="" class="cbp-caption">
-                <div class="cbp-caption-defaultWrap">
-                    <img src="@imagaddress" style="max-height:230px; max-width:380px ; background-color:white; object-fit: scale-down;" />
-                </div>
-                <div class="cbp-caption-activeWrap">
-                    <div class="cbp-l-caption-alignCenter">
-                        <div class="cbp-l-caption-body">
-                            <div class="cbp-l-caption-text">مشاهده مطلب</div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a style="padding: 0 7px" href="" target="_blank" class="cbp-l-grid-blog-title">@newitem.title</a>
-            <div style="padding:0 7px">
-                <div class="cbp-l-grid-blog-date">@newitem.date</div>
-                <div class="cbp-l-grid-blog-split">|</div>
-                <a href="#" class="cbp-l-grid-blog-comments">@newitem.view نظرات</a>
-
-            </div>
-            <br />
-            @*<div class="cbp-l-grid-blog-desc" style="max-height:35px; text-align:right">@Html.Raw(newitem.content)</div>*@
-        </div>
-
+    <style>
+        .imageHolder:hover {
+            filter: grayscale(100%);
         }
 
+        .imageHolder {
+            transition-property: -moz-filter, -ms-filter, -o-filter, -webkit-filter, filter;
+            transition-duration: 1s;
+        }
+
+        .magHolder {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .middleLine {
+            border-bottom: 2px solid #966530;
+            width: 100px;
+            margin-right: -50px;
+            z-index: 9999999
+        }
+
+        .magTitle {
+            width: 400px;
+            margin: 50px;
+        }
+
+        .titleDate {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .titleDateLine {
+            width: 50px;
+            border-bottom: 1px solid;
+            margin: 0 10px;
+        }
+
+        .titleItself {
+            line-height: 2;
+        }
+
+        .magItem {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .magContainer {
+            margin: 20px;
+            padding: 70px;
+        }
+
+        @@media only screen and (max-width: 600px) {
+            .magItem {
+                display: inline-block
+            }
+
+            .magContainer {
+                margin: 0px;
+                padding: 0px;
+            }
+
+            .magHolder {
+                padding: 0;
+                margin-top: 70px
+            }
+
+            .magTitle {
+                padding: 10px;
+                width: 100%;
+                margin: 0
+            }
+
+            .titleItself {
+                font-size: 20px
+            }
+
+            .imgItselft {
+                width: 100%
+            }
+
+            .middleLine {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+    /**/
+    <div class="magContainer" style="">
+        <div class="clearfix">
+            @*<div id="js-filters-blog-posts" class="cbp-l-filters-list cbp-l-filters-left">
+                    <div data-filter="*" class="cbp-filter-item-active cbp-filter-item cbp-l-filters-list-first">همه (<div class="cbp-filter-counter"></div>)</div>
+
+                    @{
+
+                        List<String> CatList = (from p in Model.articles
+                                                select p.catName).Distinct().ToList();
+                        List<String> CatListEn = (from p in Model.articles
+                                                  select p.catNameEn).Distinct().ToList();
+
+                    }
+                    @for (int i = 0; i <CatListEn.Count() - 1; i++)
+                    {
+                        var item = CatListEn[i];
+
+                        string filter = "." + @item;
+                        <div data-filter=@filter class="cbp-filter-item">@CatList[i] (<div class="cbp-filter-counter"></div>)</div>
+
+                    }
+                    <div data-filter=".@CatListEn.Last()" class="cbp-filter-item cbp-l-filters-list-last">@CatList.Last() (<div class="cbp-filter-counter"></div>)</div>
+
+
+
+                </div>*@
+
+            @*<div class="cbp-search cbp-l-filters-right">
+                    <input style="border-radius:5px" id="js-search-blog-posts" type="text" placeholder="عبارت مورد نظر خود را جستجو کنید" autocomplete="off" data-search=".cbp-l-grid-blog-title" class="cbp-search-input">
+                    <div class="cbp-search-icon"></div>
+                    <div class="cbp-search-nothing">نتیجه ای یافت نشد <i>{{query}}</i></div>
+                </div>*@
+        </div>
+
+
+        <div style="        direction: rtl;">
+
+            @foreach (var newitem in Model.articles)
+            {
+                string classname = "cbp-item " + newitem.catNameEn + "";
+
+                string imagaddress = newitem.image == "" ? "/images/panelimages/placeholder.jpg" : "/images/panelimages/" + newitem.image;
+
+
+                <div class="magHolder" style=" ">
+                    <a class="magItem" style="  " href="/Home/magDetail?currentid=@newitem.ID">
+                        <div class="imageHolder">
+                            <img class="imgItselft" src=" @imagaddress" style="background-color:white; " />
+                        </div>
+                        <div class="middleLine" style=""></div>
+                        <div class="magTitle" style="">
+                            <div class="titleDate" style="">
+                                <span>@newitem.catName</span>
+                                <span class="titleDateLine" style=""></span>
+                                <span>@newitem.date</span>
+                            </div>
+                            <h3 class="titleItself" style="">@newitem.title</h3>
+
+                        </div>
+                    </a>
+                </div>
+
+                @*<div class="@classname" style="direction:rtl; ">
+
+                        <a href="/Home/magDetail?currentid=@newitem.ID" target="" class="cbp-caption">
+                            <div class="cbp-caption-defaultWrap">
+                                <img src="@imagaddress" style="background-color:white; " />
+                            </div>
+                            <div class="cbp-caption-activeWrap">
+                                <div class="cbp-l-caption-alignCenter">
+                                    <div class="cbp-l-caption-body">
+                                        <div class="cbp-l-caption-text">مشاهده مطلب</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a  href="" target="_blank" class="cbp-l-grid-blog-title">@newitem.title</a>
+                        <div style="padding:0 7px">
+                            <div class="cbp-l-grid-blog-date">@newitem.date</div>
+                            <div class="cbp-l-grid-blog-split">|</div>
+                            <a href="#" class="cbp-l-grid-blog-comments">@newitem.view نظرات</a>
+
+                        </div>
+                        <br />
+                    </div>*@
+
+            }
+
+
+        </div>
+
+        <!-- load jquery -->
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+
+
 
     </div>
-
-    <!-- load jquery -->
-    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
-
-    <!-- load cubeportfolio -->
-    <script src="~/Scripts/jquery.cubeportfolio.min.js"></script>
-
-    <!-- init cubeportfolio -->
-    <script src="~/Scripts/main.js"></script>
-
-</div>
 }
 
 
+
+<style>
+    .cbp-l-grid-blog-title {
+        white-space: unset !important;
+        text-overflow: unset !important;
+    }
+</style>

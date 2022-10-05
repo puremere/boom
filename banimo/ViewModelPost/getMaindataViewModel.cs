@@ -97,6 +97,7 @@ namespace banimo.ViewModePost
         public string oldPrice { get; set; }
         public string isActive { get; set; }
         public string discount { get; set; }
+        public string meta { get; set; }
         public string isAvailable { get; set; }
     }
 

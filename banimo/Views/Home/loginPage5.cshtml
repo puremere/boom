@@ -1,0 +1,185 @@
+﻿@using BotDetect.Web.Mvc;
+@using banimo.Classes;
+@{
+    Layout = null;
+}
+
+
+
+
+
+
+@{
+    /**/
+
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout5.cshtml";
+}
+
+<link href="~/Content/loginStyle4.css" rel="stylesheet" />
+<!-- js -->
+<script type="text/javascript" src="/Scripts/jquery-2.1.4.min.js"></script>
+<!-- //js -->
+<!-- for bootstrap working -->
+<script type="text/javascript" src="/Scripts/bootstrap-3.1.1.min.js"></script>
+<!-- //for bootstrap working -->
+<script>
+    $(document).ready(function () {
+        function isValidPhonenumber(phonenumber) {
+            var pattern = /^09[0-9]{9}$/;
+            return pattern.test(phonenumber);
+        };
+        function isNotNull(str) {
+            var pattern = /^[A-Za-z0-9]{1,20}$/;
+            return pattern.test(str);
+        };
+        $('#forgettext').on('input', function (e) {
+
+            var val = $(this).val();
+            if (val.length > 0) {
+
+                if (!isNotNull(val) || !isValidPhonenumber(val)) {
+
+                    $("#remember-error").css("display", "block");
+                    $("#forgettext").css("color", "#ef5662");
+                    $("#forgettext").css("border", "1px solid #ef5662");
+                    $("#mainlabla2").addClass("error");
+
+                }
+                else {
+                    $("#remember-error").css("display", "none");
+                    $("#forgettext").css("color", "#777");
+                    $("#forgettext").css("border", "1px solid #c8c8c8");
+                    $("#mainlabla2").removeClass("error");
+                }
+            }
+            else {
+
+
+                $("#remember-error").css("display", "block");
+                $("#forgettext").css("color", "#ef5662");
+                $("#forgettext").css("border", "1px solid #ef5662");
+                $("#mainlabla2").addClass("error");
+            }
+
+        });
+
+
+    })</script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+<link href="~/Content/all.css" rel="stylesheet" />
+
+
+<div>
+    <main id="main" style="margin-top:50px">
+        <div class="semi-modal-layout">
+            <section class="o-page o-page--account-box">
+                <div class="c-account-box">
+
+                    <div class="c-account-box__headline" style="background-color:blue">ورود با رمز یکبار مصرف</div>
+                    <div class="c-account-box__content">
+                        <form class="c-form-account" data-name="remember" method="post" id="rememberForm" novalidate="novalidate">
+                            <input type="hidden" name="rc" value="UC93TE55a281dk5QYnZBMjRRcjZHdz09"><input type="hidden" name="rd" value="cHdSdHlsMkFjckE4UG44NFFDZEtpcWdKMzRqVVRSM1k4L1FldlVBVEQ0UjFNbFF2TUFnamdOYlR2aHJ3UFU5TA~~">
+                            <div class="c-form-account__title"> شماره موبایل</div>
+                            <div class="c-form-account__row">
+                                <div class="c-form-account__col">
+                                    <label id="mainlabla2" class="c-ui-input c-ui-input--account-login">
+                                        <input id="forgettext" class="c-ui-input__field" type="text" name="remember[email_phone]" placeholder=" شماره موبایل خود را وارد نمایید">
+                                        <div id="remember-error" class="error c-ui-feedback-hint"> شماره موبایل را وارد نمایید</div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="fogetconfirm" class="mybtn addtocart" style="">
+
+                                <p class="buttonverif">تایید</p>
+                                <script>
+                                        $("#fogetconfirm").click(function () {
+
+                                            function isNotNull(str) {
+                                                var pattern = /^[A-Za-z0-9]{1,20}$/;
+                                                return pattern.test(str);
+                                            };
+                                            function isValidPhonenumber(phonenumber) {
+                                                var pattern = /^09[0-9]{9}$/;
+                                                return pattern.test(phonenumber);
+                                            };
+
+
+
+                                            var val = $("#forgettext").val();
+
+
+                                            if (!isNotNull(val) || !isValidPhonenumber(val)) {
+
+                                                $("#remember-error").css("display", "block");
+                                                $("#forgettext").css("color", "#ef5662");
+                                                $("#forgettext").css("border", "1px solid #ef5662");
+                                                $("#mainlabla2").addClass("error");
+
+                                            }
+                                            else {
+                                                $("#loading").fadeIn();
+                                                $.ajax({
+                                                    url: '/CustomerLogin/forgetPass',
+                                                    dataType: 'html',
+                                                    data: {
+                                                        isRegister: "1",
+                                                        phone: val
+                                                    },
+                                                    success: function (srt) {
+                                                        $("#loading").fadeOut();
+                                                        if (srt === "300") {
+                                                            $("#remember-error").css("display", "block");
+                                                            $("#remember-error").text("شماره موبایل وارد شده در @System.Configuration.ConfigurationManager.AppSettings["siteName"] ثبت نشده است");
+                                                            $("#remember-error").css("display", "block");
+                                                            $("#forgettext").css("color", "#ef5662");
+                                                            $("#forgettext").css("border", "1px solid #ef5662");
+                                                            $("#mainlabla2").addClass("error");
+                                                        }
+
+
+                                                        if (srt === "200") {
+
+                                                            var url = '@Url.Action("confirm", "Home", new { id = "__val__"})';
+                                                            var url2 = url.replace("__val__", val);
+                                                            window.location.href = url2;
+
+
+
+                                                        }
+
+
+
+
+
+
+
+
+                                                    },
+                                                    error: function () {
+                                                        $('#lblsubscribeSubmit').text("خطای سیستمی، لطفاً با اپراتور تماس بگیرید");
+                                                    }
+                                                });
+                                            }
+
+                                        })
+                                </script>
+                                @*<p > افزودن به سبد خرید</p>*@
+                            </div>
+                        </form>
+                    </div>
+                    <div class="c-account-box__footer">
+
+                        <a data-snt-event="dkLoginClick" data-snt-params="{&quot;type&quot;:&quot;login&quot;,&quot;site&quot;:&quot;registration-page&quot;}" href="/Home/Register" class="btn-link-spoiler">ثبت نام  در @System.Configuration.ConfigurationManager.AppSettings["siteName"]</a>
+                    </div>
+                    <div class="c-account-box__footer">
+
+                        <a data-snt-event="dkLoginClick" data-snt-params="{&quot;type&quot;:&quot;login&quot;,&quot;site&quot;:&quot;registration-page&quot;}" href="/Home/login" class="btn-link-spoiler"> ورود با رمز عبور در @System.Configuration.ConfigurationManager.AppSettings["siteName"]</a>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>

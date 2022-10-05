@@ -5,15 +5,28 @@
     /**/
 
     ViewBag.Title = "نهایی سازی سفارش";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout5.cshtml";
 }
 
-<link href="~/Extra/leaflet/leaflet.css" rel="stylesheet" />
+
+
+@section HeadIncludes{
+    <link href="~/Extra/leaflet/leaflet.css" rel="stylesheet" />
+    <link href="~/Content/endOrderStyle.css" rel="stylesheet" />
+
+
+
+}
+
 
 @section scripts{
 
-    <link href="~/Content/endOrderStyle.css" rel="stylesheet" />
 
+
+    <script src="~/Scripts/bootstrap-3.1.1.min.js"></script>
+    <script src="~/Scripts/imagezoom.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
 
 
     <script>
@@ -30,32 +43,7 @@
             return x1 + x2;
         }
     </script>
-    <script>
-        $(document).ready(function () {
-            $(".master").click(function () {
 
-                $(".dispath").css("display", "none");
-                var i = $(this).children();
-                i.css("display", "block");
-
-                var id = i.attr("id");
-
-                $(".slave").css("display", "none");
-                $("#" + id).css("display", "block");
-                $("#" + id).children().children().first().css("display", "block");
-                $("#hourid").val($("#" + id).children().children().first().attr("id"));
-
-
-            })
-            $(".slave .halfrow").click(function () {
-                $(".finalrow").css("display", "none");
-                var i = $(this).children();
-                i.css("display", "block");
-                var id = i.attr("id");
-                $("#hourid").val(id);
-            })
-        })
-    </script>
     <script>
         $("#mellat").click(function () {
             $(".banky").css("display", "none");
@@ -114,7 +102,7 @@
 
                 value = "1";
                 $("#payment").val("1");
-              
+
             }
             else {
                 $("#raveshpardakht").css("display", "block");
@@ -162,7 +150,7 @@
                             }
                             toastr.error("لطفا روش پرداخت را انتخاب کنید");
                         }
-                        
+
                     }
                     else {
                         toastr.options = {
@@ -202,7 +190,7 @@
                 }
                 toastr.error("لطفا اطلاعات فردی خود را وارد نمایید");
             }
-           
+
             $("#finalconfirm").click(function () {
                 $("#finalconfirm").off('click');
                 senddata();
@@ -219,9 +207,6 @@
         })
     </script>
 
-
-    @*<script type="text/javascript" src="https://cdn.map.ir/web-sdk/1.4.2/js/jquery-3.2.1.min.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>*@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
@@ -544,6 +529,49 @@
 
 
         });
+         $(".deliverType").click(function () {
+
+
+             var price = $(this).find(".dprice").text().replace(',', "");
+            var basePrice = '@Model.baseDeliver';
+            var finalAmount = '@Model.finalAmount';
+
+
+
+            if (parseFloat(finalAmount) < parseFloat(basePrice)) {
+                $("#deliveryprice").text(addCommas(price));
+                var mot = $("#finalprice").text().replace(",", '')
+                mot = mot.replace(',', "");
+                var discount = $("#finalDiscount").text();
+                discount = discount.replace(',', "");
+               
+                $("#totalprice").text(addCommas(parseInt(mot) + parseInt(price) - parseInt(discount)))
+
+            }
+
+
+
+
+            $(".deliverType").find('i').css("display", "none");
+            $(this).find('i').css("display", "block");
+
+             var id = $(this).attr('id');
+
+            $("#planID").val(id);
+            $.ajax({
+                url: "getTime",
+                dataType: "html",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    $(".TimeTableHolder").html(data)
+                }
+            });
+
+
+
+        })
 
         $(".addressy").click(function () {
 
@@ -558,6 +586,8 @@
             $(this).css("display", "block");
 
         });
+
+
         $(".removeAddress").click(function (e) {
             e.stopPropagation();
             $("#removeModal").modal('toggle');
@@ -768,6 +798,8 @@
         <input hidden name="disc" id="lon" value="0" />
         <input hidden name="lat" id="lat" value="" />
         <input hidden name="lng" id="lng" value="" />
+        
+        <input hidden id="planID" name="planID" />
         <input hidden id="addressID" name="addressID" />
         <div id="app" style="width:100%; height:100%"></div>
         <div style="margin:30px 0px 30px 0px"></div>
@@ -814,11 +846,11 @@
 
                                 <div id="@item.ID" style="display:@display;  margin: 20px; padding:20px; " class="halfrow addressy">
                                     <i class="fa fa-check " style="display:@display;  margin:0 5px"></i>
-                                    <div style="text-align:right;font-size:14px; font-weight:600">   @item.title</div><br />
-                                    <div style="text-align:right; font-size:14px"> آدرس :   @item.address</div>
+                                    <div class="pclass" style="text-align:right;font-size:14px; font-weight:600">   @item.title</div><br />
+                                    <div class="pclass" style="text-align:right; font-size:14px"> آدرس :   @item.address</div>
                                     <div class="row" ; style="margin-top:30px; margin-bottom:10px">
-                                        <p class="btn btn-default editAddress" style="display:block; margin:-10px 10px">ویرایش</p>
-                                        <p class="btn btn-danger removeAddress" style="display:block; margin: -10px 10px">حذف</p>
+                                        <p class="btn btn-success editAddress" style="width:200px;  display:block; margin:-10px 10px">ویرایش</p>
+                                        <p class="btn btn-danger removeAddress" style="width:200px;display:block; margin: -10px 10px">حذف</p>
                                     </div>
                                 </div>
                             }
@@ -842,23 +874,23 @@
                                         <h4 style="text-align:right; margin-bottom:20px">جزئیات آدرس</h4>
                                         <h5 style="text-align:right">لطفا جزئیات آدرس را وارد نمایید.</h5>
                                         <div class="form__group field">
-                                            <input type="text" class="form__field" placeholder="عنوان" name="modalTitle" id='modalTitle'  />
+                                            <input type="text" class="form__field" placeholder="عنوان" name="modalTitle" id='modalTitle' />
                                             <label for="name" class="form__label">عنوان آدرس</label>
                                         </div>
                                         <div class="form__group field">
-                                            <input type="text" class="form__field" placeholder="استان" name="modalState" id='modalState'  />
+                                            <input type="text" class="form__field" placeholder="استان" name="modalState" id='modalState' />
                                             <label for="name" class="form__label">استان</label>
                                         </div>
                                         <div class="form__group field">
-                                            <input type="text" class="form__field" placeholder="شهر" name="modalCity" id='modalCity'  />
+                                            <input type="text" class="form__field" placeholder="شهر" name="modalCity" id='modalCity' />
                                             <label for="name" class="form__label">شهر</label>
                                         </div>
                                         <div class="form__group field">
-                                            <input type="text" class="form__field" placeholder="نشانی پستی" name="modalAddress" id='modalAddress'  />
+                                            <input type="text" class="form__field" placeholder="نشانی پستی" name="modalAddress" id='modalAddress' />
                                             <label for="name" class="form__label">نشانی پستی</label>
                                         </div>
                                         <div class="form__group field">
-                                            <input type="text" class="form__field" placeholder="کد پستی" name="modalpostalCode" id='modalpostalCode'  />
+                                            <input type="text" class="form__field" placeholder="کد پستی" name="modalpostalCode" id='modalpostalCode' />
                                             <label for="name" class="form__label">کد پستی</label>
                                         </div>
 
@@ -876,36 +908,36 @@
 
                     </div>
                     @*<div class="row ">
-                    <div class="col-lg-12 col-sm-12 row1 ">
-                        <div class="inputdiv1"><p>شهر</p></div>
-                        <div class="inputdiv2"><input id="city" name="city" class="form-control field" type="text" value="@city" /></div>
-                    </div>
+                        <div class="col-lg-12 col-sm-12 row1 ">
+                            <div class="inputdiv1"><p>شهر</p></div>
+                            <div class="inputdiv2"><input id="city" name="city" class="form-control field" type="text" value="@city" /></div>
+                        </div>
 
 
-                </div>
-                <div class="row ">
-                    <div class="col-lg-6 col-sm-6 row1 ">
-                        <div class="inputdiv1"><p>نام و نام خانوادگی</p></div>
-                        <div class="inputdiv2"><input id="fullname" name="fullname" class="form-control field" type="text" value="@fullname" /></div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 row1">
-                        <div class="inputdiv1"><p>آدرس</p></div>
-                        <div class="inputdiv2"><input id="address" name="address" class="form-control field" type="text" value="@address" /></div>
-                    </div>
+                    <div class="row ">
+                        <div class="col-lg-6 col-sm-6 row1 ">
+                            <div class="inputdiv1"><p>نام و نام خانوادگی</p></div>
+                            <div class="inputdiv2"><input id="fullname" name="fullname" class="form-control field" type="text" value="@fullname" /></div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 row1">
+                            <div class="inputdiv1"><p>آدرس</p></div>
+                            <div class="inputdiv2"><input id="address" name="address" class="form-control field" type="text" value="@address" /></div>
+                        </div>
 
-                </div>
-                <div class="row ">
-                    <div class="col-lg-6 col-sm-6 row1">
-                        <div class="inputdiv1"><p>شماره تلفن</p></div>
-                        <div class="inputdiv2"><input id="phonenumber" name="phonenumber" class="form-control field" type="text" value="@phone" /></div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 row1 ">
-                        <div class="inputdiv1"><p>کد پستی</p></div>
-                        <div class="inputdiv2"><input id="postalcode" name="postalcode" class="form-control" type="text" /></div>
-                    </div>
+                    <div class="row ">
+                        <div class="col-lg-6 col-sm-6 row1">
+                            <div class="inputdiv1"><p>شماره تلفن</p></div>
+                            <div class="inputdiv2"><input id="phonenumber" name="phonenumber" class="form-control field" type="text" value="@phone" /></div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 row1 ">
+                            <div class="inputdiv1"><p>کد پستی</p></div>
+                            <div class="inputdiv2"><input id="postalcode" name="postalcode" class="form-control" type="text" /></div>
+                        </div>
 
 
-                </div>*@
+                    </div>*@
                 </div>
             </div>
 
@@ -1016,96 +1048,47 @@
 
             }
 
-
-            <div class="containerofform">
-                <div class="header"><p> زمان ارسال</p></div>
-                <div class="sectionBody">
-
-
-
-                    <div class="row ">
-                        @{
-                            if (Model.times != null)
-                            {
-
-                                foreach (var item in Model.times)
-                                {
-
-                                    int index = Model.times.IndexOf(item);
-                                    string checkname = "check" + index;
-                                    if (index == 0)
-                                    {
-                                        <div class="col-lg-6 col-sm-6 slave" id="@checkname">
-                                            @foreach (var detail in item.hours)
-                                            {
-
-                                                string finalname = "final" + detail.ID;
-
-                                                <div class="halfrow">
-                                                    @*@if (@detail.isChecked == true)
-                                                {
-                                                    <i class="fa fa-check finalrow" id="@finalname"></i>
-                                                }
-                                                else
-                                                {
-
-                                                }*@
-                                                    <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
-                                                    <p>@detail.title</p>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-lg-6 col-sm-6 slave" id="@checkname" style="display:none">
-                                            @foreach (var detail in item.hours)
-                                            {
-
-                                                string finalname = "final" + detail.ID;
-
-                                                <div class="halfrow ">
-                                                    @*@if (@detail.isChecked == true)
-                                                {
-                                                    <i class="fa fa-check finalrow" id="@finalname"></i>
-                                                }
-                                                else
-                                                {
-
-                                                }*@
-                                                    <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
-                                                    <p>@detail.title</p>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
-
-                                }
-
-                                <div class="col-lg-6 col-sm-6 Mmaster">
-                                    @foreach (var item in Model.times)
-                                    {
-                                        int index = Model.times.IndexOf(item);
-                                        string checkname = "check" + index;
-                                        <div class="halfrow master">
-                                            @*@if (@item.isChecked == true)
-                                        {
-                                            <i class="fa fa-check dispath" id="@checkname"></i>
-                                        }
-                                        else
-                                        {
-
-                                        }*@
-                                            <i class="fa fa-check dispath" id="@checkname" style="display:none"></i>
-                                            <p>@item.title</p>
-                                        </div>
-                                    }
-                                </div>
-
-                            }
+            @if (Model.deliverType.paymentType != null)
+            {
+                <div class="containerofform">
+                    <div class="header">
+                        <p> روش پرداخت</p>
+                    </div>
+                    <style>
+                        .pclass {
+                            background-color: white;
+                            padding: 15px;
+                            border-radius: 10px
                         }
+                    </style>
+                    <div class="sectionBody">
+                        <div class=" ">
+                            @foreach (var item in Model.deliverType.paymentType)
+                            {
+                                <div id="@item.ID" style="  margin: 20px; padding:20px; " class="halfrow deliverType">
+                                    <i class="fa fa-check " style="margin:0 5px; display:none"></i>
+                                    <div class="pclass" style="text-align:right;font-size:14px; font-weight:600">   @item.typeTitle</div><br />
+                                    <div style="display:flex">
+                                        <div class="pclass" style="flex:1; text-align:right; font-size:14px"> توضیحات :   @item.typeDesc</div>
+                                        <div class="pclass" style="margin-right:20px; text-align:right; font-size:14px"> قیمت :  <span class="dprice priceItem"> @string.Format("{0:n0}", decimal.Parse(@item.typeprice)) </span>  </div>
+                                    </div>
+
+                                    @*<div class="row" ; style="margin-top:30px; margin-bottom:10px">
+                                        <p class="btn btn-default editAddress" style="display:block; margin:-10px 10px">ویرایش</p>
+                                        <p class="btn btn-danger removeAddress" style="display:block; margin: -10px 10px">حذف</p>
+                                    </div>*@
+                                </div>
+                            }
+                        </div>
 
                     </div>
+                </div>
+            }
+            <div class="containerofform">
+                <div class="header"><p> زمان ارسال</p></div>
+                <div class="sectionBody TimeTableHolder" style="">
+
+
                 </div>
             </div>
 
@@ -1225,35 +1208,35 @@
                 <div class="header"><p> مبلغ نهایی</p></div>
                 <div class="sectionBody">
                     <div class="row ">
-                        <div id="finalPriceHolder" style="">
+                        <div id="finalPriceHolder" style="direction:ltr">
                             <div class="row priceitem">
                                 @{
                                     decimal totalprice = decimal.Parse(Model.finalAmount);
                                     decimal deliverPrice = 0;
                                     if (decimal.Parse(Model.finalAmount) < decimal.Parse(@Model.baseDeliver))
                                     {
-                                        totalprice = decimal.Parse(Model.finalAmount) + decimal.Parse(Model.priceDeliver);
+                                        totalprice = decimal.Parse(Model.finalAmount);
                                         deliverPrice = decimal.Parse(@Model.priceDeliver);
                                     }
-                                  
-                                   
+
+
                                     decimal amountPrice = decimal.Parse(@Model.finalAmount);
                                     decimal creditPrice = decimal.Parse(@Model.credit);
                                 }
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice">@String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
-                                <p class="col-lg-6 col-sm-6">مبلغ</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice" class="priceItem">@String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
+                                <p class="col-lg-6 col-sm-6" style="direction:rtl">مبلغ</p>
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalDiscount">0</i>&nbsp;تومان</p>
-                                <p class="col-lg-6 col-sm-6">تخفیف</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalDiscount" class="priceItem">0</i>&nbsp;تومان</p>
+                                <p class="col-lg-6 col-sm-6" style="direction:rtl">تخفیف</p>
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 deliveryHolder Holder" style="display:flex"><span id="deliveryprice">@String.Format("{0:n0}", deliverPrice)</span>&nbsp;تومان</p>
-                                <p class="col-lg-6 col-sm-6">هزینه ارسال</p>
+                                <p class="col-lg-6 col-sm-6 deliveryHolder Holder" style="display:flex"><span id="deliveryprice" class="priceItem">@String.Format("{0:n0}", 0)</span>&nbsp;تومان</p>
+                                <p class="col-lg-6 col-sm-6" style="direction:rtl">هزینه ارسال</p>
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"><span id="totalprice"> @String.Format("{0:n0}", totalprice)  </span>&nbsp;تومان</p>
-                                <p class="col-lg-6 col-sm-6">مبلغ نهایی</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"><span id="totalprice" class="priceItem"> @String.Format("{0:n0}", totalprice)  </span>&nbsp;تومان</p>
+                                <p class="col-lg-6 col-sm-6" style="direction:rtl">مبلغ نهایی</p>
                             </div>
                         </div>
 
@@ -1267,8 +1250,9 @@
                     <div class="row ">
                         <div id="finalPriceHolder" style="">
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice"> @String.Format("{0:n0}", creditPrice)</i>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6">اعتبار</p>
+                                <p class="col-lg-6 col-sm-6 Holder " style="display:flex"> <i id="finalprice " class="priceItem"> @String.Format("{0:n0}", creditPrice)</i>&nbsp;تومان</p>
+
                             </div>
                             <style>
 
@@ -1354,13 +1338,13 @@
                 <div class="sectionBody">
                     <div class="row " style="direction:rtl;">
                         @*<div class="col-lg-6 col-sm-6 " id="inplace" style="cursor:pointer; float:right">
-                        <div class="halfrow">
-                            <i class="fa fa-check banky"></i>
+                            <div class="halfrow">
+                                <i class="fa fa-check banky"></i>
 
-                            <p>پرداخت درمحل</p>
-                        </div>
+                                <p>پرداخت درمحل</p>
+                            </div>
 
-                    </div>*@
+                        </div>*@
 
                         @{
                             if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("inplace"))
@@ -1403,13 +1387,13 @@
                             if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("wallet"))
                             {
                                 @*<div class="col-lg-6 col-sm-6 " id="Wallet" style="cursor:pointer; float:right">
-                                <div class="halfrow">
-                                    <i class="fa fa-check banky" style="display:none"></i>
+                                    <div class="halfrow">
+                                        <i class="fa fa-check banky" style="display:none"></i>
 
-                                    <p>کیف پول</p>
-                                </div>
+                                        <p>کیف پول</p>
+                                    </div>
 
-                            </div>*@
+                                </div>*@
                             }
                         }
 
@@ -1419,8 +1403,8 @@
 
 
             @*<div id="finalconfirm" class="btn-link-spoiler btn-link-spoiler--edit">
-            تایید اطلاعات
-        </div>*@
+                تایید اطلاعات
+            </div>*@
             <div style="width:100%; text-align:center; padding:20px">
                 <div id="finalconfirm" class="btn btn-success" style=" width: 60%;  padding: 10px; font-size: 14px; margin: 0 auto;">
                     پرداخت
@@ -1429,7 +1413,7 @@
         </div>
         @{
             //var value = "final" + @Model.times[0].hours[0].ID;
-            <input hidden id="hourid" name="hourid"  value="" />
+            <input hidden id="hourid" name="hourid" value="" />
             <input hidden id="payment" name="payment" value="" />
 
         }

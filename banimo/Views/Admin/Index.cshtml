@@ -111,7 +111,7 @@
                         <h1>سامانه مدیریت مطالب</h1>
 
                         @{
-                            if (Model.username != null)
+                            if (!string.IsNullOrEmpty(Model.username))
                             {
 
                                 <div>

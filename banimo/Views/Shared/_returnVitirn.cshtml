@@ -1,7 +1,14 @@
 ﻿@model IEnumerable<banimo.ViewModePost.Newest>
 @using Newtonsoft.Json;
 
-
+@{
+    banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+    string typeID = "";
+    if (userApp != null)
+    {
+        typeID = userApp.userTypeID;
+    }
+}
 
 @foreach (var item in Model)
 {
@@ -10,7 +17,14 @@
     string imagefile = "/images/placeholder.jpg";
     string src2 = "";
     List<string> srtlist = new List<string>();
-
+    double metaPrice = double.Parse(item.price);
+    double oldPrice = double.Parse(item.oldPrice);
+    if (typeID == "2")
+    {
+        banimo.AdminPanelBoom.ViewModel.metaVM metaModel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+        metaPrice = metaModel.price;
+        oldPrice = 0;
+    }
     if (item.title != null)
     {
         srtlist = item.image.Trim(',').Split(',').ToList();
@@ -31,6 +45,9 @@
 
         <div class="showmedetailFirstDiv showmedetailx">
             @{
+
+
+
                 string newurl = "/Home/ProductDetail?id=" + ID;
                 if (item.meta != "null")
                 {
@@ -43,7 +60,7 @@
                 }
             }
             <div style="padding:15px ; background-color:white">
-                <a  onclick="newProductDetail('@newurl')">
+                <a onclick="newProductDetail('@newurl')">
                     <div class="imageholderindex">
                         <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
                     </div>
@@ -83,7 +100,7 @@
                             {
                                 <div style="display:flex; align-items:center; margin-bottom:10px">
                                     <div style="width:20%;margin-right:5px">
-                                        @if (@item.discount != "0")
+                                        @if (oldPrice != metaPrice)
                                         {
                                             <span style="color: white;font-size:18px;font-weight:600;background-color: red;border-radius: 15px;padding: 5px 10px;">
                                                 @item.discount%
@@ -96,7 +113,7 @@
                                             <div class="" style="margin:0px 15px; min-height:20px;text-align:left">
                                                 <div class="">
                                                     <div class="">
-                                                        @if (item.price != item.oldPrice)
+                                                        @if (metaPrice != oldPrice)
                                                         {
                                                             <p style="display: inline-block; "> تومان </p> <del style="font-size:15px"> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)) </del>
 
@@ -105,7 +122,7 @@
                                                 </div>
                                             </div>
                                             <div class="row" style="margin:0px 15px; text-align:left">
-                                                <p style="display: inline-block; color: black"> تومان </p> <p style="color:black; display:inline-block;font-size:20px; font-weight:600">@string.Format("{0:n0}", Convert.ToInt32(@item.price))</p>
+                                                <p style="display: inline-block; color: black"> تومان </p> <p style="color:black; display:inline-block;font-size:20px; font-weight:600">@string.Format("{0:n0}", metaPrice)</p>
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +138,7 @@
                 @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
                 {
                     string valueID = "value" + item.ID;
-                    
+
                     <div class="addButton " style="height:40px">
                         <div id="@addID" class="value-plus" style="font-size:12px; direction:rtl;color:white; width:100%;  text-align:center; background-color:#FF4500; display:flex; justify-content:center;align-items:center;border-radius:5px; border:unset">
                             <i class="fa fa-shopping-basket" style="margin:0 10px;"></i>
@@ -146,7 +163,7 @@
 
 <script>
     var newProductDetail = function (e) {
-      
+
         window.location.href = "/" + e;
 
     }
@@ -155,10 +172,10 @@
         if (url != "") {
             $(this).attr('src', url);
         }
-       
-        
+
+
     }, function () {
-            var url = $(this).attr('srt1');
-            $(this).attr('src', url);
+        var url = $(this).attr('srt1');
+        $(this).attr('src', url);
     });
 </script>

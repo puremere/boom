@@ -1,0 +1,11 @@
+﻿@model banimo.AdminPanelBoom.ViewModel.nodeList
+
+
+
+<p>پروژه مد نظر</p>
+@if (Model.nodeResult != null)
+{
+    @Html.DropDownList("havaleNode", new SelectList(Model.nodeResult, "ID", "title"), new { id = "havaleNode", name = "havaleNode", @class = "form-control" })
+
+}
+

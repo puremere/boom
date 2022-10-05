@@ -245,20 +245,11 @@
     }
 </style>
 
-<div class="bottomDiv">
+<div class="bottomDiv" style="position:relative">
     <p data-toggle="tab" href="#home" style="display:flex; align-items:center;">   <i class="fal fa-pencil" style="color:#FF4500 !important; font-size:20px; color:black;position: absolute;top: 35%;right: 5%;"></i> </p>
-
-    <div style="margin:30px">
-        <h3 class="bottomDivTitle">توضیح و بررسی</h3>
-        @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
-        {
-
-            <h4 style="color:#808080" class="numEn">@Model.title</h4>
-        }
-        else
-        {
-            <h4 style="color:#808080">@Model.title</h4>
-        }
+    <div style="display:flex; direction:rtl; align-items:center; margin-bottom:30px">
+        <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+        <span style="flex:1; border-top:3px solid"></span>
     </div>
     <style>
 
@@ -345,8 +336,11 @@
 @if (Model.feature != null)
 {
     <div class="bottomDiv">
-
-        <h3 class="bottomDivTitle">بررسی ویژگی ها محصول</h3>
+        <div style="display:flex; direction:rtl; align-items:center">
+            <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+            <span style="flex:1; border-top:3px solid" ></span>
+        </div>
+       
 
         <div class="c-box c-box--tabs p-tabs__content">
             <div class="c-params is-active">
@@ -366,7 +360,11 @@
                             int j = i + 1;
                             int myindex = lst2[i];
                             <section>
-                                <h3 class="c-params__title">@Model.feature[myindex].title</h3>
+                                                    <p class="c-params__title">
+                                                        <span class="line-title"></span>
+                                                        <span>@Model.feature[myindex].title</span>
+
+                                                    </p>
                                 <ul class="c-params__list">
                                     @if (j < lst2.Count())
                                     {
@@ -421,20 +419,14 @@
 
 }
 <div class="bottomDiv">
-    <h3 class="bottomDivTitle">نظرات کاربران</h3>
-    <div class="c-comments ">
-        <h2 class="c-comments__headline">
-            <span style="margin-right:18px;display:inline-block; font-size:19px ; font-weight:500">  @Model.title </span>
-            <span>
-                @*<span> |</span>
-                    <span>۳</span><span> / ۵</span>
-                    <span>
-                        (۱۸ نفر)
-                    </span>*@
-            </span>
-        </h2>
+    <div style="display:flex; direction:rtl; align-items:center">
+        <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+        <span style="flex:1; border-top:3px solid"></span>
+    </div>
+    <div class="c-comments " style="">
+        
         <div class="c-comments__summary">
-            <div class="c-comments__summary-note">
+            <div class="c-comments__summary-note" style="margin-top:30px">
                 <span>شما هم می‌توانید در مورد این کالا نظر بدهید.</span>
                 <p>
                     اگر این محصول را قبلا خریده باشید، با وارد شدن به حساب کاربری خود،  نظر
@@ -700,49 +692,7 @@
     });
 </script>
 <script src="~/Scripts/resCarousel.js"></script>
-<script>
 
-    $('.addtocart').click(function () {
-        var ID = $('#idholder').text();
-        var RealID = "addtocarto";
-        var tobeid = RealID.concat(ID);
-        var tobeadded ='@Model.price';
-
-
-        var price = tobeadded;
-        $.ajax({
-            url: '/Home/addtocart',
-            dataType: 'html',
-            data: {
-                id: tobeid,
-                price: tobeadded
-
-            },
-            success: function (data) {
-
-
-                getquntity();
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000,
-                }
-                toastr.success('محصول مورد نظر به سبد اضافه شد')
-                //window.location.href = "@Url.Action("checkout", "Home")";
-            },
-
-            error: function () {
-
-            }
-        });
-
-
-    })
-</script>
 <script src="~/Scripts/lightgallery.min.js"></script>
 <script src="~/Scripts/lg-thumbnail.js"></script>
 <script src="~/Scripts/lg-fullscreen.js"></script>
@@ -933,3 +883,46 @@
 
 
 </script>
+<style>
+    .c-params__title{
+        font-size:16px; 
+        font-weight : 600;
+        display:flex;
+        align-items:center;
+        direction:rtl
+    }
+    .line-title{
+        width:20px;
+        border-bottom:4px solid;
+        margin-left:25px;
+
+    }
+    .c-params__title::before {
+        border-style: unset !important;
+    }
+    .c-params__list-key, .c-params__list-value{
+        padding:0
+    }
+    .c-params__list-key {
+        border: 1px solid #c5c1c1;
+        border-left: none;
+    }
+    .c-params__list-value .block {
+        background-color: white;
+    }
+    .c-params__list-value {
+       
+        border: 1px solid #ddd;
+        border-right: none;
+    }
+    .bottomDivTitle {
+        font-size: 18px;
+        margin: 0;
+        margin-left: 10px;
+    }
+    .bottomDiv {
+        margin: 50px 150px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+</style>

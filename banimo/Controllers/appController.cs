@@ -48,9 +48,28 @@ namespace banimo.Controllers
 
 
 
-
-
         [System.Web.Http.HttpPost]
+        public async Task<JObject> getcatlist()
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername);
+                string addr = appserver + "/getcatlist.php";
+                byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
+
+       [System.Web.Http.HttpPost]
         public async Task<JObject> getMainData()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];

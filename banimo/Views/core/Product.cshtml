@@ -116,14 +116,27 @@
             <div class="modal-body">
                 <p>جهت ثبت حواله موارد زیر را کامل کنید</p>
                 <div style="display:flex">
+                    <div style="margin-left:20px">
+                        <p>نوع تراکنش</p>
+                        <select id="ftypeAnbar" class="form-control">
+
+                            <option value="0">
+                                رسید
+                            </option>
+                            <option value="1">
+                                حواله
+                            </option>
+                        </select>
+                    </div>
+                   
 
                     <div style="margin-left:20px">
                         <p>تعداد مد نطر</p>
                         <input id="countHavale" class="form-control" />
                     </div>
-                    <div>
-                        <p>پروژه مد نظر</p>
-                        @Html.DropDownList("havaleNode", new SelectList(Model.nodeResult, "ID", "title"), new { id = "havaleNode", name = "havaleNode", @class = "form-control" } )
+                    <div id="havaleNodeList">
+                        @*<p>پروژه مد نظر</p>
+            @Html.DropDownList("havaleNode", new SelectList(Model.nodeResult, "ID", "title"), new { id = "havaleNode", name = "havaleNode", @class = "form-control" } )*@
 
                     </div>
                     <input hidden id="havaleID" />
@@ -140,48 +153,51 @@
                         var havaleNode = $("#havaleNode").val();
                         var countHavale = $("#countHavale").val();
                         var ID = $("#havaleID").val();
+                        var ftype = $("#ftypeAnbar").val();
 
-                        $.ajax({
-                            url: '/Core/havale',
-                            dataType: 'html',
-                            data: {
-                                node: havaleNode+"",
-                                count: countHavale+ "",
-                                ID: ID + ""
-                            },
-                            success: function (data) {
-                                if (data == "error") {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
+                        
+
+                        if (havaleNode.length > 0 && countHavale.length > 0) {
+                           
+                            $.ajax({
+                                url: '/Core/resid',
+                                dataType: 'html',
+                                data: {
+                                    count: countHavale,
+                                    deliver: "",
+                                    ID: ID,
+                                    PID: havaleNode,
+                                    type: ftype,
+                                    factorType: "0",
+                                },
+                                success: function (data) {
+                                    if (data == "400") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('موجودی انبار مرکزی کافی نیست')
                                     }
-                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
-                                }
-                                else {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
+                                    else {
+                                        $("#Verify").click();
+                                        $("#havaleModal").modal('toggle');
+                                        //window.location.reload();
                                     }
-                                    toastr.success('محصول مورد نظر حذف شد')
-                                    window.location.reload();
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
                                 }
-
-
-                            },
-                            error: function () {
-                                alert("nashod")
-                            }
-                        });
+                            });
+                        }
+                        
+                        
                     })
 
                 </script>
@@ -385,10 +401,14 @@
                                         <div style="display : flex; align-items:center; justify-content:center">
                                             <div class="component ">
 
-                                                @Html.DropDownList("selectedCadt", new SelectList(Model.nodeResult, "ID", "title"), "-- انتخاب پروژه  --", new {style="width:250px", id = "takhsisList", name = "takhsisList", @class = "form-control", multiple = "multiple" })
+                                                @Html.DropDownList("selectedCadt", new SelectList(Model.nodeResult, "ID", "title"), "-- انتخاب پروژه  --", new { style = "width:250px", id = "takhsisList", name = "takhsisList", @class = "form-control", multiple = "multiple" })
 
                                             </div>
                                             <input style="display:none" id="takhsisID" class="form-control" />
+
+                                        </div>
+                                        <div class="row" style="display : flex; align-items:center; justify-content:center">
+                                            <input name="all" type="checkbox" /><span style="margin-right:10px">همه موارد مشابه</span>
                                         </div>
 
 
@@ -412,7 +432,7 @@
 
                                     var takhsislist = $("#takhsisList").val()
                                     var IDt = $("#takhsisID").val();
-                                   
+                                    var all = $("input[name=all]").is(":checked");
                                     if (takhsislist != "" && IDt != "") {
                                         
                                         $.ajax({
@@ -423,6 +443,7 @@
                                                
                                                 prID: IDt,
                                                 nodeList: takhsislist + "",
+                                                all : all
                                             },
                                             success: function (data) {
 

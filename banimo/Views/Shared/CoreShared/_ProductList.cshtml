@@ -82,17 +82,34 @@
         </div>
     </div>
     <div id="residModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg" >
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
                     <div style="display:flex">
                         <div style="margin-left:20px">
+                            <p>نوع تراکنش</p>
+                            <select id="partnertype" class="form-control">
+
+                                <option value="0">
+                                    رسید
+                                </option>
+                                <option value="1">
+                                    حواله
+                                </option>
+                            </select>
+                        </div>
+                        <div style="margin-left:20px">
                             <p>تعداد مد نطر</p>
                             <input id="count" class="form-control" />
                         </div>
+                        <div style="margin-left:20px">
+                            <p>تحویل دهنده/گیرنده</p>
+                            @Html.DropDownList("partnerItem", new SelectList(Model.partnerList, "ID", "title"), "انتخاب تامین کننیده", new { @class = "form-control", id = "partnerItem" })
+
+                        </div>
                         <div>
-                            <p>تحویل دهنده</p>
+                            <p>توضیحات</p>
                             <input id="reciever" class="form-control" />
                         </div>
                         <input hidden id="residID" />
@@ -109,6 +126,9 @@
                             var reciever = $("#reciever").val();
                             var count = $("#count").val();
                             var ID = $("#residID").val();
+                            var PID = $("#partnerItem").val();
+                            var type = $("#partnertype").val();
+                            var factorType = "10";
 
                             $.ajax({
                                 url: '/Core/resid',
@@ -116,7 +136,11 @@
                                 data: {
                                     count: count,
                                     deliver: reciever,
-                                    ID: ID
+                                    ID: ID,
+                                    PID: PID,
+                                    type: type,
+                                    factorType: factorType,
+
                                 },
                                 success: function (data) {
                                     if (data == "error") {
@@ -222,6 +246,8 @@
                                             </th>
                                             <th>
                                             </th>
+                                            <th>
+                                            </th>
                                         </tr>
                                     </thead>
 
@@ -266,14 +292,15 @@
                                                 <td>
                                                     @{
 
-                                                        <a dataToResid=@item.ID class="btn btn-primary residButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> رسید اولیه</a>
+                                                        <a dataToResid=@item.ID class="btn btn-primary residButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال تامین کننده</a>
 
                                                     }
                                                 </td>
+
                                                 <td>
                                                     @{
 
-                                                        <a dataToHavale=@item.ID class="btn btn-primary havaleButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> حواله اولیه</a>
+                                                        <a dataToHavale=@item.ID class="btn btn-primary havaleButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال انبار</a>
 
                                                     }
                                                 </td>
@@ -304,7 +331,9 @@
         <script>
             $(".addtoserver").click(function () {
 
-                $("#takhsisID").val($(this).attr('id'));
+                var id = $(this).attr('id');
+                $("#takhsisID").val(id);
+               
 
             })
             $(".specialOffer").click(function () {
@@ -535,7 +564,21 @@
 
                 $(".havaleButt").click(function () {
                     var item = $(this).attr('dataToHavale');
+                    $.ajax({
+                        url: '/Core/getNodeList',
+                        dataType: 'html',
+                        data: {
+                            value: item,
 
+                        },
+                        success: function (data) {
+
+                            $("#havaleNodeList").html(data);
+                        },
+                        error: function () {
+
+                        }
+                    });
                     $("#havaleID").val(item);
                     $("#havaleModal").modal('toggle');
 

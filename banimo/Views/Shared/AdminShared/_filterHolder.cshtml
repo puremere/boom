@@ -16,7 +16,7 @@
     <ul class="nav nav-tabs" style="padding:0px">
         <li class="active" style="float:right"><a data-toggle="tab" href="#filterone" style=" color: #8d8d8d; ">فیلتر نوع یک </a></li>
         <li style="float:right"><a data-toggle="tab" href="#filtertwo" style=" color: #8d8d8d; ">فیلتر نوع دو (بازه)</a></li>
-        <li style="float:right"><a data-toggle="tab" href="#filterthree" style=" color: #8d8d8d; ">فیلتر نوع  سه (رنگ)</a></li>
+        @*<li style="float:right"><a data-toggle="tab" href="#filterthree" style=" color: #8d8d8d; ">فیلتر نوع  سه (رنگ)</a></li>*@
     </ul>
 
     <div class="tab-content">
@@ -382,24 +382,25 @@
                                                         success: function (data) {
 
                                                             if (data === "1") {
+                                                                $("#" + filterdetailtitle).val('');
                                                                 var newvluew = $("#selectedCatForEdit").val();
-                                                                $.ajax({
-                                                                    url: '/Admin/getfilters',
-                                                                    dataType: 'html',
-                                                                    data: {
-                                                                        catID: newvluew,
-                                                                    },
-                                                                    success: function (data) {
+                                                                //$.ajax({
+                                                                //    url: '/Admin/getfilters',
+                                                                //    dataType: 'html',
+                                                                //    data: {
+                                                                //        catID: newvluew,
+                                                                //    },
+                                                                //    success: function (data) {
 
-                                                                        $("#mainDetailHolder").html(data)
-                                                                        $("#questioncolorholder").css("display", "inline")
+                                                                //        $("#mainDetailHolder").html(data)
+                                                                //        $("#questioncolorholder").css("display", "inline")
 
 
-                                                                    },
-                                                                    error: function () {
-                                                                        alert("خطا")
-                                                                    }
-                                                                });
+                                                                //    },
+                                                                //    error: function () {
+                                                                //        alert("خطا")
+                                                                //    }
+                                                                //});
                                                                 toastr.options = {
                                                                     "debug": false,
                                                                     "positionClass": "toast-top-center",
@@ -522,25 +523,25 @@
                                                             }
 
                                                             toastr.success('  آیتم مورد نظر حذف شد')
-
+                                                            $("#" + filterdetaillist + " option:selected").remove()
                                                              var newvluew = $("#selectedCatForEdit").val();
-                                                            $.ajax({
-                                                                url: '/Admin/getfilters',
-                                                                dataType: 'html',
-                                                                data: {
-                                                                    catID: newvluew,
-                                                                },
-                                                                success: function (data) {
+                                                            //$.ajax({
+                                                            //    url: '/Admin/getfilters',
+                                                            //    dataType: 'html',
+                                                            //    data: {
+                                                            //        catID: newvluew,
+                                                            //    },
+                                                            //    success: function (data) {
 
-                                                                    $("#mainDetailHolder").html(data)
-                                                                    $("#questioncolorholder").css("display", "inline")
+                                                            //        $("#mainDetailHolder").html(data)
+                                                            //        $("#questioncolorholder").css("display", "inline")
 
 
-                                                                },
-                                                                error: function () {
-                                                                    alert("خطا")
-                                                                }
-                                                            });
+                                                            //    },
+                                                            //    error: function () {
+                                                            //        alert("خطا")
+                                                            //    }
+                                                            //});
                                                         }
 
                                                         else {

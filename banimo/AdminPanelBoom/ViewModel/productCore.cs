@@ -57,8 +57,13 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string brand { get; set; }
         public string cat { get; set; }
         public int ID { get; set; }
-        
+
 
     }
 
+
+    public class nodeList
+    {
+        public List<NodeResult> nodeResult { get; set; }
+    }
 }

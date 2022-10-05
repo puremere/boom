@@ -2,7 +2,8 @@
 
 @using (Html.BeginForm("setMainProduct", "Core", FormMethod.Post, new { enctype = "multipart/form-data", id = "addproduct00" }))
 {
-
+    <input id="selectedColor" name="selectedColor" hidden/>
+    <input id="SFilter" name="selectedFilter" hidden />
     string address = Model.address != null ? Model.address : "";
     string title = Model.title != null ? Model.title : "";
     string code = Model.code != null ? Model.code : "0";
@@ -80,7 +81,7 @@
                 else
                 {
                     <div class=" ">
-                        @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
+                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
                     </div>
                 }
 
@@ -97,7 +98,7 @@
                 }
                 else
                 {<div class=" ">
-                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                        @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
                     </div>
 
                 }
@@ -157,81 +158,89 @@
 
         </script>
     }
-    <script>
+<script>
 
-        $("#CRprocuct").click(function () {
-
-
-            var name = productname.value;
-            var addMPCat = $("#addMPCat").val();
-            var brandC = $("#brandC").val();
+    $("#CRprocuct").click(function () {
 
 
 
 
+        var name = productname.value;
+        var addMPCat = $("#addMPCat").val();
+        var brandC = $("#brandC").val();
 
-            if (name == "") {
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.error('نام محصول را وارد نمایید')
+
+
+
+
+        if (name == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
             }
-            if (brandC == "") {
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.error(' لطفا برند را انتخاب کنید')
-
+            toastr.error('نام محصول را وارد نمایید')
+        }
+        if (brandC == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
             }
-            if (addMPCat == "") {
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.error(' لطفا دسته بندی را انتخاب کنید ')
+            toastr.error(' لطفا برند را انتخاب کنید')
 
+        }
+        if (addMPCat == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
             }
+            toastr.error(' لطفا دسته بندی را انتخاب کنید ')
+
+        }
 
 
-            if (name != "" && brandC != "" && addMPCat != "") {
+        if (name != "" && brandC != "" && addMPCat != "") {
 
-                $("#addproduct00").submit();
+            
+            $("#SFilter").val($("#filterC").val());
+            $("#selectedColor").val($("#ColorC").val());
+          
+           
+            //alert($("#filterC").val());
+            $("#addproduct00").submit();
 
+        }
+        else {
+
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
             }
-            else {
-
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.error('تمامی موارد را کامل کنید')
-            }
-        })
+            toastr.error('تمامی موارد را کامل کنید')
+        }
+    })
 
 
-    </script>
+</script>
     <script>
 
 

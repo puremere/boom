@@ -1,90 +1,294 @@
-﻿
+﻿@model banimo.AdminPanelBoom.ViewModel.ListNode
 @{
-    ViewBag.Title = "draft";
+    ViewBag.Title = "bank";
     Layout = "~/Views/Shared/_CoreLayout.cshtml";
 }
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
 
-<div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
-    <div>
-        <div class="" style="margin : 0 5px">
-            <p style="display:inline-block">تاریخ سند از :</p>
-            <input id="dateFrom" style="display:inline-block" class="form-control inputForm FromdatePicker" />
-            <input name="Fromabserver" id="Fromabserver" style="display:none" class="form-control Fromabserver " />
+    .nav-tabs {
+        padding-right: 0px;
+    }
 
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+</style>
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+    <div class="row">
+
+        <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+            <div class="row" style="">
+
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>پروژه :</p>
+                    <select id="nodeID" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">انبار مرکزی</option>
+                        @foreach (var item in Model.nodeResult)
+                        {
+                            <option value="@item.ID">@item.title</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>نوع فاکتور :</p>
+                    <select id="trantype" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">رسید</option>
+                        <option value="0">حواله</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                    <p>از تاریخ :</p>
+                    <input type="text" class="form-control projectDate inputfield" />
+                    <input class="PDabserver" style="display:none" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تا تاریخ :</p>
+                    <input type="text" class="form-control projectDate2 inputfield" />
+                    <input class="PD2abserver" style="display:none" />
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت از :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت تا :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد از :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد تا :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                    <p> محصول :</p>
+                    <input type="text" class="form-control  inputfield" id="addItemToOrderInput" />
+                    <input id="IDholder" hidden />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>توضیحات :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>وضعیت :</p>
+                    <select id="factorStatus" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">اولیه</option>
+                        <option value="0">نهایی</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>محصول امانی :</p>
+                    <select id="amani" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">خیر</option>
+                        <option value="1">بله</option>
+
+                    </select>
+
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>روش انتقال:</p>
+                    <select id="factorType" class="form-control">
+                        <option value="">همه</option>
+                        <option value="10">تامین کننده</option>
+                        <option value="0">انبار به انبار</option>
+                        <option value="1">فروش</option>
+
+                    </select>
+
+
+
+                </div>
+            </div>
+
+            <div class="row" style="">
+
+                <div style="width:20%;padding:10px;">
+                    <div style="position:relative; margin:5px" id="">
+                        <div class="btn btn-success" style=";margin-top:20px" id="verifyCodeingTran">تایید</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+
+                <script>
+                    $("#verifyCodeingTran").click(function () {
+
+
+
+                        $.ajax({
+                            url: 'returnDraftList',
+                            dataType: 'html',
+                            data: {
+
+                                timeFrom: $(".PDabserver").val(),
+                                timeTTo: $(".PD2abserver").val(),
+                                transactionType: $("#trantype").val(),
+                                factorStatus: $("#factorStatus").val(),
+                                priceFrom: $("#priceFrom").val(),
+                                priceTo: $("#priceTo").val(),
+                                countFrom: $("#countFrom").val(),
+                                countTo: $("#countTo").val(),
+                                amani: $("#amani").val(),
+                                factorType: $("#factorType").val(),
+                                nodeID: $("#nodeID").val(),
+                                productID: $("#IDholder").val(),
+
+                            },
+                            success: function (data) {
+
+                                $("#detailHolder").html(data)
+                            }
+                        })
+                    })
+                </script>
+            </div>
+            <div id="detailHolder" class="row">
+            </div>
         </div>
     </div>
-    <div>
-        <div class="" style="margin : 0 5px">
-            <p style="display:inline-block">تاریخ سند تا :</p>
-            <input id="dateTo" style="display:inline-block" class="form-control inputForm TodatePicker" />
-            <input name="Toabserver" id="Toabserver" style="display:none" class="form-control Toabserver " />
-
-        </div>
-    </div>
-
-    <div class="" style="margin : 0 5px">
-        <p style="display:inline-block">وضعیت سند :</p>
-        <select class="form-control" style=" display:inline-block" id="selectOrderType">
-            <option value="0">همه</option>
-            <option value="1">ثبت اولی</option>
-            <option value="2">ثبت نهایی</option>
-            <option value="3">ثبت دائم</option>
-
-        </select>
-    </div>
-</div>
-<div class="row " style="margin:40px 0px; display:flex">
-
-
-    <div class="" style="padding-top:30px">
-        <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> تایید</p>
-
-    </div>
-
 </div>
 
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
 
 
 
-
-<p class="ORDERBUTT" style="display:none" id="dataOrder">11</p>
-<div id="OrderTableHolder">
-
-</div>
+<script src="~/Scripts/persian-date.js"></script>
+<script src="~/Scripts/persian-datepicker.js"></script>
 <script>
-                var getlofo = function (page) {
-                    $("#loading").show();
-                    order = "22";
-                    type = $("#selectOrderType").val();
-                    dateFrom = $("#Fromabserver").val();
-                    dateTo = $("#Toabserver").val();
 
-                    $.ajax({
-                        url: '/Admin/ChangeRecietList',
-                        dataType: 'html',
-                        data: {
-                            type: type,
-                            page: page,
-                            dateTo: dateTo,
-                            dateFrom: dateFrom
-                        },
+    $(function () {
+        $(".datePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.abserver',
+            autoClose: true
 
-                        success: function (data) {
+            // minDate: new persianDate().add('day', 2).valueOf(),
+            // options & callbacks here
+        });
 
-                            $("#OrderTableHolder").html(data);
-                            $("#loading").hide();
+        $(".projectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver',
+            autoClose: true
+        });
+        $(".projectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PD2abserver',
+            autoClose: true
+        });
+
+    });
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".PD2abserver").val("");
+        $(".projectDate2").val("");
+    });
+</script>
+<script>
+    $('input.inputnumber').keyup(function (event) {
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
+</script>
+<script>
+   
+    $("#autoProduct").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        if (value.length == 0) {
+            $("#IDholder").val("");
+        }
+       // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    server: ""
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
                         }
 
 
 
-                    });
-
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
                 }
-                $("#orderFormSearch").click(function () {
-                    $("#loading").show();
-                    getlofo(1)
-                });
 
+            })
+        }
+        else {
 
+        }
+    });
 </script>
 

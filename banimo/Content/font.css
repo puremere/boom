@@ -1,5 +1,6 @@
 ﻿body {
 }
+
 @font-face {
     font-family: IRANSans;
     font-style: normal;
@@ -22,10 +23,13 @@
 }
 
 
-h1, h2, h3, h4, h5, h6, div,  p,  li ,span, div, a,i, option,text{
+h1, h2, h3, h4, h5, h6, div, p, li, span, div, a, i, option, text, button, input {
     font-family: IRANSans !important;
 }
 .priceItem {
+    font-family: IRANSansfaNum !important;
+}
+.priceNum {
     font-family: IRANSansfaNum !important;
 }
 

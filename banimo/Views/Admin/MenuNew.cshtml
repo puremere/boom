@@ -213,7 +213,7 @@
                     </div>
                 </div>
 
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                     <label> انتخاب برند </label>
                     <div style="width:100%">
                         @if (Model.brands != null)
@@ -222,7 +222,7 @@
 
                         }
                     </div>
-                </div>
+                </div>*@
 
 
                 <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
@@ -294,14 +294,14 @@
         var description = $("#descAdd").val();
         var image = $(".imageNameAdd").text();
 
-        if (brandID != "" && catname != "" && name != "" && image != "" && entitle != "" && priority != "" && description != "") {
+        if ( catname != "" && name != "" && image != "" && entitle != "" && priority != "" && description != "") {
            
-            var br = brandID.toString();
+            
             $.post(
                 '/admin/setnewcatNew',
                 {
                     catID: catname,
-                    brandID: br,
+                    brandID: '',
                     title: name,
                     entitle: entitle,
                     description: description,
@@ -409,7 +409,7 @@
         })
     }
     $("#verifEdit").click(function () {
-        var brandID = $("#listOfBrandsEdit").val();
+        var brandID = "";
         var catname = $("#listofcatEdit").val();
         var name = $("#titleEdit").val();
         var enname = $("#entitleEdit").val();

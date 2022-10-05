@@ -228,6 +228,7 @@
     });
     $("#imageFileHolderEdit").on('change', function () {
 
+        $("#imageHolderEdit").html("");
         uploadImage("imageHolderEdit", "imageNameEdit", this)
     });
     $("#addCat").click(function () {
@@ -321,11 +322,11 @@
 
                     if (image != null && image != "") {
                         var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
-                        $("#imageHolderEdit").append(htmldiv);
+                        $("#imageHolderEdit").html(htmldiv);
 
 
                         var srt = $(".imageNameEdit").text();
-                        $(".imageNameEdit").text(obj[0]["image"] + "," + srt);
+                        $(".imageNameEdit").text(obj[0]["image"]);
                     }
 
 

@@ -252,7 +252,7 @@
                                                                     foreach (var group in groupList)
                                                                     {
                                                                         string groupclassname = "group" + group.ID;
-                                                                        List<banimo.ViewModel.CodingList> kollList = Model.CodingList.Where(x => x.codingType == "2").ToList();
+                                                                        List<banimo.ViewModel.CodingList> kollList = Model.CodingList.Where(x => x.parentID == group.ID.ToString()).ToList();
 
                                                                         <tr style="background-color:#f9f9f9; ">
                                                                             <td>

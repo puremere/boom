@@ -2,44 +2,19 @@
 
 @{
     ViewBag.Title = "سبد خرید";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout5.cshtml";
 }
 
 
 
 @{
 
-    <link href="~/Content/checkoutStyle.css" rel="stylesheet" />
-    <script>
-        function addCommas(nStr) {
-            nStr += '';
-            var x = nStr.split('.');
-            var x1 = x[0];
-            var x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-            }
-            return x1 + x2;
-        }
-    </script>
-    if (ViewBag.Message != "")
-    {
-        <script>
-         
-            toastr.options = {
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "fadeIn": 300,
-                "fadeOut": 1000,
-                "timeOut": 5000,
-                "extendedTimeOut": 1000
-            }
-            toastr.error('@ViewBag.message' + " ، تنها یک مورد از این گروه میتواند در سبد خرید وجود داشته باشد")
-        </script>
-    }
+    @section HeadIncludes{
 
+        <link href="~/Content/checkoutStyle.css" rel="stylesheet" />
+      
+
+    }
 
 
     if (@Model.Count() > 0)
@@ -49,26 +24,26 @@
                 <div id="headofshopcart" class="row" style="margin:25px; padding:0px">
                     <p id="headofshopcartP" style="font-size:22px; float:right">سبد خرید</p>
                 </div>
-                <div class="row" style="direction:rtl; margin-bottom:20px">
-                    <div class="col-lg-4" id="finalpricediv" style="width:25%; margin: 0px; float: left;margin:5px; padding: 5px; padding-left:25px; background-color: #f5f5f5; display: inline-block; ">
-                        <div class="rowabove" style="width: 100%; background-color: #fff; padding: 20px; border: 1px solid #eee;">
-                            <div class="row" style="padding:15px 15px">
-                                <p style="float:right; text-align:right; font-size:12px; font-weight:700 ; color:#808080">مبلغ کل ( <i class="simpleCart_quantityy"></i>  کالا) </p>
+                <div class="row" style="direction:ltr; margin:20px">
+                    <div class="col-lg-4" id="finalpricediv" style="border-radius:8px; width:25%; margin: 0px; float: left;margin:5px; padding: 5px;  background-color: #fff; display: inline-block; ">
+                        <div class="rowabove" style="width: 100%; background-color: #fff; padding: 20px; border: 1px solid #eee;border-radius:8px">
+                            <div class="row" style="padding:15px 15px; direction:rtl">
+                                <p style="float:right; text-align:right; font-size:12px; font-weight:700 ; color:#808080">مبلغ کل ( <i class="simpleCart_quantityy priceItem"></i>  کالا) </p>
                                 @{
 
                                     decimal leftbaseprice = Model.Sum(x => x.baseprice * x.quantity);
-                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #808080; "><span id="basepriceholder">@String.Format("{0:n0}", @leftbaseprice)</span>  تومان</p>
+                                    <p style="flex:1; text-align:left;  float: left; font-size: 14px; font-weight: 700; color: #808080; "><span id="basepriceholder" class="priceNum">@String.Format("{0:n0}", @leftbaseprice)</span>  تومان</p>
 
                                 }
 
                             </div>
-                            <div class="row discountSection" style="padding:5px 15px">
+                            <div class="row discountSection" style="padding:5px 15px; direction:rtl">
                                 <p style="float: right; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">سود شما از خرید </p>
                                 @{
 
                                     decimal benefit = Model.Sum(x => x.baseprice * x.quantity) - Model.Sum(x => x.price * x.quantity);
 
-                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">(<span class="discountpercent">@String.Format("{0:n0}", @benefit) </span>) <span class="discountfinal"></span>   تومان </p>
+                                    <p style="flex:1; text-align:left; float: left;  font-size: 14px; font-weight: 700; color: #00BFD6; ">(<span class="discountpercent priceNum">@String.Format("{0:n0}", @benefit) </span>) <span class="discountfinal"></span>   تومان </p>
 
                                 }
                             </div>
@@ -79,7 +54,7 @@
                                 decimal payment = Model.Sum(x => x.price * x.quantity);
 
 
-                                <p style=" font-size: 22px; color: red; text-align: center; padding: 10px"><span id="spanfortotal2">@String.Format("{0:n0}", @payment)</span> تومان</p>
+                                <p style=" font-size: 22px; color: red; text-align: center; padding: 10px"><span id="spanfortotal2" class="priceNum">@String.Format("{0:n0}", @payment)</span> تومان</p>
 
                             }
                             <style>
@@ -110,7 +85,7 @@
                         int h = Request.Browser.ScreenPixelsHeight;
                         if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
                         {
-                            <div id="tr2" class="col-lg-8" style=" display:none; width:100%; margin: 0px; float: right; padding: 5px;background-color: #f5f5f5">
+                            <div id="tr2" class="col-lg-8" style="border-radius:8px;  display:none; width:100%; margin: 0px; float: right; padding: 5px;background-color: #fff">
 
                                 @{
 
@@ -223,12 +198,12 @@
 
                                                             else
                                                             {
-                                                                <div class="@tobeadded" style="display: none; ">@price</div>
-                                                                <div class="@tobeaddedbase" style="display: none;">@baseprice</div>
+                                                                <div class="@tobeadded priceNum" style="display: none; ">@price</div>
+                                                                <div class="@tobeaddedbase priceNum" style="display: none;">@baseprice</div>
                                                                 <div style="direction:ltr; margin-bottom:15px">
                                                                     <div style="width:100%; text-align:right">
                                                                         <div>
-                                                                            <del style="display: inline-block; color: red" class="@pricesectionbase">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </del>
+                                                                            <del style="display: inline-block; color: red" class="@pricesectionbase priceNum">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </del>
                                                                         </div>
                                                                         <div>
                                                                             <p style="display:inline-block; color:green">تومان</p>
@@ -273,10 +248,10 @@
                         }
                         else
                         {
-                            <div class="col-lg-8" id="detailpricediv" style=" width:74%; margin: 0px; float: right; padding: 5px;padding-right:25px; background-color: #f5f5f5;  display: inline-block">
+                            <div class="col-lg-8" id="detailpricediv" style="border-radius:8px;  width:74%; margin: 0px; float: right; padding: 5px;padding-right:25px; background-color: #fff;  display: inline-block">
                                 <div id="tableholder" style="width: 100%; background-color: #fff; border: 1px solid #eee;">
                                     <div class="table-responsive checkout-right animated wow slideInUp" data-wow-delay=".5s">
-                                        <table class="timetable_sub">
+                                        <table class="timetable_sub" style="direction:rtl">
                                             @{
 
 
@@ -334,7 +309,7 @@
                                                         message = " محدودیت خرید : " + item.limit;
                                                     }
 
-                                                    <tr class=@classremname style="background-color:@parentback">
+                                                    <tr class=@classremname style="background-color:@parentback; direction:rtl">
                                                         <td id="row1_td1" class="invert-closeb " style="width:5%">
                                                             <div class="rem">
                                                                 <div id=@classremname class=@classclosename style="background-color:#ddd; border-radius:50%; padding:5px; width:30px"><img style="width:15px" src="~/images/del.png"> </div>
@@ -378,14 +353,15 @@
                                                             @name
                                                         </td>
                                                         <td id="row1_td4" style="width:25%" class="invert ">
-                                                            <div class="quantity">
-                                                                <div class="quantity-select row">
-                                                                    <div id=@classminusname class="entry value-minus" style="background-color: #ddd; border-radius: 50%; border-color:#eee">&nbsp;</div>
-                                                                    <div style="background-color:@background; color:@color" class="entry value"><span>@quantity</span></div>
-                                                                    <div id=@classaddname class="entry value-plus active" style="background-color: #ddd; border-radius: 50%; border-color: #eee">&nbsp;</div>
+                                                            <div class="quantity" style="">
+                                                                <div class="quantity-select row " style="margin-right:25%; align-items:center">
+                                                                    <div id=@classminusname class="entry value-minus " style="width:unset; cursor:pointer;background-color: #eee;padding: 3px 7px;border-radius: 50%;margin: 15px; "><i class="fa fa-minus"></i></div>
+                                                                    <div style="width:unset; background-color:@background; color:@color" class="entry value"><span class="priceNum" >@quantity</span></div>
+                                                                    <div id=@classaddname class="entry value-plus active" style="width:unset; cursor:pointer;background-color: #eee;padding: 3px 7px;border-radius: 50%;margin: 15px;  "><i class="fa fa-plus"></i></div>
                                                                 </div>
                                                             </div>
                                                         </td>
+
                                                         @if (@message != "")
                                                         {
 
@@ -402,9 +378,9 @@
 
                                                             else
                                                             {
-                                                                <td class="invert @tobeadded" style="display:none">@price</td>
-                                                                <td class="invert @tobeaddedbase" style="display:none">@baseprice</td>
-                                                                <td id="" style="width: 25%; font-size:20px" class=@finaltotal><div style="color:#808080; font-size:14px"><p style="display:inline-block" class="@pricesectionbase">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </p> <p style="display:inline-block">تومان</p></div> <div><p style="display:inline-block" class="@pricesection">@string.Format("{0:n0}", Convert.ToInt32(total)) </p> <p style="display:inline-block">تومان</p></div></td>
+                                                                <td class="invert @tobeadded priceNum" style="display:none">@price</td>
+                                                                <td class="invert @tobeaddedbase priceNum" style="display:none">@baseprice</td>
+                                                                <td id="" style="width: 25%; font-size:20px" class="priceNum @finaltotal" ><div style="color:#808080; font-size:14px"><p style="display:inline-block" class="@pricesectionbase priceNum">@string.Format("{0:n0}", Convert.ToInt32(totalbase)) </p> <p style="display:inline-block">تومان</p></div> <div><p style="display:inline-block" class="@pricesection priceNum">@string.Format("{0:n0}", Convert.ToInt32(total)) </p> <p style="display:inline-block">تومان</p></div></td>
                                                             }
                                                         }
 
@@ -428,68 +404,7 @@
 
 
 
-                    <script>
 
-                        $('.value-plus').on('click', function () {
-                            $("#loading").show();
-                            var ID = this.id
-                            $.ajax({
-                                url: '/Home/addtocart2',
-                                dataType: 'html',
-                                data: {
-                                    id: ID
-
-                                },
-                                success: function (data) {
-                                    window.location.reload();
-
-
-
-                                },
-                                error: function () {
-                                    alert("error")
-                                }
-
-
-                            });
-
-
-
-                        });
-
-                        $('.value-minus').on('click', function () {
-                            $("#loading").show();
-                            var divUpd = $(this).siblings('.value'),
-                                newVal = parseInt(divUpd.text(), 10) - 1;
-
-                         
-                            if (newVal >= 0) {
-
-
-                                var ID = this.id
-                                $.ajax({
-                                    url: '/Home/minusfromcart',
-                                    dataType: 'html',
-                                    data: {
-                                        id: ID
-                                    },
-                                    success: function (data) {
-                                        window.location.reload();
-                                    },
-                                    error: function () {
-                                        alert("error")
-                                    }
-
-
-                                });
-
-
-
-                            }
-
-
-                        });
-                    </script>
 
 
 
@@ -518,11 +433,99 @@
 
                     }
                 </div>
-               
+
 
             </div>
 
-            <script>
+
+        </div>
+        <div class="checkout noData" style="display:none">
+            <div class="c-profile-empty">
+
+                موردی برای نمایش وجود ندارد!
+            </div>
+        </div>
+        <!-- //banner -->
+        <!-- check out -->
+
+    }
+    else
+    {
+        <div class="checkout noData">
+            <div class="c-profile-empty">
+
+                موردی برای نمایش وجود ندارد!
+            </div>
+        </div>
+    }
+}
+
+
+
+@section scripts{
+    <script>
+
+        $('.value-plus').on('click', function () {
+            $("#loading").show();
+            var ID = this.id
+            $.ajax({
+                url: '/Home/addtocart2',
+                dataType: 'html',
+                data: {
+                    id: ID
+
+                },
+                success: function (data) {
+                    window.location.reload();
+
+
+
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
+
+
+
+        });
+
+        $('.value-minus').on('click', function () {
+            $("#loading").show();
+            var divUpd = $(this).siblings('.value'),
+                newVal = parseInt(divUpd.text(), 10) - 1;
+
+
+            if (newVal >= 0) {
+
+
+                var ID = this.id
+                $.ajax({
+                    url: '/Home/minusfromcart',
+                    dataType: 'html',
+                    data: {
+                        id: ID
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function () {
+                        alert("error")
+                    }
+
+
+                });
+
+
+
+            }
+
+
+        });
+    </script>
+    <script>
                 $(document).ready(function () {
                     $('#confirmation').click(function () {
 
@@ -561,27 +564,35 @@
                     });
 
                 });
-            </script>
-        </div>
-        <div class="checkout noData" style="display:none">
-            <div class="c-profile-empty">
-
-                موردی برای نمایش وجود ندارد!
-            </div>
-        </div>
-        <!-- //banner -->
-        <!-- check out -->
-
-    }
-    else
+    </script>
+    <script>
+        function addCommas(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+    </script>
+    @if (ViewBag.Message != "")
     {
-        <div class="checkout noData">
-            <div class="c-profile-empty">
+        <script>
 
-                موردی برای نمایش وجود ندارد!
-            </div>
-        </div>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('@ViewBag.message' + " ، تنها یک مورد از این گروه میتواند در سبد خرید وجود داشته باشد")
+        </script>
     }
 }
-
 

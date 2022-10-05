@@ -14,8 +14,9 @@
             selector: 'textarea',
             height: 500,
             menubar: false,
+            
             plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
+                'code advlist autolink lists link image charmap print preview anchor',
                 'searchreplace visualblocks code fullscreen',
                 'insertdatetime media table paste code help wordcount'
             ],
@@ -23,7 +24,7 @@
             toolbar: 'undo redo | formatselect | ' +
                 ' bold italic backcolor | alignleft aligncenter ' +
                 ' alignright alignjustify | bullist numlist outdent indent |' +
-                ' removeformat | help| link image',
+                ' removeformat | help| link image | code',
             content_css: [
                 '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                 '//www.tiny.cloud/css/codepen.min.css'
@@ -587,7 +588,38 @@
                                 <div class="col-md-8 col-sm-8 col-xs-12">
                                     <input value="@Model.metaDescription" type="text" id="descTag" name="descTag" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
-
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">
+                                    متا تگ :
+                                </label>
+                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <input value="@Model.metaTag" type="text" id="metaTag" name="metaTag" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">
+                                    ریدارکت :
+                                </label>
+                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <input value="@Model.redirect" type="text" id="redirect" name="redirect" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">
+                                    کنونیکال :
+                                </label>
+                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <input value="@Model.canonical" type="text" id="canonical" name="canonical" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">
+                                    نام انگلیسی :
+                                </label>
+                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <input value="@Model.enName" type="text" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
                             </div>
                             <div class="form-group ">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
@@ -630,7 +662,7 @@
                                             request.send(formData);
                                             request.onreadystatechange = function () {
                                                 if (request.readyState == 4 && request.status == 200) {
-                                                    var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + request.responseText + "'><p>" + request.responseText + "</p><img onclick='removeimg(this)'  class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
+                                                    var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + request.responseText + "'><p class='btn btn-success' onclick='copyContent(this)' content=" + request.responseText+">کپی آدرس</p><img onclick='removeimg(this)'  class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
                                                     $('#thumbholderEdior').append(html);
                                                     $("#loading").css("display", "none");
 
@@ -1032,7 +1064,7 @@
                                                                                 @myitem.title :
                                                                             </label>
                                                                             <div class=" col-md-8 col-sm-8 col-xs-12 featureInput">
-                                                                                <input value="@myitem.value" class="control-label col-md-8 col-sm-8 col-xs-12 featureInput" id="@myitem.title" type="text" style="display:none" />
+                                                                                <input value="@myitem.value" class="control-label col-md-8 col-sm-8 col-xs-12" id="@myitem.title" type="text" style="display:none" />
 
                                                                             </div>
                                                                         </div>
@@ -1095,117 +1127,117 @@
 
                                 @*<div id="imagelistholder" class="col-md-12 col-sm-12 col-xs-12" style="margin-top:2%">
 
-                                        @{
-                                            string myListOfImage = "";
-                                            if (Model.imagelist != null)
-                                            {
+                    @{
+                        string myListOfImage = "";
+                        if (Model.imagelist != null)
+                        {
 
-                                                foreach (var item in Model.imagelist)
-                                                {
-                                                    myListOfImage = myListOfImage + item.title + ",";
+                            foreach (var item in Model.imagelist)
+                            {
+                                myListOfImage = myListOfImage + item.title + ",";
 
-                                                    string ID = item.ID.ToString();
-                                                    string deletetid = "addtocart" + ID;
-                                                    string title = "titleof" + ID;
-                                                    string id = Model.ID;
+                                string ID = item.ID.ToString();
+                                string deletetid = "addtocart" + ID;
+                                string title = "titleof" + ID;
+                                string id = Model.ID;
 
-                                                    <div class="imagelistholder">
+                                <div class="imagelistholder">
 
-                                                        <div class="con">
+                                    <div class="con">
 
-                                                            <img src="@item.title" data-imagezoom="true" class=" back">
-                                                            <div id=@deletetid class="btn deleteimage">حذف</div>
-                                                            <div style="display:none" id=@title>@item.title</div>
-                                                        </div>
+                                        <img src="@item.title" data-imagezoom="true" class=" back">
+                                        <div id=@deletetid class="btn deleteimage">حذف</div>
+                                        <div style="display:none" id=@title>@item.title</div>
+                                    </div>
 
-                                                        <style>
+                                    <style>
 
-                                                            .imagelistholder {
-                                                                display: inline-block;
-                                                                width: 200px;
-                                                                padding: 5px;
-                                                                border: 1px solid #eee;
-                                                                box-shadow: 3px 3px #eee;
-                                                                border-radius: 25px;
-                                                            }
+                                        .imagelistholder {
+                                            display: inline-block;
+                                            width: 200px;
+                                            padding: 5px;
+                                            border: 1px solid #eee;
+                                            box-shadow: 3px 3px #eee;
+                                            border-radius: 25px;
+                                        }
 
-                                                            .con {
-                                                                position: relative;
-                                                                width: 100%;
-                                                            }
-
-
-                                                                .con img {
-                                                                    width: 100%;
-                                                                    height: auto;
-                                                                    border-radius: 25px;
-                                                                }
-
-
-                                                                .con .btn {
-                                                                    position: absolute;
-                                                                    top: 50%;
-                                                                    left: 50%;
-                                                                    transform: translate(-50%, -50%);
-                                                                    -ms-transform: translate(-50%, -50%);
-                                                                    background-color: #555;
-                                                                    color: white;
-                                                                    font-size: 16px;
-                                                                    padding: 12px 24px;
-                                                                    border: none;
-                                                                    cursor: pointer;
-                                                                    border-radius: 5px;
-                                                                }
-
-                                                                    .con .btn:hover {
-                                                                        background-color: black;
-                                                                    }
-                                                        </style>
-
-
-                                                    </div>
-
-                                                }
-                                            }
-
-
-
-                                            <input id="ImageList" name="ImageList" type="hidden" value="@myListOfImage" />
+                                        .con {
+                                            position: relative;
+                                            width: 100%;
                                         }
 
 
-                                        <div style="display:none" id="orderidholder">@Model.ID</div>
-                                        <script>
+                                            .con img {
+                                                width: 100%;
+                                                height: auto;
+                                                border-radius: 25px;
+                                            }
 
 
-                                            $(".deleteimage").click(function () {
+                                            .con .btn {
+                                                position: absolute;
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%);
+                                                -ms-transform: translate(-50%, -50%);
+                                                background-color: #555;
+                                                color: white;
+                                                font-size: 16px;
+                                                padding: 12px 24px;
+                                                border: none;
+                                                cursor: pointer;
+                                                border-radius: 5px;
+                                            }
 
-                                                var orderid = $("#orderidholder").text();
-                                                var id = this.id;
-                                                var res = id.substring(9, id.length);
-                                                var titleid = "titleof" + res;
-                                                var name = $('#' + titleid).text();
+                                                .con .btn:hover {
+                                                    background-color: black;
+                                                }
+                                    </style>
 
 
-                                                $.ajax({
-                                                    url: '/Admin/Deleteimage',
-                                                    dataType: 'html',
-                                                    data: {
-                                                        id: id,
-                                                        title: name,
-                                                        orderid: orderid
-                                                    },
-                                                    success: function (data) {
+                                </div>
 
-                                                    },
-                                                    error: function () {
+                            }
+                        }
 
-                                                    }
-                                                });
-                                            })
-                                        </script>
 
-                                    </div>*@
+
+                        <input id="ImageList" name="ImageList" type="hidden" value="@myListOfImage" />
+                    }
+
+
+                    <div style="display:none" id="orderidholder">@Model.ID</div>
+                    <script>
+
+
+                        $(".deleteimage").click(function () {
+
+                            var orderid = $("#orderidholder").text();
+                            var id = this.id;
+                            var res = id.substring(9, id.length);
+                            var titleid = "titleof" + res;
+                            var name = $('#' + titleid).text();
+
+
+                            $.ajax({
+                                url: '/Admin/Deleteimage',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                    title: name,
+                                    orderid: orderid
+                                },
+                                success: function (data) {
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        })
+                    </script>
+
+                </div>*@
                             </div>
                             <div class="row" style="padding-top:20px">
                                 <div class="col-lg-2"></div>
@@ -1314,42 +1346,42 @@
                                 </div>
                                 <div style="display:inline-block">
                                     @*<div>
-                                            <input  type="checkbox" id="AllGroupbut" style="color:black; display:inline-block" />
-                                            <p style="display:inline-block">ثبت تغییرات برای تمام گروه</p>
-                                        </div>
-                                        <script>
-                                            $("#AllGroupbut").click(function () {
+                        <input  type="checkbox" id="AllGroupbut" style="color:black; display:inline-block" />
+                        <p style="display:inline-block">ثبت تغییرات برای تمام گروه</p>
+                    </div>
+                    <script>
+                        $("#AllGroupbut").click(function () {
 
-                                                if ($(this).is(':checked')) {
-                                                    $("#allGroup").val("True");
+                            if ($(this).is(':checked')) {
+                                $("#allGroup").val("True");
 
-                                                }
-                                                else {
-                                                    $("#allGroup").val("false");
+                            }
+                            else {
+                                $("#allGroup").val("false");
 
-                                                }
+                            }
 
-                                                //if ()
-                                            })
-                                        </script>*@
+                            //if ()
+                        })
+                    </script>*@
 
                                     @*<input type="checkbox" id="addnewbut" style="color:black; display:inline-block" />
-                                        <p style="display:inline-block">ثبت به عنوان محصول جدید</p>
-                                        <script>
-                                            $("#addnewbut").click(function () {
+                    <p style="display:inline-block">ثبت به عنوان محصول جدید</p>
+                    <script>
+                        $("#addnewbut").click(function () {
 
-                                                if ($(this).is(':checked')) {
-                                                    $("#addnew").val("True");
-                                                    $("#imagelistholder").css("display", "none")
-                                                }
-                                                else {
-                                                    $("#addnew").val("false");
-                                                    $("#imagelistholder").css("display", "block")
-                                                }
+                            if ($(this).is(':checked')) {
+                                $("#addnew").val("True");
+                                $("#imagelistholder").css("display", "none")
+                            }
+                            else {
+                                $("#addnew").val("false");
+                                $("#imagelistholder").css("display", "block")
+                            }
 
-                                                //if ()
-                                            })
-                                        </script>*@
+                            //if ()
+                        })
+                    </script>*@
                                 </div>
 
 
@@ -1406,6 +1438,22 @@
             var id = $(this).attr('id');
 
     });
+    var copyContent = function (contentEl) {
+        var id = $(contentEl).attr('content');
+        navigator.clipboard.writeText(id);
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000
+        }
+        toastr.success('کپی شد')
+        
+    };
+
     var removeimg = function (newel) {
 
         var id = newel.id;
@@ -1463,23 +1511,23 @@
                 alert("featurefail")
             }
         });
-        $.ajax({
-            url: '/Admin/bringBrandforproduct',
-            dataType: 'html',
-            data:
-            {
-                catid: sentitem
-            },
-            success: function (data) {
+        //$.ajax({
+        //    url: '/Admin/bringBrandforproduct',
+        //    dataType: 'html',
+        //    data:
+        //    {
+        //        catid: sentitem
+        //    },
+        //    success: function (data) {
 
 
-                $('#brandHolder').html(data);
+        //        $('#brandHolder').html(data);
 
-            },
-            error: function () {
-                alert("featurefail")
-            }
-        });
+        //    },
+        //    error: function () {
+        //        alert("featurefail")
+        //    }
+        //});
     })
 
 

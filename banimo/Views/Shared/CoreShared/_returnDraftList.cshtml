@@ -1,0 +1,234 @@
+﻿@model banimo.ViewModel.MainFactorListVM
+
+
+
+<div class="row">
+    <div style="overflow-x:auto;padding:10px">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> شرح فاکتور    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  <i onclick="" style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus"></i></h3>
+
+
+
+            </div>
+            @if (Model.mainFactor != null)
+            {
+                @*<script>
+                        $("#print").click(function () {
+
+                            var obj = @Html.Raw(@Json.Encode(Model.list.myProducts));
+                            $("input[name=data]").val(JSON.stringify(obj));
+                            $("input[name=id]").val('@Model.id');
+                            $("#getPDF").submit();
+                            $("#loading").fadeIn();
+                            setInterval(function () { $("#loading").fadeOut(); }, 3000);
+
+
+
+                        });
+                    </script>*@
+                <div class="panel-body">
+                    <div id="morris-area-chart">
+                        @{
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام انبار</th>
+                                            <th>نوع سند</th>
+                                            <th>مخاطب</th>
+                                            <th>نام کالا</th>
+                                            <th>قیمت </th>
+                                            <th>تعداد </th>
+                                            <th>زمان</th>
+                                            <th>توضیحات</th>
+                                            <th>امانی</th>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.mainFactor)
+                                        {
+                                            string image = "";
+                                            int i = Model.mainFactor.IndexOf(item) + 1;
+                                            string deleteid = item.ID;
+                                            <tr id="@deleteid">
+
+                                                <td>@i</td>
+                                                <td>
+                                                    @if (item.factorType == "10")
+                                                    {
+                                                    <span>انبار مرکزی</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (String.IsNullOrEmpty(item.nodeID))
+                                                        {
+                                                            <span>انبار مرکزی</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span> @item.nodeID</span>
+                                                        }
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @if (item.type == "0")
+                                                    {
+                                                        <span>رسید</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>حواله</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item.factorType == "10")
+                                                    {
+
+                                                    <span>@item.coworkerName2</span>
+
+                                                       
+                                                    }
+                                                    else if (item.factorType == "1")
+                                                    {
+                                                        <span>سفارش شماره @item.partnerID</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.partnerID == "0")
+                                                        {
+                                                            <span>انبار مرکزی</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@item.partnerTitle</span>
+                                                        }
+
+                                                    }
+                                                </td>
+                                                <td>@item.title</td>
+                                                <td>
+                                                    <span class="phase1">
+                                                        @item.price
+                                                    </span>
+                                                    <span style="display:none" class="phase2">
+                                                        <input type="text" class="form-control factorPrice" />
+                                                    </span>
+
+
+
+                                                </td>
+                                                <td>@item.count</td>
+                                                <td>@item.timestamp</td>
+                                                <td>@item.deliverName</td>
+                                                <td>
+                                                    <span class="phase1">
+                                                        @if (item.amani == "1")
+                                                        {
+                                                            <p>بله</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>خیر</p>
+                                                        }
+
+                                                    </span>
+                                                    <span style="display:none" class="phase2">
+                                                        @if (item.amani == "1")
+                                                        {
+                                                            <input type="checkbox" class="form-control amanicheckbox" checked />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="checkbox" class="form-control amanicheckbox" />
+                                                        }
+
+
+                                                    </span>
+
+
+                                                </td>
+                                                <td>
+                                                    @if ((item.status != "1" && item.type == "0" && item.factorType != "0") || (item.type == "1" && item.factorType == "10" && item.status == "0") )
+                                                    {
+                                                        <div class="btn btn-success editItem phase1">ویرایش</div>
+
+                                                    }
+                                                    <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
+                                                </td>
+                                                <td><div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div> </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @{
+                                                int count = @Model.mainFactor.Count() + 1;
+
+                                                double sum = Model.mainFactor.Sum(x => x.price * x.count);
+                                                double sumcount = Model.mainFactor.Sum(x => x.count);
+                                            }
+                                            <td>@count.ToString()</td>
+                                            <td>جمع کل</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                @sum
+                                            </td>
+                                            <td>
+                                                @sumcount
+                                            </td>
+                                            <td></td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".editItem").click(function () {
+        $(this).parent().parent().find(".phase1").toggle();
+        $(this).parent().parent().find(".phase2").toggle();
+
+    })
+    $(".editItemVerif").click(function () {
+
+
+        var amani = $(this).parent().parent().find(".amanicheckbox").is(":checked");
+        var factorPrice = $(this).parent().parent().find(".factorPrice").val();
+        var id = $(this).parent().parent().attr("id");
+
+        $.ajax({
+            url: '/Core/editFactor',
+            dataType: 'html',
+            data: {
+                amani: amani,
+                factorPrice: factorPrice,
+                id: id,
+            },
+            success: function (data) {
+
+                $("#verifyCodeingTran").click();
+            }
+
+        })
+
+
+    })
+
+</script>

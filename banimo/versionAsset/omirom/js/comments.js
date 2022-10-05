@@ -114,7 +114,7 @@ function handleCommentActions() {
 
 function renderUsername(comment) {
     if(comment.is_agent){
-        return 'سایمان دیجیتال';
+        return '';
     }
     return comment.name ? comment.name:'ناشناس';
 }

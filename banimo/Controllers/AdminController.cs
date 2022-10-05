@@ -177,7 +177,7 @@ namespace banimo.Controllers
             return deserializedPerson;
         }
 
-        [Throttle(TimeUnit = TimeUnit.Minute, Count = 10)]
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 20)]
         [Throttle(TimeUnit = TimeUnit.Hour, Count = 50)]
         [Throttle(TimeUnit = TimeUnit.Day, Count = 200)]
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
@@ -248,7 +248,7 @@ namespace banimo.Controllers
                             return RedirectToAction("index", "core");
 
                         }
-                        return RedirectToAction("dashboard", "admin");
+                        return RedirectToAction("product", "admin");
                         //return Content("1/Admin/dashboard");
                     }
                     else
@@ -287,6 +287,9 @@ namespace banimo.Controllers
 
 
             banimo.ViewModel.BaseViewModel basemodel = new banimo.ViewModel.BaseViewModel();
+
+            basemodel.username = Request.Cookies["Username"] != null && Request.Cookies["Username"].Value != null ?  Request.Cookies["Username"].Value : "";
+            basemodel.pass = Request.Cookies["Password"] != null && Request.Cookies["Password"].Value != null ?  Request.Cookies["Password"].Value : "";
 
             return View(basemodel);
         }
@@ -1594,10 +1597,9 @@ namespace banimo.Controllers
                 collection.Add("quantity", quantity);
                 collection.Add("OrderId", OrderId);
 
-
-
                 byte[] response =
-                client.UploadValues(server + "/Admin/addNewTtemToOrderTest.php", collection);
+                client.UploadValues(server + "/Admin/addNewTtemToOrderTestNewVersion.php", collection);
+                //client.UploadValues(server + "/Admin/addNewTtemToOrderTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1625,7 +1627,8 @@ namespace banimo.Controllers
 
 
                 byte[] response =
-                client.UploadValues(server + "/Admin/deleteItemFromOrder.php", collection);
+                client.UploadValues(server + "/Admin/deleteItemFromOrderNewVersion.php", collection);
+                //client.UploadValues(server + "/Admin/deleteItemFromOrder.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
 
             }
@@ -2026,20 +2029,27 @@ namespace banimo.Controllers
             string final = result.Replace("\r\n", "");
             return Content(final);
         }
-        public ActionResult ChangeProductPriceForEdit(string ID,  string price, string finalprice, string count)
+        public ActionResult ChangeProductPriceForEdit( string meta, string finalCoworkerPrice, string ID,  string price, string finalprice, string count)
         {
+
+
+            metaVM metmodel = JsonConvert.DeserializeObject<metaVM>(meta);
             string device = RandomString(10);
+            metmodel.price = Int32.Parse(finalCoworkerPrice);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
 
 
             using (WebClient client = new WebClient())
             {
+
+
                 var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("count", count);
                 collection.Add("id", ID);
+                collection.Add("meta", JsonConvert.SerializeObject(metmodel));
                 collection.Add("finalprice", finalprice);
                 collection.Add("price", price);
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
@@ -2432,7 +2442,7 @@ namespace banimo.Controllers
         public ActionResult setnewBrand(banimo.ViewModel.newMenuVM model)
         {
 
-
+            string filename = model.image.Split(',').ToList().First();
             string fname = model.image.Trim(',').Split(',').ToList().First();
             string finalimage = Path.GetFileName(model.image);
             string token = Session["LogedInUser2"] as string;
@@ -2453,7 +2463,7 @@ namespace banimo.Controllers
                 collection.Add("description", model.description);
                 collection.Add("token", token);
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
-                collection.Add("image", finalimage.Trim(','));
+                collection.Add("image", filename);
 
                 byte[] response = client.UploadValues(server + "/Admin/setnewBrand.php", collection);
 
@@ -3369,7 +3379,6 @@ namespace banimo.Controllers
             }
 
             ViewModel.adminBankVM model = JsonConvert.DeserializeObject<ViewModel.adminBankVM>(result);
-
             model.CodingList = model.CodingList != null ? model.CodingList : new List<ViewModel.CodingList>();
             return View(model);
 
@@ -4883,8 +4892,8 @@ namespace banimo.Controllers
 
             banimo.AdminPanelBoom.ViewModel.oderdetaillistNew log = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.oderdetaillistNew>(result);
 
-            List<banimo.AdminPanelBoom.ViewModel.orderdetailNew> data = new List<banimo.AdminPanelBoom.ViewModel.orderdetailNew>();
 
+            
             return PartialView("/Views/Shared/AdminShared/_ProductListForEdit.cshtml", log);
 
 
@@ -4932,8 +4941,8 @@ namespace banimo.Controllers
 
             banimo.AdminPanelBoom.ViewModel.oderdetaillistNew log = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.oderdetaillistNew>(result);
 
-            List<banimo.AdminPanelBoom.ViewModel.orderdetailNew> data = new List<banimo.AdminPanelBoom.ViewModel.orderdetailNew>();
-
+          
+            
             return PartialView("/Views/Shared/AdminShared/_ProductList.cshtml", log);
 
 
@@ -6166,11 +6175,11 @@ namespace banimo.Controllers
             }
 
             log.data.First().ID = id.ToString();
-           
+
             NewDatumm model = new NewDatumm()
             {
 
-                domain = ConfigurationManager.AppSettings["domain"] + "/" ,
+                domain = ConfigurationManager.AppSettings["domain"] + "/",
                 brands = log.brand,
                 meta = log.data.First().meta,
                 partners = log.partners,
@@ -6202,7 +6211,11 @@ namespace banimo.Controllers
                 catid = catID,
                 range = log.ranges,
                 metaDescription = metaModel.desctag == null ? "" : metaModel.desctag,
-                metaTitle = metaModel.titletag == null ? "" : metaModel.titletag
+                metaTitle = metaModel.titletag == null ? "" : metaModel.titletag,
+                metaTag = metaModel.keyTag == null ? "" : metaModel.keyTag,
+                canonical = metaModel.canonical == null ? "" : metaModel.canonical,
+                enName = metaModel.curl == null ? "" : metaModel.curl,
+                redirect = metaModel.redirect == null ? "" : metaModel.redirect,
 
 
             };
@@ -6259,6 +6272,11 @@ namespace banimo.Controllers
             metaVM metamodel = String.IsNullOrEmpty(detail.meta) ? new metaVM() : JsonConvert.DeserializeObject<metaVM>(detail.meta);
             metamodel.titletag = String.IsNullOrEmpty(detail.titleTag) ? "" : detail.titleTag;
             metamodel.desctag = String.IsNullOrEmpty(detail.descTag) ? "" : detail.descTag;
+            metamodel.keyTag = String.IsNullOrEmpty(detail.metaTag) ? "" : detail.metaTag;
+            metamodel.redirect = String.IsNullOrEmpty(detail.redirect) ? "" : detail.redirect;
+            metamodel.canonical = String.IsNullOrEmpty(detail.canonical) ? "" : detail.canonical;
+            metamodel.curl = String.IsNullOrEmpty(detail.enName) ? "" : detail.enName;
+            
             string finalMeta = JsonConvert.SerializeObject(metamodel);
             if (detail.productdesc != null && detail.productdesc != "")
             {

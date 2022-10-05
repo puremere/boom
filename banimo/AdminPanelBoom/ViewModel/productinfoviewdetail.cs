@@ -47,6 +47,10 @@ namespace AdminPanelBoom.ViewModel
     {
 
         public string allGroup { get; set; }
+        public string metaTag { get; set; }
+        public string redirect { get; set; }
+        public string canonical { get; set; }
+        public string enName { get; set; }
         public string brand { get; set; }
         public string meta { get; set; }
         public string catmode { get; set; }

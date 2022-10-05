@@ -1,6 +1,7 @@
 ﻿
 @using BotDetect.Web.Mvc;
 @using banimo.Classes;
+@using Newtonsoft.Json;
 
 @model banimo.ViewModePost.getMaindataViewModel
 
@@ -20,6 +21,11 @@
 
     <link rel="stylesheet" href="/versionAsset/omirom/css/home.css">
 
+}
+@{ 
+    banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+
+    string userType = userApp != null ? userApp.userTypeID : "0";
 }
 <main>
 
@@ -41,7 +47,9 @@
                                     string imagetitle = item.title;
                                     string imagedesc = item.Ptitle;
                                     string index = Model.slides.IndexOf(item).ToString();
-                                    <div class="swiper-slide mySlide"
+                                    string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val=" + item.type + "-" + item.catIDOrLink;
+
+                                    <div class="swiper-slide "
                                          data-image="@src"
                                          data-color="#000000" role="group" aria-label="@index / 7"
                                          style="width: 1280px; margin-left: 10px;">
@@ -54,7 +62,7 @@
                                                     <p style="color: #000000">
                                                         @imagedesc
                                                     </p>
-                                                    <a style="" class="mySlide" id='@item.type-@item.catIDOrLink' href="#"
+                                                    <a style="" class="mySlide" id='@item.type-@item.catIDOrLink' href="@urlvalue"
                                                        dideo-checked="true">
 
                                                         بررسی و خرید
@@ -139,11 +147,12 @@
                                 string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
                                 string imagetitle = item.title;
                                 string imagedesc = item.Ptitle;
+                                string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val="+  item.type + "-" + item.catIDOrLink;
                                 string index = Model.slides.IndexOf(item).ToString();
                                 {
 
                                     <div class="swiper-slide">
-                                        <a class="mySlide" id='@item.type-@item.catIDOrLink' href="#"
+                                        <a class="mySlide" id='@item.type-@item.catIDOrLink' href="@urlvalue"
                                            dideo-checked="true">
                                             <div class="slide-box position-relative d-flex justify-content-center">
                                                 <img alt="@imagetitle"
@@ -175,14 +184,16 @@
         <div class="container">
             <div class="swiper product-slider-header-swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                 <div class="swiper-wrapper" id="swiper-wrapper-14ccbb8db9cf43d3" aria-live="polite"
-                     style="transform: translate3d(0px, 0px, 0px);">
+                     style="transition-duration: 5000ms; transform: translate3d(400px, 0px, 0px);">
                     @{
                         if (Model.banners.Count > 0)
                         {
-                            string banner1 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages /" + @Model.banners[0].image;
+                            string banner1 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[0].image;
+                            string urlvalue = Model.banners[0].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[0].type + "-" + Model.banners[0].catIDOrLink;
+
                             <div class="swiper-slide swiper-slide-active" role="group"
-                                 style="width: 421.333px; margin-left: 16px;">
-                                <a href="#"
+                                 style="width: 421.333px; margin-left: 16px; ">
+                                <a href="@urlvalue"
                                    class="image-banner-wrapper d-block" target="_self" dideo-checked="true">
                                     <img cl id='@Model.banners[0].type-@Model.banners[0].catIDOrLink' alt="@Model.banners[0].title" class="image br-4 bannerimage"
                                          src="@banner1"
@@ -192,10 +203,12 @@
                         }
                         if (Model.banners.Count > 1)
                         {
-                            string banner2 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages /" + @Model.banners[1].image;
+                            string banner2 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[1].image;
+                            string urlvalue = Model.banners[1].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[1].type + "-" + Model.banners[1].catIDOrLink;
+
                             <div class="swiper-slide swiper-slide-active" role="group"
                                  style="width: 421.333px; margin-left: 16px;">
-                                <a href="#"
+                                <a href="@urlvalue"
                                    class="image-banner-wrapper d-block" target="_self" dideo-checked="true">
                                     <img cl id='@Model.banners[1].type-@Model.banners[1].catIDOrLink' alt="@Model.banners[1].title" class="image br-4 bannerimage"
                                          src="@banner2"
@@ -205,10 +218,12 @@
                         }
                         if (Model.banners.Count > 2)
                         {
-                            string banner3 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages /" + @Model.banners[2].image;
+                            string banner3 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[2].image;
+                            string urlvalue = Model.banners[2].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[2].type + "-" + Model.banners[2].catIDOrLink;
+
                             <div class="swiper-slide swiper-slide-active" role="group"
                                  style="width: 421.333px; margin-left: 16px;">
-                                <a href="#"
+                                <a href="@urlvalue"
                                    class="image-banner-wrapper d-block" target="_self" dideo-checked="true">
                                     <img cl id='@Model.banners[2].type-@Model.banners[2].catIDOrLink' alt="@Model.banners[2].title" class="image br-4 bannerimage"
                                          src="@banner3"
@@ -218,10 +233,12 @@
                         }
                         if (Model.banners.Count > 3)
                         {
-                            string banner4 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages /" + @Model.banners[3].image;
+                            string banner4 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[3].image;
+                            string urlvalue = Model.banners[3].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[3].type + "-" + Model.banners[3].catIDOrLink;
+
                             <div class="swiper-slide swiper-slide-active" role="group"
                                  style="width: 421.333px; margin-left: 16px;">
-                                <a href="#"
+                                <a href="@urlvalue"
                                    class="image-banner-wrapper d-block" target="_self" dideo-checked="true">
                                     <img cl id='@Model.banners[3].type-@Model.banners[3].catIDOrLink' alt="@Model.banners[3].title" class="image br-4 bannerimage"
                                          src="@banner4"
@@ -231,10 +248,12 @@
                         }
                         if (Model.banners.Count > 4)
                         {
-                            string banner5 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages /" + @Model.banners[4].image;
+                            string banner5 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[4].image;
+                           
+                            string urlvalue = Model.banners[4].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[4].type + "-" + Model.banners[4].catIDOrLink;
                             <div class="swiper-slide swiper-slide-active" role="group"
                                  style="width: 421.333px; margin-left: 16px;">
-                                <a href="#"
+                                <a href="@urlvalue"
                                    class="image-banner-wrapper d-block" target="_self" dideo-checked="true">
                                     <img cl id='@Model.banners[4].type-@Model.banners[4].catIDOrLink' alt="@Model.banners[4].title" class="image br-4 bannerimage"
                                          src="@banner5"
@@ -300,19 +319,20 @@
                                 @foreach (var item in Model.wonderList)
                                 {
                                     string src = item.image.Split(',').ToList().First();
+                                    string prID = "o" + @item.ID;
                                     DateTime itemdate = DateTime.Now.AddSeconds(double.Parse(item.time));
                                     <div class="swiper-slide swiper-slide-active" key="6016" role="group"
                                          aria-label="1 / 4" style="width: 306px; margin-left: 24px;">
                                         <div class="product-card product-card-purple">
 
-                                            <a href="#"
+                                            <a href="/Home/productDetail?ID=@prID"
                                                dideo-checked="true">
                                                 <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
                                                     <div class="product-price">
                                                         <span class="discount">
                                                             @string.Format("{0:n0}", double.Parse(item.oldPrice)) ت
                                                         </span>
-                                                        <span class="total-price">
+                                                        <span class="total-price" style="z-index:99">
                                                             @string.Format("{0:n0}", double.Parse(item.price)) ت
                                                         </span>
                                                     </div>
@@ -565,6 +585,7 @@
 
             if (group.value != null)
             {
+                string groupid = group.type + "-" + group.catIDOrLink;
                 <div class="phone-wrapper xmt-12 xmt-lg-16">
                     <div class="container">
                         <div class="title">
@@ -575,7 +596,7 @@
                                     </h2>
                                 </div>
                                 <a class="more"
-                                   href="#/%D9%85%D8%AD%D8%B5%D9%88%D9%84%D8%A7%D8%AA/%da%af%d9%88%d8%b4%db%8c/"
+                                   href="/Home/ManageSlide?val=@groupid"
                                    dideo-checked="true">
                                     <span class="d-none d-sm-inline">بیشتر</span>
                                     <span>
@@ -602,363 +623,64 @@
                                     @foreach (var item in group.value)
                                     {
                                         string src = item.image.Split(',').First();
+                                        string prID = "o" + item.ID;
                                         string imagetitle = item.title;
                                         string index = (group.value.IndexOf(item) + 1).ToString();
                                         string count = group.value.Count() + "";
-                                        <div class="swiper-slide swiper-slide-active" key="6137" role="group"
-                                             aria-label="@index / @count" style="width: 306px; margin-left: 24px;">
-                                            <div class="product-card product-card-blue">
-                                                <a href="#/product/nokia-c30-dual-sim-64-3gb-ta-1359/"
-                                                   dideo-checked="true">
-                                                    <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                        <div class="product-price">
-                                                            <span class="total-price">
-                                                                @string.Format("{0:n0}", double.Parse(item.price)) ت
-                                                            </span>
-                                                        </div>
-                                                        <div class="product-img xmb-3">
-                                                            <img class="img-fluid rounded"
-                                                                 alt="@item.title"
-                                                                 src="@src"
-                                                                 loading="lazy">
-                                                        </div>
-                                                        <div class="product-text">
-                                                            <h3 class="title">
-                                                                @item.title
-                                                            </h3>
-                                                        </div>
-                                                        <div class="color-range">
-                                                            @*@{
-                                                                    List<string> srt = item.image.Split(',').ToList();
-                                                                    foreach(var IMGITEM in srt)
-                                                                    {
-                                                                        <img src="@IMGITEM" style="width:70px"/>
-                                                                    }
-                                                                }*@
-                                                            @*<span title="سفید" class="range" style=" background: #FFFFFF; "></span>*@
+                                     
+
+                                        
+
+                                                    <div class="swiper-slide swiper-slide-active" key="6137" role="group"
+                                                         aria-label="@index / @count" style="width: 306px; margin-left: 24px;">
+                                                        <div class="product-card product-card-blue">
+                                                            <a href="/Home/productDetail?ID=@prID"
+                                                               dideo-checked="true">
+                                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
+                                                                    <div class="product-price">
+                                                                        <span class="total-price" style="z-index:99">
+                                                                            @{
+                                                                                if (userType == "5")
+                                                                                {
+                                                                                    banimo.AdminPanelBoom.ViewModel.metaVM metmodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+                                                                                    <span>@string.Format("{0:n0}", metmodel.price) ت</span> 
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span>@string.Format("{0:n0}", item.price) ت</span> 
+                                                                                }
+                                                                            }
+
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="product-img xmb-3">
+                                                                        <img class="img-fluid rounded"
+                                                                             alt="@item.title"
+                                                                             src="@src"
+                                                                             loading="lazy">
+                                                                    </div>
+                                                                    <div class="product-text">
+                                                                        <h3 class="title">
+                                                                            @item.title
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div class="color-range">
+                                                                        @*@{
+                                                                                List<string> srt = item.image.Split(',').ToList();
+                                                                                foreach(var IMGITEM in srt)
+                                                                                {
+                                                                                    <img src="@IMGITEM" style="width:70px"/>
+                                                                                }
+                                                                            }*@
+                                                                        @*<span title="سفید" class="range" style=" background: #FFFFFF; "></span>*@
+                                                                    </div>
+                                                                </div>
+                                                            </a>
                                                         </div>
                                                     </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
+                                                }
 
 
-                                    <div class="swiper-slide swiper-slide-next" key="6105" role="group" aria-label="2 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/huawei-nova-y70-dualsim-128-4gb/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۴,۵۲۹,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی هواوی نوا Y70 دوسیم کارت ظرفیت 128 گیگابایت رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/07/21/wDkBsaELHdCCawoEqSlcvS99vEVLqMvIUpv9sdIE_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی هواوی نوا Y70 دوسیم کارت ظرفیت 128 گیگابایت
-                                                            رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="آبی" class="range" style="
-            background: #1E90FF;
-            "></span>
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                        <span title="سفید" class="range" style="
-            background: #FFFFFF;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="6036" role="group" aria-label="3 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/glx-general-luxe-106-dual-sim-4mb/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۴۲۸,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی جی ال ایکس مدل جنرال لوکس 106 دو سیم&zwnj;کارت ظرفیت 4 مگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/07/05/rzAz7V67TojnHe9sXuJoCqCfF4SeGYRMRjQNlzMt_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی جی ال ایکس مدل جنرال لوکس 106 دو سیم&zwnj;کارت
-                                                            ظرفیت 4 مگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5977" role="group" aria-label="4 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/apple-iphone-se-2022-single-sim-128-4gb/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۱۶,۸۸۸,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی اپل آیفون اس ای 2022 تک سیم&zwnj; کارت ظرفیت 128 گیگابایت و رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/06/19/tZUqch5FvcNwzqjg1dIvJAQ70arjdl0q7oSi6pwb_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی اپل آیفون اس ای 2022 تک سیم&zwnj; کارت ظرفیت
-                                                            128 گیگابایت و رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5928" role="group" aria-label="5 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/samsung-galaxy-a33-dual-sim-128-8gb-ram/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۸,۱۰۰,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی سامسونگ گلکسی A33 5G دو سیم&zwnj;کارت ظرفیت 128 گیگابایت رم 8 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/05/15/Ey94hTkIQH6cD2IeRWM0IHCLd410IVFXPE4dlwOP_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی سامسونگ گلکسی A33 5G دو سیم&zwnj;کارت ظرفیت
-                                                            128 گیگابایت رم 8 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5893" role="group" aria-label="6 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/samsung-galaxy-a23-dual-sim-128-4gb-ram/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۵,۴۰۰,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی سامسونگ گلکسی A23 دو سیم&zwnj;کارت ظرفیت 128 گیگابایت رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/04/24/BOmUc1lEgbxRylzR4FAreQbbtEPdvFnxzuzRKgLj_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی سامسونگ گلکسی A23 دو سیم&zwnj;کارت ظرفیت 128
-                                                            گیگابایت رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                        <span title="گلبهی" class="range" style="
-            background: #f0dfc7;
-            "></span>
-                                                        <span title="آبی" class="range" style="
-            background: #1E90FF;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5883" role="group" aria-label="7 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-purple">
-                                            <a href="#/product/infinix-hot-11-play-dual-sim-128-4gb-ram/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="discount">
-                                                            ۳,۹۱۹,۰۰۰ ت
-                                                        </span>
-                                                        <span class="total-price">
-                                                            ۳,۸۶۹,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی اینفینیکس هات 11 پلی دو سیم&zwnj;کارت ظرفیت 128 گیگابایت رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/02/07/xDS3NFUDqiCCjv7qQqv0xq7xHrPtdnsh4qL6lu2r_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی اینفینیکس هات 11 پلی دو سیم&zwnj;کارت ظرفیت
-                                                            128 گیگابایت رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="طلایی" class="range" style="
-            background: #FFD700;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5872" role="group" aria-label="8 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/samsung-galaxy-a13-4g-128-4gb-ram/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۵,۲۰۳,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی سامسونگ گلکسی A13 4G دو سیم&zwnj;کارت ظرفیت 128 گیگابایت رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/04/26/f6w22ZbmsRasuN1uesbYpWMGJHRBwIyEnzRTlrfB_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی سامسونگ گلکسی A13 4G دو سیم&zwnj;کارت ظرفیت
-                                                            128 گیگابایت رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                        <span title="گلبهی" class="range" style="
-            background: #f0dfc7;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5829" role="group" aria-label="9 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/samsung-galaxy-a13-4g-64-4gb-ram/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۴,۴۶۸,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی سامسونگ گلکسی A13 4G دو سیم&zwnj;کارت ظرفیت 64 گیگابایت رم 4 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/04/26/f6w22ZbmsRasuN1uesbYpWMGJHRBwIyEnzRTlrfB_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی سامسونگ گلکسی A13 4G دو سیم&zwnj;کارت ظرفیت
-                                                            64 گیگابایت رم 4 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                        <span title="آبی" class="range" style="
-            background: #1E90FF;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" key="5821" role="group" aria-label="10 / 10"
-                                         style="width: 306px; margin-left: 24px;">
-                                        <div class="product-card product-card-blue">
-                                            <a href="#/product/samsung-galaxy-a23/"
-                                               dideo-checked="true">
-                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                    <div class="product-price">
-                                                        <span class="total-price">
-                                                            ۶,۲۰۰,۰۰۰ ت
-                                                        </span>
-                                                    </div>
-                                                    <div class="product-img xmb-3">
-                                                        <img class="img-fluid rounded"
-                                                             alt="گوشی سامسونگ گلکسی A23 دو سیم&zwnj;کارت ظرفیت 128 گیگابایت رم 6 گیگابایت"
-                                                             src="https://saymandigital.com/storage/uploads/2022/04/24/BOmUc1lEgbxRylzR4FAreQbbtEPdvFnxzuzRKgLj_thumbnail.webp"
-                                                             loading="lazy">
-                                                    </div>
-                                                    <div class="product-text">
-                                                        <h3 class="title">
-                                                            گوشی سامسونگ گلکسی A23 دو سیم&zwnj;کارت ظرفیت 128
-                                                            گیگابایت رم 6 گیگابایت
-                                                        </h3>
-                                                    </div>
-                                                    <div class="color-range">
-                                                        <span title="مشکی" class="range" style="
-            background: #222222;
-            "></span>
-                                                        <span title="آبی" class="range" style="
-            background: #1E90FF;
-            "></span>
-                                                        <span title="گلبهی" class="range" style="
-            background: #f0dfc7;
-            "></span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
                                 </div>
                                 <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                             </div>
@@ -979,7 +701,7 @@
         <div class="container">
             <div class="nav-link-numbered-products xmb-6">
                 <div class="title-numbered-products">
-                    <ul class="nav nav-tabs" id="myTab" role="tab-b">
+                    <ul class="nav nav-tabs" id="myTab" role="tab-b" style="flex-wrap:unset">
                         <li class="nav-item" role="presentation">
                             <h2 class="nav-link active" id="nav-numbered-products-tab" data-bs-toggle="tab" data-bs-target="#nav-numbered-products" role="tab" aria-controls="nav-numbered-products" aria-selected="true" style="background-color:unset">
                                 جدید ترین ها
@@ -1011,7 +733,7 @@
                                 string purl = "/Home/ProductDetail/o" + @item.ID;
                                 int total = Model.newest.Count();
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
-                                    <a href="" dideo-checked="true">
+                                    <a href="@purl" dideo-checked="true">
                                         <div style="z-index:100" class="numbered-products-box-product d-flex justify-content-center align-items-center flex-column first-number">
                                             <div class="img-numbered-products">
                                                 <div class="number-numbered-products position-absolute">@number</div>
@@ -1042,7 +764,7 @@
                                 string purl = "/Home/ProductDetail/o" + @item.ID;
                                 int total = Model.bestseller.Count();
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
-                                    <a href="" dideo-checked="true">
+                                    <a href="@purl" dideo-checked="true">
                                         <div style="z-index:100" class="numbered-products-box-product d-flex justify-content-center align-items-center flex-column first-number">
                                             <div class="img-numbered-products">
                                                 <div class="number-numbered-products position-absolute">@number</div>
@@ -1072,7 +794,7 @@
                                 string purl = "/Home/ProductDetail/o" + @item.ID;
                                 int total = Model.specialOffers.Count();
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
-                                    <a href="" dideo-checked="true">
+                                    <a href="@purl" dideo-checked="true">
                                         <div style="z-index:100" class="numbered-products-box-product d-flex justify-content-center align-items-center flex-column first-number">
                                             <div class="img-numbered-products">
                                                 <div class="number-numbered-products position-absolute">@number</div>
@@ -1119,7 +841,7 @@
 
                                 <div class="swiper-slide " data-swiper-slide-index="@index" role="group" aria-label="@index / @total" style="width: 148px; margin-left: 16px;">
                                     <a href="#/brand/qcy" target="_blank" class="brand-box" style="background: #FFE9ED" dideo-checked="true">
-                                        <img src="/images/panelimages/@item.image" alt="@item.title" loading="lazy">
+                                        <img src="/images/@item.image" alt="@item.title" loading="lazy">
                                     </a>
                                 </div>
                             }
@@ -1167,8 +889,9 @@
         }
     })
     $(".mySlide").click(function () {
-        var val = $(this).attr('id');
 
+        var val = $(this).attr('id');
+       
         if (!val.contain('image')) {
             window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
@@ -1193,10 +916,5 @@
     <!--start header -->
     <!-- لاگین و رجیستر-->
     <script src="~/versionAsset/omirom/js/signUp.js"></script>
-    <!--قسمت سرج هدر-->
-    <script src="~/versionAsset/omirom/js/search.js?v=002"></script>
-    <!--منو و سرچ باکس هدر سایت-->
-    <script src="~/versionAsset/omirom/js/headerMenu.js"></script>
-    <!-- اسلایدر قسمت هدر سایت-->
-    <script src="~/versionAsset/omirom/js/headerSwiper.js"></script>
+   
 } 

@@ -147,12 +147,12 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("orderID", orderNum);
                     collection.Add("auth", auth);
-                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                    collection.Add("mbrand", servername);
 
 
                     //foreach (var myvalucollection in imaglist) {
@@ -175,7 +175,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection2 = new NameValueCollection();
+                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("ID", log2.peigiry);
@@ -195,7 +195,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection2 = new NameValueCollection();
+                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("auth", refModel.auth);
@@ -269,7 +269,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("fullname", model.fullname);
@@ -292,7 +292,7 @@ namespace banimo.Controllers
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
                   
-                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                    collection.Add("mbrand", servername);
                     
 
 
@@ -323,11 +323,11 @@ namespace banimo.Controllers
                         // اینجا باید کردیت یارو گرفته بشه و با مقدار فاکتور زده شده مقایسه بشه 
                         using (WebClient client = new WebClient())
                         {
-                            var collection = new NameValueCollection();
+                            var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                             collection.Add("device", device);
                             collection.Add("code", code);
                             collection.Add("token", token);
-                            collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                            collection.Add("mbrand", servername);
                             //foreach (var myvalucollection in imaglist) {
                             //    collection.Add("imaglist[]", myvalucollection);
                             //}
@@ -403,7 +403,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection2 = new NameValueCollection();
+                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("partnerID", cookieModel.partnerID);
@@ -426,7 +426,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("id", id);
@@ -455,7 +455,7 @@ namespace banimo.Controllers
                     {
 
 
-                        var collection2 = new NameValueCollection();
+                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                         collection2.Add("device", device);
                         collection2.Add("code", code);
                         collection2.Add("auth", Authority);
@@ -493,7 +493,7 @@ namespace banimo.Controllers
                         using (WebClient client = new WebClient())
                         {
 
-                            var collection2 = new NameValueCollection();
+                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                             collection2.Add("device", device);
                             collection2.Add("code", code);
                             collection2.Add("auth", Request.QueryString["Authority"]);
@@ -529,7 +529,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                var collection2 = new NameValueCollection();
+                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
@@ -618,7 +618,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", "");
@@ -666,7 +666,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("ID", id);
@@ -695,7 +695,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("ID", id);
@@ -718,7 +718,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", refModel.auth);
@@ -732,6 +732,7 @@ namespace banimo.Controllers
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
+                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
@@ -795,7 +796,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("fullname", model.fullname);
@@ -816,7 +817,7 @@ namespace banimo.Controllers
                     collection.Add("auth", auth);
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
-                    collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                    collection.Add("mbrand", servername);
 
                     //foreach (var myvalucollection in imaglist) {
                     //    collection.Add("imaglist[]", myvalucollection);
@@ -850,7 +851,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                var collection2 = new NameValueCollection();
+                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("partnerID", cookieModel.partnerID);
@@ -878,7 +879,7 @@ namespace banimo.Controllers
                             {
 
 
-                                var collection2 = new NameValueCollection();
+                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Authority);
@@ -931,7 +932,7 @@ namespace banimo.Controllers
                         using (WebClient client = new WebClient())
                         {
 
-                            var collection = new NameValueCollection();
+                            var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                             collection.Add("device", device);
                             collection.Add("code", code);
                             collection.Add("auth", Request.QueryString["Authority"]);
@@ -964,7 +965,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                var collection2 = new NameValueCollection();
+                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
@@ -976,7 +977,8 @@ namespace banimo.Controllers
                                 collection2.Add("payment", "5");
 
                                 byte[] response =
-                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+                                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
                             }
@@ -1142,7 +1144,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("fullname", model.fullname);
@@ -1163,7 +1165,7 @@ namespace banimo.Controllers
                 collection.Add("auth", auth);
                 collection.Add("latitude", model.lat);
                 collection.Add("longitude", model.lon);
-                collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
@@ -1323,7 +1325,7 @@ namespace banimo.Controllers
                                     using (WebClient client = new WebClient())
                                     {
 
-                                        var collection2 = new NameValueCollection();
+                                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                         collection2.Add("device", device);
                                         collection2.Add("code", code);
                                         collection2.Add("auth", saleOrderId.ToString());
@@ -1352,7 +1354,7 @@ namespace banimo.Controllers
                                         using (WebClient client = new WebClient())
                                         {
 
-                                            var collection2 = new NameValueCollection();
+                                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                             collection2.Add("device", device);
                                             collection2.Add("code", code);
                                             collection2.Add("auth", saleOrderId.ToString());
@@ -1395,7 +1397,7 @@ namespace banimo.Controllers
                                         using (WebClient client = new WebClient())
                                         {
 
-                                            var collection2 = new NameValueCollection();
+                                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                                             collection2.Add("device", device);
                                             collection2.Add("code", code);
                                             collection2.Add("refID", rr);
@@ -1555,7 +1557,7 @@ namespace banimo.Controllers
             //                using (WebClient client = new WebClient())
             //                {
 
-            //                    var collection2 = new NameValueCollection();
+            //                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
             //                    collection2.Add("device", device);
             //                    collection2.Add("code", code);
             //                    collection2.Add("token", user.token);
@@ -1688,7 +1690,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("fullname", model.fullname);
@@ -1709,7 +1711,7 @@ namespace banimo.Controllers
                 collection.Add("auth", auth);
                 collection.Add("latitude", model.lat);
                 collection.Add("longitude", model.lon);
-                collection.Add("mbrand", servername);collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername);
 
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
@@ -1733,7 +1735,7 @@ namespace banimo.Controllers
                 {
 
 
-                    var collection2 = new NameValueCollection();
+                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("token", token);
@@ -1874,7 +1876,7 @@ namespace banimo.Controllers
                     {
                         string device = RandomString();
                         string code = MD5Hash(device + "ncase8934f49909");
-                        var collection2 = new NameValueCollection();
+                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                         collection2.Add("device", device);
                         collection2.Add("code", code);
                         // collection2.Add("amount", amount);
@@ -1937,7 +1939,7 @@ namespace banimo.Controllers
             {
 
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device1);
                 collection2.Add("code", code1);
                 collection2.Add("title", "pasargad");
@@ -1971,7 +1973,7 @@ namespace banimo.Controllers
             {
 
 
-                var collection2 = new NameValueCollection();
+                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", invoiceNumber);

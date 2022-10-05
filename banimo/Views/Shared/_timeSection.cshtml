@@ -1,6 +1,6 @@
 ﻿@model  banimo.ViewModel.TimeList
 
-<div class="row ">
+<div class="row " style="direction:ltr">
     @{
         if (Model.times != null)
         {
@@ -28,7 +28,7 @@
 
                                     }*@
                                 <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
-                                <p>@detail.title</p>
+                                <p class="priceItem">@detail.title</p>
                             </div>
                         }
                     </div>
@@ -51,7 +51,7 @@
 
                                     }*@
                                 <i class="fa fa-check finalrow" id="@finalname" style="display:none"></i>
-                                <p>@detail.title</p>
+                                <p  class="priceItem">@detail.title</p>
                             </div>
                         }
                     </div>
@@ -64,7 +64,7 @@
                 {
                     int index = Model.times.IndexOf(item);
                     string checkname = "check" + index;
-                    <div class="halfrow master">
+                    <div class="halfrow master" checkS="@checkname">
                         @*@if (@item.isChecked == true)
                             {
                                 <i class="fa fa-check dispath" id="@checkname"></i>
@@ -73,8 +73,8 @@
                             {
 
                             }*@
-                        <i class="fa fa-check dispath" id="@checkname" style="display:none"></i>
-                        <p>@item.title</p>
+                        <i class="fa fa-check dispath" checkID="@checkname"  style="display:none"></i>
+                        <p  class="priceItem">@item.title</p>
                     </div>
                 }
             </div>
@@ -84,28 +84,28 @@
 
 </div>
 <script>
-        $(document).ready(function () {
-            $(".master").click(function () {
+    $(".master").click(function () {
+        
+        $(".dispath").css("display", "none");
+        var i = $(this).children();
+        i.css("display", "block");
 
-                $(".dispath").css("display", "none");
-                var i = $(this).children();
-                i.css("display", "block");
-
-                var id = i.attr("id");
-
-                $(".slave").css("display", "none");
-                $("#" + id).css("display", "block");
-                $("#" + id).children().children().first().css("display", "block");
-                $("#hourid").val($("#" + id).children().children().first().attr("id"));
+        var id = i.attr("checkID");
+       
+      
+        $(".slave").css("display", "none");
+        $("#" + id).show();
+        $(this).find('i').css("display", "block");
+        $("#" + id).children().children().first().css("display", "block");
+        $("#hourid").val($("#" + id).children().children().first().attr("id"));
 
 
-            })
-            $(".slave .halfrow").click(function () {
-                $(".finalrow").css("display", "none");
-                var i = $(this).children();
-                i.css("display", "block");
-                var id = i.attr("id");
-                $("#hourid").val(id);
-            })
-        })
+    })
+    $(".slave .halfrow").click(function () {
+        $(".finalrow").css("display", "none");
+        var i = $(this).children();
+        i.css("display", "block");
+        var id = i.attr("id");
+        $("#hourid").val(id);
+    })
 </script>

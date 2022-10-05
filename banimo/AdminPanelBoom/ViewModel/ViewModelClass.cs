@@ -189,6 +189,10 @@ namespace AdminPanelBoom.ViewModel
         public string SetId { get; set; }
         public string metaTitle { get; set; }
         public string metaDescription { get; set; }
+        public string metaTag { get; set; }
+        public string canonical { get; set; }
+        public string redirect { get; set; }
+        public string enName { get; set; }
 
         public string discount { get; set; }
         public string title { get; set; }
@@ -521,6 +525,7 @@ namespace AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string phone { get; set; }
+        public string percent { get; set; }
     }
     public class catVM
     {
@@ -560,6 +565,7 @@ namespace AdminPanelBoom.ViewModel
     public class productMainVM
     {
         public List<Product> products { get; set; }
+        public List<PartnerList> partnerList { get; set; }
         public int count { get; set; }
         public int current { get; set; }
         public string productChosen { get; set; }

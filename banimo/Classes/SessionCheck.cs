@@ -95,7 +95,7 @@ namespace banimo.Classes
             {
                 string param1 = (HttpUtility.ParseQueryString(myUri.Query).Get(item.ToString())).ToLower();
 
-                if (param1.Contains("select") || param1.Contains("delete") || param1.Contains("update") || param1.Contains("null") || param1.Contains("union") || param1.Contains(" or ") || param1.Contains(" and ") || param1.Contains(" group by ") || param1.Contains(" sum(") || param1.Contains(" count(") || param1.Contains(";") || param1.Contains("--") || param1.Contains("&&") || param1.Contains("&") || param1.Contains("||") || param1.Contains("|") || param1.Contains("$") || param1.Contains("()") || param1.Contains("alert()") ||  param1.Contains("<") || param1.Contains(">") || param1.Contains("%0d") || param1.Contains("%0a") || param1.Contains("%0c") || param1.Contains("``") )
+                if (param1.Contains("select") || param1.Contains("delete") || param1.Contains("update")  || param1.Contains("union") || param1.Contains(" or ") || param1.Contains(" and ") || param1.Contains(" group by ") || param1.Contains(" sum(") || param1.Contains(" count(") || param1.Contains(";") || param1.Contains("--") || param1.Contains("&&") || param1.Contains("&") || param1.Contains("||") || param1.Contains("|") || param1.Contains("$") || param1.Contains("()") || param1.Contains("alert()") ||  param1.Contains("<") || param1.Contains(">") || param1.Contains("%0d") || param1.Contains("%0a") || param1.Contains("%0c") || param1.Contains("``") )
                 {
                      
                     filterContext.Result = new RedirectToRouteResult(

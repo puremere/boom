@@ -373,7 +373,7 @@ const handleFiltersChanged = () => {
     loadProductList(filters, sortBy, null)
 }
 
-$('.products-list').on('click', '.pagination a', function(e){
+$('.products-list').on('click', '.paginationn a', function(e){
     e.preventDefault();
     loadProductList({}, null, this.getAttribute('href'));
 })

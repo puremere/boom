@@ -30,7 +30,7 @@ namespace banimo.Controllers
       
 
         string servername = ConfigurationManager.AppSettings["serverName"];
-        //
+        string nodeID = ConfigurationManager.AppSettings["nodeID"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
@@ -159,7 +159,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("user", registertext);
@@ -218,7 +218,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", phone);
@@ -287,6 +287,7 @@ namespace banimo.Controllers
             {
 
                 var collection = new NameValueCollection();
+                collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", registertext);
@@ -393,7 +394,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", registertext);
@@ -453,7 +454,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();
+                    var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("phone", phone);
@@ -470,6 +471,7 @@ namespace banimo.Controllers
                     byte[] response = client.UploadValues(address, collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
+                
                 }
                 userdata log = JsonConvert.DeserializeObject<userdata>(result);
                 if (log.status == "300")
@@ -522,7 +524,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mobile", phone);
@@ -557,7 +559,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", phone);
@@ -599,7 +601,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();
+                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);

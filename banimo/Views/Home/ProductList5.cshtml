@@ -14,7 +14,7 @@
 }
 
 
-<main>
+<main style="margin-top:90px">
 
 
     <div class="products-list">
@@ -28,13 +28,13 @@
                         <!--دکمه های فیلتر و سورتیگ در دو حالت-->
                         <div class="category-product container">
                             <div class="category-lists element">
-                                <select id="sort-select"
-                                        class="category-select form-select d-none d-md-block sort-select">
-                                    <option value="newest" selected="selected">جدیدترین</option>
-                                    <option value="rating">محبوب&zwnj;ترین</option>
-                                    <option value="sales">پرفروش&zwnj;ترین</option>
-                                    <option value="cheapest">ارزانترین</option>
-                                    <option value="most_expensive">گرانترین</option>
+                                <select id="sortingItesm"
+                                        class="category-select form-select d-none d-md-block ">
+                                    <option value="1sort" selected="selected">جدیدترین</option>
+                                    <option value="3sort">پیشنهاد ویژه</option>
+                                    <option value="2sort">پرفروش&zwnj;ترین</option>
+                                    <option value="5sort">ارزانترین</option>
+                                    <option value="4sort">گرانترین</option>
                                 </select>
                                 <div class="category-select form-select d-flex d-md-none"
                                      id="select-btn-filter-product-responsive">
@@ -237,7 +237,7 @@
                                                             </div>
                                                         </div>
                                                         <div style="text-align:center">
-                                                            <span class="btn btn-default"><i class="fa fa-check" style=""></i></span>
+                                                            <span id="setRange" class="btn btn-default"><img src="~/images/check.png" /></span>
                                                         </div>
                                                     </div>
 
@@ -252,16 +252,10 @@
 
                                         <div class="col-4 col-lg-3 xmt-md-6 xmt-lg-0" style="display:inline-block; margin:10px">
                                             <div class="switch-filter">
-                                                <div class="discount-filter d-flex align-items-center">
-                                                    <span class="text">تخفیف&zwnj;دار ها</span>
-                                                    <div class=" form-check form-switch">
-                                                        <input class="form-check-input filter-has_discount discount-check change-select"
-                                                               type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
+
                                                 <div class="out-filter d-flex align-items-center">
                                                     <span class="text">فقط موجود</span>
-                                                    <div class="form-check form-switch">
+                                                    <div class="form-check form-switch" id="lableToggle">
                                                         <input class="form-check-input filter-in_stock out-of-check change-select"
                                                                type="checkbox" role="switch">
                                                     </div>
@@ -618,6 +612,7 @@
     <script src="~/versionAsset/omirom/js/headerMenu.js"></script>
     <!-- اسلایدر قسمت هدر سایت-->
     <script src="~/versionAsset/omirom/js/headerSwiper.js"></script>
+   
     <script>
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
@@ -707,12 +702,140 @@
 
 
 
-        })
-            //$(".changeList").click(function () {
-            //    var selected = $('.js-example-basic-multiple').find(':selected').val();
-            //    alert(selected)
 
-            //})
+        })
+        $("#setRange").click(function () {
+
+
+            var min = "price-" + $(".price-range-min").val() + ",";
+            var max = "price-" + $(".price-range-max").val() + ",";
+            $.ajax({
+                url: '/Home/changeRangeIDes',
+                data: {
+                    min: min,
+                    max: max
+
+                },
+                dataType: 'html',
+                success: function () {
+
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        aType: 'html',
+                        success: function (data) {
+
+                            $('#productlist').html(data);
+
+                        },
+                        error: function () {
+
+                        },
+                        complete: function () {
+
+                            $("#loading").fadeOut();
+                        }
+                    });
+                },
+                error: function () {
+                    alert("nashod")
+                }
+            });
+        })
+
+
+        $("#sortingItesm").change(function () {
+
+            var id = $(this).val();
+
+            $.ajax({
+                url: '/Home/changesortid',
+                data: {
+                    ID: id,
+
+                },
+                dataType: 'html',
+                success: function () {
+                    //فقط برای پروژه مسکن که آپدیت لحظه ای نمی خوایم
+
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        aType: 'html',
+                        success: function (data) {
+
+                            $('#productlist').html(data);
+
+                        },
+                        error: function () {
+                            //alert("nashod")
+                        },
+                        complete: function () {
+
+                            $("#loading").fadeOut();
+
+                        }
+                    });
+
+                },
+                error: function () {
+                    //alert("nashod")
+                }
+            });
+        })
+
+        //$(".changeList").click(function () {
+        //    var selected = $('.js-example-basic-multiple').find(':selected').val();
+        //    alert(selected)
+
+        //})
 
     </script>
+    <script>
+        $("#lableToggle input").click(function () {
+            $("#loading").css("display", "block");
+            let value = "0";
+            if ($(this).is(':checked')) {
+                value = "1"
+            }
+            $.ajax({
+                url: '/Home/changeAvailableStatus',
+                data: {
+                    status: value,
+
+                },
+                dataType: 'html',
+                success: function () {
+                    //فقط برای پروژه مسکن که آپدیت لحظه ای نمی خوایم
+                    //if ($(window).width() > 960) {
+
+                    //}
+                    if ($(window).width() > 960) {
+                        $.ajax({
+                            url: '/Home/gogetproductlist',
+                            aType: 'html',
+                            success: function (data) {
+                                $("#SIBdiv").css("height", "");
+                                $('#productlist').html(data);
+                                window.scrollTo(0, 0);
+                            },
+                            error: function () {
+                                //alert("nashod")
+                            },
+                            complete: function () {
+                                $('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
+                                $('#spaceholder').css("height", '');
+                                $("#loading").fadeOut();
+                            }
+                        });
+                    }
+
+
+                },
+                error: function () {
+
+                }
+            });
+
+        })
+    </script>
+
 }

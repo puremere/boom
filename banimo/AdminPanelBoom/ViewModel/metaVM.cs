@@ -11,6 +11,11 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string bandID { get; set; }
         public string desctag { get; set; }
         public string titletag { get; set; }
+        public string keyTag { get; set; }
+        public string redirect { get; set; }
+        public string canonical { get; set; }
+        public string lastURL { get; set; }
+        public Int64 price { get; set; }
     }
     
 }
