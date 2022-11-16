@@ -1,0 +1,148 @@
+﻿@model banimo.ViewModel.TranList
+
+    <div class="row">
+        <div style="overflow-x:auto;padding:10px">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                    
+                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست تراکنش ها  </h3>
+                </div>
+                <div class="panel-body">
+                    @if (Model.myTransaction != null)
+                    {
+                        double finalMande = 0;
+                        <div id="morris-area-chart">
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                ردیف
+
+                                            </th>
+                                            <th>
+                                                شرح
+                                            </th>
+                                            <th>
+                                                تاریخ
+                                            </th>
+                                            <th>
+                                                بدهکار
+                                            </th>
+                                            <th>
+                                                بستانکار
+                                            </th>
+                                            <td>مانده</td>
+                                            <td>وضعیت مانده </td>
+
+                                        </tr>
+                                    </thead>
+
+
+
+                                    <tbody>
+                                        @foreach (var item in Model.myTransaction)
+                                        {
+                                            int index = Model.myTransaction.IndexOf(item) + 1;
+                                            string rcid = "rc" + item.ID;
+                                            finalMande += item.price;
+                                        <tr id="@rcid">
+                                            <td>@index</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.description)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.date)
+                                            </td>
+
+
+                                            <td>
+                                                @if (item.type == "0")
+                                                {
+
+                                                    @String.Format("{0:n0}", Math.Abs(item.price))
+                                                }
+                                            </td>
+
+                                            <td >
+                                                @if (item.type == "1")
+                                                {
+                                                    @String.Format("{0:n0}", Math.Abs(item.price))
+                                                }
+                                            </td>
+                                        
+                                            <td>
+                                                @String.Format("{0:n0}", Math.Abs(finalMande))
+                                                
+                                            </td>
+                                            <td>
+                                                @if (finalMande > 0)
+                                                {
+                                                    <p>بد</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>بس</p>
+                                                }
+                                            </td>
+
+
+                                        </tr>
+                                        }
+
+                                    <tr>
+                                        <td>
+                                            @{
+                                                int count = Model.myTransaction.Count() + 1;
+                                                <p>@count</p>
+                                            }
+                                        </td>
+                                        <td colspan="2">
+                                            جمع
+                                        </td>
+                                        <td>
+                                            @{
+                                                double plusSum = Model.myTransaction.Where(x => x.type == "0").Sum(x => x.price);
+                                            }
+                                            <p>@String.Format("{0:n0}", Math.Abs(plusSum))</p>
+                                        </td>
+                                        <td>
+                                            @{
+                                                double minusSum = Model.myTransaction.Where(x => x.type == "1").Sum(x => x.price);
+                                            }
+                                            <p>@String.Format("{0:n0}", Math.Abs(minusSum))</p>
+                                        </td>
+                                        <td >
+                                            @{
+                                                double finalSum = Model.myTransaction.Sum(x => x.price);
+                                            }
+                                            <p>@String.Format("{0:n0}", Math.Abs(finalSum))</p>
+                                        </td>
+                                        <td>
+                                            @if (finalSum > 0)
+                                            {
+                                                <p>بد</p>
+                                            }
+                                            else
+                                            {
+                                                <p>بس</p>
+                                            }
+                                        </td>
+                                       
+                                    </tr>
+                                       
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                                                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>

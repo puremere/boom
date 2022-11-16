@@ -23,17 +23,678 @@
     .REM {
         border-radius: 5px;
     }
+
+    .formItem {
+        margin: 5px
+    }
 </style>
+<div id="newArticleModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div id="articleForm" class="row" style="background-color:white; padding:10px; margin:0px; ">
+
+
+                    <form id="addTransaction" action="addCodingTransaction">
+                        <input hidden id="recietID" />
+                        <div class="row" style=" margin: 20px; padding: 35px; ">
+
+                            <div class="autocomplete row" style="display:flex">
+
+
+                                <div class="formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
+                                        <select name="M2" id="M2" class="form-control">
+                                            <option value="0">انتخاب گروه</option>
+                                            @foreach (var item in M2)
+                                            {
+                                                <option parentValue="" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M3 = Model.CodingList.Where(x => x.codingType == "3").ToList();
+                                        <select name="M3" id="M3" class="form-control">
+                                            <option value="0">انتخاب معین</option>
+                                            @foreach (var item in M3)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class="formItem " style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M4 = Model.CodingList.Where(x => x.codingType == "4").ToList();
+                                        <select name="M4" id="M4" class="form-control">
+                                            <option value="0">انتخاب تفصیلی</option>
+                                            @foreach (var item in M4)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M5 = Model.CodingList.Where(x => x.codingType == "5").ToList();
+                                        <select name="M5" id="M5" class="form-control">
+                                            <option value="0">انتخاب تفصیلی2</option>
+                                            @foreach (var item in M5)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+
+
+                            </div>
+                            <script>
+                                $("#M2").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M3 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                    $("#M4 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        $(this).hide();
+                                    });
+                                })
+                                $("#M3").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M4 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                })
+                                $("#M4").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M5 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                })
+
+                            </script>
+
+
+
+                            <div class="row" style="display:flex">
+
+                                <div class="formItem" style="width:100%">
+                                    <select name="RTaraf" id="RTaraf" class="form-control">
+                                        <option value="0">طرف حساب</option>
+                                        @if (Model.tarafList != null)
+                                        {
+                                            foreach (var item in Model.tarafList)
+                                            {
+                                                string name = item.name + " - " + item.phone;
+                                                <option value="@item.code">@name </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+                                    <select name="Rtype" id="Rtype" class="form-control">
+                                        <option value="">نوع تراکنش</option>
+                                        <option value="1">بستانکار</option>
+                                        <option value="0">بدهکار</option>
+                                    </select>
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+
+                                    <div class=" " style="width:100%">
+                                        <input name="dateFrom" id="dateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
+                                        <input name="abserver" id="abserver" style="display:none" class="form-control abserver " />
+
+                                    </div>
+                                </div>
+                                <div class="formItem" style="width:100%">
+
+                                    @{
+                                        <div class=" " style="width:100%">
+                                            <input placeholder="قیمت" name="price" id="price" class="form-control inputnumber" style="width:100%; " />
+                                        </div>
+                                    }
+                                </div>
+
+
+
+                            </div>
+                            <div class="row" style="display:flex">
+                                <div class="formItem" style="width:25%">
+                                    <select name="RNode" id="RNode" class="form-control">
+                                        <option value="">انتخاب پروژه</option>
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div class="formItem" style="width:75%">
+
+                                    @{
+
+                                        <div class=" " style="width:100%">
+                                            @*<input id="Desc" class="form-control" style="width:100%; " />*@
+                                            <textarea placeholder="شرح سند" name="description" id="description" class="form-control" style="width:100%; height:100px"></textarea>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="verifynewArticle" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#verifynewArticle").click(function () {
+
+                        // $("#addTransaction").submit();
+
+                        var type = $("#Rtype").val();
+                        var M2 = $("#M2").find(':selected').attr('code');
+                        var M3 = $("#M3").find(':selected').attr('code');
+                        var M4 = $("#M4").find(':selected').attr('code');
+                        var M5 = $("#M5").find(':selected').attr('code');
+                        var price = $("#price").val().replace(',', '');
+                        var description = $("#description").val();
+                        var abserver = $("#abserver").val();
+                        var recietID = $("#recietID").val();
+                        var RTaraf = $("#RTaraf").val();
+                        var RNode = $("#RNode").val();
+
+                        $.ajax({
+                            url: "addCodingTransaction",
+                            dataType: "html",
+                            data: {
+                                M2: M2,
+                                M3: M3,
+                                M4: M4,
+                                M5: M5,
+                                price: price,
+                                description: description,
+                                abserver: abserver,
+                                recietID: recietID,
+                                type: type,
+                                RTaraf: RTaraf,
+                                nodeID: RNode
+                            },
+                            success: function (data) {
+                                if (data == "200") {
+                                    $("#M2").val('');
+                                    $("#M3").val('');
+                                    $("#M4").val('');
+                                    $("#M12").val('');
+                                    $("#M13").val('');
+                                    $("#M14").val('');
+                                    $("#price").val('');
+                                    $("#description").val('');
+                                    $("#abserver").val('');
+
+                                    $.ajax({
+                                        url: '/Core/getRecietArticle',
+                                        dataType: 'html',
+                                        data: {
+                                            id: recietID,
+                                        },
+                                        success: function (data) {
+                                            $("#newRecietArticle").html(data);
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+
+
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000,
+
+
+                                    }
+                                    toastr.success('سند شما با موفقیت ثبت شد')
+                                }
+                                //window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="newRecietModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div id="newSalemaliModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div style="display:flex">
+
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>عنوان سال مالی</p>
+                        <div class=" " style="width:100%">
+                            <input placeholder="توضیحات" name="salmaliTitle" id="salmaliTitle" class="form-control " style="width:100%; " />
+                        </div>
+                    </div>
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>شروع سال مالی</p>
+                        <input name="dateFrom" id="saldateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
+                        <input name="abserver"  style="display:none" class="form-control  " />
+                       
+
+                    </div>
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>پایان سال مالی</p>
+                        <input name="dateFrom" id="saldateTo" style="display:inline-block" class="form-control inputForm datePicker" />
+                        <input name="abserver"  style="display:none" class="form-control  " />
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="newSaleMali" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#newSaleMali").click(function () {
+                        var dateFrom = $("#saldateFrom").val();
+                      
+                        var dateTo = $("#saldateTo").val();
+                        var salmaliTitle = $("#salmaliTitle").val();
+                        $.ajax({
+                            url: "/core/addNewSaleMali",
+                            data: {
+                                dateFrom: dateFrom,
+                                dateTo: dateTo,
+                                title: salmaliTitle
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">کدینگ</a></li>
-        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">ثبت سند</a></li>
-        <li><a data-toggle="tab" href="#menu2" style=" color: #8d8d8d; ">لیست اسناد</a></li>
+        <li class="active"><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
+        <li class=""><a data-toggle="tab" href="#resid" style=" color: #8d8d8d; ">رسید/حواله</a></li>
+        <li class=""><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">کدینگ</a></li>
+        <li><a data-toggle="tab" href="#sabt" style=" color: #8d8d8d; ">ثبت سند</a></li>
+        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست اسناد</a></li>
         <li><a data-toggle="tab" href="#menu3" style=" color: #8d8d8d; ">گزارشات</a></li>
 
     </ul>
     <div class="tab-content">
-        <div id="home" class="tab-pane fade in active" style="padding-top:20px">
+        <div id="salemali" class="tab-pane fade in active" style="padding-top:20px">
+            <div class="row">
+                <div style="overflow-x:auto;padding:10px">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                            <i id="newSaleMaliModalIcon" style="cursor:pointer; float:left;font-size:20px" class="fa fa-plus"></i>
+                            <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست سال مالی  </h3>
+                        </div>
+                        <div class="panel-body">
+                            @if (Model.salemaliList != null)
+                            {
+                                <div id="morris-area-chart">
+                                    <div style="overflow:auto">
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        ردیف
+
+                                                    </th>
+                                                    <th>
+                                                        عنوان
+                                                    </th>
+                                                    <th>
+                                                        تاریخ از
+                                                    </th>
+                                                    <th>
+                                                        تاریخ تا
+                                                    </th>
+
+                                                    <th>
+                                                        پایان یافته
+                                                    </th>
+
+
+
+
+                                                    <th>
+                                                    </th>
+
+
+                                                </tr>
+                                            </thead>
+
+
+
+                                            <tbody>
+                                                @foreach (var item in Model.salemaliList)
+                                                {
+                                                    int index = Model.salemaliList.IndexOf(item) + 1;
+                                                    string rcid = "sm" + item.ID;
+                                                    <tr id="@rcid">
+                                                        <td>@index</td>
+                                                        
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.datefrom)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.dateTo)
+                                                        </td>
+
+                                                        <td style="text-align: center;">
+                                                            @if (item.status == "1")
+                                                            {
+                                                                <input id=@item.ID type="checkbox" class="avalie" checked disabled />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input id=@item.ID type="checkbox" class="avalie" />
+
+                                                            }
+                                                        </td>
+
+
+
+
+
+                                                        <td>
+                                                            @{
+
+                                                                <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteSalemali" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                            }
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+
+                $("#newSaleMaliModalIcon").click(function () {
+                    $("#newSalemaliModal").modal('toggle');
+                })
+                $(".deleteSalemali").click(function () {
+                    $("").text(this.id);
+                });
+            </script>
+        </div>
+        <div id="resid" class="tab-pane fade in" style="padding-top:20px">
+            <div class="row" style="">
+
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>پروژه :</p>
+                    <select id="nodeID" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">انبار مرکزی</option>
+                        @foreach (var item in Model.tarafList)
+                        {
+                            <option value="@item.ID">@item.name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>نوع فاکتور :</p>
+                    <select id="trantype" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">رسید</option>
+                        <option value="0">حواله</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                    <p>از تاریخ :</p>
+                    <input type="text" class="form-control projectDate inputfield" />
+                    <input class="PDabserver" style="display:none" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تا تاریخ :</p>
+                    <input type="text" class="form-control projectDate2 inputfield" />
+                    <input class="PD2abserver" style="display:none" />
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت از :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت تا :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد از :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد تا :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                    <p> محصول :</p>
+                    <input type="text" class="form-control  inputfield" id="addItemToOrderInput" />
+                    <input id="IDholder" hidden />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>توضیحات :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>وضعیت :</p>
+                    <select id="factorStatus" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">اولیه</option>
+                        <option value="0">نهایی</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>محصول امانی :</p>
+                    <select id="amani" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">خیر</option>
+                        <option value="1">بله</option>
+
+                    </select>
+
+
+
+                </div>
+               
+            </div>
+
+            <div class="row" style="">
+
+                <div style="width:20%;padding:10px;">
+                    <div style="position:relative; margin:5px" id="">
+                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTran">تایید</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+
+                <script>
+                    var getDraft = function () {
+                        $.ajax({
+                            url: 'returnDraftList',
+                            dataType: 'html',
+                            data: {
+
+                                timeFrom: $(".PDabserver").val(),
+                                timeTTo: $(".PD2abserver").val(),
+                                transactionType: $("#trantype").val(),
+                                factorStatus: $("#factorStatus").val(),
+                                priceFrom: $("#priceFrom").val(),
+                                priceTo: $("#priceTo").val(),
+                                countFrom: $("#countFrom").val(),
+                                countTo: $("#countTo").val(),
+                                amani: $("#amani").val(),
+                                nodeID: $("#nodeID").val(),
+                                productID: $("#IDholder").val(),
+
+                            },
+                            success: function (data) {
+                                $("#detailHolder").html(data)
+                            }
+                        })
+                    };
+                    $("#verifyCodeingTran").click(function () {
+                        getDraft();
+                    })
+                    getDraft();
+                </script>
+            </div>
+            <div id="detailHolder" class="row">
+            </div>
+        </div>
+        <div id="home" class="tab-pane fade in" style="padding-top:20px">
 
             <div class="modal fade" id="delAccountModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -293,7 +954,7 @@
                                                                         {
                                                                             string kollclassname = "koll" + koll.ID;
                                                                             List<banimo.ViewModel.CodingList> moinList = Model.CodingList.Where(x => x.parentID == koll.ID.ToString()).ToList();
-                                                                            <tr class="@groupclassname" style="background-color:#f5cbcb;display:none;">
+                                                                            <tr class="@groupclassname" style="background-color:#f5cbcb;">
                                                                                 <td>
                                                                                     @Html.DisplayFor(modelItem => koll.codeHesab)
                                                                                 </td>
@@ -328,9 +989,9 @@
                                                                             foreach (var moin in moinList)
                                                                             {
                                                                                 string moinclassname = "moin" + moin.ID;
-                                                                                List<banimo.ViewModel.CodingList> tafsilList = Model.CodingList.Where(x => x.parentID == moin.ID.ToString()).ToList();
+                                                                                List<banimo.ViewModel.CodingList> tafsilList = Model.CodingList.Where(x => x.parentID == moin.ID.ToString()).Distinct().ToList();
 
-                                                                                <tr class="@kollclassname" style="display:none; background-color:#88e5f2">
+                                                                                <tr class="@kollclassname" style=" background-color:#88e5f2">
                                                                                     <td>
                                                                                         @Html.DisplayFor(modelItem => moin.codeHesab)
                                                                                     </td>
@@ -365,10 +1026,10 @@
                                                                                 foreach (var tafsil in tafsilList)
                                                                                 {
                                                                                     string tafsilclassname = "tafsil" + tafsil.ID;
-                                                                                    List<banimo.ViewModel.CodingList> tafsil2List = Model.CodingList.Where(x => x.parentID == tafsil.ID.ToString()).ToList();
+                                                                                    List<banimo.ViewModel.CodingList> tafsil2List = Model.CodingList.Where(x => x.parentID == tafsil.ID.ToString()).OrderBy(x => x.ID).ToList();
 
 
-                                                                                    <tr class="@moinclassname" style="display:none; background-color:#b57ccc">
+                                                                                    <tr class="@moinclassname" style=" background-color:#b57ccc">
                                                                                         <td>
                                                                                             @Html.DisplayFor(modelItem => tafsil.codeHesab)
                                                                                         </td>
@@ -381,11 +1042,15 @@
                                                                                         <td></td>
 
                                                                                         <td style="text-align: center;">
-                                                                                            <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                                                                                            @if (tafsil2List.Count() == 0)
+                                                                                            {
+                                                                                                <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                            }
 
                                                                                         </td>
                                                                                         <td>
-                                                                                            <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن تفصیل 2</a>
+                                                                                            <a myparent="@tafsil.ID" mytype="5" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">افزودن تفصیل 2</a>
 
                                                                                         </td>
                                                                                         <td>
@@ -398,8 +1063,8 @@
                                                                                     </tr>
                                                                                     foreach (var tafsil2 in tafsil2List)
                                                                                     {
-
-                                                                                        <tr class="@tafsilclassname" style="display:none; background-color:#e88baa">
+                                                                                        string tafsil2classname = "tafsil2" + tafsil.ID;
+                                                                                        <tr class="@tafsil2classname" style=" background-color:#e88baa">
                                                                                             <td>
                                                                                                 @Html.DisplayFor(modelItem => tafsil2.codeHesab)
                                                                                             </td>
@@ -667,394 +1332,73 @@
                 </div>
             </div>
 
-            <script>
-                $(".Dbutton").click(function () {
-                    var ID = $(this).attr('id');
-                    $("#deleteID").val(ID);
-                    $("#delAccountModal").modal('toggle')
-                })
-                $("#modalDelVerify").click(function () {
-                    var title = $("#daramadTitle").val();
 
-
-                    $("#delAccountForm").submit();
-                })
-                $(".openacount").click(function () {
-                    var parnetID = $(this).attr('myparent');
-                    var codingType = $(this).attr('mytype');
-                    switch (codingType) {
-                        case ("0"):
-                            var title = "variTafsil" + parnetID;
-                            break;
-                        case ("1"):
-                            var title = "group" + parnetID;
-                            break;
-                        case ("2"):
-                            var title = "koll" + parnetID;
-                            break;
-                        case ("3"):
-                            var title = "moin" + parnetID;
-                            break;
-                        case ("4"):
-                            var title = "tafsil" + parnetID;
-                            break;
-                        case ("6"):
-                            var title = "varitafsil" + parnetID;
-                            break;
-
-                    }
-
-                    $("." + title).each(function () {
-                        if ($(this).is(":visible")) {
-                            $(this).fadeOut();
-                        }
-                        else {
-                            $(this).fadeIn();
-                        }
-
-                    })
-                })
-                $(".addacount").click(function () {
-
-
-                    var codingType = $(this).attr('mytype');
-
-                    switch (codingType) {
-                        case ("0"):
-                            var title = "عنوان تفصیل متغیر";
-                            break;
-                        case ("1"):
-                            var title = "";
-                            break;
-                        case ("2"):
-                            var title = "نام کل جدید";
-                            break;
-                        case ("3"):
-                            var title = "نام معین جدید";
-                            break;
-                        case ("4"):
-                            var title = "نام تفصیلی جدید";
-                            break;
-                        case ("6"):
-                            var title = "عنوان جزئیات تفصیل";
-                            break;
-
-                    }
-                    $("#codingTitle").text(title);
-                    $("#typeID").val(codingType);
-                    $("#parentID").val($(this).attr('myparent'));
-                    $(".formsection").css("display", "none");
-                    $(".main1").css("display", "inline-block");
-                    $("#createAccount").modal('toggle');
-                })
-            </script>
 
         </div>
-        <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
-            <div class="row" style="background-color:white; padding:10px; margin:0px; ">
-                <form id="addTransaction" action="addCodingTransaction">
-                    <div class="row" style=" margin: 20px; padding: 35px; ">
-                        <div class="autocomplete col-md-3 col-sm-3 col-xs-12">
-                            <label>مبدا تراکنش :</label>
+        <div id="sabt" class="tab-pane fade in " style="padding-top:20px">
+            <div>
+                <div style="display:flex; align-items:center">
 
-                            <div class=" " style="width:100%">
-                                @{
-                                    List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
-                                    <select name="M2" id="M2" class="form-control">
-                                        <option value="0">انتخاب گروه</option>
-                                        @foreach (var item in M2)
-                                        {
-                                            <option parentValue="" value="@item.ID">@item.title</option>
-                                        }
-                                    </select>
-                                }
+                    <div class="formItem" style="width:200px">
 
-                            </div>
-                            <div class=" " style="width:100%">
-                                @{
-                                    List<banimo.ViewModel.CodingList> M3 = Model.CodingList.Where(x => x.codingType == "3").ToList();
-                                    <select name="M3" id="M3" class="form-control">
-                                        <option value="0">انتخاب معین</option>
-                                        @foreach (var item in M3)
-                                        {
-                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
-                                        }
-                                    </select>
-                                }
-
-                            </div>
-                            <div class=" " style="width:100%">
-                                @{
-                                    List<banimo.ViewModel.CodingList> M4 = Model.CodingList.Where(x => x.codingType == "4").ToList();
-                                    <select name="M4" id="M4" class="form-control">
-                                        <option value="0">انتخاب تفصیلی</option>
-                                        @foreach (var item in M4)
-                                        {
-                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
-                                        }
-                                    </select>
-                                }
-
-                            </div>
-
+                        <div class=" " style="width:100%">
+                            <input name="dateFrom" id="dateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
+                            <input name="abserver" id="abserver" style="display:none" class="form-control  " />
 
                         </div>
-                        <script>
-                            $("#M2").change(function () {
-                                var id = $(this).val();
-                                console.log(id)
-                                $("#M3 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-                                    var optionid = $(this).attr('parentValue');
-                                    if (optionid != id) {
-                                        $(this).hide();
-                                    }
-                                    else {
-                                        $(this).show();
-                                    }
-                                })
-                                $("#M4 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-                                    $(this).hide();
-                                });
-                            })
-                            $("#M3").change(function () {
-                                var id = $(this).val();
-                                console.log(id)
-                                $("#M4 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-                                    var optionid = $(this).attr('parentValue');
-                                    if (optionid != id) {
-                                        $(this).hide();
-                                    }
-                                    else {
-                                        $(this).show();
-                                    }
-                                })
-                            })
-
-                        </script>
-
-                        <div class="autocomplete col-md-3 col-sm-3 col-xs-12">
-                            <label>مقصد تراکنش :</label>
-                            @{
-                                <div class=" " style="width:100%">
-                                    @{
-
-                                        <select name="M12" id="M12" class="form-control">
-                                            <option value="0">انتخاب گروه</option>
-                                            @foreach (var item in M2)
-                                            {
-                                                <option parentValue="" value="@item.ID">@item.title</option>
-                                            }
-                                        </select>
-                                    }
-
-                                </div>
-                                <div class=" " style="width:100%">
-                                    @{
-
-                                        <select name="M13" id="M13" class="form-control">
-                                            <option value="0">انتخاب معین</option>
-                                            @foreach (var item in M3)
-                                            {
-                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
-                                            }
-                                        </select>
-                                    }
-
-                                </div>
-                                <div class=" " style="width:100%">
-                                    @{
-
-                                        <select name="M14" id="M14" class="form-control">
-                                            <option value="0">انتخاب تفصیلی</option>
-                                            @foreach (var item in M4)
-                                            {
-                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
-                                            }
-                                        </select>
-                                    }
-
-                                </div>
-                            }
-                        </div>
-                        <script>
-                            $("#M12").change(function () {
-                                var id = $(this).val();
-                                console.log(id)
-                                $("#M13 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-
-                                    var optionid = $(this).attr('parentValue');
-                                    if (optionid != id) {
-                                        $(this).hide();
-                                    }
-                                    else {
-                                        $(this).show();
-                                    }
-                                })
-                                $("#M14 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-                                    $(this).hide();
-                                });
-                            })
-                            $("#M13").change(function () {
-                                var id = $(this).val();
-                                console.log(id)
-                                $("#M14 option").each(function () {
-                                    var val = $(this).val();
-                                    if (val == "0") {
-                                        $(this).prop('selected', true);
-                                    }
-                                    else {
-                                        $(this).prop('selected', false);
-                                    }
-                                    var optionid = $(this).attr('parentValue');
-                                    if (optionid != id) {
-                                        $(this).hide();
-                                    }
-                                    else {
-                                        $(this).show();
-                                    }
-                                })
-                            })
-
-                        </script>
-
-
-                        <div class=" col-md-3 col-sm-3 col-xs-12">
-                            <div>
-                                <label>زمان :</label>
-                                <div class=" " style="width:100%">
-                                    <input name="dateFrom" id="dateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
-                                    <input name="abserver" id="abserver" style="display:none" class="form-control abserver " />
-
-                                </div>
-                            </div>
-
-
-                            <div>
-                                <label>مبلغ :</label>
-                                @{
-                                    <div class=" " style="width:100%">
-                                        <input name="price" id="price" class="form-control inputnumber" style="width:100%; " />
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <div class=" col-md-3 col-sm-3 col-xs-12">
-                            <label>توضیحات :</label>
-                            @{
-
-                                <div class=" " style="width:100%">
-                                    @*<input id="Desc" class="form-control" style="width:100%; " />*@
-                                    <textarea name="description" id="description" class="form-control" style="width:100%; height:100px"></textarea>
-                                </div>
-                            }
-                        </div>
-
-
-
                     </div>
-                    <div id="verifyCat" class="btn btn-primary" style="width:50px; margin-top:28px">تایید</div>
-                </form>
+                    <div class="formItem" style="width:200px">
+
+                        <div class=" " style="width:100%">
+                            <div class=" " style="width:100%">
+                                <input placeholder="توضیحات" name="recietDesc" id="recietDesc" class="form-control " style="width:100%; " />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formItem" style="width:200px">
+
+                        <div class=" " style="width:100%">
+                            <button id="newReciet" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+                        </div>
+                    </div>
+
+                </div>
                 <script>
-                    $("#verifyCat").click(function () {
-
-                        // $("#addTransaction").submit();
-
-
-                        var M2 = $("#M2").val();
-                        var M3 = $("#M3").val();
-                        var M4 = $("#M4").val();
-                        var M12 = $("#M12").val();
-                        var M13 = $("#M13").val();
-                        var M14 = $("#M14").val();
-                        var price = $("#price").val().replace(',', '');
-                        var description = $("#description").val();
+                    $("#newReciet").click(function () {
                         var abserver = $("#abserver").val();
-
-
+                        var desc = $("#recietDesc").val();
                         $.ajax({
-                            url: "addCodingTransaction",
-                            dataType: "html",
+                            url: "/core/addNewReciet",
                             data: {
-                                M2: M2,
-                                M3: M3,
-                                M4: M4,
-                                M12: M12,
-                                M13: M13,
-                                M14: M14,
-                                price: price,
-                                description: description,
-                                abserver: abserver
+                                abserver: abserver,
+                                desc: desc
                             },
                             success: function (data) {
-                                if (data == "200") {
-                                    //$("#M2").val('');
-                                    //$("#M3").val('');
-                                    //$("#M4").val('');
-                                    //$("#M12").val('');
-                                    //$("#M13").val('');
-                                    //$("#M14").val('');
-                                    //$("#price").val('');
-                                    //$("#description").val('');
-                                    //$("#abserver").val('');
-
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000,
-
+                                $("#recietID").val(data);
+                                $.ajax({
+                                    url: '/Core/getRecietArticle',
+                                    dataType: 'html',
+                                    data: {
+                                        id: data,
+                                    },
+                                    success: function (data) {
+                                        $("#newRecietArticle").html(data);
+                                    },
+                                    error: function () {
 
                                     }
-                                    toastr.success('سند شما با موفقیت ثبت شد')
-                                }
-                                //window.location.reload();
+                                });
+
                             }
                         })
                     })
                 </script>
+
+                <div id="newRecietArticle"></div>
             </div>
         </div>
-
-        <div id="menu2" class="tab-pane fade in " style="padding-top:20px">
-
+        <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
             <div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
                 <div>
                     <div class="" style="margin : 0 5px">
@@ -1076,32 +1420,48 @@
                 <div class="" style="margin : 0 5px">
                     <p style="display:inline-block">وضعیت سند :</p>
                     <select class="form-control" style=" display:inline-block" id="selectOrderType">
-                        <option value="0">همه</option>
+                        <option value="">همه</option>
+                        <option value="0">ثبت مقدماتی</option>
                         <option value="1">ثبت اولی</option>
                         <option value="2">ثبت نهایی</option>
                         <option value="3">ثبت دائم</option>
 
                     </select>
                 </div>
-            </div>
-            <div class="row " style="margin:40px 0px; display:flex">
 
+                <div>
+                    <div class="" style="padding-top:30px">
+                        <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> تایید</p>
 
-                <div class="" style="padding-top:30px">
-                    <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> تایید</p>
-
+                    </div>
                 </div>
-
             </div>
 
 
-
-
-
-            <p class="ORDERBUTT" style="display:none" id="dataOrder">11</p>
-            <div id="OrderTableHolder">
+            <div id="notCompleteReciet">
 
             </div>
+            @*<script>
+
+                    $.ajax({
+                        url: '/Core/ChangeRecietList',
+                        dataType: 'html',
+                        data: {
+                            page: "1",
+
+                        },
+
+                        success: function (data) {
+
+                            $("#notCompleteReciet").html(data);
+                            $("#loading").hide();
+                        }
+
+
+
+                    });
+                </script>*@
+
             <script>
                 var getlofo = function (page) {
                     $("#loading").show();
@@ -1122,7 +1482,7 @@
 
                         success: function (data) {
 
-                            $("#OrderTableHolder").html(data);
+                            $("#notCompleteReciet").html(data);
                             $("#loading").hide();
                         }
 
@@ -1135,172 +1495,605 @@
                     $("#loading").show();
                     getlofo(1)
                 });
+                getlofo(1);
 
 
             </script>
 
+
         </div>
+
         <div id="menu3" class="tab-pane fade in " style="padding-top:20px">
-            <div class="row">
-                <div class="col-lg-9 col-md-8 col-sm-3 col-xs-12">
-                    <p>حساب مقصد</p>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#gardesh" style=" color: #8d8d8d; ">گردش حساب</a></li>
+                <li><a data-toggle="tab" href="#taraz" style=" color: #8d8d8d; ">ترازنامه</a></li>
+               
 
-                    <div style="display:flex; align-items:center">
-                        <div class=" " style="width:100% ; margin:10px">
-                            @{
-                                <select name="M22" id="M22" class="form-control">
-                                    <option value="0">انتخاب گروه</option>
-                                    @foreach (var item in M2)
-                                    {
-                                        <option parentValue="" value="@item.ID">@item.title</option>
+            </ul>
+            <div class="tab-content">
+                <div id="gardesh" class="tab-pane fade in active" style="padding-top:20px">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                          
+
+                            <div style="display:flex; align-items:center">
+                                <div class=" " style="width:100% ; margin:10px">
+                                    @{
+                                        <select name="M22" id="M22" class="form-control">
+                                            <option value="0">انتخاب گروه</option>
+                                            @foreach (var item in M2)
+                                            {
+                                                <option parentValue="" value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
                                     }
-                                </select>
-                            }
 
-                        </div>
-                        <div class=" " style="width:100% ; margin:10px">
-                            @{
-                                <select name="M33" id="M33" class="form-control">
-                                    <option value="0">انتخاب معین</option>
-                                    @foreach (var item in M3)
-                                    {
-                                        <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                </div>
+                                <div class=" " style="width:100% ; margin:10px">
+                                    @{
+                                        <select name="M33" id="M33" class="form-control">
+                                            <option value="0">انتخاب معین</option>
+                                            @foreach (var item in M3)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
                                     }
-                                </select>
-                            }
 
-                        </div>
-                        <div class=" " style="width:100% ; margin:10px">
-                            @{
-                                <select name="M44" id="M44" class="form-control">
-                                    <option value="0">انتخاب تفصیلی</option>
-                                    @foreach (var item in M4)
-                                    {
-                                        <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                </div>
+                                <div class=" " style="width:100% ; margin:10px">
+                                    @{
+                                        <select name="M44" id="M44" class="form-control">
+                                            <option value="0">انتخاب تفصیلی</option>
+                                            @foreach (var item in M4)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
                                     }
-                                </select>
-                            }
+
+                                </div>
+                                <div class=" " style="width:100% ; margin:10px">
+                                    @{
+                                        <select name="M55" id="M55" class="form-control">
+                                            <option value="0">انتخاب تفصیلی 2</option>
+                                            @foreach (var item in M5)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+
+                            </div>
+
 
                         </div>
+                        <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                            <div style="display:flex">
 
-                    </div>
+                                <div style="margin:10px;width:100%">
+                                    <p>نوع تراکنش :</p>
+                                    <select id="trantype" class="form-control">
+                                        <option value="0">همه</option>
+                                        <option value="1">واریز</option>
+                                        <option value="0">برداشت</option>
+                                    </select>
+                                </div>
+                                <div style="margin:10px;width:100%" id="dateHolder">
+                                    <p>از تاریخ :</p>
+                                    <input type="text" class="form-control projectDate inputfield" />
+                                    <input class="PDabserver" style="display:none" />
+                                </div>
+                                <div style="margin:10px;width:100%" id="dateHolder2">
+                                    <p>تا تاریخ :</p>
+                                    <input type="text" class="form-control projectDate2 inputfield" />
+                                    <input class="PD2abserver" style="display:none" />
+
+                                </div>
+                                <div style="margin:10px;width:100%">
+                                    <p>طرف حساب :</p>
+                                    <select name="GTaraf" id="GTaraf" class="form-control">
 
 
-                </div>
-                <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
-                    <div style="display:flex">
+                                        <option value="0">انتخاب طرف حساب</option>
+                                        @if (Model.tarafList != null)
+                                        {
+                                            foreach (var item in Model.tarafList)
+                                            {
+                                                string name = item.name + " - " + item.phone;
+                                                <option value="@item.code">@name </option>
+                                            }
+                                        }
 
-                        <div style="margin:10px;width:100%">
-                            <p>نوع تراکنش :</p>
-                            <select id="trantype" class="form-control">
-                                <option value="">همه</option>
-                                <option value="1">واریز</option>
-                                <option value="0">برداشت</option>
-                            </select>
-                        </div>
-                        <div style="margin:10px;width:100%" id="dateHolder">
-                            <p>از تاریخ :</p>
-                            <input type="text" class="form-control projectDate inputfield" />
-                            <input class="PDabserver" style="display:none" />
-                        </div>
-                        <div style="margin:10px;width:100%" id="dateHolder2">
-                            <p>تا تاریخ :</p>
-                            <input type="text" class="form-control projectDate2 inputfield" />
-                            <input class="PD2abserver" style="display:none" />
 
-                        </div>
-                        <div style="width:100%;margin:10px;">
-                            <div style="position:relative; margin:5px" id="">
-                                <div class="btn btn-success" style="width:100%;margin-top:20px" id="verifyCodeingTran">تایید</div>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <div style="display:flex">
+                                <div style="margin:10px;width:100%">
+                                    <p>انتخاب پروژه</p>
+                                    <select name="GNode" id="GNode" class="form-control">
+                                        <option value="">انتخاب پروژه</option>
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                <div style="margin:10px;width:100%">
+                                    <div style="position:relative; margin:5px" id="">
+                                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTran">تایید</div>
+                                    </div>
+                                </div>
+                                <div style="margin:10px;width:100%"></div>
+                                <div style="margin:10px;width:100%"></div>
+                            </div>
+
+                            <div>
+
+                                <script>
+                                    $("#verifyCodeingTran").click(function () {
+
+
+                                        $.ajax({
+                                            url: 'getCodingTranList',
+                                            dataType: 'html',
+                                            data: {
+                                                M22: $("#M22").val(),
+                                                M33: $("#M33").val(),
+                                                M44: $("#M44").val(),
+                                                M55: $("#M55").val(),
+                                                datefrom: $(".PDabserver").val(),
+                                                dateTo: $(".PD2abserver").val(),
+                                                transactionType: $("#trantype").val(),
+                                                GTaraf: $("#GTaraf").val(),
+                                                GNode: $("#GNode").val(),
+                                                type: $("#trantype").val()
+                                            },
+                                            success: function (data) {
+
+                                                $("#TrasactionListHolder").html(data)
+                                            }
+                                        })
+                                    })
+                                </script>
+                            </div>
+                            <div id="TrasactionListHolder" class="row">
                             </div>
                         </div>
-
-                    </div>
-                    <div>
-
                         <script>
-                            $("#verifyCodeingTran").click(function () {
-                                $.ajax({
-                                    url: 'getCodingTranList',
-                                    dataType: 'html',
-                                    data: {
-                                        M22: $("#M22").val(),
-                                        M33: $("#M33").val(),
-                                        M44: $("#M44").val(),
-                                        datefrom: $(".PDabserver").val(),
-                                        dateTo: $(".PD2abserver").val(),
-                                        transactionType: $("#trantype").val(),
-                                    },
-                                    success: function (data) {
+                            $("#getTransactoin").click(function () {
 
-                                        $("#detailHolder").html(data)
+                            })
+                            $("#M22").change(function () {
+                                var id = $(this).val();
+                                // console.log(id)
+                                $("#M33 option").each(function () {
+                                    var val = $(this).val();
+                                    if (val == "0") {
+                                        $(this).prop('selected', true);
+                                    }
+                                    else {
+                                        $(this).prop('selected', false);
+                                    }
+                                    var optionid = $(this).attr('parentValue');
+                                    if (optionid != id) {
+                                        $(this).hide();
+                                    }
+                                    else {
+                                        $(this).show();
                                     }
                                 })
+                                $("#M44 option").each(function () {
+                                    var val = $(this).val();
+                                    if (val == "0") {
+                                        $(this).prop('selected', true);
+                                    }
+                                    else {
+                                        $(this).prop('selected', false);
+                                    }
+                                    $(this).hide();
+                                });
                             })
+                            $("#M33").change(function () {
+                                var id = $(this).val();
+                                console.log(id)
+                                $("#M44 option").each(function () {
+
+                                    var val = $(this).val();
+                                    if (val == "0") {
+                                        $(this).prop('selected', true);
+                                    }
+                                    else {
+                                        $(this).prop('selected', false);
+                                    }
+
+                                    var optionid = $(this).attr('parentValue');
+                                    if (optionid != id) {
+                                        $(this).hide();
+                                    }
+                                    else {
+                                        $(this).show();
+                                    }
+                                })
+
+
+                            })
+                            $("#M44").change(function () {
+                                var id = $(this).val();
+                                console.log(id)
+                                $("#M55 option").each(function () {
+                                    var val = $(this).val();
+                                    if (val == "0") {
+                                        $(this).prop('selected', true);
+                                    }
+                                    else {
+                                        $(this).prop('selected', false);
+                                    }
+                                    var optionid = $(this).attr('parentValue');
+                                    if (optionid != id) {
+                                        $(this).hide();
+                                    }
+                                    else {
+                                        $(this).show();
+                                    }
+                                })
+                            });
+
                         </script>
                     </div>
-                    <div id="detailHolder" class="row">
-                    </div>
                 </div>
-                <script>
-                    $("#getTransactoin").click(function () {
+                <div id="taraz" class="tab-pane fade in " style="padding-top:20px">
 
-                    })
-                    $("#M22").change(function () {
-                        var id = $(this).val();
-                        // console.log(id)
-                        $("#M33 option").each(function () {
-                            var val = $(this).val();
-                            if (val == "0") {
-                                $(this).prop('selected', true);
-                            }
-                            else {
-                                $(this).prop('selected', false);
-                            }
-                            var optionid = $(this).attr('parentValue');
-                            if (optionid != id) {
-                                $(this).hide();
-                            }
-                            else {
-                                $(this).show();
-                            }
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+
+
+                        <div style="display:flex; align-items:center">
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M222" id="M222" class="form-control">
+                                        <option value="0">انتخاب گروه</option>
+                                        @foreach (var item in M2)
+                                        {
+                                            <option parentValue="" value="@item.ID">@item.title</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M333" id="M333" class="form-control">
+                                        <option value="0">انتخاب معین</option>
+                                        @foreach (var item in M3)
+                                        {
+                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M444" id="M444" class="form-control">
+                                        <option value="0">انتخاب تفصیلی</option>
+                                        @foreach (var item in M4)
+                                        {
+                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                        <div style="display:flex">
+                            <div class=" " style="width:100% ; margin:10px">
+
+                                @{
+                                    <select name="M555" id="M555" class="form-control">
+                                        <option value="0">انتخاب تفصیلی 2</option>
+                                        @foreach (var item in M5)
+                                        {
+                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+
+
+                            <div style="margin:10px;width:100%">
+
+                                <select name="TTaraf" id="TTaraf" class="form-control">
+
+
+                                    <option value="0">انتخاب طرف حساب</option>
+                                    @if (Model.tarafList != null)
+                                    {
+                                        foreach (var item in Model.tarafList)
+                                        {
+                                            string name = item.name + " - " + item.phone;
+                                            <option value="@item.code">@name </option>
+                                        }
+                                    }
+
+
+                                </select>
+                            </div>
+                            <div style="margin:10px;width:100%">
+                              
+                                <select name="TNode" id="TNode" class="form-control">
+                                    <option value="">انتخاب پروژه</option>
+                                    @if (Model.nodeList != null)
+                                    {
+                                        foreach (var item in Model.nodeList)
+                                        {
+                                            <option value="@item.ID">@item.title </option>
+                                        }
+                                    }
+
+
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div style="display:flex">
+
+                            
+                            <div style="margin:10px;width:100%">
+                                <div style="position:relative; margin:5px" id="">
+                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTraz">تایید</div>
+                                </div>
+                            </div>
+                            <div style="margin:10px;width:100%"></div>
+                            <div style="margin:10px;width:100%"></div>
+                        </div>
+
+                        <div>
+
+                            <script>
+                                $("#verifyCodeingTraz").click(function () {
+                                    
+
+                                    $.ajax({
+                                        url: 'getCodingTrazList',
+                                        dataType: 'html',
+                                        data: {
+                                            M222: $("#M222").val(),
+                                            M333: $("#M333").val(),
+                                            M444: $("#M444").val(),
+                                            M555: $("#M555").val(),
+                                            TTaraf: $("#TTaraf").val(),
+                                            TNode: $("#TNode").val(),
+                                           
+                                        },
+                                        success: function (data) {
+
+                                            $("#TrazListHolder").html(data)
+                                        }
+                                    })
+                                })
+                            </script>
+                        </div>
+                        <div id="TrazListHolder" class="row">
+                            <div class="row">
+                                <div style="margin:10px;">
+
+                                    <select name="columnCount" id="columnCount" class="form-control">
+                                        <option class="2soton" value="2">دو ستون</option>
+                                        <option class="4soton" value="4">چهار ستون</option>
+                                        <option class="6soton" value="6">شش ستون</option>
+
+
+
+                                    </select>
+                                </div>
+                                <script>
+                                    $("#columnCount").change(function () {
+                                        var value = $(this).val();
+                                        if (value == 2) {
+                                            $(".ga").hide()
+                                            $(".ef").hide()
+                                            $(".ma").show();
+
+                                        } else if (value == 4) {
+                                            $(".ga").show();
+                                            $(".ef").hide();
+                                            $(".ma").show();
+                                        }
+                                        else if (value == 6) {
+                                            $(".ga").show();
+                                            $(".ef").show();
+                                            $(".ma").show();
+                                        }
+
+
+                                    })
+                                </script>
+                                <style>
+                                    .ga {
+                                        display: none;
+                                    }
+                                    .ef {
+                                        display: none;
+                                    }
+                                </style>
+                                <div style="overflow-x:auto;padding:10px">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+
+                                            <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> ترازنامه </h3>
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <div id="morris-area-chart">
+                                                <div style="overflow:auto">
+                                                    <table class="table table-bordered table-hover table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="2">
+                                                                </th>
+                                                                <th class=" ef" colspan="2">
+                                                                    افتتاحیه
+                                                                </th>
+                                                                <th class="ga" colspan="2">
+                                                                    گردش
+                                                                </th>
+                                                                <th class="ma" colspan="2">
+                                                                    مانده
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>
+                                                                    ردیف
+
+                                                                </th>
+                                                                <th>
+                                                                    شرح
+                                                                </th>
+                                                                <th class="ef">
+                                                                    بد
+                                                                </th>
+                                                                <th class="ef">
+                                                                    بس
+                                                                </th>
+                                                                <th class="ga">
+                                                                    بد
+                                                                </th>
+                                                                <th class="ga">
+                                                                    بس
+                                                                </th>
+                                                                <th class="ma">
+                                                                    بد
+                                                                </th>
+                                                                <th class="ma">
+                                                                    بس
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+
+
+
+                                                        <tbody id="tarazHolder">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $("#getTransactoin").click(function () {
+
                         })
-                        $("#M44 option").each(function () {
-                            var val = $(this).val();
-                            if (val == "0") {
-                                $(this).prop('selected', true);
-                            }
-                            else {
-                                $(this).prop('selected', false);
-                            }
-                            $(this).hide();
+                        $("#M222").change(function () {
+                            var id = $(this).val();
+                            // console.log(id)
+                            $("#M333 option").each(function () {
+                                var val = $(this).val();
+                                if (val == "0") {
+                                    $(this).prop('selected', true);
+                                }
+                                else {
+                                    $(this).prop('selected', false);
+                                }
+                                var optionid = $(this).attr('parentValue');
+                                if (optionid != id) {
+                                    $(this).hide();
+                                }
+                                else {
+                                    $(this).show();
+                                }
+                            })
+                            $("#M44 option").each(function () {
+                                var val = $(this).val();
+                                if (val == "0") {
+                                    $(this).prop('selected', true);
+                                }
+                                else {
+                                    $(this).prop('selected', false);
+                                }
+                                $(this).hide();
+                            });
+                        })
+                        $("#M333").change(function () {
+                            var id = $(this).val();
+                            console.log(id)
+                            $("#M44 option").each(function () {
+
+                                var val = $(this).val();
+                                if (val == "0") {
+                                    $(this).prop('selected', true);
+                                }
+                                else {
+                                    $(this).prop('selected', false);
+                                }
+
+                                var optionid = $(this).attr('parentValue');
+                                if (optionid != id) {
+                                    $(this).hide();
+                                }
+                                else {
+                                    $(this).show();
+                                }
+                            })
+
+
+                        })
+                        $("#M44").change(function () {
+                            var id = $(this).val();
+                            console.log(id)
+                            $("#M555 option").each(function () {
+                                var val = $(this).val();
+                                if (val == "0") {
+                                    $(this).prop('selected', true);
+                                }
+                                else {
+                                    $(this).prop('selected', false);
+                                }
+                                var optionid = $(this).attr('parentValue');
+                                if (optionid != id) {
+                                    $(this).hide();
+                                }
+                                else {
+                                    $(this).show();
+                                }
+                            })
                         });
-                    })
-                    $("#M33").change(function () {
-                        var id = $(this).val();
-                        console.log(id)
-                        $("#M44 option").each(function () {
 
-                            var val = $(this).val();
-                            if (val == "0") {
-                                $(this).prop('selected', true);
-                            }
-                            else {
-                                $(this).prop('selected', false);
-                            }
+                    </script>
 
-                            var optionid = $(this).attr('parentValue');
-                            if (optionid != id) {
-                                $(this).hide();
-                            }
-                            else {
-                                $(this).show();
-                            }
-                        })
-                    })
-
-                </script>
+                </div>
             </div>
+
+           
         </div>
     </div>
 </div>
@@ -1310,6 +2103,7 @@
 <script>
 
     $(function () {
+       
         $(".datePicker").pDatepicker({
             observer: true,
             format: 'YYYY/MM/DD',
@@ -1368,4 +2162,91 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         });
     });
+</script>
+<script>
+    $(".Dbutton").click(function () {
+        var ID = $(this).attr('id');
+        $("#deleteID").val(ID);
+        $("#delAccountModal").modal('toggle')
+    })
+    $("#modalDelVerify").click(function () {
+        var title = $("#daramadTitle").val();
+
+
+        $("#delAccountForm").submit();
+    })
+    $(".openacount").click(function () {
+        var parnetID = $(this).attr('myparent');
+        var codingType = $(this).attr('mytype');
+        switch (codingType) {
+            case ("0"):
+                var title = "variTafsil" + parnetID;
+                break;
+            case ("1"):
+                var title = "group" + parnetID;
+                break;
+            case ("2"):
+                var title = "koll" + parnetID;
+                break;
+            case ("3"):
+                var title = "moin" + parnetID;
+                break;
+            case ("4"):
+                var title = "tafsil" + parnetID;
+                break;
+            case ("5"):
+                var title = "tafsil2" + parnetID;
+                break;
+            case ("6"):
+                var title = "varitafsil" + parnetID;
+                break;
+
+        }
+
+        $("." + title).each(function () {
+            if ($(this).is(":visible")) {
+                $(this).fadeOut();
+            }
+            else {
+                $(this).fadeIn();
+            }
+
+        })
+    })
+    $(".addacount").click(function () {
+
+
+        var codingType = $(this).attr('mytype');
+
+        switch (codingType) {
+            case ("0"):
+                var title = "عنوان تفصیل متغیر";
+                break;
+            case ("1"):
+                var title = "";
+                break;
+            case ("2"):
+                var title = "نام کل جدید";
+                break;
+            case ("3"):
+                var title = "نام معین جدید";
+                break;
+            case ("4"):
+                var title = "نام تفصیلی جدید";
+                break;
+            case ("5"):
+                var title = "نام تفصیلی 2 جدید";
+                break;
+            case ("6"):
+                var title = "عنوان جزئیات تفصیل";
+                break;
+
+        }
+        $("#codingTitle").text(title);
+        $("#typeID").val(codingType);
+        $("#parentID").val($(this).attr('myparent'));
+        $(".formsection").css("display", "none");
+        $(".main1").css("display", "inline-block");
+        $("#createAccount").modal('toggle');
+    })
 </script>

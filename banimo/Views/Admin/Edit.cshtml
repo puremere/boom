@@ -627,7 +627,7 @@
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
                                     <p id="addDescButt" class="btn btn-default">افزودن عکس</p>
-                                    <div id="thumbholderEdior" style="display:flex">
+                                    <div id="thumbholderEdior" style="display:flex; overflow-x:scroll">
 
                                     </div>
                                 </div>
@@ -1259,7 +1259,7 @@
                                             var discount = $("#discount").val();
 
 
-                                            if (name != "" & vahed != "" & price != "" & discount != "" & setid != "") {
+                                            if (name != "" && vahed != "" && price != "" && discount != "" && setid != "") {
 
                                                 $("#inputallfilterid").val("");
                                                 let filtervalue = "";
@@ -1408,20 +1408,20 @@
 </div>
 <script>
 
-        //tinymce.get('productdesc').setContent('@Model.description');
+       
 
-        let srt = @Html.Raw(Json.Encode(@Model));
+        @*let srt = @Html.Raw(Json.Encode(@Model));
         var html = $.parseHTML(srt.description);
         var $response = $(html);
         var $links = $response.find('img');
         var value = "";
         $links.each(function (index, $link) {
             var src = $(this).attr('src');
-            var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + src + "'><p>" + src + "</p><img id='"+src+"' class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
+            var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + src + "'><img onclick='removeimg(this)'  class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
 
             $('#thumbholderEdior').append(html);
             $("#loading").css("display", "none");
-        });
+        });*@
     $(".delIcon").click(function () {
               var id = $(this).attr('id');
             var element = $(this).parent();

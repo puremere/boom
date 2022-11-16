@@ -1,0 +1,113 @@
+﻿@model banimo.ViewModel.AccessVM
+
+<div class="row" style="padding:20px">
+    <div style="overflow-x:auto;padding:10px">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                <i class="fa fa-plus" id="addRoleSectionModalIcon"  style="float:left"></i>
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست دسترسی   </h3>
+            </div>
+            <div class="panel-body" style="max-height:450px; overflow-y:scroll;">
+                <div id="morris-area-chart">
+                    <div style="overflow:auto">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th>
+                                        عنوان
+                                    </th>
+
+                                    <th>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.Sections != null)
+                                    {
+                                        foreach (var item in Model.Sections)
+                                        {
+
+                                            <tr>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.actionF)
+                                                </td>
+
+
+                                                <td style="text-align: center;">
+
+                                                    @{ var ID = @item.ID;
+
+                                                        <a id=@ID class="btn btn-primary roleSectionRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                        <script>
+
+                            $(".editAccess").click(function () {
+
+                                var id = $(this).attr("id");
+
+                                $.ajax({
+                                    url: '/Core/getRoleSection',
+                                    dataType: 'html',
+                                    data: {
+                                        id: id,
+                                    },
+                                    success: function (data) {
+
+                                        var search = $("#searchinput").val();
+
+                                        $.ajax({
+                                            url: '/Admin/getNewListUser',
+
+                                            dataType: 'html',
+                                            data: {
+                                                search: search,
+
+                                            },
+                                            success: function (data) {
+
+                                                $("#Listholder").html(data);
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+
+                                    },
+                                    error: function () {
+
+                                    }
+                                });
+                            });
+
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#addRoleSectionModalIcon").click(function () {
+        $("#addRoleSectionModal").modal("toggle");
+    })
+</script>

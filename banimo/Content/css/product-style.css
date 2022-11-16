@@ -1,0 +1,24 @@
+.row.pro-contact li {
+    line-height: 43px;
+}
+
+.far-m {
+    margin: 55px 0;
+}
+
+.far-contact {
+    padding: 40px 0;
+}
+
+.row.pro-contact h3 {
+    font-size: 26px;
+}
+
+.row.pro-contact i {
+    color: #ff8900;
+    font-size: 25px;
+}
+
+.far-contact p {
+    line-height: 45px;
+}

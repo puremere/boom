@@ -156,7 +156,7 @@
                     </div>
                 </div>
             </div>
-            <div class="number-phone  xmt-16 xmt-lg-20  justify-content-center align-items-center xp-6">
+            <div class="number-phone  xmt-16 xmt-lg-20  justify-content-center align-items-center xp-6" style="text-align:justify">
 
                 @Html.Raw(@Model.aboutus)
 
@@ -212,7 +212,7 @@
                             <div class="links-box">
 
 
-                                <div class="row" style="margin:0px; display:flex; margin:0; direction:ltr">
+                                <div class="row" style="margin:0px; display:flex; margin:0; direction:ltr ;">
 
 
                                     @{
@@ -220,7 +220,7 @@
                                         {
                                             string hrefSRT = "https://trustseal.enamad.ir/?" + Model.trusteeLink;
                                             string srcSRT = "https://Trustseal.eNamad.ir/logo.aspx?" + Model.trusteeLink;
-                                            <div class="lableHolder" style="max-width:200px;margin:0;padding:5px; display:inline-block; padding:7px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
+                                            <div class="lableHolder" style=" width:unset; max-width:200px;margin:0;padding:5px; display:inline-block; padding:7px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
                                                 <div style="padding:5px; display:flex; object-fit:cover" class="VerifyHolder">
                                                     <a target="_blank" href=@hrefSRT>
                                                         <img src=@srcSRT alt="" style="width:100%; cursor:pointer" id=@Model.code>
@@ -233,7 +233,7 @@
                                         }
                                         if (Model.samanLink != "")
                                         {
-                                            <div class="lableHolder" style="max-width:200px;margin:0;padding:5px; display:inline-block; padding:0px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
+                                            <div class="lableHolder" style="width:unset; max-width:200px;margin:0;padding:5px; display:inline-block; padding:0px; margin-right:3px; background-color:#eee;border-radius: 5px; border: 1px solid #eee;">
                                                 <div style="padding:5px; display:flex; object-fit:cover">
                                                     <img id='@Model.samanCode' style='width:100%;cursor:pointer' onclick='window.open("@Model.samanLink", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src=@Model.samanLink2 />
                                                 </div>
@@ -265,7 +265,7 @@
                                             }
                                             else
                                             {
-                                                <a href=@Model.instaLink style="cursor:pointer"><p style="color:white; display:inline-block; font-size:13px">اینستاگرام @System.Configuration.ConfigurationManager.AppSettings["siteName"]</p></a>
+                                                <a href=@Model.instaLink style="cursor:pointer"><p style="color:white; display:inline-block; font-size:13px"> </p></a>
                                             }
                                         }
 

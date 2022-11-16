@@ -31,6 +31,7 @@ namespace banimo.ViewModel
     {
         public int ID { get; set; }
         public string fullname { get; set; }
+        public string token { get; set; }
         public string email { get; set; }
         public string mobile { get; set; }
         public string address { get; set; }

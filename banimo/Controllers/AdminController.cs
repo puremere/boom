@@ -200,68 +200,91 @@ namespace banimo.Controllers
                     collection.Add("mobile", phone);
                     collection.Add("pass", pass);
 
-                    byte[] response = client.UploadValues(server + "/Admin/getuserid.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getuseridNew.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
-
-                var log = JsonConvert.DeserializeObject<List<userdata>>(result);
-                if (log != null)
+                userDataNew log = JsonConvert.DeserializeObject<userDataNew>(result);
+                if (log.token != null && log.action != null)
                 {
-                    userdata user = log[0];
-                    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1 || user.userTypeID == 2))
+                    if (log.action.Contains("Core"))
                     {
-                        Session["partner"] = "0";
-                        if (user.userTypeID == 2)
-                        {
-                            Session["partner"] = user.moaref;
-                        }
-
-                        Session["LogedInUser2"] = user.token;
-                        if (Request.Cookies["productcookiie"] != null)
-                        {
-                            HttpCookie currentUserCookie = Request.Cookies["productcookiie"];
-                            Response.Cookies.Remove("productcookiie");
-                            currentUserCookie.Expires = DateTime.Now.AddDays(-10);
-                            currentUserCookie.Value = null;
-                            Response.SetCookie(currentUserCookie);
-                        }
-
-
-
-
-                        if (ischecked == "checked")
-                        {
-                            HttpCookie Username = new HttpCookie("Username");
-                            HttpCookie Password = new HttpCookie("Password");
-                            DateTime now = DateTime.Now;
-                            Username.Value = phone;
-                            Username.Expires = now.AddMonths(1);
-                            Password.Value = pass;
-                            Password.Expires = now.AddMonths(1);
-                            Response.Cookies.Add(Username);
-                            Response.Cookies.Add(Password);
-                        }
-                        if (user.userTypeID == 10)
-                        {
-                            Session["CoreUser"] = user.token;
-                            return RedirectToAction("index", "core");
-
-                        }
-                        return RedirectToAction("product", "admin");
-                        //return Content("1/Admin/dashboard");
+                        Session["CoreUser"] = log.token;
                     }
                     else
                     {
-                        return RedirectToAction("index", "admin", new { error = 1 });
-                        //return Content("2/Admin/index");
+                        Session["LogedInUser2"] = log.token;
                     }
+                   
+                    HttpContext.Response.Cookies["AT"].Value = log.token;
 
+                    List<string> lst = log.action.Split('/').ToList();
+                    return RedirectToAction( lst[1],lst[0]);
                 }
                 else
                 {
                     return RedirectToAction("index", "admin", new { error = 2 });
+
                 }
+
+                //var log = JsonConvert.DeserializeObject<List<userdata>>(result);
+                //if (log != null)
+                //{
+                //    userdata user = log[0];
+                //    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1 || user.userTypeID == 2))
+                //    {
+                //        Session["partner"] = "0";
+                //        if (user.userTypeID == 2)
+                //        {
+                //            Session["partner"] = user.moaref;
+                //        }
+
+                //        Session["LogedInUser2"] = user.token;
+                //        HttpContext.Response.Cookies["AT"].Value = user.token; 
+                //        if (Request.Cookies["productcookiie"] != null)
+                //        {
+                //            HttpCookie currentUserCookie = Request.Cookies["productcookiie"];
+                //            Response.Cookies.Remove("productcookiie");
+                //            currentUserCookie.Expires = DateTime.Now.AddDays(-10);
+                //            currentUserCookie.Value = null;
+                //            Response.SetCookie(currentUserCookie);
+                //        }
+
+
+
+
+                //        if (ischecked == "checked")
+                //        {
+                //            HttpCookie Username = new HttpCookie("Username");
+                //            HttpCookie Password = new HttpCookie("Password");
+                //            DateTime now = DateTime.Now;
+                //            Username.Value = phone;
+                //            Username.Expires = now.AddMonths(1);
+                //            Password.Value = pass;
+                //            Password.Expires = now.AddMonths(1);
+                //            Response.Cookies.Add(Username);
+                //            Response.Cookies.Add(Password);
+                //        }
+                //        if (user.userTypeID == 10)
+                //        {
+                //            Session["CoreUser"] = user.token;
+                //            return RedirectToAction("index", "core");
+
+                //        }
+                //        return RedirectToAction("product", "admin");
+                //        //return Content("1/Admin/dashboard");
+                //    }
+                //    else
+                //    {
+                //        return RedirectToAction("index", "admin", new { error = 1 });
+                //        //return Content("2/Admin/index");
+                //    }
+
+                //}
+                //else
+                //{
+                //    return RedirectToAction("index", "admin", new { error = 2 });
+                //}
             }
             catch (Exception e)
             {
@@ -6651,14 +6674,13 @@ namespace banimo.Controllers
                     collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
                     collection.Add("isAvalible", detail.isAvalible);
                     collection.Add("isActive", detail.isActive);
-                    collection.Add("nodeID", finalNodeID);
-
+                    
 
                     //foreach (var myvalucollection in imaglist) {
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(server + "/Admin/editproductPostTest2.php?", collection);
+                    client.UploadValues(server + "/Admin/editproductPostTest3.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -7702,7 +7724,7 @@ namespace banimo.Controllers
             banimo.ViewModel.PartnerOrders model = JsonConvert.DeserializeObject<ViewModel.PartnerOrders>(result);
             model.partnerID = id;
 
-            List<ViewModel.PartnerOrder> list = model.partnerOrders.Where(x => x.Rdate == "1399/3/1").ToList();
+            List<ViewModel.PartnerOrder> list = model.partnerOrders.ToList();
 
             return PartialView("/Views/Shared/AdminShared/_ListOfPartnerOrders.cshtml", model);
 
@@ -9194,6 +9216,146 @@ namespace banimo.Controllers
             //return PartialView("/Views/Shared/AdminShared/_gogetFactorDetail.cshtml", model);
             return View(log2);
         }
+
+
+        public ActionResult access()
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("type", "1");
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/getAccess.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            banimo.ViewModel.AccessVM log2 = JsonConvert.DeserializeObject<banimo.ViewModel.AccessVM>(result);
+
+            return View(log2);
+        }
+        public PartialViewResult getRoleSection(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getRoleSection.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.AccessVM log2 = JsonConvert.DeserializeObject<banimo.ViewModel.AccessVM>(result);
+            return PartialView("/Views/Shared/AdminShared/_ListOfRoleSection.cshtml", log2);
+        }
+
+
+        [HttpPost]
+        public ActionResult setNewRoll(string roleTitle, List<string> sectionList, string itemID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string Lst = "";
+            string result = "";
+            if (sectionList != null)
+            {
+                foreach (var item in sectionList)
+                {
+                    Lst += item.ToString() + ",";
+                }
+            }
+            string ID = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", roleTitle);
+                collection.Add("itemID", itemID);
+                collection.Add("sectionList", Lst.Trim(','));
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/setNewRole.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return RedirectToAction("access");
+        }
+
+
+
+        public PartialViewResult checkPartnerStatus(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/getPartnerStatus.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.UserStatus log = JsonConvert.DeserializeObject<banimo.ViewModel.UserStatus>(result);
+            return PartialView("/Views/Shared/AdminShared/_partnerStatus.cshtml", log);
+        }
+
+        public ActionResult addPartner(List<int> partnerType, string patnerUsername, string patnerPassword)
+        {
+            string device = RandomString(10);
+            string partnerString = "";
+            if (partnerType != null)
+            {
+                foreach (var item in partnerType)
+                {
+                    partnerString += item + ",";
+                }
+            }
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("partnerType", partnerString.Trim(','));
+                collection.Add("patnerUsername", patnerUsername);
+                collection.Add("patnerPassword", patnerPassword);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/addPartner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return RedirectToAction("access");
+        }
+
+
         public void imageUrl(string filename, string type)
         {
 

@@ -328,7 +328,7 @@
                                                                                 <select class="js-example-basic-multiple-res " name="states[]" multiple="multiple">
                                                                                     @foreach (var detail in item.filterdetailes)
                                                                                     {
-                                                                                        <option value="AL">@detail.detailname</option>
+                                                                                        <option  value="@detail.ID">@detail.detailname</option>
                                                                                     }
 
                                                                                 </select>
@@ -389,7 +389,7 @@
                                                                                 var typid = detail.ID;
                                                                                 var classname = "colorbox " + typid;
                                                                                 var colorcode = detail.title;
-                                                                                <option id="@typid" value="AL">@detail.imagetitle</option>
+                                                                                <option id="@typid"  value="@detail.ID">@detail.imagetitle</option>
                                                                             }
 
                                                                         </select>
@@ -445,9 +445,9 @@
                                                                         </div>
                                                                         <div class="middle">
                                                                             <div class="">
-                                                                                <input class="price-range-min change-select" value="0"
+                                                                                <input class="price-range-minapp change-select" value="0"
                                                                                        min="@item.min" max="@item.max" step="1000" type="range">
-                                                                                <input class="price-range-max change-select"
+                                                                                <input class="price-range-maxapp change-select"
                                                                                        value="@item.max" min="0" max="@item.max"
                                                                                        step="1000" type="range">
                                                                             </div>
@@ -621,6 +621,65 @@
 
         });
     </script>
+
+    <script>
+        $(".apply-filters").click(function () {
+            var min = "price-" + $(".price-range-minapp").val() + ",";
+            var max = "price-" + $(".price-range-maxapp").val() + ",";
+            $.ajax({
+                url: '/Home/changeRangeIDes',
+                data: {
+                    min: min,
+                    max: max
+
+                },
+                dataType: 'html',
+                success: function () {
+                },
+                error: function () {
+                    alert("nashod")
+                }
+            });
+
+            var filterValue = "";
+            $('.js-example-basic-multiple-res').each(function () {
+                $(this).find(':selected').each(function () {
+                    filterValue = filterValue + $(this).val() + ",";
+                })
+            })
+
+            $.ajax({
+                url: '/Home/changefilterides',
+                data: {
+                    ID: filterValue,
+
+                },
+                dataType: 'html',
+                success: function () {
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        aType: 'html',
+                        success: function (data) {
+                            $('#productlist').html(data);
+                            window.scrollTo(0, 0);
+                            $("#button-toggle-filter-responsive").click();
+                        },
+                        error: function () {
+                            //alert("nashod")
+                        },
+                        complete: function () {
+                            $("#loading").fadeOut();
+                        }
+                    });
+
+
+                },
+                error: function () {
+
+                }
+            });
+        })
+    </script>
     <script>
         $('.js-example-basic-multiple').change(function () {
             var filterValue = "";
@@ -709,6 +768,38 @@
 
             var min = "price-" + $(".price-range-min").val() + ",";
             var max = "price-" + $(".price-range-max").val() + ",";
+
+             $.ajax({
+                url: '/Home/changeRangeIDes',
+                data: {
+                    min: min,
+                    max: max
+
+                },
+                dataType: 'html',
+                success: function () {
+
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        aType: 'html',
+                        success: function (data) {
+
+                            $('#productlist').html(data);
+
+                        },
+                        error: function () {
+
+                        },
+                        complete: function () {
+
+                            $("#loading").fadeOut();
+                        }
+                    });
+                },
+                error: function () {
+                    alert("nashod")
+                }
+            });
             $.ajax({
                 url: '/Home/changeRangeIDes',
                 data: {
@@ -835,6 +926,11 @@
                 }
             });
 
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".select2-container").css("width","100%")
         })
     </script>
 

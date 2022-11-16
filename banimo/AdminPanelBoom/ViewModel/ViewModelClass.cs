@@ -364,7 +364,11 @@ namespace AdminPanelBoom.ViewModel
     }
 
 
-
+    public class userDataNew
+    {
+        public string token { get; set; }
+        public string action { get; set; }
+    }
     public class userdata
     {
         public string ID { get; set; }

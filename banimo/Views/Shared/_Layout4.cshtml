@@ -706,18 +706,25 @@
                                         <div style="display:flex; align-items:center">
                                             <div class="menuDetailHoder" style="">
                                                 <div style="display:flex; flex-direction:column;height:300px;flex-wrap:wrap">
-                                                    @foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
+                                                    @if (menumodel.First().mysubcatcollection != null)
                                                     {
-                                                        entitle += "/" + subcatitem.entitle;
-                                                        <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
-                                                        foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
+                                                        foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
                                                         {
-                                                            entitle += "/" + subcat2item.entitle;
-                                                            <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
-                                                            entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
-                                                        }
+                                                            entitle += "/" + subcatitem.entitle;
+                                                            <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
+                                                            if (menumodel.First().mysubcatcollection2 != null)
+                                                            {
+                                                                foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
+                                                                {
+                                                                    entitle += "/" + subcat2item.entitle;
+                                                                    <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
+                                                                    entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
+                                                                }
+                                                            }
 
-                                                        entitle = "/" + cat.entitle;
+
+                                                            entitle = "/" + cat.entitle;
+                                                        }
                                                     }
                                                 </div>
 

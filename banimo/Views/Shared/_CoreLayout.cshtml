@@ -27,8 +27,9 @@
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/adminjquery.js"></script>
+    <script src="~/Scripts/admin-jqueryUI.js"></script>
     <!-- Bootstrap -->
 
     <script src="~/AdminPanelBoom/Scripts/bootstrap.min.js"></script>
@@ -36,7 +37,7 @@
     <script src="~/Scripts/bootstrap-tagsinput.min.js"></script>
     <script src="~/Scripts/bootstrap-tagsinput-angular.min.js"></script>
     @RenderSection("scripts", required: false)
-    
+
 </head>
 <body class="nav-md">
 
@@ -88,26 +89,36 @@
 
                             <ul class="nav side-menu" style="padding-right:0px">
                                 <li>
-                                    <a href="@Url.Action("dashboard", "Core")"><i class="fa fa-dashboard"></i>داشبورد </a>
+                                    <a href="@Url.Action("index", "Core")"><i class="fa fa-dashboard"></i>داشبورد </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("structure", "Core")"><i class="fa fa-filter"></i> مدیریت ساختار محصول </a>
                                 </li>
                                 <li>
                                     <a href="@Url.Action("product", "Core")"><i class="fa fa-edit"></i> مدیریت محصولات </a>
                                 </li>
+
                                 <li>
-                                    <a href="@Url.Action("structure", "Core")"><i class="fa fa-filter"></i> مدیریت ساختار </a>
+                                    <a href="@Url.Action("draft", "Core")"><i class="fa fa-file-archive-o"></i> ورود/خروج انبار </a>
                                 </li>
-                                 <li>
-                                    <a href="@Url.Action("draft", "Core")"><i class="fa fa-file-archive-o"></i> رسید/حواله </a>
+                                <li>
+                                    <a href="@Url.Action("draft", "budget")"><i class="fa fa-file-archive-o"></i> بودجه عملکرد </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("draft", "HR")"><i class="fa fa-file-archive-o"></i> منابع انسانی </a>
                                 </li>
 
                                 <li>
-                                    <a href="@Url.Action("bank", "Core")"><i class="fa fa-file-archive-o"></i> بانک </a>
+                                    <a href="@Url.Action("bank", "Core")"><i class="fa fa-file-archive-o"></i> حسابداری </a>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="@Url.Action("project", "Core")"><i class="fa fa-file-archive-o"></i> لیست پروژه ها </a>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="@Url.Action("partner", "Core")"><i class="fa fa-file-archive-o"></i> مدیریت تامین کننده </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("access", "Core")"><i class="fa fa-file-archive-o"></i> مدیریت دسترسی </a>
                                 </li>
 
                                 @*<li>

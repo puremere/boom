@@ -1,0 +1,402 @@
+﻿@model banimo.ViewModel.RecietArticle
+
+@{
+    ViewBag.Title = "لیست رسید ها";
+}
+
+
+@*@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }*@
+@{
+
+
+    <!-- Modal -->
+    <p style="display:none" id="modalValue"></p>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Admin/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Admin/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="repeatOrder" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Admin/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    if (Model.RecietArticleList == null)
+    {
+        <p style="text-align:center">موردی وجود ندارد</p>
+    }
+    else
+    {
+
+
+
+
+        <div class="row">
+            <div style="overflow-x:auto;padding:10px">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست اسناد </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-area-chart">
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                ردیف
+
+                                            </th>
+                                            <th>
+                                                کد حساب
+                                            </th>
+                                            <th>
+                                                شرح
+                                            </th>
+                                            <th>
+                                                بدهکار
+                                            </th>
+                                            <th>
+                                                بستانکار
+                                            </th>
+
+                                            
+
+                                        </tr>
+                                    </thead>
+
+
+
+                                    <tbody>
+                                        @foreach (var item in Model.RecietArticleList)
+                                        {
+                                            int index = Model.RecietArticleList.IndexOf(item) + 1;
+                                        <tr id="">
+                                            <td>@index</td>
+                                            <td>
+                                                @if (!String.IsNullOrEmpty(item.koll))
+                                                {
+                                                    <p>@item.koll</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.moein))
+                                                {
+                                                    <p>@item.moein</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.tafsil1) && item.tafsil1 != "0")
+                                                {
+                                                    <p>@item.tafsil1</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.tafsil2) && item.tafsil1 != "0")
+                                                {
+                                                    <p>@item.tafsil2</p>
+                                                }
+                                                @if (item.trafhesab != "0")
+                                                {
+                                                    <p>@item.trafhesab</p>
+                                                }
+                                                
+
+                                            </td>
+                                            <td>
+                                                @if (!String.IsNullOrEmpty(item.kolltitle))
+                                                {
+                                                    <p>@item.kolltitle</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.moientitle))
+                                                {
+                                                    <p>@item.moientitle</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.tafsil1title))
+                                                {
+                                                    <p>@item.tafsil1title</p>
+                                                }
+                                                @if (!String.IsNullOrEmpty(item.tafsil2title))
+                                                {
+                                                    <p>@item.tafsil2title</p>
+                                                }
+                                                @if (item.trafhesab != "0")
+                                                {
+                                                    <p>@item.name</p>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if(item.type == "0")
+                                                {
+
+                                                    <span> @string.Format("{0:n0}", @Int64.Parse(item.price)) </span>
+                                                }
+                                                
+                                            </td>
+                                            <td>
+                                                @if (item.type == "1")
+                                                {
+                                                <span>@string.Format("{0:n0}", @Int64.Parse(item.price))</span>
+                                                }
+                                            </td>
+                                          
+
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+     
+
+      
+
+
+
+    }
+}
+

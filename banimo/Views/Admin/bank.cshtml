@@ -26,13 +26,131 @@
 </style>
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">کدینگ</a></li>
+        <li class="active"><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
+        <li class=""><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">کدینگ</a></li>
         <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">ثبت سند</a></li>
         <li><a data-toggle="tab" href="#menu2" style=" color: #8d8d8d; ">لیست اسناد</a></li>
         <li><a data-toggle="tab" href="#menu3" style=" color: #8d8d8d; ">گزارشات</a></li>
 
     </ul>
     <div class="tab-content">
+        <div id="salemali" class="tab-pane fade in active" style="padding-top:20px">
+            <div class="row">
+                <div style="overflow-x:auto;padding:10px">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                            <i id="newSaleMaliModalIcon" style="cursor:pointer; float:left;font-size:20px" class="fa fa-plus"></i>
+                            <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست سال مالی  </h3>
+                        </div>
+                        <div class="panel-body">
+                            @if (Model.salemaliList != null)
+                            {
+                                <div id="morris-area-chart">
+                                    <div style="overflow:auto">
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        ردیف
+
+                                                    </th>
+                                                    <th>
+                                                        عنوان
+                                                    </th>
+                                                    <th>
+                                                        تاریخ از
+                                                    </th>
+                                                    <th>
+                                                        تاریخ تا
+                                                    </th>
+
+                                                    <th>
+                                                        پایان یافته
+                                                    </th>
+
+
+
+
+                                                    <th>
+                                                    </th>
+
+
+                                                </tr>
+                                            </thead>
+
+
+
+                                            <tbody>
+                                                @foreach (var item in Model.salemaliList)
+                                                {
+                                                    int index = Model.salemaliList.IndexOf(item) + 1;
+                                                    string rcid = "sm" + item.ID;
+                                                    <tr id="@rcid">
+                                                        <td>@index</td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.ID)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.datefrom)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.dateTo)
+                                                        </td>
+
+                                                        <td style="text-align: center;">
+                                                            @if (item.status == "1")
+                                                            {
+                                                                <input id=@item.ID type="checkbox" class="avalie" checked disabled />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input id=@item.ID type="checkbox" class="avalie" />
+
+                                                            }
+                                                        </td>
+
+
+
+
+
+                                                        <td>
+                                                            @{
+                                                               
+                                                                <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteSalemali" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a> 
+
+                                                            }
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                                                            
+                $("#newSaleMaliModalIcon").click(function () {
+                    $("#newRecietModal").modal('toggle');
+                })
+                $(".deleteSalemali").click(function () {
+                    $("").text(this.id);
+                });
+            </script>
+        </div>
         <div id="home" class="tab-pane fade in active" style="padding-top:20px">
 
             <div class="modal fade" id="delAccountModal" tabindex="-1" role="dialog">

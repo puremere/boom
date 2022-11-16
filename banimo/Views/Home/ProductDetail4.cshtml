@@ -147,6 +147,8 @@
     }
 </style>
 
+
+
 @{
     banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@Model.meta);
     string newurl = metaModel.curl;
@@ -158,17 +160,17 @@
         if (Model.catTreeList != null)
         {
             <a href="/@entitle"> <i class="fa fa-home"></i>  </a>
-            if (Model.catTreeList[0] != null)
+            if (Model.catTreeList.Count > 0)
             {
                 entitle = @Model.catTreeList[0].entitle;
                 <a href="/@entitle"> <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span> @Model.catTreeList[0].title </a>
             }
-            if (Model.catTreeList[1] != null)
+            if (Model.catTreeList.Count > 1)
             {
                 entitle += "/" + @Model.catTreeList[1].entitle;
                 <a href="/@entitle"> <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span> @Model.catTreeList[1].title   </a>
             }
-            if (Model.catTreeList[2] != null)
+            if (Model.catTreeList.Count >  2)
             {
                 entitle += "/" + @Model.catTreeList[2].entitle;
                 <a href="/@entitle">   <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span>@Model.catTreeList[2].title</a>
@@ -260,7 +262,7 @@
             font-size: 16px;
             font-size: 1.143rem;
             line-height: 2.25;
-            padding: 25px 322px 27px 50px;
+            padding: 15px;
             min-height: 256px;
             position: relative;
             margin-left: 24px;
@@ -318,8 +320,8 @@
                 })
                 $("#toggledesc").click(function () {
                     if ($(".c-mask__text").css("max-height") == "250px") {
-                        $(".c-mask__text").css("max-height", "1500px");
-                        $(".c-mask__text").css("overflow-y", "scroll");
+                        $(".c-mask__text").css("max-height", "5500px");
+                        $(".c-mask__text").css("overflow-y", "unset");
                         $("#toggledesc").text("بستن");
                     }
                     else {
@@ -926,3 +928,4 @@
         padding-bottom: 0;
     }
 </style>
+<link href="~/Content/css/product-style.css" rel="stylesheet" />

@@ -49,7 +49,7 @@
 
 
                 string newurl = "/Home/ProductDetail?id=" + ID;
-                if (item.meta != "null")
+                if (item.meta != "null" && item.meta != null)
                 {
                     banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
                     newurl = metaModel.curl;

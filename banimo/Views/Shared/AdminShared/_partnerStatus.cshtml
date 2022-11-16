@@ -1,0 +1,150 @@
+﻿@model banimo.ViewModel.UserStatus
+
+
+@{
+    if (Model.ID != null)
+    {
+        <div class="row" id="detailholder" style="padding: 0px 20px;width: 100%;margin: 0px;">
+
+
+
+            @using (Html.BeginForm("addPartner", "Core", FormMethod.Post, new { enctype = "multipart/form-data", id = "updateUser" }))
+            {
+
+                <p>ویرایش وضعیت همکار</p>
+                <div style="padding: 15px 15px; border: 1px solid #d8d8d8; border-radius: 5px">
+
+                    <div class="row">
+                        <div class="row fieldholder col-lg-3" style="margin:15px 0">
+                            <label> نوع کاربر</label>
+                            <div class=" ">
+                                <span style="color:red; display:none">*</span>
+                                <div class=" ">
+                                    <span style="color:red; display:none">*</span>
+                                    <select name="partnerType" class="form-control" multiple>
+
+                                        @foreach (var item in Model.roleList)
+                                        {
+
+                                            string selected = "";
+                                            foreach (var useritem in Model.userRoleList)
+                                            {
+                                                if (item.ID == useritem.RoleID)
+                                                {
+                                                    selected = "selected";
+                                                    continue;
+                                                }
+                                            }
+                                            <option value="@item.ID" @selected>@item.roleName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <input type="hidden" name="patnerUsername" class="patnerUsername" />
+
+                        <div class="row fieldholder col-lg-3" style="margin:15px 0; padding-top:25px">
+
+                            <div class="btn btn-success">
+                                <input style="background:none; border:none" type="submit" value=" ویرایش جایگاه همکار" />
+
+                            </div>
+                            <div class="btn btn-danger">
+                                قطع همکاری
+                            </div>
+
+
+                        </div>
+
+
+
+                        <input id="partnerToken" name="partnerToken" value="@Model.token" hidden />
+
+
+                    </div>
+
+                </div>
+
+            }
+
+
+        </div>
+    }
+    else
+    {
+        <div class="row" id="detailholder" style="padding: 0px 20px;width: 100%;margin: 0px;">
+
+
+
+            @using (Html.BeginForm("addPartner", "Core", FormMethod.Post, new { enctype = "multipart/form-data", id = "editPartner" }))
+            {
+                <p> ایجاد همکاری جدید </p>
+                @Html.AntiForgeryToken();
+                <div style="padding: 15px 15px; border: 1px solid #d8d8d8; border-radius: 5px">
+
+                    <div class="row">
+                        <div class="row fieldholder col-lg-3" style="margin:15px 0">
+                            <label> نوع کاربر</label>
+                            <div class=" ">
+                                <span style="color:red; display:none">*</span>
+                                <div class=" ">
+                                    <span style="color:red; display:none">*</span>
+                                    <select name="partnerType" class="form-control" multiple>
+                                        
+                                        @foreach (var item in Model.roleList)
+                                        {
+
+                                            <option value="@item.ID">@item.roleName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <input type="hidden" name="patnerUsername" class="patnerUsername" />
+                        <div class="row fieldholder col-lg-3" style="margin:15px 0">
+                            <label style="text-align: right">
+                                رمز عبور :
+                            </label>
+                            <div>
+                                <span style="color:red; display:none">*</span>
+                                <input value="" type="text" id="patnerPassword" name="patnerPassword" required="required" class="form-control ">
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row fieldholder col-lg-3" style="margin:15px 0; padding-top:25px">
+
+                            <div class="btn btn-success">
+                                <input style="background:none; border:none" type="submit" value="تایید مشخصات همکار" />
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+
+            }
+
+
+        </div>
+    }
+
+}

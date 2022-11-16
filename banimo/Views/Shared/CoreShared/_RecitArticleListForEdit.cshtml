@@ -1,0 +1,648 @@
+﻿@model banimo.ViewModel.RecietArticle
+
+@{
+    ViewBag.Title = "لیست رسید ها";
+}
+
+
+@*@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }*@
+@{
+
+
+    <!-- Modal -->
+    <p style="display:none" id="modalValue"></p>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Admin/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div style="overflow-x:auto;padding:10px">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                    <i id="newArticleModalIcon" style="cursor:pointer; float:left;font-size:20px" class="fa fa-plus"></i>
+                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست آرتیکل </h3>
+                </div>
+                <div class="panel-body">
+                    @if (Model.RecietArticleList != null)
+                    {
+                        <div id="morris-area-chart">
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                ردیف
+
+                                            </th>
+                                            <th>
+                                                کد حساب
+                                            </th>
+                                            <th>
+                                                شرح
+                                            </th>
+                                            <td>
+                                                توضیحات
+                                            </td>
+                                            <th>
+                                                بدهکار
+                                            </th>
+                                            <th>
+                                                بستانکار
+                                            </th>
+                                            <th>
+                                                
+                                            </th>
+
+
+
+                                        </tr>
+                                    </thead>
+
+
+
+                                    <tbody>
+                                        
+
+                                        @foreach (var item in Model.RecietArticleList)
+                                        {
+                                            int index = Model.RecietArticleList.IndexOf(item) + 1;
+
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>
+                                                    <p class="koll">@item.koll</p>
+                                                    <p class="moien">@item.moein</p>
+                                                    @if (item.tafsil1 != "0")
+                                                    {
+                                                        <p class="fasil">@item.tafsil1</p>
+
+                                                    }
+                                                    @if (item.tafsil2 != "0")
+                                                    {
+                                                        <p class="fasil2">@item.tafsil2</p>
+
+                                                    }
+                                                    @if (item.trafhesab != "0")
+                                                    {
+                                                        <p class="taraf">@item.trafhesab</p>
+
+                                                    }
+
+
+                                                </td>
+                                                <td>
+                                                    <p class="koll">@item.kolltitle</p>
+                                                    <p class="moien">@item.moientitle</p>
+                                                    @if (item.tafsil1 != "0")
+                                                    {
+                                                        <p class="fasil">@item.tafsil1title</p>
+
+                                                    }
+                                                    @if (item.tafsil2 != "0")
+                                                    {
+                                                        <p class="fasil2">@item.tafsil2title</p>
+
+                                                    }
+                                                    @if (item.trafhesab != "0")
+                                                    {
+                                                        <p class="taraf">@item.name</p>
+
+                                                    }
+                                                   
+                                                </td>
+                                                <td>
+                                                    @item.description
+                                                </td>
+                                                <td>
+                                                    @if (item.price >= 0)
+                                                    {
+                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="koll">-</p>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item.price <= 0)
+                                                    {
+                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="koll">-</p>
+                                                    }
+                                                </td>
+                                                <td>
+                                                   
+                                                    <a idattr='@item.ID' class="btn btn-primary editArticle" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+                                                </td>
+
+                                            </tr>
+
+
+                                            //foreach (var moien in lst0)
+                                            //{
+                                            //    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                            //    foreach (var tafsil1 in lst1)
+                                            //    {
+                                            //        lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+                                            //        foreach (var tafsil2 in lst2)
+                                            //        {
+                                            //            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                            //        }
+                                            //    }
+                                            //}
+
+
+
+
+                                        }
+
+                                        @*@if (!lst.Contains(item))
+                                            {
+
+                                            int index = Model.RecietArticleList.IndexOf(item) + 1;
+                                            <tr id="">
+                                                <td>@index</td>
+                                                <td>
+                                                    <p>@item.koll</p>
+                                                    <p>@item.moein</p>
+                                                    @if (item.tafsil1 != "0")
+                                                    {
+                                                        <p>@item.tafsil1</p>
+                                                    }
+                                                    @if (item.tafsil2 != "0")
+                                                    {
+                                                        <p>@item.tafsil2</p>
+                                                    }
+                                                    @if (item.trafhesab != "0")
+
+                                                    {
+                                                        <p class="taraf">@item.trafhesab</p>
+
+                                                    }
+
+
+                                                    @{
+                                                        foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 == item.tafsil2 && x.trafhesab != item.trafhesab))
+                                                        {
+                                                            if (!lst.Contains(priceitem))
+                                                            {
+                                                                lst.Add(priceitem);
+                                                                if (priceitem.trafhesab != "0")
+
+                                                                {
+                                                                    <p class="taraf">@priceitem.trafhesab</p>
+
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 != item.tafsil2))
+                                                    {
+                                                        if (!lst.Contains(priceitem))
+                                                        {
+                                                            lst.Add(priceitem);
+                                                            if (priceitem.tafsil2 != "0")
+                                                            {
+                                                                <p class="fasil2">priceitem.tafsil2</p>
+                                                                if (priceitem.trafhesab != "0")
+
+                                                                {
+                                                                    <p class="fasil2">@priceitem.trafhesab</p>
+                                                                    if (priceitem.trafhesab != "0")
+                                                                    {
+                                                                        <p class="taraf">@priceitem.trafhesab</p>
+
+
+                                                                    }
+                                                                    foreach (var priceitem1 in Model.RecietArticleList.Where(x => x.koll == priceitem.koll && x.moein == priceitem.moein && x.tafsil1 == priceitem.tafsil1 && x.tafsil2 == priceitem.tafsil2 && x.trafhesab != priceitem.trafhesab))
+                                                                    {
+                                                                        if (!lst.Contains(priceitem1))
+                                                                        {
+                                                                            lst.Add(priceitem1);
+                                                                            if (priceitem1.trafhesab != "0")
+
+                                                                            {
+                                                                                <p class="taraf">@priceitem1.trafhesab</p>
+
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
+
+                                                        }
+
+                                                    }
+
+
+
+
+
+                                                </td>
+                                                <td>
+                                                    @foreach (var priceitem in Model.RecietArticleList)
+                                                    {
+
+                                                        if (!lst1.Contains(priceitem))
+                                                        {
+
+                                                            if (priceitem.koll != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.koll.Contains(priceitem.koll));
+                                                                if (newItem == null)
+                                                                {
+                                                                    <p class="koll">@priceitem.kolltitle</p>
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.moein != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.moein.Contains(priceitem.moein));
+                                                                if (newItem == null)
+                                                                {
+                                                                    <p class="moien">@priceitem.moientitle</p>
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil1 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                                                                if (newItem == null)
+                                                                {
+                                                                    <p class="fasil">@priceitem.tafsil1title</p>
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil2 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                                                                if (newItem == null)
+                                                                {
+                                                                    <p class="fasil2">@priceitem.tafsil2title</p>
+
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.trafhesab != "0")
+
+                                                            {
+                                                                <p class="taraf">@priceitem.name</p>
+
+                                                            }
+
+                                                            lst1.Add(priceitem);
+                                                        }
+                                                    }
+
+
+
+                                                </td>
+
+
+                                                <td>
+                                                    @foreach (var priceitem in Model.RecietArticleList)
+                                                    {
+
+                                                        if (!lst2.Contains(priceitem))
+                                                        {
+
+                                                            if (priceitem.koll != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.koll.Contains(priceitem.koll));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
+                                                                    if (kollsum > 0)
+                                                                    {
+                                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(kollsum))</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.moein != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.moein.Contains(priceitem.moein));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
+                                                                    if (miensum > 0)
+                                                                    {
+                                                                        <p class="moien">@string.Format("{0:n0}", @Math.Abs(miensum)) </p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil1 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
+                                                                    if (tafsil1sum > 0)
+                                                                    {
+                                                                        <p class="fasil">  @string.Format("{0:n0}", @Math.Abs(tafsil1sum))</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil2 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
+                                                                    if (tafsil2sum > 0)
+                                                                    {
+                                                                        <p class="fasil2"> @string.Format("{0:n0}", @Math.Abs(tafsil2sum))</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.trafhesab != "0")
+
+                                                            {
+                                                                if (priceitem.price > 0)
+                                                                {
+                                                                    <p class="taraf"> @string.Format("{0:n0}", @Math.Abs(priceitem.price))</p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>-</p>
+                                                                }
+
+                                                            }
+
+
+                                                        }
+                                                        lst2.Add(priceitem);
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @foreach (var priceitem in Model.RecietArticleList)
+                                                    {
+
+                                                        if (!lst3.Contains(priceitem))
+                                                        {
+
+                                                            if (priceitem.koll != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.koll.Contains(priceitem.koll));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
+                                                                    if (kollsum < 0)
+                                                                    {
+                                                                        <p class="koll">@Math.Abs(kollsum)</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.moein != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.moein.Contains(priceitem.moein));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
+                                                                    if (miensum < 0)
+                                                                    {
+                                                                        <p class="moien">@Math.Abs(miensum)</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil1 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
+                                                                    if (tafsil1sum < 0)
+                                                                    {
+                                                                        <p class="fasil">@Math.Abs(tafsil1sum)</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.tafsil2 != "0")
+                                                            {
+                                                                banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                                                                if (newItem == null)
+                                                                {
+                                                                    double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
+                                                                    if (tafsil2sum < 0)
+                                                                    {
+                                                                        <p class="fasil2">@Math.Abs(tafsil2sum)</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+
+
+                                                                }
+
+                                                            }
+                                                            if (priceitem.trafhesab != "0")
+
+                                                            {
+                                                                if (priceitem.price < 0)
+                                                                {
+                                                                    <p class="taraf">@Math.Abs(priceitem.price)</p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>-</p>
+                                                                }
+
+                                                            }
+
+                                                            lst3.Add(priceitem);
+                                                        }
+                                                    }
+                                                </td>
+
+
+                                            </tr>
+                                            }*@
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .koll {
+        font-weight: 800
+    }
+
+    .moien {
+        font-weight: 700;
+        margin-right: 15px;
+    }
+
+    .fasil {
+        font-weight: 600;
+        margin-right: 30px;
+    }
+
+    .fasil2 {
+        font-weight: 500;
+        margin-right: 45px;
+    }
+
+    .taraf {
+        font-weight: 500;
+        margin-right: 60px;
+    }
+</style>
+
+<script>
+    $("#newArticleModalIcon").click(function () {
+        $("#newArticleModal").modal('toggle');
+    })
+    $(".editArticle").click(function () {
+
+    })
+</script>
+
+

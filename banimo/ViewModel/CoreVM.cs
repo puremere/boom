@@ -26,7 +26,9 @@ namespace banimo.ViewModel
         public string partnerTitle { get; set; }
         public string coworkerName { get; set; }
         public string coworkerName2 { get; set; }
-        
+        public string percent { get; set; }
+        public string percent2 { get; set; }
+
 
     }
 

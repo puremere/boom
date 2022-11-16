@@ -32,7 +32,8 @@ namespace banimo
               name: "Default1",
               url: "{catname}/{subcatName}/{subcat2Name}",
               defaults: new { controller = "Home", action = "subMenuNew", subcatName = UrlParameter.Optional, subcat2Name = UrlParameter.Optional },
-              constraints: new { catname = "digital|projection|history|store-35" }
+              constraints: new { catname = "digital|projection|history|store-35|mobile accessory|phone|tablet|mobile accessory|headphone|speaker|electronic equipment" +
+              "" }
             );
             routes.MapRoute(
            name: "DisplayBrand",

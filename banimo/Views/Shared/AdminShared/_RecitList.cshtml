@@ -317,6 +317,8 @@
                                             </th>
                                             <th>
                                             </th>
+                                            <th>
+                                            </th>
 
                                         </tr>
                                     </thead>
@@ -373,7 +375,6 @@
                                         
                                            
                                             <td>
-                                                @* @Html.ActionLink("ویرایش", "Edit", new { id = item.ID }, new { style = "background-color: #246388;padding: 5px;color: #fff;border-radius: 5px;" }) |*@
                                                 @{
                                                     var editclassname = "editproduct" + item.ID;
                                                     <a id=@item.ID class="btn btn-primary @editclassname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
@@ -395,6 +396,9 @@
                                                             });
                                                     </script>
                                                 }
+                                            </td>
+                                            <td>
+                                                <a idattr='@item.ID'  class="btn btn-primary editRecite" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">مشاهده</a> 
                                             </td>
                                             @*<td>
             @{
@@ -446,14 +450,35 @@
             </div>
         </div>
 
+        <div id="articleHolder">
 
+        </div>
 
 
         <br />
         @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
         <p id="selectedForServer"></p>
 
-      
+       <script>
+           $(".editRecite").click(function () {
+             
+               var id = $(this).attr('idattr');
+               $.ajax({
+                   url: '/Core/getRecietArticle',
+                   dataType: 'html',
+                   data: {
+                       id: id,
+                   },
+                   success: function (data) {
+                       $("#articleHolder").html(data);
+                   },
+                   error: function () {
+
+                   }
+               });
+
+           })
+       </script>
         <script>
           
             $(".final").click(function () {

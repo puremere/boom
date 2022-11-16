@@ -332,7 +332,7 @@
                                                         <span class="discount">
                                                             @string.Format("{0:n0}", double.Parse(item.oldPrice)) ت
                                                         </span>
-                                                        <span class="total-price" style="z-index:99">
+                                                        <span class="total-price" style="z-index:9">
                                                             @string.Format("{0:n0}", double.Parse(item.price)) ت
                                                         </span>
                                                     </div>
@@ -638,7 +638,7 @@
                                                                dideo-checked="true">
                                                                 <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
                                                                     <div class="product-price">
-                                                                        <span class="total-price" style="z-index:99">
+                                                                        <span class="total-price" style="z-index:9">
                                                                             @{
                                                                                 if (userType == "5")
                                                                                 {
@@ -725,7 +725,7 @@
                     <div class="swiper numbered-products-swiper xpr-8 swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                         <div class="swiper-wrapper" id="swiper-wrapper-1091fb1ed107279a22" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
 
-                            @foreach (var item in Model.newest)
+                            @foreach (var item in Model.newest.Take(9))
                             {
                                 string url = item.image.Split(',').ToList().First();
                                 string index = Model.newest.IndexOf(item).ToString();
@@ -756,7 +756,7 @@
                 <div class="numbered-products-box tab-pane fade" id="nav-most-visited" role="tabpanel" aria-labelledby="nav-most-visited-tab">
                     <div class="swiper numbered-products-visited-swiper xpr-8 swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                         <div class="swiper-wrapper" id="swiper-wrapper-d162d47dad74e469" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
-                            @foreach (var item in Model.bestseller)
+                            @foreach (var item in Model.bestseller.Take(9))
                             {
                                 string url = item.image.Split(',').ToList().First();
                                 string index = Model.bestseller.IndexOf(item).ToString();
@@ -786,7 +786,7 @@
                 <div class="numbered-products-box tab-pane fade" id="nav-most-visited" role="tabpanel" aria-labelledby="nav-offer-tab">
                     <div class="swiper numbered-products-visited-swiper xpr-8 swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                         <div class="swiper-wrapper" id="swiper-wrapper-d162d47dad74e469" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
-                            @foreach (var item in Model.specialOffers)
+                            @foreach (var item in Model.specialOffers.Take(9))
                             {
                                 string url = item.image.Split(',').ToList().First();
                                 string index = Model.specialOffers.IndexOf(item).ToString();

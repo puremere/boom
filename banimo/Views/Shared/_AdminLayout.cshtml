@@ -26,9 +26,10 @@
     @RenderSection("HeadIncludes", required: false)
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="~/Scripts/adminjquery.js"></script>
+    <script src="~/Scripts/admin-jqueryUI.js"></script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript"></script>
+   
     <!-- Bootstrap -->
 
     <script src="~/AdminPanelBoom/Scripts/bootstrap.min.js"></script>
@@ -36,7 +37,7 @@
     <script src="~/Scripts/bootstrap-tagsinput.min.js"></script>
     <script src="~/Scripts/bootstrap-tagsinput-angular.min.js"></script>
     @RenderSection("scripts", required: false)
-    
+
 </head>
 <body class="nav-md">
 
@@ -97,11 +98,11 @@
                                     <a href="@Url.Action("productdetail", "Admin")"><i class="fa fa-filter"></i> مدیریت فیلتر </a>
                                 </li>
 
+                                @*<li>
+            <a href="@Url.Action("Menu", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت دسته بندی  </a>
+        </li>*@
                                 <li>
-                                    <a href="@Url.Action("Menu", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت دسته بندی  </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("MenuNew", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت دسته بندی جدید  </a>
+                                    <a href="@Url.Action("MenuNew", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت دسته بندی   </a>
                                 </li>
                                 <li>
                                     <a href="@Url.Action("Features", "Admin")"><i class="fa fa-star"></i> مدیریت ویژگی محصول </a>
@@ -141,6 +142,9 @@
                                 </li>
                                 <li>
                                     <a href="@Url.Action("Pages", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت صفحات </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("access", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت دسترسی </a>
                                 </li>
                                 <li>
                                     <a href="@Url.Action("partner", "Admin")"><i class="fa fa-file-archive-o"></i> مدیریت تامین کننده </a>

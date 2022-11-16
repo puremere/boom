@@ -300,6 +300,7 @@
     <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\CoreController.cs" />
     <Compile Include="ViewModelPost\MetaVM.cs" />
+    <Compile Include="ViewModel\AccessVM.cs" />
     <Compile Include="ViewModel\addressPartialVM.cs" />
     <Compile Include="ViewModel\addressVM.cs" />
     <Compile Include="ViewModel\adminBankVM.cs" />
@@ -362,6 +363,7 @@
     <Compile Include="ViewModel\contactSectionVM.cs" />
     <Compile Include="ViewModel\CoreVM.cs" />
     <Compile Include="ViewModel\DownloadAppVM.cs" />
+    <Compile Include="ViewModel\draftVM.cs" />
     <Compile Include="ViewModel\factorDetail.cs" />
     <Compile Include="ViewModel\factorVM.cs" />
     <Compile Include="ViewModel\finalCheckVM.cs" />
@@ -424,6 +426,8 @@
     <Compile Include="ViewModel\productlistclass.cs" />
     <Compile Include="ViewModel\productviewmodel.cs" />
     <Compile Include="ViewModel\ProfileVM.cs" />
+    <Compile Include="ViewModel\RecietArticlCustomViewVM.cs" />
+    <Compile Include="ViewModel\RecietArticle.cs" />
     <Compile Include="ViewModel\RecietVM.cs" />
     <Compile Include="ViewModel\reponsVM.cs" />
     <Compile Include="ViewModel\searchVM.cs" />
@@ -432,7 +436,10 @@
     <Compile Include="ViewModel\subMenuVM.cs" />
     <Compile Include="ViewModel\TicketViewModel\InfoForNewTicket.cs" />
     <Compile Include="ViewModel\TicketViewModel\ticketStremVM.cs" />
+    <Compile Include="ViewModel\TranList.cs" />
+    <Compile Include="ViewModel\TrazVM.cs" />
     <Compile Include="ViewModel\userdata.cs" />
+    <Compile Include="ViewModel\UserStatus.cs" />
     <Compile Include="ViewModel\VerificationViewModel.cs" />
     <Compile Include="ViewModel\VerifyViewModel.cs" />
     <Compile Include="ViewModel\walletUpdate.cs" />
@@ -557,6 +564,7 @@
     <Content Include="Content\app_min4.css" />
     <Content Include="Content\check.css" />
     <Content Include="Content\confirmStyle4.css" />
+    <Content Include="Content\css\product-style.css" />
     <Content Include="Content\forgetPassStyle4.css" />
     <Content Include="Content\formstyle.css" />
     <Content Include="Content\ionicons.css" />
@@ -582,6 +590,8 @@
     <Content Include="images\panelimages\XD1KTWM.jpg" />
     <Content Include="images\user.png" />
     <Content Include="images\XSF32G8cat2.jpg" />
+    <Content Include="Scripts\admin-jqueryUI.js" />
+    <Content Include="Scripts\adminjquery.js" />
     <Content Include="Scripts\downloadIMG.js" />
     <Content Include="Scripts\formscript.js" />
     <Content Include="Scripts\googleMapFile.js" />
@@ -2288,6 +2298,23 @@
     <Content Include="Views\Shared\CoreShared\_nodeList.cshtml" />
     <Content Include="Views\core\partner.cshtml" />
     <Content Include="Views\Shared\CoreShared\_ListOfPartnerOrders.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_RecitArticleList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_RecitList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_RecitFirstList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_RecitArticleList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_TransactionList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_TrazList.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_differentTarafhesab.cshtml" />
+    <Content Include="Views\core\access.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_ListOfUsers.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_ListOfRoleSection.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_partnerStatus.cshtml" />
+    <Content Include="Views\Admin\access.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_ListOfRoleSection.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_partnerStatus.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_itemListPartial.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_returnDraftListA.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_RecitArticleListForEdit.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

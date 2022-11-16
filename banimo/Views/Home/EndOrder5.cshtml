@@ -207,7 +207,7 @@
         })
     </script>
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>
+    @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>*@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
@@ -356,21 +356,21 @@
                 }
         };
 
-        google.maps.event.addDomListener(window, 'load', function () {
-            var places = new google.maps.places.Autocomplete(document.getElementById('mapaddress'));
-            google.maps.event.addListener(places, 'place_changed', function () {
-                var place = places.getPlace();
+        //google.maps.event.addDomListener(window, 'load', function () {
+        //    var places = new google.maps.places.Autocomplete(document.getElementById('mapaddress'));
+        //    google.maps.event.addListener(places, 'place_changed', function () {
+        //        var place = places.getPlace();
 
 
-                if (theMarker != undefined) {
-                    myMap.removeLayer(theMarker);
-                };
-                myMap.panTo(new L.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
-                theMarker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]).addTo(myMap);
-                $("#lat").val(place.geometry.location.lat());
-                $("#lng").val(place.geometry.location.lng());
-            });
-        });
+        //        if (theMarker != undefined) {
+        //            myMap.removeLayer(theMarker);
+        //        };
+        //        myMap.panTo(new L.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
+        //        theMarker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]).addTo(myMap);
+        //        $("#lat").val(place.geometry.location.lat());
+        //        $("#lng").val(place.geometry.location.lng());
+        //    });
+        //});
         $("#changeAddress").click(function () {
 
             $(".addressy").css("display","block")

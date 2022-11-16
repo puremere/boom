@@ -1053,11 +1053,13 @@ namespace banimo.Controllers
             
            
             // TempData["page"] as string; // jsonModel.pagenumberactive;
-            string colorIds = jsonModel.colorIds;            string min = jsonModel.min;
+            string colorIds = jsonModel.colorIds; 
+            string min = jsonModel.min;
             string max = jsonModel.max;
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            query = query == null ? "" : query.Trim();
             using (WebClient client = new WebClient())
             {
 
@@ -1080,7 +1082,7 @@ namespace banimo.Controllers
                 collection.Add("isAvailable", Available);
                 collection.Add("wonder", wonder); 
                 collection.Add("partnerID", urlid.ToString());
-                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductListTest2.php";
+                string url = ConfigurationManager.AppSettings["server"] + "/getDataProductList.php";
                 byte[] response = client.UploadValues(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1804,6 +1806,7 @@ namespace banimo.Controllers
             if(log.title == null)
             {
                 return RedirectToAction("Error404", "Error");
+
             }
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
@@ -3917,8 +3920,6 @@ namespace banimo.Controllers
             }
 
 
-
-
         }
         public ActionResult portfolio()
         {
@@ -4019,7 +4020,7 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-            string server = ConfigurationManager.AppSettings["server"] + "/getcatlist.php";
+            string server = ConfigurationManager.AppSettings["server"] + "/getcatlist0.php";
             using (WebClient client = new WebClient())
             {
 

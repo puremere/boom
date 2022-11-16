@@ -1663,6 +1663,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername);
+                collection.Add("nodeID", nodeID);
                 collection.Add("page", page);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/productListAPI.php", collection);
