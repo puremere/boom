@@ -24,6 +24,12 @@
 
                                             </th>
                                             <th>
+                                                شماره عطف
+                                            </th>
+                                            <th>
+                                                شماره سند
+                                            </th>
+                                            <th>
                                                 شرح
                                             </th>
                                             <th>
@@ -37,6 +43,7 @@
                                             </th>
                                             <td>مانده</td>
                                             <td>وضعیت مانده </td>
+                                            <td></td>
 
                                         </tr>
                                     </thead>
@@ -51,6 +58,8 @@
                                             finalMande += item.price;
                                         <tr id="@rcid">
                                             <td>@index</td>
+                                            <td>@item.atf</td>
+                                            <td>@item.sanadID</td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.description)
                                             </td>
@@ -67,16 +76,16 @@
                                                 }
                                             </td>
 
-                                            <td >
+                                            <td>
                                                 @if (item.type == "1")
                                                 {
                                                     @String.Format("{0:n0}", Math.Abs(item.price))
                                                 }
                                             </td>
-                                        
+
                                             <td>
                                                 @String.Format("{0:n0}", Math.Abs(finalMande))
-                                                
+
                                             </td>
                                             <td>
                                                 @if (finalMande > 0)
@@ -87,6 +96,9 @@
                                                 {
                                                     <p>بس</p>
                                                 }
+                                            </td>
+                                            <td>
+                                                <div class="btn btn-success">مشاهده سند</div>
                                             </td>
 
 
@@ -103,6 +115,8 @@
                                         <td colspan="2">
                                             جمع
                                         </td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
                                             @{
                                                 double plusSum = Model.myTransaction.Where(x => x.type == "0").Sum(x => x.price);
@@ -115,7 +129,7 @@
                                             }
                                             <p>@String.Format("{0:n0}", Math.Abs(minusSum))</p>
                                         </td>
-                                        <td >
+                                        <td>
                                             @{
                                                 double finalSum = Model.myTransaction.Sum(x => x.price);
                                             }
@@ -131,7 +145,7 @@
                                                 <p>بس</p>
                                             }
                                         </td>
-                                       
+
                                     </tr>
                                        
 

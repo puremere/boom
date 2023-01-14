@@ -215,41 +215,48 @@
                             {
                                 if (Model.list.myProducts != null)
                                 {
+
                                     foreach (var item in Model.list.myProducts)
                                     {
+                                        string colorCode = item.colorCode;
 
                                         int i = Model.list.myProducts.IndexOf(item) + 1;
                                         string image = item.image;
 
-                                        <div class="Itemholderr" id="@item.orderID">
+                                                <div class="Itemholderr" id="@item.orderID">
 
-                                            <div class="Item">
-                                                <p class="itemtitle">ردیف :</p>
-                                                <p class="itemvalue">@i</p>
+                                                    <div class="Item">
+                                                        <p class="itemtitle">ردیف :</p>
+                                                        <p class="itemvalue">@i</p>
 
-                                            </div>
-                                            <div class="Item">
-                                                <p class="itemtitle">نام کالا : </p>
-                                                <p class="itemvalue">@item.title</p>
+                                                    </div>
+                                                    <div class="Item">
+                                                        <p class="itemtitle">نام کالا : </p>
+                                                        <p class="itemvalue">@item.title</p>
 
-                                            </div>
-                                            <div class="Item">
-                                                <p class="itemtitle">قیمت :</p>
-                                                <p class="itemvalue">@item.price</p>
+                                                    </div>
+                                                    <div class="Item">
+                                                        <p class="itemtitle">رنگ : </p>
+                                                        <p class="itemvalue"><span style="width:50px; height:50px; background-color:@colorCode"></span> </p>
 
-                                            </div>
-                                            <div class="Item">
-                                                <p class="itemtitle">تعداد :</p>
-                                                <p class="itemvalue">@item.nums</p>
+                                                    </div>
+                                                    <div class="Item">
+                                                        <p class="itemtitle">قیمت :</p>
+                                                        <p class="itemvalue">@item.price</p>
 
-                                            </div>
-                                            <div class="Item" style="text-align:center">
-                                                <img src=@image style="max-width:100px" />
-                                            </div>
+                                                    </div>
+                                                    <div class="Item">
+                                                        <p class="itemtitle">تعداد :</p>
+                                                        <p class="itemvalue">@item.nums</p>
+
+                                                    </div>
+                                                    <div class="Item" style="text-align:center">
+                                                        <img src=@image style="max-width:100px" />
+                                                    </div>
 
 
 
-                                        </div>
+                                                </div>
                                     }
                                 }
                             }
@@ -261,6 +268,7 @@
                                             <tr>
                                                 <th>ردیف</th>
                                                 <th>نام کالا</th>
+                                                <th>رنگ</th>
                                                 <th>قیمت </th>
                                                 <th>تعداد</th>
                                                 <th></th>
@@ -275,6 +283,7 @@
                                                 {
                                                     foreach (var item in Model.list.myProducts)
                                                     {
+                                                        string colorCode = item.colorCode;
                                                         string active = item.active;
                                                         string color = "RGBA(255,255,255,1)";
                                                         ; if (active != "1")
@@ -284,29 +293,30 @@
                                                         string image = item.image;
                                                         int i = Model.list.myProducts.IndexOf(item) + 1;
                                                         string deleteid = item.id + "-" + item.orderID;
-                                                       
-                                            <tr style=" background-color : @color">
-                                                <td>@i</td>
-                                                <td>@item.title</td>
-                                                <td>@item.price</td>
-                                                <td>@item.nums</td>
-                                                <td><img src=@image style="max-width:100px" /> </td>
-                                                @if (Model.type == "00")
-                                                {
-                                                    if (item.delivered == 0)
-                                                    {
-                                                        <td><div id="@deleteid" class="btn btn-success hondover">تحویل</div> </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td><div id="@deleteid" class="btn btn-danger returnItem">دریافت مجدد</div> </td>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <td><div id="@deleteid" class="btn btn-danger deletItem">حذف</div> </td>
-                                                }
-                                            </tr>
+
+                                                                                        <tr style=" background-color : @color">
+                                                                                            <td>@i</td>
+                                                                                            <td>@item.title</td>
+                                                                                            <td><span style="border:1px solid #ddd;padding:20px; background-color:@colorCode"></span></td>
+                                                                                            <td>@item.price</td>
+                                                                                            <td>@item.nums</td>
+                                                                                            <td><img src=@image style="max-width:100px" /> </td>
+                                                                                            @if (Model.type == "00")
+                                                                                            {
+                                                                                                if (item.delivered == 0)
+                                                                                                {
+                                                                                                    <td><div id="@deleteid" class="btn btn-success hondover">تحویل</div> </td>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <td><div id="@deleteid" class="btn btn-danger returnItem">دریافت مجدد</div> </td>
+                                                                                                }
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <td><div id="@deleteid" class="btn btn-danger deletItem">حذف</div> </td>
+                                                                                            }
+                                                                                        </tr>
                                                     }
                                                 }
                                             }
@@ -651,7 +661,7 @@
 
                     });
                 }
-                else if (data == 500) {
+                else if (data == 400) {
                     toastr.options = {
                         "debug": false,
                         "positionClass": "toast-top-center",

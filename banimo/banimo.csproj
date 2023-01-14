@@ -54,6 +54,9 @@
     <Reference Include="BotDetect.Web.Mvc, Version=4.4.2.0, Culture=neutral, PublicKeyToken=74616036388b765f, processorArchitecture=MSIL">
       <HintPath>..\packages\Captcha.4.4.2\lib\net35\BotDetect.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
     </Reference>
@@ -75,8 +78,11 @@
     <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.1.3.0\lib\net45\FastMember.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    <Reference Include="FubarCoder.RestSharp.Portable.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=be81bb0f53eab22f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FubarCoder.RestSharp.Portable.Core.4.0.8\lib\net45\FubarCoder.RestSharp.Portable.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Kavenegar, Version=1.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Kavenegar.1.1.4\lib\net35\Kavenegar.dll</HintPath>
@@ -299,6 +305,7 @@
     <Compile Include="Classes\dateTimeConvert.cs" />
     <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\CoreController.cs" />
+    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="ViewModelPost\MetaVM.cs" />
     <Compile Include="ViewModel\AccessVM.cs" />
     <Compile Include="ViewModel\addressPartialVM.cs" />
@@ -370,6 +377,9 @@
     <Compile Include="ViewModel\getCredit.cs" />
     <Compile Include="ViewModel\getOrderRefID.cs" />
     <Compile Include="AdminPanelBoom\ViewModel\metaVM.cs" />
+    <Compile Include="ViewModel\keepaModel.cs" />
+    <Compile Include="ViewModel\keepaConfirmVM.cs" />
+    <Compile Include="ViewModel\keepaVerifyVM.cs" />
     <Compile Include="ViewModel\orderDetailVM.cs" />
     <Compile Include="ViewModel\orderProductListVM.cs" />
     <Compile Include="ViewModel\PartnerInfo.cs" />
@@ -430,6 +440,8 @@
     <Compile Include="ViewModel\RecietArticle.cs" />
     <Compile Include="ViewModel\RecietVM.cs" />
     <Compile Include="ViewModel\reponsVM.cs" />
+    <Compile Include="ViewModel\responseVM.cs" />
+    <Compile Include="ViewModel\RookeshVM.cs" />
     <Compile Include="ViewModel\searchVM.cs" />
     <Compile Include="ViewModel\sendEmailVM.cs" />
     <Compile Include="ViewModel\slider.cs" />
@@ -562,6 +574,7 @@
     <Content Include="AdminPanelBoom\Scripts\date.js" />
     <Content Include="AdminPanelBoom\Scripts\fastclick.js" />
     <Content Include="Content\app_min4.css" />
+    <Content Include="Content\css\bootstrap5.css" />
     <Content Include="Content\check.css" />
     <Content Include="Content\confirmStyle4.css" />
     <Content Include="Content\css\product-style.css" />
@@ -592,9 +605,11 @@
     <Content Include="images\XSF32G8cat2.jpg" />
     <Content Include="Scripts\admin-jqueryUI.js" />
     <Content Include="Scripts\adminjquery.js" />
+    <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\downloadIMG.js" />
     <Content Include="Scripts\formscript.js" />
     <Content Include="Scripts\googleMapFile.js" />
+    <Content Include="Scripts\html2canvas.min.js" />
     <Content Include="Scripts\jquery.readall.js" />
     <Content Include="versionAsset\aukey\assets\brand\bootstrap-logo-black.svg" />
     <Content Include="versionAsset\aukey\assets\brand\bootstrap-logo-shadow.png" />
@@ -1584,7 +1599,6 @@
     <Content Include="fonts\webfonts\fa-solid-900.ttf" />
     <Content Include="fonts\webfonts\fa-solid-900.woff" />
     <Content Include="fonts\webfonts\fa-solid-900.woff2" />
-    <Content Include="files\grid.xlsx" />
     <Content Include="fonts\version\fonts\Estedad-Black.ttf" />
     <Content Include="fonts\version\fonts\Estedad-Black.woff" />
     <Content Include="fonts\version\fonts\Estedad-Black.woff2" />
@@ -2315,6 +2329,17 @@
     <Content Include="Views\Shared\CoreShared\_itemListPartial.cshtml" />
     <Content Include="Views\Shared\CoreShared\_returnDraftListA.cshtml" />
     <Content Include="Views\Shared\CoreShared\_RecitArticleListForEdit.cshtml" />
+    <Content Include="Views\Connection\RedirectVPOSKeepa.cshtml" />
+    <Content Include="Views\Home\myProfile4.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_addProduct.cshtml" />
+    <Content Include="Views\Connection\PaymentResult.cshtml" />
+    <Content Include="Views\Shared\_PartnerLayout.cshtml" />
+    <Content Include="Views\Partner\product.cshtml" />
+    <Content Include="Views\Shared\CoreShared\_addProductFromSail.cshtml" />
+    <Content Include="Views\Partner\Edit.cshtml" />
+    <Content Include="Views\Shared\PartnerShared\_ProductListForEdit.cshtml" />
+    <Content Include="Views\Shared\PartnerShared\_addProductFromSail.cshtml" />
+    <Content Include="Views\Shared\PartnerShared\_ProductList.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
@@ -2423,6 +2448,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AdminPanelBoom\images\scarfimages\" />
+    <Folder Include="files\" />
+    <Folder Include="pdfimages\" />
     <Folder Include="Scripts\Scripts\webrtcdemo3\webrtcdemo\" />
     <Folder Include="UploadFile\" />
     <Folder Include="Views\CustomerLogin\" />

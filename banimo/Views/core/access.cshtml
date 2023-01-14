@@ -26,7 +26,7 @@
 </style>
 
 <div>
-    <p>انتخاب پروژه </p>
+    <p>انتخاب پروژه</p>
     <select id="nodeSelected" class="form-control">
         @{
             string nodeselected = ViewBag.node;
@@ -34,14 +34,16 @@
             {
                 if (item.ID == nodeselected)
                 {
-                <option selected value="@item.ID">@item.title</option>
+                    <option selected value="@item.ID">@item.title</option>
                 }
                 else
                 {
-                    <option  value="@item.ID">@item.title</option>
+                    <option value="@item.ID">@item.title</option>
                 }
 
             }
+
+          
         }
 
     </select>
@@ -62,7 +64,7 @@
             </div>
             <div class="modal-body">
                 <div>
-                    @using (Html.BeginForm("setNewUser", "Admin", FormMethod.Post,
+                    @using (Html.BeginForm("setNewUser", "Core", FormMethod.Post,
 new { enctype = "multipart/form-data", id = "addUser" }))
                     {
 
@@ -120,7 +122,7 @@ new { enctype = "multipart/form-data", id = "addUser" }))
 
                                                     });
                                                 }
-                                                @Html.DropDownList("UserListUpdate", UserTypeList, "-- انتخاب سرگروه --", new { id = "UserListUpdate", name = "UserListUpdate", style = "", @class = "form-control" })
+                                                @Html.DropDownList("UserList", UserTypeList, "-- انتخاب سرگروه --", new { id = "UserListUpdate", name = "UserList", style = "", @class = "form-control" })
                                             </div>
                                         </div>
                                     </div>

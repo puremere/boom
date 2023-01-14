@@ -36,32 +36,45 @@ namespace banimo.Classes
                         if (!string.IsNullOrEmpty(request))
                         {
                             session["LogedInUser2"] = request.ToString();
-                            string[] lst = { "factor", "dashboard", "product", "productdetail", "MenuNew", "Features", "Orders", "brand", "access" , "slide" , "newBanner", "productGroup", "wonderProduct", "portfolio", "comment", "blog", "Users", "Pages", };
+                            string[] lst = { "factor", "dashboard", "product", "productdetail", "MenuNew", "Features", "Orders", "brand", "access", "slide", "newBanner", "productGroup", "wonderProduct", "portfolio", "comment", "blog", "Users", "Pages", };
                             if (lst.Contains(actionName))
                             {
-                                string result = "";
-                                using (WebClient client = new WebClient())
+                                try
                                 {
-                                    string token = session["CoreUser"].ToString();
-                                    string action = "Admin/" + actionName;
+                                    string result = "";
+                                    using (WebClient client = new WebClient())
+                                    {
+                                        string token = session["CoreUser"].ToString();
+                                        string action = "Admin/" + actionName;
 
-                                    var collection = new NameValueCollection();
-                                    collection.Add("token", token);
-                                    collection.Add("action", action);
-                                    collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
-                                    string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
-                                    byte[] response = client.UploadValues(url, collection);
-                                    result = System.Text.Encoding.UTF8.GetString(response);
-                                }
-                                banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
-                                if (model.status != "200")
-                                {
-                                    filterContext.Result = new RedirectToRouteResult(
-                                    new RouteValueDictionary {
+                                        var collection = new NameValueCollection();
+                                        collection.Add("token", token);
+                                        collection.Add("action", action);
+                                        collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
+                                        string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
+                                        byte[] response = client.UploadValues(url, collection);
+                                        result = System.Text.Encoding.UTF8.GetString(response);
+                                    }
+                                    banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                                    if (model.status != "200")
+                                    {
+                                        filterContext.Result = new RedirectToRouteResult(
+                                        new RouteValueDictionary {
                                         { "Controller", "admin" },
                                         { "Action", "Index" }
-                                                   });
+                                                       });
+                                    }
                                 }
+                                catch (Exception)
+                                {
+
+                                    filterContext.Result = new RedirectToRouteResult(
+                                    new RouteValueDictionary {
+                                        { "Controller", "Admin" },
+                                        { "Action", "Index" }
+                                                });
+                                        }
+
 
                             }
 
@@ -146,6 +159,107 @@ namespace banimo.Classes
 
         }
     }
+
+    public class PartnerSessionCheck : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var descriptor = filterContext.ActionDescriptor;
+            var actionName = descriptor.ActionName;
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+            if (session["PartnerUser"] == null)
+            {
+                if (filterContext.HttpContext.Request.Cookies["AT"] != null)
+                {
+                    var request = filterContext.HttpContext.Request.Cookies["AT"].Value;
+                    if (!string.IsNullOrEmpty(request))
+                    {
+                        session["PartnerUser"] = request.ToString();
+                        string[] lst = { "Index", "product", "structure", "draft", "bank", "partner", "access" };
+                        if (lst.Contains(actionName))
+                        {
+                            string result = "";
+                            using (WebClient client = new WebClient())
+                            {
+                                string token = session["PartnerUser"].ToString();
+                                string action = "Partner/" + actionName;
+
+                                var collection = new NameValueCollection();
+                                collection.Add("token", token);
+                                collection.Add("action", action);
+                                collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
+                                string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
+                                byte[] response = client.UploadValues(url, collection);
+                                result = System.Text.Encoding.UTF8.GetString(response);
+                            }
+                            banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                            if (model.status != "200")
+                            {
+                                filterContext.Result = new RedirectToRouteResult(
+                                new RouteValueDictionary {
+                                        { "Controller", "admin" },
+                                        { "Action", "Index" }
+                                               });
+                            }
+
+                        }
+                        //string val = cookie["NameOfTheCookieIWant"].Value;
+                    }
+                    else
+                    {
+                        filterContext.Result = new RedirectToRouteResult(
+                        new RouteValueDictionary {
+                                { "Controller", "Admin" },
+                                { "Action", "Index" }
+                                    });
+                    }
+
+                }
+                else
+                {
+                    filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary {
+                                { "Controller", "Admin" },
+                                { "Action", "Index" }
+                                });
+                }
+            }
+            else
+            {
+
+                string[] lst = { "Index", "product", "structure", "draft", "bank", "partner", "access" };
+                if (lst.Contains(actionName))
+                {
+                    string result = "";
+                    using (WebClient client = new WebClient())
+                    {
+                        string token = session["PartnerUser"].ToString();
+                        string action = "Partner/" + actionName;
+
+                        var collection = new NameValueCollection();
+                        collection.Add("token", token);
+                        collection.Add("action", action);
+                        collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
+                        string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
+                        byte[] response = client.UploadValues(url, collection);
+                        result = System.Text.Encoding.UTF8.GetString(response);
+                    }
+                    banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                    if (model.status != "200")
+                    {
+                        filterContext.Result = new RedirectToRouteResult(
+                        new RouteValueDictionary {
+                                        { "Controller", "admin" },
+                                        { "Action", "Index" }
+                                       });
+                    }
+
+                }
+
+            }
+
+        }
+    }
     public class CoreSessionCheck : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -212,7 +326,7 @@ namespace banimo.Classes
             }
             else
             {
-               
+
                 string[] lst = { "Index", "product", "structure", "draft", "bank", "partner", "access" };
                 if (lst.Contains(actionName))
                 {
@@ -258,13 +372,14 @@ namespace banimo.Classes
 
                 if (param1.Contains("delete") || param1.Contains("update") || param1.Contains("union") || param1.Contains(" or ") || param1.Contains(" and ") || param1.Contains(" group by ") || param1.Contains(" sum(") || param1.Contains(" count(") || param1.Contains(";") || param1.Contains("--") || param1.Contains("&&") || param1.Contains("&") || param1.Contains("||") || param1.Contains("|") || param1.Contains("$") || param1.Contains("()") || param1.Contains("alert()") || param1.Contains("<") || param1.Contains(">") || param1.Contains("%0d") || param1.Contains("%0a") || param1.Contains("%0c") || param1.Contains("``"))
 
-                {
 
-                    filterContext.Result = new RedirectToRouteResult(
-                        new RouteValueDictionary {
-                                { "Controller", "Error" },
-                                { "Action", "Error500" }
-                                    });
+                {
+                    
+                    //filterContext.Result = new RedirectToRouteResult(
+                    //    new RouteValueDictionary {
+                    //            { "Controller", "Error" },
+                    //            { "Action", "Error500" }
+                    //                });
                 }
 
 

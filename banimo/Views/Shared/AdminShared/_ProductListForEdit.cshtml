@@ -101,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="addItemCountModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -110,20 +110,65 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
-                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                    <p id="addCountLable"></p>
+                    <div style="display:flex">
+                        <input id="ProductSelectedID" style="display:none" />
+
+                        <div style="margin:5px;">
+                            <p id="modalmessage">قیمت خرید</p>
+                            <input id="addprice" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">طرف حساب :</p>
+
+                            <select id="tarafIDPlus" class="form-control">
+
+                                <option value="">مهم نیست</option>
+                                @foreach (var item in Model.tarafList)
+                                {
+                                    <option value="@item.ID">@item.name</option>
+                                }
+                            </select>
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">تعداد</p>
+                            <input id="addcount" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">امانی</p>
+                            <input id="addamani" type="checkbox" class="form-control" />
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
-                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
+                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
                     <script>
-                        $("#confirmdelete").click(function () {
+                        $("#confirmAddItemCount").click(function () {
                             $("#myModal").modal('hide');
-                            var id = $("#modalValue").text();
+                            var amani = "";
+                            if ($("#addamani").is(':checked')) {
+                                amani = "1";
+                            }
+                            else {
+                                amani = "0";
+                            }
+                            var price = $("#addprice").val();
+                            var count = $("#addcount").val();
+                            var ID = $("#ProductSelectedID").val();
+                            var tarafID = $("#tarafIDPlus").val();
                             $.ajax({
-                                url: '/Admin/Delete',
+                                url: '/Admin/SetNewFactorFromSail',
                                 dataType: 'html',
                                 data: {
-                                    id: id,
+                                    amani: amani,
+                                    price: price,
+                                    count: count,
+                                    ID: ID,
+                                    tarafID: tarafID
+
                                 },
                                 success: function (data) {
                                     if (data == "error") {
@@ -139,6 +184,93 @@
                                         toastr.error('محصول مورد نظر دارای گردش میباشد')
                                     }
                                     else {
+                                        window.location.reload();
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="returnItemCountModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="returnCountLable"></p>
+                    <div style="display:flex">
+                        <input id="ProductSelectedID0" style="display:none" />
+
+                        <div style="margin:5px;">
+                            <p id="modalmessage">قیمت خرید</p>
+                            <input id="returnprice" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">طرف حساب :</p>
+                          
+                            <select id="tarafID" class="form-control">
+                              
+                                <option value="">مهم نیست</option>
+                                @foreach (var item in Model.tarafList)
+                                {
+                                    <option value="@item.ID">@item.name</option>
+                                }
+                            </select>
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">تعداد</p>
+                            <input id="returncount" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">امانی</p>
+                            <input id="returnamani" type="checkbox" class="form-control" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
+                    <button id="confirmReturnItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                    <script>
+                        $("#confirmReturnItemCount").click(function () {
+                            $("#returnItemCount").modal('hide');
+                            var amani = "";
+                            if ($("#returnamani").is(':checked')) {
+                                amani = "1";
+                            }
+                            else {
+                                amani = "0";
+                            }
+                            var price = $("#returnprice").val();
+                            var count = $("#returncount").val();
+                            var ID = $("#ProductSelectedID0").val();
+                            var tarafID = $("#tarafID").val();
+                            $.ajax({
+                                url: '/Admin/SetReturnFactorFromSail',
+                                dataType: 'html',
+                                data: {
+                                    amani: amani,
+                                    price: price,
+                                    count: count,
+                                    ID: ID,
+                                    tarafID: tarafID
+
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
                                         toastr.options = {
                                             "debug": false,
                                             "positionClass": "toast-top-center",
@@ -148,25 +280,10 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.success('محصول مورد نظر حذف شد')
-                                        var value = $("#listofproduct").val();
-                                        var partner = $("#partnerList").val();
-                                        $.ajax({
-                                            url: '/Admin/GetTheListOfItems',
-                                            dataType: 'html',
-                                            data: {
-                                                value: value,
-                                                partner: partner
-                                            },
-                                            success: function (data) {
-
-                                                $('#listholder').html(data);
-                                                $('#listholder').css("display", "block");
-                                            },
-                                            error: function () {
-                                                alert("nashod")
-                                            }
-                                        });
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        window.location.reload();
                                     }
 
 
@@ -394,7 +511,7 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.ID)
                                                 </td>
-                                                <td>
+                                                <td class="titemHOlder">
                                                     @Html.DisplayFor(modelItem => item.title)
                                                 </td>
                                                 <td>
@@ -404,8 +521,9 @@
                                                     @Html.DisplayFor(modelItem => item.selectedFilter)
                                                 </td>
 
-                                                <td style="text-align: center;">
+                                                <td id="@item.parentID" style="text-align: center; align-items:center; border:none">
                                                     @{
+                                                        <p class="quickEditInput addItemCount" style="display:none; font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
 
                                                         if (item.count == "-1")
                                                         {
@@ -420,30 +538,33 @@
                                                             <p class="quickEditInput">@Html.DisplayFor(modelItem => item.count)</p>
 
                                                         }
-                                                        <input style="display:none" value="@item.count" class="quickEditInput quickCount" />
+
+                                                        <p class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+
+                                                        <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
 
                                                     }
                                                 </td>
                                                 <td>
                                                     <div>
-                                                        <p>کاربر</p>
+                                                        @*<p>کاربر</p>*@
                                                         <p class="quickEditInput">@item.oldPrice</p>
                                                         <input style="display:none" value="@item.oldPrice" class="quickEditInput  quickPrice" />
                                                     </div>
-                                                    <div>
-                                                        <p>همکار</p>
-                                                        <p class="quickEditInput  ">@string.Format("{0:n0}", @coWorkerPrice) </p>
-                                                        <input style="display:none" value="@coWorkerPrice" class="quickEditInput  quickFinalWorkerPrice" />
-                                                    </div>
+                                                    @*<div>
+                                                            <p>همکار</p>
+                                                            <p class="quickEditInput  ">@string.Format("{0:n0}", @coWorkerPrice) </p>
+                                                            <input style="display:none" value="@coWorkerPrice" class="quickEditInput  quickFinalWorkerPrice" />
+                                                        </div>*@
 
                                                 </td>
                                                 <td>
                                                     <div>
-                                                        <p>کاربر</p>
+                                                        @*<p>کاربر</p>*@
                                                         <p class="quickEditInput  ">@item.price</p>
                                                         <input style="display:none" value="@item.price" class="quickEditInput  quickFinalPrice" />
                                                     </div>
-                                                   
+
 
                                                 </td>
                                                 <td>
@@ -645,8 +766,8 @@
 
 
                 var ID = $(this).parent().parent().attr('id')
-                
-               
+
+
                 $.ajax({
                     url: '/Admin/ChangeProductPriceForEdit',
                     dataType: 'html',
@@ -779,127 +900,35 @@
                     }
                 });
             })
+
+            $(".minusItemCount").click(function () {
+                var id = $(this).parent().attr('id');
+                $("#ProductSelectedID0").val(id);
+                var text = $(this).parent().parent().find(".titemHOlder").text().trim();
+                var lableText = "عودت محصول " + text;
+                $("#returnCountLable").text(lableText)
+                $("#returnItemCountModal").modal('toggle');
+            })
+
+            $(".addItemCount").click(function () {
+                var id = $(this).parent().attr('id');
+                $("#ProductSelectedID").val(id);
+                var text = $(this).parent().parent().find(".titemHOlder").text().trim();
+                var lableText = "افزایش موجودی " + text;
+                $("#addCountLable").text(lableText)
+
+                $("#addItemCountModal").modal('toggle');
+
+            })
+
+            $(".returnItemCount").click(function () {
+                
+            })
+
+
         </script>
 
 
-        <div class="row">
-            @{
-                var total = (Convert.ToInt32(Model.count) / 12);
-                var remain = (Convert.ToInt32(Model.count) % 12);
-                if (remain != 0)
-                {
-                    total = total + 1;
-                }
-                var activ = Convert.ToInt32(Model.current);
-                var activminus2 = activ - 2;
-                var activminus1 = activ - 1;
-                var activplus1 = activ + 1;
-                var activplus2 = activ + 2;
-
-
-
-                if ((total - activ) > 3 & activ > 3)
-                {
-                    <ul class="pagination">
-                        <li><a>«</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
-                        @if (activminus2 > 2)
-                        {
-                            <li><a>...</a></li>
-                        }
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
-                        <li class="active"><a>@activ</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
-                        <li><a> ...</a></li>
-                        <li><a>@total</a></li>
-                        <li><a>»</a></li>
-                    </ul>
-                }
-                else if ((total - activ > 3) && !(activ > 3))
-                {
-                    <ul class="pagination">
-                        @for (int i = 1; i < activ; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li class="active"><a>@activ </a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
-                        <li><a href="#">...</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
-                        <li><a href="#">»</a></li>
-                    </ul>
-
-                }
-                else if (!(total - activ > 3) && activ > 3)
-                {
-                    <ul class="pagination">
-                        <li><a>«</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
-                        <li><a>...</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
-                        <li style="cursor:pointer" class="active"><a>@activ </a></li>
-                        @for (int i = activ + 1; i <= total; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li><a>»</a></li>
-                    </ul>
-
-                }
-                else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
-                {
-
-                    <ul class="pagination">
-                        @for (int i = 1; i < activ; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li class="active"><a href="#">@activ</a></li>
-                        @for (int i = activ + 1; i <= total; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                    </ul>
-
-                }
-
-            }
-            <script>
-                $(".pagingnumberforall").click(function () {
-
-                    var num = this.textContent;
-                    var value = $("#listofproduct").val();
-                    var partner = $("#partnerList").val();
-                    var que = $("#SearchQuery").val();
-                    $.ajax({
-                        url: '/admin/GetTheListOfItems',
-                        data: {
-                            page: num,
-                            value: value,
-                            partner: partner,
-                            query: que
-                        },
-                        dataType: 'html',
-                        success: function (data) {
-
-                            $('#listholder').html(data);
-                            $('#listholder').css("display", "block");
-                        },
-                        error: function () {
-                            alert("nashod")
-                        },
-                    });
-                })
-
-            </script>
-
-        </div>
-
-        @*@Html.PagedListPager(Model, page => Url.Action("product", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "listholder" }))*@
 
 
     }

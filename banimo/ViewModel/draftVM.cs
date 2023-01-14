@@ -8,6 +8,7 @@ namespace banimo.ViewModel
     public class draftVM
     {
         public List<TarafList> TarafList { get; set; }
+        public List<NodeList> NodeList { get; set; }
     }
 
     //public class TarafList

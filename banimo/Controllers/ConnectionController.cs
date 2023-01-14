@@ -22,6 +22,8 @@ using System.Configuration;
 using BankMellatLibrary;
 using System.Xml;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 
 //using banimo.ServiceReference1;  1618834939
@@ -31,16 +33,47 @@ using System.Diagnostics;
 
 namespace banimo.Controllers
 {
-    [doForAll]
+    //[doForAll]
     public class ConnectionController : Controller
     {
+        private static readonly HttpClient newclient = new HttpClient();
         webservise wb = new webservise();
         string servername = ConfigurationManager.AppSettings["serverName"];
         string nodeID = ConfigurationManager.AppSettings["nodeID"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
+        public static string setVariable()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string nodeID = ConfigurationManager.AppSettings["nodeID"];
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+
+                collection.Add("servername", servername);
+
+                string url = ConfigurationManager.AppSettings["server"] + "/getcatlistDemoTest.php";
+                byte[] response = client.UploadValues(url, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            MyCollectionOfCatsList catsCollection = JsonConvert.DeserializeObject<MyCollectionOfCatsList>(result);
+            string srt = "";
+            if (catsCollection.catsdata != null)
+            {
+                srt = JsonConvert.SerializeObject(catsCollection.catsdata);
+                Variables.menu = srt;
+            }
+
+            return srt;
+        }
         private string GetIp()
         {
             string ip = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
@@ -52,7 +85,7 @@ namespace banimo.Controllers
         }
         private void SetCookie(string mymodel, string name)
         {
-           
+
             Response.Cookies[name].Value = Encrypt(mymodel);
 
         }
@@ -131,13 +164,13 @@ namespace banimo.Controllers
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
         //public ActionResult ReqestForPayment(string newdiscount, string address, string city, string country, string phonenumber, string postalcode, string fullname, string hourid, string payment)
-        
 
 
-        public  ContentResult copyRequest(int num, string orderNum)
+
+        public ContentResult copyRequest(int num, string orderNum)
         {
 
-            for(int i=1; i<=num; i++)
+            for (int i = 1; i <= num; i++)
             {
                 string device = RandomString();
                 string code = MD5Hash(device + "ncase8934f49909");
@@ -147,7 +180,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("orderID", orderNum);
@@ -175,7 +208,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("ID", log2.peigiry);
@@ -195,7 +228,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("auth", refModel.auth);
@@ -220,7 +253,8 @@ namespace banimo.Controllers
             return Content("200");
 
         }
-        public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model) {
+        public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model)
+        {
 
             
 
@@ -241,7 +275,7 @@ namespace banimo.Controllers
                     ids = ids + "," + (item.productid);
                     nums = nums + "," + (item.quantity);
                 }
-               
+
                 userdata user = Session["LogedInUser"] as userdata;
 
 
@@ -269,7 +303,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("fullname", model.fullname);
@@ -291,9 +325,9 @@ namespace banimo.Controllers
                     collection.Add("auth", auth);
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
-                  
+
                     collection.Add("mbrand", servername);
-                    
+
 
 
                     //foreach (var myvalucollection in imaglist) {
@@ -316,14 +350,14 @@ namespace banimo.Controllers
 
                     if (model.payment == "2")
                     {
-                        return RedirectToAction("verifyByAdmin", new { payment  = "2", id= log2.peigiry, fromUser = 1 });
+                        return RedirectToAction("verifyByAdmin", new { payment = "2", id = log2.peigiry, fromUser = 1 });
                     }
                     else
                     {
                         // اینجا باید کردیت یارو گرفته بشه و با مقدار فاکتور زده شده مقایسه بشه 
                         using (WebClient client = new WebClient())
                         {
-                            var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                            var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                             collection.Add("device", device);
                             collection.Add("code", code);
                             collection.Add("token", token);
@@ -339,11 +373,11 @@ namespace banimo.Controllers
                         getCredit creditmodel = JsonConvert.DeserializeObject<getCredit>(result);
                         if (creditmodel.credit >= log2.amount)
                         {
-                            return RedirectToAction("verifyByAdmin", new { payment = "1", id = log2.peigiry , fromUser  = 1});
+                            return RedirectToAction("verifyByAdmin", new { payment = "1", id = log2.peigiry, fromUser = 1 });
                         }
                         else
                         {
-                            
+
                             string varizdesc = " واریز بابت تصویه سفارش شماره " + log2.ID;
                             int famount = log2.amount - creditmodel.credit;
 
@@ -358,12 +392,12 @@ namespace banimo.Controllers
                             // کدها ملت
                             Random rnd = new Random();
                             long referenceID = rnd.Next(222000000, 222999999);
-                            string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID,"0", referenceID.ToString());
+                            string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
                             addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
                             return RedirectToAction("ReqestForMellat", new { price = famount, orderNumberWeb = referenceID });
                         }
                     }
-                   
+
                 }
 
 
@@ -373,7 +407,7 @@ namespace banimo.Controllers
             return Content("");
         }
 
-       
+
 
 
         public ActionResult ReqestForWallet(string id)
@@ -403,7 +437,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("partnerID", cookieModel.partnerID);
@@ -426,7 +460,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("id", id);
@@ -455,7 +489,7 @@ namespace banimo.Controllers
                     {
 
 
-                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                         collection2.Add("device", device);
                         collection2.Add("code", code);
                         collection2.Add("auth", Authority);
@@ -493,7 +527,7 @@ namespace banimo.Controllers
                         using (WebClient client = new WebClient())
                         {
 
-                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                            var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                             collection2.Add("device", device);
                             collection2.Add("code", code);
                             collection2.Add("auth", Request.QueryString["Authority"]);
@@ -510,7 +544,7 @@ namespace banimo.Controllers
                         int Amount = Convert.ToInt32(log2.mytransaction.First().price);
 
 
-                       // long RefID;
+                        // long RefID;
                         System.Net.ServicePointManager.Expect100Continue = false;
                         ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
 
@@ -529,7 +563,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
@@ -553,7 +587,7 @@ namespace banimo.Controllers
                             {
 
                                 string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
-                                string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1","");
+                                string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
 
 
 
@@ -612,13 +646,13 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result;
-            
+
 
             string result2 = "";
             using (WebClient client = new WebClient())
             {
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", "");
@@ -654,7 +688,7 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult finalizeOrder( string id,string payment)
+        public ActionResult finalizeOrder(string id, string payment)
         {
 
             string result2 = "";
@@ -666,7 +700,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("ID", id);
@@ -684,7 +718,7 @@ namespace banimo.Controllers
         public ActionResult verifyByAdmin(string payment, string id, string isPayed, string fromUser)
         {
 
-
+            payment = "6";
             isPayed = isPayed == null ? "" : isPayed;
             string result2 = "";
             string device = RandomString();
@@ -695,7 +729,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("ID", id);
@@ -715,10 +749,11 @@ namespace banimo.Controllers
 
 
             string paymentstatus = payment == "2" ? "2" : "1";
+            paymentstatus = "1";
             using (WebClient client = new WebClient())
             {
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", refModel.auth);
@@ -732,11 +767,11 @@ namespace banimo.Controllers
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+               // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
-            }
+       }
             finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(res);
             if (fromUser != null)
             {
@@ -789,14 +824,14 @@ namespace banimo.Controllers
                 string postalCode = "";
                 string result = "";
                 string auth = "";
-             
+
 
                 //ids = ids.Substring(1, ids.Count() - 1);
                 //nums = ids.Substring(1, nums.Count() - 1);
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("fullname", model.fullname);
@@ -829,7 +864,7 @@ namespace banimo.Controllers
                 }
 
                 banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
-               
+
                 if (log2.status == 200)
                 {
                     string Authority;
@@ -851,7 +886,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("partnerID", cookieModel.partnerID);
@@ -879,7 +914,7 @@ namespace banimo.Controllers
                             {
 
 
-                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Authority);
@@ -893,7 +928,7 @@ namespace banimo.Controllers
                             }
 
                             banimo.ViewModelPost.responseModel log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
-                            if(log3.status == "200")
+                            if (log3.status == "200")
                             {
                                 Response.Redirect("https://www.zarinpal.com/pg/StartPay/" + Authority);
                             }
@@ -932,7 +967,7 @@ namespace banimo.Controllers
                         using (WebClient client = new WebClient())
                         {
 
-                            var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                            var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                             collection.Add("device", device);
                             collection.Add("code", code);
                             collection.Add("auth", Request.QueryString["Authority"]);
@@ -947,7 +982,7 @@ namespace banimo.Controllers
                         var log2 = JsonConvert.DeserializeObject<List<AUTHModel>>(result);
                         int Amount = Convert.ToInt32(log2[0].TotalPrice);
 
-                       
+
                         long RefID;
                         System.Net.ServicePointManager.Expect100Continue = false;
                         ServiceReference1.PaymentGatewayImplementationServicePortTypeClient zp = new ServiceReference1.PaymentGatewayImplementationServicePortTypeClient();
@@ -957,7 +992,7 @@ namespace banimo.Controllers
 
                         int Status = zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
 
-                        
+
 
                         if (Status == 100)
                         {
@@ -965,7 +1000,7 @@ namespace banimo.Controllers
                             using (WebClient client = new WebClient())
                             {
 
-                                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                 collection2.Add("device", device);
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
@@ -978,7 +1013,7 @@ namespace banimo.Controllers
 
                                 byte[] response =
                                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
-                                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                               // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                                 result2 = System.Text.Encoding.UTF8.GetString(response);
                             }
@@ -1028,7 +1063,7 @@ namespace banimo.Controllers
 
             //if (jsonModel.partnerID == "0")
             //{
-                
+
             //}
             //else
             //{
@@ -1037,18 +1072,50 @@ namespace banimo.Controllers
             return View();
         }
 
+       
+        public ActionResult requestManager(ViewModelPost.requestManagerVM model)
+        {
+
+            responseVM resmodel = new responseVM()
+            {
+                 message = "موفق ",
+                  number = 123456  ,
+                   status = 200
+
+            };
+            if (model.type == "1")
+            {
+                return RedirectToAction("PaymentResult", resmodel);
+            }
+            else
+            {
+                return RedirectToAction("OrderResult", resmodel);
+            }
+        }
+
+
+        public ActionResult PaymentResult(responseVM model)
+        {
+
+            // Check the User Agent
+            var agent = Request.UserAgent.ToLower();
+            ViewBag.agent = agent;
+            setVariable();
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View();
+        }
 
         public ActionResult ReqestForMellat(ViewModelPost.ReqestWalletViewModel model)
         {
-            
+
             string txtDescription = "افزودن به سبد خرید";
             Random rnd = new Random();
 
-            long orderID = model.orderNumberWeb == null?  rnd.Next(111000000, 111999999) : long.Parse(model.orderNumberWeb);
+            long orderID = model.orderNumberWeb == null ? rnd.Next(111000000, 111999999) : long.Parse(model.orderNumberWeb);
             string message = "";
-          
 
-            long amount =  model.price * 10;
+
+            long amount = model.price * 10;
             string additionalData = txtDescription;
 
 
@@ -1082,7 +1149,7 @@ namespace banimo.Controllers
             string srt = TempData["Message"].ToString();
 
 
-           
+
             return RedirectToAction("verifyAtBase", "Connection");
 
 
@@ -1121,15 +1188,15 @@ namespace banimo.Controllers
 
 
 
-               
+
                 if (user.email != null)
                 {
                     email = user.email;
                 }
-                 token = user.token;
+                token = user.token;
             }
-            
-            
+
+
             string state = "";
 
             string discount = model.newdiscount;
@@ -1144,7 +1211,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("fullname", model.fullname);
@@ -1185,7 +1252,7 @@ namespace banimo.Controllers
                 string message = "";
 
                 long orderId = Convert.ToInt64(log2.peigiry);
-               
+
                 long amount = log2.amount * 10;
                 string additionalData = txtDescription;
 
@@ -1308,7 +1375,7 @@ namespace banimo.Controllers
 
 
 
-                                
+
                                 if (saleOrderId / 1000000 == 222)
                                 {
                                     // این قسمت برای پرداخت مابقی از ملت است که 
@@ -1325,7 +1392,7 @@ namespace banimo.Controllers
                                     using (WebClient client = new WebClient())
                                     {
 
-                                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                         collection2.Add("device", device);
                                         collection2.Add("code", code);
                                         collection2.Add("auth", saleOrderId.ToString());
@@ -1354,7 +1421,7 @@ namespace banimo.Controllers
                                         using (WebClient client = new WebClient())
                                         {
 
-                                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                            var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                             collection2.Add("device", device);
                                             collection2.Add("code", code);
                                             collection2.Add("auth", saleOrderId.ToString());
@@ -1397,7 +1464,7 @@ namespace banimo.Controllers
                                         using (WebClient client = new WebClient())
                                         {
 
-                                             var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                                            var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                                             collection2.Add("device", device);
                                             collection2.Add("code", code);
                                             collection2.Add("refID", rr);
@@ -1641,6 +1708,367 @@ namespace banimo.Controllers
         }
 
 
+
+
+
+        public async Task<ActionResult> ReqestForPaymentKeepa(ViewModelPost.ReqestForPaymentViewModel model)
+        {
+
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+
+            model.hourid = model.hourid.Replace("final", "");
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            List<string> finalmodel = new List<string>();
+
+            string ids = model.ids;
+            string nums = model.nums;
+            string email = "";
+            string token = model.token;
+            if (string.IsNullOrEmpty(model.ids))
+            {
+                string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+                List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
+
+                //List<ProductDetail> dataList = JsonConvert.DeserializeObject<List<ProductDetail>>(getCookie("cartModel"));
+                foreach (var item in data)
+                {
+                    ids = ids + "," + (item.productid);
+                    nums = nums + "," + (item.quantity);
+                }
+
+                userdata user = Session["LogedInUser"] as userdata;
+
+
+
+
+                if (user.email != null)
+                {
+                    email = user.email;
+                }
+                token = user.token;
+            }
+
+
+            string state = "";
+
+            string discount = model.newdiscount;
+            string postalCode = "";
+            string result = "";
+            string auth = "";
+            if (model.payment != "1")
+            {
+                auth = RandomString();
+            }
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("fullname", model.fullname);
+                collection.Add("mobile", model.phonenumber);
+                collection.Add("email", email);
+                collection.Add("state", state);
+                collection.Add("city", model.city);
+                collection.Add("address", model.address);
+                collection.Add("addressID", model.addressID);
+                collection.Add("ids", ids);
+                collection.Add("nums", nums);
+                collection.Add("token", token);
+                collection.Add("discount", discount);
+                collection.Add("postalCode", postalCode);
+                collection.Add("hourID", model.hourid);
+                collection.Add("comment", "");
+                collection.Add("payment", model.payment);
+                collection.Add("auth", auth);
+                collection.Add("latitude", model.lat);
+                collection.Add("longitude", model.lon);
+                collection.Add("planID", model.planID);
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest4.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+            if (log2.status == 200)
+            {
+
+
+
+
+
+
+
+                string txtDescription = "شماره پیگیری:" + log2.peigiry;
+                string timestamp = log2.orderID;
+                string message = "";
+
+                long orderId = Convert.ToInt64(log2.peigiry);
+
+                long amount = log2.amount * 10;
+                string additionalData = txtDescription;
+
+
+                string localDate = DateTime.Now.ToString("yyyyMMdd");
+                string localTime = DateTime.Now.ToString("HHmmss");
+
+                string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyKeepa";
+                string authoriztion = ConfigurationManager.AppSettings["keepa"];
+
+                string url = "https://api.kipaa.ir/ipg/v1/supplier/request_payment_token";
+
+
+
+                keepaRequstModel payloadModel = new keepaRequstModel()
+                {
+                    Amount = amount.ToString(),
+                    CallBack_Url = callBackUrl,
+                    currency = "IRR",
+                    Param1 = "Param1",
+                    Param2 = "Param2",
+                    Param3 = "Param3",
+                    Debt = "",
+                    Details = "جزییات تراکنش",
+                    max_credit = null,
+                    min_credit = null,
+
+                };
+                var payload = JsonConvert.SerializeObject(payloadModel);
+                result = await wb.doPostData(url, payload);
+
+                keepaModelRespons modell = JsonConvert.DeserializeObject<keepaModelRespons>(result);
+
+
+                userdata user = Session["LogedInUser"] as userdata;
+                if (user.email != null)
+                {
+                    email = user.email;
+                }
+                string usertoken = user.token;
+                if (modell.Status == 200)
+                {
+
+
+                    string result2 = "";
+                    using (WebClient client = new WebClient())
+                    {
+
+
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("auth", modell.Content.payment_token.ToString());
+                        collection2.Add("timestamp", timestamp);
+                        collection2.Add("token", usertoken);
+                        collection2.Add("servername", servername);
+                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/setauth.php", collection2);
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+
+
+                    }
+
+                    banimo.ViewModelPost.responseModel log3 = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
+
+                    if (log3.status == "200")
+                    {
+                        TempData["keepaToken"] = modell.Content.payment_token;
+                        return RedirectToAction("RedirectVPOSKeepa", "Connection");
+                    }
+                   
+                }
+
+                // اینجا توکن ذخیره میکنیم برای ترنزکشن فروش
+
+
+                //if (int.Parse(StatusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                //{
+
+                //    return RedirectToAction("RedirectVPOS", "Connection", new { id = StatusSendRequest[1] });
+                //}
+
+                //TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(StatusSendRequest[0].Replace("_", " ")));
+                //string srt = TempData["Message"].ToString();
+                //return RedirectToAction("verifyAtBase", "Connection");
+
+
+
+
+            }
+            //string json = "";
+            return Content("");
+
+
+        }
+        [HttpPost]
+        public ActionResult VerifyKeepa(string payment_token, string reciept_number, string state,string msg)
+        {
+
+            return Content("paymnt_token:" + payment_token + " and reciept_number : " + reciept_number);
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result2 = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                collection2.Add("device", device);
+                collection2.Add("code", code);
+                collection2.Add("auth", reciept_number);
+                collection2.Add("paymentStatus", "1");
+                collection2.Add("payment", "6");
+                collection2.Add("mbrand", servername);
+
+
+
+
+
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+
+                result2 = System.Text.Encoding.UTF8.GetString(response);
+                return RedirectToAction("verifyAtHome", "Connection", new { refID = result2, status = 1 });
+
+            }
+
+
+
+
+            if (reciept_number == "")
+            {
+                return RedirectToAction("verifyAtHome", "Connection", new { refID = state + "-" + msg, status = 0 });
+
+            }
+
+            string result = "";
+            string url = "https://api.kipaa.ir/ipg/v1/supplier/verify_transaction";
+
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("reciept_number", reciept_number);
+                collection.Add("payment_token", payment_token);
+                client.Headers.Add("Authorization", "brear 5cccd276-3072-4d0f-9d2d-b60f5548f9d5");
+
+                byte[] response =
+                client.UploadValues(url, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.verifyK.keepaVerifyVM modell = JsonConvert.DeserializeObject<ViewModel.verifyK.keepaVerifyVM>(result);
+
+            if (modell.Status == 200)
+            {
+                url = "https://api.kipaa.ir/ipg/v1/supplier/confirm_transaction";
+
+                using (WebClient client = new WebClient())
+                {
+
+
+                    var collection = new NameValueCollection();
+                    collection.Add("reciept_number", reciept_number);
+                    collection.Add("payment_token", payment_token);
+                    client.Headers.Add("Authorization", "brear 5cccd276-3072-4d0f-9d2d-b60f5548f9d5");
+
+                    byte[] response =
+                    client.UploadValues(url, collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                ViewModel.confirmK.keepaConfirmVM confirmModel = JsonConvert.DeserializeObject<ViewModel.confirmK.keepaConfirmVM>(result);
+
+                result2 = "";
+                if (confirmModel.Status == 200)
+                {
+
+
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("AUTH", payment_token);
+                        collection2.Add("paymentStatus", "1");
+                        collection2.Add("payment", "6");
+                        collection2.Add("mbrand", servername);
+
+
+
+
+
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+
+
+                        return RedirectToAction("verifyAtHome", "Connection", new { refID = result2, status = 1 });
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("verifyAtHome", "Connection", new { refID = confirmModel.Content.ConfirmTransactionNumber + " - " + "موفق", status = 0 });
+                }
+                //string device = RandomString();
+                //string code = MD5Hash(device + "ncase8934f49909");
+
+
+                //using (WebClient client = new WebClient())
+                //{
+
+                //    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                //    collection.Add("device", device);
+                //    collection.Add("code", code);
+                //    collection.Add("auth", payment_token);
+                //    collection.Add("servername", servername);
+                //    byte[] response =
+                //    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getorderamount.php", collection);
+
+                //    result = System.Text.Encoding.UTF8.GetString(response);
+                //}
+
+
+                //var log2 = JsonConvert.DeserializeObject<List<AUTHModel>>(result);
+                //int Amount = Convert.ToInt32(log2[0].TotalPrice);
+
+                //if (Amount.ToString() == modell.Content.Amount)
+                //{
+
+                //}
+                //else
+                //{
+                //    return RedirectToAction("verifyAtHome", "Connection", new { refID = modell.Message + " - " + "ناموفق", status = 0 });
+                //}
+            }
+            else
+            {
+                return RedirectToAction("verifyAtHome", "Connection", new { refID = modell.Message + " - " + "ناموفق", status = 0 });
+            }
+
+           
+
+           
+
+
+
+
+
+
+
+
+        }
+
+
         public void ReqestForPaymentPasargad(ViewModelPost.ReqestForPaymentViewModel model)
         {
 
@@ -1690,7 +2118,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection();collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("fullname", model.fullname);
@@ -1735,7 +2163,7 @@ namespace banimo.Controllers
                 {
 
 
-                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                     collection2.Add("device", device);
                     collection2.Add("code", code);
                     collection2.Add("token", token);
@@ -1817,7 +2245,15 @@ namespace banimo.Controllers
             }
         }
 
-       
+        public ActionResult RedirectVPOSKeepa()
+        {
+            ViewBag.id = TempData["keepaToken"];
+
+            return View();
+        }
+
+
+
 
         public ActionResult VerifyPasargad()//"4940540"
         {
@@ -1876,7 +2312,7 @@ namespace banimo.Controllers
                     {
                         string device = RandomString();
                         string code = MD5Hash(device + "ncase8934f49909");
-                         var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                         collection2.Add("device", device);
                         collection2.Add("code", code);
                         // collection2.Add("amount", amount);
@@ -1939,7 +2375,7 @@ namespace banimo.Controllers
             {
 
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device1);
                 collection2.Add("code", code1);
                 collection2.Add("title", "pasargad");
@@ -1973,7 +2409,7 @@ namespace banimo.Controllers
             {
 
 
-                 var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
+                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                 collection2.Add("device", device);
                 collection2.Add("code", code);
                 collection2.Add("auth", invoiceNumber);
@@ -2030,7 +2466,7 @@ namespace banimo.Controllers
                 //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
                 //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
                 Response.Cookies["Modelcart"].Value = "";
-               
+
                 var saleorder = TempData["message2"] as string;
 
             }
@@ -2049,8 +2485,8 @@ namespace banimo.Controllers
                 //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
                 Response.Cookies["Modelcart"].Value = "";
             }
-        
-           
+
+
 
             ViewBag.message2 = refID;
             ViewBag.message3 = "CHR-" + refID;
@@ -2062,8 +2498,8 @@ namespace banimo.Controllers
             this.ViewData["MenuViewModel"] = Variables.menu;
             return View(action);
         }
-     
-       
+
+
 
 
 

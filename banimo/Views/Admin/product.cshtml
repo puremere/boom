@@ -150,7 +150,7 @@
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">لیست محصولات </a></li>
-        @*<li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> تعریف محصول</a></li>*@
+        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> تعریف محصول</a></li>
 
 
     </ul>
@@ -201,41 +201,41 @@
 
                             }
                         }
-                        if (Model.basecat.filtersModel != null)
-                        {
-                            foreach (var item in Model.basecat.filtersModel)
-                            {
-                                listItems2.Add(new SelectListItem
-                                {
-                                    Text = item.title,
-                                    Value = "1" + item.ID
-                                });
-                                if (item.filtersubcat != null)
-                                {
-                                    foreach (var subcat in item.filtersubcat)
-                                    {
-                                        listItems2.Add(new SelectListItem
-                                        {
-                                            Text = "---" + subcat.title,
-                                            Value = "2" + subcat.ID
-                                        });
-                                        if (subcat.filtersubcat2 != null)
-                                        {
-                                            foreach (var subcat2 in subcat.filtersubcat2)
-                                            {
-                                                listItems2.Add(new SelectListItem
-                                                {
-                                                    Text = "------" + subcat2.title,
-                                                    Value = "3" + subcat2.ID
-                                                });
-                                            }
-                                        }
+                        //if (Model.basecat.filtersModel != null)
+                        //{
+                        //    foreach (var item in Model.basecat.filtersModel)
+                        //    {
+                        //        listItems2.Add(new SelectListItem
+                        //        {
+                        //            Text = item.title,
+                        //            Value = "1" + item.ID
+                        //        });
+                        //        if (item.filtersubcat != null)
+                        //        {
+                        //            foreach (var subcat in item.filtersubcat)
+                        //            {
+                        //                listItems2.Add(new SelectListItem
+                        //                {
+                        //                    Text = "---" + subcat.title,
+                        //                    Value = "2" + subcat.ID
+                        //                });
+                        //                if (subcat.filtersubcat2 != null)
+                        //                {
+                        //                    foreach (var subcat2 in subcat.filtersubcat2)
+                        //                    {
+                        //                        listItems2.Add(new SelectListItem
+                        //                        {
+                        //                            Text = "------" + subcat2.title,
+                        //                            Value = "3" + subcat2.ID
+                        //                        });
+                        //                    }
+                        //                }
 
-                                    }
-                                }
+                        //            }
+                        //        }
 
-                            }
-                        }
+                        //    }
+                        //}
 
                     }
 
@@ -594,6 +594,9 @@
 
         </div>
         <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
+            @Html.Partial("/Views/Shared/AdminShared/_addProduct.cshtml", Model.basecat)
+        </div>
+        <div id="menu2" class="tab-pane fade in " style="padding-top:20px">
 
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#add1" style=" color: #8d8d8d; ">افزودن دستی</a></li>

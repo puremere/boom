@@ -1508,40 +1508,7 @@
                     }
 
                 </div>
-                <script>
-                    $(".banner").each(function () {
 
-                        if (($(this).attr('id').indexOf("empty") >= 0)) {
-
-                            $(this).css("cursor", "default");
-                        }
-                    })
-                    $(".banner").click(function () {
-                        var val = $(this).attr('id');
-                        if (!(val.indexOf("empty") >= 0)) {
-                            window.location.href = "/Home/ManageBanner?val=" + $(this).attr('id');
-
-                        }
-                    })
-
-
-                    $(".mySlide").each(function () {
-
-                        if (($(this).attr('id').indexOf("empty") >= 0)) {
-
-                            $(this).css("cursor", "default");
-                        }
-                    })
-                    $(".mySlide").click(function () {
-                        var val = $(this).attr('id');
-
-                        if (!val.contain('image')) {
-                            window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
-
-                        }
-                    })
-
-                </script>
             </div>
 
         }
@@ -2030,7 +1997,43 @@
 
 
 
+<script>
+    $(".banner").each(function () {
 
+        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+            $(this).css("cursor", "default");
+        }
+    })
+    $(".banner").click(function () {
+        var val = $(this).attr('id');
+        if (!(val.indexOf("empty") >= 0)) {
+            window.location.href = "/Home/ManageBanner?val=" + $(this).attr('id');
+
+        }
+    })
+
+
+    $(".mySlide").each(function () {
+
+        if (($(this).attr('id').indexOf("empty") >= 0)) {
+
+            $(this).css("cursor", "default");
+        }
+    })
+    $(".mySlide").click(function () {
+
+       
+        var val = $(this).attr('id');
+       
+        if (!val.includes('image')) {
+            window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
+
+        }
+    })
+
+</script>
+</script>
 
 <style>
 
@@ -2127,7 +2130,7 @@
         $(".watchall").each(function () {
             $(this).height($(this).siblings(".showmedetail").height())
         })
-       
+
     })
 
     $(".watchall").click(function () {

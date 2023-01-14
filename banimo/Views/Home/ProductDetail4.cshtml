@@ -43,7 +43,7 @@
 
 
     }
-
+  <link href="~/Content/css/bootstrap5.css" rel="stylesheet" />
 }
 
 <link href="~/Content/flexslider2.css" rel="stylesheet" />
@@ -145,6 +145,159 @@
         background-color: #FF4500;
         border-radius: 10px;
     }
+
+    .header1 {
+        display: flex;
+        padding: 20px;
+        background-color: #eee;
+        align-items: center;
+        justify-content: center;
+        direction: rtl;
+    }
+    .header2 {
+        display: flex;
+        direction: rtl;
+        margin: 10px 20px;
+        border-radius: 5px;
+        padding: 15px;
+        border-top: 1px solid #ddd
+    }
+    .headeer2Icon {
+        margin: 0 10px !important;
+        color: #FF4500 !important;
+        font-weight: 600 !important;
+    }
+    .header2 a,p{
+        display:flex
+    }
+    .detailTitle {
+        padding: 15px;
+        direction: rtl
+    }
+    .dataholder {
+        border-right: 1px solid #ddd;
+        padding-bottom: 10px;
+        direction: rtl;
+        float: left;
+        visibility:visible;
+    }
+    .pricedetail {
+        border-radius: 10px;
+        padding: 0 20px;
+        margin-top: 30px
+    }
+    .priceParent {
+        margin: 0px;
+        height: 100%;
+        float: right
+    }
+    .discountParentt {
+        display: inline-block;
+        width: 100%;
+        direction: ltr;
+        min-height: 25px
+    }
+    .oldPrice {
+        float: left;
+        display: inline-block;
+        margin-bottom: 5px;
+        font-size: 18px;
+        direction:rtl;
+    }
+    .discountSectence {
+        float: right;
+        display: inline-block;
+        color: white;
+        padding: 15px;
+        border-radius: 35px;
+        background-color: #ef3b3b;
+    }
+    .discountParentt {
+        display: flex;
+        align-items: center;
+    }
+    .oldPrice {
+        flex: 1
+    }
+    .priceParent{
+        width:100%
+    }
+    .addtocart {
+        border: unset;
+        background-color: orange;
+        margin:15px 0;
+        background-image: linear-gradient(to right, #FF4500 50%, #d53c0b 50%);
+        width: 100%;
+        padding:0
+    }
+    .featureTitle {
+        text-align: right;
+        float: right;
+        margin: 20px 0;
+    }
+    .bottomDivTitleParent {
+        display: flex;
+        direction: rtl;
+        align-items: center;
+        margin: 30px 0
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .mybtn{
+            width:100%;
+        }
+
+
+
+        .c-comments__summary-note {
+            flex: none !important;
+            max-width: 100% !important;
+        }
+        .bottomDiv {
+            margin-top: 15px
+        }
+        .discountParentt {
+            display: flex;
+            align-items: center;
+        }
+        .oldPrice{
+            flex:1
+        }
+        .pricedetail div {
+            padding: 0
+        }
+        .priceParent {
+            width: 100%
+        }
+        .pricedetail {
+            padding: 0;
+        }
+        .dataholder {
+            margin-top: 40px;
+            padding: 0 !important;
+            border: none
+        }
+        .detailTitle {
+            padding: 15px;
+            direction: rtl;
+            font-size: 18px;
+            text-align: center;
+        }
+        .header1 {
+            
+            padding:15px 5px;
+            
+        }
+
+        .header2Title {
+            clear: both;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width:100px
+        }
+
+    }
 </style>
 
 
@@ -154,35 +307,36 @@
     string newurl = metaModel.curl;
 
 }
-<div class="row" style="display:flex; direction: rtl;margin:10px 20px; border-radius: 5px;padding: 15px; border-top:1px solid #ddd">
+<div class="header2" style="">
     @{
         string entitle = "";
         if (Model.catTreeList != null)
         {
-            <a href="/@entitle"> <i class="fa fa-home"></i>  </a>
+            <a href="/@entitle"> <i class="fa fa-home "></i>  </a>
             if (Model.catTreeList.Count > 0)
             {
                 entitle = @Model.catTreeList[0].entitle;
-                <a href="/@entitle"> <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span> @Model.catTreeList[0].title </a>
+                <a href="/@entitle"> <span   style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[0].title</span>  </a>
             }
             if (Model.catTreeList.Count > 1)
             {
                 entitle += "/" + @Model.catTreeList[1].entitle;
-                <a href="/@entitle"> <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span> @Model.catTreeList[1].title   </a>
+                <a href="/@entitle"> <span style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[1].title</span>    </a>
             }
             if (Model.catTreeList.Count >  2)
             {
                 entitle += "/" + @Model.catTreeList[2].entitle;
-                <a href="/@entitle">   <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span>@Model.catTreeList[2].title</a>
+                <a href="/@entitle">   <span class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[2].title</span> </a>
             }
-            <p style="color: #FF4500 ">   <span style="margin:0 10px; color: #FF4500; font-weight:600" class="fal fa-chevron-left"></span>@Model.title</p>
+            <p style="color: #FF4500 ">   <span style="" class="fal fa-chevron-left headeer2Icon"></span> <span class="header2Title">@Model.title</span></p>
 
         }
     }
 </div>
-<div class="row" style="display:flex;padding: 20px;background-color: #eee;align-items: center;justify-content: center;direction: rtl;">
+<div class="header1"  style="">
     <div style="display:flex;align-items: center;margin: 0 15px;">
-        <i class="fal fa-info" style="margin:0 5px; color:#FF4500"></i>
+        <i class="fal fa-info" style="        margin: 0 5px;
+        color: #FF4500"></i>
         <p>راهنمای خرید</p>
     </div>
     <div style="display:flex;align-items: center;margin: 0 15px;">
@@ -229,75 +383,17 @@
     });
 
 </script>
-<style>
-    .bottomDiv {
-        text-align: right;
-        padding: 50px;
-    }
 
-    .bottomDivTitle {
-        margin-bottom: 20px;
-        color: #FF4500
-    }
-
-    @@media only screen and (max-width: 600px) {
-        .bottomDiv {
-            padding: 5px;
-        }
-    }
-</style>
 
 <div class="bottomDiv" style="position:relative">
-    <p data-toggle="tab" href="#home" style="display:flex; align-items:center;">   <i class="fal fa-pencil" style="color:#FF4500 !important; font-size:20px; color:black;position: absolute;top: 35%;right: 5%;"></i> </p>
-    <div style="display:flex; direction:rtl; align-items:center; margin-bottom:30px">
-        <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+    
+    <div class="bottomDivTitleParent" style="">
+        <i class="fal fa-pencil" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+        <p class="bottomDivTitle">بررسی تخصصی محصول</p>
         <span style="flex:1; border-top:3px solid"></span>
     </div>
-    <style>
-
-
-        .c-content-expert__summary {
-            background: #fcfcfc;
-            color: #404040;
-            font-size: 16px;
-            font-size: 1.143rem;
-            line-height: 2.25;
-            padding: 15px;
-            min-height: 256px;
-            position: relative;
-            margin-left: 24px;
-            margin-bottom: 24px;
-        }
-
-        .c-mask {
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        .c-content-expert__summary:after {
-            width: 165px;
-            height: 165px;
-            position: absolute;
-            content: "";
-            top: 30px;
-            right: 81px;
-            background: url(/images/pen.jpg) no-repeat 50% 50%;
-            background-size: 100%;
-        }
-
-        .c-mask__text {
-            position: relative;
-            overflow: hidden;
-            max-height: 250px;
-        }
-
-            .c-mask__text img {
-                width: 60%;
-                margin: auto;
-                margin-top: 15px
-            }
-    </style>
-    <section class="c-content-expert__summary">
+    
+    <section >
         <div class="c-mask js-mask is-masked">
             <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
                 @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
@@ -309,28 +405,7 @@
                     <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
                 }
             </div>
-            <a id="toggledesc" style="display: none; cursor:pointer; text-align:center; float:left;margin:10px 0; padding:10px;color:blue"><span>ادامه مطلب</span></a>
-            <script>
-                $(document).ready(function () {
-                    var height = $(".c-mask__text").height();
-
-                    if (height >= 250) {
-                        $("#toggledesc").css("display", "inline")
-                    }
-                })
-                $("#toggledesc").click(function () {
-                    if ($(".c-mask__text").css("max-height") == "250px") {
-                        $(".c-mask__text").css("max-height", "5500px");
-                        $(".c-mask__text").css("overflow-y", "unset");
-                        $("#toggledesc").text("بستن");
-                    }
-                    else {
-                        $(".c-mask__text").css("max-height", "250px");
-                        $(".c-mask__text").css("overflow-y", "hidden");
-                        $("#toggledesc").text("ادامه مطلب");
-                    }
-                })
-            </script>
+          
         </div>
     </section>
 </div>
@@ -338,9 +413,10 @@
 @if (Model.feature != null)
 {
     <div class="bottomDiv">
-        <div style="display:flex; direction:rtl; align-items:center">
+        <div class="bottomDivTitleParent">
+            <i class="fal fa-file" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
             <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
-            <span style="flex:1; border-top:3px solid" ></span>
+            <span style="flex:1; border-top:3px solid"></span>
         </div>
        
 
@@ -421,8 +497,9 @@
 
 }
 <div class="bottomDiv">
-    <div style="display:flex; direction:rtl; align-items:center">
-        <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+    <div class="bottomDivTitleParent" style="">
+        <i class="fal fa-comment" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+        <p class="bottomDivTitle">نظر کاربران</p>
         <span style="flex:1; border-top:3px solid"></span>
     </div>
     <div class="c-comments " style="">
@@ -921,11 +998,112 @@
         font-size: 18px;
         margin: 0;
         margin-left: 10px;
+        color: #FF4500;
+        margin-right: 20px;
     }
     .bottomDiv {
         margin: 50px 150px;
         margin-bottom: 0;
         padding-bottom: 0;
+        text-align: right;
+    }
+    @@media only screen and (max-width: 600px) {
+        .bottomDiv {
+            padding: 5px;
+            margin:5px;
+        }
     }
 </style>
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
+
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+   
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+    }
+</style>
+
 <link href="~/Content/css/product-style.css" rel="stylesheet" />

@@ -39,19 +39,24 @@
             <div class="modal-body">
                 <div id="articleForm" class="row" style="background-color:white; padding:10px; margin:0px; ">
 
-
                     <form id="addTransaction" action="addCodingTransaction">
+                        <input hidden id="fromADD" />
                         <input hidden id="recietID" />
+                        <input hidden id="articleID" />
                         <div class="row" style=" margin: 20px; padding: 35px; ">
 
                             <div class="autocomplete row" style="display:flex">
 
 
+                                @{ 
+                                    List<banimo.ViewModel.CodingList> M1 = Model.CodingList.Where(x => x.codingType == "1").ToList();
+                                }
+
                                 <div class="formItem" style="width:100%">
                                     @{
                                         List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
                                         <select name="M2" id="M2" class="form-control">
-                                            <option value="0">انتخاب گروه</option>
+                                            <option value="0">انتخاب کل</option>
                                             @foreach (var item in M2)
                                             {
                                                 <option parentValue="" value="@item.ID" code="@item.codeHesab">@item.title</option>
@@ -103,6 +108,7 @@
 
                             </div>
                             <script>
+                               
                                 $("#M2").change(function () {
                                     var id = $(this).val();
                                     console.log(id)
@@ -206,26 +212,14 @@
 
                                 <div class="formItem" style="width:100%">
 
-                                    <div class=" " style="width:100%">
-                                        <input name="dateFrom" id="dateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
-                                        <input name="abserver" id="abserver" style="display:none" class="form-control abserver " />
-
-                                    </div>
-                                </div>
-                                <div class="formItem" style="width:100%">
-
                                     @{
                                         <div class=" " style="width:100%">
                                             <input placeholder="قیمت" name="price" id="price" class="form-control inputnumber" style="width:100%; " />
                                         </div>
                                     }
                                 </div>
+                                <div class="formItem" style="width:100%">
 
-
-
-                            </div>
-                            <div class="row" style="display:flex">
-                                <div class="formItem" style="width:25%">
                                     <select name="RNode" id="RNode" class="form-control">
                                         <option value="">انتخاب پروژه</option>
                                         @if (Model.nodeList != null)
@@ -239,7 +233,13 @@
 
                                     </select>
                                 </div>
-                                <div class="formItem" style="width:75%">
+
+
+
+                            </div>
+                            <div class="row" style="display:flex">
+
+                                <div class="formItem" style="width:100%">
 
                                     @{
 
@@ -267,84 +267,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
                 <button id="verifynewArticle" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
-                <script>
-                    $("#verifynewArticle").click(function () {
 
-                        // $("#addTransaction").submit();
-
-                        var type = $("#Rtype").val();
-                        var M2 = $("#M2").find(':selected').attr('code');
-                        var M3 = $("#M3").find(':selected').attr('code');
-                        var M4 = $("#M4").find(':selected').attr('code');
-                        var M5 = $("#M5").find(':selected').attr('code');
-                        var price = $("#price").val().replace(',', '');
-                        var description = $("#description").val();
-                        var abserver = $("#abserver").val();
-                        var recietID = $("#recietID").val();
-                        var RTaraf = $("#RTaraf").val();
-                        var RNode = $("#RNode").val();
-
-                        $.ajax({
-                            url: "addCodingTransaction",
-                            dataType: "html",
-                            data: {
-                                M2: M2,
-                                M3: M3,
-                                M4: M4,
-                                M5: M5,
-                                price: price,
-                                description: description,
-                                abserver: abserver,
-                                recietID: recietID,
-                                type: type,
-                                RTaraf: RTaraf,
-                                nodeID: RNode
-                            },
-                            success: function (data) {
-                                if (data == "200") {
-                                    $("#M2").val('');
-                                    $("#M3").val('');
-                                    $("#M4").val('');
-                                    $("#M12").val('');
-                                    $("#M13").val('');
-                                    $("#M14").val('');
-                                    $("#price").val('');
-                                    $("#description").val('');
-                                    $("#abserver").val('');
-
-                                    $.ajax({
-                                        url: '/Core/getRecietArticle',
-                                        dataType: 'html',
-                                        data: {
-                                            id: recietID,
-                                        },
-                                        success: function (data) {
-                                            $("#newRecietArticle").html(data);
-                                        },
-                                        error: function () {
-
-                                        }
-                                    });
-
-
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000,
-
-
-                                    }
-                                    toastr.success('سند شما با موفقیت ثبت شد')
-                                }
-                                //window.location.reload();
-                            }
-                        })
-                    })
-                </script>
             </div>
         </div>
     </div>
@@ -360,11 +283,11 @@
                   <h4 class="modal-title">Modal Header</h4>
                 </div>*@
             <div class="modal-body">
-               
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                
+
             </div>
         </div>
     </div>
@@ -389,14 +312,14 @@
                     <div class=" " style="width:100%; margin:5px;">
                         <p>شروع سال مالی</p>
                         <input name="dateFrom" id="saldateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
-                        <input name="abserver"  style="display:none" class="form-control  " />
-                       
+                        <input name="abserver" style="display:none" class="form-control  " />
+
 
                     </div>
                     <div class=" " style="width:100%; margin:5px;">
                         <p>پایان سال مالی</p>
                         <input name="dateFrom" id="saldateTo" style="display:inline-block" class="form-control inputForm datePicker" />
-                        <input name="abserver"  style="display:none" class="form-control  " />
+                        <input name="abserver" style="display:none" class="form-control  " />
 
                     </div>
 
@@ -408,7 +331,7 @@
                 <script>
                     $("#newSaleMali").click(function () {
                         var dateFrom = $("#saldateFrom").val();
-                      
+
                         var dateTo = $("#saldateTo").val();
                         var salmaliTitle = $("#salmaliTitle").val();
                         $.ajax({
@@ -430,16 +353,17 @@
 </div>
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
-        <li class=""><a data-toggle="tab" href="#resid" style=" color: #8d8d8d; ">رسید/حواله</a></li>
+
+        <li class="active"><a data-toggle="tab" href="#resid" style=" color: #8d8d8d; ">رسید/حواله</a></li>
         <li class=""><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">کدینگ</a></li>
         <li><a data-toggle="tab" href="#sabt" style=" color: #8d8d8d; ">ثبت سند</a></li>
         <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست اسناد</a></li>
         <li><a data-toggle="tab" href="#menu3" style=" color: #8d8d8d; ">گزارشات</a></li>
+        <li ><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
 
     </ul>
     <div class="tab-content">
-        <div id="salemali" class="tab-pane fade in active" style="padding-top:20px">
+        <div id="salemali" class="tab-pane fade in " style="padding-top:20px">
             <div class="row">
                 <div style="overflow-x:auto;padding:10px">
                     <div class="panel panel-default">
@@ -495,7 +419,7 @@
                                                     string rcid = "sm" + item.ID;
                                                     <tr id="@rcid">
                                                         <td>@index</td>
-                                                        
+
                                                         <td>
                                                             @Html.DisplayFor(modelItem => item.title)
                                                         </td>
@@ -526,6 +450,8 @@
                                                             @{
 
                                                                 <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteSalemali" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                                                                <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteSalemali" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">بستن حساب ها  موقت</a>
+                                                                <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteSalemali" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">بستن حساب های دائم</a>
 
                                                             }
                                                         </td>
@@ -554,11 +480,11 @@
                 });
             </script>
         </div>
-        <div id="resid" class="tab-pane fade in" style="padding-top:20px">
+        <div id="resid" class="tab-pane fade in active" style="padding-top:20px">
             <div class="row" style="">
 
                 <div class="col-lg-3" style="padding:10px;">
-                    <p>پروژه :</p>
+                    <p>طرف حساب :</p>
                     <select id="nodeID" class="form-control">
                         <option value="">همه</option>
                         <option value="0">انبار مرکزی</option>
@@ -645,7 +571,7 @@
 
 
                 </div>
-               
+
             </div>
 
             <div class="row" style="">
@@ -1342,9 +1268,8 @@
                     <div class="formItem" style="width:200px">
 
                         <div class=" " style="width:100%">
-                            <input name="dateFrom" id="dateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
-                            <input name="abserver" id="abserver" style="display:none" class="form-control  " />
-
+                            <input id="dateFrom2" style="display:inline-block" class="form-control inputForm FromdatePicker2" />
+                            <input name="Fromabserver2" id="Fromabserver2" style="display:none" class="form-control Fromabserver2 " />
                         </div>
                     </div>
                     <div class="formItem" style="width:200px">
@@ -1366,7 +1291,10 @@
                 </div>
                 <script>
                     $("#newReciet").click(function () {
-                        var abserver = $("#abserver").val();
+                        var abserver = $("#Fromabserver2").val();
+
+                        $("#fromADD").val("add");
+
                         var desc = $("#recietDesc").val();
                         $.ajax({
                             url: "/core/addNewReciet",
@@ -1428,6 +1356,22 @@
 
                     </select>
                 </div>
+                <div class="" style="margin : 0 5px">
+                    <p style="display:inline-block">انتخاب پروژه:</p>
+                    <select name="recietListNode" id="recietListNode" class="form-control inputForm">
+
+                        @*<option value="">همه </option>*@
+                        @if (Model.nodeList != null)
+                        {
+                            foreach (var item in Model.nodeList)
+                            {
+                                <option value="@item.ID">@item.title </option>
+                            }
+                        }
+
+
+                    </select>
+                </div>
 
                 <div>
                     <div class="" style="padding-top:30px">
@@ -1469,7 +1413,7 @@
                     type = $("#selectOrderType").val();
                     dateFrom = $("#Fromabserver").val();
                     dateTo = $("#Toabserver").val();
-
+                    nodeSelected = $("#recietListNode").val();
                     $.ajax({
                         url: '/Core/ChangeRecietList',
                         dataType: 'html',
@@ -1477,7 +1421,8 @@
                             type: type,
                             page: page,
                             dateTo: dateTo,
-                            dateFrom: dateFrom
+                            dateFrom: dateFrom,
+                            nodeSelected: nodeSelected
                         },
 
                         success: function (data) {
@@ -1506,24 +1451,27 @@
         <div id="menu3" class="tab-pane fade in " style="padding-top:20px">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#gardesh" style=" color: #8d8d8d; ">گردش حساب</a></li>
-                <li><a data-toggle="tab" href="#taraz" style=" color: #8d8d8d; ">ترازنامه</a></li>
-               
+                <li><a data-toggle="tab" href="#taraz" style=" color: #8d8d8d; ">تراز آزمایشی</a></li>
+
 
             </ul>
             <div class="tab-content">
                 <div id="gardesh" class="tab-pane fade in active" style="padding-top:20px">
                     <div class="row">
                         <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
-                          
+
 
                             <div style="display:flex; align-items:center">
+                                <div style="width:100% ; margin:10px">
+                                    <input id="handMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                                </div>
                                 <div class=" " style="width:100% ; margin:10px">
                                     @{
                                         <select name="M22" id="M22" class="form-control">
-                                            <option value="0">انتخاب گروه</option>
+                                            <option value="0">انتخاب کل</option>
                                             @foreach (var item in M2)
                                             {
-                                                <option parentValue="" value="@item.ID">@item.title</option>
+                                                <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
                                             }
                                         </select>
                                     }
@@ -1535,7 +1483,7 @@
                                             <option value="0">انتخاب معین</option>
                                             @foreach (var item in M3)
                                             {
-                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                                <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
                                             }
                                         </select>
                                     }
@@ -1547,7 +1495,7 @@
                                             <option value="0">انتخاب تفصیلی</option>
                                             @foreach (var item in M4)
                                             {
-                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                                <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
                                             }
                                         </select>
                                     }
@@ -1559,7 +1507,7 @@
                                             <option value="0">انتخاب تفصیلی 2</option>
                                             @foreach (var item in M5)
                                             {
-                                                <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                                <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
                                             }
                                         </select>
                                     }
@@ -1583,12 +1531,12 @@
                                 </div>
                                 <div style="margin:10px;width:100%" id="dateHolder">
                                     <p>از تاریخ :</p>
-                                    <input type="text" class="form-control projectDate inputfield" />
+                                    <input id="gardeshFrom" type="text" class="form-control projectDate inputfield" />
                                     <input class="PDabserver" style="display:none" />
                                 </div>
                                 <div style="margin:10px;width:100%" id="dateHolder2">
                                     <p>تا تاریخ :</p>
-                                    <input type="text" class="form-control projectDate2 inputfield" />
+                                    <input id="gardeshTo"  type="text" class="form-control projectDate2 inputfield" />
                                     <input class="PD2abserver" style="display:none" />
 
                                 </div>
@@ -1610,14 +1558,10 @@
 
                                     </select>
                                 </div>
-
-
-                            </div>
-                            <div style="display:flex">
                                 <div style="margin:10px;width:100%">
                                     <p>انتخاب پروژه</p>
                                     <select name="GNode" id="GNode" class="form-control">
-                                        <option value="">انتخاب پروژه</option>
+                                      
                                         @if (Model.nodeList != null)
                                         {
                                             foreach (var item in Model.nodeList)
@@ -1630,9 +1574,17 @@
                                     </select>
                                 </div>
 
-                                <div style="margin:10px;width:100%">
+
+                            </div>
+                            <div style="display:flex">
+
+
+                                <div style="margin:10px;width:100%;display: flex; align-items:center">
                                     <div style="position:relative; margin:5px" id="">
-                                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTran">تایید</div>
+                                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">مشاهده</div>
+                                    </div>
+                                    <div style="position:relative; margin:5px" id="">
+                                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardeshPrint">چاپ</div>
                                     </div>
                                 </div>
                                 <div style="margin:10px;width:100%"></div>
@@ -1642,7 +1594,57 @@
                             <div>
 
                                 <script>
-                                    $("#verifyCodeingTran").click(function () {
+                                    $("#verifyCodeingTranGardeshPrint").click(function () {
+                                        var M22 = $("#M22").val();
+                                        var M33 = $("#M33").val();
+                                        var M44 = $("#M44").val();
+                                        var M55 = $("#M55").val();
+                                        var finalText = "";
+                                        var m2text = $("#M22 option:selected").text();
+                                        var m3text = $("#M33 option:selected").text();
+                                        var m4text = $("#M44 option:selected").text();
+                                        var m5text = $("#M55 option:selected").text();
+                                        var trafText = $("#GTaraf option:selected").text();
+
+                                        if (m2text != "انتخاب کل") {
+                                            finalText += m2text + "_ ";
+                                        }
+                                        if (m3text != "انتخاب معین") {
+                                            finalText += m3text + "_  ";
+                                        }
+                                        if (m4text != "انتخاب تفصیلی") {
+                                            finalText += m4text + "_   ";
+                                        }
+                                        if (m5text != "انتخاب تفصیلی 2") {
+                                            finalText += m5text + "_    ";
+                                        }
+                                        if (trafText != "انتخاب طرف حساب") {
+                                            finalText += trafText + "_     ";
+                                        }
+
+
+
+
+
+                                        var datefrom = $(".PDabserver").val();
+                                        var dateTo = $(".PD2abserver").val();
+                                        var datefromtxt = $("#gardeshFrom").val();
+                                        var dateTotxt = $("#gardeshTo").val();
+                                        var transactionType = $("#trantype").val();
+                                        var GTaraf = $("#GTaraf").val();
+                                        var GNode = $("#GNode").val();
+                                        var type = $("#trantype").val();
+                                        var project = $("#GNode  option:selected").text();
+                                     
+
+                                        var url = "/Core/getCodingTranListPrint?dateTotxt=" + dateTotxt + "&dateFromtxt=" + datefromtxt+ "&M22=" + M22 + "&trafText=" + trafText + "&sharhdescription=" + finalText + "&project=" + project + "&M33=" + M33 + "&M44=" + M44 + "&M55=" + M55 + "&datefrom=" + datefrom + "&dateTo=" + dateTo + "&transactionType=" + transactionType + "&GTaraf=" + GTaraf + "&GNode=" + GNode + "&type=" + type;
+                                        window.open(
+                                            url, '_blank' // <- This is what makes it open in a new window.
+                                        );
+
+
+                                    });
+                                    $("#verifyCodeingTranGardesh").click(function () {
 
 
                                         $.ajax({
@@ -1658,7 +1660,8 @@
                                                 transactionType: $("#trantype").val(),
                                                 GTaraf: $("#GTaraf").val(),
                                                 GNode: $("#GNode").val(),
-                                                type: $("#trantype").val()
+                                                type: $("#trantype").val(),
+                                              
                                             },
                                             success: function (data) {
 
@@ -1672,11 +1675,43 @@
                             </div>
                         </div>
                         <script>
+
+                            var doParents = function (el) {
+
+                                var parent = el.attr('parentValue')
+
+                                if (parent != "") {
+                                    var selement = $('option[itemvalue="' + parent + '"]');
+                                    doParents(selement)
+                                }
+                                el.parent().val(el.val());
+
+
+
+                            };
+
+                            $('#handMadeCode').keyup(function (e) {
+                                if (this.value == "") {
+                                    $('option').each(function () {
+                                        $(this).removeAttr("selected");
+                                    })
+                                }
+                                if (e.keyCode == 13) {
+
+
+                                    var id = $(this).val();
+
+                                    var element = $('option[value="' + id + '"]');
+                                    doParents(element);
+
+                                }
+                            })
                             $("#getTransactoin").click(function () {
 
                             })
                             $("#M22").change(function () {
-                                var id = $(this).val();
+                                var id = $('option:selected', this).attr('itemvalue');
+
                                 // console.log(id)
                                 $("#M33 option").each(function () {
                                     var val = $(this).val();
@@ -1706,7 +1741,7 @@
                                 });
                             })
                             $("#M33").change(function () {
-                                var id = $(this).val();
+                                var id = $('option:selected', this).attr('itemvalue');
                                 console.log(id)
                                 $("#M44 option").each(function () {
 
@@ -1730,7 +1765,7 @@
 
                             })
                             $("#M44").change(function () {
-                                var id = $(this).val();
+                                var id = $('option:selected', this).attr('itemvalue');
                                 console.log(id)
                                 $("#M55 option").each(function () {
                                     var val = $(this).val();
@@ -1759,13 +1794,26 @@
 
 
                         <div style="display:flex; align-items:center">
+
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M111" id="M111" class="form-control">
+                                        <option value="0">انتخاب گروه</option>
+                                        @foreach (var item in M1)
+                                        {
+                                            <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M222" id="M222" class="form-control">
-                                        <option value="0">انتخاب گروه</option>
+                                        <option value="0">انتخاب کل</option>
                                         @foreach (var item in M2)
                                         {
-                                            <option parentValue="" value="@item.ID">@item.title</option>
+                                            <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
                                         }
                                     </select>
                                 }
@@ -1777,32 +1825,25 @@
                                         <option value="0">انتخاب معین</option>
                                         @foreach (var item in M3)
                                         {
-                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
                                         }
                                     </select>
                                 }
 
                             </div>
+
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M444" id="M444" class="form-control">
                                         <option value="0">انتخاب تفصیلی</option>
                                         @foreach (var item in M4)
                                         {
-                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
                                         }
                                     </select>
                                 }
 
                             </div>
-                            
-
-                        </div>
-
-
-                    </div>
-                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
-                        <div style="display:flex">
                             <div class=" " style="width:100% ; margin:10px">
 
                                 @{
@@ -1810,16 +1851,37 @@
                                         <option value="0">انتخاب تفصیلی 2</option>
                                         @foreach (var item in M5)
                                         {
-                                            <option parentValue="@item.parentID" value="@item.ID">@item.title</option>
+                                            <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
                                         }
                                     </select>
                                 }
 
                             </div>
 
+                        </div>
+                     
+
+
+                    </div>
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                        <div style="display:flex">
+
+                       
+
+                            <div style="margin:10px;width:100%" id="dateHolder">
+                                <p>از تاریخ :</p>
+                                <input id="tgardeshFrom" type="text" class="form-control tprojectDate inputfield" />
+                                <input class="tPDabserver" style="display:none" />
+                            </div>
+                            <div style="margin:10px;width:100%" id="dateHolder2">
+                                <p>تا تاریخ :</p>
+                                <input id="tgardeshTo" type="text" class="form-control tprojectDate2 inputfield" />
+                                <input class="tPD2abserver" style="display:none" />
+
+                            </div>
 
                             <div style="margin:10px;width:100%">
-
+                                <p>طرف حساب :</p>
                                 <select name="TTaraf" id="TTaraf" class="form-control">
 
 
@@ -1837,9 +1899,9 @@
                                 </select>
                             </div>
                             <div style="margin:10px;width:100%">
-                              
+                                <p>پروژه :</p>
                                 <select name="TNode" id="TNode" class="form-control">
-                                    <option value="">انتخاب پروژه</option>
+                                 
                                     @if (Model.nodeList != null)
                                     {
                                         foreach (var item in Model.nodeList)
@@ -1851,15 +1913,31 @@
 
                                 </select>
                             </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                <p>سطح تراز :</p>
+                                @{
+                                    <select name="baseReport" id="baseReport" class="form-control">
+                                        <option value="1">تراز آزمایشی در سطح گروه</option>
+                                        <option value="2">تراز آزمایشی در سطح کل</option>
+                                        <option value="3">تراز آزمایشی در سطح معین</option>
+                                        <option value="4">تراز آزمایشی در سطح تفصیل 1</option>
+                                        <option value="5">تراز آزمایشی در سطح تفصیل 2</option>
+                                    </select>
+                                }
+
+                            </div>
 
 
                         </div>
                         <div style="display:flex">
 
-                            
-                            <div style="margin:10px;width:100%">
+
+                            <div style="margin:10px;width:100%; display: flex; align-items:center">
                                 <div style="position:relative; margin:5px" id="">
-                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTraz">تایید</div>
+                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTraz">مشاهده</div>
+                                </div>
+                                <div style="position:relative; margin:5px" id="">
+                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTrazPrint">چاپ</div>
                                 </div>
                             </div>
                             <div style="margin:10px;width:100%"></div>
@@ -1869,20 +1947,89 @@
                         <div>
 
                             <script>
-                                $("#verifyCodeingTraz").click(function () {
-                                    
 
+
+                                $("#verifyCodeingTrazPrint").click(function () {
+
+                                    var finalText = "";
+
+                                    var m5text = $("#M555  option:selected").text();
+                                    var m4text = $("#M444  option:selected").text();
+                                    var m3text = $("#M333 option:selected").text();
+                                    var m2text = $("#M222  option:selected").text();
+                                    var trafText = $("#TTaraf option:selected").text();
+                                    if (m5text != "انتخاب تفصیلی 2") {
+                                        finalText = " تراز آزمایشی در سطح تفصیل 2 " + m5text;
+                                    }
+                                    else {
+                                        finalText = $("#baseReport option:selected").text();
+                                    }
+                                    if (m4text != "انتخاب تفصیلی") {
+                                        finalText = "تراز آزمایشی در سطح تفصیل  " + m4text;
+                                    }
+                                    else {
+                                        finalText = $("#baseReport option:selected").text();
+                                    }
+                                    if (m3text != "انتخاب معین") {
+                                        finalText = "تراز آزمایشی در سطح معین  " + m3text;
+                                    }
+                                    else {
+                                        finalText = $("#baseReport option:selected").text();
+                                    }
+                                    if (m2text != "انتخاب کل") {
+                                        finalText = "تراز آزمایشی در سطح کل  " + m3text;
+                                    }
+                                    else {
+                                        finalText = $("#baseReport option:selected").text();
+                                    }
+
+
+                                    if (trafText != "انتخاب طرف حساب") {
+                                        finalText += trafText + "_     ";
+                                    }
+
+
+                                    var baseReport = $("#baseReport").val();
+                                    var M111 = $("#M111").val();
+                                    var M222 = $("#M222").val();
+                                    var M333 = $("#M333").val();
+                                    var M444 = $("#M444").val();
+                                    var M555 = $("#M555").val();
+                                    var dateFrom = $(".tPDabserver").val();
+                                    var dateTo = $(".tPD2abserver").val();
+                                    var TTaraf = $("#TTaraf").val();
+                                    var TNode = $("#TNode").val();
+                                    var datefromtxt = $("#tgardeshFrom").val();
+                                    var dateTotxt = $("#tgardeshTo").val();
+                                    var project = $("#TNode  option:selected").text();
+                                    var columnCount = $("#columnCount").val();
+
+                                    
+                                    var url = "/Core/getCodingTrazListPring?dateTotxt=" + dateTotxt + "&columnCount=" + columnCount + "&baseReport=" + baseReport + "&dateFromtxt=" + datefromtxt + "&M111=" + M111 + "&M222=" + M222 + "&sharhdescription=" + finalText + "&project=" + project + "&M333=" + M333 + "&M444=" + M444 + "&M555=" + M555 + "&datefrom=" + dateFrom + "&dateTo=" + dateTo + "&TTaraf=" + TTaraf + "&TNode=" + TNode + "&project=" + project;
+                                    window.open(
+                                        url, '_blank' // <- This is what makes it open in a new window.
+                                    );
+
+
+                                });
+                                $("#verifyCodeingTraz").click(function () {
+
+
+                                    $("#columnCount").val("2");
                                     $.ajax({
                                         url: 'getCodingTrazList',
                                         dataType: 'html',
                                         data: {
+                                            baseReport: $("#baseReport").val(),
+                                            M111: $("#M111").val(),
                                             M222: $("#M222").val(),
                                             M333: $("#M333").val(),
                                             M444: $("#M444").val(),
                                             M555: $("#M555").val(),
+                                            dateFrom: $(".tPDabserver").val(),
+                                            dateTo: $(".tPD2abserver").val(),
                                             TTaraf: $("#TTaraf").val(),
                                             TNode: $("#TNode").val(),
-                                           
                                         },
                                         success: function (data) {
 
@@ -1892,7 +2039,7 @@
                                 })
                             </script>
                         </div>
-                        <div id="TrazListHolder" class="row">
+                        <div class="row">
                             <div class="row">
                                 <div style="margin:10px;">
 
@@ -1906,6 +2053,13 @@
                                     </select>
                                 </div>
                                 <script>
+                                    $("#baseReport").change(function () {
+                                        $("#M111").val("0");
+                                        $("#M222").val("0");
+                                        $("#M333").val("0");
+                                        $("#M444").val("0");
+                                        $("#M555").val("0");
+                                    })
                                     $("#columnCount").change(function () {
                                         var value = $(this).val();
                                         if (value == 2) {
@@ -1931,81 +2085,85 @@
                                     .ga {
                                         display: none;
                                     }
+
                                     .ef {
                                         display: none;
                                     }
                                 </style>
-                                <div style="overflow-x:auto;padding:10px">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+                                <div id="TrazListHolder">
+                                    <div style="overflow-x:auto;padding:10px">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
 
-                                            <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> ترازنامه </h3>
-                                        </div>
-                                        <div class="panel-body">
-
-                                            <div id="morris-area-chart">
-                                                <div style="overflow:auto">
-                                                    <table class="table table-bordered table-hover table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th colspan="2">
-                                                                </th>
-                                                                <th class=" ef" colspan="2">
-                                                                    افتتاحیه
-                                                                </th>
-                                                                <th class="ga" colspan="2">
-                                                                    گردش
-                                                                </th>
-                                                                <th class="ma" colspan="2">
-                                                                    مانده
-                                                                </th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    ردیف
-
-                                                                </th>
-                                                                <th>
-                                                                    شرح
-                                                                </th>
-                                                                <th class="ef">
-                                                                    بد
-                                                                </th>
-                                                                <th class="ef">
-                                                                    بس
-                                                                </th>
-                                                                <th class="ga">
-                                                                    بد
-                                                                </th>
-                                                                <th class="ga">
-                                                                    بس
-                                                                </th>
-                                                                <th class="ma">
-                                                                    بد
-                                                                </th>
-                                                                <th class="ma">
-                                                                    بس
-                                                                </th>
-
-
-                                                            </tr>
-                                                        </thead>
-
-
-
-                                                        <tbody id="tarazHolder">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> تراز آزمایشی </h3>
                                             </div>
+                                            <div class="panel-body">
+
+                                                <div id="morris-area-chart">
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-bordered table-hover table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="2">
+                                                                    </th>
+                                                                    <th class=" ef" colspan="2">
+                                                                        افتتاحیه
+                                                                    </th>
+                                                                    <th class="ga" colspan="2">
+                                                                        گردش
+                                                                    </th>
+                                                                    <th class="ma" colspan="2">
+                                                                        مانده
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        ردیف
+
+                                                                    </th>
+                                                                    <th>
+                                                                        شرح
+                                                                    </th>
+                                                                    <th class="ef">
+                                                                        بد
+                                                                    </th>
+                                                                    <th class="ef">
+                                                                        بس
+                                                                    </th>
+                                                                    <th class="ga">
+                                                                        بد
+                                                                    </th>
+                                                                    <th class="ga">
+                                                                        بس
+                                                                    </th>
+                                                                    <th class="ma">
+                                                                        بد
+                                                                    </th>
+                                                                    <th class="ma">
+                                                                        بس
+                                                                    </th>
 
 
+                                                                </tr>
+                                                            </thead>
+
+
+
+                                                            <tbody id="tarazHolder">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -2014,7 +2172,7 @@
 
                         })
                         $("#M222").change(function () {
-                            var id = $(this).val();
+                            var id = $('option:selected', this).attr('itemvalue');
                             // console.log(id)
                             $("#M333 option").each(function () {
                                 var val = $(this).val();
@@ -2044,9 +2202,11 @@
                             });
                         })
                         $("#M333").change(function () {
-                            var id = $(this).val();
-                            console.log(id)
-                            $("#M44 option").each(function () {
+                          
+                            var id = $('option:selected', this).attr('itemvalue');
+                          
+                            $("#M444 option").each(function () {
+
 
                                 var val = $(this).val();
                                 if (val == "0") {
@@ -2067,9 +2227,9 @@
 
 
                         })
-                        $("#M44").change(function () {
-                            var id = $(this).val();
-                            console.log(id)
+                        $("#M444").change(function () {
+                            var id = $('option:selected', this).attr('itemvalue');
+                        
                             $("#M555 option").each(function () {
                                 var val = $(this).val();
                                 if (val == "0") {
@@ -2093,25 +2253,69 @@
                 </div>
             </div>
 
-           
+
         </div>
     </div>
 </div>
 
 <script src="~/Scripts/persian-date.js"></script>
 <script src="~/Scripts/persian-datepicker.js"></script>
+<script src="~/Scripts/html2canvas.min.js"></script>
+<script>
+    var takePic = function () {
+        $(". ").each(function () {
+
+            var id = "#" + this.id;
+            var ele = document.getElementById(this.id);
+            html2canvas(ele).then(canvas => {
+
+                var r = new XMLHttpRequest();
+                r.open("POST", "/Core/SaveImage", true);
+                r.onreadystatechange = function () {
+                    if (r.readyState != 4 || r.status != 200) {
+                        return;
+                    }
+                    else {
+                        window.location.href = "/Home/PrintALl";
+                    }
+                    
+                };
+                var p = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+
+                if (p != "data:,") {
+
+                    p = id + "*" + p;
+                    r.send(p);
+                }
+
+
+                //window.location.href = image; // it will save locally
+                //document.body.appendChild(canvas)
+            });
+
+
+        });
+    };
+    //takePic();
+</script>
 <script>
 
     $(function () {
-       
-        $(".datePicker").pDatepicker({
+
+        $(".addSanaddatePicker").pDatepicker({
             observer: true,
             format: 'YYYY/MM/DD',
-            altField: '.abserver',
+            altField: '.addSanadData',
             autoClose: true
 
             // minDate: new persianDate().add('day', 2).valueOf(),
             // options & callbacks here
+        });
+        $(".FromdatePicker2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.Fromabserver2',
+            autoClose: true
         });
         $(".FromdatePicker").pDatepicker({
             observer: true,
@@ -2135,6 +2339,18 @@
             observer: true,
             format: 'YYYY/MM/DD',
             altField: '.PDabserver',
+            autoClose: true
+        });
+        $(".tprojectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.tPD2abserver',
+            autoClose: true
+        });
+        $(".tprojectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.tPDabserver',
             autoClose: true
         });
 
@@ -2248,5 +2464,111 @@
         $(".formsection").css("display", "none");
         $(".main1").css("display", "inline-block");
         $("#createAccount").modal('toggle');
+    })
+</script>
+
+<script>
+    $("#verifynewArticle").click(function () {
+
+        var frm = $("#fromADD").val();
+
+
+
+        var type = $("#Rtype").val();
+        var M1 = $("#M1").find(':selected').attr('code');
+        var M2 = $("#M2").find(':selected').attr('code');
+        var M3 = $("#M3").find(':selected').attr('code');
+        var M4 = $("#M4").find(':selected').attr('code');
+        var M5 = $("#M5").find(':selected').attr('code');
+        var price = $("#price").val().replace(',', '');
+        var description = $("#description").val();
+        var recietID = $("#recietID").val();
+        var articleID = $("#articleID").val();
+        var RTaraf = $("#RTaraf").val();
+        var RNode = $("#RNode").val();
+
+
+        $.ajax({
+            url: "/Core/addCodingTransaction",
+            dataType: "",
+            data: {
+
+                M2: M2,
+                M3: M3,
+                M4: M4,
+                M5: M5,
+                price: price,
+                description: description,
+                recietID: recietID,
+                type: type,
+                RTaraf: RTaraf,
+                nodeID: RNode,
+                articleID: articleID
+            },
+            success: function (data) {
+                var type;
+                if (frm != "add") {
+                    type = 1
+                }
+                else {
+                    $("#EditarticleHolder").html(data);
+                }
+                if (data == "200") {
+                    $("#M2").val('0');
+                    $("#M3").val('0');
+                    $("#M4").val('0');
+                    $("#M5").val('0');
+                    $("#Rtype").val('');
+                    $("#RTaraf").val('0');
+                    
+
+                    $("#M12").val('0');
+                    $("#M13").val('0');
+                    $("#M14").val('0');
+                    $("#price").val('');
+                    $("#description").val('');
+                    $("#abserver").val('');
+
+
+
+                    $.ajax({
+                        url: '/Core/getRecietArticle',
+                        dataType: 'html',
+                        data: {
+                            id: recietID,
+                            type: type
+                        },
+                        success: function (data) {
+
+                            if (frm == "add") {
+                                $("#newRecietArticle").html(data);
+                            }
+                            else {
+                                $("#EditarticleHolder").html(data);
+                            }
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.success('سند شما با موفقیت ثبت شد')
+                }
+                //window.location.reload();
+            }
+        })
     })
 </script>

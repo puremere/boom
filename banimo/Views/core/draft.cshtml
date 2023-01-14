@@ -149,8 +149,20 @@
                 <div class="col-lg-3" style="padding:10px;">
                     <p>پروژه :</p>
                     <select id="nodeID" class="form-control">
+
+
+                        @foreach (var item in Model.NodeList)
+                        {
+
+                            <option value="@item.ID">@item.title</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>طرف حساب :</p>
+                    <select id="tarafID" class="form-control">
                         <option value="">همه</option>
-                        <option value="0">انبار مرکزی</option>
+
                         @foreach (var item in Model.TarafList)
                         {
                             <option value="@item.ID">@item.name</option>
@@ -165,6 +177,12 @@
                         <option value="0">حواله</option>
                     </select>
                 </div>
+                <div class="col-lg-3" style="padding:10px;" id="">
+                    <p>شماره رسید/حواله :</p>
+                    <input id="number" type="text" class="form-control  inputfield" />
+
+
+                </div>
                 <div class="col-lg-3" style="padding:10px;" id="dateHolder">
                     <p>از تاریخ :</p>
                     <input type="text" class="form-control projectDate inputfield" />
@@ -178,7 +196,7 @@
                 </div>
                 <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
                     <p>قیمت از :</p>
-                    <input type="text" class="form-control  inputfield" />
+                    <input id="priceFrom" type="text" class="form-control  inputfield" />
 
 
                 </div>
@@ -197,7 +215,7 @@
                 </div>
                 <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
                     <p>تعداد تا :</p>
-                    <input type="text" class="form-control  inputfield" />
+                    <input id="priceTo" type="text" class="form-control  inputfield" />
 
 
                 </div>
@@ -210,7 +228,7 @@
                 </div>
                 <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
                     <p>توضیحات :</p>
-                    <input type="text" class="form-control  inputfield" />
+                    <input id="description" type="text" class="form-control  inputfield" />
 
 
                 </div>
@@ -234,7 +252,7 @@
 
 
                 </div>
-                
+
             </div>
 
             <div class="row" style="">
@@ -255,7 +273,7 @@
                             url: 'returnDraftListA',
                             dataType: 'html',
                             data: {
-
+                                number: $("#number").val(),
                                 timeFrom: $(".PDabserver").val(),
                                 timeTTo: $(".PD2abserver").val(),
                                 transactionType: $("#trantype").val(),
@@ -266,7 +284,9 @@
                                 countTo: $("#countTo").val(),
                                 amani: $("#amani").val(),
                                 nodeID: $("#nodeID").val(),
+                                tarafID: $("#tarafID").val(),
                                 productID: $("#IDholder").val(),
+                                description: $("#description").val(),
 
                             },
                             success: function (data) {

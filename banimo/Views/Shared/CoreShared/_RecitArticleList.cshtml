@@ -269,14 +269,57 @@
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                    <i id="newArticleModalIcon" style="cursor:pointer; float:left;font-size:20px" class="fa fa-plus"></i>
+                    <i id="newArticleModalIcon" style="cursor:pointer; float:left;font-size:20px; margin-right:20px" class="fa fa-plus"></i>
+                   
                     <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست آرتیکل </h3>
                 </div>
-                <div class="panel-body">
+                <div id="rookesh" class="panel-body canBePrint">
                     @if (Model.RecietArticleList != null)
                     {
                         <div id="morris-area-chart">
                             <div style="overflow:auto">
+                                <div style="display:flex; border:1px solid #eee; width:100%; padding:15px">
+                                    <div>
+                                        
+                                        <div style="display:flex; margin:10px"> <span>تاریخ : </span> <span>@Model.date</span> </div>
+                                        <div style="display:flex;margin:10px"> <span>شماره سند : </span> <span>@Model.sand</span> </div>
+                                        <div style="display:flex;margin:10px"> <span>شرح سند : </span> <span>@Model.atf</span> </div>
+                                    </div>
+                                    <div style="flex:1; text-align:center">
+                                        <div style=" margin:10px"> <b>@Model.title </b>  </div>
+                                        <div style="margin:10px"> <span> سند حسابداری </span>  </div>
+                                    </div>
+                                    <div>
+                                        <div style="display:flex; margin:10px"> <span>شرح سند : </span> <span>@Model.sharh</span> </div>
+                                        <div style="display:flex;margin:10px">
+                                            <span>وضعیت : </span>
+                                            @{
+                                                if (Model.status == "0")
+                                                {
+                                                    <span> موقت</span>
+                                                }
+                                                else if (Model.status == "1")
+                                                {
+                                                    <span> اولیه</span>
+                                                }
+                                                else if (Model.status == "2")
+                                                {
+                                                    <span> نهایی</span>
+                                                }
+                                                else if (Model.status == "3")
+                                                {
+                                                    <span> دائم</span>
+                                                }
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                                <div style="display:flex">
+
+                                </div>
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>
                                         <tr>
@@ -291,7 +334,7 @@
                                                 شرح
                                             </th>
                                             <th>
-                                                توضیحات
+                                                مبلغ جزء
                                             </th>
                                             <th>
                                                 بدهکار
@@ -309,7 +352,8 @@
 
                                     <tbody>
                                         @{
-                                            List<banimo.ViewModel.RecietArticleList> lst = Model.RecietArticleList.GroupBy(x => x.koll).Select(c => c.First()).ToList();
+                                            List<banimo.ViewModel.RecietArticleList> molist = Model.RecietArticleList.GroupBy(x => new { x.moientitle, x.type }).Select(c => c.First()).ToList();
+                                            List<banimo.ViewModel.RecietArticleList> lst = Model.RecietArticleList.GroupBy(x => new { x.koll, x.moein, x.type }).Select(c => c.First()).ToList();
                                             List<banimo.ViewModel.RecietArticleList> lst0 = new List<banimo.ViewModel.RecietArticleList>();
                                             List<banimo.ViewModel.RecietArticleList> lst1 = new List<banimo.ViewModel.RecietArticleList>();
                                             List<banimo.ViewModel.RecietArticleList> lst2 = new List<banimo.ViewModel.RecietArticleList>();
@@ -318,831 +362,1029 @@
 
                                         @foreach (var item in lst)
                                         {
-                                            int index = lst.IndexOf(item) + 1;
-                                            lst0 = Model.RecietArticleList.Where(x => x.koll == item.koll).GroupBy(x => x.moein).Select(c => c.First()).ToList();
 
-                                        <tr>
-                                            <td>@index</td>
-                                            <td>
-                                                <p class="koll">@item.koll</p>
-                                                @foreach (var moien in lst0)
-                                                {
-                                                    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
 
-                                                    <p class="moien">@moien.moein</p>
-                                                    foreach (var tafsil1 in lst1)
+                                            lst0 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.type == item.type && x.moein == item.moein).GroupBy(x => x.moein).Select(c => c.First()).ToList();
+
+                                            <tr>
+                                                <td>
+
+                                                    @foreach (var moien in lst0)
                                                     {
-                                                        if (tafsil1.tafsil1 != "0")
+                                                        var index = molist.IndexOf(moien) + 1;
+
+                                                        <p class="koll">@index</p>
+                                                        lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                        <p class="moien">&nbsp;</p>
+                                                        if (lst1.Count != 0)
                                                         {
-                                                            lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
-
-                                                            <p class="fasil">@tafsil1.tafsil1</p>
-                                                            foreach (var tafsil2 in lst2)
+                                                            foreach (var tafsil1 in lst1)
                                                             {
-                                                                if (tafsil2.tafsil2 != "0")
+
+                                                                if (tafsil1.tafsil1 != "0")
                                                                 {
+                                                                    lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
 
-                                                                    <p class="fasil2">@tafsil2.tafsil2</p>
-                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                    <p class="fasil">&nbsp;</p>
 
-                                                                    foreach (var trafhesab in lst3)
+                                                                    if (lst2.Count != 0)
                                                                     {
-                                                                        if (trafhesab.trafhesab != null)
+                                                                        foreach (var tafsil2 in lst2)
                                                                         {
-                                                                            <p class="taraf">@trafhesab.trafhesab</p>
-                                                                        }
-
-                                                                    }
-                                                                }
-
-                                                            }
-                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                            foreach (var trafhesab in lst3)
-                                                            {
-                                                                if (trafhesab.trafhesab != null)
-                                                                {
-                                                                    <p class="taraf">@trafhesab.trafhesab</p>
-                                                                }
-
-                                                            }
-                                                        }
-
-
-
-                                                    }
-                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == moien.tafsil1 && x.tafsil2 != moien.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                    foreach (var trafhesab in lst3)
-                                                    {
-                                                        if (trafhesab.trafhesab != null)
-                                                        {
-                                                            <p class="taraf">@trafhesab.trafhesab</p>
-                                                        }
-
-                                                    }
-                                                }
-
-                                            </td>
-                                            <td>
-                                                <p class="koll">@item.kolltitle</p>
-                                                @foreach (var moien in lst0)
-                                                {
-                                                    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
-
-                                                    <p class="moien">@moien.moientitle</p>
-                                                    foreach (var tafsil1 in lst1)
-                                                    {
-                                                        if (tafsil1.tafsil1 != "0")
-                                                        {
-                                                            lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
-
-                                                            <p class="fasil">@tafsil1.tafsil1title</p>
-                                                            foreach (var tafsil2 in lst2)
-                                                            {
-                                                                if (tafsil2.tafsil2 != "0")
-                                                                {
-
-                                                                    <p class="fasil2">@tafsil2.tafsil2title</p>
-                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                                    foreach (var trafhesab in lst3)
-                                                                    {
-                                                                        if (trafhesab.trafhesab != null)
-                                                                        {
-                                                                            <p class="taraf">@trafhesab.name</p>
-                                                                        }
-
-                                                                    }
-                                                                }
-
-                                                            }
-                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                            foreach (var trafhesab in lst3)
-                                                            {
-                                                                if (trafhesab.trafhesab != null)
-                                                                {
-                                                                    <p class="taraf">@trafhesab.name</p>
-                                                                }
-
-                                                            }
-                                                        }
-
-
-                                                    }
-                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 != moien.tafsil1 && x.tafsil2 != moien.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                    foreach (var trafhesab in lst3)
-                                                    {
-                                                        if (trafhesab.trafhesab != null)
-                                                        {
-                                                            <p class="taraf">@trafhesab.name</p>
-                                                        }
-
-                                                    }
-                                                }
-
-                                            </td>
-                                            <td>
-                                                <p class="koll">-</p>
-
-                                                @foreach (var moien in lst0)
-                                                {
-                                                    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
-
-                                                    if (lst1.Count > 0)
-                                                    {
-                                                        <p class="moien">-</p>
-                                                        foreach (var tafsil1 in lst1)
-                                                        {
-                                                            if (tafsil1.tafsil1 != "0")
-                                                            {
-                                                                lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
-
-                                                                if (lst2.Count > 0)
-                                                                {
-                                                                    <p class="fasil">-</p>
-                                                                    foreach (var tafsil2 in lst2)
-                                                                    {
-                                                                        if (tafsil2.tafsil2 != "0")
-                                                                        {
-
-
-                                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-                                                                            if (lst3.Count > 0)
+                                                                            if (tafsil2.tafsil2 != "0")
                                                                             {
-                                                                                <p class="fasil2">-</p>
+
+                                                                                <p class="fasil2">&nbsp;</p>
+                                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+
                                                                                 foreach (var trafhesab in lst3)
                                                                                 {
                                                                                     if (trafhesab.trafhesab != null)
                                                                                     {
-
-                                                                                        <p class="taraf">@trafhesab.description</p>
+                                                                                        <p class="taraf">&nbsp;</p>
+                                                                                        <p> &nbsp;</p>
                                                                                     }
 
+                                                                                }
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                        if (lst3.Count != 0)
+                                                                        {
+                                                                            foreach (var trafhesab in lst3)
+                                                                            {
+                                                                                if (trafhesab.trafhesab != null)
+                                                                                {
+                                                                                    <p class="taraf">&nbsp;</p>
+                                                                                    <p> &nbsp;</p>
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <p> &nbsp;</p>
+                                                                        }
+                                                                    }
+
+
+
+                                                                }
+
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                            if (lst3.Count != 0)
+                                                            {
+                                                                foreach (var trafhesab in lst3)
+                                                                {
+                                                                    if (trafhesab.trafhesab != null)
+                                                                    {
+                                                                        <p class="taraf">&nbsp;</p>
+                                                                        <p> &nbsp;</p>
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p> &nbsp;</p>
+                                                            }
+                                                        }
+
+
+
+
+
+
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @foreach (var moien in lst0)
+                                                    {
+                                                        <p class="koll">@item.koll</p>
+                                                        lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                        <p class="moien">@moien.moein</p>
+                                                        if (lst1.Count != 0)
+                                                        {
+                                                            foreach (var tafsil1 in lst1)
+                                                            {
+
+                                                                if (tafsil1.tafsil1 != "0")
+                                                                {
+                                                                    lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                                                    <p class="fasil">@tafsil1.tafsil1</p>
+
+                                                                    if (lst2.Count != 0)
+                                                                    {
+                                                                        foreach (var tafsil2 in lst2)
+                                                                        {
+                                                                            if (tafsil2.tafsil2 != "0")
+                                                                            {
+
+                                                                                <p class="fasil2">@tafsil2.tafsil2</p>
+                                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+                                                                                if (lst3.Count != 0)
+                                                                                {
+                                                                                    foreach (var trafhesab in lst3)
+                                                                                    {
+                                                                                        if (trafhesab.trafhesab != null)
+                                                                                        {
+                                                                                            <p class="taraf">@trafhesab.trafhesab</p>
+                                                                                            <p> &nbsp;</p>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p> &nbsp;</p>
+                                                                                }
+
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                        if (lst3.Count != 0)
+                                                                        {
+                                                                            foreach (var trafhesab in lst3)
+                                                                            {
+                                                                                if (trafhesab.trafhesab != null)
+                                                                                {
+                                                                                    <p class="taraf">@trafhesab.trafhesab</p>
+                                                                                    <p> &nbsp;</p>
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <p> &nbsp;</p>
+                                                                        }
+                                                                    }
+
+
+
+                                                                }
+
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                            if (lst3.Count != 0)
+                                                            {
+                                                                foreach (var trafhesab in lst3)
+                                                                {
+                                                                    if (trafhesab.trafhesab != null)
+                                                                    {
+                                                                        <p class="taraf">@trafhesab.trafhesab</p>
+                                                                        <p> &nbsp;</p>
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p> &nbsp;</p>
+                                                            }
+                                                        }
+
+
+
+
+
+
+                                                    }
+                                                </td>
+                                                <td>
+
+                                                    @foreach (var moien in lst0)
+                                                    {
+                                                        <p class="koll">@item.kolltitle</p>
+                                                        lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                        <p class="moien">@moien.moientitle</p>
+                                                        if (lst1.Count != 0)
+                                                        {
+                                                            foreach (var tafsil1 in lst1)
+                                                            {
+
+                                                                if (tafsil1.tafsil1 != "0")
+                                                                {
+                                                                    lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                                                    <p class="fasil">@tafsil1.tafsil1title</p>
+
+                                                                    if (lst2.Count != 0)
+                                                                    {
+                                                                        foreach (var tafsil2 in lst2)
+                                                                        {
+                                                                            if (tafsil2.tafsil2 != "0")
+                                                                            {
+
+                                                                                <p class="fasil2">@tafsil2.tafsil2title</p>
+                                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+
+                                                                                if (lst3.Count != 0)
+                                                                                {
+                                                                                    foreach (var trafhesab in lst3)
+                                                                                    {
+                                                                                        if (trafhesab.trafhesab != null)
+                                                                                        {
+                                                                                            <p class="taraf">@trafhesab.name</p>
+                                                                                            <p>@trafhesab.description</p>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>@tafsil2.description</p>
+                                                                                }
+
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                        if (lst3.Count != 0)
+                                                                        {
+                                                                            foreach (var trafhesab in lst3)
+                                                                            {
+                                                                                if (trafhesab.trafhesab != null)
+                                                                                {
+                                                                                    <p class="taraf">@trafhesab.name</p>
+                                                                                    <p>@trafhesab.description</p>
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <p>@tafsil1.description</p>
+                                                                        }
+                                                                    }
+
+
+
+                                                                }
+
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                            if (lst3.Count != 0)
+                                                            {
+                                                                foreach (var trafhesab in lst3)
+                                                                {
+                                                                    if (trafhesab.trafhesab != null)
+                                                                    {
+                                                                        <p class="taraf">@trafhesab.name</p>
+                                                                        <p>@trafhesab.description</p>
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>@moien.description</p>
+                                                            }
+                                                        }
+
+
+
+
+
+
+                                                    }
+
+
+
+
+                                                </td>
+                                                <td>
+                                                    @foreach (var moien in lst0)
+                                                    {
+                                                        <p class="koll">&nbsp;</p>
+                                                        lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                        <p class="moien">&nbsp;</p>
+                                                        if (lst1.Count != 0)
+                                                        {
+                                                            foreach (var tafsil1 in lst1)
+                                                            {
+
+                                                                if (tafsil1.tafsil1 != "0")
+                                                                {
+                                                                    lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                                                    <p class="fasil">&nbsp;</p>
+
+                                                                    if (lst2.Count != 0)
+                                                                    {
+                                                                        foreach (var tafsil2 in lst2)
+                                                                        {
+                                                                            if (tafsil2.tafsil2 != "0")
+                                                                            {
+
+                                                                                <p class="fasil2">&nbsp;</p>
+                                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+                                                                                if (lst3.Count != 0)
+                                                                                {
+                                                                                    foreach (var trafhesab in lst3)
+                                                                                    {
+                                                                                        if (trafhesab.trafhesab != null)
+                                                                                        {
+                                                                                            <p class="taraf">&nbsp;</p>
+                                                                                            <p>@string.Format("{0:n0}", Math.Abs(trafhesab.price)) </p>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>@string.Format("{0:n0}", Math.Abs(tafsil2.price)) </p>
+                                                                                }
+
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                        if (lst3.Count != 0)
+                                                                        {
+                                                                            foreach (var trafhesab in lst3)
+                                                                            {
+                                                                                if (trafhesab.trafhesab != null)
+                                                                                {
+                                                                                    <p class="taraf">&nbsp;</p>
+                                                                                    <p>@string.Format("{0:n0}", Math.Abs(trafhesab.price))</p>
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <p>@string.Format("{0:n0}", Math.Abs(tafsil1.price)) </p>
+
+                                                                        }
+                                                                    }
+
+
+
+                                                                }
+
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                            if (lst3.Count != 0)
+                                                            {
+                                                                foreach (var trafhesab in lst3)
+                                                                {
+                                                                    if (trafhesab.trafhesab != null)
+                                                                    {
+                                                                        <p class="taraf">&nbsp;</p>
+                                                                        <p>@string.Format("{0:n0}", Math.Abs(trafhesab.price))</p>
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>@string.Format("{0:n0}", Math.Abs(moien.price)) </p>
+                                                            }
+                                                        }
+
+
+
+
+
+
+                                                    }
+
+                                                </td>
+
+
+                                                <td>
+                                                    @if (item.type == "0")
+                                                    {
+
+
+                                                        foreach (var moien in lst0)
+                                                        {
+                                                            double kollsum = Model.RecietArticleList.Where(x => x.moein == moien.moein && x.type == moien.type).Sum(x => x.price);
+                                                            <p class="koll">@string.Format("{0:n0}", Math.Abs(kollsum)) </p>
+                                                            lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                            <p class="moien">&nbsp;</p>
+                                                            if (lst1.Count != 0)
+                                                            {
+                                                                foreach (var tafsil1 in lst1)
+                                                                {
+
+                                                                    if (tafsil1.tafsil1 != "0")
+                                                                    {
+                                                                        lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                                                        <p class="fasil">&nbsp;</p>
+
+                                                                        if (lst2.Count != 0)
+                                                                        {
+                                                                            foreach (var tafsil2 in lst2)
+                                                                            {
+                                                                                if (tafsil2.tafsil2 != "0")
+                                                                                {
+
+                                                                                    <p class="fasil2">&nbsp;</p>
+                                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+
+                                                                                    foreach (var trafhesab in lst3)
+                                                                                    {
+                                                                                        if (trafhesab.trafhesab != null)
+                                                                                        {
+                                                                                            <p class="taraf">&nbsp;</p>
+                                                                                            <p>&nbsp; </p>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                            if (lst3.Count != 0)
+                                                                            {
+                                                                                foreach (var trafhesab in lst3)
+                                                                                {
+                                                                                    if (trafhesab.trafhesab != null)
+                                                                                    {
+                                                                                        <p class="taraf">&nbsp;</p>
+                                                                                        <p>&nbsp;</p>
+                                                                                    }
 
                                                                                 }
                                                                             }
                                                                             else
                                                                             {
-                                                                                <p class="fasil2">@tafsil2.description</p>
+                                                                                <p>&nbsp;</p>
                                                                             }
+                                                                        }
 
+
+
+                                                                    }
+
+
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                                if (lst3.Count != 0)
+                                                                {
+                                                                    foreach (var trafhesab in lst3)
+                                                                    {
+                                                                        if (trafhesab.trafhesab != null)
+                                                                        {
+                                                                            <p class="taraf">&nbsp;</p>
+                                                                            <p>&nbsp;</p>
                                                                         }
 
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <p class="fasil">@tafsil1.description</p>
+                                                                    <p>&nbsp;</p>
                                                                 }
-
-
-
                                                             }
+
+
+
 
 
 
                                                         }
                                                     }
-                                                    else
+
+
+                                                </td>
+                                                <td>
+
+                                                    @if (item.type != "0")
                                                     {
-                                                        <p class="moien">@moien.description</p>
-                                                    }
-
-
-
-                                                }
-
-                                            </td>
-                                            <td>
-                                                @{
-                                                    double kollsum = Model.RecietArticleList.Where(x => x.koll == item.koll).Sum(x => x.price);
-                                                    if (kollsum >= 0)
-                                                    {
-                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(kollsum))</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="koll">-</p>
-                                                    }
-                                                }
-
-                                                @foreach (var moien in lst0)
-                                                {
-                                                    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
-
-                                                    double moiensum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).Sum(x => x.price);
-                                                    if (moiensum >= 0)
-                                                    {
-                                                        <p class="moien">@string.Format("{0:n0}", @Math.Abs(moiensum))</p>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="moien">-</p>
-                                                    }
-                                                    foreach (var tafsil1 in lst1)
-                                                    {
-                                                        if (tafsil1.tafsil1 != "0")
+                                                        foreach (var moien in lst0)
                                                         {
-                                                            lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
 
-                                                            double tafsilsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).Sum(x => x.price);
-                                                            if (tafsilsum >= 0)
+                                                            double kollsum = Model.RecietArticleList.Where(x => x.moein == moien.moein && x.type == moien.type).Sum(x => x.price);
+                                                            <p class="koll">@string.Format("{0:n0}", Math.Abs(kollsum)) </p>
+                                                            lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                                                            <p class="moien">&nbsp;</p>
+                                                            if (lst1.Count != 0)
                                                             {
-                                                                <p class="fasil">@string.Format("{0:n0}", @Math.Abs(tafsilsum))</p>
+                                                                foreach (var tafsil1 in lst1)
+                                                                {
 
+                                                                    if (tafsil1.tafsil1 != "0")
+                                                                    {
+                                                                        lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                                                        <p class="fasil">&nbsp;</p>
+
+                                                                        if (lst2.Count != 0)
+                                                                        {
+                                                                            foreach (var tafsil2 in lst2)
+                                                                            {
+                                                                                if (tafsil2.tafsil2 != "0")
+                                                                                {
+
+                                                                                    <p class="fasil2">&nbsp;</p>
+                                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+
+                                                                                    foreach (var trafhesab in lst3)
+                                                                                    {
+                                                                                        if (trafhesab.trafhesab != null)
+                                                                                        {
+                                                                                            <p class="taraf">&nbsp;</p>
+                                                                                            <p>&nbsp; </p>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                                                            if (lst3.Count != 0)
+                                                                            {
+                                                                                foreach (var trafhesab in lst3)
+                                                                                {
+                                                                                    if (trafhesab.trafhesab != null)
+                                                                                    {
+                                                                                        <p class="taraf">&nbsp;</p>
+                                                                                        <p>&nbsp;</p>
+                                                                                    }
+
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <p>&nbsp;</p>
+                                                                            }
+                                                                        }
+
+
+
+                                                                    }
+
+
+
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                <p class="fasil">-</p>
-                                                            }
-
-                                                            foreach (var tafsil2 in lst2)
-                                                            {
-                                                                if (tafsil2.tafsil2 != "0")
+                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                                                                if (lst3.Count != 0)
                                                                 {
-
-                                                                    double tafsil2sum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).Sum(x => x.price);
-                                                                    if (tafsil2sum >= 0)
-                                                                    {
-                                                                        <p class="fasil2">@string.Format("{0:n0}", @Math.Abs(tafsil2sum))</p>
-
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <p class="fasil2">-</p>
-                                                                    }
-                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
                                                                     foreach (var trafhesab in lst3)
                                                                     {
                                                                         if (trafhesab.trafhesab != null)
                                                                         {
-                                                                            double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                                            if (tarafsum >= 0)
-                                                                            {
-                                                                                <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <p class="taraf">-</p>
-                                                                            }
+                                                                            <p class="taraf">&nbsp;</p>
+                                                                            <p>&nbsp;</p>
                                                                         }
 
                                                                     }
                                                                 }
-
-                                                            }
-                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.trafhesab != tafsil1.trafhesab).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                            foreach (var trafhesab in lst3)
-                                                            {
-                                                                if (trafhesab.trafhesab != null)
+                                                                else
                                                                 {
-                                                                    double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == "0" && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                                    if (tarafsum >= 0)
-                                                                    {
-                                                                        <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <p class="taraf">-</p>
-                                                                    }
+                                                                    <p>&nbsp;</p>
                                                                 }
-
                                                             }
+
+
+
+
+
+
                                                         }
-
-
                                                     }
-                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 != moien.tafsil1 && x.tafsil2 != moien.tafsil2 && x.trafhesab != moien.trafhesab).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                    foreach (var trafhesab in lst3)
-                                                    {
-                                                        if (trafhesab.trafhesab != null)
-                                                        {
-                                                            double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                            if (tarafsum >= 0)
-                                                            {
-                                                                <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-
-                                                            }
-                                                            else
-                                                            {
-                                                                <p class="taraf">-</p>
-                                                            }
-                                                        }
-
-                                                    }
-                                                }
-
-                                            </td>
-                                            <td>
-                                                @{
-                                                    kollsum = Model.RecietArticleList.Where(x => x.koll == item.koll).Sum(x => x.price);
-                                                    if (kollsum <= 0)
-                                                    {
-                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(kollsum))</p>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="koll">-</p>
-                                                    }
-                                                }
-
-                                                @foreach (var moien in lst0)
-                                                {
-                                                    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
-
-                                                    double moiensum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).Sum(x => x.price);
-                                                    if (moiensum <= 0)
-                                                    {
-                                                        <p class="moien">@string.Format("{0:n0}", @Math.Abs(moiensum))</p>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="moien">-</p>
-                                                    }
-                                                    foreach (var tafsil1 in lst1)
-                                                    {
-                                                        if (tafsil1.tafsil1 != "0")
-                                                        {
-                                                            lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
-
-                                                            double tafsilsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).Sum(x => x.price);
-                                                            if (tafsilsum <= 0)
-                                                            {
-                                                                <p class="fasil">@string.Format("{0:n0}", @Math.Abs(tafsilsum))</p>
-
-                                                            }
-                                                            else
-                                                            {
-                                                                <p class="fasil">-</p>
-                                                            }
-
-                                                            foreach (var tafsil2 in lst2)
-                                                            {
-                                                                if (tafsil2.tafsil2 != "0")
-                                                                {
-
-                                                                    double tafsil2sum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).Sum(x => x.price);
-                                                                    if (tafsil2sum <= 0)
-                                                                    {
-                                                                        <p class="fasil2">@string.Format("{0:n0}", @Math.Abs(tafsil2sum))</p>
-
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <p class="fasil2">-</p>
-                                                                    }
-                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                                    foreach (var trafhesab in lst3)
-                                                                    {
-                                                                        if (trafhesab.trafhesab != null)
-                                                                        {
-                                                                            double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                                            if (tarafsum <= 0)
-                                                                            {
-
-                                                                                <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <p class="taraf">-</p>
-                                                                            }
-                                                                        }
-
-                                                                    }
-                                                                }
-
-                                                            }
-                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-
-                                                            foreach (var trafhesab in lst3)
-                                                            {
-                                                                if (trafhesab.trafhesab != null)
-                                                                {
-                                                                    double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == "0" && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                                    if (tarafsum <= 0)
-                                                                    {
-                                                                        <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <p class="taraf">-</p>
-                                                                    }
-                                                                }
-
-                                                            }
-                                                        }
 
 
-                                                    }
-                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 != moien.tafsil1 && x.tafsil2 != moien.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
 
-                                                    foreach (var trafhesab in lst3)
-                                                    {
-                                                        if (trafhesab.trafhesab != null)
-                                                        {
+                                                </td>
+                                            </tr>
 
-                                                            double tarafsum = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.trafhesab == trafhesab.trafhesab).Sum(x => x.price);
-                                                            if (tarafsum <= 0)
-                                                            {
-                                                                <p class="taraf">@string.Format("{0:n0}", @Math.Abs(tarafsum))</p>
-
-                                                            }
-                                                            else
-                                                            {
-                                                                <p class="taraf">-</p>
-                                                            }
-                                                        }
-
-                                                    }
-                                                }
-
-                                            </td>
-                                        </tr>
-
-
-                                            //foreach (var moien in lst0)
-                                            //{
-                                            //    lst1 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein).GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
-
-                                            //    foreach (var tafsil1 in lst1)
-                                            //    {
-                                            //        lst2 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
-                                            //        foreach (var tafsil2 in lst2)
-                                            //        {
-                                            //            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
-                                            //        }
-                                            //    }
-                                            //}
-
+                                         
 
 
 
                                         }
 
-                                        @*@if (!lst.Contains(item))
-                                        {
 
-                                        int index = Model.RecietArticleList.IndexOf(item) + 1;
-                                        <tr id="">
-                                            <td>@index</td>
+                                        <tr>
+                                            <td colspan="3">جمع کل</td>
+                                            <td></td>
+                                            @{
+                                                double bedehkar = Model.RecietArticleList.Where(x => x.type == "0").Sum(x => x.price);
+                                                double bestankar = Model.RecietArticleList.Where(x => x.type == "1").Sum(x => x.price);
+
+                                            }
                                             <td>
-                                                <p>@item.koll</p>
-                                                <p>@item.moein</p>
-                                                @if (item.tafsil1 != "0")
-                                                {
-                                                    <p>@item.tafsil1</p>
-                                                }
-                                                @if (item.tafsil2 != "0")
-                                                {
-                                                    <p>@item.tafsil2</p>
-                                                }
-                                                @if (item.trafhesab != "0")
-
-                                                {
-                                                    <p class="taraf">@item.trafhesab</p>
-
-                                                }
-
-
-                                                @{
-                                                    foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 == item.tafsil2 && x.trafhesab != item.trafhesab))
-                                                    {
-                                                        if (!lst.Contains(priceitem))
-                                                        {
-                                                            lst.Add(priceitem);
-                                                            if (priceitem.trafhesab != "0")
-
-                                                            {
-                                                                <p class="taraf">@priceitem.trafhesab</p>
-
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                @foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 != item.tafsil2))
-                                                {
-                                                    if (!lst.Contains(priceitem))
-                                                    {
-                                                        lst.Add(priceitem);
-                                                        if (priceitem.tafsil2 != "0")
-                                                        {
-                                                            <p class="fasil2">priceitem.tafsil2</p>
-                                                            if (priceitem.trafhesab != "0")
-
-                                                            {
-                                                                <p class="fasil2">@priceitem.trafhesab</p>
-                                                                if (priceitem.trafhesab != "0")
-                                                                {
-                                                                    <p class="taraf">@priceitem.trafhesab</p>
-
-
-                                                                }
-                                                                foreach (var priceitem1 in Model.RecietArticleList.Where(x => x.koll == priceitem.koll && x.moein == priceitem.moein && x.tafsil1 == priceitem.tafsil1 && x.tafsil2 == priceitem.tafsil2 && x.trafhesab != priceitem.trafhesab))
-                                                                {
-                                                                    if (!lst.Contains(priceitem1))
-                                                                    {
-                                                                        lst.Add(priceitem1);
-                                                                        if (priceitem1.trafhesab != "0")
-
-                                                                        {
-                                                                            <p class="taraf">@priceitem1.trafhesab</p>
-
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                            }
-                                                        }
-
-
-                                                    }
-
-                                                }
-
-                                               
-
-
+                                                @string.Format("{0:n0}", Math.Abs(bedehkar))
 
                                             </td>
                                             <td>
-                                                @foreach (var priceitem in Model.RecietArticleList)
-                                                {
-
-                                                    if (!lst1.Contains(priceitem))
-                                                    {
-
-                                                        if (priceitem.koll != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.koll.Contains(priceitem.koll));
-                                                            if (newItem == null)
-                                                            {
-                                                                <p class="koll">@priceitem.kolltitle</p>
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.moein != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.moein.Contains(priceitem.moein));
-                                                            if (newItem == null)
-                                                            {
-                                                                <p class="moien">@priceitem.moientitle</p>
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil1 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
-                                                            if (newItem == null)
-                                                            {
-                                                                <p class="fasil">@priceitem.tafsil1title</p>
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil2 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
-                                                            if (newItem == null)
-                                                            {
-                                                                <p class="fasil2">@priceitem.tafsil2title</p>
-
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.trafhesab != "0")
-
-                                                        {
-                                                            <p class="taraf">@priceitem.name</p>
-
-                                                        }
-
-                                                        lst1.Add(priceitem);
-                                                    }
-                                                }
-
-
-
+                                                @string.Format("{0:n0}", Math.Abs(bestankar))
                                             </td>
-
-
-                                            <td>
-                                                @foreach (var priceitem in Model.RecietArticleList)
-                                                {
-
-                                                    if (!lst2.Contains(priceitem))
-                                                    {
-
-                                                        if (priceitem.koll != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.koll.Contains(priceitem.koll));
-                                                            if (newItem == null)
-                                                            {
-                                                                double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
-                                                                if (kollsum > 0)
-                                                                {
-                                                                    <p class="koll">@string.Format("{0:n0}", @Math.Abs(kollsum))</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.moein != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.moein.Contains(priceitem.moein));
-                                                            if (newItem == null)
-                                                            {
-                                                                double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
-                                                                if (miensum > 0)
-                                                                {
-                                                                    <p class="moien">@string.Format("{0:n0}", @Math.Abs(miensum)) </p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil1 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
-                                                            if (newItem == null)
-                                                            {
-                                                                double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
-                                                                if (tafsil1sum > 0)
-                                                                {
-                                                                    <p class="fasil">  @string.Format("{0:n0}", @Math.Abs(tafsil1sum))</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil2 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
-                                                            if (newItem == null)
-                                                            {
-                                                                double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
-                                                                if (tafsil2sum > 0)
-                                                                {
-                                                                    <p class="fasil2"> @string.Format("{0:n0}", @Math.Abs(tafsil2sum))</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.trafhesab != "0")
-
-                                                        {
-                                                            if (priceitem.price > 0)
-                                                            {
-                                                                <p class="taraf"> @string.Format("{0:n0}", @Math.Abs(priceitem.price))</p>
-                                                            }
-                                                            else
-                                                            {
-                                                                <p>-</p>
-                                                            }
-
-                                                        }
-
-
-                                                    }
-                                                    lst2.Add(priceitem);
-                                                }
-                                            </td>
-                                            <td>
-                                                @foreach (var priceitem in Model.RecietArticleList)
-                                                {
-
-                                                    if (!lst3.Contains(priceitem))
-                                                    {
-
-                                                        if (priceitem.koll != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.koll.Contains(priceitem.koll));
-                                                            if (newItem == null)
-                                                            {
-                                                                double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
-                                                                if (kollsum < 0)
-                                                                {
-                                                                    <p class="koll">@Math.Abs(kollsum)</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.moein != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.moein.Contains(priceitem.moein));
-                                                            if (newItem == null)
-                                                            {
-                                                                double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
-                                                                if (miensum < 0)
-                                                                {
-                                                                    <p class="moien">@Math.Abs(miensum)</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil1 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
-                                                            if (newItem == null)
-                                                            {
-                                                                double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
-                                                                if (tafsil1sum < 0)
-                                                                {
-                                                                    <p class="fasil">@Math.Abs(tafsil1sum)</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.tafsil2 != "0")
-                                                        {
-                                                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
-                                                            if (newItem == null)
-                                                            {
-                                                                double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
-                                                                if (tafsil2sum < 0)
-                                                                {
-                                                                    <p class="fasil2">@Math.Abs(tafsil2sum)</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p>-</p>
-                                                                }
-
-
-                                                            }
-
-                                                        }
-                                                        if (priceitem.trafhesab != "0")
-
-                                                        {
-                                                            if (priceitem.price < 0)
-                                                            {
-                                                                <p class="taraf">@Math.Abs(priceitem.price)</p>
-                                                            }
-                                                            else
-                                                            {
-                                                                <p>-</p>
-                                                            }
-
-                                                        }
-
-                                                        lst3.Add(priceitem);
-                                                    }
-                                                }
-                                            </td>
-
-
                                         </tr>
-                                        }*@
+
+
+                                        @*@if (!lst.Contains(item))
+        {
+
+        int index = Model.RecietArticleList.IndexOf(item) + 1;
+        <tr id="">
+            <td>@index</td>
+            <td>
+                <p>@item.koll</p>
+                <p>@item.moein</p>
+                @if (item.tafsil1 != "0")
+                {
+                    <p>@item.tafsil1</p>
+                }
+                @if (item.tafsil2 != "0")
+                {
+                    <p>@item.tafsil2</p>
+                }
+                @if (item.trafhesab != "0")
+
+                {
+                    <p class="taraf">@item.trafhesab</p>
+
+                }
+
+
+                @{
+                    foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 == item.tafsil2 && x.trafhesab != item.trafhesab))
+                    {
+                        if (!lst.Contains(priceitem))
+                        {
+                            lst.Add(priceitem);
+                            if (priceitem.trafhesab != "0")
+
+                            {
+                                <p class="taraf">@priceitem.trafhesab</p>
+
+                            }
+                        }
+                    }
+                }
+
+                @foreach (var priceitem in Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == item.moein && x.tafsil1 == item.tafsil1 && x.tafsil2 != item.tafsil2))
+                {
+                    if (!lst.Contains(priceitem))
+                    {
+                        lst.Add(priceitem);
+                        if (priceitem.tafsil2 != "0")
+                        {
+                            <p class="fasil2">priceitem.tafsil2</p>
+                            if (priceitem.trafhesab != "0")
+
+                            {
+                                <p class="fasil2">@priceitem.trafhesab</p>
+                                if (priceitem.trafhesab != "0")
+                                {
+                                    <p class="taraf">@priceitem.trafhesab</p>
+
+
+                                }
+                                foreach (var priceitem1 in Model.RecietArticleList.Where(x => x.koll == priceitem.koll && x.moein == priceitem.moein && x.tafsil1 == priceitem.tafsil1 && x.tafsil2 == priceitem.tafsil2 && x.trafhesab != priceitem.trafhesab))
+                                {
+                                    if (!lst.Contains(priceitem1))
+                                    {
+                                        lst.Add(priceitem1);
+                                        if (priceitem1.trafhesab != "0")
+
+                                        {
+                                            <p class="taraf">@priceitem1.trafhesab</p>
+
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                }
+
+
+
+
+
+            </td>
+            <td>
+                @foreach (var priceitem in Model.RecietArticleList)
+                {
+
+                    if (!lst1.Contains(priceitem))
+                    {
+
+                        if (priceitem.koll != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.koll.Contains(priceitem.koll));
+                            if (newItem == null)
+                            {
+                                <p class="koll">@priceitem.kolltitle</p>
+
+                            }
+
+                        }
+                        if (priceitem.moein != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.moein.Contains(priceitem.moein));
+                            if (newItem == null)
+                            {
+                                <p class="moien">@priceitem.moientitle</p>
+
+                            }
+
+                        }
+                        if (priceitem.tafsil1 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                            if (newItem == null)
+                            {
+                                <p class="fasil">@priceitem.tafsil1title</p>
+
+                            }
+
+                        }
+                        if (priceitem.tafsil2 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst1.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                            if (newItem == null)
+                            {
+                                <p class="fasil2">@priceitem.tafsil2title</p>
+
+
+                            }
+
+                        }
+                        if (priceitem.trafhesab != "0")
+
+                        {
+                            <p class="taraf">@priceitem.name</p>
+
+                        }
+
+                        lst1.Add(priceitem);
+                    }
+                }
+
+
+
+            </td>
+
+
+            <td>
+                @foreach (var priceitem in Model.RecietArticleList)
+                {
+
+                    if (!lst2.Contains(priceitem))
+                    {
+
+                        if (priceitem.koll != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.koll.Contains(priceitem.koll));
+                            if (newItem == null)
+                            {
+                                double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
+                                if (kollsum > 0)
+                                {
+                                    <p class="koll">@string.Format("{0:n0}", @Math.Abs(kollsum))</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.moein != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.moein.Contains(priceitem.moein));
+                            if (newItem == null)
+                            {
+                                double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
+                                if (miensum > 0)
+                                {
+                                    <p class="moien">@string.Format("{0:n0}", @Math.Abs(miensum)) </p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.tafsil1 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                            if (newItem == null)
+                            {
+                                double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
+                                if (tafsil1sum > 0)
+                                {
+                                    <p class="fasil">  @string.Format("{0:n0}", @Math.Abs(tafsil1sum))</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.tafsil2 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst2.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                            if (newItem == null)
+                            {
+                                double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
+                                if (tafsil2sum > 0)
+                                {
+                                    <p class="fasil2"> @string.Format("{0:n0}", @Math.Abs(tafsil2sum))</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+
+                            }
+
+                        }
+                        if (priceitem.trafhesab != "0")
+
+                        {
+                            if (priceitem.price > 0)
+                            {
+                                <p class="taraf"> @string.Format("{0:n0}", @Math.Abs(priceitem.price))</p>
+                            }
+                            else
+                            {
+                                <p>-</p>
+                            }
+
+                        }
+
+
+                    }
+                    lst2.Add(priceitem);
+                }
+            </td>
+            <td>
+                @foreach (var priceitem in Model.RecietArticleList)
+                {
+
+                    if (!lst3.Contains(priceitem))
+                    {
+
+                        if (priceitem.koll != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.koll.Contains(priceitem.koll));
+                            if (newItem == null)
+                            {
+                                double kollsum = Model.RecietArticleList.Where(x => x.koll == priceitem.koll).Sum(x => x.price);
+                                if (kollsum < 0)
+                                {
+                                    <p class="koll">@Math.Abs(kollsum)</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.moein != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.moein.Contains(priceitem.moein));
+                            if (newItem == null)
+                            {
+                                double miensum = Model.RecietArticleList.Where(x => x.moein == priceitem.moein).Sum(x => x.price);
+                                if (miensum < 0)
+                                {
+                                    <p class="moien">@Math.Abs(miensum)</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.tafsil1 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil1.Contains(priceitem.tafsil1));
+                            if (newItem == null)
+                            {
+                                double tafsil1sum = Model.RecietArticleList.Where(x => x.tafsil1 == priceitem.tafsil1).Sum(x => x.price);
+                                if (tafsil1sum < 0)
+                                {
+                                    <p class="fasil">@Math.Abs(tafsil1sum)</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+                            }
+
+                        }
+                        if (priceitem.tafsil2 != "0")
+                        {
+                            banimo.ViewModel.RecietArticleList newItem = lst3.Find(x => x.tafsil2.Contains(priceitem.tafsil2));
+                            if (newItem == null)
+                            {
+                                double tafsil2sum = Model.RecietArticleList.Where(x => x.tafsil2 == priceitem.tafsil2).Sum(x => x.price);
+                                if (tafsil2sum < 0)
+                                {
+                                    <p class="fasil2">@Math.Abs(tafsil2sum)</p>
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+
+
+                            }
+
+                        }
+                        if (priceitem.trafhesab != "0")
+
+                        {
+                            if (priceitem.price < 0)
+                            {
+                                <p class="taraf">@Math.Abs(priceitem.price)</p>
+                            }
+                            else
+                            {
+                                <p>-</p>
+                            }
+
+                        }
+
+                        lst3.Add(priceitem);
+                    }
+                }
+            </td>
+
+
+        </tr>
+        }*@
 
                                     </tbody>
                                 </table>
@@ -1156,22 +1398,25 @@
     </div>
 }
 <style>
-    .koll{
-       font-weight:800
-
+    .koll {
+        font-weight: 800
     }
+
     .moien {
         font-weight: 700;
-        margin-right:15px;
+        margin-right: 15px;
     }
+
     .fasil {
         font-weight: 600;
         margin-right: 30px;
     }
+
     .fasil2 {
         font-weight: 500;
         margin-right: 45px;
     }
+
     .taraf {
         font-weight: 500;
         margin-right: 60px;
@@ -1182,6 +1427,40 @@
     $("#newArticleModalIcon").click(function () {
         $("#newArticleModal").modal('toggle');
     })
+</script>
+<script src="~/Scripts/html2canvas.min.js"></script>
+<script>
+    var takePic = function () {
+        var id = "#rookesh" ;
+        //var ele = document.getElementById('rookesh');
+        //html2canvas(ele).then(canvas => {
+
+        //    var r = new XMLHttpRequest();
+        //    r.open("POST", "/Core/SaveImage", true);
+        //    r.onreadystatechange = function () {
+        //        if (r.readyState != 4 || r.status != 200) {
+                   
+        //        }
+        //        else {
+        //            window.location.href = "/Core/PrintALl?parent=''"
+        //        }
+               
+        //    };
+        //    var p = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+
+        //    if (p != "data:,") {
+
+        //        p = id + "*" + p;
+        //        r.send(p);
+        //    }
+
+
+        //    //window.location.href = image; // it will save locally
+        //    //document.body.appendChild(canvas)
+        //});
+    };
+
+
 </script>
 
 

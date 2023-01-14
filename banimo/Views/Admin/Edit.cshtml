@@ -47,8 +47,8 @@
             dataType: 'html',
             success: function (data) {
 
-                $('#listholder').html(data);
-                $('#listholder').css("display", "block");
+                $('#listOFItemsholder').html(data);
+                $('#listOFItemsholder').css("display", "block");
             },
             error: function () {
                 alert("nashod")
@@ -316,7 +316,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <div class="form-group " id="listholder">
+                <div class="form-group " id="listOFItemsholder">
 
                 </div>
                 <br />
@@ -732,7 +732,7 @@
                                                         @{
 
                                                             <div style=" border-bottom:1px solid #ddd; padding:0px ; margin:0px;margin-bottom:10px; padding-bottom:10px">
-                                                                <p style="margin:5px">فیلتر های گزینه ای:</p>
+                                                                <p style="margin:5px">فیلتر های گزینه :</p>
                                                                 @if (Model.filters != null && Model.filters.Count() > 0)
                                                                 {
                                                                     foreach (var myitem in Model.filters)
@@ -760,7 +760,7 @@
                                                                                                     {
                                                                                                         if (Model.productfilterlist != null)
                                                                                                         {
-                                                                                                            if (Model.productfilterlist.Any(s => s.detailname.Contains(detail.detailname)))
+                                                                                                            if (Model.productfilterlist.Any(s => s.ID.Contains(detail.ID)))
                                                                                                             {
                                                                                                                 <option value=@detail.ID selected> @detail.detailname</option>
                                                                                                             }
@@ -813,7 +813,7 @@
                                                                                                     {
                                                                                                         if (Model.productfilterlist != null)
                                                                                                         {
-                                                                                                            if (Model.productfilterlist.Any(s => s.detailname.Contains(detail.detailname)))
+                                                                                                            if (Model.productfilterlist.Any(s => s.ID.Contains(detail.detailname)))
                                                                                                             {
                                                                                                                 <option value=@detail.ID selected> @detail.detailname</option>
                                                                                                             }
@@ -865,7 +865,7 @@
                                                                                                     {
                                                                                                         if (Model.productfilterlist != null)
                                                                                                         {
-                                                                                                            if (Model.productfilterlist.Any(s => s.detailname.Contains(detail.detailname)))
+                                                                                                            if (Model.productfilterlist.Any(s => s.ID.Contains(detail.ID)))
                                                                                                             {
                                                                                                                 <option value=@detail.ID selected> @detail.detailname</option>
                                                                                                             }
@@ -1021,7 +1021,7 @@
                                                                 <a id="FilterConfirm" class="btn btn-primary">تایید</a>
                                                                 <script>
                                                                     $("#FilterConfirm").click(function () {
-
+                                                                        //alert("dd");
                                                                         $('#filterModal').modal('toggle');
 
                                                                     })
@@ -1272,6 +1272,7 @@
                                                         filtervalue = filtervalue + (ID + "-" + $(this).val() + ";");
 
                                                     }
+                                                    
                                                     //    var id = $(this).attr("id");
                                                     //    var ID = (id + "").replace("DEFfilterdetaillist", "");
 
@@ -1280,7 +1281,7 @@
 
                                                     //    }
                                                 });
-
+                                               
 
                                                 $("#inputallfilterid").val(filtervalue);
                                                 $("#inputallrangeid").val("");
@@ -1321,7 +1322,10 @@
 
                                                 $("#inputallcolid").val(colval);
                                                 $("#Selectedfilters").val($(".selectedfilter option:selected").text());
+                                               
                                                 $("#SelectedAnbars").val($(".SelectedAnbar option:selected").text());
+
+                                               
                                                 $("#signupformforedit").submit();
                                             }
 

@@ -41,6 +41,7 @@ namespace banimo.AdminPanelBoom.ViewModel
         
         public string count { get; set; }
         public string current { get; set; }
+        public List<banimo.ViewModel.TarafList> tarafList { get; set; }
         public List<orderdetailNew> data { get; set; }
     }
    

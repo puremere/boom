@@ -154,24 +154,26 @@
                                         {
                                             int index = Model.RecietArticleList.IndexOf(item) + 1;
 
-                                            <tr>
+                                            <tr idattr='@item.ID'>
+                                                <td style="display:none" id="addTransType">@item.type</td>
+                                                <td style="display:none" id="addTransNode">@item.nodeID</td>
                                                 <td>@index</td>
                                                 <td>
-                                                    <p class="koll">@item.koll</p>
-                                                    <p class="moien">@item.moein</p>
+                                                    <p id="addTransKoll" class="koll">@item.koll</p>
+                                                    <p id="addTransMein" class="moien">@item.moein</p>
                                                     @if (item.tafsil1 != "0")
                                                     {
-                                                        <p class="fasil">@item.tafsil1</p>
+                                                        <p id="addTranTafsil" class="fasil">@item.tafsil1</p>
 
                                                     }
                                                     @if (item.tafsil2 != "0")
                                                     {
-                                                        <p class="fasil2">@item.tafsil2</p>
+                                                        <p id="addTranTafsil2" class="fasil2">@item.tafsil2</p>
 
                                                     }
                                                     @if (item.trafhesab != "0")
                                                     {
-                                                        <p class="taraf">@item.trafhesab</p>
+                                                        <p id="addTranTaraf" class="taraf">@item.trafhesab</p>
 
                                                     }
 
@@ -198,12 +200,15 @@
                                                    
                                                 </td>
                                                 <td>
-                                                    @item.description
+                                                    <p id="addTranDesc">
+                                                        @item.description
+                                                    </p>
+                                                   
                                                 </td>
                                                 <td>
                                                     @if (item.price >= 0)
                                                     {
-                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
+                                                        <p id="addTranPrice" class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
                                                     }
                                                     else
                                                     {
@@ -213,7 +218,7 @@
                                                 <td>
                                                     @if (item.price <= 0)
                                                     {
-                                                        <p class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
+                                                        <p id="addTranPrice" class="koll">@string.Format("{0:n0}", @Math.Abs(item.price))</p>
                                                     }
                                                     else
                                                     {
@@ -222,7 +227,7 @@
                                                 </td>
                                                 <td>
                                                    
-                                                    <a idattr='@item.ID' class="btn btn-primary editArticle" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+                                                    <a  class="btn btn-primary editArticle" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
                                                 </td>
 
                                             </tr>
@@ -638,10 +643,72 @@
 
 <script>
     $("#newArticleModalIcon").click(function () {
+
+        
+        $("#fromADD").val("edit");
         $("#newArticleModal").modal('toggle');
+
+
     })
     $(".editArticle").click(function () {
+        $("#newArticleModal").modal('toggle');
+        var parent = $(this).parent().parent();
+        var id = parent.attr('idattr');
+        var addTransKoll = parent.find("#addTransKoll").text().trim();
+        var addTransMein = parent.find("#addTransMein").text().trim();
+        var addTranTafsil = parent.find("#addTranTafsil").text().trim();
+        var addTranTafsil2 = parent.find("#addTranTafsil2").text().trim();
+        var addTranTaraf = parent.find("#addTranTaraf").text().trim();
+        var addTransType = parent.find("#addTransType").text().trim();
+        var addTransNode = parent.find("#addTransNode").text().trim();
+        var addTranPrice = parent.find("#addTranPrice").text().trim();
+        var addTranDesc = parent.find("#addTranDesc").text().trim();
+       
+        $("#articleID").val(id);
+        $("#description").val(addTranDesc);
+        $("#price").val(addTranPrice); 
+        $("#RNode option").each(function () {
+            if ($(this).attr("value") == addTransNode) {
+                $(this).attr("selected", "selected");
+            }
 
+        });
+        $("#Rtype option").each(function () {
+            if ($(this).attr("value") == addTransType) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
+        $("#RTaraf option").each(function () {
+            if ($(this).attr("value") == addTranTaraf) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
+        $("#M2 option").each(function () {
+            if ($(this).attr("code") == addTransKoll) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
+        $("#M3 option").each(function () {
+            if ($(this).attr("code") == addTransMein) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
+        $("#M4 option").each(function () {
+            if ($(this).attr("code") == addTranTafsil) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
+        $("#M5 option").each(function () {
+            if ($(this).attr("code") == addTranTafsil2) {
+                $(this).attr("selected", "selected");
+            }
+
+        });
     })
 </script>
 

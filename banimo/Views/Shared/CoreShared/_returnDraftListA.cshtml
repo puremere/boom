@@ -9,7 +9,7 @@
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  <i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i></h3>
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  @*<i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i>*@</h3>
 
 
 
@@ -38,6 +38,7 @@
                                     <thead>
                                                                 <tr>
                                                                     <th>ردیف</th>
+                                                                    <th>شماره رسید/حواله</th>
                                                                     <th>نام انبار</th>
                                                                     <th>نوع سند</th>
                                                                     <th>طرف حساب</th>
@@ -45,7 +46,7 @@
                                                                     <th>تعداد </th>
                                                                     <th>زمان</th>
                                                                     <th>توضیحات</th>
-                                                                 
+
                                                                     <th></th>
                                                                     <th></th>
 
@@ -60,6 +61,7 @@
                                         <tr id="@deleteid">
 
                                             <td>@i</td>
+                                            <td>@item.ID</td>
                                             <td>
 
 
@@ -79,15 +81,15 @@
                                             <td>
 
                                                 @item.partnerTitle
-                                                
+
                                             </td>
                                             <td>@item.title</td>
-                                           
-                                           
+
+
                                             <td>@item.count</td>
                                             <td>@item.timestamp</td>
                                             <td>@item.deliverName</td>
-                                          
+
                                             <td>
                                                 @if (item.status != "1")
                                                 {
@@ -117,13 +119,13 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                         <td>
-                                            @sum
+                                            @sumcount
                                         </td>
                                         <td></td>
 
                                         <td>
-                                            @sumcount
                                         </td>
                                         <td></td>
                                     </tr>

@@ -7143,7 +7143,7 @@ input[type=number] {
 .product-card.product-card-blue .product-price span.total-price {
     background: #dbebfd;
     border-radius: 16px 0 16px 0;
-    color: #1473e6;
+    color: red;
     display: inline-block;
     font-family: Estedad-Medium, serif;
     font-size: 16px;
@@ -7162,7 +7162,7 @@ input[type=number] {
 }
 
 .product-card.product-card-blue .product-price span.discount:after {
-    background: #1473e6;
+    background: red;
     content: "";
     height: 1px;
     left: 1.6em;

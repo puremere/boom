@@ -16,10 +16,15 @@
     }*@
 @{
 
-
+    <style>
+        .activated{
+            background-color : #d59e9e !important;
+        }
+    </style>
     <!-- Modal -->
     <p style="display:none" id="modalValue"></p>
-//newRecietModal
+    <p style="display:none" id="productValue"></p>
+    //newRecietModal
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -38,7 +43,7 @@
                         $("#confirmdeleteReciet").click(function () {
                             $("#myModal").modal('hide');
                             var id = $("#modalValue").text();
-                            var rc = "rc" + id; 
+                            var rc = "rc" + id;
                             $.ajax({
                                 url: '/Core/confirmdeleteReciet',
                                 dataType: 'html',
@@ -57,7 +62,7 @@
                                             "extendedTimeOut": 1000
                                         }
                                         toastr.error('امکان حذف سند وجود ندارد')
-                                       
+
                                     }
                                     else {
                                         $("#" + rc).hide();
@@ -87,9 +92,97 @@
             </div>
         </div>
     </div>
-   
 
 
+    <div id="daemModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از دائم نمودن سند اطمینان دارید؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        
+                        $("#confirmDaem").click(function () {
+                            $("#daemModal").modal('toggle');
+                            var Prodcutid = $("#modalValue").text();
+                            var productValue = $("#productValue").text();
+                            var rc = "rc" + Prodcutid;
+                           
+                            var iteCheck = $("#".rc).find('#daemHolder .daem');
+                            $.ajax({
+                                url: '/Core/ChangeProductStatus',
+                                dataType: 'html',
+                                data: {
+                                    id: Prodcutid,
+                                    value: productValue,
+                                    type: "3"
+
+                                },
+                                success: function (data) {
+                                    if (data == "200") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+
+
+                                        }
+                                        toastr.success('با موفقیت انجام شد');
+
+                                    }
+                                    else {
+                                        if (productValue == "0") {
+                                           
+                                            $("#" + rc).find('.daemHolder .daem').prop("checked", true);
+                                        }
+                                        else {
+                                            $("#"+rc).find('.daemHolder .daem').prop("checked", false);
+                                          
+                                            //iteCheck.prop("checked", false);
+
+                                          
+                                        }
+
+
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+
+
+                                        }
+                                        toastr.error(data)
+                                        
+                                    }
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 
 }
 
@@ -157,10 +250,10 @@
                                     {
                                         int index = Model.recietList.IndexOf(item) + 1;
                                         string rcid = "rc" + item.ID;
-                                    <tr id="@rcid">
+                                    <tr class="sanadParent" id="@rcid" >
                                         <td>@index</td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.ID)
+                                            @Html.DisplayFor(modelItem => item.atf)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.num)
@@ -175,27 +268,49 @@
                                         <td style="text-align: center;">
                                             @if (item.status == "1")
                                             {
-                                                <input id=@item.ID type="checkbox" class="avalie" checked disabled />
+
+
+                                                <input id=@item.ID type="checkbox" class="avalie" checked />
                                             }
                                             else
                                             {
-                                                <input id=@item.ID type="checkbox" class="avalie" />
+                                                string disabled = "";
+                                                if (item.status == "2" || item.status == "3")
+                                                {
+                                                    disabled = "disabled";
+                                                    <input id=@item.ID type="checkbox" class="avalie" selected @disabled />
 
+                                                }
+                                                else
+                                                {
+                                                    <input id=@item.ID type="checkbox" class="avalie" />
+                                                }
                                             }
                                         </td>
 
                                         <td style="text-align: center;">
-                                            @if (item.status == "2" || item.status == "3")
+                                            @if (item.status == "2")
                                             {
                                                 <input id=@item.ID type="checkbox" class="final" checked />
                                             }
                                             else
                                             {
-                                                <input id=@item.ID type="checkbox" class="final" />
+                                                string disabled = "";
+                                                if (item.status == "3")
+                                                {
+                                                    disabled = "disabled";
+
+                                                    <input id=@item.ID type="checkbox" checked class="final" disabled />
+                                                }
+                                                else
+                                                {
+                                                    <input id=@item.ID type="checkbox" class="final" />
+                                                }
+
 
                                             }
                                         </td>
-                                        <td style="text-align: center;">
+                                        <td style="text-align: center;" class="daemHolder">
                                             @{
 
                                                 if (item.status == "3")
@@ -216,9 +331,11 @@
 
                                         <td>
                                             @{
-                                                var classname = "deleteproduct" + item.ID;
-                                                <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary @classname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-                                                <script>
+                                                if (item.status != "2" && item.status != "3")
+                                                {
+                                                    var classname = "deleteproduct" + item.ID;
+                                                    <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary @classname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+                                                    <script>
                                                         var classname = "deleteproduct" + @item.ID
 
                                                             $("." + classname).click(function () {
@@ -226,7 +343,9 @@
 
 
                                                             });
-                                                </script>
+                                                    </script>
+                                                }
+
                                             }
                                         </td>
                                         <td>
@@ -237,6 +356,9 @@
                                         </td>
                                         <td>
                                             <a idattr='@item.ID' class="btn btn-primary showRecite" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">مشاهده</a>
+                                        </td>
+                                        <td>
+                                            <a idattr='@item.ID' class="btn btn-primary chapRecite" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">چاپ</a>
                                         </td>
 
                                         @*<td>
@@ -285,14 +407,14 @@
                         </div>
                     </div>
                 }
-               
+
 
             </div>
         </div>
     </div>
 </div>
 
-<div id="articleHolder">
+<div id="EditarticleHolder">
 
 </div>
 
@@ -306,24 +428,39 @@
         $("#newRecietModal").modal('toggle');
     })
     $(".editRecite").click(function () {
+
         var id = $(this).attr('idattr');
+        $("#recietID").val(id);
+        $("#fromADD").val("edit");
         $.ajax({
             url: '/Core/getRecietArticle',
-            dataType: 'html',
+            dataType: '',
             data: {
                 id: id,
-                type : "1"
+                type: "1"
             },
             success: function (data) {
-                $("#articleHolder").html(data);
+                
+                $("#EditarticleHolder").html(data);
             },
             error: function () {
 
             }
         });
     })
+    $(".chapRecite").click(function () {
+        var id = $(this).attr('idattr');
+        var url = '/Core/getRecietArticlePaper?id=' + id;
+        window.open(
+            url, '_blank' // <- This is what makes it open in a new window.
+        );
+       
+    })
     $(".showRecite").click(function () {
-
+        $(".sanadParent").each(function () {
+            $(this).removeClass("activated")
+        });
+        $(this).parent().parent().addClass("activated")
         var id = $(this).attr('idattr');
         $("#recietID").val(id);
         $.ajax({
@@ -333,7 +470,7 @@
                 id: id,
             },
             success: function (data) {
-                $("#articleHolder").html(data);
+                $("#EditarticleHolder").html(data);
             },
             error: function () {
 
@@ -344,7 +481,64 @@
 </script>
 <script>
 
+    $(".avalie").click(function () {
+        var iteCheck = $(this);
+        if ($(this).is(':checked')) {
+            var productValue = "1";
+        }
+        else {
+            var productValue = "0";
+        }
+        var Prodcutid = $(this).attr("id");
+
+        $.ajax({
+            url: '/Core/ChangeProductStatus',
+            dataType: 'html',
+            data: {
+                id: Prodcutid,
+                value: productValue,
+                type: "1"
+            },
+            success: function (data) {
+
+                if (data == "200") {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.success('با موفقیت انجام شد')
+                }
+                else {
+                    iteCheck.prop("checked", false)
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.error(data)
+                }
+            },
+            error: function () {
+
+            }
+        });
+    })
     $(".final").click(function () {
+
+        var iteCheck = $(this);
         if ($(this).is(':checked')) {
             var productValue = "1";
         }
@@ -354,14 +548,43 @@
         var Prodcutid = $(this).attr("id");
 
         $.ajax({
-            url: '/Admin/ChangeProductStatus',
+            url: '/Core/ChangeProductStatus',
             dataType: 'html',
             data: {
                 id: Prodcutid,
-                value: productValue
+                value: productValue,
+                type: "2"
             },
             success: function (data) {
+                if (data == "200") {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
 
+
+                    }
+                    toastr.success('با موفقیت انجام شد')
+                }
+                else {
+                    iteCheck.prop("checked", false)
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.error(data)
+                }
 
             },
             error: function () {
@@ -369,32 +592,38 @@
             }
         });
     })
-    $(".Offer").click(function () {
+    $(".daem").click(function () {
+        var iteCheck = $(this);
         if ($(this).is(':checked')) {
             var productValue = "1";
         }
         else {
             var productValue = "0";
         }
+        $("#productValue").text(productValue);
         var Prodcutid = $(this).attr("id");
+        $("#modalValue").text(Prodcutid);
+        if (productValue == "0") {
+            iteCheck.prop("checked", true)
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000,
 
-        $.ajax({
-            url: '/Admin/ChangeProductOffer',
-            dataType: 'html',
-            data: {
-                id: Prodcutid,
-                value: productValue
-            },
-            success: function (data) {
-
-
-            },
-            error: function () {
 
             }
-        });
+            toastr.error("شما قادر به انجام عملیات نیستید")
+        }
+        else {
+            $("#daemModal").modal('toggle');
+        }
+
     })
-   
+
 </script>
 
 
@@ -485,30 +714,12 @@
 
     }
     <script>
+      
         $(".pagingnumberforall").click(function () {
 
             var num = this.textContent;
-            var value = $("#listofproduct").val();
-            var partner = $("#partnerList").val();
-            var que = $("#SearchQuery").val();
-            $.ajax({
-                url: '/admin/GetTheListOfItems',
-                data: {
-                    page: num,
-                    value: value,
-                    partner: partner,
-                    query: que
-                },
-                dataType: 'html',
-                success: function (data) {
-
-                    $('#listholder').html(data);
-                    $('#listholder').css("display", "block");
-                },
-                error: function () {
-                    alert("nashod")
-                },
-            });
+            $("#loading").show();
+            getlofo(num)
         })
 
     </script>

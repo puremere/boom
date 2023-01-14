@@ -280,24 +280,10 @@ namespace banimo.Controllers
                 servername = servername
             };
             var payload = JsonConvert.SerializeObject(payloadModel);
-            if (partnerID != null)
-            {
-                urlid = partnerID.ToString();
-                string partnerName = "";
-                if (partnerID != "0")
-                {
-                    result = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/getPartnerNameDemo.php",payload);
-                    partnerName = result.Replace("\n", "");
-                }
-                else
-                {
-                    partnerName = System.Configuration.ConfigurationManager.AppSettings["siteName"];
-                }
-
-                TempData["partnerName"] = partnerName;
-            }
+           
           
-
+            //0101/319534
+            //    7156010055050514
 
            
             device = RandomString();
@@ -1397,7 +1383,7 @@ namespace banimo.Controllers
         [HomeSessionCheck]
         public ActionResult myProfile(string type)
         {
-
+           
             
             ViewBag.type = type.ToString();
 
@@ -1796,7 +1782,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-
+            
             banimo.ViewModelPost.viewProductViewModel log = JsonConvert.DeserializeObject<banimo.ViewModelPost.viewProductViewModel>(result);
            
             if (ID != "")
@@ -3041,6 +3027,10 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("ReqestForPaymentZarin", "Connection", model);
             }
+            else if (payment == "6")
+            {
+                return RedirectToAction("ReqestForPaymentKeepa", "Connection", model);
+            }
             else if (payment == "1" || payment == "2")
             {
 
@@ -3978,26 +3968,13 @@ namespace banimo.Controllers
         }
             searchVM model = JsonConvert.DeserializeObject<searchVM>(result);
             model.lst = new List<caITem>(); 
-          if(model.data != null)
+        if(model.data != null)
             {
                 foreach (var item in model.data)
                 {
                     caITem itemModel = JsonConvert.DeserializeObject<caITem>(item);
                     if (item != null)
                     {
-                        //int first = itemModel.title.IndexOf(val);
-                        //int spaceIndex = itemModel.title.IndexOf(" ", first+ val.Count());
-                        //if (spaceIndex != -1)
-                        //{
-                        //    string final = itemModel.title.Substring(first, spaceIndex - first);
-                        //    itemModel.title = final;
-                        //}
-                        //else
-                        //{
-                        //    itemModel.title = val;
-                        //}
-                        itemModel.title = val;
-
                         model.lst.Add(itemModel);
                     }
 

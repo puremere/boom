@@ -8,7 +8,8 @@
     Layout = "~/Views/Shared/_Layout4.cshtml";
 }
 
-<link href="~/Content/confirmStyle4.css" rel="stylesheet" />
+
+<link href="~/Content/loginStyle4.css" rel="stylesheet" />
 <script>
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
@@ -82,7 +83,7 @@ else if (ViewBag.error == "400")
                     <div class="c-account-box__headline">تایید شماره تلفن همراه</div>
                     <div class="c-account-box__content">
                         <form action="/CustomerLogin/checkConfirmCode" class="c-form-account" method="post" id="confirmForm">
-                            @Html.AntiForgeryToken();
+                            @Html.AntiForgeryToken()
                             <input name="phone" hidden value="@Model.id" />
                             <div class="c-message-light c-message-light--success">
                                 <span>برای شماره همراه @Model.id  کد تایید ارسال گردید</span>
@@ -92,7 +93,7 @@ else if (ViewBag.error == "400")
                             <div class="c-form-account__row">
                                 <div class="c-form-account__col">
                                     <label class="c-ui-input c-ui-input--account-sms">
-                                        <input name="register" id="verificationcode" class="c-ui-input__field" type="text" placeholder="_ _ _ _ _" maxlength="5" name="confirm[code]">
+                                        <input name="register" id="verificationcode" class="c-ui-input__field" type="text" placeholder="" maxlength="5" name="confirm[code]">
                                     </label>
                                     <div class="c-ui-feedback-hint c-message c-message-light c-message-light--error">نام کاربری را به شکل صحیح وارد کنید</div>
                                 </div>
@@ -318,7 +319,7 @@ else if (ViewBag.error == "400")
                         </form>
                     </div>
                     <div class="c-account-box__footer">
-                        <span>قبلا در @System.Configuration.ConfigurationManager.AppSettings["siteName"] ثبت‌نام کرده‌اید؟</span>
+                        <span>قبلا در @System.Configuration.ConfigurationManager.AppSettings["siteName"] ثبت ‌نام کرده‌اید؟</span>
                         <a href="/home/login" class="btn-link-spoiler">وارد شویــد</a>
                     </div>
                 </div>

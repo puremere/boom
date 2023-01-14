@@ -10,6 +10,10 @@
     }
 }
 
+
+
+
+
 @foreach (var item in Model)
 {
     string addID = "addtocarto" + item.ID;
@@ -41,7 +45,7 @@
     string src = imagefile;
 
 
-    <div class="item showmedetail" id=@ID style="cursor:pointer">
+    <div class="item showmedetail" id=@ID >
 
         <div class="showmedetailFirstDiv showmedetailx">
             @{
@@ -59,7 +63,7 @@
 
                 }
             }
-            <div style="padding:15px ; background-color:white">
+            <div class="mainParent" style="">
                 <a onclick="newProductDetail('@newurl')">
                     <div class="imageholderindex">
                         <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
@@ -92,17 +96,17 @@
                         {
                             if (item.price == "0")
                             {
-                                <div class="row" style="margin:0px 15px;min-height: 49px;margin-bottom: 10px;">
+                                <div class="row" style="margin: 0px 15px; min-height: 49px; margin-bottom: 10px;">
                                     <p style="display:inline-block"> تماس بگیرید</p>
                                 </div>
                             }
                             else
                             {
-                                <div style="display:flex; align-items:center; margin-bottom:10px">
-                                    <div style="width:20%;margin-right:5px">
+                                <div class="wholeSectionPrice">
+                                    <div class="discountParent" style="">
                                         @if (oldPrice != metaPrice)
                                         {
-                                            <span style="color: white;font-size:18px;font-weight:600;background-color: red;border-radius: 15px;padding: 5px 10px;">
+                                            <span style="" class="vitrinDiscount">
                                                 @item.discount%
                                             </span>
                                         }
@@ -110,19 +114,19 @@
                                     </div>
                                     <div style="flex:1">
                                         <div>
-                                            <div class="" style="margin:0px 15px; min-height:20px;text-align:left">
+                                            <div class="sectionPrice" style="">
                                                 <div class="">
                                                     <div class="">
                                                         @if (metaPrice != oldPrice)
                                                         {
-                                                            <p style="display: inline-block; "> تومان </p> <del style="font-size:15px"> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)) </del>
+                                                            <p style="display: inline-block; "> تومان </p> <del class="oldPrice" style=""> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)) </del>
 
                                                         }
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row" style="margin:0px 15px; text-align:left">
-                                                <p style="display: inline-block; color: black"> تومان </p> <p style="color:black; display:inline-block;font-size:20px; font-weight:600">@string.Format("{0:n0}", metaPrice)</p>
+                                            <div class="sectionPrice" >
+                                                <p style="display: inline-block; color: black"> تومان </p> <p class="newPrice" style="">@string.Format("{0:n0}", metaPrice)</p>
                                             </div>
                                         </div>
                                     </div>
@@ -140,8 +144,8 @@
                     string valueID = "value" + item.ID;
 
                     <div class="addButton " style="height:40px">
-                        <div id="@addID" class="value-plus" style="font-size:12px; direction:rtl;color:white; width:100%;  text-align:center; background-color:#FF4500; display:flex; justify-content:center;align-items:center;border-radius:5px; border:unset">
-                            <i class="fa fa-shopping-basket" style="margin:0 10px;"></i>
+                        <div id="@addID" class="value-plus addButtonP"  style="">
+                            <i class="fa fa-shopping-basket" style=""></i>
                             <p style="color:white">افزودن به سبد خرید</p>
                         </div>
                     </div>
@@ -179,3 +183,98 @@
         $(this).attr('src', url);
     });
 </script>
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
+
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+    .discountParent {
+        width: 20%;
+        margin-right: 5px;
+        text-align: right
+    }
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+    }
+</style>

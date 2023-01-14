@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "تاییده پرداخت";
+    Layout = "~/Views/Shared/_Layout4.cshtml"; 
+ }
+
+@if (ViewBag.agent == "ios")
+{
+
+}
+
+@{
+     string srt ="digijanebi://status=200&message=20110";
+}
+
+
+    <div style="display:flex; align-items:center; justify-content:center">
+        <div class="btn btn-success return"> بازگشت به اپلیکیشن</div>
+    </div>
+
+    <script>
+
+        $(".return").click(function () {
+            /**/
+            window.location.href = 'digijanebi://status=200&message=20110';
+        /**/
+    })
+
+
+    </script>

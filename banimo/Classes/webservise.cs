@@ -79,6 +79,11 @@ namespace banimo.Classes
             HttpResponseMessage result;
             using (var client = new HttpClient())
             {
+                if (serverAddress.Contains("kipaa"))
+                {
+                    client.DefaultRequestHeaders.Add("Authorization", "brear 5cccd276-3072-4d0f-9d2d-b60f5548f9d5");
+                }
+               
                 result = await client.PostAsync(u, c);
                 if (result.IsSuccessStatusCode)
                 {
@@ -87,6 +92,8 @@ namespace banimo.Classes
             }
             return response;
         }
+
+
 
        
 

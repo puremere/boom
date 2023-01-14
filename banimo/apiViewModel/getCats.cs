@@ -240,6 +240,13 @@ namespace banimo.apiViewModel
     {
         public string productID{get; set;}
     }
+    public class deliveryTypeVM
+    {
+        public string planID { get; set; }
+        public string prodcutID { get; set; }
+        public string addressID { get; set; }
+
+    }
     public class getproductdetailForCookie
     {
         public string idlist{get; set;}

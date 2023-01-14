@@ -37,6 +37,11 @@
             $(this).children().children("i").css("display", "inline-block");
             $("#payment").val("3");
         })
+        $("#keepa").click(function () {
+            $(".banky").css("display", "none");
+            $(this).children().children("i").css("display", "inline-block");
+            $("#payment").val("6");
+        })
         $("#pasargad").click(function () {
             $(".banky").css("display", "none");
             $(this).children().children("i").css("display", "inline-block");
@@ -1313,13 +1318,13 @@
                 <div class="sectionBody">
                     <div class="row " style="direction:rtl;">
                         @*<div class="col-lg-6 col-sm-6 " id="inplace" style="cursor:pointer; float:right">
-                            <div class="halfrow">
-                                <i class="fa fa-check banky"></i>
+            <div class="halfrow">
+                <i class="fa fa-check banky"></i>
 
-                                <p>پرداخت درمحل</p>
-                            </div>
+                <p>پرداخت درمحل</p>
+            </div>
 
-                        </div>*@
+        </div>*@
 
                         @{
                             if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("inplace"))
@@ -1350,6 +1355,15 @@
                                     </div>
                                 </div>
                             }
+                            if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("keepa"))
+                            {
+                                <div class="col-lg-6 col-sm-6 " id="keepa" style="cursor:pointer; float:right">
+                                    <div class="halfrow ">
+                                        <i class="fa fa-check banky" style="display:none"></i>
+                                        <p>درگاه پرداخت کیپا</p>
+                                    </div>
+                                </div>
+                            }
                             if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("pasargad"))
                             {
                                 <div class="col-lg-6 col-sm-6 " id="pasargad" style="cursor:pointer; float:right">
@@ -1362,13 +1376,13 @@
                             if (@System.Configuration.ConfigurationManager.AppSettings["dargah"].Contains("wallet"))
                             {
                                 @*<div class="col-lg-6 col-sm-6 " id="Wallet" style="cursor:pointer; float:right">
-                                    <div class="halfrow">
-                                        <i class="fa fa-check banky" style="display:none"></i>
+                    <div class="halfrow">
+                        <i class="fa fa-check banky" style="display:none"></i>
 
-                                        <p>کیف پول</p>
-                                    </div>
+                        <p>کیف پول</p>
+                    </div>
 
-                                </div>*@
+                </div>*@
                             }
                         }
 

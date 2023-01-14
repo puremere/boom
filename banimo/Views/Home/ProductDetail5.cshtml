@@ -87,19 +87,42 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-6" style="padding:0 10px">
-                                <div class="product-gallery-image in-stock d-flex justify-content-center align-items-center position-relative card-blue">
+                                <div  class="product-gallery-image in-stock d-flex justify-content-center align-items-center position-relative card-blue">
+
+                                    @if (Model.price != Model.oldPrice)
+                                    {
+                                        <div style="right:0" class="price-box position-absolute price-offer-box">
+                                            <div class="title-timer-product" style="background-color:unset">
+                                                <div class="number-timer">
+                                                    <span><del style="" class=" priceItem">@string.Format("{0:n0}", double.Parse(Model.oldPrice)) ت</del></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
                                     <div class="price-box position-absolute">
-                                        @if (Model.isAvailable == "1")
-                                        {
-                                            <span class="in-stock priceItem">@string.Format("{0:n0}", double.Parse(Model.price)) ت</span>
+                                        <div class="title-timer-product d-flex">
+                                            @if (Model.price != Model.oldPrice)
+                                            {
+                                                <div class="text-offer"><span class="txt">پیشنهاد ویژه</span></div>
+                                            }
 
-                                        }
-                                        else
-                                        {
-                                            <span class="in-stock priceItem">ناموجود</span>
+                                            <div class="number-timer">
+                                                @if (Model.isAvailable == "1")
+                                                {
+                                                    <span class=" priceItem">@string.Format("{0:n0}", double.Parse(Model.price)) ت</span>
 
-                                        }
+                                                }
+                                                else
+                                                {
+                                                    <span class=" priceItem">ناموجود</span>
+
+                                                }
+
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="image-zoom">
                                         <div class="swiper swiper-image-zoom-desktop swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                                             <div class="swiper-wrapper" id="swiper-wrapper-f5b73a3b58fd340b"

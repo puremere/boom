@@ -24,7 +24,7 @@ namespace banimo
                name: "Default",
                url: "{controller}/{action}/{id}",
                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core" }
+               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner" }
 
            );
 

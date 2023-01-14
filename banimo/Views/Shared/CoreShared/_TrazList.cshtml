@@ -1,29 +1,160 @@
 ﻿@model banimo.ViewModel.TrazVM
 
-    <tr>
-        <th>
-        </th>
-        <th>
-            شرح
-        </th>
-        <th class="ef">
-            بد
-        </th>
-        <th class="ef">
-            بس
-        </th>
-        <th class="ga">
-            بد
-        </th>
-        <th class="ga">
-            بس
-        </th>
-        <th class="ma">
-            بد
-        </th>
-        <th class="ma">
-            بس
-        </th>
+<div style="overflow-x:auto;padding:10px">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+          
+            <h3 class="panel-title" style="color:white">  <i class="fa fa-print" style="float:left; margin-left : 15px; color:white"></i> ترازنامه </h3>
+        </div>
+        <div class="panel-body">
+
+            <div id="morris-area-chart">
+                <div style="overflow:auto">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                </th>
+                                <th class=" ef" colspan="2">
+                                    افتتاحیه
+                                </th>
+                                <th class="ga" colspan="2">
+                                    گردش
+                                </th>
+                                
+                                <th class="ma" colspan="2">
+                                    مانده
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    کد حساب
+
+                                </th>
+                                <th>
+                                    شرح
+                                </th>
+                                <th class="ef">
+                                    بد
+                                </th>
+                                <th class="ef">
+                                    بس
+                                </th>
+                                <th class="ga">
+                                    بد
+                                </th>
+                                <th class="ga">
+                                    بس
+                                </th>
+                                <th class="ma">
+                                    بد
+                                </th>
+                                <th class="ma">
+                                    بس
+                                </th>
 
 
-    </tr>
+                            </tr>
+                            @{
+                                int eftBEDSUM = 0;
+
+                                if (Model.lst != null)
+                                {
+                                    foreach (var item in Model.lst)
+                                    {
+
+
+                                        decimal finalmande = @Math.Abs(item.mandebed) - @Math.Abs(item.mandebes);
+
+
+
+                                        <tr>
+                                            <th>@item.codeHesab</th>
+                                            <th>@item.title</th>
+                                            <th class="ef">
+
+                                                <span>@string.Format("{0:n0}", @Math.Abs(item.eftetahbed)) </span>
+
+                                            </th>
+                                            <th class="ef">
+                                                <span>@string.Format("{0:n0}", @Math.Abs(item.eftetahbes)) </span>
+
+                                            </th>
+                                            <th class="ga">
+                                                <span>@string.Format("{0:n0}", @Math.Abs(item.garddeshbed)) </span>
+
+                                            </th>
+                                            <th class="ga">
+                                                <span>@string.Format("{0:n0}", @Math.Abs(item.garddeshbes)) </span>
+                                            </th>
+                                            <th class="ma">
+                                                @if (finalmande >= 0)
+                                                {
+                                                    <span><span>@string.Format("{0:n0}", @Math.Abs(finalmande)) </span> </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><span>0 </span> </span>
+                                                }
+
+                                            </th>
+                                            <th class="ma">
+                                                @if (finalmande <= 0)
+                                                {
+                                                    <span><span>@string.Format("{0:n0}", @Math.Abs(finalmande)) </span> </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><span>0 </span> </span>
+                                                }
+                                            </th>
+                                        </tr>
+                                    }
+                                }
+
+
+                            }
+
+                            @{
+                                int efbed = Model.lst.Sum(x => x.eftetahbed);
+                                int efbes = Model.lst.Sum(x => x.eftetahbes);
+                                int garbed = Model.lst.Sum(x => x.garddeshbed);
+                                int garbes = Model.lst.Sum(x => x.garddeshbes);
+                                int mandebed = Model.lst.Where(x => Math.Abs(x.mandebed) > Math.Abs(x.mandebes)).Sum(x => Math.Abs(x.mandebed) - Math.Abs(x.mandebes));
+                                int mandebes = Model.lst.Where(x => Math.Abs(x.mandebes) > Math.Abs(x.mandebed)).Sum(x => Math.Abs(x.mandebes) - Math.Abs(x.mandebed));
+
+                            }
+                            <tr>
+                                <th></th>
+                                <th>جمع کل</th>
+                                <th class="ef">@string.Format("{0:n0}", @Math.Abs(efbed))</th>
+                                <th class="ef">@string.Format("{0:n0}", @Math.Abs(efbes))</th>
+                                <th class="ga">@string.Format("{0:n0}", @Math.Abs(garbed))</th>
+                                <th class="ga">@string.Format("{0:n0}", @Math.Abs(garbes))</th>
+                                <th class="ma">
+                                    @string.Format("{0:n0}", @Math.Abs(mandebed))
+                                </th>
+                                <th class="ma">
+                                    @string.Format("{0:n0}", @Math.Abs(mandebes))
+                                </th>
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody id="tarazHolder">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

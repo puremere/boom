@@ -12,8 +12,12 @@
 <div class="" style="width:100%; margin:0;">
     @if (Model.lst != null)
     {
-        <div  style=" margin-bottom:20px;border-bottom:2px solid #ddd ; direction:rtl">
-            @foreach (var item in Model.lst)
+
+    <div style=" margin-bottom:20px;border-bottom:2px solid #ddd ; direction:rtl">
+
+        @foreach (var item in Model.lst)
+        {
+            if (item.cattitle != null)
             {
                 <div id="@item.ID" class="row searchItem" style="display:flex; padding:20px">
                     <p class="searchtitle">@item.title</p>
@@ -21,19 +25,38 @@
                     <p style="color:blue; flex:1"> @item.cattitle</p>
                 </div>
             }
-        </div>
+
+
+        }
+        <div style="width:100%; border:1px;"></div>
+        @foreach (var item in Model.lst)
+        {
+            if (item.cattitle == null)
+            {
+
+               
+                <div id="@item.meta" class="row searchtitle" style="display:flex; padding:20px; cursor:pointer">
+                    <p class="itemtitle">@item.title</p>
+                    
+                </div>
+            }
+
+
+        }
+    </div>
     }
 
-    <div class="row searchItemRaw" style="display:flex; padding:20px; cursor:pointer">
-        <p style="margin:0 5px">نمایش همه نتایج برای</p>
-        <p id="valsearch" style="color:blue; flex:1"> @Model.key</p>
-    </div>
+   
 
 
 
 </div>
 
 <script>
+    $(".searchtitle").click(function () {
+        var id = $(this).attr('id');
+        window.location.href = "/"+ id
+    })
     $(".searchItem").click(function () {
         var id = $(this).attr('id');
         var search = $(this).find(".searchtitle").text();

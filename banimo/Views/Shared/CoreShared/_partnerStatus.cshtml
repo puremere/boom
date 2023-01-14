@@ -50,7 +50,7 @@
                         <div class="row fieldholder col-lg-3" style="margin:15px 0; padding-top:25px">
 
                             <div class="btn btn-success" id="editPartnerStatus">
-                                
+
                                 <p style="margin:0">ویرایش جایگاه همکار</p>
                             </div>
                             <div class="btn btn-danger">
@@ -76,6 +76,7 @@
     }
     else
     {
+
         <div class="row" id="detailholder" style="padding: 0px 20px;width: 100%;margin: 0px;">
 
 
@@ -94,7 +95,7 @@
                                 <div class=" ">
                                     <span style="color:red; display:none">*</span>
                                     <select name="partnerType" class="form-control" multiple>
-                                       
+
                                         @foreach (var item in Model.roleList)
                                         {
 
@@ -107,7 +108,7 @@
 
 
                         </div>
-                        <input  type="hidden" name="node" id="nodeHolder" />
+                        <input type="hidden" name="node" id="nodeHolder" />
                         <input type="hidden" name="patnerUsername" class="patnerUsername" />
                         <div class="row fieldholder col-lg-3" style="margin:15px 0">
                             <label style="text-align: right">
@@ -150,6 +151,9 @@
 }
 
 
+
+
+
 <script>
     $("#confirmAddPartner").click(function () {
         var node = $("#nodeSelected").val();
@@ -160,6 +164,6 @@
         var node = $("#nodeSelected").val();
         $("#nodeHolderEdit").val(node);
         $("#updateUser").submit();
-        
+
     })
 </script>

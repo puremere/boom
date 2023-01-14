@@ -36,6 +36,29 @@
     .jst-timeout {
         color: red;
     }
+
+    .watchallItem {
+        max-width: 100%;
+        max-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .watchall {
+        background-color: white;
+        cursor: pointer;
+        height: 100%;
+        box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);
+        position: relative
+    }
 </style>
 
 
@@ -48,7 +71,8 @@
 </div>
 
 
-<div style="display:none" class="modal fade" id="iosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div style="        display: none
+" class="modal fade" id="iosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header" style="text-align:center; padding:15px;border-bottom:1px solid #ddd">
@@ -355,7 +379,7 @@
 @if (Model.banners != null)
 {
     <div class="row bannerholder">
-        <div class="banerset1" style=" ">
+        <div class="banerset1 row" style=" ">
             @if (Model.banners.Count >= 1)
             {
                 if (Model.banners[0].image != "")
@@ -446,10 +470,10 @@
 @if (Model.banners != null)
 {
     <div class="row bannerholder" style="">
-        <div class="row bannerrow1" style="margin:5px 10% !important">
+        <div class="row bannerrow1" style="">
             @if (Model.banners.Count >= 5)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[4].image' id='@Model.banners[4].type-@Model.banners[4].catIDOrLink' />
                     </div>
@@ -458,7 +482,7 @@
             }
             @if (Model.banners.Count >= 6)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[5].image' id='@Model.banners[5].type-@Model.banners[5].catIDOrLink' />
                     </div>
@@ -468,7 +492,7 @@
             @if (Model.banners.Count >= 7)
             {
 
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner plusmargin ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[6].image' id='@Model.banners[6].type-@Model.banners[6].catIDOrLink' />
                     </div>
@@ -479,7 +503,7 @@
             }
             @if (Model.banners.Count >= 8)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[7].image' id='@Model.banners[7].type-@Model.banners[7].catIDOrLink' />
                     </div>
@@ -538,8 +562,8 @@
                     <div id="bestholder" class="resCarousel" data-items="3-5-5-5" data-slide="1" data-speed="100">
 
                         <div class="resCarousel-inner">
-                            <div id="/Home/ProductList?sortID=1" class="item watchall" style="background-color:white; cursor:pointer;height: 100%;box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);">
-                                <div href="" style="width:100%;height:100%; display:flex; flex-direction:column; align-items:center;justify-content:center">
+                            <div id="/Home/ProductList?sortID=1" class="item watchall" style="">
+                                <div href="" class="watchallItem">
                                     <span>
                                         <i style="color:cornflowerblue; font-size:28px" class="fa fa-angle-left"></i>
                                     </span>
@@ -577,8 +601,8 @@
                     <div id="bestholder" class="resCarousel " data-items="3-5-5-5" data-slide="1" data-speed="100" data-value="8">
 
                         <div class="resCarousel-inner">
-                            <div id="/Home/ProductList?sortID=3" class="item watchall" style="background-color:white; cursor:pointer;height: 100%;box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);">
-                                <div href="" style="width:100%;height:100%; display:flex; flex-direction:column; align-items:center;justify-content:center">
+                            <div id="/Home/ProductList?sortID=3" class="item watchall">
+                                <div href="" style="" class="watchallItem">
                                     <span>
                                         <i style="color:cornflowerblue; font-size:28px" class="fa fa-angle-left"></i>
                                     </span>
@@ -610,7 +634,7 @@
             @if (Model.banners.Count >= 9)
             {
 
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[8].image' id='@Model.banners[8].type-@Model.banners[8].catIDOrLink' />
                     </div>
@@ -621,7 +645,7 @@
             }
             @if (Model.banners.Count >= 10)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[9].image' id='@Model.banners[9].type-@Model.banners[9].catIDOrLink' />
                     </div>
@@ -630,7 +654,7 @@
             }
             @if (Model.banners.Count >= 11)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner plusmargin ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[10].image' id='@Model.banners[10].type-@Model.banners[10].catIDOrLink' />
                     </div>
@@ -639,7 +663,7 @@
             }
             @if (Model.banners.Count >= 12)
             {
-                <div class="col-lg-6 col-md- col-sm-6 col-xs-12 indexbanner ">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 indexbanner ">
                     <div class="imageparent">
                         <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[11].image' id='@Model.banners[11].type-@Model.banners[11].catIDOrLink' />
                     </div>
@@ -702,8 +726,8 @@
                     <div id="bestholder" class="resCarousel" data-items="3-5-5-5" data-slide="1" data-speed="100">
 
                         <div class="resCarousel-inner">
-                            <div id="/Home/ProductList?sortID=2" class="item watchall" style="background-color:white; cursor:pointer;height: 100%;box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);">
-                                <div href="" style="width:100%;height:100%; display:flex; flex-direction:column; align-items:center;justify-content:center">
+                            <div id="/Home/ProductList?sortID=2" class="item watchall">
+                                <div href="" class="watchallItem">
                                     <span>
                                         <i style="color:cornflowerblue; font-size:28px" class="fa fa-angle-left"></i>
                                     </span>
@@ -734,11 +758,11 @@
 {
     <div class="row bannerholder" style="">
         <div class="row bannerrow1" style="margin:5px 10% !important">
-            <div class="row">
+            <div class="row" style="display:flex">
                 @if (Model.banners.Count >= 13)
                 {
 
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[12].image' id='@Model.banners[12].type-@Model.banners[12].catIDOrLink' />
                         </div>
@@ -749,7 +773,7 @@
                 }
                 @if (Model.banners.Count >= 14)
                 {
-                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[13].image' id='@Model.banners[13].type-@Model.banners[13].catIDOrLink' />
                         </div>
@@ -757,10 +781,10 @@
 
                 }
             </div>
-            <div class="row">
+            <div class="row" style="display:flex">
                 @if (Model.banners.Count >= 15)
                 {
-                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[14].image' id='@Model.banners[14].type-@Model.banners[14].catIDOrLink' />
                         </div>
@@ -769,7 +793,7 @@
                 }
                 @if (Model.banners.Count >= 16)
                 {
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[15].image' id='@Model.banners[15].type-@Model.banners[15].catIDOrLink' />
                         </div>
@@ -777,11 +801,11 @@
 
                 }
             </div>
-            <div class="row">
+            <div class="row" style="display:flex">
 
                 @if (Model.banners.Count >= 17)
                 {
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[16].image' id='@Model.banners[16].type-@Model.banners[16].catIDOrLink' />
                         </div>
@@ -791,7 +815,7 @@
                 @if (Model.banners.Count >= 18)
 
                 {
-                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 indexbanner ">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 indexbanner ">
                         <div class="imageparent">
                             <img alt="بنر" class="banner bannerimage" src='@System.Configuration.ConfigurationManager.AppSettings["domain"]/images/panelimages/@Model.banners[17].image' id='@Model.banners[17].type-@Model.banners[17].catIDOrLink' />
                         </div>
@@ -799,8 +823,8 @@
 
                 }
             </div>
-           
-           
+
+
         </div>
         <script>
             $(".banner").each(function () {
@@ -879,8 +903,8 @@
                             <div id="bestholder" class="resCarousel" data-items="3-5-5-5" data-slide="1" data-speed="100">
 
                                 <div class="resCarousel-inner">
-                                    <div id="/Home/ManageSlide?val= @id" class="item watchall" style="background-color:white; cursor:pointer;height: 100%;box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);">
-                                        <div href="" style="width:100%;height:100%; display:flex; flex-direction:column; align-items:center;justify-content:center">
+                                    <div id="/Home/ManageSlide?val= @id" class="item watchall">
+                                        <div href="" class="watchallItem">
                                             <span>
                                                 <i style="color:cornflowerblue; font-size:28px" class="fa fa-angle-left"></i>
                                             </span>
@@ -1164,7 +1188,101 @@
 }
 
 
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
 
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+    .discountParent {
+        width: 20%;
+        margin-right: 5px;
+        text-align: right
+    }
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+    }
+</style>
 
 @if (Request.Browser.IsMobileDevice)
 {

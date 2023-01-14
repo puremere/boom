@@ -61,7 +61,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
                 string addr = appserver + "/getcatlist.php";
                 byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -82,7 +82,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
                 string addr = appserver + "/getMainData.php";
                 byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -103,7 +103,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/aboutUs.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -127,13 +127,17 @@ namespace banimo.Controllers
                 collection.Add("status", model.status);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/addToWishList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
         }
+
+
+
+        
 
         [System.Web.Http.HttpPost]
         public async Task<JObject> addTransaction([FromBody] addTransaction model)
@@ -152,7 +156,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/addTransaction.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -192,7 +196,7 @@ namespace banimo.Controllers
                 collection.Add("auth", model.auth);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/buyRequest.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -218,7 +222,7 @@ namespace banimo.Controllers
                 collection.Add("token", model.token);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/callMe.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -246,7 +250,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/changePass.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -278,7 +282,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/commentArticleProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -308,7 +312,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/commentProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -335,7 +339,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/compare.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -362,7 +366,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/compareSearch.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -393,7 +397,7 @@ namespace banimo.Controllers
                 collection.Add("longitude", model.longitude);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/completeProfile.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -416,7 +420,7 @@ namespace banimo.Controllers
                 collection.Add("isRegister", model.isRegister);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/confirmUser.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -438,7 +442,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/contactUs.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -463,7 +467,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/defaultAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -497,7 +501,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -528,7 +532,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -552,7 +556,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doSignIn.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -578,7 +582,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doSignUp.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -603,7 +607,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/doWalletFinalCheck.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -637,7 +641,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/editProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -663,7 +667,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/FinalizeOrder.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -692,7 +696,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCredit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -716,7 +720,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -740,7 +744,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataArticleComment.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -764,7 +768,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataArticlesDetail.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -788,7 +792,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataCatArticle.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -814,7 +818,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataCatArticlesList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -840,7 +844,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataComment.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -866,7 +870,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataMyOrderDetails.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -890,7 +894,7 @@ namespace banimo.Controllers
                 collection.Add("token", model.token);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataMyOrders.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -935,7 +939,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -961,7 +965,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataProfile.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -986,7 +990,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDataWishList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1015,7 +1019,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverCode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1041,7 +1045,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCustomerList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1067,7 +1071,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1093,7 +1097,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeliverListWait.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1122,7 +1126,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDiscount.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1169,7 +1173,7 @@ namespace banimo.Controllers
                 collection.Add("productID", model.productID);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getListOfFeaturesCombinWithValue.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1177,6 +1181,32 @@ namespace banimo.Controllers
            JObject jObject = JObject.Parse(result); return jObject ;
         }
 
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getTimeDeliverType([FromBody] deliveryTypeVM model)
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+
+                collection.Add("planID", model.planID);
+                collection.Add("prodcutID", model.prodcutID);
+                collection.Add("addressID", model.addressID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername); 
+                collection.Add("nodeID", nodeID);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getTimeDeliverType.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
+        
         [System.Web.Http.HttpPost]
         public async Task<JObject> getproductdetailForCookie([FromBody] getproductdetailForCookie model)
         {
@@ -1193,7 +1223,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getproductdetailForCookie.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1218,7 +1248,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getSubcatData.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1243,7 +1273,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getTime.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1268,7 +1298,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getTypeList.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1295,7 +1325,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/isInArea.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1322,7 +1352,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/removeAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1349,7 +1379,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/sendCodeAgain.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1399,11 +1429,9 @@ namespace banimo.Controllers
                 collection.Add("city", model.city);
                 collection.Add("state", model.state);
                 collection.Add("id", model.id);
-
-
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setAddress.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1429,7 +1457,7 @@ namespace banimo.Controllers
                 collection.Add("auth", model.auth);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setAUTcode.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1454,7 +1482,7 @@ namespace banimo.Controllers
                 collection.Add("auth", model.auth);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setauth.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1479,7 +1507,7 @@ namespace banimo.Controllers
                 collection.Add("auth", model.auth);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setWalletAuth.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1513,7 +1541,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/update.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1537,7 +1565,7 @@ namespace banimo.Controllers
                 collection.Add("token", model.token);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewArticle.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1561,7 +1589,7 @@ namespace banimo.Controllers
                 collection.Add("token", model.token);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewProduct.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1588,7 +1616,7 @@ namespace banimo.Controllers
                 collection.Add("ID", model.ID.ToString());
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCats.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1616,7 +1644,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getInfo.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1640,7 +1668,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/terms.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1662,8 +1690,8 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
-                collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
+               
                 collection.Add("page", page);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/productListAPI.php", collection);
@@ -1687,9 +1715,9 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
                 collection.Add("page", page);
-                collection.Add("nodeID", nodeID);
+               
 
 
 
@@ -1716,7 +1744,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
                 collection.Add("key", serchModel.val);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getSearch.php", collection);
@@ -1782,7 +1810,7 @@ namespace banimo.Controllers
                 collection.Add("orderID", deficitModel.orderID);
                 collection.Add("userID", deficitModel.userID);
                 collection.Add("productID", deficitModel.productID);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeficit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1808,7 +1836,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("orderID", deficitModel.orderID);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/getDeficit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1835,7 +1863,7 @@ namespace banimo.Controllers
                 collection.Add("IDs", deliverWaittModel.IDs);
                 collection.Add("desc", deliverWaittModel.desc);
                 collection.Add("deliverID", deliverWaittModel.deliverID);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeliverWait.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1863,7 +1891,7 @@ namespace banimo.Controllers
                 collection.Add("ID", deliverWaittModel.ID);
                 collection.Add("desc", deliverWaittModel.desc);
                 collection.Add("deliverID", deliverWaittModel.deliverID);
-                collection.Add("mbrand", servername);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(appserver + "/setDeliverPast.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);

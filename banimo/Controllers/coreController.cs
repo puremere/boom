@@ -15,6 +15,9 @@ using System.Web.Mvc;
 using AdminPanelBoom.ViewModel;
 using banimo.AdminPanelBoom.ViewModel;
 using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html.simpleparser;
 
 namespace banimo.Controllers
 {
@@ -53,6 +56,27 @@ namespace banimo.Controllers
         // GET: core
         public ActionResult Index()
         {
+
+
+            //string device = RandomString(10);
+            //string code = MD5Hash(device + "ncase8934f49909");
+            //string result = "";
+            //using (WebClient client = new WebClient())
+            //{
+
+            //    var collection = new NameValueCollection();
+            //    collection.Add("servername", servername);
+            //    collection.Add("device", device);
+            //    collection.Add("code", code);
+
+
+            //    //byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
+            //    string url = ConfigurationManager.AppSettings["server"] + "/Admin/getDashbaordData.php";
+            //    byte[] response = client.UploadValues(url, collection);
+
+            //    result = System.Text.Encoding.UTF8.GetString(response);
+            //}
+
             return View();
         }
 
@@ -79,6 +103,8 @@ namespace banimo.Controllers
             productCore log = JsonConvert.DeserializeObject<productCore>(result);
             return View(log);
         }
+
+
         public ActionResult setMainProduct(productCore model)
         {
             string finalID = model.ID != 0 ? model.ID.ToString() : "";
@@ -501,7 +527,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getTarafHesab.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDraft.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             draftVM log = JsonConvert.DeserializeObject<draftVM>(result);
@@ -595,7 +621,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/CoreShared/_returnDraftList.cshtml", log);
         }
 
-        public ActionResult returnDraftListA( string factorType, string amani, string nodeID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string desc)
+        public ActionResult returnDraftListA(string number, string factorType, string amani, string nodeID, string tarafID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string description)
         {
             double finalTimeFrom = 0;
             double finalTimeTo = 0;
@@ -629,6 +655,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("nodeID", nodeID);
+                collection.Add("tarafID", tarafID);
                 collection.Add("type", type);
                 collection.Add("productID", productID);
                 collection.Add("priceFrom", priceFrom);
@@ -638,8 +665,10 @@ namespace banimo.Controllers
                 collection.Add("countFrom", countFrom);
                 collection.Add("countTo", countTo);
                 collection.Add("status", status);
-                collection.Add("desc", desc);
+                collection.Add("desc", description);
                 collection.Add("amani", amani);
+                collection.Add("number", number);
+                
                 collection.Add("factorType", factorType);
 
 
@@ -674,7 +703,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             productMainVM log = JsonConvert.DeserializeObject<productMainVM>(result);
-            List<ViewModel.pList> model =new List<pList>();
+            List<ViewModel.pList> model = new List<pList>();
             if (log.products != null)
             {
                 foreach (var item in log.products)
@@ -1042,8 +1071,18 @@ namespace banimo.Controllers
         }
 
         [HttpPost]
-        public ActionResult setNewPartner(string phone, string title, string percent)
+        public ActionResult setNewPartner(string phone, string title, string percent, List<string> node)
         {
+
+            string nodes = "";
+            if (node != null)
+            {
+                foreach (var item in node)
+                {
+                    nodes += item + ",";
+                }
+            }
+            nodes = nodes.Trim(',');
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -1055,6 +1094,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("phone", phone);
                 collection.Add("title", title);
+                collection.Add("node", nodes);
                 collection.Add("percent", percent);
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 byte[] response = client.UploadValues(server + "/Admin/setNewPartner.php", collection);
@@ -1114,10 +1154,6 @@ namespace banimo.Controllers
 
 
         }
-
-
-
-
 
 
 
@@ -1248,7 +1284,7 @@ namespace banimo.Controllers
                 collection.Add("time", abserver.Replace("000", ""));
                 collection.Add("token", token);
                 collection.Add("description", desc);
-                collection.Add("nodID", "0");
+                collection.Add("nodeID", "0");
 
 
                 collection.Add("servername", servername);
@@ -1260,7 +1296,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult getCodingTrazList(string TNode, string TTaraf, string M222, string M333, string M444, string M555, string columnCount)
+        public ActionResult getCodingTrazList(string dateFrom, string dateTo, string TNode, string TTaraf, string M111, string M222, string M333, string M444, string M555, string columnCount, string baseReport)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1276,13 +1312,16 @@ namespace banimo.Controllers
                 collection.Add("token", token);
 
                 collection.Add("M222", M222);
+                collection.Add("M111", M111);
                 collection.Add("M333", M333);
-
                 collection.Add("M444", M444);
                 collection.Add("M555", M555);
                 collection.Add("nodeID", TNode);
+                collection.Add("dateFrom", dateFrom.Replace("000", ""));
+                collection.Add("dateTo", dateTo.Replace("000", ""));
                 collection.Add("taraf", TTaraf);
                 collection.Add("count", columnCount);
+                collection.Add("baseReport", baseReport);
 
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(server + "/Admin/getCodingTrazList.php", collection);
@@ -1293,6 +1332,657 @@ namespace banimo.Controllers
             TrazVM model = JsonConvert.DeserializeObject<TrazVM>(result);
             return PartialView("/Views/Shared/CoreShared/_TrazList.cshtml", model);
         }
+        public ActionResult getCodingTrazListPring(string project, string dateFrom, string dateTo, string TNode, string TTaraf, string M111, string M222, string M333, string M444, string M555, string columnCount, string baseReport, string sharhdescription, string dateFromtxt, string dateTotxt)
+        {
+
+            sharhdescription = sharhdescription.Replace("_", "\n");
+
+            // ردیف/شماره سند/تاریخ/ شرح/ بدهکار/بستانکار/وضعیت مانده/ مانده
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            int PcolspanEF = 4;
+            int PcolspanGA = 4;
+            int PcolspanMa = 4;
+            int colspanEF = 2;
+            int colspanGA = 2;
+            int colspanMa = 2;
+          
+            switch (columnCount)
+            {
+                case "2":
+                    PcolspanEF = 0;
+                    PcolspanGA = 0;
+                    PcolspanMa = 12;
+                    colspanEF = 0;
+                    colspanGA = 0;
+                    colspanMa = 6;
+                    
+                    break;
+                case "4":
+                    PcolspanEF = 0;
+                    PcolspanGA = 6;
+                    PcolspanMa = 6;
+                    colspanEF = 0;
+                    colspanGA = 3;
+                    colspanMa = 3;
+                 
+                    break;
+              
+            }
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+
+                collection.Add("M222", M222);
+                collection.Add("M111", M111);
+                collection.Add("M333", M333);
+                collection.Add("M444", M444);
+                collection.Add("M555", M555);
+                collection.Add("nodeID", TNode);
+                collection.Add("dateFrom", dateFrom.Replace("000", ""));
+                collection.Add("dateTo", dateTo.Replace("000", ""));
+                collection.Add("taraf", TTaraf);
+                collection.Add("count", columnCount);
+                collection.Add("baseReport", baseReport);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTrazList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            TrazVM model = JsonConvert.DeserializeObject<TrazVM>(result);
+            int counter = 12;
+
+
+            double loopCount = model.lst.Count / counter;
+            int remaining = model.lst.Count % counter;
+            loopCount = remaining > 0 ? loopCount + 1 : loopCount;
+            List<List<Lst>> parentlist = new List<List<Lst>>();
+            for (int i = 1; i <= loopCount; i++)
+            {
+                int skipnum = (i - 1) * counter;
+                List<Lst> tranVMLIst = model.lst.Skip(skipnum).Take(counter).ToList();
+                parentlist.Add(tranVMLIst);
+            }
+
+
+
+            Document document = new Document(PageSize.A4.Rotate());
+            document.SetMargins(0f, 0f, 10f, 0f);
+            string pdfFileName = Server.MapPath("/files/" + "sample2" + ".pdf");
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            string pathString = "~/fonts/ttf";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
+            BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
+            Font font = new Font(bfTimes, 9);
+            Font fontbig = new Font(bfTimes, 14);
+            Font fontSMALL = new Font(bfTimes, 10);
+            Font fontSMALLHeader = new Font(bfTimes);
+            Font fontbigBold = new Font(bfTimes, 14, Font.BOLD);
+            fontSMALLHeader.SetColor(0, 0, 0);
+
+
+            double totalEfbedehkar = 0;
+            double totalEfbestankar = 0;
+            double totalGabedehkar = 0;
+            double totalGabestankar = 0;
+            double totalBedmande = 0;
+            double totalBesmande = 0;
+            foreach (var groupList in parentlist)
+            {
+                document.NewPage();
+
+                PdfPTable toptable = new PdfPTable(12);
+                toptable.TotalWidth = 750f;
+                toptable.DefaultCell.NoWrap = false;
+                toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                toptable.PaddingTop = 200;
+
+
+
+
+                PdfPCell celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(project, fontbigBold))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شرح ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(sharhdescription, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("از تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateFromtxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("تراز آزمایشی", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                string vasiat = "";// M22 + " " + M33 + " " + M44 + " " + M55 + " " + trafText;
+
+
+                celltop = new PdfPCell(new Phrase(vasiat, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+                celltop = new PdfPCell(new Phrase("تار تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateTotxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("صفحه : ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                int currentpage = parentlist.IndexOf(groupList) + 1;
+                int kollpage = parentlist.Count();
+                celltop = new PdfPCell(new Phrase(currentpage + "/" + kollpage, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+
+                document.Add(toptable);
+
+
+                PdfPTable table = new PdfPTable(16);
+                table.TotalWidth = 550f;
+                table.DefaultCell.NoWrap = false;
+                table.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                table.PaddingTop = 100;
+
+                PdfPCell countIN = new PdfPCell(new Phrase("", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 4;
+                countIN.Padding = 10;
+                table.AddCell(countIN);
+
+                countIN = new PdfPCell(new Phrase("افتتاحیه", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanEF;
+                countIN.Padding = 10;
+                if (PcolspanEF != 0)
+                {
+                    table.AddCell(countIN);
+                }
+                
+
+                countIN = new PdfPCell(new Phrase("گردش", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanGA;
+                countIN.Padding = 10;
+                if (PcolspanGA != 0)
+                {
+                    table.AddCell(countIN);
+                }
+
+               
+                countIN = new PdfPCell(new Phrase("مانده", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanMa;
+                countIN.Padding = 10;
+                if (PcolspanMa != 0)
+                {
+                    table.AddCell(countIN);
+                }
+               
+
+
+
+                countIN = new PdfPCell(new Phrase("کد حساب", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 2;
+                table.AddCell(countIN);
+
+                PdfPCell num = new PdfPCell(new Phrase("شرح", font));
+                num.Padding = 10;
+                num.HorizontalAlignment = Element.ALIGN_CENTER;
+                num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                num.Colspan = 2;
+                table.AddCell(num);
+
+
+                PdfPCell detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+                
+
+                PdfPCell sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(sharh);
+                }
+               
+
+                detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+               
+
+                sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(sharh);
+                }
+               
+
+                detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+               
+
+
+
+                sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(sharh);
+                }
+               
+
+
+
+                foreach (var item in groupList)
+                {
+                    countIN = new PdfPCell(new Phrase(item.codeHesab, font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 2;
+                    table.AddCell(countIN);
+
+                    countIN = new PdfPCell(new Phrase(item.title, font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 2;
+                    table.AddCell(countIN);
+
+
+                    countIN = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.eftetahbed)), font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = colspanEF;
+                    if (colspanEF != 0)
+                    {
+                        table.AddCell(countIN);
+                    }
+                    
+
+                    num = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.eftetahbes)), font));
+                    num.Padding = 10;
+                    num.HorizontalAlignment = Element.ALIGN_CENTER;
+                    num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    num.Colspan = colspanEF;
+                    if (colspanEF != 0)
+                    {
+                        table.AddCell(num);
+                    }
+                   
+
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.garddeshbed)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanGA;
+                    if (colspanGA != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+                   
+
+                    sharh = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.garddeshbes)), font));
+                    sharh.Padding = 10;
+                    sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                    sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    sharh.Colspan = colspanGA;
+                    if (colspanGA != 0)
+                    {
+                        table.AddCell(sharh);
+                    }
+                   
+
+                    decimal finalmande = @Math.Abs(item.mandebed) - @Math.Abs(item.mandebes);
+                    decimal mandeBed = 0;
+                    decimal mandeBes = 0;
+                    if (finalmande >= 0)
+                    {
+                        mandeBed = Math.Abs(finalmande);
+                        mandeBes = 0;
+                    }
+                    else
+                    {
+                        mandeBes = Math.Abs(finalmande);
+                        mandeBed = 0;
+                    }
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(mandeBed)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanMa;
+                    if (colspanMa != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+                
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(mandeBes)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanMa;
+                    if (colspanMa != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+                  
+
+
+                }
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                countIN = new PdfPCell(new Phrase("جمع کل", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 4;
+                table.AddCell(countIN);
+
+
+                int efbed = groupList.Sum(x => x.eftetahbed);
+                int efbes = groupList.Sum(x => x.eftetahbes);
+                int garbed = groupList.Sum(x => x.garddeshbed);
+                int garbes = groupList.Sum(x => x.garddeshbes);
+                int mandebed = groupList.Where(x => Math.Abs(x.mandebed) > Math.Abs(x.mandebes)).Sum(x => Math.Abs(x.mandebed) - Math.Abs(x.mandebes));
+                int mandebes = groupList.Where(x => Math.Abs(x.mandebes) > Math.Abs(x.mandebed)).Sum(x => Math.Abs(x.mandebes) - Math.Abs(x.mandebed));
+                totalEfbedehkar += efbed;
+                totalEfbestankar += efbes;
+                totalGabedehkar += garbed;
+                totalGabestankar += garbes;
+                totalBedmande += mandebed;
+                totalBesmande += mandebes;
+
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalEfbedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+               
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalEfbestankar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+              
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalGabedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+              
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalGabestankar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+               
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalBedmande)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+              
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalBesmande)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+               
+
+
+
+
+                document.Add(table);
+
+            }
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
+
+            //return PartialView("/Views/Shared/CoreShared/_TransactionList.cshtml", model);
+        }
+
 
         public ActionResult getCodingTranList(string GNode, string GTaraf, string M22, string M33, string M44, string M55, string type, string datefrom, string dateTo)
         {
@@ -1327,7 +2017,527 @@ namespace banimo.Controllers
             TranList model = JsonConvert.DeserializeObject<TranList>(result);
             return PartialView("/Views/Shared/CoreShared/_TransactionList.cshtml", model);
         }
-        public ActionResult addCodingTransaction(string nodeID, string RTaraf, string M2, string M3, string M4, string M5, string type, string price, string description, string abserver, string recietID)
+
+        public ActionResult getCodingTranListPrint(string trafText, string GNode, string GTaraf, string M22, string M33, string M44, string M55, string type, string datefrom, string dateTo, string dateFromtxt, string dateTotxt, string project, string sharhdescription)
+        {
+            DateTime gdateTo = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(dateTo) / 1000);
+            DateTime gdateFrom = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(datefrom) / 1000);
+            sharhdescription = sharhdescription.Replace("_", "\n");
+            trafText = trafText.Replace("انتخاب طرف حساب", "");
+            // ردیف/شماره سند/تاریخ/ شرح/ بدهکار/بستانکار/وضعیت مانده/ مانده
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("datefrom", datefrom.Replace("000", ""));
+                collection.Add("dateTo", dateTo.Replace("000", ""));
+                collection.Add("type", type);
+                collection.Add("M22", M22);
+                collection.Add("M33", M33);
+                collection.Add("taraf", GTaraf);
+                collection.Add("M44", M44);
+                collection.Add("M55", M55);
+                collection.Add("nodeID", GNode);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTranList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            TranList model = JsonConvert.DeserializeObject<TranList>(result);
+            List<MyTransactionVM> modelVM = new List<MyTransactionVM>();
+
+            if (model.myTransaction == null)
+            {
+                return Content("");
+            }
+
+            double mandefinal = 0;
+            foreach (var item in model.myTransaction)
+            {
+                int index = model.myTransaction.IndexOf(item) + 1;
+                MyTransactionVM tranVM = new MyTransactionVM();
+                tranVM.radif = index.ToString();
+                tranVM.sanadID = item.sanadID;
+                tranVM.date = item.date;
+                tranVM.description = item.description;
+                if (item.type == "0")
+                {
+                    tranVM.bedehkar = item.price;
+                    tranVM.vaziatMande = "بد";
+                    tranVM.bestankar = 0;
+                }
+                else
+                {
+                    tranVM.bedehkar = 0;
+                    tranVM.bestankar = item.price;
+                    tranVM.vaziatMande = "بس";
+                }
+                mandefinal += item.price;
+                tranVM.mande = mandefinal;
+                tranVM.type = item.type;
+                tranVM.price = item.price;
+                modelVM.Add(tranVM);
+
+
+
+            }
+
+
+            parentTrandListVM parentModel = new parentTrandListVM();
+            List<TranListVM> MainList = new List<TranListVM>();
+            parentModel.parentList = MainList;
+            int counter = 12;
+
+            TranListVM listmodel = new TranListVM();
+            List<MyTransactionVM> rookeshlist = new List<MyTransactionVM>();
+            listmodel.myTransaction = rookeshlist;
+
+
+            double loopCount = modelVM.Count / counter;
+            int remaining = modelVM.Count % counter;
+            loopCount = remaining > 0 ? loopCount + 1 : loopCount;
+
+            for (int i = 1; i <= loopCount; i++)
+            {
+                int skipnum = (i - 1) * counter;
+                List<MyTransactionVM> tranVMLIst = modelVM.Skip(skipnum).Take(counter).ToList();
+                TranListVM listList = new TranListVM();
+                listList.myTransaction = tranVMLIst;
+                parentModel.parentList.Add(listList);
+            }
+
+
+
+            Document document = new Document(PageSize.A4.Rotate());
+            document.SetMargins(0f, 0f, 10f, 0f);
+            string pdfFileName = Server.MapPath("/files/" + "sample2" + ".pdf");
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            string pathString = "~/fonts/ttf";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
+            BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
+            Font font = new Font(bfTimes, 8);
+            Font fontbig = new Font(bfTimes, 14);
+            Font fontSMALL = new Font(bfTimes, 10);
+            Font fontSMALLHeader = new Font(bfTimes);
+            Font fontbigBold = new Font(bfTimes, 14, Font.BOLD);
+            fontSMALLHeader.SetColor(0, 0, 0);
+
+
+            double totalbedehkar = 0;
+            double totalbestankar = 0;
+            double totalmande = 0;
+            foreach (var groupList in parentModel.parentList)
+            {
+                document.NewPage();
+
+                PdfPTable toptable = new PdfPTable(12);
+                toptable.TotalWidth = 750f;
+                toptable.DefaultCell.NoWrap = false;
+                toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                toptable.PaddingTop = 200;
+
+
+
+
+                PdfPCell celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(project, fontbigBold))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شرح ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(sharhdescription, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("از تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateFromtxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("گردش حساب", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+                celltop = new PdfPCell(new Phrase("کد حساب", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                string vasiat = "";// M22 + " " + M33 + " " + M44 + " " + M55 + " " + trafText;
+                vasiat = M22 != "0" ? vasiat + M22 + "\n " : vasiat;
+                vasiat = M33 != "0" ? vasiat + M33 + "\n  " : vasiat;
+                vasiat = M44 != "0" ? vasiat + M44 + "\n   " : vasiat;
+                vasiat = M55 != "0" ? vasiat + M55 + "\n     " : vasiat;
+                vasiat = trafText != "" ? vasiat + GTaraf + "\n     " : vasiat;
+
+
+                celltop = new PdfPCell(new Phrase(vasiat, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+                celltop = new PdfPCell(new Phrase("تار تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateTotxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("صفحه : ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                int currentpage = parentModel.parentList.IndexOf(groupList) + 1;
+                int kollpage = parentModel.parentList.Count();
+                celltop = new PdfPCell(new Phrase(currentpage + "/" + kollpage, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+
+                document.Add(toptable);
+
+
+                PdfPTable table = new PdfPTable(19);
+                table.TotalWidth = 550f;
+                table.DefaultCell.NoWrap = false;
+                table.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                table.PaddingTop = 100;
+
+
+                PdfPCell countIN = new PdfPCell(new Phrase("ردیف", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 1;
+                table.AddCell(countIN);
+
+                PdfPCell num = new PdfPCell(new Phrase("شماره سند", font));
+                num.Padding = 10;
+                num.HorizontalAlignment = Element.ALIGN_CENTER;
+                num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                num.Colspan = 2;
+                table.AddCell(num);
+                PdfPCell detail = new PdfPCell(new Phrase("تاریخ", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                PdfPCell sharh = new PdfPCell(new Phrase("شرح", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = 6;
+                table.AddCell(sharh);
+
+                detail = new PdfPCell(new Phrase("بدهکار", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                PdfPCell bedehkar = new PdfPCell(new Phrase("بستانکار", font));
+                bedehkar.Padding = 10;
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                PdfPCell bestankar = new PdfPCell(new Phrase("وضعیت مانده", font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                bestankar = new PdfPCell(new Phrase("مانده", font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                foreach (var item in groupList.myTransaction)
+                {
+                    countIN = new PdfPCell(new Phrase(item.radif, font));
+
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 1;
+                    table.AddCell(countIN);
+
+                    num = new PdfPCell(new Phrase(item.sanadID, font));
+                    num.Padding = 10;
+                    num.HorizontalAlignment = Element.ALIGN_CENTER;
+                    num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    num.Colspan = 2;
+                    table.AddCell(num);
+                    detail = new PdfPCell(new Phrase(item.date, font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = 2;
+                    table.AddCell(detail);
+
+                    sharh = new PdfPCell(new Phrase(item.description, font));
+                    sharh.Padding = 10;
+                    sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                    sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    sharh.Colspan = 6;
+                    table.AddCell(sharh);
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.bedehkar)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = 2;
+                    table.AddCell(detail);
+
+                    bedehkar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.bestankar)), font));
+                    bedehkar.Padding = 10;
+                    bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bedehkar.Colspan = 2;
+                    table.AddCell(bedehkar);
+
+                    bestankar = new PdfPCell(new Phrase(item.vaziatMande, font));
+                    bestankar.Padding = 10;
+                    bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bestankar.Colspan = 2;
+                    table.AddCell(bestankar);
+
+                    bestankar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.mande)), font));
+                    bestankar.Padding = 10;
+                    bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bestankar.Colspan = 2;
+                    table.AddCell(bestankar);
+                }
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                countIN = new PdfPCell(new Phrase("جمع کل", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 11;
+                table.AddCell(countIN);
+
+
+
+
+
+                totalbedehkar += groupList.myTransaction.Where(x => x.type == "0").Sum(x => x.price);
+                totalbestankar += groupList.myTransaction.Where(x => x.type == "1").Sum(x => x.price);
+                totalmande += groupList.myTransaction.Sum(x => x.price);
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalbedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                bedehkar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalbestankar)), font));
+                bedehkar.Padding = 10;
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                string status = "";
+                if (totalmande > 0)
+                {
+                    status = "بد";
+                }
+                else if (totalmande < 0)
+                {
+                    status = "بس";
+                }
+
+                bestankar = new PdfPCell(new Phrase(status, font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                bestankar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalmande)), font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+
+
+
+                document.Add(table);
+
+            }
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
+
+            //return PartialView("/Views/Shared/CoreShared/_TransactionList.cshtml", model);
+        }
+
+
+        public ContentResult addCodingTransaction(string articleID, string nodeID, string RTaraf, string M2, string M3, string M4, string M5, string type, string price, string description, string abserver, string recietID)
         {
 
             price = price.Replace(",", "");
@@ -1356,7 +2566,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("token", token);
                 collection.Add("price", price);
-                collection.Add("time", abserver.Replace("000", ""));
+
                 collection.Add("description", description);
                 collection.Add("recietID", recietID);
                 collection.Add("type", type);
@@ -1366,6 +2576,8 @@ namespace banimo.Controllers
                 collection.Add("t1", M4);
                 collection.Add("t2", M5);
                 collection.Add("nodeID", nodeID);
+                collection.Add("articleID", articleID);
+
 
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(server + "/Admin/setRecietArticle.php", collection);
@@ -1376,7 +2588,7 @@ namespace banimo.Controllers
             return Content(result);
         }
 
-        public ActionResult ChangeRecietList(string type, string page, string dateFrom, string dateTo)
+        public ActionResult ChangeRecietList(string nodeSelected, string type, string page, string dateFrom, string dateTo)
         {
 
             page = page == null ? "1" : page;
@@ -1396,6 +2608,7 @@ namespace banimo.Controllers
                 collection.Add("timeFrom", dateFrom);
                 collection.Add("timeTo", dateTo);
                 collection.Add("type", type == null ? "" : type);
+                collection.Add("nodeID", nodeSelected);
                 string serveraddress = server + "/Admin/getDataRecietInfo.php";
                 byte[] response = client.UploadValues(serveraddress, collection);
 
@@ -1403,15 +2616,15 @@ namespace banimo.Controllers
             }
 
             banimo.ViewModel.RecietVM log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietVM>(result);
-            if (log.recietList != null)
-            {
-                foreach (var item in log.recietList)
-                {
-                    long lng = Int64.Parse(item.date) / 1000;
-                    DateTime dt = dateTimeConvert.UnixTimeStampToDateTime(lng);
-                    item.date = dateTimeConvert.ToPersianDateString(dt);
-                }
-            }
+            //if (log.recietList != null)
+            //{
+            //    foreach (var item in log.recietList)
+            //    {
+            //        long lng = Int64.Parse(item.date) / 1000;
+            //        DateTime dt = dateTimeConvert.UnixTimeStampToDateTime(lng);
+            //        item.date = dateTimeConvert.ToPersianDateString(dt);
+            //    }
+            //}
 
             log.current = page;
             return PartialView("/Views/Shared/CoreShared/_RecitFirstList.cshtml", log);
@@ -1443,14 +2656,13 @@ namespace banimo.Controllers
             }
 
         }
-        public ActionResult getRecietArticle(string id,string type)
+        public ActionResult getRecietArticle(string id, string type)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             using (WebClient client = new WebClient())
             {
-
                 var collection = new NameValueCollection();
                 collection.Add("servername", servername);
                 collection.Add("device", device);
@@ -1462,14 +2674,818 @@ namespace banimo.Controllers
             }
 
             banimo.ViewModel.RecietArticle log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietArticle>(result);
+
             if (type == "1")
             {
                 return PartialView("/Views/Shared/CoreShared/_RecitArticleListForEdit.cshtml", log);
             }
             else
             {
+
                 return PartialView("/Views/Shared/CoreShared/_RecitArticleList.cshtml", log);
             }
+        }
+        public ActionResult getRecietArticlePaper(string id, string type)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                string serveraddress = server + "/Admin/getRecietArticlePrint.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.recietArticlePrint log = JsonConvert.DeserializeObject<banimo.ViewModel.recietArticlePrint>(result);
+
+
+
+
+
+            List<RookeshVM> finalModel = new List<RookeshVM>();
+            string indexCreated = "";
+            string numCreated = "";
+            string sharhCreated = "";
+            string detailCreated = "";
+            string bedehkarCreated = "";
+            string bestankarCreated = "";
+            int typeCreated = 0;
+            double priceCreated = 0;
+            List<banimo.ViewModel.RecietArticleList> lst = log.RecietArticleList.GroupBy(x => new { x.koll, x.moein, x.type }).Select(c => c.First()).ToList();
+
+
+
+            List<banimo.ViewModel.RecietArticleList> molist = log.RecietArticleList.GroupBy(x => new { x.moientitle, x.type }).Select(c => c.First()).ToList();
+
+            List<banimo.ViewModel.RecietArticleList> lst0;
+            List<banimo.ViewModel.RecietArticleList> lst1;
+            List<banimo.ViewModel.RecietArticleList> lst2;
+            List<banimo.ViewModel.RecietArticleList> lst3;
+            int i = 1;
+            foreach (var item in lst)
+            {
+
+
+
+                RookeshVM fmodel = new RookeshVM();
+                lst0 = log.RecietArticleList.Where(x => x.koll == item.koll && x.type == item.type && x.moein == item.moein).GroupBy(x => x.moein).Select(c => c.First()).ToList();
+                foreach (var moien in lst0)
+                {
+                    var index = molist.IndexOf(moien) + 1;
+                    indexCreated = "\n\n" + index.ToString();
+
+                    sharhCreated = "\n\n" + item.kolltitle;
+
+                    numCreated = "\n\n" + item.koll;
+
+                    detailCreated = "\n\n";
+
+                    priceCreated = item.price;
+                    if (item.type == "0")
+                    {
+                        bedehkarCreated = "\n\n" + string.Format("{0:n0}", Math.Abs(item.price));
+
+                        bestankarCreated = "\n\n";
+
+                        typeCreated = 0;
+
+                    }
+                    else
+                    {
+                        bedehkarCreated = "\n\n";
+
+                        bestankarCreated = string.Format("{0:n0}", Math.Abs(item.price));
+
+                        typeCreated = 1;
+                    }
+
+                    lst1 = log.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.type == moien.type && moien.tafsil1 != "0").GroupBy(x => x.tafsil1).Select(c => c.First()).ToList();
+
+                    indexCreated += "\n\n  ";
+                    numCreated += "\n\n  " + moien.moein;
+                    sharhCreated += "\n\n  " + moien.moientitle;
+
+
+
+                    detailCreated += "\n\n  ";
+
+                    bedehkarCreated += "\n\n  ";
+
+                    bestankarCreated += "\n\n  ";
+
+                    if (lst1.Count != 0)
+                    {
+                        foreach (var tafsil1 in lst1)
+                        {
+
+                            if (tafsil1.tafsil1 != "0")
+                            {
+                                lst2 = log.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && tafsil1.tafsil2 != "0" && x.type == tafsil1.type).GroupBy(x => x.tafsil2).Select(c => c.First()).ToList();
+
+                                indexCreated += "\n\n    ";
+                                numCreated += "\n\n    " + tafsil1.tafsil1;
+                                sharhCreated += "\n\n    " + tafsil1.tafsil1title;
+
+
+
+                                detailCreated += "\n\n    ";
+
+                                bedehkarCreated += "\n\n    ";
+
+                                bestankarCreated += "\n\n    ";
+
+                                if (lst2.Count != 0)
+                                {
+                                    foreach (var tafsil2 in lst2)
+                                    {
+                                        if (tafsil2.tafsil2 != "0")
+                                        {
+
+                                            indexCreated += "\n\n      ";
+                                            numCreated += "\n\n      " + tafsil2.tafsil2;
+                                            sharhCreated += "\n\n      " + tafsil2.tafsil2title;
+                                            detailCreated += "\n\n      ";
+                                            bedehkarCreated += "\n\n      ";
+                                            bestankarCreated += "\n\n      ";
+
+
+
+                                            lst3 = log.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == tafsil2.type && x.trafhesab != null).ToList();
+                                            if (lst3.Count != 0)
+                                            {
+                                                foreach (var trafhesab in lst3)
+                                                {
+                                                    if (trafhesab.trafhesab != null)
+                                                    {
+
+
+                                                        indexCreated += "\n\n        ";
+                                                        indexCreated += "\n\n        ";
+                                                        indexCreated += "\n\n        ";
+
+                                                        numCreated += "\n\n        " + trafhesab.trafhesab;
+                                                        numCreated += "\n\n        ";
+                                                        numCreated += "\n\n        ";
+
+                                                        sharhCreated += "\n\n        " + trafhesab.name;
+                                                        sharhCreated += "\n\n        " + trafhesab.description;
+                                                        sharhCreated += "\n\n        ";
+
+                                                        detailCreated += "\n\n        ";
+                                                        detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(trafhesab.price));
+                                                        detailCreated += "\n\n        ";
+
+                                                        bedehkarCreated += "\n\n        ";
+                                                        bedehkarCreated += "\n\n        ";
+                                                        bedehkarCreated += "\n\n        ";
+
+                                                        bestankarCreated += "\n\n        ";
+                                                        bestankarCreated += "\n\n        ";
+                                                        bestankarCreated += "\n\n        ";
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                indexCreated += "\n\n        ";
+                                                indexCreated += "\n\n        ";
+
+                                                numCreated += "\n\n        ";
+                                                numCreated += "\n\n        ";
+
+                                                sharhCreated += "\n\n        " + tafsil2.description;
+                                                sharhCreated += "\n\n        ";
+
+                                                detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(tafsil2.price));
+                                                detailCreated += "\n\n        ";
+
+
+                                                bedehkarCreated += "\n\n        ";
+                                                bedehkarCreated += "\n\n        ";
+
+                                                bestankarCreated += "\n\n        ";
+                                                bestankarCreated += "\n\n        ";
+                                            }
+
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    lst3 = log.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 != tafsil1.tafsil2 && x.type == tafsil1.type).GroupBy(x => x.trafhesab).Select(c => c.First()).ToList();
+                                    if (lst3.Count != 0)
+                                    {
+                                        foreach (var trafhesab in lst3)
+                                        {
+                                            if (trafhesab.trafhesab != null)
+                                            {
+                                                indexCreated += "\n\n        ";
+                                                indexCreated += "\n\n        ";
+                                                indexCreated += "\n\n        ";
+
+
+                                                numCreated += "\n\n        " + trafhesab.trafhesab;
+                                                numCreated += "\n\n        ";
+                                                numCreated += "\n\n        ";
+
+
+                                                sharhCreated += "\n\n        " + trafhesab.name;
+                                                sharhCreated += "\n\n        " + trafhesab.description;
+                                                sharhCreated += "\n\n        ";
+
+                                                detailCreated += "\n\n        ";
+                                                detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(trafhesab.price));
+                                                detailCreated += "\n\n        ";
+
+
+
+                                                bedehkarCreated += "\n\n        ";
+                                                bedehkarCreated += "\n\n        ";
+                                                bedehkarCreated += "\n\n        ";
+
+                                                bestankarCreated += "\n\n        ";
+                                                bestankarCreated += "\n\n        ";
+                                                bestankarCreated += "\n\n        ";
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        indexCreated += "\n\n        ";
+                                        indexCreated += "\n\n        ";
+
+                                        numCreated += "\n\n        ";
+                                        numCreated += "\n\n        ";
+
+                                        sharhCreated += "\n\n        " + tafsil1.description;
+                                        sharhCreated += "\n\n        ";
+
+                                        detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(tafsil1.price));
+                                        detailCreated += "\n\n        ";
+
+
+                                        bedehkarCreated += "\n\n        ";
+                                        bedehkarCreated += "\n\n        ";
+
+                                        bestankarCreated += "\n\n        ";
+                                        bestankarCreated += "\n\n        ";
+                                    }
+                                }
+
+
+
+                            }
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        lst3 = log.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type && x.trafhesab != null).ToList();
+                        if (lst3.Count != 0)
+                        {
+                            foreach (var trafhesab in lst3)
+                            {
+                                if (trafhesab.trafhesab != null)
+                                {
+                                    indexCreated += "\n\n        ";
+                                    indexCreated += "\n\n        ";
+                                    indexCreated += "\n\n        ";
+
+
+                                    numCreated += "\n\n        " + trafhesab.trafhesab;
+                                    numCreated += "\n\n        ";
+                                    numCreated += "\n\n        ";
+
+
+                                    sharhCreated += "\n\n        " + trafhesab.name;
+                                    sharhCreated += "\n\n        " + trafhesab.description;
+                                    sharhCreated += "\n\n        ";
+
+                                    detailCreated += "\n\n        ";
+                                    detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(trafhesab.price));
+                                    detailCreated += "\n\n        ";
+
+
+
+                                    bedehkarCreated += "\n\n        ";
+                                    bedehkarCreated += "\n\n        ";
+                                    bedehkarCreated += "\n\n        ";
+
+                                    bestankarCreated += "\n\n        ";
+                                    bestankarCreated += "\n\n        ";
+                                    bestankarCreated += "\n\n        ";
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            indexCreated += "\n\n        ";
+                            indexCreated += "\n\n        ";
+
+                            numCreated += "\n\n        ";
+                            numCreated += "\n\n        ";
+
+                            sharhCreated += "\n\n        " + moien.description;
+                            sharhCreated += "\n\n        ";
+
+                            detailCreated += "\n\n        " + string.Format("{0:n0}", Math.Abs(moien.price));
+                            detailCreated += "\n\n        ";
+
+
+                            bedehkarCreated += "\n\n        ";
+                            bedehkarCreated += "\n\n        ";
+
+                            bestankarCreated += "\n\n        ";
+                            bestankarCreated += "\n\n        ";
+                        }
+                    }
+
+
+
+
+
+
+                }
+
+                fmodel.num = indexCreated;
+                fmodel.code = numCreated;
+                fmodel.sharh = sharhCreated;
+                fmodel.Detail = detailCreated;
+                fmodel.Bedhkar = bedehkarCreated;
+                fmodel.bestanakar = bestankarCreated;
+                fmodel.type = typeCreated;
+                fmodel.price = priceCreated;
+                finalModel.Add(fmodel);
+            }
+
+
+
+
+            rookshParent parentModel = new rookshParent();
+            List<rookshList> MainList = new List<rookshList>();
+            parentModel.lstList = MainList;
+            int counter = 1;
+
+            rookshList listmodel = new rookshList();
+            List<RookeshVM> rookeshlist = new List<RookeshVM>();
+            listmodel.lst = rookeshlist;
+            bool mustBeAdd = false;
+            foreach (var itemin in finalModel)
+            {
+                mustBeAdd = true;
+
+
+                if (counter == 1)
+                {
+                    rookeshlist = new List<RookeshVM>();
+                    listmodel.lst = rookeshlist;
+                }
+                listmodel.lst.Add(itemin);
+                counter++;
+
+                if (counter == 100)
+                {
+
+                    parentModel.lstList.Add(listmodel);
+                    counter = 1;
+                    mustBeAdd = false;
+                }
+
+
+
+            }
+            if (mustBeAdd)
+            {
+                parentModel.lstList.Add(listmodel);
+            }
+
+
+
+
+            Document document = new Document(PageSize.LETTER);
+            document.SetMargins(0f, 0f, 10f, 0f);
+            string pdfFileName = Server.MapPath("/files/" + "sample" + ".pdf");
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            string pathString = "~/fonts/ttf";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
+            BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
+            Font font = new Font(bfTimes, 8);
+            Font fontbig = new Font(bfTimes, 14);
+            Font fontSMALL = new Font(bfTimes, 10);
+            Font fontSMALLHeader = new Font(bfTimes);
+            Font fontbigBold = new Font(bfTimes, 14, Font.BOLD);
+            fontSMALLHeader.SetColor(0, 0, 0);
+
+
+
+            foreach (var groupList in parentModel.lstList)
+            {
+                document.NewPage();
+
+                PdfPTable toptable = new PdfPTable(12);
+                toptable.TotalWidth = 550f;
+                toptable.DefaultCell.NoWrap = false;
+                toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                toptable.PaddingTop = 200;
+
+
+                PdfPCell celltop = new PdfPCell(new Phrase(log.title, fontbigBold))
+                {
+                    Border = PdfPCell.TOP_BORDER | PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 10;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("سند حسابداری", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(log.date, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 4;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شرح ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(log.sharh, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شماره سند:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(log.sand, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 4;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+                celltop = new PdfPCell(new Phrase("وضعیت", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                string vasiat = "موقت";
+                if (log.status == "2")
+                {
+                    vasiat = "نهایی";
+                }
+                if (log.status == "3")
+                {
+                    vasiat = "دائم";
+                }
+
+
+                celltop = new PdfPCell(new Phrase(vasiat, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+                celltop = new PdfPCell(new Phrase("شماره عطف:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(log.atf, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 4;
+                toptable.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 6;
+                toptable.AddCell(celltop);
+
+
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+
+                document.Add(toptable);
+
+
+                PdfPTable table = new PdfPTable(15);
+                table.TotalWidth = 550f;
+                table.DefaultCell.NoWrap = false;
+                table.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                table.PaddingTop = 100;
+
+
+                PdfPCell countIN = new PdfPCell(new Phrase("ردیف", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 1;
+                table.AddCell(countIN);
+
+                PdfPCell num = new PdfPCell(new Phrase("کد", font));
+                num.Padding = 10;
+                num.HorizontalAlignment = Element.ALIGN_CENTER;
+                num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                num.Colspan = 2;
+                table.AddCell(num);
+
+                PdfPCell sharh = new PdfPCell(new Phrase("شرح", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = 6;
+                table.AddCell(sharh);
+
+                PdfPCell detail = new PdfPCell(new Phrase("جزئیات", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                PdfPCell bedehkar = new PdfPCell(new Phrase("بدهکار", font));
+                bedehkar.Padding = 10;
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                PdfPCell bestankar = new PdfPCell(new Phrase("بستانکار", font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+                foreach (var item in groupList.lst)
+                {
+                    countIN = new PdfPCell(new Phrase(item.num, font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 1;
+                    table.AddCell(countIN);
+
+                    num = new PdfPCell(new Phrase(item.code, font));
+                    num.HorizontalAlignment = Element.ALIGN_LEFT;
+                    num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    num.Colspan = 2;
+                    table.AddCell(num);
+
+                    sharh = new PdfPCell(new Phrase(item.sharh, font));
+                    sharh.HorizontalAlignment = Element.ALIGN_LEFT;
+                    sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    sharh.Colspan = 6;
+                    table.AddCell(sharh);
+
+                    detail = new PdfPCell(new Phrase(item.Detail, font));
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = 2;
+                    table.AddCell(detail);
+
+                    bedehkar = new PdfPCell(new Phrase(item.Bedhkar, font));
+                    bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bedehkar.Colspan = 2;
+                    table.AddCell(bedehkar);
+
+                    bestankar = new PdfPCell(new Phrase(item.bestanakar, font));
+                    bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bestankar.Colspan = 2;
+                    table.AddCell(bestankar);
+
+
+                }
+
+
+                sharh = new PdfPCell(new Phrase("جمع", font));
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Padding = 10;
+                sharh.Colspan = 9;
+                table.AddCell(sharh);
+
+                detail = new PdfPCell(new Phrase("", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                detail.Colspan = 2;
+                table.AddCell(detail);
+                double bedehkarprice = groupList.lst.Where(x => x.type == 0).Sum(x => x.price);
+                double bestankarprice = groupList.lst.Where(x => x.type == 1).Sum(x => x.price);
+
+                bedehkar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(bedehkarprice)), font));
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.Padding = 10;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                bestankar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(bestankarprice)), font));
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.Padding = 10;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+
+
+
+
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+                document.Add(table);
+
+
+
+
+                PdfPTable footerTbl = new PdfPTable(3);
+
+                footerTbl.DefaultCell.NoWrap = false;
+                footerTbl.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                footerTbl.PaddingTop = 200;
+
+                celltop = new PdfPCell(new Phrase("مدیر عامل", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.TOP_BORDER | PdfPCell.BOTTOM_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.PaddingBottom = 75;
+                celltop.Colspan = 1;
+                footerTbl.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("مسئول مالی", font))
+                {
+                    Border = PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER | PdfPCell.BOTTOM_BORDER | PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.PaddingBottom = 75;
+                celltop.Colspan = 1;
+                footerTbl.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تهیه کننده", font))
+                {
+                    Border = PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER | PdfPCell.BOTTOM_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.PaddingBottom = 75;
+                celltop.Colspan = 1;
+                footerTbl.AddCell(celltop);
+                footerTbl.TotalWidth = 550f;
+
+                PdfContentByte pcb = writer.DirectContent;
+                footerTbl.WriteSelectedRows(0, -1, 30, 100, pcb);
+
+                // document.Add(footerTbl);
+            }
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
         }
         public string addNewSaleMali(string dateFrom, string dateTo, string title)
         {
@@ -1497,22 +3513,91 @@ namespace banimo.Controllers
             return result;
         }
 
+        public ActionResult ChangeProductStatus(string id, string value, string type)
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("value", value);
+                collection.Add("type", type);
+
+
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/changeRecietStatus.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            responsVM model = JsonConvert.DeserializeObject<responsVM>(result);
+            if (model.status == 200)
+            {
+                return Content("200");
+            }
+            else
+            {
+                return Content(model.message);
+            }
+
+
+        }
 
 
 
 
 
+        public ActionResult setNewUser(string address, string email, string phone, string fullname, string UserList, string password)
+        {
 
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("address", address);
+                collection.Add("email", email);
+                collection.Add("mobile", phone);
+                collection.Add("fullname", fullname);
+                collection.Add("password", MD5Hash(password));
+                collection.Add("type", "add");
+                collection.Add("UserType", UserList);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("token", RandomString(18));
+
+
+
+                byte[] response = client.UploadValues(server + "/Admin/UpdateUsers.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return RedirectToAction("Access");
+        }
 
         public ActionResult access(string type)
         {
-            string finalType = "1";
+            string finalType = type;
             if (type == null || type == "0")
             {
-                 finalType = "0";
+                finalType = "0";
             }
+
+
             string finalNode = "0";
-            if (type != null || type != "0")
+            if (type != null && type != "0")
             {
                 finalNode = type;
             }
@@ -1586,7 +3671,7 @@ namespace banimo.Controllers
 
 
         [HttpPost]
-        public ActionResult setNewRoll(string roleTitle, List<string> sectionList, string itemID , string node)
+        public ActionResult setNewRoll(string roleTitle, List<string> sectionList, string itemID, string node)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1621,7 +3706,7 @@ namespace banimo.Controllers
 
 
 
-        public PartialViewResult checkPartnerStatus(string id , string node)
+        public PartialViewResult checkPartnerStatus(string id, string node)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1643,7 +3728,7 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/CoreShared/_partnerStatus.cshtml", log);
         }
 
-        public ActionResult addPartner(   List<int> partnerType, string patnerUsername, string patnerPassword, string node)
+        public ActionResult addPartner(List<int> partnerType, string patnerUsername, string patnerPassword, string node)
         {
             string device = RandomString(10);
             string partnerString = "";
@@ -1672,6 +3757,112 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             return RedirectToAction("access");
+        }
+
+        [HttpPost]
+        public ActionResult SaveImage()
+        {
+            try
+            {
+                int len = (int)Request.InputStream.Length;
+                byte[] buffer = new byte[len];
+                int c = Request.InputStream.Read(buffer, 0, len);
+                string png64 = Encoding.UTF8.GetString(buffer, 0, len);
+
+                List<string> lst = png64.Split('*').ToList();
+                byte[] png = Convert.FromBase64String(lst[1]);
+                string filename = lst[0].Trim('#') + ".png";
+                string pathString = "pdfimages\\" + filename;
+                string destPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathString);
+
+                if (System.IO.File.Exists(destPath))
+                {
+                    System.IO.File.Delete(destPath);
+                }
+                System.IO.File.WriteAllBytes(destPath, png);
+                //string pngz = Encoding.UTF8.GetString(png, 0, png.Length);
+                //code.....
+
+
+                return Content(destPath);
+            }
+            catch (Exception e)
+            {
+
+                return Content("");
+            }
+
+
+        }
+        public ActionResult PrintALl(string parent)
+        {
+
+            string pdfFileName = Server.MapPath("/pdfimages/rookesh.png");
+            //var image = iTextSharp.text.Image.GetInstance(pdfFileName);
+            //Document oDocument = new Document();
+            //oDocument.Open();
+            //PdfPTable table = new PdfPTable(1);
+            //table.WidthPercentage = 100;
+            //PdfPCell c = new PdfPCell(image, true);
+            //c.Border = PdfPCell.NO_BORDER;
+            //c.Padding = 5;
+            //c.Image.ScaleToFit(750f, 750f); /*The new line*/
+            //table.AddCell(c);  // <-- Add the cell to the table
+            //oDocument.Add(table);
+
+            //oDocument.Close();
+            //return File(pdfFileName, "application/pdf");
+
+            //return File(pdfFileName, "image/png");
+
+
+            string filename = "1";
+            pdfFileName = Server.MapPath("/files/" + filename + ".pdf");
+            if (System.IO.File.Exists(pdfFileName))
+            {
+                System.IO.File.Delete(pdfFileName);
+            }
+            Document document = new Document(PageSize.A5.Rotate());
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            document.NewPage();
+            string pathString = "pdfimages\\" + "rookesh.png";
+            string destPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathString);
+
+            if (System.IO.File.Exists(destPath))
+            {
+                string savedimageString = destPath;
+                iTextSharp.text.Image topImage = iTextSharp.text.Image.GetInstance(savedimageString);
+
+                var scalePercent = ((((document.PageSize.Width - 20) / topImage.Width) * 100) - 4);
+                topImage.ScalePercent(scalePercent);
+
+
+                document.Add(topImage);
+            }
+
+
+
+
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
+            //downloadPDF(pdfFileName, filename);
+        }
+
+        public void downloadPDF(string pdfFileName, string filename)
+        {
+
+            // return File(pdfFileName, "application/pdf");
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", filename + ".pdf"));
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.WriteFile(pdfFileName);
+            Response.HeaderEncoding = Encoding.UTF8;
+            Response.Flush();
+            Response.End();
         }
 
     }

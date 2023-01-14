@@ -9,7 +9,7 @@
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  <i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i></h3>
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  @*<i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i>*@</h3>
 
 
 
@@ -91,29 +91,7 @@
                                                 }
                                             </td>
                                             <td>
-                                                @if (item.factorType == "10")
-                                                {
-
-                                                    <span>@item.coworkerName2</span>
-
-
-                                                }
-                                                else if (item.factorType == "1")
-                                                {
-                                                    <span>سفارش شماره @item.partnerID</span>
-                                                }
-                                                else
-                                                {
-                                                    if (item.partnerID == "0")
-                                                    {
-                                                        <span>انبار مرکزی</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@item.partnerTitle</span>
-                                                    }
-
-                                                }
+                                                <span>@item.partnerTitle</span>
                                             </td>
                                             <td>@item.title</td>
                                             <td>
@@ -203,12 +181,12 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            @sum
+                                            @sumcount
                                         </td>
                                         <td></td>
 
                                         <td>
-                                            @sumcount
+                                           
                                         </td>
                                         <td></td>
                                     </tr>

@@ -266,19 +266,20 @@
            $(".editRecite").click(function () {
              
                var id = $(this).attr('idattr');
-               $.ajax({
-                   url: '/Core/getRecietArticle',
-                   dataType: 'html',
-                   data: {
-                       id: id,
-                   },
-                   success: function (data) {
-                       $("#articleHolder").html(data);
-                   },
-                   error: function () {
+               window.location.href = "/Core/getRecietArticle?id=" + id 
+               //$.ajax({
+               //    url: '/Core/getRecietArticle',
+               //    dataType: 'html',
+               //    data: {
+               //        id: id,
+               //    },
+               //    success: function (data) {
+               //        $("#articleHolder").html(data);
+               //    },
+               //    error: function () {
 
-                   }
-               });
+               //    }
+               //});
 
            })
        </script>
@@ -294,7 +295,7 @@
                 var Prodcutid = $(this).attr("id");
 
                 $.ajax({
-                    url: '/Admin/ChangeProductStatus',
+                    url: '/Core/ChangeProductStatus',
                     dataType: 'html',
                     data: {
                         id: Prodcutid,
@@ -319,7 +320,7 @@
                 var Prodcutid = $(this).attr("id");
 
                 $.ajax({
-                    url: '/Admin/ChangeProductOffer',
+                    url: '/Core/ChangeProductOffer',
                     dataType: 'html',
                     data: {
                         id: Prodcutid,
@@ -344,7 +345,7 @@
                 var Prodcutid = $(this).attr("id");
 
                 $.ajax({
-                    url: '/Admin/ChangeProductActive',
+                    url: '/Core/ChangeProductActive',
                     dataType: 'html',
                     data: {
                         id: Prodcutid,
@@ -369,7 +370,7 @@
                 var Prodcutid = $(this).attr("id");
 
                 $.ajax({
-                    url: '/Admin/ChangeProductAvailable',
+                    url: '/Core/ChangeProductAvailable',
                     dataType: 'html',
                     data: {
                         id: Prodcutid,

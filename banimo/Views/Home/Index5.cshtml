@@ -638,16 +638,25 @@
                                                                dideo-checked="true">
                                                                 <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
                                                                     <div class="product-price">
+                                                                        @{ 
+                                                                            if (item.oldPrice != item.price)
+                                                                            {
+                                                                                <span class="discount">
+                                                                                    @string.Format("{0:n0}", decimal.Parse(item.oldPrice)) ت
+                                                                                </span>
+                                                                            }
+                                                                        }
+
                                                                         <span class="total-price" style="z-index:9">
                                                                             @{
                                                                                 if (userType == "5")
                                                                                 {
                                                                                     banimo.AdminPanelBoom.ViewModel.metaVM metmodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
-                                                                                    <span>@string.Format("{0:n0}", metmodel.price) ت</span> 
+                                                                                    <span>@string.Format("{0:n0}", metmodel.price) ت</span>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <span>@string.Format("{0:n0}", item.price) ت</span> 
+                                                                                    <span>@string.Format("{0:n0}", decimal.Parse(item.price)) ت</span>
                                                                                 }
                                                                             }
 

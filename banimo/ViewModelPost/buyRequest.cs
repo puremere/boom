@@ -44,4 +44,12 @@ namespace banimo.ViewModelPost
         public string orderNumberWeb { get; set; }
 
     }
+
+
+    public class requestManagerVM
+    {
+        public string type { get; set; }
+        public string payment { get; set; }
+        public string price { get; set; }
+    }
 }

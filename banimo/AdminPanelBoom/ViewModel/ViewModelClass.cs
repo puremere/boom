@@ -24,7 +24,7 @@ namespace AdminPanelBoom.ViewModel
     public class AdminProductVM
     {
         public partnerVM log { get; set; }
-        public partnerVM basecat { get; set; }
+        public banimo.AdminPanelBoom.ViewModel.productCore basecat { get; set; }
         public List<catVM> maincat { get; set; }
         public string page { get; set; }
         public string selectedAnbar { get; set; }
@@ -291,6 +291,7 @@ namespace AdminPanelBoom.ViewModel
         public string color { get; set; }
         public string ID { get; set; }
         public string Onvan { get; set; }
+        public string selectedFilter { get; set; }
         public string Faal { get; set; }
         public string Available { get; set; }
         public string Porforoosh { get; set; }
@@ -479,6 +480,7 @@ namespace AdminPanelBoom.ViewModel
     {
         public string detailname { get; set; }
         public string filterID { get; set; }
+        public string ID { get; set; }
     }
 
 
@@ -542,13 +544,19 @@ namespace AdminPanelBoom.ViewModel
     {
         public List<Cat> cats { get; set; }
     }
-
+    public class NodeList
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+    }
     public class partnerVM
     {
+        public List<NodeList> nodeList { get; set; }
         public List<string> productName { get; set; }
         public List<PartnerList> partnerList { get; set; }
         public List<FiltersModel> filtersModel { get; set; }
         public string isPartner { get; set; }
+        public string selectedNode { get; set; }
     }
     public class Product
     {

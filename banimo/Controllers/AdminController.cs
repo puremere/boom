@@ -39,6 +39,8 @@ namespace banimo.Controllers
 {
     [SessionCheck]
     [doForAll]
+
+    
     public class AdminController : Controller
     {
 
@@ -183,8 +185,6 @@ namespace banimo.Controllers
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
         {
 
-
-
             try
             {
                 string device = RandomString(10);
@@ -210,6 +210,10 @@ namespace banimo.Controllers
                     if (log.action.Contains("Core"))
                     {
                         Session["CoreUser"] = log.token;
+                    }
+                    else if (log.action.Contains("partner"))
+                    {
+                        Session["PartnerUser"] = log.token;
                     }
                     else
                     {
@@ -2055,7 +2059,7 @@ namespace banimo.Controllers
         public ActionResult ChangeProductPriceForEdit( string meta, string finalCoworkerPrice, string ID,  string price, string finalprice, string count)
         {
 
-
+            finalCoworkerPrice = "0";
             metaVM metmodel = JsonConvert.DeserializeObject<metaVM>(meta);
             string device = RandomString(10);
             metmodel.price = Int32.Parse(finalCoworkerPrice);
@@ -5003,11 +5007,12 @@ namespace banimo.Controllers
             EcxelLists log = JsonConvert.DeserializeObject<EcxelLists>(result);
 
             DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[11] {
+            dt.Columns.AddRange(new DataColumn[12] {
 
                                           new DataColumn("ID"),
                                           new DataColumn("Onvan"),
                                           new DataColumn("color"),
+                                          new DataColumn("selectedFilter"),
                                            new DataColumn("Tedad"),
                                             new DataColumn("Faal"),
                                              new DataColumn("Available"),
@@ -5025,7 +5030,7 @@ namespace banimo.Controllers
             {
                 foreach (var item in log.ecxelList.OrderByDescending(x => x.ID))
                 {
-                    dt.Rows.Add(item.ID, item.Onvan, item.color, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
+                    dt.Rows.Add(item.ID, item.Onvan, item.color,item.selectedFilter, item.Tedad, item.Faal, item.Available, item.Pishnahadevije, item.Porforoosh, item.GheymateMahsool, item.Takhfif, item.GheymateHamkar);
                 }
 
             }
@@ -5434,22 +5439,27 @@ namespace banimo.Controllers
                 }
 
 
+
                 string json2 = "";
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    var collection = new NameValueCollection();
+                    collection.Add("servername", servername);
                     collection.Add("device", device);
                     collection.Add("code", code);
-                    collection.Add("servername", servername); //);"banimo"
 
-                    byte[] response = client.UploadValues(server + "/Admin/getbaseCat.php", collection);
+
+                    //byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
+                    string url = ConfigurationManager.AppSettings["server"] + "/Admin/getCoreProduct.php";
+                    byte[] response = client.UploadValues(url, collection);
 
                     json2 = System.Text.Encoding.UTF8.GetString(response);
                 }
+                productCore serverlog = JsonConvert.DeserializeObject<productCore>(json2);
 
 
-                partnerVM serverlog = JsonConvert.DeserializeObject<partnerVM>(json2);
+               
 
 
 
@@ -5473,6 +5483,45 @@ namespace banimo.Controllers
             }
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult setMainProduct(productCore model)
+        {
+            string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+            string finalID = model.ID != 0 ? model.ID.ToString() : "";
+            string finalcolor = model.selectedColor != null ? model.selectedColor.Trim(',') : "";
+            string finalfilter = model.selectedFilter != null ? model.selectedFilter.Trim(',') : "";
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", model.title);
+                collection.Add("initCount", model.initCount);
+                collection.Add("desc", model.description);
+                collection.Add("productCode", model.code);
+                collection.Add("IDbox", model.code);
+                collection.Add("productAddress", model.address);
+                collection.Add("barcode", model.barcode);
+                collection.Add("color", finalcolor);
+                collection.Add("filter", finalfilter);
+                collection.Add("brand", model.selectedbrand);
+                collection.Add("cat", model.selectedCat);
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("ID", finalID);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewProductMainFromSail.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return RedirectToAction("product");
+        }
+
         [HttpPost]
         public ActionResult setproduct(productinfoviewdetail detail)
         {
@@ -6287,6 +6336,83 @@ namespace banimo.Controllers
             return View(model);
         }
 
+
+        public ActionResult SetNewFactorFromSail(string amani, string count , string price, string ID , string tarafID)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        {
+
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("count", count);
+                collection.Add("productID", ID);
+                collection.Add("nodeID", nodeID);
+                collection.Add("price", price);
+                collection.Add("tarafID", tarafID);
+                collection.Add("amani", amani);
+                collection.Add("deliver", "از طرف فروشنده");
+
+                //byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setFactorFromSail.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+
+
+            }
+            return Content("200");
+
+            
+        }
+
+        public ActionResult SetReturnFactorFromSail(string amani, string count, string price, string ID,string tarafID)
+        {
+
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("count", count);
+                collection.Add("productID", ID);
+                collection.Add("nodeID", nodeID);
+                collection.Add("price", price);
+                collection.Add("tarafID", tarafID);
+                collection.Add("amani", amani);
+                collection.Add("deliver", "از طرف فروشنده");
+
+                //byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setReturnFactorFromSail.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+
+
+        }
 
         [HttpPost]
         public ActionResult Edit(productinfoforedit detail)
@@ -7705,7 +7831,8 @@ namespace banimo.Controllers
         public ActionResult GetListOfPartner(string id)
         {
 
-
+            //37.156.11.141
+            
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";

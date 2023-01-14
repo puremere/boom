@@ -22,3 +22,18 @@
 .far-contact p {
     line-height: 45px;
 }
+
+.pro-contact p{
+    line-height:2.5;
+    font-size:14px;
+    margin : 30px 0;
+
+}
+.pro-contact h2 {
+ 
+    margin: 20px 0;
+    line-height:2
+}
+.pro-contact img {
+    border-radius :8px
+}

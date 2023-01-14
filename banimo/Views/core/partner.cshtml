@@ -481,6 +481,21 @@ new { enctype = "multipart/form-data", id = "addPartner" }))
 
 
                 </div>
+                <div class=" fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                    <label style="text-align: right">
+                        فروشگاه :
+                    </label>
+                    <div>
+                        <span class="star" style="color:red; display:none">*</span>
+                        @Html.DropDownList("node",new SelectList(Model.nodeList, "ID", "title"), new { multiple="multiple", id="nodeList" , @class="form-control"})
+                    </div>
+
+
+
+
+
+
+                </div>
 
 
 

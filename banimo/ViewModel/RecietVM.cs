@@ -9,6 +9,7 @@ namespace banimo.ViewModel
     {
         public int ID { get; set; }
         public string num { get; set; }
+        public string atf { get; set; }
         public string status { get; set; }
         public string date { get; set; }
         public string description { get; set; }

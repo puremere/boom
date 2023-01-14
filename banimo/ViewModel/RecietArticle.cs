@@ -22,15 +22,34 @@ namespace banimo.ViewModel
         public string moientitle { get; set; }
         public string tafsil1title { get; set; }
         public string tafsil2title { get; set; }
+        public string nodeID { get; set; }
         public string description { get; set; }
     }
 
     public class RecietArticle
     {
+        public string title { get; set; }
+        public string status { get; set; }
+        public string atf { get; set; }
+        public string sand { get; set; }
+        public string date { get; set; }
+        public string sharh { get; set; }
         public List<RecietArticleList> RecietArticleList { get; set; }
     }
 
 
+    public class recietArticlePrint
+    {
+        public string title { get; set; }
+        public string status { get; set; }
+        public string atf { get; set; }
+        public string sand { get; set; }
+        public string date { get; set; }
+        public string sharh { get; set; }
+        public List<RecietArticleList> RecietArticleList { get; set; }
+    }
+}
+
+
 
     
-}

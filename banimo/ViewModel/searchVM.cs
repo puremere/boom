@@ -10,6 +10,7 @@ namespace banimo.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string cattitle { get; set; }
+        public string  meta { get; set; }
     }
 
     public class searchVM

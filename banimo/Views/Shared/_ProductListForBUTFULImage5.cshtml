@@ -56,11 +56,20 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="product-price">
-                                                        <span class="total-price priceItem">
-                                                            @string.Format("{0:n0}", item.price) ت
-                                                        </span>
-                                                    </div>
+                                                    
+                                                        
+                                                    
+                                            <div class="product-price">
+                                                @if (item.oldPrice != item.price)
+                                                {
+                                                <span class="discount priceItem">
+                                                    @string.Format("{0:n0}", item.oldPrice) ت
+                                                </span>
+                                                }
+                                                <span class="total-price priceItem">
+                                                    @string.Format("{0:n0}", item.price) ت
+                                                </span>
+                                            </div>
                                                 }
 
                                                 <div class="product-img xmb-3">
