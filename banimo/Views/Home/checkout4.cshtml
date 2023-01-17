@@ -57,7 +57,7 @@
                                 @{
 
                                     decimal leftbaseprice = Model.Sum(x => x.baseprice * x.quantity);
-                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #808080; "><span id="basepriceholder">@String.Format("{0:n0}", @leftbaseprice)</span>  تومان</p>
+                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #808080; "><span id="basepriceholder">@String.Format("{0:n0}", @leftbaseprice/10)</span>  تومان</p>
 
                                 }
 
@@ -68,7 +68,7 @@
 
                                     decimal benefit = Model.Sum(x => x.baseprice * x.quantity) - Model.Sum(x => x.price * x.quantity);
 
-                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">(<span class="discountpercent">@String.Format("{0:n0}", @benefit) </span>) <span class="discountfinal"></span>   تومان </p>
+                                    <p style="float: left; text-align: right; font-size: 14px; font-weight: 700; color: #00BFD6; ">(<span class="discountpercent">@String.Format("{0:n0}", @benefit/10) </span>) <span class="discountfinal"></span>   تومان </p>
 
                                 }
                             </div>
@@ -79,7 +79,7 @@
                                 decimal payment = Model.Sum(x => x.price * x.quantity);
 
 
-                                <p style=" font-size: 22px; color: red; text-align: center; padding: 10px"><span id="spanfortotal2">@String.Format("{0:n0}", @payment)</span> تومان</p>
+                                <p style=" font-size: 22px; color: red; text-align: center; padding: 10px"><span id="spanfortotal2">@String.Format("{0:n0}", @payment/10)</span> تومان</p>
 
                             }
                             <style>
@@ -134,11 +134,11 @@
                                         string finaltotal = "total" + i;
                                         string imagesrc = imagefile;
                                         string quantity = item.quantity.ToString();
-                                        string price = item.price.ToString();
-                                        string baseprice = item.baseprice.ToString();
+                                        string price = (item.price/10).ToString();
+                                        string baseprice = (item.baseprice/10).ToString();
                                         string discount = item.discount.ToString();
                                         decimal total = item.quantity * item.price;
-                                        decimal totalbase = item.quantity * item.baseprice;
+                                        decimal totalbase = item.quantity * (item.baseprice/10);
                                         string name = item.productname;
                                         string background = "white";
                                         string color = "black";
@@ -301,11 +301,11 @@
                                                     string finaltotal = "total" + i;
                                                     string imagesrc = imagefile;
                                                     string quantity = item.quantity.ToString();
-                                                    string price = item.price.ToString();
-                                                    string baseprice = item.baseprice.ToString();
+                                                    string price = (item.price/10).ToString();
+                                                    string baseprice = (item.baseprice/10).ToString();
                                                     string discount = item.discount.ToString();
-                                                    decimal total = item.quantity * item.price;
-                                                    decimal totalbase = item.quantity * item.baseprice;
+                                                    decimal total = item.quantity * (item.price/10);
+                                                    decimal totalbase = item.quantity * (item.baseprice/10);
                                                     string name = item.productname;
                                                     string background = "white";
                                                     string color = "black";
@@ -441,9 +441,8 @@
 
                                 },
                                 success: function (data) {
-                                    window.location.reload();
-
-
+                                   // getquntity();
+                                    window.location.href();
 
                                 },
                                 error: function () {
@@ -474,7 +473,8 @@
                                         id: ID
                                     },
                                     success: function (data) {
-                                        window.location.reload();
+                                        window.location.href();
+                                       // getquntity();
                                     },
                                     error: function () {
                                         alert("error")

@@ -525,9 +525,9 @@
                                                             {
                                                                 Model.discount = Model.wonderDiscount;
                                                             }
-                                                            <p class="oldPrice" style=""><del>@string.Format("{0:n0}", oldPrice)   <span>تومان</span></del></p>
+                                                            <p class="oldPrice" style=""><del>@string.Format("{0:n0}", oldPrice/10)   <span>تومان</span></del></p>
 
-                                                            <p class=" discountSectence " style=""> همین امروز <i>@string.Format("{0:n0}", difference)</i> تومان  تخفیف بگیرید    </p>
+                                                            <p class=" discountSectence " style=""> همین امروز <i>@string.Format("{0:n0}", difference/10)</i> تومان  تخفیف بگیرید    </p>
 
                                                         }
 
@@ -535,7 +535,7 @@
 
                                                     <div style="display:inline-block;width:100%; direction:ltr; text-align:left">
                                                         <p style="display: inline-block;font-size:18px;color: red;">تومان </p>
-                                                        <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice)   </h4>
+                                                        <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice/10)   </h4>
                                                     </div>
 
                                                 </div>
@@ -546,7 +546,7 @@
 
                                                 <div class="col-lg-6" style="margin:0px;height: 100%;">
                                                     <div style="display:inline-block;height: 100%;">
-                                                        <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice)   </h4>
+                                                        <h4 class="item_price" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice/10)   </h4>
 
                                                     </div>
                                                     <div style="display:inline-block">

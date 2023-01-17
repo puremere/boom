@@ -1713,7 +1713,7 @@ namespace banimo.Controllers
 
         public async Task<ActionResult> ReqestForPaymentKeepa(ViewModelPost.ReqestForPaymentViewModel model)
         {
-
+           
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
 
             model.hourid = model.hourid.Replace("final", "");
@@ -1912,32 +1912,32 @@ namespace banimo.Controllers
         public ActionResult VerifyKeepa(string payment_token, string reciept_number, string state,string msg)
         {
 
-            return Content("paymnt_token:" + payment_token + " and reciept_number : " + reciept_number);
+            //return Content("paymnt_token:" + payment_token + " \n and reciept_number : " + reciept_number);
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result2 = "";
-            using (WebClient client = new WebClient())
-            {
+            //using (WebClient client = new WebClient())
+            //{
 
-                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("auth", reciept_number);
-                collection2.Add("paymentStatus", "1");
-                collection2.Add("payment", "6");
-                collection2.Add("mbrand", servername);
-
-
+            //    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+            //    collection2.Add("device", device);
+            //    collection2.Add("code", code);
+            //    collection2.Add("auth", reciept_number);
+            //    collection2.Add("paymentStatus", "1");
+            //    collection2.Add("payment", "6");
+            //    collection2.Add("mbrand", servername);
 
 
 
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
 
-                result2 = System.Text.Encoding.UTF8.GetString(response);
-                return RedirectToAction("verifyAtHome", "Connection", new { refID = result2, status = 1 });
 
-            }
+            //    byte[] response =
+            //    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+
+            //    result2 = System.Text.Encoding.UTF8.GetString(response);
+            //    return RedirectToAction("verifyAtHome", "Connection", new { refID = result2, status = 1 });
+
+            //}
 
 
 
@@ -1985,10 +1985,11 @@ namespace banimo.Controllers
                 }
                 ViewModel.confirmK.keepaConfirmVM confirmModel = JsonConvert.DeserializeObject<ViewModel.confirmK.keepaConfirmVM>(result);
 
-                result2 = "";
+                 result2 = "";
                 if (confirmModel.Status == 200)
                 {
-
+                    Random rnd = new Random();
+                    int refID =rnd.Next(111111, 999999);
 
                     using (WebClient client = new WebClient())
                     {
@@ -1996,7 +1997,8 @@ namespace banimo.Controllers
                         var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
                         collection2.Add("device", device);
                         collection2.Add("code", code);
-                        collection2.Add("AUTH", payment_token);
+                        collection2.Add("refID", refID.ToString());
+                        collection2.Add("auth", payment_token);
                         collection2.Add("paymentStatus", "1");
                         collection2.Add("payment", "6");
                         collection2.Add("mbrand", servername);
@@ -2009,9 +2011,9 @@ namespace banimo.Controllers
                         client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
 
                         result2 = System.Text.Encoding.UTF8.GetString(response);
+                        finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(result2);
 
-
-                        return RedirectToAction("verifyAtHome", "Connection", new { refID = result2, status = 1 });
+                        return RedirectToAction("verifyAtHome", "Connection", new { refID = finalmodel.orderNumber, status = 1 });
 
                     }
                 }
@@ -2495,6 +2497,7 @@ namespace banimo.Controllers
             string action = "verifyAtHome" + srt;
 
             //return RedirectToAction( "Index",boom.Controllers.HomeController);
+            setVariable();
             this.ViewData["MenuViewModel"] = Variables.menu;
             return View(action);
         }

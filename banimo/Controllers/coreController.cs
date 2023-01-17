@@ -1269,7 +1269,7 @@ namespace banimo.Controllers
             return RedirectToAction("bank");
         }
 
-        public string addNewReciet(string abserver, string desc)
+        public string addNewReciet(string abserver, string desc,string nodeSabt)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -1284,7 +1284,7 @@ namespace banimo.Controllers
                 collection.Add("time", abserver.Replace("000", ""));
                 collection.Add("token", token);
                 collection.Add("description", desc);
-                collection.Add("nodeID", "0");
+                collection.Add("nodeID", nodeSabt);
 
 
                 collection.Add("servername", servername);
@@ -3076,7 +3076,7 @@ namespace banimo.Controllers
 
 
             Document document = new Document(PageSize.LETTER);
-            document.SetMargins(0f, 0f, 10f, 0f);
+            document.SetMargins(0f, 0f, 10f, 70f);
             string pdfFileName = Server.MapPath("/files/" + "sample" + ".pdf");
             PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
             document.Open();
@@ -3101,6 +3101,7 @@ namespace banimo.Controllers
                 toptable.DefaultCell.NoWrap = false;
                 toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
                 toptable.PaddingTop = 200;
+                
 
 
                 PdfPCell celltop = new PdfPCell(new Phrase(log.title, fontbigBold))

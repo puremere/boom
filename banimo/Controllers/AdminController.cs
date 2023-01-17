@@ -4911,7 +4911,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
 
 
-                byte[] response = client.UploadValues(server + "/Admin/getorderlistTestForEdit.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getorderlistTestForEditV2.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
@@ -4926,6 +4926,30 @@ namespace banimo.Controllers
 
 
 
+        }
+
+        public ActionResult getFactorForReturn(string productID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("productID", productID);
+                
+                collection.Add("mbrand", servername); collection.Add("nodeID", finalNodeID);
+              
+
+
+                byte[] response = client.UploadValues(server + "/Admin/getFactorForReturn.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+            return PartialView("/Views/Shared/AdminShared/_FactorListForReturn.cshtml",log);
         }
 
         public ActionResult GetTheListOfItems(string page, string value, string query, string partner)
@@ -6401,7 +6425,8 @@ namespace banimo.Controllers
                 collection.Add("productID", ID);
                 collection.Add("nodeID", nodeID);
                 collection.Add("price", price);
-                collection.Add("tarafID", tarafID);
+                collection.Add("factorID", tarafID);
+             
                 collection.Add("amani", amani);
                 collection.Add("deliver", "از طرف فروشنده");
 

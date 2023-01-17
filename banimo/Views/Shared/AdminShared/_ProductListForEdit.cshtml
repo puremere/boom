@@ -209,25 +209,28 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
+                    <b style="margin-bottom:10px">عودت محصول</b>
                     <p id="returnCountLable"></p>
                     <div style="display:flex">
                         <input id="ProductSelectedID0" style="display:none" />
 
-                        <div style="margin:5px;">
+                        @*<div style="margin:5px;">
                             <p id="modalmessage">قیمت خرید</p>
                             <input id="returnprice" class="form-control" value="1" />
-                        </div>
+                        </div>*@
                         <div style="margin:5px;">
                             <p id="modalmessage">طرف حساب :</p>
-                          
-                            <select id="tarafID" class="form-control">
+                            <div id="factorHolder">
+
+                            </div>
+                            @*<select id="tarafID" class="form-control">
                               
                                 <option value="">مهم نیست</option>
                                 @foreach (var item in Model.tarafList)
                                 {
                                     <option value="@item.ID">@item.name</option>
                                 }
-                            </select>
+                            </select>*@
                         </div>
                         <div style="margin:5px;">
                             <p id="modalmessage">تعداد</p>
@@ -254,16 +257,16 @@
                             else {
                                 amani = "0";
                             }
-                            var price = $("#returnprice").val();
+                            //var price = $("#returnprice").val();
                             var count = $("#returncount").val();
                             var ID = $("#ProductSelectedID0").val();
-                            var tarafID = $("#tarafID").val();
+                            var tarafID = $("#productFactor").val();
                             $.ajax({
                                 url: '/Admin/SetReturnFactorFromSail',
                                 dataType: 'html',
                                 data: {
                                     amani: amani,
-                                    price: price,
+                                    //price: price,
                                     count: count,
                                     ID: ID,
                                     tarafID: tarafID
@@ -539,7 +542,7 @@
 
                                                         }
 
-                                                        <p class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+                                                        <p  class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
 
                                                         <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
 
@@ -903,11 +906,28 @@
 
             $(".minusItemCount").click(function () {
                 var id = $(this).parent().attr('id');
+                var productID = $(this).parent().parent().attr('id');
                 $("#ProductSelectedID0").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "عودت محصول " + text;
+                var lableText = text;
                 $("#returnCountLable").text(lableText)
-                $("#returnItemCountModal").modal('toggle');
+                $.ajax({
+                    url: '/Admin/getFactorForReturn',
+                    dataType: 'html',
+                    data: {
+                        productID: id,
+                       
+                    },
+                    success: function (data) {
+                        $("#factorHolder").html(data);
+                        $("#returnItemCountModal").modal('toggle');
+
+                    },
+                    error: function () {
+
+                    }
+                });
+              
             })
 
             $(".addItemCount").click(function () {
@@ -918,6 +938,7 @@
                 $("#addCountLable").text(lableText)
 
                 $("#addItemCountModal").modal('toggle');
+                
 
             })
 

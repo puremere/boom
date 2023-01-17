@@ -1272,6 +1272,23 @@
                             <input name="Fromabserver2" id="Fromabserver2" style="display:none" class="form-control Fromabserver2 " />
                         </div>
                     </div>
+                    <div class="" style="margin : 0 5px">
+                    
+                        <select name="recietListNodesabt" id="recietListNodesabt" class="form-control inputForm">
+
+                            @*<option value="">همه </option>*@
+                            @if (Model.nodeList != null)
+                            {
+                                foreach (var item in Model.nodeList)
+                                {
+                                    <option value="@item.ID">@item.title </option>
+                                }
+                            }
+
+
+                        </select>
+                    </div>
+
                     <div class="formItem" style="width:200px">
 
                         <div class=" " style="width:100%">
@@ -1292,15 +1309,16 @@
                 <script>
                     $("#newReciet").click(function () {
                         var abserver = $("#Fromabserver2").val();
-
+                        var nodeSabt = $("#recietListNodesabt").val();
                         $("#fromADD").val("add");
-
+                      
                         var desc = $("#recietDesc").val();
                         $.ajax({
                             url: "/core/addNewReciet",
                             data: {
                                 abserver: abserver,
-                                desc: desc
+                                desc: desc,
+                                nodeSabt: nodeSabt
                             },
                             success: function (data) {
                                 $("#recietID").val(data);
@@ -1452,6 +1470,7 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#gardesh" style=" color: #8d8d8d; ">گردش حساب</a></li>
                 <li><a data-toggle="tab" href="#taraz" style=" color: #8d8d8d; ">تراز آزمایشی</a></li>
+                <li><a data-toggle="tab" href="#mahsool" style=" color: #8d8d8d; ">محصول</a></li>
 
 
             </ul>
@@ -2249,6 +2268,10 @@
                         });
 
                     </script>
+
+                </div>
+
+                <div id="taraz" class="tab-pane fade in " style="padding-top:20px">
 
                 </div>
             </div>

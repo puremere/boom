@@ -119,14 +119,14 @@
                                                     <div class="">
                                                         @if (metaPrice != oldPrice)
                                                         {
-                                                            <p style="display: inline-block; "> تومان </p> <del class="oldPrice" style=""> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)) </del>
+                                                            <p style="display: inline-block; "> تومان </p> <del class="oldPrice" style=""> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)/10) </del>
 
                                                         }
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="sectionPrice" >
-                                                <p style="display: inline-block; color: black"> تومان </p> <p class="newPrice" style="">@string.Format("{0:n0}", metaPrice)</p>
+                                                <p style="display: inline-block; color: black"> تومان </p> <p class="newPrice" style="">@string.Format("{0:n0}", metaPrice/10)</p>
                                             </div>
                                         </div>
                                     </div>

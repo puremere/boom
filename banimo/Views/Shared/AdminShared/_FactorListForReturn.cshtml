@@ -1,0 +1,14 @@
+﻿
+
+@model  banimo.ViewModel.MainFactorListVM
+
+
+@{ 
+    <select id="productFactor" class="form-control">
+        @foreach(var item in Model.mainFactor)
+        {
+            string optinstring =  @item.partnerTitle + " - " + string.Format("{0:n0}", item.price) + " - تاریخ:" + item.timestamp + " - شماره فاکتور : " + item.ID + " - تعداد : " + item.count;
+        <option value="@item.ID">@optinstring </option>
+        }
+    </select>
+}

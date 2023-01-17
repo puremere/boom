@@ -33,24 +33,41 @@
                 <div class="panel-body">
                     <div id="morris-area-chart">
                         @{
+                            int count = @Model.mainFactor.Count() + 1;
+
+                            double sum = Model.mainFactor.Sum(x => x.price * x.count);
+                            double sumcount = Model.mainFactor.Sum(x => x.count);
                             <div style="overflow:auto">
+                                                        <div style="padding:20px">
+                                                            <div style="display:flex">
+                                                                <span>مانده تعداد : </span>
+                                                                <span>@sumcount</span>
+
+                                                            </div>
+                                                            @*<div style="display:flex">
+                                                                <span>مانده قیمت : </span>
+                                                                <span>@sum</span>
+
+                                                            </div>*@
+                                                        </div>
+
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>
-                                                                <tr>
-                                                                    <th>ردیف</th>
-                                                                    <th>شماره رسید/حواله</th>
-                                                                    <th>نام انبار</th>
-                                                                    <th>نوع سند</th>
-                                                                    <th>طرف حساب</th>
-                                                                    <th>نام کالا</th>
-                                                                    <th>تعداد </th>
-                                                                    <th>زمان</th>
-                                                                    <th>توضیحات</th>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>شماره رسید/حواله</th>
+                                            <th>نام انبار</th>
+                                            <th>نوع سند</th>
+                                            <th>طرف حساب</th>
+                                            <th>نام کالا</th>
+                                            <th>تعداد </th>
+                                            <th>زمان</th>
+                                            <th>توضیحات</th>
 
-                                                                    <th></th>
-                                                                    <th></th>
+                                            <th></th>
+                                            <th></th>
 
-                                                                </tr>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model.mainFactor)
@@ -58,77 +75,72 @@
                                             string image = "";
                                             int i = Model.mainFactor.IndexOf(item) + 1;
                                             string deleteid = item.ID;
-                                        <tr id="@deleteid">
+                                            <tr id="@deleteid">
 
-                                            <td>@i</td>
-                                            <td>@item.ID</td>
-                                            <td>
-
-
-                                                @item.nodeID
-
-                                            </td>
-                                            <td>
-                                                @if (item.type == "0")
-                                                {
-                                                    <span>رسید</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>حواله</span>
-                                                }
-                                            </td>
-                                            <td>
-
-                                                @item.partnerTitle
-
-                                            </td>
-                                            <td>@item.title</td>
+                                                <td>@i</td>
+                                                <td>@item.ID</td>
+                                                <td>
 
 
-                                            <td>@item.count</td>
-                                            <td>@item.timestamp</td>
-                                            <td>@item.deliverName</td>
+                                                    @item.nodeID
 
-                                            <td>
-                                                @if (item.status != "1")
-                                                {
-                                                    <div class="btn btn-success editItemA phase1">ویرایش</div>
-                                                    <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
-                                                }
+                                                </td>
+                                                <td>
+                                                    @if (item.type == "0")
+                                                    {
+                                                        <span>رسید</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>حواله</span>
+                                                    }
+                                                </td>
+                                                <td>
 
-                                            </td>
-                                            <td>
-                                                @if (item.status != "1")
-                                                {
-                                                    <div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div>
+                                                    @item.partnerTitle
 
-                                                }
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>@item.title</td>
+
+
+                                                <td>@item.count</td>
+                                                <td>@item.timestamp</td>
+                                                <td>@item.deliverName</td>
+
+                                                <td>
+                                                    @if (item.status != "1")
+                                                    {
+                                                        <div class="btn btn-success editItemA phase1">ویرایش</div>
+                                                        <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @if (item.status != "1")
+                                                    {
+                                                        <div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div>
+
+                                                    }
+                                                </td>
+                                            </tr>
                                         }
-                                    <tr>
-                                        @{
-                                            int count = @Model.mainFactor.Count() + 1;
+                                        @*<tr>
 
-                                            double sum = Model.mainFactor.Sum(x => x.price * x.count);
-                                            double sumcount = Model.mainFactor.Sum(x => x.count);
-                                        }
-                                        <td>@count.ToString()</td>
-                                        <td>جمع کل</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            @sumcount
-                                        </td>
-                                        <td></td>
+                                            <td>@count.ToString()</td>
+                                            <td>جمع کل</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                @sumcount
+                                            </td>
+                                            <td></td>
 
-                                        <td>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            <td>
+                                            </td>
+                                            <td></td>
+                                        </tr>*@
 
 
                                     </tbody>

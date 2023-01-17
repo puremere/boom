@@ -2340,6 +2340,7 @@
     <Content Include="Views\Shared\PartnerShared\_ProductListForEdit.cshtml" />
     <Content Include="Views\Shared\PartnerShared\_addProductFromSail.cshtml" />
     <Content Include="Views\Shared\PartnerShared\_ProductList.cshtml" />
+    <Content Include="Views\Shared\AdminShared\_FactorListForReturn.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">
