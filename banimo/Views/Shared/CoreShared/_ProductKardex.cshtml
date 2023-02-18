@@ -1,0 +1,276 @@
+﻿
+@model banimo.ViewModel.productKardexVM
+
+
+<style>
+    td{
+        text-align:center;
+    }
+</style>
+
+@if (Model.kardexList != null)
+{
+    <div class="row" style="padding:20px">
+        <div style="overflow-x:auto;padding:10px">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                    <i class="fa fa-plus" id="addRoleSectionModalIcon" style="float:left"></i>
+                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست دسترسی   </h3>
+                </div>
+                <div class="panel-body" style="max-height:450px; overflow-y:scroll;">
+
+
+
+
+                    <div id="morris-area-chart">
+                        <div style="overflow:auto">
+                            
+
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            ردیف
+                                        </th>
+
+                                        <th>
+                                            شرح کالا
+                                        </th>
+                                        <th>
+                                            رنگ
+                                        </th>
+                                        <th>
+                                            شاخص
+                                        </th>
+                                        <th >
+                                            موجودی ابتدای دوره
+                                        </th>
+                                        <th >
+                                            خرید طی دوره
+                                        </th>
+                                        <th >
+                                            برگشت به خرید
+                                        </th>
+                                        <th >
+                                            فروش
+                                        </th>
+                                        <th >
+                                            برگشت از فروش
+                                        </th>
+                                        <th >
+                                            موجودی انتهای دوره
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">
+
+                                        </th>
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        @*<td>
+                                            مبلغ
+                                        </td>*@
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.kardexList != null)
+                                        {
+                                            foreach (var item in Model.kardexList)
+                                            {
+
+                                                int index = Model.kardexList.IndexOf(item) + 1;
+
+                                                                        <tr>
+
+                                                                            <td>
+                                                                                @index.ToString()
+                                                                            </td>
+
+
+                                                                            <td style="text-align: center;">
+
+                                                                                @item.title
+                                                                            </td>
+                                                                            <td style="text-align: center;">
+
+                                                                                @item.color
+                                                                            </td>
+                                                                            <td style="text-align: center;">
+
+                                                                                @item.selectedFilter
+                                                                            </td>
+                                                                            <td style="text-align: center;">
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+                                                                            </td>*@
+                                                                            <td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.residCount))
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.residSum))
+                                                                            </td>*@
+                                                                            <td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", Math.Abs(decimal.Parse(item.BKCount)))
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.BKSum))
+                                                                            </td>*@
+                                                                            <td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", Math.Abs(decimal.Parse(item.forooshCount)))
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.forooshSum))
+                                                                            </td>*@
+                                                                            <td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}",Math.Abs( decimal.Parse(item.BFCount)))
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.BFSum))
+                                                                            </td>*@
+                                                                            <td style="text-align: center;">
+
+                                                                                @{ 
+                                                                                    decimal mandecount = decimal.Parse(item.residCount) + decimal.Parse(item.BKCount) + decimal.Parse(item.forooshCount) + decimal.Parse(item.BFCount);
+                                                                                }
+
+                                                                                @string.Format("{0:n0}", @mandecount)
+                                                                            </td>
+                                                                            @*<td style="text-align: center;">
+
+                                                                                @string.Format("{0:n0}", decimal.Parse(item.forooshSum))
+                                                                            </td>*@
+
+                                                                        </tr>
+                                            }
+                                        }
+                                    }
+
+                                    @*<tr>
+
+                                        <td>
+                                        </td>
+
+
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+
+                                            کل
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @{
+                                                decimal finalP = Model.detailList.Sum(x => x.count * x.outPrice) - Model.detailList.Sum(x => x.count * x.inPrice);
+                                                string finaPS = String.Format("{0:n0}", @finalP);
+                                            }
+                                            @finaPS
+
+                                        </td>
+                                    </tr>*@
+
+                                </tbody>
+                            </table>
+                            <script>
+
+                                $(".editAccess").click(function () {
+
+                                    var id = $(this).attr("id");
+
+                                    $.ajax({
+                                        url: '/Core/getRoleSection',
+                                        dataType: 'html',
+                                        data: {
+                                            id: id,
+                                        },
+                                        success: function (data) {
+
+                                            var search = $("#searchinput").val();
+
+                                            $.ajax({
+                                                url: '/Admin/getNewListUser',
+
+                                                dataType: 'html',
+                                                data: {
+                                                    search: search,
+
+                                                },
+                                                success: function (data) {
+
+                                                    $("#Listholder").html(data);
+                                                },
+                                                error: function () {
+
+                                                }
+                                            });
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+                                });
+
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+
+}

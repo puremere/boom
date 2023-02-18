@@ -16,6 +16,8 @@ namespace banimo.ViewModel
         public string imageaddress { get; set; }
         public string  productname { get; set; }
         public int productid { get; set; }
+        public string partnerTitle { get; set; }
+        
 
     }
 }

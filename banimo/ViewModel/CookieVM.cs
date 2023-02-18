@@ -35,5 +35,6 @@ namespace banimo.ViewModel
         public string iosCookie = "0";
         public string userToken = "";
         public string wonder = "0";
+        public string controller = "home";
     }
 }

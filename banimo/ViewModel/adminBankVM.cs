@@ -37,7 +37,12 @@ namespace banimo.ViewModel
         public int ID { get; set; }
         public string title { get; set; }
     }
-
+    public class AnbarList
+    {
+        public int ID { get; set; }
+        public string title { get; set; }
+    }
+    
     public class TarafList
     {
         public int ID { get; set; }
@@ -45,6 +50,7 @@ namespace banimo.ViewModel
         public string code { get; set; }
         public string name { get; set; }
     }
+   
 
-    
+
 }

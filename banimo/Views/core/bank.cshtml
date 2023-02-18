@@ -48,7 +48,7 @@
                             <div class="autocomplete row" style="display:flex">
 
 
-                                @{ 
+                                @{
                                     List<banimo.ViewModel.CodingList> M1 = Model.CodingList.Where(x => x.codingType == "1").ToList();
                                 }
 
@@ -108,7 +108,7 @@
 
                             </div>
                             <script>
-                               
+
                                 $("#M2").change(function () {
                                     var id = $(this).val();
                                     console.log(id)
@@ -359,7 +359,7 @@
         <li><a data-toggle="tab" href="#sabt" style=" color: #8d8d8d; ">ثبت سند</a></li>
         <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست اسناد</a></li>
         <li><a data-toggle="tab" href="#menu3" style=" color: #8d8d8d; ">گزارشات</a></li>
-        <li ><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
+        <li><a data-toggle="tab" href="#salemali" style=" color: #8d8d8d; ">سال مالی</a></li>
 
     </ul>
     <div class="tab-content">
@@ -484,8 +484,23 @@
             <div class="row" style="">
 
                 <div class="col-lg-3" style="padding:10px;">
+                    <p>انتخاب پروژه</p>
+                    <select name="GNode" id="nodeIDRS" class="form-control">
+
+                        @if (Model.nodeList != null)
+                        {
+                            foreach (var item in Model.nodeList)
+                            {
+                                <option value="@item.ID">@item.title </option>
+                            }
+                        }
+
+
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
                     <p>طرف حساب :</p>
-                    <select id="nodeID" class="form-control">
+                    <select id="tarafRS" class="form-control">
                         <option value="">همه</option>
                         <option value="0">انبار مرکزی</option>
                         @foreach (var item in Model.tarafList)
@@ -501,6 +516,12 @@
                         <option value="1">رسید</option>
                         <option value="0">حواله</option>
                     </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>شماره فاکتور :</p>
+                    <input id="factornum" type="text" class="form-control  inputfield" />
+
+
                 </div>
                 <div class="col-lg-3" style="padding:10px;" id="dateHolder">
                     <p>از تاریخ :</p>
@@ -551,6 +572,13 @@
 
 
                 </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>شماره رسید/حواله :</p>
+                    <input id="residnum" type="text" class="form-control  inputfield" />
+
+
+                </div>
+
                 <div class="col-lg-3" style="padding:10px;">
                     <p>وضعیت :</p>
                     <select id="factorStatus" class="form-control">
@@ -602,8 +630,11 @@
                                 countFrom: $("#countFrom").val(),
                                 countTo: $("#countTo").val(),
                                 amani: $("#amani").val(),
-                                nodeID: $("#nodeID").val(),
+                                nodeID: $("#nodeIDRS").val(),
+                                taraf: $("#tarafRS").val(),
                                 productID: $("#IDholder").val(),
+                                residnum: $("#residnum").val(),
+                                factornum: $("#factornum").val(),
 
                             },
                             success: function (data) {
@@ -1273,7 +1304,7 @@
                         </div>
                     </div>
                     <div class="" style="margin : 0 5px">
-                    
+
                         <select name="recietListNodesabt" id="recietListNodesabt" class="form-control inputForm">
 
                             @*<option value="">همه </option>*@
@@ -1311,7 +1342,7 @@
                         var abserver = $("#Fromabserver2").val();
                         var nodeSabt = $("#recietListNodesabt").val();
                         $("#fromADD").val("add");
-                      
+
                         var desc = $("#recietDesc").val();
                         $.ajax({
                             url: "/core/addNewReciet",
@@ -1346,6 +1377,21 @@
         </div>
         <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
             <div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
+
+                <div>
+                    <div class="" style="margin : 0 5px">
+                        <p style="display:inline-block">شماره عطف :</p>
+                        <input id="atfNum" style="display:inline-block" class="form-control inputForm " />
+
+                    </div>
+                </div>
+                <div>
+                    <div class="" style="margin : 0 5px">
+                        <p style="display:inline-block">شماره سند :</p>
+                        <input id="sanadNum" style="display:inline-block" class="form-control inputForm " />
+
+                    </div>
+                </div>
                 <div>
                     <div class="" style="margin : 0 5px">
                         <p style="display:inline-block">تاریخ سند از :</p>
@@ -1431,6 +1477,8 @@
                     type = $("#selectOrderType").val();
                     dateFrom = $("#Fromabserver").val();
                     dateTo = $("#Toabserver").val();
+                    atf = $("#atfNum").val();
+                    sanad = $("#sanadNum").val();
                     nodeSelected = $("#recietListNode").val();
                     $.ajax({
                         url: '/Core/ChangeRecietList',
@@ -1440,7 +1488,9 @@
                             page: page,
                             dateTo: dateTo,
                             dateFrom: dateFrom,
-                            nodeSelected: nodeSelected
+                            nodeSelected: nodeSelected,
+                            atf: atf,
+                            sanad: sanad
                         },
 
                         success: function (data) {
@@ -1458,7 +1508,7 @@
                     $("#loading").show();
                     getlofo(1)
                 });
-                getlofo(1);
+               // getlofo(1);
 
 
             </script>
@@ -1471,7 +1521,7 @@
                 <li class="active"><a data-toggle="tab" href="#gardesh" style=" color: #8d8d8d; ">گردش حساب</a></li>
                 <li><a data-toggle="tab" href="#taraz" style=" color: #8d8d8d; ">تراز آزمایشی</a></li>
                 <li><a data-toggle="tab" href="#mahsool" style=" color: #8d8d8d; ">محصول</a></li>
-
+                <li><a data-toggle="tab" href="#anbarrr" style=" color: #8d8d8d; ">گردش انبار</a></li>
 
             </ul>
             <div class="tab-content">
@@ -1555,7 +1605,7 @@
                                 </div>
                                 <div style="margin:10px;width:100%" id="dateHolder2">
                                     <p>تا تاریخ :</p>
-                                    <input id="gardeshTo"  type="text" class="form-control projectDate2 inputfield" />
+                                    <input id="gardeshTo" type="text" class="form-control projectDate2 inputfield" />
                                     <input class="PD2abserver" style="display:none" />
 
                                 </div>
@@ -1580,7 +1630,7 @@
                                 <div style="margin:10px;width:100%">
                                     <p>انتخاب پروژه</p>
                                     <select name="GNode" id="GNode" class="form-control">
-                                      
+
                                         @if (Model.nodeList != null)
                                         {
                                             foreach (var item in Model.nodeList)
@@ -1654,9 +1704,9 @@
                                         var GNode = $("#GNode").val();
                                         var type = $("#trantype").val();
                                         var project = $("#GNode  option:selected").text();
-                                     
 
-                                        var url = "/Core/getCodingTranListPrint?dateTotxt=" + dateTotxt + "&dateFromtxt=" + datefromtxt+ "&M22=" + M22 + "&trafText=" + trafText + "&sharhdescription=" + finalText + "&project=" + project + "&M33=" + M33 + "&M44=" + M44 + "&M55=" + M55 + "&datefrom=" + datefrom + "&dateTo=" + dateTo + "&transactionType=" + transactionType + "&GTaraf=" + GTaraf + "&GNode=" + GNode + "&type=" + type;
+
+                                        var url = "/Core/getCodingTranListPrint?dateTotxt=" + dateTotxt + "&dateFromtxt=" + datefromtxt + "&M22=" + M22 + "&trafText=" + trafText + "&sharhdescription=" + finalText + "&project=" + project + "&M33=" + M33 + "&M44=" + M44 + "&M55=" + M55 + "&datefrom=" + datefrom + "&dateTo=" + dateTo + "&transactionType=" + transactionType + "&GTaraf=" + GTaraf + "&GNode=" + GNode + "&type=" + type;
                                         window.open(
                                             url, '_blank' // <- This is what makes it open in a new window.
                                         );
@@ -1680,7 +1730,7 @@
                                                 GTaraf: $("#GTaraf").val(),
                                                 GNode: $("#GNode").val(),
                                                 type: $("#trantype").val(),
-                                              
+
                                             },
                                             success: function (data) {
 
@@ -1878,14 +1928,14 @@
                             </div>
 
                         </div>
-                     
+
 
 
                     </div>
                     <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
                         <div style="display:flex">
 
-                       
+
 
                             <div style="margin:10px;width:100%" id="dateHolder">
                                 <p>از تاریخ :</p>
@@ -1920,7 +1970,7 @@
                             <div style="margin:10px;width:100%">
                                 <p>پروژه :</p>
                                 <select name="TNode" id="TNode" class="form-control">
-                                 
+
                                     @if (Model.nodeList != null)
                                     {
                                         foreach (var item in Model.nodeList)
@@ -2023,7 +2073,7 @@
                                     var project = $("#TNode  option:selected").text();
                                     var columnCount = $("#columnCount").val();
 
-                                    
+
                                     var url = "/Core/getCodingTrazListPring?dateTotxt=" + dateTotxt + "&columnCount=" + columnCount + "&baseReport=" + baseReport + "&dateFromtxt=" + datefromtxt + "&M111=" + M111 + "&M222=" + M222 + "&sharhdescription=" + finalText + "&project=" + project + "&M333=" + M333 + "&M444=" + M444 + "&M555=" + M555 + "&datefrom=" + dateFrom + "&dateTo=" + dateTo + "&TTaraf=" + TTaraf + "&TNode=" + TNode + "&project=" + project;
                                     window.open(
                                         url, '_blank' // <- This is what makes it open in a new window.
@@ -2221,9 +2271,9 @@
                             });
                         })
                         $("#M333").change(function () {
-                          
+
                             var id = $('option:selected', this).attr('itemvalue');
-                          
+
                             $("#M444 option").each(function () {
 
 
@@ -2248,7 +2298,7 @@
                         })
                         $("#M444").change(function () {
                             var id = $('option:selected', this).attr('itemvalue');
-                        
+
                             $("#M555 option").each(function () {
                                 var val = $(this).val();
                                 if (val == "0") {
@@ -2271,8 +2321,96 @@
 
                 </div>
 
-                <div id="taraz" class="tab-pane fade in " style="padding-top:20px">
+                <div id="mahsool" class="tab-pane fade in " style="padding-top:20px">
+                    <div style="display:flex">
+                        <div style="margin:10px;width:50%">
+                            <p>پروژه :</p>
+                            <select name="TNode" id="productChoosNode" class="form-control">
 
+                                @if (Model.nodeList != null)
+                                {
+                                    foreach (var item in Model.nodeList)
+                                    {
+                                        <option value="@item.ID">@item.title </option>
+                                    }
+                                }
+
+
+                            </select>
+                        </div>
+                        <div style="margin:10px;width:100%" id="autoProduct2">
+                            <p> محصول :</p>
+                            <input type="text" class="form-control  inputfield" id="addItemToOrderInput2" />
+                            <input id="IDholder2" hidden />
+
+
+                        </div>
+                        <div style="margin:10px;width:50%" id="">
+                           <div class="btn btn-success" id="getProductHistory" style="margin-top:30px">تایید</div>
+
+                        </div>
+                    </div>
+
+                    <div id="productHistorySection"></div>
+                    
+                </div>
+                <div id="anbarrr" class="tab-pane fade in " style="padding-top:20px">
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                        <div style="display:flex">
+
+
+
+                            <div style="margin:10px;width:100%" id="dateHolder">
+                                <p>از تاریخ :</p>
+                                <input id="tgardeshFrom" type="text" class="form-control anbardateFrom inputfield" />
+                                <input class="anbardateFromOB" style="display:none" />
+                            </div>
+                            <div style="margin:10px;width:100%" id="dateHolder2">
+                                <p>تا تاریخ :</p>
+                                <input id="tgardeshTo" type="text" class="form-control anbardateTo inputfield" />
+                                <input class="anbardateToOB" style="display:none" />
+
+                            </div>
+
+
+
+
+                        </div>
+                        <div style="display:flex">
+                            <div style="margin:10px;width:100%">
+                                <p>پروژه :</p>
+                                <select name="anbarNode" id="anbarNode" class="form-control">
+
+                                    @if (Model.nodeList != null)
+                                    {
+                                        foreach (var item in Model.nodeList)
+                                        {
+                                            <option value="@item.ID">@item.title </option>
+                                        }
+                                    }
+
+
+                                </select>
+                            </div>
+
+                            <div style="margin:10px;width:100%" id="autoProduct3">
+                                <p> محصول :</p>
+                                <input type="text" class="form-control  inputfield" id="addItemToOrderInput3" />
+                                <input id="IDholder3" hidden />
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+
+
+                        <div style="margin:10px;width:50%" id="autoProduct2">
+                            <div class="btn btn-success" id="getProductKardex" style="margin-top:30px">تایید</div>
+                        </div>
+                    </div>
+
+                    <div id="kardexKala"></div>
                 </div>
             </div>
 
@@ -2284,6 +2422,51 @@
 <script src="~/Scripts/persian-date.js"></script>
 <script src="~/Scripts/persian-datepicker.js"></script>
 <script src="~/Scripts/html2canvas.min.js"></script>
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+<script>
+    $("#getProductKardex").click(function () {
+        var nodeID = $("#anbarNode").val();
+        var prID = $("#IDholder3").val();
+        var dateFrom = $(".anbardateFromOB").val();
+        var dateTo = $(".anbardateToOB").val();
+        $.ajax({
+            url: '/Core/getProductKardex',
+            dataType: 'html',
+            data: {
+                prID: prID,
+                nodeID: nodeID,
+                dateFrom: dateFrom,
+                dateTo: dateTo
+            },
+            success: function (data) {
+
+                $("#kardexKala").html(data);
+
+            }
+
+        })
+    })
+    $("#getProductHistory").click(function () {
+        var nodeID = $("#productChoosNode").val();
+        var prID = $("#IDholder2").val();
+        $.ajax({
+            url: '/Core/getProductHistory',
+            dataType: 'html',
+            data: {
+                prID: prID,
+                nodeID: nodeID
+            },
+            success: function (data) {
+                        
+                $("#productHistorySection").html(data);
+                
+               
+            }
+
+        })
+    })
+</script>
 <script>
     var takePic = function () {
         $(". ").each(function () {
@@ -2301,7 +2484,7 @@
                     else {
                         window.location.href = "/Home/PrintALl";
                     }
-                    
+
                 };
                 var p = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
 
@@ -2374,6 +2557,20 @@
             observer: true,
             format: 'YYYY/MM/DD',
             altField: '.tPDabserver',
+            autoClose: true
+        });
+
+
+        $(".anbardateFrom").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.anbardateFromOB',
+            autoClose: true
+        });
+        $(".anbardateTo").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.anbardateToOB',
             autoClose: true
         });
 
@@ -2543,7 +2740,7 @@
                     $("#M5").val('0');
                     $("#Rtype").val('');
                     $("#RTaraf").val('0');
-                    
+
 
                     $("#M12").val('0');
                     $("#M13").val('0');
@@ -2594,4 +2791,146 @@
             }
         })
     })
+</script>
+<script>
+    $("#autoProduct").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        if (value.length == 0) {
+            $("#IDholder").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+    $("#autoProduct2").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput2").val();
+        if (value.length == 0) {
+            $("#IDholder2").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput2").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput2").getSelectedItemData().ID;
+                                $("#IDholder2").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput2").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput2").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+    $("#autoProduct3").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput3").val();
+        if (value.length == 0) {
+            $("#IDholder3").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#anbarNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput3").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput3").getSelectedItemData().ID;
+                                $("#IDholder3").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput3").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput3").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
 </script>

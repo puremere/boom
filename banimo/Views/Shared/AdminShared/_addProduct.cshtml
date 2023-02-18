@@ -2,7 +2,9 @@
 
 @using (Html.BeginForm("setMainProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "addproduct00" }))
 {
-    @Html.AntiForgeryToken();
+    
+
+
     <input id="selectedColor" name="selectedColor" hidden/>
     <input id="SFilter" name="selectedFilter" hidden />
     string address = Model.address != null ? Model.address : "";

@@ -793,7 +793,7 @@ namespace banimo.Controllers
             //model.baseUrl = baseurl;
             if (model.mycat == null)
             {
-                return RedirectToAction("ProductList", new { catmode = model.catID });
+                //return RedirectToAction("ProductList", new { catmode = model.catID });
             }
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
@@ -1684,7 +1684,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest2.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest22.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1778,7 +1778,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest2.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest22.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1792,7 +1792,6 @@ namespace banimo.Controllers
             if(log.title == null)
             {
                 return RedirectToAction("Error404", "Error");
-
             }
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
@@ -1848,6 +1847,7 @@ namespace banimo.Controllers
                 List<ProductDetailCookie> data2 = new List<ViewModel.ProductDetailCookie>();
                 newitem.productid = Convert.ToInt32(str);
                 newitem.quantity = 1;
+                newitem.tarafH = Convert.ToInt32(price); 
                 data2.Add(newitem);
                 var json = new JavaScriptSerializer().Serialize(data2);
                 Response.Cookies["Modelcart"].Value = json;
@@ -1861,7 +1861,7 @@ namespace banimo.Controllers
                 int j = 0;
                 foreach (var item in data)
                 {
-                    if (item.productid == Convert.ToInt32(str))
+                    if (item.productid == Convert.ToInt32(str) && item.tarafH == Convert.ToInt32(price))
                     {
                         item.quantity += 1;
                         j = 1;
@@ -1874,6 +1874,7 @@ namespace banimo.Controllers
                 {
                     newitem.productid = Convert.ToInt32(str);
                     newitem.quantity = 1;
+                    newitem.tarafH = Convert.ToInt32(price);
                     data.Add(newitem);
                     var json = new JavaScriptSerializer().Serialize(data);
                     Response.Cookies["Modelcart"].Value = json;
@@ -2655,11 +2656,14 @@ namespace banimo.Controllers
                 }
                
                 string idlist = "";
+                string taraflist = "";
                 foreach (var item in data)
                 {
                     idlist += item.productid.ToString() + ",";
+                    taraflist += item.tarafH.ToString() + ",";
                 }
                 idlist = idlist.Trim(',');
+                taraflist = taraflist.Trim(',');
                 string result = "";
                 string device = RandomString();
                 string code = MD5Hash(device + "ncase8934f49909");
@@ -2671,6 +2675,7 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
+                    collection.Add("taraflist", taraflist);
                     byte[] response =
                     client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
@@ -2701,6 +2706,13 @@ namespace banimo.Controllers
                         }
                     }
                     int prid = int.Parse(productItem.ID);
+
+                    int prth = 0;
+                    if (productItem.partnerID != null)
+                    {
+                        prth = int.Parse(productItem.partnerID);
+                    }
+
                     CheckoutViewModel j = new CheckoutViewModel();
                     
                     j.price = decimal.Parse(productItem.PriceNow);
@@ -2709,9 +2721,27 @@ namespace banimo.Controllers
                     j.count = decimal.Parse(productItem.count);
                     j.limit = decimal.Parse(productItem.limit);
                     j.productid = prid;
+                    j.partnerTitle = productItem.partnerTitle;
                     j.productname = Server.UrlDecode(productItem.title);
-                    j.quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
-                    j.imageaddress = productItem.imagelist[0] != null ? productItem.imagelist[0].title : "placeholder.png";
+                    j.quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == prth).quantity;
+                    if (productItem.imagelist != null)
+                    {
+                        if (productItem.imagelist.Count() != 0)
+                        {
+                            j.imageaddress = productItem.imagelist[0] != null ? productItem.imagelist[0].title : "placeholder.png";
+
+                        }
+                        else
+                        {
+                            j.imageaddress = ConfigurationManager.AppSettings["domain"] + "/images/placeholder.png";
+                        }
+
+                    }
+                    else
+                    {
+                        j.imageaddress = ConfigurationManager.AppSettings["domain"]  + "/images/placeholder.png";
+                    }
+                    
                     finalmodel.Add(j);
                 }
 
@@ -2860,9 +2890,11 @@ namespace banimo.Controllers
             if (data != null && data.Count > 0)
             {
                 string idlist = "";
+                string taraflist = "";
                 foreach (var item in data)
                 {
                     idlist += item.productid.ToString() + ",";
+                    taraflist += item.tarafH.ToString() + ",";
                 }
                 idlist = idlist.Trim(',');
                 result = "";
@@ -2875,9 +2907,12 @@ namespace banimo.Controllers
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("servername", servername);
+                    collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
+                    collection.Add("taraflist", taraflist);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
@@ -2888,7 +2923,8 @@ namespace banimo.Controllers
                   
                     int prid = int.Parse(productItem.ID);
                     int price = int.Parse(productItem.PriceNow);
-                    int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                    int parID = int.Parse(productItem.partnerID);
+                    int quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == parID).quantity;
                     if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
                     {
                         return RedirectToAction("checkout");
@@ -2950,9 +2986,11 @@ namespace banimo.Controllers
             if (data != null && data.Count > 0)
             {
                 string idlist = "";
+                string taraflist = "";
                 foreach (var item in data)
                 {
                     idlist += item.productid.ToString() + ",";
+                    taraflist += item.tarafH.ToString() + ",";
                 }
                 idlist = idlist.Trim(',');
                 string result = "";
@@ -2965,9 +3003,12 @@ namespace banimo.Controllers
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("servername", servername);
+                    collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
+                    collection.Add("taraflist", taraflist);
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
@@ -2976,7 +3017,8 @@ namespace banimo.Controllers
                 foreach (var productItem in log.data)
                 {
                     int prid = int.Parse(productItem.ID);
-                    int quantity = data.SingleOrDefault(x => x.productid == prid).quantity;
+                    int prth = int.Parse(productItem.partnerID);
+                    int quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == prth).quantity;
                     if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
                     {
                         return RedirectToAction("checkout");

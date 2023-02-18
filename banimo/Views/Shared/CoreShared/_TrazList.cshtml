@@ -67,7 +67,7 @@
                                     {
 
 
-                                        decimal finalmande = @Math.Abs(item.mandebed) - @Math.Abs(item.mandebes);
+                                        double finalmande = @Math.Abs(item.mandebed) - @Math.Abs(item.mandebes);
 
 
 
@@ -121,12 +121,12 @@
                             }
 
                             @{
-                                int efbed = Model.lst.Sum(x => x.eftetahbed);
-                                int efbes = Model.lst.Sum(x => x.eftetahbes);
-                                int garbed = Model.lst.Sum(x => x.garddeshbed);
-                                int garbes = Model.lst.Sum(x => x.garddeshbes);
-                                int mandebed = Model.lst.Where(x => Math.Abs(x.mandebed) > Math.Abs(x.mandebes)).Sum(x => Math.Abs(x.mandebed) - Math.Abs(x.mandebes));
-                                int mandebes = Model.lst.Where(x => Math.Abs(x.mandebes) > Math.Abs(x.mandebed)).Sum(x => Math.Abs(x.mandebes) - Math.Abs(x.mandebed));
+                                double efbed = Model.lst.Sum(x => x.eftetahbed);
+                                double efbes = Model.lst.Sum(x => x.eftetahbes);
+                                double garbed = Model.lst.Sum(x => x.garddeshbed);
+                                double garbes = Model.lst.Sum(x => x.garddeshbes);
+                                double mandebed = Model.lst.Where(x => Math.Abs(x.mandebed) > Math.Abs(x.mandebes)).Sum(x => Math.Abs(x.mandebed) - Math.Abs(x.mandebes));
+                                double mandebes = Model.lst.Where(x => Math.Abs(x.mandebes) > Math.Abs(x.mandebed)).Sum(x => Math.Abs(x.mandebes) - Math.Abs(x.mandebed));
 
                             }
                             <tr>

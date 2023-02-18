@@ -617,7 +617,14 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <p>@tafsil2.description</p>
+                                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == moien.type).ToList();
+                                                                                    if (lst3.Count != 0)
+                                                                                    {
+                                                                                        foreach (var hamarz in lst3)
+                                                                                        {
+                                                                                            <p>@hamarz.description</p>
+                                                                                        }
+                                                                                    }
                                                                                 }
 
                                                                             }
@@ -641,7 +648,14 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            <p>@tafsil1.description</p>
+                                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == "0" && x.type == moien.type).ToList();
+                                                                            if (lst3.Count != 0)
+                                                                            {
+                                                                                foreach (var hamarz in lst3)
+                                                                                {
+                                                                                    <p>@hamarz.description</p>
+                                                                                }
+                                                                            }
                                                                         }
                                                                     }
 
@@ -670,7 +684,15 @@
                                                             }
                                                             else
                                                             {
-                                                                <p>@moien.description</p>
+                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type).ToList();
+                                                                if (lst3.Count != 0)
+                                                                {
+                                                                    foreach (var hamarz in lst3)
+                                                                    {
+                                                                        <p>@hamarz.description</p>
+                                                                    }
+                                                                }
+
                                                             }
                                                         }
 
@@ -726,7 +748,16 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <p>@string.Format("{0:n0}", Math.Abs(tafsil2.price)) </p>
+                                                                                    lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == tafsil2.tafsil2 && x.type == moien.type).ToList();
+                                                                                    if (lst3.Count != 0)
+                                                                                    {
+                                                                                        foreach (var hamarz in lst3)
+                                                                                        {
+
+                                                                                            <p>@string.Format("{0:n0}", Math.Abs(hamarz.price)) </p>
+                                                                                        }
+                                                                                    }
+
                                                                                 }
 
                                                                             }
@@ -750,7 +781,16 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            <p>@string.Format("{0:n0}", Math.Abs(tafsil1.price)) </p>
+                                                                            lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == tafsil1.tafsil1 && x.tafsil2 == "0" && x.type == moien.type).ToList();
+                                                                            if (lst3.Count != 0)
+                                                                            {
+                                                                                foreach (var hamarz in lst3)
+                                                                                {
+
+                                                                                    <p>@string.Format("{0:n0}", Math.Abs(hamarz.price)) </p>
+                                                                                }
+                                                                            }
+
 
                                                                         }
                                                                     }
@@ -780,7 +820,15 @@
                                                             }
                                                             else
                                                             {
-                                                                <p>@string.Format("{0:n0}", Math.Abs(moien.price)) </p>
+                                                                lst3 = Model.RecietArticleList.Where(x => x.koll == item.koll && x.moein == moien.moein && x.tafsil1 == "0" && x.tafsil2 == "0" && x.type == moien.type).ToList();
+                                                                if (lst3.Count != 0)
+                                                                {
+                                                                    foreach (var hamarz in lst3)
+                                                                    {
+
+                                                                        <p>@string.Format("{0:n0}", Math.Abs(hamarz.price)) </p>
+                                                                    }
+                                                                }
                                                             }
                                                         }
 

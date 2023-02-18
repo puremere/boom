@@ -68,6 +68,7 @@ namespace banimo.ViewModel
     public class ProductDetailCookie{
         public int productid { get; set; }
         public int quantity { get; set; }
+        public int tarafH { get; set; }
     }
 
     public class ProductDetail 

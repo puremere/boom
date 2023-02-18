@@ -60,9 +60,21 @@ namespace banimo.ViewModelPost
         public string image { get; set; }
         public string meta { get; set; }
     }
+    public class PartnerList
+    {
+        public string ID { get; set; }
+        public string price { get; set; }
+        public string Title { get; set; }
+        public string count { get; set; }
+        public string pID { get; set; }
+        
+    }
     public class viewProductViewModel
     {
+
         public List<BrandInfo> BrandInfo { get; set; }
+        
+        public List<PartnerList> partnerList { get; set; }
         public List<CatTreeList> catTreeList { get; set; }
         public string vahed { get; set; }
         public string tag { get; set; }

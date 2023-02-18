@@ -35,12 +35,13 @@ namespace banimo
               constraints: new { catname = "digital|projection|history|store-35|mobile accessory|phone|tablet|mobile accessory|headphone|speaker|electronic equipment" +
               "" }
             );
+
             routes.MapRoute(
-           name: "DisplayBrand",
-           url: "{name}/{id}",
-           defaults: new { controller = "Home", action = "brandMenu", id = UrlParameter.Optional },
-            constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
-           );
+             name: "DisplayBrand",
+             url: "brands/{name}",
+             defaults: new { controller = "Home", action = "brandMenu", id = UrlParameter.Optional }
+             //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
+             );
 
             routes.MapRoute(
             name: "DisplayKombak",

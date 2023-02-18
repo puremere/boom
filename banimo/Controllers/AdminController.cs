@@ -1564,11 +1564,16 @@ namespace banimo.Controllers
 
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProduct.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getNewListProductNewVersion.php", collection);
                 result = Encoding.UTF8.GetString(response);
             }
+            
             List<ViewModel.pList> model = JsonConvert.DeserializeObject<List<ViewModel.pList>>(result);
-            string resultstring = JsonConvert.SerializeObject(model);
+            foreach (var item in model)
+            {
+                item.title = item.title + "-" + item.colorTitle + "-" + item.selectedFilter;
+            }
+                string resultstring = JsonConvert.SerializeObject(model);
             return Content(resultstring);
 
 
@@ -1649,6 +1654,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
+                collection.Add("userID", token);
                 collection.Add("id", id);
 
 
@@ -5075,7 +5081,116 @@ namespace banimo.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult UploadExcelV2(HttpPostedFileBase myfile)
+        {
 
+            DataTable dt = new DataTable();
+            //Checking file content length and Extension must be .xlsx  
+            if (myfile != null && myfile.ContentLength > 0 && (System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xlsx" || System.IO.Path.GetExtension(myfile.FileName).ToLower() == ".xls"))
+            {
+                string pathString = "~/UploadFile";
+                if (!Directory.Exists(Server.MapPath(pathString)))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+                }
+                string path = Path.Combine(Server.MapPath(pathString), Path.GetFileName(myfile.FileName));
+
+                //Saving the file  
+                myfile.SaveAs(path);
+                //Started reading the Excel file.  
+                using (XLWorkbook workbook = new XLWorkbook(path))
+                {
+                    IXLWorksheet worksheet = workbook.Worksheet(1);
+                    bool FirstRow = true;
+                    //Range for reading the cells based on the last cell used.  
+                    string readRange = "1:1";
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        //If Reading the First Row (used) then add them as column name  
+                        if (FirstRow)
+                        {
+                            //Checking the Last cellused for column generation in datatable  
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Columns.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+                            //Adding a Row in datatable  
+                            dt.Rows.Add();
+                            int cellIndex = 0;
+                            //Updating the values of datatable  
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                cellIndex++;
+                            }
+                        }
+                    }
+                    //If no data in Excel file  
+                    if (FirstRow)
+                    {
+                        ViewBag.Message = "Empty Excel File!";
+                    }
+                    List<ViewModel.factorInputVM> listIIEM = new List<ViewModel.factorInputVM>();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string id = row[4].ToString();
+                        string count = row[3].ToString();
+                        string inprice = row[6].ToString();
+                        string outprice = row[7].ToString();
+
+                       ViewModel.factorInputVM item = new ViewModel.factorInputVM()
+                        {
+                            ID = id,
+                            count = count,
+                            inprice = inprice,
+                            outprice = outprice,
+                        };
+
+                        if (item.count != "0")
+                        {
+                            listIIEM.Add(item);
+                        }
+                        
+
+                    }
+
+                    string device = RandomString(10);
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    string json = "";
+                    ViewModel.EcxeFactorlLists model = new ViewModel.EcxeFactorlLists();
+                    model.model = listIIEM;
+                    string jsonstring = JsonConvert.SerializeObject(model).Replace("\\", "");
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("ID", code);
+                        collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                        collection.Add("model", jsonstring);
+                        byte[] response = client.UploadValues(server + "/Admin/editFactorByExcel.php", collection);
+                        json = System.Text.Encoding.UTF8.GetString(response);//setFactorByExcel
+                    }
+
+                }
+            }
+            else
+            {
+                //If file extension of the uploaded file is different then .xlsx  
+                ViewBag.Message = "Please select file with .xlsx extension!";
+            }
+
+
+
+            return RedirectToAction("product");
+        }
 
         [HttpPost]
         public ActionResult UploadExcel(HttpPostedFileBase myfile)
@@ -5508,7 +5623,7 @@ namespace banimo.Controllers
 
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public ActionResult setMainProduct(productCore model)
         {
             string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
@@ -5525,7 +5640,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("title", model.title);
+                collection.Add("title", model.title.Trim());
                 collection.Add("initCount", model.initCount);
                 collection.Add("desc", model.description);
                 collection.Add("productCode", model.code);
@@ -6361,7 +6476,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult SetNewFactorFromSail(string amani, string count , string price, string ID , string tarafID)
+        public ActionResult SetNewFactorFromSail(string anbarID,string amani, string count , string price, string ID , string tarafID)
         
         
         
@@ -6377,7 +6492,7 @@ namespace banimo.Controllers
             string result = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-            
+            string token = Session["LogedInUser2"] as string; 
 
             using (WebClient client = new WebClient())
             {
@@ -6391,6 +6506,9 @@ namespace banimo.Controllers
                 collection.Add("nodeID", nodeID);
                 collection.Add("price", price);
                 collection.Add("tarafID", tarafID);
+                collection.Add("anbarID", anbarID);
+                collection.Add("userID", token);
+                
                 collection.Add("amani", amani);
                 collection.Add("deliver", "از طرف فروشنده");
 
@@ -6412,7 +6530,7 @@ namespace banimo.Controllers
             string result = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-
+            string token = Session["LogedInUser2"] as string;
 
             using (WebClient client = new WebClient())
             {
@@ -6426,6 +6544,7 @@ namespace banimo.Controllers
                 collection.Add("nodeID", nodeID);
                 collection.Add("price", price);
                 collection.Add("factorID", tarafID);
+                collection.Add("userID", token);
              
                 collection.Add("amani", amani);
                 collection.Add("deliver", "از طرف فروشنده");
@@ -8091,6 +8210,7 @@ namespace banimo.Controllers
         {
             if (true)
             {
+
                 List<ViewModelPost.ReportMyProduct> model = JsonConvert.DeserializeObject<List<ViewModelPost.ReportMyProduct>>(data);
 
 

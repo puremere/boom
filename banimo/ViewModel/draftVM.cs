@@ -9,6 +9,8 @@ namespace banimo.ViewModel
     {
         public List<TarafList> TarafList { get; set; }
         public List<NodeList> NodeList { get; set; }
+        public List<AnbarList> AnbarList { get; set; }
+        public List<CodingList> CodingList { get; set; }
     }
 
     //public class TarafList

@@ -1,0 +1,2042 @@
+﻿@model banimo.ViewModel.draftVM
+@{
+    ViewBag.Title = "bank";
+    Layout = "~/Views/Shared/_CoreLayout.cshtml";
+}
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+</style>
+
+@{
+    List<banimo.ViewModel.CodingList> M1 = Model.CodingList.Where(x => x.codingType == "1").ToList();
+    List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
+    List<banimo.ViewModel.CodingList> M3 = Model.CodingList.Where(x => x.codingType == "3").ToList();
+    List<banimo.ViewModel.CodingList> M4 = Model.CodingList.Where(x => x.codingType == "4").ToList();
+    List<banimo.ViewModel.CodingList> M5 = Model.CodingList.Where(x => x.codingType == "5").ToList();
+
+}
+
+<div id="editPurchaseFactor" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div style="display:flex">
+                    <div style="margin-left:20px; width:100%">
+                        <p>پروژه :</p>
+                        <select id="nodeIDAddParentM" class="form-control">
+
+
+                            @foreach (var item in Model.NodeList)
+                            {
+
+                                <option value="@item.ID">@item.title</option>
+                            }
+                        </select>
+                    </div>
+                    <div style="margin-left:20px; width:100%">
+                        <p>طرف حساب</p>
+                        @Html.DropDownList("partnerItemMM", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "partnerItemMM" })
+
+                    </div>
+                    @*<div style="margin-left:20px; width:100%">
+                            <p>فروشنده</p>
+                            @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
+
+                        </div>*@
+                    <div style="margin-left:20px; width:100%">
+                        <p>انبار</p>
+                        @Html.DropDownList("anabrItemM", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "anabrItemM" })
+
+                    </div>
+
+
+                </div>
+                <div style="display:flex; margin-top:25px">
+
+                    <div style="margin-left:20px; width:100%">
+                        <p> تاریخ :</p>
+                        <input type="text" class="form-control projectDate3M inputfield" />
+                        <input class="PDabserver3M" style="display:none" />
+                    </div>
+
+                    <div style="margin-left:20px; width:100%">
+                        <p>توضیحات</p>
+                        <input id="recieverM" class="form-control" />
+                    </div>
+                    <div style="margin-left:20px; width:100%">
+                        <p>شماره فاکتور</p>
+                        <input id="factorNumberM" class="form-control" />
+                    </div>
+
+
+
+                    <input hidden id="newFactorIDM" />
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+            </div>
+            <script>
+                $("#confirmFactorModal").click(function () {
+                    //$("#residModal").modal('hide');
+                    var description = $("#recieverM").val();
+                    var date = $(".PDabserver3M").val();
+                    var anabr = $("#anabrItemM").val();
+                    var PID = $("#partnerItemMM").val();
+                    var nodeID = $("#nodeIDAddParentM").val();
+                    var affID = "0";// $("#affID").val();
+                    var number = $("#factorNumberM").val();
+                    var amani = "0";
+                    var ID = $("#newFactorIDM").val();
+
+
+                    if ($("#FitemAmaniM").is(':checked')) {
+                        var amani = "1";
+                    }
+
+
+                    $.ajax({
+                        url: '/Core/setNewFactor',
+                        dataType: 'html',
+                        data: {
+                            itemID: ID,
+                            description: description,
+                            date: $(".PDabserver3M").val(),
+                            anabr: anabr,
+                            PID: PID,
+                            nodeID: nodeID,
+                            affID: affID,
+                            number: number,
+                            type: "1",
+                            amani: amani
+                        },
+                        success: function (data) {
+                            $("#verifyCodeingTran").click();
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+                })
+
+            </script>
+        </div>
+    </div>
+</div>
+<div id="FeditPurchaseFactor" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div style="display:flex">
+                    <div style="margin-left:20px; width:100%">
+                        <p>پروژه :</p>
+                        <select id="FnodeIDAddParentM" class="form-control">
+
+
+                            @foreach (var item in Model.NodeList)
+                            {
+
+                                <option value="@item.ID">@item.title</option>
+                            }
+                        </select>
+                    </div>
+                    @*<div style="margin-left:20px; width:100%">
+                        <p>طرف حساب</p>
+                        @Html.DropDownList("partnerItemMM", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "partnerItemMM" })
+
+                    </div>*@
+                    @*<div style="margin-left:20px; width:100%">
+                            <p>فروشنده</p>
+                            @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
+
+                        </div>*@
+                    <div style="margin-left:20px; width:100%">
+                        <p>انبار</p>
+                        @Html.DropDownList("FanabrItemM", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "FanabrItemM" })
+
+                    </div>
+
+
+                </div>
+                <div style="display:flex; margin-top:25px">
+
+                    <div style="margin-left:20px; width:100%">
+                        <p> تاریخ :</p>
+                        <input type="text" class="form-control FprojectDate3M inputfield" />
+                        <input class="FPDabserver3M" style="display:none" />
+                    </div>
+
+                    <div style="margin-left:20px; width:100%">
+                        <p>توضیحات</p>
+                        <input id="FrecieverM" class="form-control" />
+                    </div>
+                    <div style="margin-left:20px; width:100%">
+                        <p>شماره فاکتور</p>
+                        <input id="FfactorNumberM" class="form-control" />
+                    </div>
+
+
+
+                    <input hidden id="FnewFactorIDM" />
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="FconfirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+            </div>
+            <script>
+                $("#FconfirmFactorModal").click(function () {
+                    //$("#residModal").modal('hide');
+                    var description = $("#FrecieverM").val();
+                    var date = $(".FPDabserver3M").val();
+                    var anabr = $("#FanabrItemM").val();
+                    //var PID = $("#FpartnerItemMM").val();
+                    var nodeID = $("#FnodeIDAddParentM").val();
+                    var affID = "0";// $("#affID").val();
+                    var number = $("#FfactorNumberM").val();
+                    var amani = "0";
+                    var ID = $("#FnewFactorIDM").val();
+                    var date = $(".FPDabserver3M").val();
+
+                    if ($("#FitemAmaniM").is(':checked')) {
+                        var amani = "1";
+                    }
+
+
+                    $.ajax({
+                        url: '/Core/setNewFactor',
+                        dataType: 'html',
+                        data: {
+                            itemID: ID,
+                            description: description,
+                            date: date,
+                            anabr: anabr,
+                            //PID: PID,
+                            nodeID: nodeID,
+                            affID: affID,
+                            number: number,
+                            type: "1",
+                            amani: amani
+                        },
+                        success: function (data) {
+                            $("#verifyCodeingTran").click();
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+                })
+
+            </script>
+        </div>
+    </div>
+</div>
+
+<div id="daemModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <p id="modalmessage">در صورت تسویه فاکتور لطفا بانک مورد نظر را انتخاب کنید</p>
+                <div  style="display:flex; ">
+                    <div style="width:90%">
+                        <div class="row" style="display:flex; align-items:center">
+                            <div style="width:100% ; margin:10px">
+                                <input id="handMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M22" id="M22" class="form-control">
+                                        <option value="0">انتخاب کل</option>
+                                        @foreach (var item in M2)
+                                        {
+                                            <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M33" id="M33" class="form-control">
+                                        <option value="0">انتخاب معین</option>
+                                        @foreach (var item in M3)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="row" style="display:flex; align-items:center">
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M44" id="M44" class="form-control">
+                                        <option value="0">انتخاب تفصیلی</option>
+                                        @foreach (var item in M4)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M55" id="M55" class="form-control">
+                                        <option value="0">انتخاب تفصیلی 2</option>
+                                        @foreach (var item in M5)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div style="width:100% ; margin:10px">
+                                <input id="prc" class="form-control inputnumber" placeholder="قیمت" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width:10%">
+                        <p id="addBank" class="btn btn-success" style="padding: 8px;margin-top: 60px;width: 100%;"><i class="fa fa-plus"></i></p>
+                    </div>
+                  
+                  
+
+                </div>
+
+                <div id="finalHolder" style="padding:10px;">
+
+                </div>
+
+            </div>
+            <div>
+                <div></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+            <script>
+                var codingstring = "";
+                var pricesstring = "";
+                function addCommas(nStr) {
+                    nStr += '';
+                    var x = nStr.split('.');
+                    var x1 = x[0];
+                    var x2 = x.length > 1 ? '.' + x[1] : '';
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                    }
+                    return x1 + x2;
+                }
+                $("#addBank").click(function () {
+                    var addprice = $("#prc").val();
+                    var add2 = $("#M22  option:selected").text();
+                    var add3 = $("#M33  option:selected").text();
+                    var add4 = $("#M44  option:selected").text();
+                    var add5 = $("#M55  option:selected").text();
+                    if (addprice != "" && add2 !="" && add3 != "" ) {
+                        
+
+
+                        var finaltext = add2 + " | " + add3 + " | " + add4 + " | " + add5 + " |  قیمت : " + addCommas(addprice)
+                        $("#finalHolder").append('<div style="border:1px solid #ddd; padding:10px; border-radius:5px">' + finaltext + '</div>');
+
+                        $("#finalHolder").append('<br>');
+
+                        codingstring += $("#M22").val() + "," + $("#M33").val() + "," + $("#M44").val() + "," + $("#M44").val() + ";";
+                        pricesstring += addprice + ";";
+                    }
+                   
+                })
+
+
+
+                var doParents = function (el) {
+
+                    var parent = el.attr('parentValue')
+
+                    if (parent != "") {
+                        var selement = $('option[itemvalue="' + parent + '"]');
+                        doParents(selement)
+                    }
+                    el.parent().val(el.val());
+
+
+
+                };
+                $('#handMadeCode').keyup(function (e) {
+                    if (this.value == "") {
+                        $('option').each(function () {
+                            $(this).removeAttr("selected");
+                        })
+                    }
+                    if (e.keyCode == 13) {
+
+
+                        var id = $(this).val();
+
+                        var element = $('option[value="' + id + '"]');
+                        doParents(element);
+
+                    }
+                })
+
+                $("#M22").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+
+                    // console.log(id)
+                    $("#M33 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+                    $("#M44 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        $(this).hide();
+                    });
+                })
+                $("#M33").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+                    console.log(id)
+                    $("#M44 option").each(function () {
+
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+
+
+                })
+                $("#M44").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+                    console.log(id)
+                    $("#M55 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+                });
+                $("#cancelDaem").click(function () {
+                    var Prodcutid = $("#parentValue").text();
+                    var Value = $("#factorValue").text();
+                    var rc = "rc" + parentValue;
+                    $("#" + rc).find('.daemHolder .daem').prop("checked", false);
+                })
+                $("#confirmDaem").click(function () {
+                    $("#daemModal").modal('toggle');
+                    var parentValue = $("#parentValue").text();
+                    var factorValue = $("#factorValue").text();
+                    var rc = "rc" + parentValue;
+
+                    var iteCheck = $("#".rc).find('#daemHolder .daem');
+
+                    
+                    $.ajax({
+                        url: '/Core/ChangeFactorStatus',
+                        dataType: 'html',
+                        data: {
+                            parentValue: parentValue,
+                            factorValue: factorValue,
+                            codingstring: codingstring,
+                            pricesstring: pricesstring,
+                            M22: $("#M22").val(),
+                            M33: $("#M33").val(),
+                            M44: $("#M44").val(),
+                            M55: $("#M55").val(),
+
+                        },
+                        success: function (data) {
+                            if (data == "200") {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000,
+
+
+                                }
+                                toastr.success('با موفقیت انجام شد');
+
+                            }
+                            else {
+                                if (productValue == "0") {
+
+                                    $("#" + rc).find('.daemHolder .daem').prop("checked", true);
+                                }
+                                else {
+                                    $("#" + rc).find('.daemHolder .daem').prop("checked", false);
+
+                                    //iteCheck.prop("checked", false);
+
+
+                                }
+
+
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000,
+
+
+                                }
+                                toastr.error(data)
+
+                            }
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+                })
+
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="FdaemModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <p id="modalmessage">در صورت تسویه فاکتور لطفا بانک مورد نظر را انتخاب کنید</p>
+                <div style="display:flex; align-items:center">
+
+                    <div style="width:100% ; margin:10px">
+                        <input id="FhandMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="FM22" id="FM22" class="form-control">
+                                <option value="0">انتخاب کل</option>
+                                @foreach (var item in M2)
+                                {
+                                    <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="FM33" id="FM33" class="form-control">
+                                <option value="0">انتخاب معین</option>
+                                @foreach (var item in M3)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="FM44" id="FM44" class="form-control">
+                                <option value="0">انتخاب تفصیلی</option>
+                                @foreach (var item in M4)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="FM55" id="FM55" class="form-control">
+                                <option value="0">انتخاب تفصیلی 2</option>
+                                @foreach (var item in M5)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="FconfirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    var FdoParents = function (el) {
+
+                        var parent = el.attr('parentValue')
+
+                        if (parent != "") {
+                            var selement = $('option[itemvalue="' + parent + '"]');
+                            doParents(selement)
+                        }
+                        el.parent().val(el.val());
+
+
+
+                    };
+                    $('#FhandMadeCode').keyup(function (e) {
+                        if (this.value == "") {
+                            $('option').each(function () {
+                                $(this).removeAttr("selected");
+                            })
+                        }
+                        if (e.keyCode == 13) {
+
+
+                            var id = $(this).val();
+
+                            var element = $('option[value="' + id + '"]');
+                            doParents(element);
+
+                        }
+                    })
+
+                    $("#FM22").change(function () {
+                        var id = $('option:selected', this).attr('itemvalue');
+
+                        // console.log(id)
+                        $("#FM33 option").each(function () {
+                            var val = $(this).val();
+                            if (val == "0") {
+                                $(this).prop('selected', true);
+                            }
+                            else {
+                                $(this).prop('selected', false);
+                            }
+                            var optionid = $(this).attr('parentValue');
+                            if (optionid != id) {
+                                $(this).hide();
+                            }
+                            else {
+                                $(this).show();
+                            }
+                        })
+                        $("#FM44 option").each(function () {
+                            var val = $(this).val();
+                            if (val == "0") {
+                                $(this).prop('selected', true);
+                            }
+                            else {
+                                $(this).prop('selected', false);
+                            }
+                            $(this).hide();
+                        });
+                    })
+                    $("#FM33").change(function () {
+                        var id = $('option:selected', this).attr('itemvalue');
+                        console.log(id)
+                        $("#FM44 option").each(function () {
+
+                            var val = $(this).val();
+                            if (val == "0") {
+                                $(this).prop('selected', true);
+                            }
+                            else {
+                                $(this).prop('selected', false);
+                            }
+
+                            var optionid = $(this).attr('parentValue');
+                            if (optionid != id) {
+                                $(this).hide();
+                            }
+                            else {
+                                $(this).show();
+                            }
+                        })
+
+
+                    })
+                    $("#FM44").change(function () {
+                        var id = $('option:selected', this).attr('itemvalue');
+                        console.log(id)
+                        $("#FM55 option").each(function () {
+                            var val = $(this).val();
+                            if (val == "0") {
+                                $(this).prop('selected', true);
+                            }
+                            else {
+                                $(this).prop('selected', false);
+                            }
+                            var optionid = $(this).attr('parentValue');
+                            if (optionid != id) {
+                                $(this).hide();
+                            }
+                            else {
+                                $(this).show();
+                            }
+                        })
+                    });
+                    $("#FcancelDaem").click(function () {
+                        var Prodcutid = $("#parentValue").text();
+                        var Value = $("#factorValue").text();
+                        var rc = "rc" + parentValue;
+                        $("#" + rc).find('.daemHolder .daem').prop("checked", false);
+                    })
+                    $("#FconfirmDaem").click(function () {
+                        $("#FdaemModal").modal('toggle');
+                        var parentValue = $("#FparentValue").text();
+                        var factorValue = $("#FfactorValue").text();
+                        var rc = "rc" + parentValue;
+
+                        var iteCheck = $("#".rc).find('#FdaemHolder .daem');
+                        $.ajax({
+                            url: '/Core/FChangeFactorStatus',
+                            dataType: 'html',
+                            data: {
+                                parentValue: parentValue,
+                                factorValue: factorValue,
+                                M22: $("#FM22").val(),
+                                M33: $("#FM33").val(),
+                                M44: $("#FM44").val(),
+                                M55: $("#FM55").val(),
+
+                            },
+                            success: function (data) {
+                                if (data == "200") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000,
+
+
+                                    }
+                                    toastr.success('با موفقیت انجام شد');
+
+                                }
+                                else {
+                                    if (productValue == "0") {
+
+                                        $("#" + rc).find('.FdaemHolder .Fdaem').prop("checked", true);
+                                    }
+                                    else {
+                                        $("#" + rc).find('.FdaemHolder .Fdaem').prop("checked", false);
+
+                                        //iteCheck.prop("checked", false);
+
+
+                                    }
+
+
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000,
+
+
+                                    }
+                                    toastr.error(data)
+
+                                }
+
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="BKModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                ثبت برگشت از خرید
+            </div>
+            <div class="modal-body">
+              
+                <input id="BKID" hidden />
+                <div id="" style="display:flex">
+                    <span>تعداد : </span>
+                    <span><input style="margin:0 15px;" id="BKcount" class="form-control" /></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmBK" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+                   
+                    $("#confirmBK").click(function () {
+                        //$("#residModal").modal('hide');
+
+                        var count = $("#BKcount").val();
+                        var ID = $("#BKID").val();
+                       
+                        $.ajax({
+                            url: '/Core/SetReturnFactorFromSail',
+                            dataType: 'html',
+                            data: {
+                                ID: ID,
+                                count: count,
+                               
+
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('خطا')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('با موفقیت انجام شد')
+
+                                    $("#sayerModal").modal('toggle');
+
+                                    //window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="BFModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                ثبت برگشت از خرید
+            </div>
+            <div class="modal-body">
+
+                <input id="BKID" hidden />
+                <div id="" style="display:flex">
+                    <span>تعداد : </span>
+                    <span><input style="margin:0 15px;" id="BFcount" class="form-control" /></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmBF" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+
+                    $("#confirmBK").click(function () {
+                        //$("#residModal").modal('hide');
+
+                        var count = $("#BFcount").val();
+                        var ID = $("#BFID").val();
+
+                        $.ajax({
+                            url: '/Core/FSetReturnFactorFromSail',
+                            dataType: 'html',
+                            data: {
+                                ID: ID,
+                                count: count,
+
+
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('خطا')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('با موفقیت انجام شد')
+
+                                    $("#sayerModal").modal('toggle');
+
+                                    //window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addNewResidHavaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                فرم رسید/حواله
+            </div>
+            <div class="modal-body">
+                <div style="display:flex">
+                    <input id="callFrom" hidden />
+                    <div style="margin:10px; width:100%">
+                        <p>تعداد</p>
+                        <input id="count" class="form-control" />
+                    </div>
+                    <div style="margin:10px; width:100%">
+                        <p>قیمت</p>
+                        <input id="itemPrice" class="form-control inputnumber" />
+                    </div>
+                    <div style="margin:10px;width:100%" id="autoProduct2">
+                        <p> محصول :</p>
+                        <input type="text" class="form-control  inputfield" id="addItemToOrderInput2" />
+                        <input id="IDholder2" hidden />
+
+
+                    </div>
+                    @*<div style="margin:10px; width:100%">
+                        <p>امانی</p>
+                        <input type="checkbox" id="itemAmani" class="form-control" />
+                    </div>*@
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmResid" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+                    $("#confirmResid").click(function () {
+                        //$("#residModal").modal('hide');
+
+                        var count = $("#count").val();
+                        var ID = $("#IDholder2").val();
+                        var PID = $("#newFactorID").val();
+                        var price = $("#itemPrice").val();
+                        
+                        
+
+
+                        $.ajax({
+                            url: '/Core/resid',
+                            dataType: 'html',
+                            data: {
+                                count: count,
+                                ID: ID,
+                                PID: PID,
+                               
+                                price: price.replace(",", ""),
+
+
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('آیتم مورد نظر اضافه شد')
+
+
+
+                                    $.ajax({
+                                        url: '/Core/returnDraftListA',
+                                        dataType: 'html',
+                                        data: {
+                                            parentID: PID,
+                                        },
+                                        success: function (data) {
+
+                                            $("#count").val("");
+                                            $("#IDholder2").val("");
+                                            $("#itemPrice").val("");
+                                            $("#addItemToOrderInput2").val("");
+                                            if ($("#callFrom").val() == "1") {
+                                                $("#kharidFactorListSection").html(data);
+                                                $("#kharidFactorListSection3").html(data);
+                                            }
+                                            else {
+
+                                                $("#kharidFactorListSection2").html(data);
+                                                $("#kharidFactorListSection4").html(data);
+                                            }
+
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+
+                                    //window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="FaddNewResidHavaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                فرم رسید/حواله
+            </div>
+            <div class="modal-body">
+                <div style="display:flex">
+                    <input id="FcallFrom" hidden />
+                    <div style="margin:10px; width:100%">
+                        <p>تعداد</p>
+                        <input id="Fcount" class="form-control" />
+                    </div>
+                    <div style="margin:10px; width:100%">
+                        <p>قیمت</p>
+                        <input id="FitemPrice" class="form-control" />
+                    </div>
+                    <div style="margin:10px;width:100%" id="FautoProduct2">
+                        <p> محصول :</p>
+                        <input type="text" class="form-control  inputfield" id="FaddItemToOrderInput2" />
+                        <input id="FIDholder2" hidden />
+
+
+                    </div>
+                
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="FconfirmResid" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+                    $("#FconfirmResid").click(function () {
+                        //$("#residModal").modal('hide');
+
+                        var count = $("#Fcount").val();
+                        var ID = $("#FIDholder2").val();
+                        var PID = $("#FnewFactorID").val();
+                        var price = $("#FitemPrice").val();
+
+                        var PID = $("#FnewFactorID").val();
+                      
+
+                        $.ajax({
+                            url: '/Core/resid',
+                            dataType: 'html',
+                            data: {
+                                count: count,
+                                ID: ID,
+                                PID: PID,
+                                price: price
+
+
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('آیتم مورد نظر اضافه شد')
+
+
+
+                                    $.ajax({
+                                        url: '/Core/FreturnDraftListFactor',
+                                        dataType: 'html',
+                                        data: {
+                                            parentID: PID,
+                                        },
+                                        success: function (data) {
+
+                                            $("#Fcount").val("");
+                                            $("#FIDholder2").val("");
+                                            $("#FitemPrice").val("");
+                                            $("#FaddItemToOrderInput2").val("");
+                                            if ($("#FcallFrom").val() == "1") {
+
+                                                $("#kharidFactorListSection4").html(data);
+                                            }
+                                            else {
+
+
+                                                $("#kharidFactorListSection3").html(data);
+                                            }
+
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+
+                                    //window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="background-color:white; padding:10px; margin:0px; ">
+
+    <ul class="nav nav-tabs">
+
+
+        <li class="active"><a data-toggle="tab" href="#kharid" style=" color: #8d8d8d; ">فاکتور خرید</a></li>
+        <li><a data-toggle="tab" href="#foroosh" style=" color: #8d8d8d; ">فاکتور فروش</a></li>
+
+
+    </ul>
+    <div class="tab-content">
+
+        <div id="kharid" class="tab-pane fade in active" style="padding-top:20px">
+            <ul class="nav nav-tabs">
+
+                <li class="active"><a data-toggle="tab" href="#kharidList" style=" color: #8d8d8d; ">لیست فاکتورها</a></li>
+                <li class=""><a data-toggle="tab" href="#AddNewKharid" style=" color: #8d8d8d; ">افزودن فاکتور جدید</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="kharidList" class="tab-pane fade in active " style="padding-top:20px">
+                    <div class="row" style="background-color:white; padding:10px; margin:0px; ">
+                        <div class="row">
+
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                                <div class="row" style="">
+
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>پروژه :</p>
+                                        <select id="newFactornodeID" class="form-control">
+
+
+                                            @foreach (var item in Model.NodeList)
+                                            {
+
+                                                <option value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>طرف حساب :</p>
+                                        <select id="tarafID" class="form-control">
+                                            <option value="">همه</option>
+
+                                            @foreach (var item in Model.TarafList)
+                                            {
+                                                <option value="@item.ID">@item.name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="">
+                                        <p>شماره فاکتور :</p>
+                                        <input id="number" type="text" class="form-control  inputfield" />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>نوع فاکتور :</p>
+                                        <select id="trantype" class="form-control">
+                                            <option value="">همه</option>
+                                            <option value="1">رسید</option>
+                                            <option value="0">حواله</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                                        <p>از تاریخ :</p>
+                                        <input type="text" class="form-control projectDate inputfield" />
+                                        <input class="PDabserver" style="display:none" />
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                        <p>تا تاریخ :</p>
+                                        <input type="text" class="form-control projectDate2 inputfield" />
+                                        <input class="PD2abserver" style="display:none" />
+
+                                    </div>
+
+                                    <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                                        <p> محصول :</p>
+                                        <input type="text" class="form-control  inputfield" id="addItemToOrderInput" />
+                                        <input id="IDholder" hidden />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                        <p>توضیحات :</p>
+                                        <input id="description" type="text" class="form-control  inputfield" />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>وضعیت :</p>
+                                        <select id="factorStatus" class="form-control">
+                                            <option value="">همه</option>
+                                            <option value="1">اولیه</option>
+                                            <option value="0">نهایی</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row" style="margin-top:50px">
+
+                                    <div style="width:20%;padding:10px;">
+                                        <div style="position:relative; margin:5px" id="">
+                                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTran">تایید</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+
+                                    <script>
+                                        var getDraft = function () {
+                                            $.ajax({
+                                                url: 'returnFactorList',
+                                                dataType: 'html',
+                                                data: {
+                                                    number: $("#number").val(),
+                                                    timeFrom: $(".PDabserver").val(),
+                                                    timeTTo: $(".PD2abserver").val(),
+                                                    transactionType: $("#trantype").val(),
+                                                    factorStatus: $("#factorStatus").val(),
+                                                    priceFrom: $("#priceFrom").val(),
+                                                    priceTo: $("#priceTo").val(),
+                                                    countFrom: $("#countFrom").val(),
+                                                    countTo: $("#countTo").val(),
+                                                    amani: $("#amani").val(),
+                                                    nodeID: $("#newFactornodeID").val(),
+                                                    tarafID: $("#tarafID").val(),
+                                                    productID: $("#IDholder").val(),
+                                                    description: $("#description").val(),
+                                                    factorType: "1",
+
+                                                },
+                                                success: function (data) {
+
+                                                    $("#detailHolder").html(data)
+                                                }
+                                            })
+                                        };
+                                        $("#verifyCodeingTran").click(function () {
+                                            getDraft();
+                                        })
+                                        getDraft();
+                                    </script>
+                                </div>
+                                <div id="detailHolder" class="row">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="kharidFactorListSection2">
+
+                    </div>
+                </div>
+                <div id="AddNewKharid" class="tab-pane fade in  " style="padding-top:20px">
+                    <div style="display:flex">
+                        <div style="margin-left:20px; width:100%">
+                            <p>پروژه :</p>
+                            <select id="nodeIDAddParent" class="form-control">
+
+
+                                @foreach (var item in Model.NodeList)
+                                {
+
+                                    <option value="@item.ID">@item.title</option>
+                                }
+                            </select>
+                        </div>
+                        <div style="margin-left:20px; width:100%">
+                            <p>طرف حساب</p>
+                            @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "partnerItem" })
+
+                        </div>
+                        @*<div style="margin-left:20px; width:100%">
+            <p>فروشنده</p>
+            @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
+
+        </div>*@
+                        <div style="margin-left:20px; width:100%">
+                            <p>انبار</p>
+                            @Html.DropDownList("anabrItem", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "anabrItem" })
+
+                        </div>
+                        <div style="margin-left:20px; width:100%">
+                            <p> تاریخ :</p>
+                            <input type="text" class="form-control projectDate3 inputfield" />
+                            <input class="PDabserver3" style="display:none" />
+                        </div>
+
+                    </div>
+                    <div style="display:flex; margin-top:25px" >
+
+
+                       
+                        <div style="margin-left:20px; width:100%">
+                            <p>توضیحات</p>
+                            <input id="reciever" class="form-control" />
+                        </div>
+                        <div style="margin-left:20px; width:100%">
+                            <p>شماره فاکتور</p>
+                            <input id="factorNumber" class="form-control" />
+                        </div>
+                        <div style="margin-left:20px; width:100%">
+                            <p>امانی</p>
+                            <input type="checkbox" id="FitemAmani" class="form-control" />
+                        </div>
+
+                        <div style="margin-left:20px; width:100%">
+                            <p></p>
+                            <button id="confirmFactorE" type="button" class="btn btn-success" style="margin: 7px;margin-top:20px">تایید</button>
+                        </div>
+
+                        <input hidden id="newFactorID" />
+
+                    </div>
+
+
+                    <script>
+                        $("#confirmFactorE").click(function () {
+                            //$("#residModal").modal('hide');
+                            var description = $("#reciever").val();
+                            var date = $(".PDabserver3").val();
+                            var anabr = $("#anabrItem").val();
+                            var PID = $("#partnerItem").val();
+                            var nodeID = $("#nodeIDAddParent").val();
+                            var affID = "0";// $("#affID").val();
+                            var number = $("#factorNumber").val();
+                            var amani = "0";
+
+                            
+
+                            if ($("#FitemAmani").is(':checked')) {
+                                var amani = "1";
+                            }
+
+
+                            $.ajax({
+                                url: '/Core/setNewFactor',
+                                dataType: 'html',
+                                data: {
+                                    description: description,
+                                    date: $(".PDabserver3").val(),
+                                    anabr: anabr,
+                                    PID: PID,
+                                    nodeID: nodeID,
+                                    affID: affID,
+                                    number: number,
+                                    type: "1",
+                                    amani : amani
+                                },
+                                success: function (data) {
+                                    $("#newFactorID").val(data);
+
+                                    $.ajax({
+                                        url: '/Core/returnDraftListA',
+                                        dataType: 'html',
+                                        data: {
+                                            parentID: data,
+                                        },
+                                        success: function (data) {
+                                            $("#kharidFactorListSection").html(data);
+                                            $("#callFrom").val("1")
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                    <div id="kharidFactorListSection">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div id="foroosh" class="tab-pane fade in " style="padding-top:20px">
+
+            <ul class="nav nav-tabs">
+
+                <li class="active"><a data-toggle="tab" href="#fFrooshidList" style=" color: #8d8d8d; ">لیست فاکتورهای فروش</a></li>
+              
+            </ul>
+            <div class="tab-content">
+                <div id="fFrooshidList" class="tab-pane fade in active " style="padding-top:20px">
+                    <div class="row" style="background-color:white; padding:10px; margin:0px; ">
+                        <div class="row">
+
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                                <div class="row" style="">
+
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>پروژه :</p>
+                                        <select id="FnewFactornodeID" class="form-control">
+
+
+                                            @foreach (var item in Model.NodeList)
+                                            {
+
+                                                <option value="@item.ID">@item.title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>طرف حساب :</p>
+                                        <select id="FtarafID" class="form-control">
+                                            <option value="">همه</option>
+
+                                            @foreach (var item in Model.TarafList)
+                                            {
+                                                <option value="@item.ID">@item.name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>نوع فاکتور :</p>
+                                        <select id="Ftrantype" class="form-control">
+                                            <option value="">همه</option>
+                                            <option value="1">رسید</option>
+                                            <option value="0">حواله</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="">
+                                        <p>شماره فاکتور :</p>
+                                        <input id="Fnumber" type="text" class="form-control  inputfield" />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                                        <p>از تاریخ :</p>
+                                        <input type="text" class="form-control FprojectDate inputfield" />
+                                        <input class="FPDabserver" style="display:none" />
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                        <p>تا تاریخ :</p>
+                                        <input type="text" class="form-control FprojectDate2 inputfield" />
+                                        <input class="FPD2abserver" style="display:none" />
+
+                                    </div>
+
+                                    <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                                        <p> محصول :</p>
+                                        <input type="text" class="form-control  inputfield" id="FaddItemToOrderInput" />
+                                        <input id="FIDholder" hidden />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                        <p>توضیحات :</p>
+                                        <input id="Fdescription" type="text" class="form-control  inputfield" />
+
+
+                                    </div>
+                                    <div class="col-lg-3" style="padding:10px;">
+                                        <p>وضعیت :</p>
+                                        <select id="FfactorStatus" class="form-control">
+                                            <option value="">همه</option>
+                                            <option value="1">اولیه</option>
+                                            <option value="0">نهایی</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row" style="">
+
+                                    <div style="width:20%;padding:10px;">
+                                        <div style="position:relative; margin:5px" id="">
+                                            <div class="btn btn-success" style="margin-top:20px" id="FverifyCodeingTran">تایید</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+
+                                    <script>
+                                        var FgetDraft = function () {
+                                            $.ajax({
+                                                url: 'FreturnFactorList',
+                                                dataType: 'html',
+                                                data: {
+                                                    number: $("#Fnumber").val(),
+                                                    timeFrom: $(".FPDabserver").val(),
+                                                    timeTTo: $(".FPD2abserver").val(),
+                                                    transactionType: $("#Ftrantype").val(),
+                                                    factorStatus: $("#FfactorStatus").val(),
+                                                    priceFrom: $("#FpriceFrom").val(),
+                                                    priceTo: $("#FpriceTo").val(),
+                                                    countFrom: $("#FcountFrom").val(),
+                                                    countTo: $("#FcountTo").val(),
+                                                    amani: $("#Famani").val(),
+                                                    nodeID: $("#FnewFactornodeID").val(),
+                                                    tarafID: $("#FtarafID").val(),
+                                                    productID: $("#FIDholder").val(),
+                                                    description: $("#Fdescription").val(),
+                                                    factorType : "3"
+                                                },
+                                                success: function (data) {
+
+                                                    $("#FdetailHolder").html(data)
+                                                }
+                                            })
+                                        };
+                                        $("#FverifyCodeingTran").click(function () {
+                                            FgetDraft();
+                                        })
+                                        getDraft();
+                                    </script>
+                                </div>
+                                <div id="FdetailHolder" class="row">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="kharidFactorListSection3">
+
+                    </div>
+                </div>
+               
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+
+
+
+<script src="~/Scripts/persian-date.js"></script>
+<script src="~/Scripts/persian-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $(".datePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.abserver',
+            autoClose: true
+
+            // minDate: new persianDate().add('day', 2).valueOf(),
+            // options & callbacks here
+        });
+
+        $(".projectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver',
+            autoClose: true
+        });
+        $(".projectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PD2abserver',
+            autoClose: true
+        });
+        $(".projectDate3M").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver3M',
+            autoClose: true
+        });
+        $(".FprojectDate3M").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.FPDabserver3M',
+            autoClose: true
+        });
+        $(".projectDate3").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver3',
+            autoClose: true
+        });
+
+        $(".FdatePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.Fabserver',
+            autoClose: true
+        });
+
+        $(".FprojectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.FPDabserver',
+            autoClose: true
+        });
+        $(".FprojectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.FPD2abserver',
+            autoClose: true
+        });
+        $(".FprojectDate3").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.FPDabserver3',
+            autoClose: true
+        });
+        $(".FprojectDate33").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.FPDabserver33',
+            autoClose: true
+        });
+    });
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".PD2abserver").val("");
+        $(".projectDate2").val("");
+    });
+</script>
+<script>
+    $('input.inputnumber').keyup(function (event) {
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
+</script>
+<script>
+
+    $("#autoProduct").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        if (value.length == 0) {
+            $("#IDholder").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    server: ""
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+</script>
+<script>
+
+    $("#addNewResidHavaleModal").on("keyup", function (e) {
+        console.log('d');
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var value = $("#kala").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: value,
+
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#kala").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+                        //  list: {
+                        //    maxNumberOfElements: 100,
+                        //    match: {
+                        //        enabled: true
+                        //    }
+                        //},
+                        //template: {
+                        //    type: "custom",
+                        //    method: function (value, item) {
+                        //        return   item.title + " | <div style='background-color:#ddd; border-radius:50%; width:30px'></div> "
+                        //    }
+                        //},
+
+
+                    };
+
+                    $("#kala").easyAutocomplete(productItems);
+                    $("#kala").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+
+
+    })
+
+
+</script>
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+<script>
+
+    $("#autoProduct2").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput2").val();
+        if (value.length == 0) {
+            $("#IDholder2").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput2").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput2").getSelectedItemData().ID;
+                                $("#IDholder2").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput2").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput2").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+
+    $("#FautoProduct2").on('keyup', function (e) {
+        var value = $("#FaddItemToOrderInput2").val();
+        if (value.length == 0) {
+            $("#FIDholder2").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#FaddItemToOrderInput2").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#FaddItemToOrderInput2").getSelectedItemData().ID;
+                                $("#FIDholder2").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#FaddItemToOrderInput2").easyAutocomplete(productItems);
+                    $("#FaddItemToOrderInput2").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+</script>
+<script>
+    $('input.inputnumber').keyup(function (event) {
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
+</script>

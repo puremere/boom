@@ -1,0 +1,189 @@
+﻿
+@model banimo.ViewModel.productHistoryVM
+
+
+
+
+@if (Model.detailList != null)
+{
+    <div class="row" style="padding:20px">
+        <div style="overflow-x:auto;padding:10px">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                    <i class="fa fa-plus" id="addRoleSectionModalIcon" style="float:left"></i>
+                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست دسترسی   </h3>
+                </div>
+                <div class="panel-body" style="max-height:450px; overflow-y:scroll;">
+
+
+
+
+                    <div id="morris-area-chart">
+                        <div style="overflow:auto">
+                            <div style="padding:30px; margin:15px; border:1px solid #eee; border-radius :8px">
+                                <span id="nameResult"></span>
+                                موجودی انبار : @Model.count
+                            </div>
+
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            ردیف
+                                        </th>
+
+                                        <th>
+                                            تاریخ
+                                        </th>
+                                        <th>
+                                            شرح
+                                        </th>
+                                        <th>
+                                            تعداد
+                                        </th>
+                                        <th>
+                                            مبلغ خرید
+                                        </th>
+                                        <th>
+                                            مبلغ فروش
+                                        </th>
+                                        <th>
+                                            سود نهایی
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.detailList != null)
+                                        {
+                                            foreach (var item in Model.detailList)
+                                            {
+
+                                                int index = Model.detailList.IndexOf(item) + 1;
+
+                                                <tr>
+
+                                                    <td>
+                                                        @index.ToString()
+                                                    </td>
+
+
+                                                    <td style="text-align: center;">
+
+                                                        @item.date
+                                                    </td>
+                                                    <td style="text-align: center;">
+
+                                                        <span>رسید شماره @item.ID</span>
+                                                    </td>
+                                                    <td style="text-align: center;">
+
+                                                        @item.count
+                                                    </td>
+                                                    <td style="text-align: center;">
+
+                                                        @String.Format("{0:n0}", item.inPrice)
+                                                    </td>
+                                                    <td style="text-align: center;">
+
+                                                        @String.Format("{0:n0}", item.outPrice)
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        @{
+                                                            decimal finalPrice = (@item.outPrice * item.count) - (@item.inPrice * item.count);
+                                                            string finalPriceS = String.Format("{0:n0}", finalPrice);
+                                                        }
+                                                        @finalPriceS
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+
+                                    <tr>
+
+                                        <td>
+                                        </td>
+
+
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+
+                                            کل
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @{
+                                                decimal finalP = Model.detailList.Sum(x => x.count * x.outPrice) - Model.detailList.Sum(x => x.count * x.inPrice);
+                                                string finaPS = String.Format("{0:n0}", @finalP);
+                                            }
+                                            @finaPS
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <script>
+
+                                $(".editAccess").click(function () {
+
+                                    var id = $(this).attr("id");
+
+                                    $.ajax({
+                                        url: '/Core/getRoleSection',
+                                        dataType: 'html',
+                                        data: {
+                                            id: id,
+                                        },
+                                        success: function (data) {
+
+                                            var search = $("#searchinput").val();
+
+                                            $.ajax({
+                                                url: '/Admin/getNewListUser',
+
+                                                dataType: 'html',
+                                                data: {
+                                                    search: search,
+
+                                                },
+                                                success: function (data) {
+
+                                                    $("#Listholder").html(data);
+                                                },
+                                                error: function () {
+
+                                                }
+                                            });
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+                                });
+
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+
+}

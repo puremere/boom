@@ -9,7 +9,7 @@
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  @*<i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i>*@</h3>
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  <i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i></h3>
 
 
 
@@ -56,16 +56,24 @@
                                         <tr>
                                             <th>ردیف</th>
                                             <th>شماره رسید/حواله</th>
+                                            <th>پروژه</th>
                                             <th>نام انبار</th>
                                             <th>نوع سند</th>
+                                            <th>روش ایجاد</th>
                                             <th>طرف حساب</th>
                                             <th>نام کالا</th>
                                             <th>تعداد </th>
+                                            <th>قیمت </th>
                                             <th>زمان</th>
+                                            <th>شماره سند</th>
+                                            <th>شماره عطف</th>
+                                            <th>تهیه کننده</th>
                                             <th>توضیحات</th>
+
 
                                             <th></th>
                                             <th></th>
+                                           
 
                                         </tr>
                                     </thead>
@@ -75,54 +83,78 @@
                                             string image = "";
                                             int i = Model.mainFactor.IndexOf(item) + 1;
                                             string deleteid = item.ID;
-                                            <tr id="@deleteid">
+                                        <tr id="@deleteid">
 
-                                                <td>@i</td>
-                                                <td>@item.ID</td>
-                                                <td>
-
-
-                                                    @item.nodeID
-
-                                                </td>
-                                                <td>
-                                                    @if (item.type == "0")
-                                                    {
-                                                        <span>رسید</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>حواله</span>
-                                                    }
-                                                </td>
-                                                <td>
-
-                                                    @item.partnerTitle
-
-                                                </td>
-                                                <td>@item.title</td>
+                                            <td>@i</td>
+                                            <td>@item.ID</td>
+                                            <td>
 
 
-                                                <td>@item.count</td>
-                                                <td>@item.timestamp</td>
-                                                <td>@item.deliverName</td>
+                                                @item.nodeID
 
-                                                <td>
-                                                    @if (item.status != "1")
-                                                    {
-                                                        <div class="btn btn-success editItemA phase1">ویرایش</div>
-                                                        <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
-                                                    }
+                                            </td>
+                                            <td>@item.anbarTitle</td>
+                                            <td>
+                                                @if (item.type == "0")
+                                                {
+                                                    <span>رسید</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>حواله</span>
+                                                }
+                                            </td>
+                                            <td>
 
-                                                </td>
-                                                <td>
-                                                    @if (item.status != "1")
-                                                    {
-                                                        <div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div>
+                                                @item.typeTitle
 
-                                                    }
-                                                </td>
-                                            </tr>
+                                            </td>
+                                            <td>
+
+                                                @item.partnerTitle
+
+                                            </td>
+                                            <td>@item.title</td>
+
+
+                                            <td>
+                                                @Math.Abs(@item.count)
+
+                                            </td>
+                                            <td>
+                                                <span class="phase1">
+                                                    @string.Format("{0:n0}", @item.price)
+
+                                                </span>
+                                                <span style="display:none" class="phase2">
+                                                    <input type="text" class="form-control factorPrice" />
+                                                </span>
+
+                                              
+                                            </td>
+                                            <td>@item.timestamp</td>
+                                            <td>@item.num</td>
+                                            <td>@item.atf</td>
+                                            <td>@item.client</td>
+                                            <td>@item.deliverName</td>
+
+                                            <td>
+                                                @*@if (item.status == "1")
+                                                {
+                                                    <div class="btn btn-success editItem phase1">ویرایش</div>
+                                                    <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
+                                                }*@
+
+                                            </td>
+                                            <td>
+                                                @if (item.status != "1")
+                                                {
+                                                    <div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div>
+
+                                                }
+                                            </td>
+                                           
+                                        </tr>
                                         }
                                         @*<tr>
 
@@ -173,7 +205,7 @@
 
         var amani = $(this).parent().parent().find(".amanicheckbox").is(":checked");
         var factorPrice = $(this).parent().parent().find(".factorPrice").val();
-        var factorPercent = $(this).parent().parent().find(".factorPercent").val();
+        var factorCount = $(this).parent().parent().find(".factorCount").val();
         var id = $(this).parent().parent().attr("id");
 
         $.ajax({
@@ -182,7 +214,7 @@
             data: {
                 amani: amani,
                 factorPrice: factorPrice,
-                factorPercent: factorPercent,
+                factorCount: factorCount,
                 id: id,
             },
             success: function (data) {

@@ -848,9 +848,9 @@
                                     <i class="fa fa-check " style="display:@display;  margin:0 5px"></i>
                                     <div class="pclass" style="text-align:right;font-size:14px; font-weight:600">   @item.title</div><br />
                                     <div class="pclass" style="text-align:right; font-size:14px"> آدرس :   @item.address</div>
-                                    <div class="row" ; style="margin-top:30px; margin-bottom:10px">
-                                        <p class="btn btn-success editAddress" style="width:200px;  display:block; margin:-10px 10px">ویرایش</p>
-                                        <p class="btn btn-danger removeAddress" style="width:200px;display:block; margin: -10px 10px">حذف</p>
+                                    <div class="" ; style="display:flex; margin-top:30px; margin-bottom:10px">
+                                        <div class="btn btn-success editAddress" style=" width:200px;  display:block; margin:-10px 10px">ویرایش</div>
+                                        <div class="btn btn-danger removeAddress" style="width:200px;display:block; margin: -10px 10px">حذف</div>
                                     </div>
                                 </div>
                             }
@@ -1223,20 +1223,24 @@
                                     decimal amountPrice = decimal.Parse(@Model.finalAmount);
                                     decimal creditPrice = decimal.Parse(@Model.credit);
                                 }
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice" class="priceItem">@String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6" style="direction:rtl">مبلغ</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice" class="priceItem">@String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
+
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalDiscount" class="priceItem">0</i>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6" style="direction:rtl">تخفیف</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalDiscount" class="priceItem">0</i>&nbsp;تومان</p>
+
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 deliveryHolder Holder" style="display:flex"><span id="deliveryprice" class="priceItem">@String.Format("{0:n0}", 0)</span>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6" style="direction:rtl">هزینه ارسال</p>
+                                <p class="col-lg-6 col-sm-6 deliveryHolder Holder" style="display:flex"><span id="deliveryprice" class="priceItem">@String.Format("{0:n0}", 0)</span>&nbsp;تومان</p>
+
                             </div>
                             <div class="row priceitem">
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"><span id="totalprice" class="priceItem"> @String.Format("{0:n0}", totalprice)  </span>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6" style="direction:rtl">مبلغ نهایی</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"><span id="totalprice" class="priceItem"> @String.Format("{0:n0}", totalprice)  </span>&nbsp;تومان</p>
+
                             </div>
                         </div>
 
@@ -1255,7 +1259,9 @@
 
                             </div>
                             <style>
-
+                                .priceitem{
+                                    direction:rtl;
+                                }
                                 .switch {
                                     position: relative;
                                     display: inline-block;

@@ -10,12 +10,12 @@ namespace banimo.ViewModel
     public class Lst
     {
         public string title { get; set; }
-        public int eftetahbed { get; set; }
-        public int eftetahbes { get; set; }
-        public int garddeshbed { get; set; }
-        public int garddeshbes { get; set; }
-        public int mandebed { get; set; }
-        public int mandebes { get; set; }
+        public double eftetahbed { get; set; }
+        public double eftetahbes { get; set; }
+        public double garddeshbed { get; set; }
+        public double garddeshbes { get; set; }
+        public double mandebed { get; set; }
+        public double mandebes { get; set; }
         public string codeHesab { get; set; }
     }
 

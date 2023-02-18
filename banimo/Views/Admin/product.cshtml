@@ -372,7 +372,7 @@
                             });
                         </script>
                     </form>
-                    @using (Html.BeginForm("UploadExcel", "Admin", FormMethod.Post, new { id = "UploadExcelForm", enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("UploadExcelV2", "Admin", FormMethod.Post, new { id = "UploadExcelForm", enctype = "multipart/form-data" }))
                     {
                         <div id="upload" class="btn btn-primary lgnsubmitt" style="margin-top:25px"> بارگزاری فایل  اکسل (ادیت)</div>
                         <input id="myfile" type="file" name="myfile" style="display: none;" />

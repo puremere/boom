@@ -110,6 +110,7 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
+                    <b style="margin-bottom:10px">افزایش موجودی</b>
                     <p id="addCountLable"></p>
                     <div style="display:flex">
                         <input id="ProductSelectedID" style="display:none" />
@@ -117,6 +118,18 @@
                         <div style="margin:5px;">
                             <p id="modalmessage">قیمت خرید</p>
                             <input id="addprice" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">انبار:</p>
+
+                            <select id="anbarIDPlus" class="form-control">
+
+                               
+                                @foreach (var item in Model.anbarList)
+                                {
+                                    <option value="@item.ID">@item.title</option>
+                                }
+                            </select>
                         </div>
                         <div style="margin:5px;">
                             <p id="modalmessage">طرف حساب :</p>
@@ -159,6 +172,7 @@
                             var count = $("#addcount").val();
                             var ID = $("#ProductSelectedID").val();
                             var tarafID = $("#tarafIDPlus").val();
+                            var anbarID = $("#anbarIDPlus").val();
                             $.ajax({
                                 url: '/Admin/SetNewFactorFromSail',
                                 dataType: 'html',
@@ -167,8 +181,8 @@
                                     price: price,
                                     count: count,
                                     ID: ID,
-                                    tarafID: tarafID
-
+                                    tarafID: tarafID,
+                                    anbarID: anbarID
                                 },
                                 success: function (data) {
                                     if (data == "error") {
@@ -934,7 +948,7 @@
                 var id = $(this).parent().attr('id');
                 $("#ProductSelectedID").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "افزایش موجودی " + text;
+                var lableText =  text;
                 $("#addCountLable").text(lableText)
 
                 $("#addItemCountModal").modal('toggle');

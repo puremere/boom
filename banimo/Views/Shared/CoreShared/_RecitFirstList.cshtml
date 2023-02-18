@@ -75,7 +75,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.success('محصول مورد نظر حذف شد')
+                                        toastr.success('آیتم مورد نظر حذف شد')
 
                                     }
 
@@ -106,10 +106,15 @@
                     <p id="modalmessage">آیا از دائم نمودن سند اطمینان دارید؟</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
                     <button id="confirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
                     <script>
-                        
+                        $("#cancelDaem").click(function () {
+                            var Prodcutid = $("#modalValue").text();
+                            var productValue = $("#productValue").text();
+                            var rc = "rc" + Prodcutid;
+                            $("#" + rc).find('.daemHolder .daem').prop("checked", false);
+                        })
                         $("#confirmDaem").click(function () {
                             $("#daemModal").modal('toggle');
                             var Prodcutid = $("#modalValue").text();
@@ -331,7 +336,7 @@
 
                                         <td>
                                             @{
-                                                if (item.status != "2" && item.status != "3")
+                                                if (item.status != "2" && item.status != "3" && item.status != "1")
                                                 {
                                                     var classname = "deleteproduct" + item.ID;
                                                     <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary @classname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
@@ -414,9 +419,7 @@
     </div>
 </div>
 
-<div id="EditarticleHolder">
 
-</div>
 
 
 <br />
@@ -471,6 +474,10 @@
             },
             success: function (data) {
                 $("#EditarticleHolder").html(data);
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $("#EditarticleHolder").offset().top
+                }, 1000);
+
             },
             error: function () {
 
@@ -723,5 +730,11 @@
         })
 
     </script>
+
+</div>
+
+
+
+<div id="EditarticleHolder">
 
 </div>

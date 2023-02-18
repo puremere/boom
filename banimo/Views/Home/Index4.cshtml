@@ -871,7 +871,7 @@
         <div class="owl-carousel owl-theme" style="">
             @foreach (var item in Model.brands)
             {
-                <a href="@item.title">
+                <a href="/brands/@item.title">
                     <div class="item brandItem img-hover-zooom" style="border-radius:8px">
                         <img src="~/images/brands/@item.image" style="border-radius: 8px" class="grayscale" />
                         <p style="display:none; padding: 10px;text-align: center;background-color: rgba(0,0,0,0.5);color: white;position: absolute;bottom: 0;width: 100%;"> @item.title</p>
@@ -912,9 +912,6 @@
                                     </div>
 
                                     @Html.Partial("~/Views/Shared/_returnVitirn.cshtml", Model.bestseller)
-
-
-
 
 
                                 </div>
@@ -980,13 +977,7 @@
             },
             success: function (data) {
 
-                var value = "value" + ID;
-
-                var count = parseInt($(".cartQuanitityapp").text());
-
-                count += 1;
-                $(".simpleCart_quantityy").text(count);
-                $("#loading").fadeOut();
+                getquntity()
 
 
 
@@ -1031,10 +1022,7 @@
             },
             success: function (data) {
 
-                var count = parseInt($(".simpleCart_quantityy").text());
-                count -= 1;
-                $(".simpleCart_quantityy").text(count);
-                $("#loading").fadeOut();
+                getquntity()
 
 
 

@@ -56,6 +56,8 @@ namespace banimo.ViewModel
         public string IsOffer { get; set; }
         public string PriceNow { get; set; }
         public string isActive { get; set; }
+        public string partnerTitle { get; set; }
+        public string partnerID { get; set; }
         
     }
 

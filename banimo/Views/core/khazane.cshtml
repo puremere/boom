@@ -1,0 +1,1045 @@
+﻿
+@model banimo.ViewModel.adminBankVM
+@{
+    ViewBag.Title = "bank";
+    Layout = "~/Views/Shared/_CoreLayout.cshtml";
+}
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+
+    .formItem {
+        margin: 5px
+    }
+</style>
+@{
+    List<banimo.ViewModel.CodingList> M1 = Model.CodingList.Where(x => x.codingType == "1").ToList();
+    List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
+    List<banimo.ViewModel.CodingList> M3 = Model.CodingList.Where(x => x.codingType == "3").ToList();
+    List<banimo.ViewModel.CodingList> M4 = Model.CodingList.Where(x => x.codingType == "4").ToList();
+    List<banimo.ViewModel.CodingList> M5 = Model.CodingList.Where(x => x.codingType == "5").ToList();
+}
+
+
+
+
+
+
+<div id="setEnteghal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div style="display:flex; align-items:center">
+                    <div style="width:100% ; margin:10px">
+                        <input id="handMadeCode2" class="form-control" placeholder="ثبت دستی کد" />
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="M222" id="M222" class="form-control">
+                                <option value="0">انتخاب کل</option>
+                                @foreach (var item in M2)
+                                {
+                                    <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="M333" id="M333" class="form-control">
+                                <option value="0">انتخاب معین</option>
+                                @foreach (var item in M3)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="M444" id="M444" class="form-control">
+                                <option value="0">انتخاب تفصیلی</option>
+                                @foreach (var item in M4)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <input id="sanadID" style="display:none" />
+
+                </div>
+
+                <div style="display:flex; align-items:center">
+                    
+                    <div class=" " style="width:100% ; margin:10px">
+                        @{
+                            <select name="M555" id="M555" class="form-control">
+                                <option value="0">انتخاب تفصیلی 2</option>
+                                @foreach (var item in M5)
+                                {
+                                    <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        <select name="RTaraf2" id="RTaraf2" class="form-control">
+
+                            @if (Model.tarafList != null)
+                            {
+                                foreach (var item in Model.tarafList)
+                                {
+                                    string name = item.name + " - " + item.phone;
+                                    <option value="@item.code">@name </option>
+                                }
+                            }
+
+
+                        </select>
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px">
+                        <input type="text" class="form-control dateEnteghal inputfield" />
+                        <input class="dateEnteghalOb" style="display:none" />
+                    </div>
+                    <div class=" " style="width:100% ; margin:10px"></div>
+                </div>
+                <input id="enteghalID" style="display:none" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="entaghalIDVerify" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#entaghalIDVerify").click(function () {
+                        var M222 = $("#M222").val();
+                        var M333 = $("#M333").val();
+                        var M444 = $("#M444").val();
+                        var M555 = $("#M555").val();
+                        var ID = $("#enteghalID").val();
+                        var date = $(".dateEnteghalOb").val();
+                        var RTaraf = $("#RTaraf2").val();
+                        $.ajax({
+                            url: "/core/setEnteghalForSand",
+                            data: {
+                                ID: ID,
+                                date: date,
+                                RTaraf: RTaraf,
+                                M222: M222,
+                                M333: M333,
+                                M444: M444,
+                                M555: M555,
+
+
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="setBargasht" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <p>لطفا تاریخ برگشت چک را انتخاب کنید</p>
+                <div class=" " style="width:50% ; margin:10px">
+
+                    <input type="text" class="form-control dateBargasht inputfield" />
+                    <input class="dateBargashtOb" style="display:none" />
+                </div>
+                <input id="bargashtID" style="display:none" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="bargashtIDVerify" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#bargashtIDVerify").click(function () {
+
+                        var ID = $("#bargashtID").val();
+                        var date = $(".dateBargashtOb").val();
+                        $.ajax({
+                            url: "/core/setBargashtForSand",
+                            data: {
+                                ID: ID,
+                                date: date
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="setVosool" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <p style="margin:10px">لطفا تاریخ وصول چک را انتخاب کنید</p>
+                <div class=" " style="width:50% ; margin:10px">
+
+                    <input type="text" class="form-control dateJarian inputfield" />
+                    <input class="dateJarianOb" style="display:none" />
+                </div>
+                <input id="vossolID" style="display:none" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="newVosool" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#newVosool").click(function () {
+
+                        var ID = $("#vossolID").val();
+                        var date = $(".dateJarianOb").val();
+                        $.ajax({
+                            url: "/core/setVossolForSand",
+                            data: {
+                                ID: ID,
+                                date: date
+
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="setJarian" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div style="display:flex">
+
+                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+
+
+
+
+                        <div style="display:flex; align-items:center">
+                            <div style="width:100% ; margin:10px">
+                                <input id="handMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M22" id="M22" class="form-control">
+                                        <option value="0">انتخاب کل</option>
+                                        @foreach (var item in M2)
+                                        {
+                                            <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M33" id="M33" class="form-control">
+                                        <option value="0">انتخاب معین</option>
+                                        @foreach (var item in M3)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+
+                            <input id="sanadID" style="display:none" />
+
+                        </div>
+
+                        <div style="display:flex; align-items:center">
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M44" id="M44" class="form-control">
+                                        <option value="0">انتخاب تفصیلی</option>
+                                        @foreach (var item in M4)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+                                @{
+                                    <select name="M55" id="M55" class="form-control">
+                                        <option value="0">انتخاب تفصیلی 2</option>
+                                        @foreach (var item in M5)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div class=" " style="width:100% ; margin:10px">
+
+                                <input type="text" class="form-control dateJarian inputfield" />
+                                <input class="dateJarianOb" style="display:none" />
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="newJarian" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#newJarian").click(function () {
+                        var M22 = $("#M22").val();
+                        var M33 = $("#M33").val();
+                        var M44 = $("#M44").val();
+                        var M55 = $("#M55").val();
+                        var ID = $("#sanadID").val();
+                        var date = $(".dateJarianOb").val();
+                        $.ajax({
+                            url: "/core/setJarianForSand",
+                            data: {
+                                ID: ID,
+                                M55: M55,
+                                M44: M44,
+                                date: date
+
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newSanadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div id="articleForm" class="row" style="background-color:white; padding:10px; margin:0px; ">
+
+                    <form id="addTransaction" action="addCodingTransaction">
+
+
+
+                        <div class="row" style=" margin: 20px; padding: 35px; ">
+
+                            <div class="autocomplete row" style="display:flex; margin-bottom:20px">
+
+
+
+                                <div class=" formItem" style="width:100%">
+                                    <div class=" " style="width:100%">
+                                        <p>سریال اصلی :</p>
+                                        <input placeholder="شماره سریال" name="orgSerial" id="orgSerial" class="form-control inputnumber" style="width:100%; " />
+                                    </div>
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    <div class=" " style="width:100%">
+                                        <p>سریال فرعی :</p>
+                                        <input placeholder="شماره سریال" name="fakeSerial" id="fakeSerial" class="form-control inputnumber" style="width:100%; " />
+                                    </div>
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    <p> تاریخ سند :</p>
+                                    <input type="text" class="form-control projectDateA inputfield" />
+                                    <input class="PDabserverA" style="display:none" />
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    <p> تاریخ وصول :</p>
+                                    <input type="text" class="form-control projectDateA2 inputfield" />
+                                    <input class="PDabserverA2" style="display:none" />
+                                </div>
+                                <div class="formItem" style="width:100%">
+                                    <p>تجاری/غیر تجاری</p>
+                                    <select id="tejariType" class="form-control">
+                                        <option value="0">تجاری</option>
+                                        <option value="1">غیر تجاری</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row" style="display:flex; margin-bottom:20px">
+                                <div class="formItem" style="width:100%">
+                                    <p> قیمت :</p>
+                                    @{
+                                        <div class=" " style="width:100%">
+                                            <input placeholder="قیمت" name="price" id="price" class="form-control inputnumber" style="width:100%; " />
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+                                    <p> طرف حساب : :</p>
+                                    <select name="RTaraf" id="RTaraf" class="form-control">
+
+                                        @if (Model.tarafList != null)
+                                        {
+                                            foreach (var item in Model.tarafList)
+                                            {
+                                                string name = item.name + " - " + item.phone;
+                                                <option value="@item.code">@name </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                @*<div class="formItem" style="width:100%">
+                                        <p> نوع تراکنش :</p>
+                                        <select name="Rtype" id="Rtype" class="form-control">
+
+                                            <option value="1">بستانکار</option>
+                                            <option value="0">بدهکار</option>
+                                        </select>
+                                    </div>*@
+                                <div class="formItem" style="width:100%">
+                                    <p>نوع سند :</p>
+                                    <select id="sanadName" class="form-control">
+                                        <option value="1">چک</option>
+                                        <option value="2">سفته</option>
+                                        <option value="3">ضمانت نامه بانکی</option>
+                                        <option value="4">سایر</option>
+                                    </select>
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+                                    <p>انتخاب پروژه :</p>
+                                    <select name="RNode" id="RNode" class="form-control">
+
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row" style="display:flex">
+
+                                <div class="formItem" style="width:100%">
+
+                                    @{
+
+                                        <div class=" " style="width:100%">
+                                            @*<input id="Desc" class="form-control" style="width:100%; " />*@
+                                            <textarea placeholder="شرح سند" name="description" id="description" class="form-control" style="width:100%; height:100px"></textarea>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="verifynewArticle" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+
+    <ul class="nav nav-tabs">
+
+        <li class="active"><a data-toggle="tab" href="#daryaftani" style=" color: #8d8d8d; ">اسناد دریافتنی</a></li>
+        <li class=""><a data-toggle="tab" href="#moghayerat" style=" color: #8d8d8d; ">صورت مغایرت بانکی</a></li>
+        <li><a data-toggle="tab" href="#pardakhtani" style=" color: #8d8d8d; ">اسناد پرداختنی</a></li>
+
+
+    </ul>
+    <div class="tab-content">
+        <div id="daryaftani" class="tab-pane fade in active " style="padding-top:20px">
+            <div class="row" style="">
+
+
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>پروژه :</p>
+                    <select id="sanadNodeID" class="form-control">
+                        @foreach (var item in Model.nodeList)
+                        {
+                            <option value="@item.ID">@item.title</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>طرف حساب :</p>
+                    <select id="taqrafID" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">انبار مرکزی</option>
+                        @foreach (var item in Model.tarafList)
+                        {
+                            <option value="@item.ID">@item.name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>نوع سند :</p>
+                    <select id="sanadName" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">چک</option>
+                        <option value="2">سفته</option>
+                        <option value="3">ضمانت نامه بانکی</option>
+                        <option value="4">سایر</option>
+                    </select>
+                </div>
+                @*<div class="col-lg-3" style="padding:10px;">
+                        <p>ماهیت سند :</p>
+                        <select id="sanadtype" class="form-control">
+                            <option value="">همه</option>
+                            <option value="0">بدهکار</option>
+                            <option value="1">بستانکار</option>
+
+                        </select>
+                    </div>*@
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                    <p>از تاریخ :</p>
+                    <input type="text" class="form-control projectDate inputfield" />
+                    <input class="PDabserver" style="display:none" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تا تاریخ :</p>
+                    <input type="text" class="form-control dateToField inputfield" />
+                    <input id="dateTobserver" class="dateTobserver" style="display:none" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت از :</p>
+                    <input id="priceFrom" type="text" class="form-control  inputfield" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>قیمت تا :</p>
+                    <input id="priceTo" type="text" class="form-control  inputfield" />
+                </div>
+
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>شماره سریال :</p>
+                    <input id="serial" type="text" class="form-control  inputfield" />
+                </div>
+
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>توضیحات :</p>
+                    <input id="descri" type="text" class="form-control  inputfield" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>وضعیت :</p>
+                    <select id="factorStatus" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">پرداخت نشده </option>
+                        <option value="0">پرداخت شده</option>
+                        <option value="0">عودت شده</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <div style="position:relative; margin:5px" id="">
+                        <div class="btn btn-success" style="margin-top:20px" id="getSanad">تایید</div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            @*<div class="row">
+
+                    <div style="width:20%;padding:10px;">
+
+                    </div>
+                </div>*@
+
+
+            <div>
+
+
+            </div>
+            <div id="detailHolder" class="row" style="margin:10px ">
+            </div>
+        </div>
+        <div id="moghayerat" class="tab-pane fade in " style="padding-top:20px">
+
+        </div>
+        <div id="pardakhtani" class="tab-pane fade in " style="padding-top:20px">
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/persian-date.js"></script>
+<script src="~/Scripts/persian-datepicker.js"></script>
+<script>
+    $(".projectDate").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.PDabserver',
+        autoClose: true
+    });
+    $(".dateToField").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '#dateTobserver',
+        autoClose: true
+    });
+    $(".projectDateA").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.PDabserverA',
+        autoClose: true
+    });
+    $(".projectDateA2").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.PDabserverA2',
+        autoClose: true
+    });
+
+    $(".dateJarian").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.dateJarianOb',
+        autoClose: true
+    });
+    $(".dateBargasht").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.dateBargashtOb',
+        autoClose: true
+    });
+    $(".dateVosool").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.dateVosoolOb',
+        autoClose: true
+    });
+    $(".dateEnteghal").pDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.dateEnteghalOb',
+        autoClose: true
+    });
+
+
+</script>
+<script>
+    $("#verifynewArticle").click(function () {
+
+        var frm = $("#fromADD").val();
+
+
+        var tejariType = $("#tejariType").val();
+        var orgSerial = $("#orgSerial").val();
+        var fakeSerial = $("#fakeSerial").val();
+        var description = $("#description").val();
+        var PDabserverA = $(".PDabserverA").val();
+        var PDabserverA2 = $(".PDabserverA2").val();
+        var RTaraf = $("#RTaraf").val();
+        var Rtype = "0";
+        var RNode = $("#RNode").val();
+        var sanadName = $("#sanadName").val();
+        var price = $("#price").val().replace(',', '');
+
+
+
+        $.ajax({
+            url: "/Core/addSanadKhazane",
+            dataType: "",
+            data: {
+                tejariType: tejariType,
+                orgSerial: orgSerial,
+                fakeSerial: fakeSerial,
+                description: description,
+                PDabserverA: PDabserverA,
+                price: price,
+                PDabserverA2: PDabserverA2,
+                Rtype: Rtype,
+                RTaraf: RTaraf,
+                nodeID: RNode,
+                sanadName: sanadName
+            },
+            success: function (data) {
+                var type;
+                if (frm != "add") {
+                    type = 1
+                }
+                else {
+                    $("#EditarticleHolder").html(data);
+                }
+                if (data == "200") {
+                    //$("#M2").val('0');
+                    //$("#M3").val('0');
+                    //$("#M4").val('0');
+                    //$("#M5").val('0');
+                    //$("#Rtype").val('');
+                    //$("#RTaraf").val('0');
+
+
+                    //$("#M12").val('0');
+                    //$("#M13").val('0');
+                    //$("#M14").val('0');
+                    //$("#price").val('');
+                    //$("#description").val('');
+                    //$("#abserver").val('');
+
+
+
+                    //$.ajax({
+                    //    url: '/Core/getRecietArticle',
+                    //    dataType: 'html',
+                    //    data: {
+                    //        id: recietID,
+                    //        type: type
+                    //    },
+                    //    success: function (data) {
+
+                    //        if (frm == "add") {
+                    //            $("#newRecietArticle").html(data);
+                    //        }
+                    //        else {
+                    //            $("#EditarticleHolder").html(data);
+                    //        }
+
+                    //    },
+                    //    error: function () {
+
+                    //    }
+                    //});
+
+
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.success('سند شما با موفقیت ثبت شد')
+                }
+                //window.location.reload();
+            }
+        })
+    })
+</script>
+
+<script>
+    var getDraft = function () {
+
+        $.ajax({
+            url: 'returnSanadList',
+            dataType: 'html',
+            data: {
+
+                timeFrom: $(".PDabserver").val(),
+                timeTTo: $(".dateTobserver").val(),
+                sanadtype: "0", // ینی گرفتیم
+                sanadName: $("#sanadName").val(),
+                priceFrom: $("#priceFrom").val(),
+                priceTo: $("#priceTo").val(),
+                serial: $("#serial").val(),
+                description: $("#descri").val(),
+                sanadNodeID: $("#sanadNodeID").val(),
+                taqrafID: $("#taqrafID").val(),
+                factorStatus: $("#factorStatus").val(),
+
+
+            },
+            success: function (data) {
+                $("#detailHolder").html(data)
+            }
+        })
+    };
+    $("#getSanad").click(function () {
+        getDraft();
+    })
+    getDraft();
+</script>
+
+<script>
+    var doParents = function (el) {
+
+        var parent = el.attr('parentValue')
+
+        if (parent != "") {
+            var selement = $('option[itemvalue="' + parent + '"]');
+            doParents(selement)
+        }
+        el.parent().val(el.val());
+
+
+
+    };
+
+    $('#handMadeCode').keyup(function (e) {
+        if (this.value == "") {
+            $('option').each(function () {
+                $(this).removeAttr("selected");
+            })
+        }
+        if (e.keyCode == 13) {
+
+
+            var id = $(this).val();
+
+            var element = $('option[value="' + id + '"]');
+            doParents(element);
+
+        }
+    })
+    $("#getTransactoin").click(function () {
+
+    })
+    $("#M22").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+
+        // console.log(id)
+        $("#M33 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+        $("#M44 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            $(this).hide();
+        });
+    })
+    $("#M33").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+        console.log(id)
+        $("#M44 option").each(function () {
+
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+
+
+    })
+    $("#M44").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+        console.log(id)
+        $("#M55 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+    });
+
+    $('#handMadeCode2').keyup(function (e) {
+        if (this.value == "") {
+            $('option').each(function () {
+                $(this).removeAttr("selected");
+            })
+        }
+        if (e.keyCode == 13) {
+
+
+            var id = $(this).val();
+
+            var element = $('option[value="' + id + '"]');
+            doParents(element);
+
+        }
+    })
+    $("#M222").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+
+        // console.log(id)
+        $("#M333 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+        $("#M444 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            $(this).hide();
+        });
+    })
+    $("#M333").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+        console.log(id)
+        $("#M444 option").each(function () {
+
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+
+
+    })
+    $("#M444").change(function () {
+        var id = $('option:selected', this).attr('itemvalue');
+        console.log(id)
+        $("#M555 option").each(function () {
+            var val = $(this).val();
+            if (val == "0") {
+                $(this).prop('selected', true);
+            }
+            else {
+                $(this).prop('selected', false);
+            }
+            var optionid = $(this).attr('parentValue');
+            if (optionid != id) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        })
+    });
+</script>

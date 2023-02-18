@@ -11,6 +11,8 @@ namespace banimo.ViewModel
         public string title { get; set; }
         public string ID { get; set; }
         public string color { get; set; }
+        public string colorTitle { get; set; }
+        
         public string selectedFilter { get; set; }
 
     }

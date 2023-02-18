@@ -1,0 +1,130 @@
+﻿
+@model  banimo.ViewModel.factorSayerVM
+
+<table>
+    <thead>
+        <tr>
+            <td>ردیف</td>
+            <td>عنوان</td>
+            <td>درصد</td>
+            <td>قیمت</td>
+            <td></td>
+            @*<td>محاسبه در بهای تمام شده</td>*@
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model.sayerList != null)
+        {
+            banimo.ViewModel.SayerList discount = Model.sayerList.Where(x => x.title == "discount").FirstOrDefault();
+            banimo.ViewModel.SayerList haml = Model.sayerList.Where(x => x.title == "haml").FirstOrDefault();
+            banimo.ViewModel.SayerList ojrat = Model.sayerList.Where(x => x.title == "ojrat").FirstOrDefault();
+            //banimo.ViewModel.SayerList ayab = Model.sayerList.Where(x => x.title == "ayab").FirstOrDefault();
+            string dbahachechekd = discount.baha == "1" ? "checked" : "";
+            //string Tbahachechekd = ayab.baha == "1" ? "checked" : "";
+            string Hbahachechekd = haml.baha == "1" ? "checked" : "";
+            string Obahachechekd = ojrat.baha == "1" ? "checked" : "";
+            <tr>
+                <td>1</td>
+                <td>تخفیف</td>
+
+                <td><input id="FdPercent" class="form-control" value="@discount.percent" /></td>
+                <td><input id="FdPrice" class="form-control" value="@discount.price.Replace("-","")" /></td>
+                @if (discount.baha == "1")
+                {
+                    <td><input style="display : none" checked id="Fdcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input style="display : none" id="Fdcheck" class="form-control" type="checkbox" /></td>
+
+                }
+            </tr>
+            @*<tr>
+                <td>2</td>
+                <td>ایاب و ذهاب</td>
+                <td><input id="FTPercent" class="form-control" value="@ayab.percent" /></td>
+                <td><input id="FTPrice" class="form-control" value="@ayab.price" /></td>
+                @if (ayab.baha == "1")
+                {
+                    <td><input checked id="FTcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input id="FTcheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+            </tr>*@
+            <tr>
+                <td>2</td>
+                <td>اجرت</td>
+                <td><input id="FOPercent" class="form-control" value="@ojrat.percent" /></td>
+                <td><input id="FOPrice" class="form-control" value="@ojrat.price" /></td>
+                @if (ojrat.baha == "1")
+                {
+                    <td><input style="display: none" checked id="FOcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input style="display : none" id="FOcheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>حمل و نقل</td>
+                <td><input id="FHPercent" class="form-control" value="@haml.percent" /></td>
+                <td><input id="FHPrice" class="form-control" value="@haml.price" /></td>
+                @if (haml.baha == "1")
+                {
+                    <td><input style="display : none" checked id="FHcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input style="display : none" id="FHcheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>1</td>
+                <td>تخفیف</td>
+
+                <td><input id="FdPercent" class="form-control" value="0" /></td>
+                <td><input id="FdPrice" class="form-control" value="0" /></td>
+                <td><input style="display : none" id="Fdcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+            @*<tr>
+                <td>2</td>
+                <td>ایاب و ذهاب</td>
+                <td><input id="FTPercent" class="form-control" value="0" /></td>
+                <td><input id="FTPrice" class="form-control" value="0" /></td>
+                <td><input id="FTcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>*@
+            <tr>
+                <td>2</td>
+                <td>اجرت</td>
+                <td><input id="FOPercent" class="form-control" value="0" /></td>
+                <td><input id="FOPrice" class="form-control" value="0" /></td>
+                <td><input style="display : none" id="FOcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>حمل و نقل</td>
+                <td><input id="FHPercent" class="form-control" value="0" /></td>
+                <td><input id="FHPrice" class="form-control" value="0" /></td>
+                <td><input style="display : none" id="FHcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+        }
+
+    </tbody>
+</table>

@@ -51,14 +51,14 @@
 
         int w = Request.Browser.ScreenPixelsWidth;
         int h = Request.Browser.ScreenPixelsHeight;
-        if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
+        @*if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
         {
 
             string srt = package + "://mellatgate-" + "OK" + "-" + @ViewBag.message3;
             <script>
            window.location.href = '@srt';
             </script>
-        }
+        }*@
     }
 
 </div>
@@ -89,7 +89,7 @@
         }
         int w = Request.Browser.ScreenPixelsWidth;
         int h = Request.Browser.ScreenPixelsHeight;
-        if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
+        @*if (Request.Browser.IsMobileDevice || (w < 820 && h > w))
         {
             string srt = package + "://mellatgate-" + "NOTOK" + "-" + @ViewBag.message3;
             <script>
@@ -101,7 +101,7 @@
             }
 
             </script>
-        }
+        }*@
 
 
     }

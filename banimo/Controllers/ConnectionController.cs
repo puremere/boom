@@ -270,10 +270,12 @@ namespace banimo.Controllers
 
                 string ids = "";
                 string nums = "";
+                string ths = "";
                 foreach (var item in data)
                 {
                     ids = ids + "," + (item.productid);
                     nums = nums + "," + (item.quantity);
+                    ths = ths + "," + (item.tarafH);
                 }
 
                 userdata user = Session["LogedInUser"] as userdata;
@@ -314,6 +316,7 @@ namespace banimo.Controllers
                     collection.Add("address", model.address);
                     collection.Add("addressID", model.addressID);
                     collection.Add("ids", ids);
+                    collection.Add("tarafHesabs", ths);
                     collection.Add("nums", nums);
                     collection.Add("token", token);
                     collection.Add("discount", discount);
@@ -334,7 +337,8 @@ namespace banimo.Controllers
                     //    collection.Add("imaglist[]", myvalucollection);
                     //}
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
+                    //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestNewVersionV2.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -767,11 +771,11 @@ namespace banimo.Controllers
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
                // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
-       }
+         }
             finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(res);
             if (fromUser != null)
             {
@@ -1477,7 +1481,7 @@ namespace banimo.Controllers
 
 
                                             byte[] response =
-                                            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+                                            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
 
                                             result2 = System.Text.Encoding.UTF8.GetString(response);
                                         }

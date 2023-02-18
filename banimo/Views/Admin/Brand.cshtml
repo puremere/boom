@@ -367,8 +367,8 @@
         var entitle = $("#entitleAdd").val();
         var description = tinymce.get("descAdd").getContent();
         var image = $(".imageNameAdd").text();
-       
-       
+
+
         if (name != "" && image != "" && entitle != "" && description != "") {
 
 
@@ -447,11 +447,11 @@
                     var priority = obj[0]["priority"];
                     var description = obj[0]["description"];
 
-                   
+
                     tinymce.get("descEdit").setContent(description)
                     $("#titleEdit").val(title);
                     $("#entitleEdit").val(entitle);
-                    
+
 
                     if (image != null && image != "") {
                         var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
@@ -486,16 +486,13 @@
         var brandID = $("#listOfBrandsEdit").val();
         var name = $("#titleEdit").val();
         var enname = $("#entitleEdit").val();
-        var desc = $("#descEdit").val();
+     
+        var desc = tinymce.get("descEdit").getContent();
         var image = $(".imageNameEdit").text();
         var br = brandID.toString();
+       
 
-
-        if (brandID != "" && name != "" && image != "" && desc != "") {
-
-
-
-
+        if (brandID != "" && name != "" && desc != "") {
 
             $.post(
                 '/admin/setnewBrand',
@@ -513,6 +510,18 @@
 
                     }
                 });
+        }
+        else {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.success('لطفا همه موارد را کامل کنید')
         }
     })
 

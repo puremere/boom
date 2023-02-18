@@ -1,6 +1,26 @@
 ﻿@model banimo.ViewModel.MainFactorListVM
 
 
+    <div id="deleteFactorModel" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+                <div class="modal-body">
+                    <p>آیا از حذف فاکتور مورد نظر اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                    <button id="deletButon" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <div class="row">
     <div style="overflow-x:auto;padding:10px">
@@ -9,7 +29,7 @@
     background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
     background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  @*<i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i>*@</h3>
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست رسید و حواله    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  <i style="cursor:pointer; float:left; margin-left:20px" class="fa fa-plus addNewResidHavale" ></i></h3>
 
 
 
@@ -40,10 +60,11 @@
                                                                     <th>ردیف</th>
                                                                     <th>نام انبار</th>
                                                                     <th>نوع سند</th>
+                                                                    <th>شماره عطف</th>
                                                                     <th>طرف حساب</th>
                                                                     <th>نام کالا</th>
                                                                     <th>قیمت </th>
-                                                                    <th>درصد مشارکت </th>
+                                                                    @*<th>درصد مشارکت </th>*@
                                                                     <th>تعداد </th>
                                                                     <th>زمان</th>
                                                                     <th>توضیحات</th>
@@ -90,44 +111,54 @@
                                                     <span>حواله</span>
                                                 }
                                             </td>
+                                            <td>@item.atf</td>
                                             <td>
                                                 <span>@item.partnerTitle</span>
                                             </td>
                                             <td>@item.title</td>
                                             <td>
                                                 <span class="phase1">
-                                                    @item.price
+                                                    @string.Format("{0:n0}", @item.price)
+
                                                 </span>
                                                 <span style="display:none" class="phase2">
-                                                    <input type="text" class="form-control factorPrice" />
+                                                    <input value="@item.price" type="text" class="form-control factorPrice" />
                                                 </span>
 
 
 
                                             </td>
+                                            @*<td>
+            @{
+                string fpercent = item.percent == null ? item.percent2 : item.percent;
+            }
+            <span class="phase1">
+                @if ((item.status != "1" && item.type == "0" && item.factorType != "0") || (item.type == "1" && item.factorType == "10" && item.status == "0"))
+                {
+                    <span>تعیین نشده</span>
+                }
+                else
+                {
+                    <span> تعیین شده</span>
+                }
+
+            </span>
+
+
+
+
+        </td>*@
                                             <td>
-                                                @{ 
-                                                    string fpercent = item.percent == null ? item.percent2 : item.percent;
-                                                }
                                                 <span class="phase1">
-                                                    @if ((item.status != "1" && item.type == "0" && item.factorType != "0") || (item.type == "1" && item.factorType == "10" && item.status == "0"))
-                                                    {
-                                                        <span>تعیین نشده</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span> تعیین شده</span>
-                                                    }
-                                                   
+                                                    @Math.Abs(@item.count)
+
                                                 </span>
                                                 <span style="display:none" class="phase2">
-                                                    <input value="@fpercent" type="text" class="form-control factorPercent" />
+                                                    <input value="@item.count" type="text" class="form-control factorCount" />
                                                 </span>
-
 
 
                                             </td>
-                                            <td>@item.count</td>
                                             <td>@item.timestamp</td>
                                             <td>@item.deliverName</td>
                                             <td>
@@ -157,15 +188,17 @@
 
 
                                             </td>
+                                            <td></td>
                                             <td>
-                                                @if (item.status != "1" )
+                                                @if (item.status != "1")
                                                 {
-                                                    <div class="btn btn-success editItem phase1">ویرایش</div>
+
 
                                                 }
+                                                <div class="btn btn-success editItem phase1">ویرایش</div>
                                                 <div style="display:none" class="btn btn-success editItemVerif phase2">تایید</div>
                                             </td>
-                                            <td><div onclick="deleteitemfactor(@deleteid)" class="btn btn-danger deletItem">حذف</div> </td>
+                                            <td><div class="btn btn-danger deletItem">حذف</div> </td>
                                         </tr>
                                         }
                                     <tr>
@@ -178,6 +211,8 @@
                                         <td>@count.ToString()</td>
                                         <td>جمع کل</td>
                                         <td></td>
+
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>
@@ -186,7 +221,6 @@
                                         <td></td>
 
                                         <td>
-                                           
                                         </td>
                                         <td></td>
                                     </tr>
@@ -222,7 +256,7 @@
 
         var amani = $(this).parent().parent().find(".amanicheckbox").is(":checked");
         var factorPrice = $(this).parent().parent().find(".factorPrice").val();
-        var factorPercent = $(this).parent().parent().find(".factorPercent").val();
+        var factorCount = $(this).parent().parent().find(".factorCount").val();
         var id = $(this).parent().parent().attr("id");
 
         $.ajax({
@@ -231,7 +265,7 @@
             data: {
                 amani: amani,
                 factorPrice: factorPrice,
-                factorPercent: factorPercent,
+                factorCount: factorCount,
                 id: id,
             },
             success: function (data) {
@@ -242,6 +276,28 @@
         })
 
 
+    })
+    var itemtodelete = "";
+    $(".deletItem").click(function () {
+        var id = $(this).parent().parent().attr("id");
+        itemtodelete = id;
+       
+        $("#deleteFactorModel").modal('toggle');
+       
+    })
+    $("#deletButon").click(function () {
+        $.ajax({
+            url: '/Core/removeFactor',
+            dataType: 'html',
+            data: {
+                id: itemtodelete,
+            },
+            success: function (data) {
+                $("#" + itemtodelete).remove();
+                $("#verifyCodeingTran").click();
+            }
+
+        })
     })
 
 </script>
