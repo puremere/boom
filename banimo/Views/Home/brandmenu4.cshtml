@@ -354,11 +354,11 @@
 <div style="position:relative;  ">
     <div style="display:flex; align-items:center; direction:rtl; text-align:right;box-shadow: 2px 2px 5px -1px rgb(148 149 153);  margin: 10px;border: 1px solid #ddd;border-radius: 5px;">
         <div style="width:25%;text-align:center">
-            <img style=" border-radius:7px;       max-height: 180px;  max-width: 100%; object-fit: contain" src="~/images/brands/@Model.brands.First().image" />
+            <img style=" border-radius:7px;       max-height: 180px;  max-width: 100%; object-fit: contain" src="~/images/@Model.brands.First().image" />
         </div>
         <div style="width:75%; padding:50px;position:relative">
             <p class="matn" style=" font-size:12px ; line-height:2.5; text-align:justify; ">
-                <span>@Model.brands.First().description</span>
+                <span>@Html.Raw(Model.brands.First().description)</span>
                 
             </p>
         </div>

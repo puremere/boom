@@ -32,10 +32,14 @@
 
 
             </div>
-            <div class="row fieldholder col-lg-3">
+            <div  style="display:none" class="row fieldholder col-lg-3">
                 <label> برند</label>
                 <div class=" ">
-                    @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+                    @if (Model.brandCore != null)
+                    {
+                        @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+
+                    }
                 </div>
 
 
@@ -89,20 +93,30 @@
 
             </div>
             <div class="row fieldholder col-lg-3">
-                <label> شاخص</label>
-
-                @if (Model.ID != 0)
+                <label style="display:flex"> <span style="flex:1" >شاخص</span>   <span id="addShakhesButton" style="margin:0 10px"><i class="fa fa-plus"></i></span></label>
+                @if (@Model.filterCore !=null)
                 {
-                    <div class=" ">
-                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
-                    </div>
+                    if (Model.ID != 0)
+                    {
+                        <div class=" ">
+
+                            @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
+                        </div>
+                    }
+                    else
+                    {<div class=" ">
+                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                        </div>
+
+                    }
                 }
                 else
-                {<div class=" ">
-                        @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
-                    </div>
+                {
+                    <select class="form-control">
 
+                    </select>
                 }
+
 
 
             </div>
@@ -262,5 +276,10 @@
         else {
             $(".webview").css("display", "none")
         }
+
+
+        $("#addShakhesButton").click(function () {
+            $("#addShakhes").modal('toggle');
+        })
     </script>
 }

@@ -276,6 +276,8 @@ namespace banimo.AdminPanel.ViewModel
 
     public class orderdetail
     {
+        
+
         public string ID { get; set; }
         public string title { get; set; }
         public string video { get; set; }
@@ -286,9 +288,9 @@ namespace banimo.AdminPanel.ViewModel
         public string recommended { get; set; }
         public string specialOffer { get; set; }
         public string IsAvailable { get; set; }
-       
+
         public string serverRowID { get; set; }
-        
+
     }
 
     public class oderdetaillist

@@ -1,0 +1,297 @@
+﻿@using BotDetect.Web.Mvc;
+@using banimo.Classes;
+@{
+    //ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_Layout7.cshtml";
+}
+
+
+@*@Scripts.Render("~/Scripts/captcha.validate.js")*@
+
+
+<div>
+    <main class="main login-page">
+
+        <!-- End of Page Header -->
+        <!-- Start of Breadcrumb -->
+        <nav class="breadcrumb-nav">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="demo1.html">Home</a></li>
+                    <li>My account</li>
+                </ul>
+            </div>
+        </nav>
+        <!-- End of Breadcrumb -->
+        <div class="page-content">
+            <div class="container">
+                <div class="login-popup">
+                    <div class="tab tab-nav-boxed tab-nav-center tab-nav-underline">
+                        <ul class="nav nav-tabs text-uppercase" role="tablist">
+                            <li class="nav-item">
+                                <a href="#sign-in" class="nav-link active">Sign In</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="sign-in">
+                                @using (Html.BeginForm("CustomerLoginWC", "CustomerLogIn", FormMethod.Post,
+new { @class = "c-form-account", enctype = "multipart/form-data", id = "registerForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="rc" value="ZURUU1UzMVowaHFXNFFGZEdCb01pdz09"><input type="hidden" name="rd" value="a3RYVkxNOER0Q0IvaFpnQlVZMVNpdXV2bGxSSWJvRDEvbU8wN0VvdjFFakowc1NVQU9wdW9JOFF5QXhldEx0cg~~">
+
+                                    <div class="form-group">
+                                        <label>Username or email address *</label>
+                                        <input id="registertext" type="text" class="form-control" name="registertext">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label>Password *</label>
+                                        <input id="registerpassword" type="text" class="form-control" name="registerpassword">
+                                    </div>
+                                    <div class="form-checkbox d-flex align-items-center justify-content-between">
+                                        <input id="accountAutoLogin" type="checkbox" class="custom-checkbox" name="accountAutoLogin" required="">
+                                        <label for="remember1">Remember me</label>
+                                        <a href="#">Last your password?</a>
+                                        <a href="#">Sing Up?</a>
+                                    </div>
+                                    @*if (Convert.ToInt32(Session["LoginTime"]) > 2)
+                                        {
+                                            <div class="form-group mb-0">
+                                                <div class="c-form-account__row js-valid-row">
+                                                    <div class="c-form-account__col">
+
+                                                        @{MvcCaptcha registrationCaptcha = CaptchaHelper.GetRegistrationCaptcha(); }
+                                                        @if (!registrationCaptcha.IsSolved)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    @Html.Captcha(registrationCaptcha)
+                                                                </div>
+                                                                <div class="col-lg-12" style="margin-top:10px">
+                                                                    @Html.Label("کد را وارد نمایید", new
+                                                                    {
+                                                                        @class = "col-md-4 control-label",
+                                                                     @for = "CaptchaCode",
+                                                                        style = "float:right; margin-top:15px"
+                                                                    })
+
+                                                                    <div class="col-md-6" style="float:right">
+                                                                        @Html.TextBox("CaptchaCode", null, new { @class = "form-control captchaVal" })
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        }*@
+                                    <p id="verifyyy" class="btn btn-primary">Sign In</p>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+</div>
+
+
+
+@section scripts{
+
+
+
+
+    <link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl" rel="stylesheet" type="text/css" />
+
+    <script>
+        function isValidPhonenumber(phonenumber) {
+            var pattern = /^09[0-9]{9}$/;
+            return pattern.test(phonenumber);
+        };
+        function dologin() {
+           
+        }
+        $('body').keypress(function (e) {
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                dologin();
+                return false;
+            }
+        });
+        $("#verifyyy").click(function () {
+           
+            var n = $("#accountAutoLogin:checked").length;
+            var pass = $("#registerpassword").val();
+            var val = $("#registertext").val();
+
+
+            if (pass.length === 0) {
+                $("#registerpassword-error").css("display", "block");
+                $("#registertext").css("color", "#ef5662");
+                $("#registerpassword").css("border", "1px solid #ef5662");
+                $("#mainlabla2").addClass("error");
+
+            }
+            if (!isValidPhonenumber(val)) {
+
+                $("#registererror").css("display", "block");
+                $("#registertext").css("color", "#ef5662");
+                $("#registertext").css("border", "1px solid #ef5662");
+                $("#mainlabla").addClass("error");
+
+
+            }
+
+            if ((isValidPhonenumber(val) || isValidEmailAddress(val)) && (pass.length !== 0)) {
+                $("#registerForm").submit();
+            }
+           
+        });
+    </script>
+    <script>
+
+
+        $("#forgetclickevent").click(function () {
+
+
+            $("#submitdiv").css("display", "none");
+            $("#logindiv").css("display", "none");
+            $("#forgetdiv").css("display", "block");
+
+        });
+
+
+        $("gobacktologin").click(function () {
+
+
+            $("#submitdiv").css("display", "block");
+            $("#logindiv").css("display", "block");
+            $("#forgetdiv").css("display", "none");
+
+        });
+
+        function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            return pattern.test(emailAddress);
+        };
+        function isValidPhonenumber(phonenumber) {
+            var pattern = /^09[0-9]{9}$/;
+            return pattern.test(phonenumber);
+        };
+        function isNotNull(str) {
+            if (str != "") {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        };
+
+        function isValidPhonenumber(phonenumber) {
+            var pattern = /^09[0-9]{9}$/;
+            return pattern.test(phonenumber);
+        };
+        function isNotNull(str) {
+            var pattern = /^[A-Za-z0-9]{1,20}$/;
+            return pattern.test(str);
+        };
+        $('#registertext').on('input', function (e) {
+
+            var val = $(this).val();
+            if (val.length > 0) {
+
+                if (!isValidPhonenumber(val)) {
+
+                    $("#registererror").css("display", "block");
+                    $("#registertext").css("color", "#ef5662");
+                    $("#registertext").css("border", "1px solid #ef5662");
+                    $("#mainlabla").addClass("error");
+
+
+                }
+                else {
+                    $("#registererror").css("display", "none");
+                    $("#registertext").css("color", "#777");
+                    $("#registertext").css("border", "1px solid #c8c8c8");
+                    $("#mainlabla").removeClass("error");
+                }
+
+            }
+            else {
+
+                $("#registererror").css("display", "none");
+                $("#registertext").css("color", "#777");
+                $("#registertext").css("border", "1px solid #c8c8c8");
+                $("#mainlabla").removeClass("error");
+            }
+
+        });
+        $('#registerpassword').on('input', function (e) {
+
+            var val = $(this).val();
+
+            if ($(this).val().length === 0) {
+                $("#registerpassword-error").css("display", "block");
+                $("#registertext").css("color", "#ef5662");
+                $("#registerpassword").css("border", "1px solid #ef5662");
+                $("#mainlabla2").addClass("error");
+            }
+            else {
+                $("#registerpassword-error").css("display", "none");
+                $("#registertext").css("color", "#777");
+                $("#registerpassword").css("border", "1px solid #c8c8c8");
+                $("#mainlabla2").removeClass("error");
+            }
+
+        });
+    </script>
+
+
+
+
+    <script type="text/javascript">
+        function preventBack() { window.history.forward(); }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+
+    @{
+        if (ViewBag.message != null && ViewBag.message != "")
+        {
+            <script>
+
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 8000,
+                "extendedTimeOut": 1000,
+
+
+            }
+            toastr.error('@ViewBag.message');
+            </script>
+        }
+
+    }
+    <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+}
+
+

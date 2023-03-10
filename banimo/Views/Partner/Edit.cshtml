@@ -114,140 +114,278 @@
 
 
 
-<div id="serverModal" class="modal fade" role="dialog">
+<div id="addsonModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->
         <div class="modal-content">
 
             <div class="modal-body">
-                <div id="serverDataHolder" style="display:block;  ">
+                <style>
+                    .itemform {
+                        width: 200px;
+                        margin: 0 10px;
+                        border: 1px solid #ddd
+                    }
 
-                    <div class="form-group " style="display:inline-block">
+                    .addpanel {
+                        padding: 15px;
+                        border: 1px solid #ddd;
+                        margin: 0 20px;
+                    }
+
+                    .itemform label {
+                        margin: 15px
+                    }
+                </style>
+                <div id="addsonDataHolder" style="display:block;  ">
+
+                    <div class="form-group " style="display:inline-block; width:100%">
 
 
-                        @*@{
-                                List<SelectListItem> serverListItem = new List<SelectListItem>();
-                                if (Model.basecat != null)
+                        <div>
+                            <div class="addpanel" style="display:flex">
+                                <input id="addsonItem" style="display:none" />
+                                <div class="">
+                                    <input id="addsonName" class="form-control" placeholder="نام " />
+                                </div>
+
+                                <div class="itemform">
+                                    <label>انتخاب چندگانه</label>
+                                    <input id="addsonMultiple" type="checkbox" />
+                                </div>
+                                <div class="itemform">
+                                    <label>انتخاب اجباری</label>
+                                    <input id="addsonRequired" type="checkbox" />
+                                </div>
+                                <div class="">
+                                    <button class="btn btn-success" id="setAddsOn">Verify</button>
+                                </div>
+
+                                <script>
+                                  $("#setAddsOn").click(function () {
+                                      var title = $("#addsonName").val();
+                                      var multiple = "";
+                                      var required = "";
+                                      var addsonID = idtosend;// $("#addsonItem").val();
+                                      if ($("#addsonMultiple").is(':checked')) {
+                                          multiple = "on";
+                                      }
+                                      if ($("#addsonRequired").is(':checked')) {
+                                          required = "on";
+                                      }
+
+                                      $.ajax({
+                                          url: '/partner/setNewAddson',
+                                          dataType: 'html',
+                                          data: {
+                                              title: title,
+                                              multiple: multiple,
+                                              required: required,
+                                              productID: '@Model.ID',
+                                              addsonID: addsonID
+                                          },
+                                          success: function (data) {
+                                               $.ajax({
+                                                  url: '/partner/getAddsonTitle',
+                                                  dataType: 'html',
+                                                  data: {
+                                                      id: '@Model.ID',
+                                                  },
+                                                   success: function (data) {
+                                                       //alert(data);
+                                                      $("#addsonDataHolder").html(data);
+                                                  },
+                                                  error: function () {
+
+                                                  }
+                                              });
+                                          },
+                                          error: function () {
+
+                                          }
+                                      });
+                                  })
+                                </script>
+                            </div>
+                            <div class="tablepanel">
+
+                                @if (Model.addson != null)
                                 {
-                                    foreach (var item in Model.basecat.filtersModel)
-                                    {
-                                        serverListItem.Add(new SelectListItem
-                                        {
-                                            Text = item.title,
-                                            Value = "1" + item.ID
-                                        });
-                                        if (item.filtersubcat != null)
-                                        {
-                                            foreach (var subcat in item.filtersubcat)
-                                            {
-                                                serverListItem.Add(new SelectListItem
-                                                {
-                                                    Text = "---------" + subcat.title,
-                                                    Value = "2" + subcat.ID
-                                                });
-                                                if (subcat.filtersubcat2 != null)
-                                                {
-                                                    foreach (var subcat2 in subcat.filtersubcat2)
-                                                    {
-                                                        serverListItem.Add(new SelectListItem
-                                                        {
-                                                            Text = "-------------------" + subcat2.title,
-                                                            Value = "3" + subcat2.ID
-                                                        });
-                                                    }
-                                                }
+                                    <div class="row" style="padding:20px">
+                                        <div style="overflow-x:auto;padding:10px">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                                                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> آخرین نظرات تایید نشده  </h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div id="morris-area-chart">
+                                                        <div style="overflow:auto">
+                                                            <table class="table table-bordered table-hover table-striped">
+                                                                <thead>
+                                                                    <tr>
 
-                                            }
-                                        }
+                                                                        <th>
+                                                                            عنوان
+                                                                        </th>
+                                                                        <th>
+                                                                            چندگانه
+                                                                        </th>
+                                                                        <th>
+                                                                            اجباری
+                                                                        </th>
+                                                                        <th>
 
-                                    }
+                                                                        </th>
+
+                                                                        <th>
+
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        if (Model.addson.adds != null)
+                                                                        {
+                                                                            foreach (var item in Model.addson.adds)
+                                                                            {
+
+                                                                                <tr id="@item.ID">
+
+                                                                                    <td>
+                                                                                        <span class="tableTitle"> @Html.DisplayFor(modelItem => item.title)</span>
+                                                                                       
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @{ 
+                                                                                            string ischecked = "";
+                                                                                            if (item.isMultiple == "on")
+                                                                                            {
+                                                                                                ischecked = "checked";
+                                                                                            }
+                                                                                            <input type="checkbox" @ischecked class="form-control tableMultiple"/>
+                                                                                        }
+
+                                                                                    </td>
+                                                                                     <td>
+                                                                                        @{ 
+                                                                                            ischecked = "";
+                                                                                            if (item.isRquired == "on")
+                                                                                            {
+                                                                                                ischecked = "checked";
+                                                                                            }
+                                                                                            <input  type="checkbox" @ischecked class="form-control tableRequired"/>
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td style="text-align: center;">
+
+                                                                                        @{
+
+                                                                                            <a class="btn btn-primary addsonDetailButton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> جزئیات</a>
+
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td style="text-align: center;">
+
+                                                                                        @{
+                                                                                            var ID = @item.ID;
+                                                                                            <a class="btn btn-primary editAddson" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td style="text-align: center;">
+
+                                                                                        @{
+
+                                                                                            <a class="btn btn-primary addsonRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                        }
+
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    }
+
+
+
+                                                                </tbody>
+                                                            </table>
+                                                            <script>
+                                                                var idtosend;
+                                                                $(".addsonDetailButton").click(function () {
+                                                                    var addsonid = $(this).parent().parent().attr('id');
+                                                                    $("#addsonItem").val(addsonid);
+
+                                                                    $.ajax({
+                                                                        url: '/partner/getAddsonDetail',
+                                                                        dataType: 'html',
+                                                                        data: {
+                                                                            id: addsonid,
+                                                                        },
+                                                                        success: function (data) {
+
+                                                                            $("#addsonDetailHolder").html(data)
+                                                                        },
+                                                                        error: function () {
+
+                                                                        }
+                                                                    });
+                                                                })
+                                                                $(".editAddson").click(function () {
+                                                                    var addsonid = $(this).parent().parent().attr('id');
+                                                                    idtosend = addsonid;
+                                                                    var addsontitle = $(this).parent().parent().find(".tableTitle").text().trim();
+                                                                    var addsonRequired = $(this).parent().parent().find(".tableRequired").is(":checked");
+                                                                    var addsonMultiple = $(this).parent().parent().find(".tableMultiple").is(":checked");
+
+                                                                   
+                                                                    $("#addsonName").val(addsontitle);
+                                                                    if (addsonMultiple == true) {
+                                                                        $("#addsonMultiple").attr("checked", "checked");
+                                                                    }
+                                                                    if (addsonRequired == true) {
+                                                                        $("#addsonRequired").attr("checked", "checked");
+                                                                    }
+                                                                })
+                                                                $(".addsonRemove").click(function () {
+                                                                    var addsonid = $(this).parent().parent().attr('id');
+                                                                    var parent = $(this).parent().parent();
+                                                                    $.ajax({
+                                                                        url: '/partner/removeAddsonTitle',
+                                                                        dataType: 'html',
+                                                                        data: {
+                                                                            id: addsonid,
+                                                                        },
+                                                                        success: function (data) {
+                                                                            parent.remove();
+                                                                        },
+                                                                        error: function () {
+
+                                                                        }
+                                                                    });
+
+                                                                })
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 }
 
-
-                            }*@
-                        <div style="display : flex; align-items:center">
-                            <div class="component ">
-                                @Html.DropDownListFor(m => m.SelectedaddProductServer, new SelectList(Model.anabrcatModel, "ID", "title"), "-- انتخاب دسته بندی --", new { id = "serverCates", style = "width:150px", @class = "form-control" })
                             </div>
-                            <div>
-                                <input id="titleTosearch" class="form-control" />
-                            </div>
-                            <div id="getmainproduct" class=" btn btn-success"> تایید</div>
                         </div>
-                        <script>
-                            $("#getmainproduct").click(function () {
-
-                                var selectedProduct = $("#selectedForServer").text();
-
-                                var title = $("#titleTosearch").val();
-                                var cat = $("#serverCates").val();
-                                $.ajax({
-                                    url: '/partner/bringProductMain',
-                                    dataType: 'html',
-                                    data:
-                                    {
-                                        catid: cat,
-                                        title: title,
-                                        page: 1,
-                                        productChosen: selectedProduct
-                                    },
-                                    success: function (data) {
-
-                                        $('#filterholderforserver').html(data);
-
-                                    },
-                                    error: function () {
-                                        alert("filterfail")
-                                    }
-                                });
-                            })
-                        </script>
-
-                        @*<script>
-                                $("#serverCates").change(function () {
-                                    var value = $("#serverCates").val();
-
-                                    $.ajax({
-                                        url: '/partner/bringFilterForServer',
-                                        dataType: 'html',
-                                        data:
-                                        {
-                                            catid: value
-                                        },
-                                        success: function (data) {
-
-                                            $('#filterholderforserver').html(data);
-
-                                        },
-                                        error: function () {
-                                            alert("filterfail")
-                                        }
-                                    });
-                                    //$.ajax({
-                                    //    url: '/partner/bringFeatureforServer',
-                                    //    dataType: 'html',
-                                    //    data:
-                                    //    {
-                                    //        catid: value
-                                    //    },
-                                    //    success: function (data) {
-
-                                    //        $('#featureholderforproduct').html(data);
-
-                                    //    },
-                                    //    error: function () {
-                                    //        alert("featurefail")
-                                    //    }
-                                    //});
-
-                                })
-
-                            </script>*@
 
 
-
-
+                        <div id="addsonDetailHolder"></div>
 
 
 
@@ -452,25 +590,28 @@
                                 <input name="meta" value="" type="hidden" />
 
                                 <input id="catID" name="catID" type="hidden" value="@Model.catid" />
-                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
-                                    نام :
-                                </label>
-                                @{
-                                    if (Model.title != "")
-                                    {
-                                        <div class="col-md-8 col-sm-8 col-xs-12">
-                                            @Html.TextBoxFor(m => m.title, new { @class = "form-control col-md-7 col-xs-12", id = "title" })
+                                <div style="display:none">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
+                                        نام :
+                                    </label>
+                                    @{
+                                        if (Model.title != "")
+                                        {
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                                @Html.TextBoxFor(m => m.title, new { @class = "form-control col-md-7 col-xs-12", id = "title" })
 
-                                        </div>
+                                            </div>
 
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                                <input type="text" id="title" name="title" class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <div class="col-md-8 col-sm-8 col-xs-12">
-                                            <input type="text" id="title" name="title" class="form-control col-md-7 col-xs-12">
-                                        </div>
-                                    }
-                                }
+
+                                </div>
 
 
 
@@ -530,40 +671,44 @@
                                 </div>
 
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     هشدار انبار :
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <input value='@Model.vahed' type="text" id="vahed" name="vahed" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input value='1000' type="text" id="vahed" name="vahed" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
 
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     محدودیت خرید :
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
 
-                                    <input value='@Model.limit' type="text" id="limit" name="limit" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input value='1000' type="text" id="limit" name="limit" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
 
                             </div>
-                            <div class="form-group ">
-                                <label class="control-label col-md-2 col-sm-2 col-xs-12">
-                                    برند:
+                            <div class="form-group">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" style="display:flex">
+                                    <span style="flex:1"> برند:</span>
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12 " id="brandHolder">
                                     @if (Model.brands != null)
                                     {
                                         @Html.DropDownListFor(x => x.brand, new SelectList(Model.brands, "ID", "title"), "انتخاب برند", new { @class = "form-control", id = "brandList", name = "brand" })
                                     }
+                                    else
+                                    {
+                                        <select class="form-control"></select>
+                                    }
 
 
                                 </div>
 
                             </div>
-                            <div class="form-group " style="display:block">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     تعداد محصول :
                                 </label>
@@ -572,7 +717,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     متا تایتل :
                                 </label>
@@ -581,7 +726,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     متا دسکریپشن :
                                 </label>
@@ -589,7 +734,7 @@
                                     <input value="@Model.metaDescription" type="text" id="descTag" name="descTag" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     متا تگ :
                                 </label>
@@ -597,15 +742,15 @@
                                     <input value="@Model.metaTag" type="text" id="metaTag" name="metaTag" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     ریدارکت :
                                 </label>
-                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div class="col-md-8 col-sm-8 col-xs-12" style="display:none">
                                     <input value="@Model.redirect" type="text" id="redirect" name="redirect" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     کنونیکال :
                                 </label>
@@ -613,12 +758,12 @@
                                     <input value="@Model.canonical" type="text" id="canonical" name="canonical" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display:none">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">
                                     نام انگلیسی :
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <input value="@Model.enName" type="text" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input value="@Model.title" type="text" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
                             <div class="form-group ">
@@ -692,7 +837,7 @@
                                     تگ ها :
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <input data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height:150px">
+                                    <input data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
                                 </div>
                                 <script>
                                     var hashtags = '@Model.tag';
@@ -1035,6 +1180,10 @@
                                         </div>
                                     </div>
                                     <div style="display:inline-block">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addsonModal">
+                                            مدیریت ادزان
+                                        </button>
+
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#featureModal">
                                             مشاهده  ویژگی
                                         </button>

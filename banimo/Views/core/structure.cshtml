@@ -76,7 +76,7 @@
                             <div class="formParent">
                                 <div>
                                     <p>سرگروه</p>
-                                    @Html.DropDownList("cat", new SelectList(Model.catmodel, "ID", "title"), "انتخاب دسته بندی", new { @class = "form-control formItem", id="catListAdd" })
+                                    @Html.DropDownList("cat", new SelectList(Model.catmodel, "ID", "title"), new { @class = "form-control formItem", id="catListAdd" })
                                 </div>
 
                                 <div>
@@ -302,7 +302,11 @@
 
                                 <div>
                                     <p>انتخاب شاخص</p>
-                                    @Html.DropDownList("filter", new SelectList(Model.FilterList.filters, "ID", "title"), "انتخاب شاخص", new { @class = "form-control formItem", id = "filterListRemove" })
+                                    @if (Model.FilterList.filters != null)
+                                    {
+                                        @Html.DropDownList("filter", new SelectList(Model.FilterList.filters, "ID", "title"), "انتخاب شاخص", new { @class = "form-control formItem", id = "filterListRemove" })
+
+                                    }
                                 </div>
 
 
@@ -429,7 +433,11 @@
 
                                 <div>
                                     <p>انتخاب برند</p>
-                                    @Html.DropDownList("brand", new SelectList(Model.filter.filters, "ID", "title"), "انتخاب برند", new { @class = "form-control formItem", id = "brandListRemove" })
+                                    @if (Model.filter.filters != null)
+                                    {
+                                        @Html.DropDownList("brand", new SelectList(Model.filter.filters, "ID", "title"), "انتخاب برند", new { @class = "form-control formItem", id = "brandListRemove" })
+
+                                    }
                                 </div>
 
 

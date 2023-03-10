@@ -160,7 +160,8 @@ namespace banimo.Controllers
                 string code = MD5Hash(device + "ncase8934f49909");
 
                 string newjson = "";
-
+                string PartnerCat = Session["PartnerCat"] as string;
+                string partner = Session["PartnerUser"] as string;
 
                 using (WebClient client = new WebClient())
                 {
@@ -171,6 +172,8 @@ namespace banimo.Controllers
                     collection.Add("servername", servername);
                     collection.Add("token", token);
                     collection.Add("nodeID", node);
+                    collection.Add("partnerCat", PartnerCat);
+                    collection.Add("partner", partner);
 
                     byte[] response = client.UploadValues(server + "/Admin/getPartnerVM_Partner.php", collection);
 
@@ -187,12 +190,14 @@ namespace banimo.Controllers
 
 
                 string result = "";
+            
                 using (WebClient client = new WebClient())
                 {
 
                     var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                     collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
+                    
                     collection.Add("code", code);
                     byte[] response = client.UploadValues(server + "/Admin/getMainCat.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
@@ -349,7 +354,7 @@ namespace banimo.Controllers
 
         public ActionResult SetNewFactorFromSail(string amani, string count, string price, string ID)
         {
-
+            amani = "1";
             string result = "";
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -367,6 +372,7 @@ namespace banimo.Controllers
                 collection.Add("nodeID", nodeID);
                 collection.Add("price", price);
                 collection.Add("token", token);
+                collection.Add("factorType", "1");
                 collection.Add("amani", amani);
                 collection.Add("deliver", "از طرف فروشنده");
 
@@ -598,6 +604,8 @@ namespace banimo.Controllers
 
 
         }
+
+       
         public ActionResult Edit(int id, string catID, string message)
         {
 
@@ -608,7 +616,8 @@ namespace banimo.Controllers
             string device = RandomString(8);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-
+            string PartnerCat = Session["PartnerCat"] as string;
+            string partner = Session["PartnerUser"] as string;
 
             using (WebClient client = new WebClient())
             {
@@ -616,6 +625,8 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catID", catID);
+                collection.Add("partnerCat", PartnerCat);
+                collection.Add("partner", partner);
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("ID", id.ToString());
                 byte[] response = client.UploadValues(server + "/Admin/ProductdetailForEditTest2.php", collection);
@@ -702,22 +713,152 @@ namespace banimo.Controllers
             {
 
                 var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); 
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("productID", id.ToString());
+                byte[] response = client.UploadValues(server + "/Admin/getAddson.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            addsonList addson = JsonConvert.DeserializeObject<addsonList>(result);
+            model.addson = addson;
+            return View(model);
+        }
+
+        public ActionResult setNewAddson(string title, string multiple,string required,string productID,string addsonID)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername);
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("multiple", multiple);
+                collection.Add("required", required);
+                collection.Add("productID", productID);
+                collection.Add("addsonID", addsonID);
+                byte[] response = client.UploadValues(server + "/Admin/setAddson.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content("");
+        }
+        public ActionResult setNewAddsonDetail(string price, string title, string addsonID,string addsonDetailID)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                byte[] response = client.UploadValues(server + "/Admin/getMainCat.php", collection);
+                collection.Add("ID", addsonID);
+                collection.Add("title", title);
+                collection.Add("price", price);
+                
+                collection.Add("addsonDetailID", addsonDetailID);
+                
+                byte[] response = client.UploadValues(server + "/Admin/setAddsonDetail.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            catVMList catlog = JsonConvert.DeserializeObject<catVMList>(result);
-            List<catVM> catmodel = new List<catVM>();
 
-            if (catlog.cats != null)
-            {
-                catmodel = GetGroup(catmodel, catlog.cats, null);
-            }
-            model.anabrcatModel = catmodel;
-            return View(model);
+            return Content("");
         }
+       
+        public ActionResult removeAddsonDetail(string id)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                byte[] response = client.UploadValues(server + "/Admin/removeAddsonDetail.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content("");
+        }
+        public ActionResult removeAddsonTitle(string id)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                byte[] response = client.UploadValues(server + "/Admin/removeAddson.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content("");
+        }
+
+        public PartialViewResult getAddsonDetail(string id)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                byte[] response = client.UploadValues(server + "/Admin/getAddsonDetail.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.AddsDetailVM  addsondetail = JsonConvert.DeserializeObject<ViewModel.AddsDetailVM>(result);
+            return PartialView("/views/Shared/PartnerShared/_addsonDetail.cshtml", addsondetail);
+        }
+        public PartialViewResult getAddsonTitle(string id)
+        {
+            string device = RandomString(8);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername);
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("productID", id.ToString());
+                byte[] response = client.UploadValues(server + "/Admin/getAddson.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            NewDatumm model = new NewDatumm();
+            addsonList addson = JsonConvert.DeserializeObject<addsonList>(result);
+            model.addson = addson;
+            model.ID = id;
+            return PartialView("/views/Shared/PartnerShared/_addsonTitle.cshtml", model);
+
+        }
+
 
         [HttpPost]
         public ActionResult Edit(productinfoforedit detail)
@@ -1164,6 +1305,558 @@ namespace banimo.Controllers
                 }
             }
 
+
+
+        }
+
+        public ActionResult MenuNew()
+        {
+
+            // CatPageViewModel model = new CatPageViewModel();
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("lan", lan);
+                collection.Add("partner", partner);
+
+                byte[] response = client.UploadValues(server + "/Admin/getcatlistAllTest.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            var log = JsonConvert.DeserializeObject<AdminPanelBoom.ViewModel.catAll>(result);
+            return View(log);
+
+        }
+
+        [Throttle(TimeUnit = TimeUnit.Minute, Count = 20)]
+        [Throttle(TimeUnit = TimeUnit.Hour, Count = 50)]
+        [Throttle(TimeUnit = TimeUnit.Day, Count = 200)]
+        public ActionResult CustomerLogin(string pass, string ischecked, string phone)
+        {
+
+            try
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("mobile", phone);
+                    collection.Add("pass", pass);
+
+                    byte[] response = client.UploadValues(server + "/Admin/getuseridNew.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+                userDataNew log = JsonConvert.DeserializeObject<userDataNew>(result);
+                if (log.token != null && log.action != null)
+                {
+                    if (log.action.Contains("Core"))
+                    {
+                        Session["CoreUser"] = log.token;
+                    }
+                    else if (log.action.Contains("partner"))
+                    {
+
+                        using (WebClient client = new WebClient())
+                        {
+
+                            var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                            collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                            collection.Add("device", device);
+                            collection.Add("code", code);
+                            collection.Add("token", log.token);
+
+                            byte[] response = client.UploadValues(server + "/Admin/getPartnerCategory.php", collection);
+
+                            result = System.Text.Encoding.UTF8.GetString(response);
+                        }
+
+                        responsVM catmodel = JsonConvert.DeserializeObject<responsVM>(result);
+                        Session["PartnerUser"] = log.token;
+                        Session["PartnerCat"] =  catmodel.status.ToString();
+                        HttpContext.Response.Cookies["PC"].Value = catmodel.status.ToString();
+                    }
+                    else
+                    {
+                        Session["LogedInUser2"] = log.token;
+                    }
+
+                    HttpContext.Response.Cookies["AT"].Value = log.token;
+                   
+
+                    List<string> lst = log.action.Split('/').ToList();
+                    return RedirectToAction(lst[1], lst[0]);
+                }
+                else
+                {
+                    return RedirectToAction("index", "admin", new { error = 2 });
+
+                }
+
+                //var log = JsonConvert.DeserializeObject<List<userdata>>(result);
+                //if (log != null)
+                //{
+                //    userdata user = log[0];
+                //    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1 || user.userTypeID == 2))
+                //    {
+                //        Session["partner"] = "0";
+                //        if (user.userTypeID == 2)
+                //        {
+                //            Session["partner"] = user.moaref;
+                //        }
+
+                //        Session["LogedInUser2"] = user.token;
+                //        HttpContext.Response.Cookies["AT"].Value = user.token; 
+                //        if (Request.Cookies["productcookiie"] != null)
+                //        {
+                //            HttpCookie currentUserCookie = Request.Cookies["productcookiie"];
+                //            Response.Cookies.Remove("productcookiie");
+                //            currentUserCookie.Expires = DateTime.Now.AddDays(-10);
+                //            currentUserCookie.Value = null;
+                //            Response.SetCookie(currentUserCookie);
+                //        }
+
+
+
+
+                //        if (ischecked == "checked")
+                //        {
+                //            HttpCookie Username = new HttpCookie("Username");
+                //            HttpCookie Password = new HttpCookie("Password");
+                //            DateTime now = DateTime.Now;
+                //            Username.Value = phone;
+                //            Username.Expires = now.AddMonths(1);
+                //            Password.Value = pass;
+                //            Password.Expires = now.AddMonths(1);
+                //            Response.Cookies.Add(Username);
+                //            Response.Cookies.Add(Password);
+                //        }
+                //        if (user.userTypeID == 10)
+                //        {
+                //            Session["CoreUser"] = user.token;
+                //            return RedirectToAction("index", "core");
+
+                //        }
+                //        return RedirectToAction("product", "admin");
+                //        //return Content("1/Admin/dashboard");
+                //    }
+                //    else
+                //    {
+                //        return RedirectToAction("index", "admin", new { error = 1 });
+                //        //return Content("2/Admin/index");
+                //    }
+
+                //}
+                //else
+                //{
+                //    return RedirectToAction("index", "admin", new { error = 2 });
+                //}
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("index", "admin", new { error = 2 });
+            }
+
+
+
+
+        }
+
+        public ActionResult CustomerLogout()
+        {
+            Session.Remove("LogedInUser2");
+            return RedirectToAction("index");
+        }
+        public ActionResult Index(string error)
+        {
+            Variables.menu = "";
+            ViewBag.error = error;
+            if (Session["imageList"] == null)
+                Session["imageList"] = "";
+
+
+            banimo.ViewModel.BaseViewModel basemodel = new banimo.ViewModel.BaseViewModel();
+
+            basemodel.username = Request.Cookies["Username"] != null && Request.Cookies["Username"].Value != null ? Request.Cookies["Username"].Value : "";
+            basemodel.pass = Request.Cookies["Password"] != null && Request.Cookies["Password"].Value != null ? Request.Cookies["Password"].Value : "";
+
+            return View(basemodel);
+        }
+
+        public ActionResult setnewcatNew(banimo.ViewModel.newMenuVM model)
+        {
+
+
+            string fname = model.image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(model.image);
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+
+                collection.Add("partner", partner);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", model.title);
+                collection.Add("entitle", model.entitle);
+                collection.Add("description", model.description);
+                collection.Add("priority", model.priority);
+                collection.Add("token", token);
+                collection.Add("catID", model.catID);
+                collection.Add("brands", model.brandID);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("image", finalimage.Trim(','));
+
+                byte[] response = client.UploadValues(server + "/Admin/setnewcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        public ActionResult delnewcatNew(string catid)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/deletefromcatNew.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ResponseFromServer Serverresponse = JsonConvert.DeserializeObject<ResponseFromServer>(result);
+            if (Serverresponse.status == 200)
+            {
+
+                string pathString = "~/images";
+                string savedFileName = Path.Combine(Server.MapPath(pathString), Serverresponse.message);
+                System.IO.File.Delete(savedFileName);
+                return Content("1");
+            }
+            else
+            {
+                return Content(Serverresponse.message);
+            }
+
+        }
+
+        public ActionResult addFilter(string title)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("servername", servername);
+
+                byte[] response = client.UploadValues(server + "/Admin/setnewFilterSpecial.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("success"))
+            {
+                return Content("200");
+            }
+            else
+            {
+                return Content("300");
+            }
+        }
+        public ActionResult addColor(string title, string ColorCode)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("ColorCode", ColorCode);
+                collection.Add("catID", "0");
+                collection.Add("servername", servername);
+
+                byte[] response = client.UploadValues(server + "/Admin/setnewcolor.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+
+
+
+            }
+
+
+            if (result.Contains("success"))
+            {
+                return Content("200");
+            }
+            else
+            {
+                return Content("300");
+            }
+        }
+
+        public void removeImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            System.IO.File.Delete(savedFileName);
+            if (Request.Cookies["adminimages"] != null)
+            {
+                ViewModel.CookieVM model = JsonConvert.DeserializeObject<ViewModel.CookieVM>(Request.Cookies["adminimages"].Value);
+                if (model.images != null)
+                {
+                    model.images = model.images.Replace(id + ",", "");
+                }
+                Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
+            }
+
+
+
+
+
+
+        }
+        public ContentResult sendToServerByJSIMG(FormCollection formCollection)// download product img
+        {
+
+            string productID = formCollection["productID"];
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString(7) + hpf.FileName; ;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+
+            }
+
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+                string iamgeTITLE = ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + filename;
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("productID", productID);
+                collection.Add("title", iamgeTITLE);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/addImageToProduct.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content(filename);
+        }
+
+        public ActionResult getCatDetail(string catid)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getcatsItem.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            return Content(result);
+        }
+
+        public ActionResult editcatNew(ViewModel.newMenuVM model)
+        {
+            string fname = model.image.Trim(',').Split(',').ToList().First();
+            string finalimage = Path.GetFileName(fname);
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", model.title);
+                collection.Add("entitle", model.entitle);
+                collection.Add("priority", model.priority);
+                collection.Add("description", model.description);
+                collection.Add("token", token);
+                collection.Add("catID", model.catID);
+                collection.Add("brandID", model.brandID);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("image", finalimage);
+
+                byte[] response = client.UploadValues(server + "/Admin/editcatNewTest.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+
+        public ActionResult deleteimage(string id, string title)
+        {
+
+            string str = id;
+            str = str.Substring(9, str.Length - 9);
+            ViewBag.Message = "Your application description page.";
+
+
+
+
+            productinfoviewdetail model = new productinfoviewdetail();
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", str);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/deleteimage.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            banimo.ViewModelPost.removeImageRespond mylog = JsonConvert.DeserializeObject<banimo.ViewModelPost.removeImageRespond>(result);
+            if (mylog.status == 200 && mylog.count == 1)
+            {
+                string pathString = "~/images/panelimages";
+
+                string savedFileName = Path.Combine(Server.MapPath(pathString), Path.GetFileName(title));
+                string pathString2 = "~/images/panelimages/app";
+
+                string savedFileName2 = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
+                if (System.IO.File.Exists(savedFileName))
+                {
+                    System.IO.File.Delete(savedFileName);
+                }
+                if (System.IO.File.Exists(savedFileName2))
+                {
+                    System.IO.File.Delete(savedFileName2);
+                }
+
+            }
+
+            return Content("1");
+        }
+        public void deleteimageDesc(string title)
+        {
+
+            string pathString2 = "~/images/panelimages/";
+
+            string savedFileName = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
+            if (System.IO.File.Exists(savedFileName))
+            {
+                System.IO.File.Delete(savedFileName);
+            }
 
 
         }

@@ -289,7 +289,7 @@ namespace banimo.Controllers
             device = RandomString();
             code = MD5Hash(device + "ncase8934f49909");
             productinfoviewdetail model = new productinfoviewdetail();
-            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest2.php";
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoMarsool.php";
             payloadModel.device = device;
             payloadModel.code = code;
             payloadModel.nodeID = nodeID;
@@ -325,7 +325,7 @@ namespace banimo.Controllers
             }
 
              this.ViewData["MenuViewModel"] = string.IsNullOrEmpty(Variables.menu) ? setVariable() : Variables.menu;
-
+            Response.Cookies["partnerID"].Value = partnerID != null ? partnerID : "";
             return View(action,log2);
 
 
@@ -804,7 +804,7 @@ namespace banimo.Controllers
             return View(action, model);
         }
 
-        public ActionResult ProductList(string brand,string value, string catmode, string sortID, string newquery, string tag, string filter, string Available,string wonder)
+        public ActionResult ProductList( string brand,string value, string catmode, string sortID, string newquery, string tag, string filter, string Available,string wonder)
         {
 
             ViewBag.Title = " مجموعه محصولات " +value  + " | " + ConfigurationManager.AppSettings["siteName2"];
@@ -1015,6 +1015,7 @@ namespace banimo.Controllers
             string filterIds = jsonModel.filterIds;
             string wonder = jsonModel.wonder;
             string brand = jsonModel.brand;
+            string partnerID = Request.Cookies["partnerID"].Value;
             if (fromList != null)
             {
 
@@ -1027,15 +1028,11 @@ namespace banimo.Controllers
                 tag =  TempData["tag"] as string ;
                 filterIds =  TempData["filter"] as string ;
                 wonder = TempData["wonder"] as string;
-                Available =  TempData["Available"] as string ;
+                Available = TempData["Available"] as string ;
+               
                 TempData.Keep("query");
             }
-            string urlid = "0";
-            if (jsonModel.partnerID != "")
-            {
-                urlid = jsonModel.partnerID;
-            }
-
+           
             
            
             // TempData["page"] as string; // jsonModel.pagenumberactive;
@@ -1067,7 +1064,7 @@ namespace banimo.Controllers
                 collection.Add("servername", servername);
                 collection.Add("isAvailable", Available);
                 collection.Add("wonder", wonder); 
-                collection.Add("partnerID", urlid.ToString());
+                collection.Add("partnerID", partnerID);
                 string url = ConfigurationManager.AppSettings["server"] + "/getDataProductList.php";
                 byte[] response = client.UploadValues(url, collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -1622,13 +1619,13 @@ namespace banimo.Controllers
         //}
 
        
-         public ActionResult GetPRoductView(viewProductViewModel model)
+        public ActionResult GetPRoductView(viewProductViewModel model)
         {
             return PartialView("/Views/Shared/_partialProductDetail4.cshtml",model);
         }
 
 
-        public ActionResult ProductDetailPartial(string name, string id)
+        public PartialViewResult ProductDetailPartial(string name, string id)
         {
 
             id = id == null ? "" : id;
@@ -1697,7 +1694,7 @@ namespace banimo.Controllers
             }
             if (log.title == null)
             {
-                return RedirectToAction("Error500", "Error");
+                //return RedirectToAction("Error500", "Error");
             }
 
             List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
@@ -1714,7 +1711,10 @@ namespace banimo.Controllers
                 log.filter = new List<ViewModelPost.Filter>();
             }
 
-            return PartialView("/Views/Shared/_partialProductDetail4.cshtml", log);
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "_partialProductDetail" + srt+ ".cshtml";
+            return PartialView("/Views/Shared/"+ action, log);
 
             //string srt = ConfigurationManager.AppSettings["design"] as string;
             //string action = "ProductDetail" + srt;
@@ -1778,7 +1778,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductTest22.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/viewProductNewVersion.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1830,10 +1830,13 @@ namespace banimo.Controllers
             ViewBag.id = id;
             return View();
         }
-        public string addtocart(string id, string price)
+        public string addtocart(string id, string price, string quantity,string addson)
         {
-
-
+            addson = addson.Trim('-');
+            if (string.IsNullOrEmpty( quantity))
+            {
+                quantity = "1";
+            }
            
             string str = id;
             str = str.Substring(10, str.Length - 10);
@@ -1846,8 +1849,9 @@ namespace banimo.Controllers
                 ProductDetailCookie newitem = new ViewModel.ProductDetailCookie();
                 List<ProductDetailCookie> data2 = new List<ViewModel.ProductDetailCookie>();
                 newitem.productid = Convert.ToInt32(str);
-                newitem.quantity = 1;
-                newitem.tarafH = Convert.ToInt32(price); 
+                newitem.quantity = Int32.Parse(quantity);
+                newitem.tarafH = Convert.ToInt32(price);
+                newitem.addson = addson;
                 data2.Add(newitem);
                 var json = new JavaScriptSerializer().Serialize(data2);
                 Response.Cookies["Modelcart"].Value = json;
@@ -1861,11 +1865,10 @@ namespace banimo.Controllers
                 int j = 0;
                 foreach (var item in data)
                 {
-                    if (item.productid == Convert.ToInt32(str) && item.tarafH == Convert.ToInt32(price))
+                    if (item.productid == Convert.ToInt32(str) && item.tarafH == Convert.ToInt32(price) && item.addson == addson)
                     {
-                        item.quantity += 1;
+                        item.quantity += Int32.Parse(quantity);
                         j = 1;
-
                     }
 
                 }
@@ -1873,8 +1876,9 @@ namespace banimo.Controllers
                 if (j == 0)
                 {
                     newitem.productid = Convert.ToInt32(str);
-                    newitem.quantity = 1;
+                    newitem.quantity = Int32.Parse(quantity);
                     newitem.tarafH = Convert.ToInt32(price);
+                    newitem.addson = addson;
                     data.Add(newitem);
                     var json = new JavaScriptSerializer().Serialize(data);
                     Response.Cookies["Modelcart"].Value = json;
@@ -1895,7 +1899,7 @@ namespace banimo.Controllers
         }
 
 
-        public void deletefromcart(string id)
+        public void deletefromcart(string id,string price)
         {
             string CookieModel = Request.Cookies["Modelcart"].Value;
             List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(CookieModel);
@@ -1906,7 +1910,7 @@ namespace banimo.Controllers
             if (data != null && data.Count > 0)
             {
 
-                ProductDetailCookie newitem = data.SingleOrDefault(x => x.productid == intstr); //new ViewModel.ProductDetail();
+                ProductDetailCookie newitem = data.SingleOrDefault(x => x.productid == intstr && x.tarafH == Convert.ToInt32(price)); //new ViewModel.ProductDetail();
 
               
                 data.Remove(newitem);
@@ -1931,7 +1935,7 @@ namespace banimo.Controllers
 
         }
 
-        public void minusfromcart(string id)
+        public void minusfromcart(string id, string price)
         {
 
 
@@ -1951,7 +1955,7 @@ namespace banimo.Controllers
                 foreach (var item in data)
                 {
                     lastindex = data.IndexOf(item);
-                    if (item.productid == Convert.ToInt32(str))
+                    if (item.productid == Convert.ToInt32(str) && item.tarafH == Convert.ToInt32(price))
                     {
                         if (item.quantity > 0 )
                         {
@@ -2657,10 +2661,15 @@ namespace banimo.Controllers
                
                 string idlist = "";
                 string taraflist = "";
+                string addsonlist = "";
+
                 foreach (var item in data)
                 {
                     idlist += item.productid.ToString() + ",";
                     taraflist += item.tarafH.ToString() + ",";
+                    addsonlist += item.addson.ToString() + ",";
+
+
                 }
                 idlist = idlist.Trim(',');
                 taraflist = taraflist.Trim(',');
@@ -2676,8 +2685,11 @@ namespace banimo.Controllers
                     collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
                     collection.Add("taraflist", taraflist);
+                    collection.Add("addsonlist", addsonlist);
+                    
+
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieMarsool.php", collection);
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
@@ -2685,6 +2697,9 @@ namespace banimo.Controllers
                
                 foreach (var productItem in log.data)
                 {
+                    int index = log.data.IndexOf(productItem);
+                    int prodctID = Int32.Parse(productItem.ID);
+                    string addson = data[index].addson;
                     if (productItem.tag.Contains("محدودیت در تعداد"))
                     {
                         List<string> taglist = productItem.tag.Split(',').ToList();
@@ -2706,7 +2721,6 @@ namespace banimo.Controllers
                         }
                     }
                     int prid = int.Parse(productItem.ID);
-
                     int prth = 0;
                     if (productItem.partnerID != null)
                     {
@@ -2716,14 +2730,21 @@ namespace banimo.Controllers
                     CheckoutViewModel j = new CheckoutViewModel();
                     
                     j.price = decimal.Parse(productItem.PriceNow);
+                    if (productItem.addson != null)
+                    {
+                        j.addson = productItem.addson;
+                    }
+                    j.addsonstring = productItem.addsonsrt;
                     j.baseprice = decimal.Parse(productItem.productprice);
                     j.discount = decimal.Parse(productItem.discount);
                     j.count = decimal.Parse(productItem.count);
                     j.limit = decimal.Parse(productItem.limit);
+                    j.partner = productItem.partnerID;
+                    j.meta = productItem.meta;
                     j.productid = prid;
                     j.partnerTitle = productItem.partnerTitle;
                     j.productname = Server.UrlDecode(productItem.title);
-                    j.quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == prth).quantity;
+                    j.quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == prth && x.addson == addson).quantity;
                     if (productItem.imagelist != null)
                     {
                         if (productItem.imagelist.Count() != 0)
@@ -2881,7 +2902,7 @@ namespace banimo.Controllers
             TempData["deliverybase"] = log.baseDeliver;
             TempData["deliveryprice"] = log.priceDeliver;
             TempData["credit"] = log.credit;
-            int finalAmount = 0;
+            double finalAmount = 0;
             
 
             
@@ -2891,10 +2912,12 @@ namespace banimo.Controllers
             {
                 string idlist = "";
                 string taraflist = "";
+                string addsonlist = "";
                 foreach (var item in data)
                 {
                     idlist += item.productid.ToString() + ",";
                     taraflist += item.tarafH.ToString() + ",";
+                    addsonlist += item.addson.ToString() + ",";
                 }
                 idlist = idlist.Trim(',');
                 result = "";
@@ -2910,9 +2933,11 @@ namespace banimo.Controllers
                     collection.Add("mbrand", servername);
                     collection.Add("idlist", idlist);
                     collection.Add("taraflist", taraflist);
+                    collection.Add("addsonlist", addsonlist);
+                    
                     byte[] response =
                     //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getproductdetailForCookie.php", collection);
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieMarsool.php", collection); // getproductdetailForCookieTest2
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
@@ -2924,12 +2949,19 @@ namespace banimo.Controllers
                     int prid = int.Parse(productItem.ID);
                     int price = int.Parse(productItem.PriceNow);
                     int parID = int.Parse(productItem.partnerID);
-                    int quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == parID).quantity;
+                    productItem.addsonsrt = productItem.addsonsrt == null ? "" : productItem.addsonsrt;
+                    int quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == parID && x.addson == productItem.addsonsrt).quantity;
                     if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
                     {
                         return RedirectToAction("checkout");
                     }
-                    finalAmount += quantity * price;
+
+                    double addsonprice = 0;
+                    if (productItem.addson != null)
+                    {
+                        addsonprice = productItem.addson.Sum(x => x.price) ;
+                    }
+                    finalAmount += quantity * (price  + addsonprice);
                 }
 
 
@@ -3125,54 +3157,83 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/_timeSection.cshtml", log);
         }
 
-        public PartialViewResult checkoutsummery()
-        {
+        //public PartialViewResult checkoutsummery()
+        //{
 
 
 
 
 
-            List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
+            //List<CheckoutViewModel> finalmodel = new List<CheckoutViewModel>();
 
-            string srt = getCookie("cartModel");
-            string cartmodel = ",";
-            if (srt != "")
-            {
-                List<ProductDetail> data = JsonConvert.DeserializeObject<List<ProductDetail>>(srt);
-
-
-                if (data != null && data.Count > 0)
-                {
-
-                    if (data != null)
-                    {
-
-                        foreach (var item in data)
-                        {
-                            CheckoutViewModel j = new CheckoutViewModel();
-                            j.price = item.price;
-                            j.baseprice = item.baseprice;
-                            j.discount = item.discount;
-                            j.productid = item.productid;
-                            j.productname = Server.UrlDecode(item.name);
-                            j.quantity = item.quantity;
-                            j.imageaddress = item.imagethum;
-                            finalmodel.Add(j);
-
-                            cartmodel = item.productid + "-" + item.quantity + ",";
-                        }
-
-                    }
-
-
-                }
-            }
+            //string srt = getCookie("cartModel");
+            //string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            //List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(cartModelString);
 
 
 
+            //string idlist = "";
+            //string taraflist = "";
+            //foreach (var item in data)
+            //{
+            //    idlist += item.productid.ToString() + ",";
+            //    taraflist += item.tarafH.ToString() + ",";
+            //}
+            //idlist = idlist.Trim(',');
+            //taraflist = taraflist.Trim(',');
+            //string result = "";
+            //string device = RandomString();
+            //string code = MD5Hash(device + "ncase8934f49909");
+            //using (WebClient client = new WebClient())
+            //{
 
-            return PartialView("/Views/Shared/_cartSummery.cshtml", finalmodel);
-        }
+            //    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+            //    collection.Add("device", device);
+            //    collection.Add("code", code);
+            //    collection.Add("mbrand", servername);
+            //    collection.Add("idlist", idlist);
+            //    collection.Add("taraflist", taraflist);
+            //    byte[] response =
+            //    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getproductdetailForCookieTest2.php", collection);
+            //    result = System.Text.Encoding.UTF8.GetString(response);
+            //}
+
+            //earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
+
+
+            //List<CheckoutViewModel> fmodel = from p in log.data
+            //                                 select new CheckoutViewModel() { 
+            //                                      baseprice = p.PriceNow,
+            //                                       count = 
+            //                                 }
+            //string cartmodel = ",";
+            //if (log != null)
+            //{
+
+            //    foreach (var item in data)
+            //    {
+            //        CheckoutViewModel j = new CheckoutViewModel();
+            //        j.price = item.price;
+            //        j.baseprice = item.baseprice;
+            //        j.discount = item.discount;
+            //        j.productid = item.productid;
+            //        j.productname = Server.UrlDecode(item.name);
+            //        j.quantity = item.quantity;
+            //        j.imageaddress = item.imagethum;
+            //        finalmodel.Add(j);
+
+            //        cartmodel = item.productid + "-" + item.quantity + ",";
+            //    }
+
+            //}
+
+
+
+            //string srt0 = ConfigurationManager.AppSettings["design"] as string;
+            //string action = "_cartSummery" + srt0;
+
+            //return PartialView("/Views/Shared/" + action + ".cshtml", finalmodel);
+       // }
 
 
 
@@ -4216,7 +4277,57 @@ namespace banimo.Controllers
             return true;
         }
         #endregion
+        public ContentResult sendToServer(string srt)
+        {
 
-        
+            string pathString = "~/images";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString() + hpf.FileName;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+                CookieVM model = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+                model.images += filename + ",";
+                SetCookie(JsonConvert.SerializeObject(model), "token");
+
+
+
+            }
+            return Content(filename);
+
+        }
+        public void removeImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            System.IO.File.Delete(savedFileName);
+            CookieVM model = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            if (model.images != null)
+            {
+                model.images = model.images.Replace(id + ",", "");
+            }
+
+
+            SetCookie(JsonConvert.SerializeObject(model), "token");
+        }
+        public void deleteImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            //System.IO.File.Delete(savedFileName);
+
+        }
+
     }
 }

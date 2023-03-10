@@ -366,14 +366,14 @@
                                                 @if(item.type == "0")
                                                 {
 
-                                                    <span> @string.Format("{0:n0}", @Int64.Parse(item.price)) </span>
+                                                    <span> @string.Format("{0:n0}", item.price) </span>
                                                 }
                                                 
                                             </td>
                                             <td>
                                                 @if (item.type == "1")
                                                 {
-                                                <span>@string.Format("{0:n0}", @Int64.Parse(item.price))</span>
+                                                <span>@string.Format("{0:n0}", item.price)</span>
                                                 }
                                             </td>
                                           

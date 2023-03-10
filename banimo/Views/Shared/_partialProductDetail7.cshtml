@@ -1,0 +1,246 @@
+﻿
+@model banimo.ViewModelPost.viewProductViewModel
+@using Newtonsoft.Json;
+@{
+//string typeID = "";
+//banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+//if (userApp != null)
+//{
+//    typeID = userApp.userTypeID;
+//}
+
+//double metaPrice = double.Parse(Model.price);
+//double oldPrice = double.Parse(Model.oldPrice);
+//if (typeID == "2")
+//{
+//    banimo.AdminPanelBoom.ViewModel.metaVM metaModel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(Model.meta);
+//    metaPrice = metaModel.price;
+//    oldPrice = 0;
+//}
+}
+
+
+
+<div class="col-md-6 mb-4 mb-md-8">
+    <div class="product-gallery product-gallery-sticky">
+        <div class="swiper-container product-single-swiper swiper-theme nav-inner" data-swiper-options="{
+                                            'navigation': {
+                                                'nextEl': '.swiper-button-next',
+                                                'prevEl': '.swiper-button-prev'
+                                            }
+                                        }">
+            <div class="swiper-wrapper row cols-1 gutter-no">
+                @{
+                    if (Model.slides != null)
+                    {
+
+                        foreach (var item in Model.slides)
+                        {
+                            string imagefile = "placeholder.jpg";
+                            if (item.title != null)
+                            {
+                                imagefile = item.image;
+                            }
+                            string src = imagefile;
+                            <div class="swiper-slide">
+                                <figure class="product-image">
+                                    <img src="@src"
+                                         data-zoom-image="@src"
+                                         alt="Fashion Table Sound Marker" width="800" height="900">
+                                </figure>
+                            </div>
+
+
+                        }
+
+                    }
+                }
+
+
+            </div>
+            <button class="swiper-button-next"></button>
+            <button class="swiper-button-prev"></button>
+            <a href="#" class="product-gallery-btn product-image-full"><i class="w-icon-zoom"></i></a>
+        </div>
+        <div class="product-thumbs-wrap swiper-container" data-swiper-options="{
+                                            'navigation': {
+                                                'nextEl': '.swiper-button-next',
+                                                'prevEl': '.swiper-button-prev'
+                                            }
+                                        }">
+            <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
+                @{
+                    if (Model.slides != null)
+                    {
+
+                        foreach (var item in Model.slides)
+                        {
+                            string imagefile = "placeholder.jpg";
+                            if (item.title != null)
+                            {
+                                imagefile = item.image;
+                            }
+                            string src = imagefile;
+                            <div class="product-thumb swiper-slide">
+                                <img src="@src"
+                                     alt="Product Thumb" width="800" height="900">
+                            </div>
+
+
+                        }
+
+                    }
+                }
+
+
+            </div>
+            <button class="swiper-button-next"></button>
+            <button class="swiper-button-prev"></button>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mb-6 mb-md-8">
+    <div class="product-details" data-sticky-options="{'minWidth': 767}">
+        <h1 class="product-title">@Model.title</h1>
+        @*<div class="product-bm-wrapper">
+            <figure class="brand">
+                <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
+                     width="85" height="48" />
+            </figure>
+            <div class="product-meta">
+                <div class="product-categories">
+                    Category:
+                    <span class="product-category"><a href="#">Electronics</a></span>
+                </div>
+                <div class="product-sku">
+                    SKU: <span>MS46891342</span>
+                </div>
+            </div>
+        </div>*@
+
+        <hr class="product-divider">
+
+        <div class="product-price">@Model.price</div>
+
+        @*<div class="ratings-container">
+            <div class="ratings-full">
+                <span class="ratings" style="width: 80%;"></span>
+                <span class="tooltiptext tooltip-top"></span>
+            </div>
+            <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
+        </div>*@
+
+        <div class="product-short-desc">
+            <ul class="list-type-check list-style-none">
+                <li>Item Color : @Model.color</li>
+                <li>Item Feature : @Model.SelectedFilter</li>
+               
+            </ul>
+        </div>
+
+        <hr class="product-divider">
+
+        @if (Model.otherColors != null)
+        {
+            List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.GroupBy(x => x.colorCode).Select(x => x.First()).ToList();
+
+            <div class="product-form product-variation-form product-image-swatch">
+                <label>Color:</label>
+                <div class="d-flex align-items-center ">
+                    @if (lst != null)
+                    {
+                        int i = 1;
+                        int count = Convert.ToInt32(lst.Count);
+                        foreach (var it in lst)
+                        {
+                            var myID = "o" + @it.ID;
+                            <div onclick="otherColorClicked('@myID')"  class=" otherColor">
+                                <img src="@it.imageTitle"
+                                     alt="Product Swatch" width="24" height="24" />
+                            </div>
+                        }
+                    }
+
+
+                </div>
+            </div>
+
+        }
+
+
+
+        @{
+            if (Model.otherProductFilter != null)
+            {
+
+                if (Model.otherProductFilter.Count > 0)
+                {
+                    <div class="product-form product-variation-form product-size-swatch">
+                        <label class="mb-1">Size:</label>
+                        <div class="flex-wrap d-flex align-items-center ">
+                            @foreach (var item in Model.otherProductFilter.Where(x => x.ID != Model.ID))
+                            {
+                                var  myID = "o" + item.ID;
+                                <p onclick="otherColorClicked('@myID')" class="otherfilter"><span value="@item.ID">@item.selectedFilter</span></p>
+
+
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                }
+
+            }
+        }
+
+
+        <div class="product-variation-price">
+            <span></span>
+        </div>
+
+        <div class="fix-bottom product-sticky-content sticky-content">
+            <div class="product-form container">
+                <div class="product-qty-form">
+                    <div class="input-group">
+                        <input class="quantity form-control" type="number" min="1"
+                               max="10000000">
+                        <button class="quantity-plus w-icon-plus"></button>
+                        <button class="quantity-minus w-icon-minus"></button>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-cart">
+                    <i class="w-icon-cart"></i>
+                    <span>Add to Cart</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="social-links-wrapper">
+            <div class="social-links">
+                <div class="social-icons social-no-color border-thin">
+                    <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                    <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                    <a href="#"
+                       class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                    <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                    <a href="#"
+                       class="social-icon social-youtube fab fa-linkedin-in"></a>
+                </div>
+            </div>
+            <span class="divider d-xs-show"></span>
+            <div class="product-link-wrapper d-flex">
+                <a href="#"
+                   class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                <a href="#"
+                   class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/webAsset/wolmart/assets/js/main.js"></script>

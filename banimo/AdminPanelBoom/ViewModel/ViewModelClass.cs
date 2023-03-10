@@ -60,9 +60,9 @@ namespace AdminPanelBoom.ViewModel
     }
     public class adminFilterModel
     {
-       public  RootObjectFilter log { get; set; }
+        public RootObjectFilter log { get; set; }
         public RangeFilterList log2 { get; set; }
-        
+
     }
 
     public class Filtersubcat2
@@ -109,7 +109,7 @@ namespace AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string vahed { get; set; }
-        
+
     }
 
     public class RangeFilterList
@@ -136,7 +136,7 @@ namespace AdminPanelBoom.ViewModel
     {
         public List<SubFeature> subFeatures { get; set; }
         public List<MainFeature> mainFeatures { get; set; }
-       
+
     }
 
     public class FeatureModel
@@ -155,7 +155,7 @@ namespace AdminPanelBoom.ViewModel
         public List<FeaturDataDetail> featurDataDetail { get; set; }
     }
 
-    
+
 
 
 
@@ -170,15 +170,17 @@ namespace AdminPanelBoom.ViewModel
     public class NewDatumm
     {
         public string SelectedaddProductServer { get; set; }
-        public  List<catVM> anabrcatModel { get; set; }
+
+        public addsonList addson { get; set; }
+        public List<catVM> anabrcatModel { get; set; }
         public string domain { get; set; }
         public List<Partner> partners { get; set; }
         public List<Brand> brands { get; set; }
 
         public List<FiltercatsAll> filtercatsAll { get; set; }
-        public string  tag { get; set; }
+        public string tag { get; set; }
         public string meta { get; set; }
-        public string  catid { get; set; }
+        public string catid { get; set; }
         public List<FeaturDataDetail> featureList { get; set; }
         public IEnumerable<SelectListItem> Colores { get; set; }
         public List<Filter> filters { get; set; }
@@ -205,19 +207,19 @@ namespace AdminPanelBoom.ViewModel
         public string IsNew { get; set; }
         public string IsOffer { get; set; }
         public string isAvailable { get; set; }
-        
+
         public string PriceNow { get; set; }
         public string isActive { get; set; }
         public string vahed { get; set; }
         public string limit { get; set; }
         public string catmode { get; set; }
-        public string  anbar { get; set; }
+        public string anbar { get; set; }
     }
     public class Datum
     {
-        
+
         public string ID { get; set; }
-        public string  anbar { get; set; }
+        public string anbar { get; set; }
         public string count { get; set; }
         public string SetId { get; set; }
         public string discount { get; set; }
@@ -231,7 +233,7 @@ namespace AdminPanelBoom.ViewModel
         public string IsNew { get; set; }
         public string IsOffer { get; set; }
         public string isAvailable { get; set; }
-        
+
         public string PriceNow { get; set; }
         public string isActive { get; set; }
         public string vahed { get; set; }
@@ -284,7 +286,7 @@ namespace AdminPanelBoom.ViewModel
     }
 
 
-  
+
 
     public class EcxelList
     {
@@ -312,10 +314,10 @@ namespace AdminPanelBoom.ViewModel
         public string setid { get; set; }
         public string unit { get; set; }
         public string imagelist { get; set; }
-        
-            
-            
-            
+
+
+
+
 
     }
 
@@ -448,11 +450,12 @@ namespace AdminPanelBoom.ViewModel
     public class FilterListMain
     {
         public List<fitlterItem> filters { get; set; }
-        
+
     }
-    public class fitlterItem {
-        public string  ID { get; set; }
-        public string  title { get; set; }
+    public class fitlterItem
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
     }
 
     public class FilterList
@@ -462,7 +465,7 @@ namespace AdminPanelBoom.ViewModel
         public List<Range> ranges { get; set; }
     }
 
-    
+
     public class ProductFilter
     {
         public string detailname { get; set; }
@@ -537,9 +540,21 @@ namespace AdminPanelBoom.ViewModel
     {
         public string ID { get; set; }
         public string title { get; set; }
-       
+
     }
-  
+    public class add
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string isMultiple { get; set; }
+        public string isRquired { get; set; }
+        public string productID { get; set; }
+    }
+    public class addsonList
+    {
+       public  List<add> adds { get; set; }
+    }
+
     class catVMList
     {
         public List<Cat> cats { get; set; }
@@ -582,6 +597,6 @@ namespace AdminPanelBoom.ViewModel
         public int current { get; set; }
         public string productChosen { get; set; }
     }
-    
+
 
 }

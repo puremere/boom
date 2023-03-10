@@ -1,0 +1,799 @@
+﻿
+@{
+    ViewBag.Title = "accordion";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section scripts{
+    <style>
+        .nav-tabs {
+            padding-right: 0px;
+        }
+
+            .nav-tabs li {
+                float: right !important;
+            }
+
+        .fieldholder {
+            /*width: 30%;
+            display: inline-block;*/
+            padding: 15px;
+        }
+
+        .REM {
+            border-radius: 5px;
+        }
+    </style>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help | link image',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
+    <script>
+        function makeid(length) {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i <length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+    </script>
+    <script>
+        $(".teba").click(function () {
+            alert($(this).text());
+        })
+    </script>
+
+
+}
+
+
+
+
+
+
+
+
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a class="teba" data-toggle="tab" href="#home" style=" color: #8d8d8d; ">@Resources.res.addNewAccordion</a></li>
+        <li><a class="teba" data-toggle="tab" href="#home2" style=" color: #8d8d8d; ">@Resources.res.editAccordion</a></li>
+
+        @*@foreach (var item in Model.items)
+            {
+                int index = Model.items.IndexOf(item);
+                if (index == 0)
+                {
+                    <li class="active"><a class="teba" data-toggle="tab" href="#home" style=" color: #8d8d8d; ">@item.title</a></li>
+                }
+                else
+                {
+                    <li><a class="teba" data-toggle="tab" href="#home3" style=" color: #8d8d8d; ">@item.title</a></li>
+                }
+            }*@
+
+
+
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active" style="padding-top:20px">
+
+
+            <div class="row">
+
+                @using (Html.BeginForm("addNewAccordion", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "addNewPage" }))
+                {
+                    
+                <div class="row " style="padding: 5px 25px; display:flex">
+
+                    <div style="width:30%; display:inline-block">
+                        <label style="text-align: right">
+                            @Resources.res.title
+                        </label>
+
+                        <div>
+                            <input type="text" id="name" name="name" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div style="width:30%; display:inline-block">
+                        <label style="text-align: right">
+                            @Resources.res.type
+                        </label>
+
+                        <div>
+                            <select class="form-control" name="type" id="typeSelection">
+                                <option value="0">@Resources.res.FAQ</option>
+                                <option value="1">@Resources.res.email</option>
+                                <option value="2">@Resources.res.letter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:inline-block" id="questionPlace">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control" name="questionPlace">
+                                <option value="1008">@Resources.res.mastercart</option>
+                                <option value="1007">@Resources.res.setting</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:none" id="emailPlace">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control" name="emailPlace">
+                                <option value="1009">@Resources.res.mastercart</option>
+                                <option value="1010">EN-A1</option>
+                                <option value="1011">En-A2</option>
+                                <option value="1012">En-B1</option>
+                                <option value="1013">En-B2</option>
+                                <option value="1014">En-C1</option>
+                                <option value="1015">En-C2</option>
+                                <option value="1016">Fr-A1</option>
+                                <option value="1017">Fr-A2</option>
+                                <option value="1018">Fr-B1</option>
+                                <option value="1019">Fr-B2</option>
+                                <option value="1020">Fr-C1</option>
+                                <option value="1021">Fr-C2</option>
+                                <option value="1022">De-A1</option>
+                                <option value="1023">De-A2</option>
+                                <option value="1024">De-B1</option>
+                                <option value="1025">De-B2</option>
+                                <option value="1026">De-C1</option>
+                                <option value="1027">De-C2</option>
+                                <option value="1028">Es-A1</option>
+                                <option value="1029">Es-A2</option>
+                                <option value="1030">Es-B1</option>
+                                <option value="1031">Es-B2</option>
+                                <option value="1032">Es-C1</option>
+                                <option value="1033">Es-C2</option>
+                                <option value="1034">Tr-A1</option>
+                                <option value="1035">Tr-A2</option>
+                                <option value="1036">Tr-B1</option>
+                                <option value="1037">Tr-B2</option>
+                                <option value="1038">Tr-C1</option>
+                                <option value="1039">Tr-C2</option>
+                                @*<option value="1">@Resources.res.setting</option>*@
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:none" id="letterPlace">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control" name="letterPlace">
+                                <option value="1101">EN-A1</option>
+                                <option value="1102">En-A2</option>
+                                <option value="1103">En-B1</option>
+                                <option value="1104">En-B2</option>
+                                <option value="1105">En-C1</option>
+                                <option value="1106">En-C2</option>
+
+                                <option value="1107">De-A1</option>
+                                <option value="1108">De-A2</option>
+                                <option value="1109">De-B1</option>
+                                <option value="1110">De-B2</option>
+                                <option value="1111">De-C1</option>
+                                <option value="1112">De-C2</option>
+
+
+                                <option value="1113">Es-A1</option>
+                                <option value="1114">Es-A2</option>
+                                <option value="1115">Es-B1</option>
+                                <option value="1116">Es-B2</option>
+                                <option value="1117">Es-C1</option>
+                                <option value="1118">Es-C2</option>
+
+                                <option value="1119">Fr-A1</option>
+                                <option value="1120">Fr-A2</option>
+                                <option value="1121">Fr-B1</option>
+                                <option value="1122">Fr-B2</option>
+                                <option value="1123">Fr-C1</option>
+                                <option value="1124">Fr-C2</option>
+
+
+                                <option value="1125">Tr-A1</option>
+                                <option value="1126">Tr-A2</option>
+                                <option value="1127">Tr-B1</option>
+                                <option value="1128">Tr-B2</option>
+                                <option value="1129">Tr-C1</option>
+                                <option value="1130">Tr-C2</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+                    <div style="padding: 15px ; margin:15px">
+
+                        <div id="thumbholderEdior">
+
+                        </div>
+
+                        <div class="row">
+                            <div class="row fieldholder col-lg-12">
+
+                                <div>
+                                    <span style="color:red; display:none">*</span>
+
+                                    <textarea id="content" name="content" required="required" class="form-control " style="min-height:150px"></textarea>
+
+                                </div>
+
+
+                            </div>
+                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                                <a id="addButt" class="lgnsubmitt btn btn-primary">@Resources.res.OK</a>
+
+                            </div>
+                        </div>
+                        <script>
+
+
+                            $("#addButt").click(function () {
+                                // alert("aa");
+
+                                var int = 0;
+                                $(".REM2").each(function () {
+
+                                    if ($(this).val() === "") {
+                                        $(this).siblings("span").css("display", "inline-block");
+                                        int = 1;
+                                    }
+                                })
+                                if (int === 0) {
+                                    $("#addNewPage").submit();
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('@Resources.res.completeAll')
+
+                                }
+
+
+                            })
+                        </script>
+                        <script language="javascript" type="text/javascript">
+
+                            $(".uploadeNewImage").on('change', function () {
+                                        var input = this;
+                                        if (input.files && input.files[0])
+                                        {
+                                                var formData = new FormData();
+                                                formData.append('blob', input.files[0]);
+                                                formData.append('filename', 'aboutus');
+                                                var MyAppUrlSettings = {
+                                                    MyUsefulUrl: '@Url.Action("GetImageList", "admin")'
+                                                }
+                                                var request = new XMLHttpRequest();
+                                                request.open('POST', MyAppUrlSettings.MyUsefulUrl);
+                                                request.send(formData);
+                                                request.onreadystatechange = function() {
+                                                        if (request.readyState == 4 && request.status == 200)
+                                                         {
+                                                             $('#thumbholderEdior').html(request.responseText);
+                                                             $("#main-cropper").css("display", "none");
+                                                             $("#loading").css("display", "none");
+                                                         }
+                                                }
+                                        }
+                                        else
+                                        {
+                                            alert("error");
+                                        }
+
+                                });
+                        </script>
+                        @*<script>
+                            $("#click").click(function () {
+                                var items = @Html.Raw(Json.Encode(Model.items));
+                                var srt = "";
+                                for (var i = 0, l = items.length; i < l; i++) {
+
+                                    if (items[i].title === 'درباره ما') {
+                                        srt = items[i].content;
+                                        html = $.parseHTML(srt);
+                                        var $response = $(html);
+                                        var $links = $response.find('img');
+                                        var value = "";
+                                        $links.each(function (index, $link) {
+                                            value = value + $(this).attr('src') + ",";
+                                        });
+                                        $.ajax({
+                                            url: '/Admin/GetContentImageForMCEaccordion',
+                                            dataType: 'html',
+                                            data: {
+                                                srt: value,
+                                                type: "aboutus"
+                                            },
+                                            success: function (data) {
+                                                $('#thumbholderEdior').html(data);
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+
+
+                                    }
+                                    else {
+
+                                    }
+                                }
+                                tinymce.get('content').setContent(srt);
+                            });
+                        </script>*@
+                    </div>
+
+                }
+
+            <script>
+                $("#typeSelection").change(function () {
+
+                    var id = $(this).val();
+
+                    if (id == "0") {
+                        $("#emailPlace").hide();
+                        $("#letterPlace").hide();
+                        $("#questionPlace").show();
+
+
+                    }
+                    else if (id == "1") {
+                        $("#emailPlace").show();
+                        $("#questionPlace").hide();
+                        $("#letterPlace").hide();
+                    }
+                    else {
+                        $("#emailPlace").hide();
+                        $("#questionPlace").hide();
+                        $("#letterPlace").show();
+                    }
+                });
+            </script>
+
+            </div>
+
+        </div>
+
+        <div id="home2" class="tab-pane fade in" style="padding-top:20px">
+
+            
+
+            <div class="row">
+                @using (Html.BeginForm("addNewAccordion", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "updateContact" }))
+                {
+
+
+                <div class="row " style="padding: 5px 25px; display:flex">
+
+                    <div style="width:30%; display:inline-block">
+                        <label style="text-align: right">
+                            @Resources.res.type
+                        </label>
+
+                        <div>
+                            <select class="form-control " name="type" id="typeSelection2">
+                                <option>@Resources.res.select</option>
+                                <option value="0">@Resources.res.FAQ</option>
+                                <option value="1">@Resources.res.email</option>
+                                <option value="2">@Resources.res.letter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:inline-block" id="questionPlace2">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control dropList" name="questionPlace">
+                                <option>@Resources.res.select</option>
+                                <option value="1008">@Resources.res.mastercart</option>
+                                <option value="1007">@Resources.res.setting</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:none" id="emailPlace2">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control dropList" name="emailPlace">
+                                <option>@Resources.res.select</option>
+                                <option value="1009">@Resources.res.mastercart</option>
+                                <option value="1010">EN-A1</option>
+                                <option value="1011">En-A2</option>
+                                <option value="1012">En-B1</option>
+                                <option value="1013">En-B2</option>
+                                <option value="1014">En-C1</option>
+                                <option value="1015">En-C2</option>
+                                <option value="1016">Fr-A1</option>
+                                <option value="1017">Fr-A2</option>
+                                <option value="1018">Fr-B1</option>
+                                <option value="1019">Fr-B2</option>
+                                <option value="1020">Fr-C1</option>
+                                <option value="1021">Fr-C2</option>
+                                <option value="1022">De-A1</option>
+                                <option value="1023">De-A2</option>
+                                <option value="1024">De-B1</option>
+                                <option value="1025">De-B2</option>
+                                <option value="1026">De-C1</option>
+                                <option value="1027">De-C2</option>
+                                <option value="1028">Es-A1</option>
+                                <option value="1029">Es-A2</option>
+                                <option value="1030">Es-B1</option>
+                                <option value="1031">Es-B2</option>
+                                <option value="1032">Es-C1</option>
+                                <option value="1033">Es-C2</option>
+                                <option value="1034">Tr-A1</option>
+                                <option value="1035">Tr-A2</option>
+                                <option value="1036">Tr-B1</option>
+                                <option value="1037">Tr-B2</option>
+                                <option value="1038">Tr-C1</option>
+                                <option value="1039">Tr-C2</option>
+                                @*<option value="1">@Resources.res.setting</option>*@
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width:30%; display:none" id="letterPlace2">
+                        <label style="text-align: right">
+                            @Resources.res.place
+                        </label>
+
+                        <div>
+                            <select class="form-control dropList" name="letterPlace">
+                                <option value="1101">EN-A1</option>
+                                <option value="1102">En-A2</option>
+                                <option value="1103">En-B1</option>
+                                <option value="1104">En-B2</option>
+                                <option value="1105">En-C1</option>
+                                <option value="1106">En-C2</option>
+
+                                <option value="1107">De-A1</option>
+                                <option value="1108">De-A2</option>
+                                <option value="1109">De-B1</option>
+                                <option value="1110">De-B2</option>
+                                <option value="1111">De-C1</option>
+                                <option value="1112">De-C2</option>
+
+
+                                <option value="1113">Es-A1</option>
+                                <option value="1114">Es-A2</option>
+                                <option value="1115">Es-B1</option>
+                                <option value="1116">Es-B2</option>
+                                <option value="1117">Es-C1</option>
+                                <option value="1118">Es-C2</option>
+
+                                <option value="1119">Fr-A1</option>
+                                <option value="1120">Fr-A2</option>
+                                <option value="1121">Fr-B1</option>
+                                <option value="1122">Fr-B2</option>
+                                <option value="1123">Fr-C1</option>
+                                <option value="1124">Fr-C2</option>
+
+
+                                <option value="1125">Tr-A1</option>
+                                <option value="1126">Tr-A2</option>
+                                <option value="1127">Tr-B1</option>
+                                <option value="1128">Tr-B2</option>
+                                <option value="1129">Tr-C1</option>
+                                <option value="1130">Tr-C2</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="mustbeshow"  style="width:30%; display:none">
+                        <label style="text-align: right">
+                            @Resources.res.chooseItem
+                        </label>
+
+                        <div ID="AccordionListHolder">
+
+                        </div>
+
+                    </div>
+                    <div class="mustbeshow"  style="width:30%; display:none">
+                        <label style="text-align: right">
+                            @Resources.res.newName
+                        </label>
+
+                        <div>
+                            <input class="form-control" name="newName" />
+
+                        </div>
+                    </div>
+
+
+
+                   
+
+                </div>
+                <input  id="nameupdte" name="name" hidden value="" />
+                <input name="update" hidden value="1" />
+                <div style="padding: 15px ; margin:15px">
+
+                    <div id="thumbholderEdiorContact">
+                    </div>
+                    <div style="width:98%; direction:ltr">
+                        <p id="clickContact" class="btn btn-default " style="display:inline-block"> @Resources.res.reload</p>
+                        <p id="deleteContact" class="btn btn-default " style="display:inline-block"> @Resources.res.delete</p>
+                    </div>
+                    <div class="row">
+                        <div class="row fieldholder col-lg-12">
+
+                            <div>
+                                <span style="color:red; display:none">*</span>
+
+                                <textarea id="contentContact" name="content" required="required" class="form-control " style="min-height:150px"></textarea>
+
+                            </div>
+
+
+                        </div>
+                        <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                            <a id="UpdateContactButt" class="lgnsubmitt btn btn-primary">@Resources.res.OK</a>
+
+                        </div>
+                    </div>
+                    <script>
+                        $(".dropList").change(function () {
+                            var type = $("#typeSelection2").val();
+                            var val = $(this).val()
+                            $.ajax({
+                                url: "getAccordrionList",
+                                data: {
+                                    type: type,
+                                    val: val
+                                },
+                                success: function (data) {
+                                    $(".mustbeshow").show();
+                                    $("#AccordionListHolder").html(data)
+                                }
+
+                            })
+
+                        });
+
+                        $("#typeSelection2").change(function () {
+
+                            var id = $(this).val();
+
+                            if (id == "0") {
+                                $("#emailPlace2").hide();
+                                $("#letterPlace2").hide();
+                                $("#questionPlace2").show();
+
+
+                            }
+                            else if (id == "1") {
+                                $("#emailPlace2").show();
+                                $("#questionPlace2").hide();
+                                $("#letterPlace2").hide();
+                            }
+                            else {
+                                $("#emailPlace2").hide();
+                                $("#questionPlace2").hide();
+                                $("#letterPlace2").show();
+                            }
+                        });
+                    </script>
+                    <script>
+
+
+                            $("#UpdateContactButt").click(function () {
+                                // alert("aa");
+
+                                var int = 0;
+                                $(".REM2").each(function () {
+
+                                    if ($(this).val() === "") {
+                                        $(this).siblings("span").css("display", "inline-block");
+                                        int = 1;
+                                    }
+                                })
+                                if (int === 0) {
+                                    $("#updateContact").submit();
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('@Resources.res.completeAll')
+
+                                }
+
+
+                            })
+                    </script>
+                    <script language="javascript" type="text/javascript">
+
+                            $("#contactImage").on('change', function () {
+                                        var input = this;
+                                        if (input.files && input.files[0])
+                                        {
+                                                var formData = new FormData();
+                                                formData.append('blob', input.files[0]);
+                                                formData.append('filename', 'aboutus');
+                                                var MyAppUrlSettings = {
+                                                    MyUsefulUrl: '@Url.Action("GetImageList", "admin")'
+                                                }
+                                                var request = new XMLHttpRequest();
+                                                request.open('POST', MyAppUrlSettings.MyUsefulUrl);
+                                                request.send(formData);
+                                                request.onreadystatechange = function() {
+                                                        if (request.readyState == 4 && request.status == 200)
+                                                         {
+                                                             $('#thumbholderEdiorContact').html(request.responseText);
+                                                             $("#main-cropper").css("display", "none");
+                                                             $("#loading").css("display", "none");
+                                                         }
+                                                }
+                                        }
+                                        else
+                                        {
+                                            alert("s");
+                                        };
+
+                                });
+                    </script>
+                    <script>
+                                $("#deleteContact").click(function () {
+                                    var ID = $("#selectPage").val();
+                                    $.ajax({
+                                        url: '/Admin/delAccordionDetail',
+                                        dataType: 'html',
+                                        data: {
+                                            ID: ID
+                                        },
+                                        success: function (data) {
+                                            window.location.reload();
+
+                                        },
+                                        error: function () {
+                                        }
+                                    });
+                                })
+                            $("#clickContact").click(function () {
+
+                                var ID = $("#selectPage").val();
+
+                                var lang = $("#langUpdate").val();
+                                $("#nameupdte").val($("#selectPage option:selected").text());
+
+                                $.ajax({
+                                    url: '/Admin/getAccordionDetail',
+                                    dataType: 'html',
+                                    data: {
+                                        lang: lang,
+                                        ID: ID
+                                    },
+                                    success: function (data) {
+                                        tinymce.get('contentContact').setContent(data);
+
+                                    },
+                                    error: function () {
+                                    }
+                                });
+                                //$.ajax({
+                                //    url: '/Admin/GetPageDetail',
+                                //    dataType: 'html',
+                                //    data: {
+                                //        lang = lang,
+                                //        ID: ID,
+                                //    },
+                                //    success: function (data) {
+                                //        alert(data);
+                                //    },
+                                //    error: function () {
+                                //    }
+                                //});
+                                @*var items = @Html.Raw(Json.Encode(Model.items));
+                                var srt = "";
+                                var title = $("#selectPage").val()
+
+                                for (var i = 0, l = items.length; i < l; i++) {
+
+                                    alert(items[i].ID);
+                                    alert(title)
+                                    if (items[i].title === title) {
+
+                                        srt = items[i].content;
+                                        html = $.parseHTML(srt);
+                                        var $response = $(html);
+                                        var $links = $response.find('img');
+                                        var value = "";
+                                        $links.each(function (index, $link) {
+                                            value = value + $(this).attr('src') + ",";
+                                        });
+                                        $.ajax({
+                                            url: '/Admin/GetImageList',
+                                            dataType: 'html',
+                                            data: {
+                                                srt: value,
+                                            },
+                                            success: function (data) {
+                                                $('#thumbholderEdiorContact').html(data);
+                                            },
+                                            error: function ()
+                                            {
+                                            }
+                                        });
+
+
+                                    }
+                                    else {
+
+                                    }
+                                }
+                                tinymce.get('contentContact').setContent(srt);*@
+                            });
+                    </script>
+                </div>
+
+                }
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+</div>

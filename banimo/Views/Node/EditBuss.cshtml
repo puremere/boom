@@ -1,0 +1,209 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+}
+
+@section scripts{
+    <link href="~/Content/croppie.css" rel="stylesheet" />
+    <script src="~/Scripts/croppie.js">
+    </script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
+}
+
+
+<div class="">
+    <div class="form-group " style="display:flex; align-items:center">
+
+
+        @{
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            if (Model.log.filtersModel != null)
+            {
+                foreach (var item in Model.log.filtersModel)
+                {
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = item.title,
+                        Value = "1" + item.ID
+                    });
+                    if (item.filtersubcat != null)
+                    {
+                        foreach (var subcat in item.filtersubcat)
+                        {
+                            listItems.Add(new SelectListItem
+                            {
+                                Text = "---" + subcat.title,
+                                Value = "2" + subcat.ID
+                            });
+                            if (subcat.filtersubcat2 != null)
+                            {
+                                foreach (var subcat2 in subcat.filtersubcat2)
+                                {
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = "------" + subcat2.title,
+                                        Value = "3" + subcat2.ID
+                                    });
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            List<SelectListItem> listItems2 = new List<SelectListItem>();
+            if (Model.log.locationAll != null)
+            {
+                foreach (var item in Model.log.locationAll)
+                {
+                    listItems2.Add(new SelectListItem
+                    {
+                        Text = item.title,
+                        Value = "1" + item.ID
+                    });
+                    if (item.cityList != null)
+                    {
+                        foreach (var subcat in item.cityList)
+                        {
+                            listItems2.Add(new SelectListItem
+                            {
+                                Text = "---" + subcat.title,
+                                Value = "2" + subcat.ID
+                            });
+
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        <form method="post" action="ExportToExcel" style="display:inline-block; margin-left:8px">
+
+
+            <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                <label> @Resources.res.category </label>
+                <div style="width:100%">
+                    @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, "-- Select Status --", new { id = "listofproductfirst", @class = "form-control" })
+
+                </div>
+            </div>
+            <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                <label> @Resources.res.createLocation </label>
+                <div style="width:100%">
+                    @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
+                </div>
+            </div>
+            <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                <label> @Resources.res.search </label>
+                <div style="width:100%">
+                    <input id="SearchQuery" name="SearchQuery" type="text" placeholder=" @Resources.res.search" class="form-control" style="padding:8px" />
+
+                </div>
+            </div>
+            <div style="display:flex; margin-top:25px;margin-left:15px; min-width:250px">
+                <div style="padding:7px 40px" id="Verify" class="btn btn-primary lgnsubmitt"> @Resources.res.OK</div>
+
+            </div>
+
+
+            <script>
+
+
+                var getlist = function () {
+
+                    var query = $("#SearchQuery").val();
+                    var value = $("#listofproductfirst").val();
+                    var partner = $("#partnerList").val();
+                    var Countryname = $("#listofLocation2").val()
+                    $.ajax({
+                        url: '/Node/GetTheListOfItems',
+                        data:
+                        {
+                            value: value,
+                            query: query,
+                            partner: partner,
+                            Countryname: Countryname
+                        },
+                        dataType: 'html',
+                        success: function (data) {
+
+                            $('#listholder').html(data);
+                            $('#listholder').css("display", "block");
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+                };
+
+                $("#Verify").click(function () {
+
+
+                    $.ajax({
+                        url: '/Node/resetAdminProductPage',
+                        dataType: 'html',
+                        success: function (data) {
+                            getlist();
+                        },
+                        error: function () {
+                            alert("nashod")
+                        }
+                    });
+
+
+                })
+
+
+
+
+
+
+            </script>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="form-group ">
+
+    </div>
+
+    <div class="form-group rowholder" id="listholder" style="display:none">
+    </div>
+</div>

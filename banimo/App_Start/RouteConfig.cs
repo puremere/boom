@@ -19,12 +19,25 @@ namespace banimo
             routes.IgnoreRoute("{*botdetect}",
                new { botdetect = @"(.*)BotDetectCaptcha\.ashx" });
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            
+            routes.MapRoute(
+          name: "DisplayProduct",
+          url: "products/{name}",
+          defaults: new { controller = "Home", action = "productDetail", id = UrlParameter.Optional }
+          //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
+          );
+            routes.MapRoute(
+        name: "DisplayCategory",
+        url: "category/{catname}/{subcatName}/{subcat2Name}",
+        defaults: new { controller = "Home", action = "subMenuNew", subcatName = UrlParameter.Optional, subcat2Name = UrlParameter.Optional }
+        //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
+        );
 
             routes.MapRoute(
                name: "Default",
                url: "{controller}/{action}/{id}",
-               defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner" }
+               defaults: new { controller = "Main", action = "Index", id = UrlParameter.Optional },
+               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner|Main|Node" }
 
            );
 
@@ -32,8 +45,11 @@ namespace banimo
               name: "Default1",
               url: "{catname}/{subcatName}/{subcat2Name}",
               defaults: new { controller = "Home", action = "subMenuNew", subcatName = UrlParameter.Optional, subcat2Name = UrlParameter.Optional },
-              constraints: new { catname = "digital|projection|history|store-35|mobile accessory|phone|tablet|mobile accessory|headphone|speaker|electronic equipment" +
-              "" }
+              constraints: new
+              {
+                  catname = "digital|projection|history|store-35|mobile accessory|phone|tablet|mobile accessory|headphone|speaker|electronic equipment" +
+              ""
+              }
             );
 
             routes.MapRoute(
@@ -42,6 +58,8 @@ namespace banimo
              defaults: new { controller = "Home", action = "brandMenu", id = UrlParameter.Optional }
              //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
              );
+
+
 
             routes.MapRoute(
             name: "DisplayKombak",

@@ -40,10 +40,12 @@
                     <div class="autocomplete col-md-3 col-sm-3 col-xs-12">
                         <label>تامین کننده :</label>
                         @{
-                            
+                            if (Model.partnerList != null){
                             <div class=" " style="width:100%">
-                                @Html.DropDownList("partnerList", new SelectList (Model.partnerList, "ID","title"), "-- انتخاب کنید --", new { id = "partnerList", style = "width:100%; min-height:43px", @class = "form-control" })
+                                @Html.DropDownList("partnerList", new SelectList(Model.partnerList, "ID", "title"), "-- انتخاب کنید --", new { id = "partnerList", style = "width:100%; min-height:43px", @class = "form-control" })
                             </div>
+                        }
+
                         }
                     </div>
                     <div class="autocomplete col-md-3 col-sm-3 col-xs-12">
@@ -220,10 +222,13 @@
                         <label>تامین کننده :</label>
                         @{
 
+                            if (Model.partnerList != null)
+                            {
+                                <div class=" " style="width:100%">
+                                    @Html.DropDownList("partnerListForPartner", new SelectList(Model.partnerList, "ID", "title"), "-- انتخاب کنید --", new { id = "partnerListForPartner", style = "width:100%; min-height:43px", @class = "form-control" })
+                                </div>
+                            }
 
-                            <div class=" " style="width:100%">
-                                @Html.DropDownList("partnerListForPartner", new SelectList(Model.partnerList, "ID", "title"), "-- انتخاب کنید --", new { id = "partnerListForPartner", style = "width:100%; min-height:43px", @class = "form-control" })
-                            </div>
                         }
                     </div>
                     <div class="autocomplete col-md-3 col-sm-3 col-xs-12">

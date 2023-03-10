@@ -122,10 +122,10 @@
                             <p id="modalmessage">تعداد</p>
                             <input id="addcount" class="form-control" value="1" />
                         </div>
-                        <div style="margin:5px;">
+                        @*<div style="margin:5px;">
                             <p id="modalmessage">امانی</p>
                             <input id="addamani" type="checkbox" class="form-control" />
-                        </div>
+                        </div>*@
                     </div>
 
 
@@ -209,10 +209,10 @@
                             <p id="modalmessage">تعداد</p>
                             <input id="returncount" class="form-control" value="1" />
                         </div>
-                        <div style="margin:5px;">
+                        @*<div style="margin:5px;">
                             <p id="modalmessage">امانی</p>
                             <input id="returnamani" type="checkbox" class="form-control" />
-                        </div>
+                        </div>*@
                     </div>
 
 
@@ -453,12 +453,12 @@
                                             <th>
                                                 موجود
                                             </th>
-                                            <th>
+                                            @*<th>
                                                 پرفروش
                                             </th>
                                             <th>
                                                 پیشنهاد ویژه
-                                            </th>
+                                            </th>*@
                                             <th></th>
 
                                             <th></th>
@@ -497,7 +497,7 @@
 
                                                 <td id="@item.parentID" style="text-align: center; align-items:center; border:none">
                                                     @{
-                                                        <p class="quickEditInput addItemCount" style="display:none; font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
+                                                        <p class=" addItemCount" style=" font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
 
                                                         if (item.count == "-1")
                                                         {
@@ -509,11 +509,11 @@
                                                         }
                                                         else
                                                         {
-                                                            <p class="quickEditInput">@Html.DisplayFor(modelItem => item.count)</p>
+                                                            <p class="">@Html.DisplayFor(modelItem => item.count)</p>
 
                                                         }
 
-                                                        <p class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+                                                        <p class=" minusItemCount" style=" font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
 
                                                         <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
 
@@ -568,7 +568,7 @@
 
                                                     }
                                                 </td>
-                                                <td style="text-align: center;">
+                                                @*<td style="text-align: center;">
                                                     @{
 
                                                         if (item.isOffer == "1")
@@ -597,7 +597,7 @@
                                                         }
 
                                                     }
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     @{
                                                         string myListOfImage = "";
@@ -657,7 +657,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <a class="btn btn-primary quickEdit">ویرایش سریع</a>
+                                                    @*<a class="btn btn-primary quickEdit">ویرایش سریع</a>*@
                                                     <a class="btn btn-primary quickEdit quickVerify" style="display:none">تایید</a>
 
                                                 </td>
@@ -908,7 +908,7 @@
     }
 }
 
-<script src="~/Scripts/downloadIMG.js"></script>
+<script src="~/Scripts/downloadIMGPartner.js"></script>
 <script>
     $(".addMoreImage").click(function () {
         var id = $(this).attr('itemtoshow');

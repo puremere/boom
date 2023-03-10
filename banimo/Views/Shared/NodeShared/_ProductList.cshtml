@@ -1,0 +1,545 @@
+﻿@model  banimo.AdminPanel.ViewModel.oderdetaillist
+@*@model PagedList.IPagedList<AdminPanel.ViewModel.orderdetail>*@
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = Resources.res.busilist;
+}
+
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+
+@*@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }*@
+
+@{
+    <script src="~/Scripts/download.js"></script>
+    <input type="file" style="display:none" id="fileupload" />
+    <p id="parent" style="display:none"></p>
+    <p class="imageName" style="display:none"></p>
+
+    <!-- Modal -->
+    <p style="display:none" id="modalValue"></p>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">@Resources.res.delbusi</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Node/DeleteNode',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('محصول مورد نظر حذف شد')
+                                    var value = $("#listofproduct").val();
+                                    var partner = $("#partnerList").val();
+                                    $.ajax({
+                                        url: '/Node/GetTheListOfItems',
+                                        dataType: 'html',
+                                        data: {
+                                            value: value,
+                                            partner: partner
+                                        },
+                                        success: function (data) {
+
+                                            $('#listholder').html(data);
+                                            $('#listholder').css("display", "block");
+                                        },
+                                        error: function () {
+                                            alert("nashod")
+                                        }
+                                    });
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    if (Model.data == null)
+    {
+        <p style="text-align:center">@Resources.res.noItemFound</p>
+    }
+    else
+    {
+
+        <div class="row">
+            <div style="overflow-x:auto;padding:10px">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> @Resources.res.busilist </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-area-chart">
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                ID
+                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                                            </th>
+                                            <th>
+                                                @Resources.res.title
+                                            </th>
+                                            <th>
+                                                @Resources.res.inactive
+                                            </th>
+                                            <th>
+                                                @Resources.res.offer
+                                            </th>
+                                            <th>
+                                                @Resources.res.recommended
+
+                                            </th>
+                                            <th>
+
+                                            </th>
+                                            <th>
+
+                                            </th>
+                                         
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.data)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ID)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.title)
+                                                </td>
+
+
+                                                <td style="text-align: center;">
+                                                    @if (item.isActive == "1")
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Active checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Active />
+
+                                                    }
+                                                </td>
+
+
+                                                <td style="text-align: center;">
+                                                    @{
+
+                                                        if (item.specialOffer == "1")
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="specialOffer" checked />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="specialOffer" />
+
+                                                        }
+
+                                                    }
+
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    @{
+
+                                                        if (item.recommended == "1")
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="recomended" checked />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="recomended" />
+
+                                                        }
+
+                                                    }
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    <a id=@item.ID class="btn btn-primary editproduct" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.edit</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+
+                                                </td>
+                                                <td>
+                                                    <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteproduct" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.delete</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+
+                                                </td>
+
+                                                @{
+                                                    int count = item.video.Count();
+                                                    string imageHolder = "holder" + item.ID;
+                                                    if (count == 33)
+                                                    {
+                                                        <td>
+                                                            <a id=@item.ID class="btn btn-primary addVideo" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.video</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+                                                            <a id=@item.ID class="btn btn-primary confirmVideo" style=" display:none;  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.OK</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+
+                                                            <span id="@imageHolder"></span>
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        
+
+                                            @*<td>
+                                                @foreach (var im in item.video.Trim(',').Split(','))
+                                                {
+                                                    <div class="imageCover" style="position:relative !important; width:150px"><div style="position:relative"><img style="width:150px" src="~/images/@im" /> <img class="removeVideo" id="@item.ID" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div></div>
+
+                                                }
+                                               
+                                            </td>*@
+                                                    }
+
+                                                }
+
+
+
+
+                                            </tr>
+                                        }
+
+
+
+                                    </tbody>
+                                </table>
+                                <script>
+                                    $(".addVideo").click(function () {
+
+                                        $(this).parent().find(".confirmVideo").css("display","inline")
+                                        var parentName = $(this).parent().find('span').attr('id');
+                                        $("#parent").text(parentName);
+                                        $("#fileupload").click();
+
+
+                                    })
+                                    $("#fileupload").on('change', function () {
+                                        //alert("sss");
+                                        var pr = $("#parent").text();
+                                        uploadImage(pr, "imageName", this)
+                                    });
+                                    $(".confirmVideo").click(function () {
+                                        
+                                        var val = $(this).attr('id');
+                                        var image = $(".imageName").text();
+                                        $.ajax({
+                                            url: "/Node/setvideo",
+                                            dataType: "html",
+                                            data: {
+                                                val: val,
+                                                image : image
+                                            },
+                                            success: function (data) {
+                                                window.location.reload();
+                                            }
+                                        })
+                                    })
+                                    $(".removeVideo").click(function () {
+                                        var id = $(this).siblings().attr('src');
+                                        var val = $(this).attr('id');
+                                        $(this).remove();
+                                        $.ajax({
+                                            url: "/Node/RemoveVideo",
+                                            dataType: "html",
+                                            data: {
+                                                image: id,
+                                                val : val
+                                            },
+                                            success: function (data) {
+                                                window.location.reload();
+                                            }
+                                        })
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <br />
+        @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+        <p id="selectedForServer"></p>
+        <script>
+            $(".deleteproduct").click(function () {
+                $("#modalValue").text(this.id);
+            });
+            $(".editproduct").click(function () {
+                var id = $(this).attr('id');
+                var selectedCatID = $("#listofproduct").val();
+                var url = "@Url.Action("EditBus", "Node", new { id = "__id__"})";
+                var url2 = url.replace("__id__", this.id);
+                window.open(url2);
+            });
+        </script>
+        <script>
+
+            $(".specialOffer").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Node/ChangeProductSpecialOffer',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+
+            $(".Active").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Node/ChangeProductActive',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+
+
+            $(".recomended").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Node/ChangeProductRecommended',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+
+        </script>
+
+
+        <div class="row">
+            @{
+                var total = (Convert.ToInt32(Model.count) / 12);
+                var remain = (Convert.ToInt32(Model.count) % 12);
+                if (remain != 0)
+                {
+                    total = total + 1;
+                }
+                var activ = Convert.ToInt32(Model.current);
+                var activminus2 = activ - 2;
+                var activminus1 = activ - 1;
+                var activplus1 = activ + 1;
+                var activplus2 = activ + 2;
+
+
+
+                if ((total - activ) > 3 & activ > 3)
+                {
+                    <ul class="pagination">
+
+                        <li><a>«</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                        @if (activminus2 > 2)
+                        {
+                            <li><a>...</a></li>
+                        }
+
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                        <li class="active"><a>@activ</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                        <li><a> ...</a></li>
+                        <li><a>@total</a></li>
+                        <li><a>»</a></li>
+                    </ul>
+                }
+                else if ((total - activ > 3) && !(activ > 3))
+                {
+                    <ul class="pagination">
+
+                        @for (int i = 1; i < activ; i++)
+                        {
+                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                        }
+                        <li class="active"><a>@activ </a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                        <li><a href="#">...</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+
+                }
+                else if (!(total - activ > 3) && activ > 3)
+                {
+                    <ul class="pagination">
+
+                        <li><a>«</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                        <li><a>...</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                        <li style="cursor:pointer" class="active"><a>@activ </a></li>
+                        @for (int i = activ + 1; i <= total; i++)
+                        {
+                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                        }
+                        <li><a>»</a></li>
+                    </ul>
+
+                }
+                else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
+                {
+
+                    <ul class="pagination">
+
+                        @for (int i = 1; i < activ; i++)
+                        {
+                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                        }
+                        <li class="active"><a href="#">@activ</a></li>
+                        @for (int i = activ + 1; i <= total; i++)
+                        {
+                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                        }
+
+                    </ul>
+
+                }
+
+            }
+
+            <script>
+                $(".pagingnumberforall").click(function () {
+
+                    var num = this.textContent;
+                    var value = $("#listofproduct").val();
+                    var partner = $("#partnerList").val();
+                    $.ajax({
+                        url: '/Node/GetTheListOfItems',
+                        data: {
+                            page: num,
+                            value: value,
+                            partner: partner,
+                            Countryname: '@Model.location',
+                            query : '@Model.query'
+
+                        },
+                        dataType: 'html',
+                        success: function (data) {
+
+                            $('#listholder').html(data);
+                            $('#listholder').css("display", "block");
+                        },
+                        error: function () {
+                            alert("nashod")
+                        },
+                    });
+                })
+
+            </script>
+
+
+        </div>
+
+        @*@Html.PagedListPager(Model, page => Url.Action("product", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "listholder" }))*@
+
+
+    }
+}
+
+

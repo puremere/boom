@@ -125,6 +125,7 @@
 <div id="idholder" style="display:none">@Model.ID</div>
 
 
+
 <div class="row contentholder" style="background-color: #fff; margin: 20px 20px 0 20px; border: 1px #eee solid; border-radius: 5px ;box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);">
 
 
@@ -463,7 +464,7 @@
                             @if (Model.BrandInfo != null)
                             {
                                 <div>
-                                    <img src="~/images/brands/@Model.BrandInfo.First().title" style="width:50px"/>
+                                    <img src="~/images/brands/@Model.BrandInfo.First().title" style="width:50px" />
                                 </div>
                             }
 
@@ -479,7 +480,7 @@
                                 }
                             </div>
                         </div>
-                       
+
                     </div>
                     <div style="width:100%; padding:20px 0 20px 0; border-bottom: 1px solid #eee; ">
                         <h5 style="display:inline-block;font-weight: 600;">دسته بندی:</h5>
@@ -732,52 +733,52 @@
     {
         <div id="appp" style="margin-bottom:45px">
             @*<script>
-                try {
-                    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    var recognition = new SpeechRecognition();
-                }
-                catch (e) {
-                    console.error(e);
-                    $('.no-browser-support').show();
-                    $('.app').hide();
-                }
-                recognition.onstart = function () {
-                    instructions.text('Voice recognition activated. Try speaking into the microphone.');
-                }
+                    try {
+                        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                        var recognition = new SpeechRecognition();
+                    }
+                    catch (e) {
+                        console.error(e);
+                        $('.no-browser-support').show();
+                        $('.app').hide();
+                    }
+                    recognition.onstart = function () {
+                        instructions.text('Voice recognition activated. Try speaking into the microphone.');
+                    }
 
-                recognition.onspeechend = function () {
-                    instructions.text('You were quiet for a while so voice recognition turned itself off.');
-                }
+                    recognition.onspeechend = function () {
+                        instructions.text('You were quiet for a while so voice recognition turned itself off.');
+                    }
 
-                recognition.onerror = function (event) {
-                    if (event.error == 'no-speech') {
-                        instructions.text('No speech was detected. Try again.');
-                    };
-                }
-                recognition.onresult = function (event) {
+                    recognition.onerror = function (event) {
+                        if (event.error == 'no-speech') {
+                            instructions.text('No speech was detected. Try again.');
+                        };
+                    }
+                    recognition.onresult = function (event) {
 
-                    // event is a SpeechRecognitionEvent object.
-                    // It holds all the lines we have captured so far.
-                    // We only need the current one.
-                    var current = event.resultIndex;
+                        // event is a SpeechRecognitionEvent object.
+                        // It holds all the lines we have captured so far.
+                        // We only need the current one.
+                        var current = event.resultIndex;
 
-                    // Get a transcript of what was said.
-                    var transcript = event.results[current][0].transcript;
+                        // Get a transcript of what was said.
+                        var transcript = event.results[current][0].transcript;
 
-                    // Add the current transcript to the contents of our Note.
-                    noteContent += transcript;
-                    noteTextarea.val(noteContent);
-                }
-                var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
+                        // Add the current transcript to the contents of our Note.
+                        noteContent += transcript;
+                        noteTextarea.val(noteContent);
+                    }
+                    var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
 
-                if (!mobileRepeatBug) {
-                    noteContent += transcript;
-                    noteTextarea.val(noteContent);
-                }
-                $('#start-record-btn').on('click', function (e) {
-                    recognition.start();
-                });
-            </script>*@
+                    if (!mobileRepeatBug) {
+                        noteContent += transcript;
+                        noteTextarea.val(noteContent);
+                    }
+                    $('#start-record-btn').on('click', function (e) {
+                        recognition.start();
+                    });
+                </script>*@
             <div class="mustbeshown appsection" style="display:none">
                 <div style="background-color:white;text-align:center;border-bottom:1px solid #eee; margin:-5px 0 10px 0" class="col-sm-12">
                     <div style="width:100% ; text-align:center; padding:0px; ">
@@ -871,8 +872,8 @@
                             </div>
                         </div>
                     </div>
-                   
-                   
+
+
 
                 </div>
                 @{
@@ -923,7 +924,7 @@
                         <span> نظرات کاربران</span>
                     </div>
                 </div>
-               
+
                 <div class="row" style=" box-shadow: 2px 2px 5px -1px rgba(148,149,153,1);margin:5px;background-color: white;padding: 10px;">
                     <p style="width:100%; text-align:right;font-weight:500; padding:5px; border-bottom:1px solid #eee">توضیحات</p>
                     <div class="featureAppsection" style="direction:rtl; padding:10px; line-height:2.5">
@@ -1177,7 +1178,7 @@
 
                                             <div class="showmedetailx">
                                                 <div style="padding:2px  ">
-                                                   
+
                                                     <div class="imageholderindex" style="width:100%; ">
                                                         <img class="imageitself" src="@src" style="width:100%;height:100%; object-fit:fill" />
                                                     </div>
@@ -1274,7 +1275,7 @@
                             <p style="display:inline-block" class=" ">ادامه ثبت سفارش</p>
                         </div>
                     </a>
-                    
+
 
                 }
             </div>
@@ -1620,7 +1621,7 @@
                                                             <img class="imageitself" src="@src" />
                                                         </div>
                                                     </a>
-                                                    
+
                                                     <div class="titleholder">
                                                         @{
                                                             if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
@@ -1720,7 +1721,7 @@
         // setting one image slider vertically middl
         $(".showmedetail").click(function () {
             window.location.href = "/Home/ProductDetail?id="+ this.id
-           
+
         })
         if (window.outerWidth > 950) {
 

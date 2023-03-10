@@ -22,6 +22,7 @@ namespace banimo.ViewModePost
         public int ID { get; set; }
         public string title { get; set; }
         public int IsFinal { get; set; }
+        public string image { get; set; }
         public int catLevel { get; set; }
 
     }

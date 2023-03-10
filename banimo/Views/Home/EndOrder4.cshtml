@@ -1199,12 +1199,10 @@
                                         totalprice = decimal.Parse(Model.finalAmount)/10 + decimal.Parse(Model.priceDeliver)/10;
                                         deliverPrice = decimal.Parse(@Model.priceDeliver)/10;
                                     }
-
-
                                     decimal amountPrice = decimal.Parse(@Model.finalAmount)/10;
                                     decimal creditPrice = decimal.Parse(@Model.credit)/10;
                                 }
-                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice">@String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
+                                <p class="col-lg-6 col-sm-6 Holder" style="display:flex"> <i id="finalprice"> @String.Format("{0:n0}", amountPrice) </i>&nbsp;تومان</p>
                                 <p class="col-lg-6 col-sm-6">مبلغ</p>
                             </div>
                             <div class="row priceitem">

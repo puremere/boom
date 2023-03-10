@@ -1,0 +1,231 @@
+﻿using banimo.Classes;
+using banimo.ViewModel.MainViewModel;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+
+namespace banimo.Controllers
+{
+    public class MainController : Controller
+    {
+        string servername = ConfigurationManager.AppSettings["serverName"];
+        string server = ConfigurationManager.AppSettings["server"];
+        webservise wb = new webservise();
+        public static string device = RandomString();
+        public static string code = MD5Hash(device + "ncase8934f49909");
+        public static string MD5Hash(string input)
+        {
+            StringBuilder hash = new StringBuilder();
+
+            MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
+            byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(input));
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                hash.Append(bytes[i].ToString("x2"));
+            }
+            return hash.ToString();
+        }
+        static readonly string PasswordHash = "P@@Sw0rd";
+        static readonly string SaltKey = "S@LT&KEY";
+        static readonly string VIKey = "@1B2c3D4e5F6g7H8";
+        public static string RandomString()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 10)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        private void SetCookie(string mymodel, string name)
+        {
+
+            Response.Cookies[name].Value = Encrypt(mymodel);
+
+        }
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        private string getCookie(string name)
+        {
+
+
+            string req2 = "";
+            if (Request.Cookies[name] != null)
+            {
+                req2 = Decrypt(Request.Cookies[name].Value);
+            }
+            if (name == "tokenMain" && req2 == "")
+            {
+                ViewModel.CookieVM cookieModel = new ViewModel.CookieVM();
+                cookieModel.currentpage = "index";
+                cookieModel.controller = "home";
+                string srt = JsonConvert.SerializeObject(cookieModel);
+                SetCookie(srt, "tokenMain");
+                return srt;
+            }
+            else if (name == "vari" && req2 == "")
+            {
+                AdminPanel.ViewModel.variabli cookieModel = new AdminPanel.ViewModel.variabli();
+                string srt = JsonConvert.SerializeObject(cookieModel);
+                SetCookie(srt, "vari");
+                return srt;
+            }
+            return req2;
+
+
+        }
+        public static string Encrypt(string plainText)
+        {
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+
+            byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
+            var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.Zeros };
+            var encryptor = symmetricKey.CreateEncryptor(keyBytes, Encoding.ASCII.GetBytes(VIKey));
+
+            byte[] cipherTextBytes;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                {
+                    cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                    cryptoStream.FlushFinalBlock();
+                    cipherTextBytes = memoryStream.ToArray();
+                    cryptoStream.Close();
+                }
+                memoryStream.Close();
+            }
+            return Convert.ToBase64String(cipherTextBytes);
+        }
+        public static string Decrypt(string encryptedText)
+        {
+            byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);
+            byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
+            var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.None };
+
+            var decryptor = symmetricKey.CreateDecryptor(keyBytes, Encoding.ASCII.GetBytes(VIKey));
+            var memoryStream = new MemoryStream(cipherTextBytes);
+            var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+
+            int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+            memoryStream.Close();
+            cryptoStream.Close();
+            return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
+        }
+        public ActionResult Index()
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string tokenMain = Session["LogedInUser2"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", "test");
+                collection.Add("device", device);
+                collection.Add("code", code);
+
+                byte[] response =
+                client.UploadValues(server + "/Main/GetMain.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            mainIndex model = JsonConvert.DeserializeObject<mainIndex>(result);
+            return View(model);
+        }
+
+        
+
+        public void setPage()
+        {
+            AdminPanel.ViewModel.CookieVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.CookieVM>(getCookie("tokenMain"));
+            int current = model.page != null ? Int32.Parse(model.page) : 0;
+            model.page = (current + 1).ToString();
+            SetCookie(JsonConvert.SerializeObject(model), "token");
+        }
+        public void setValues(string result, string mallID, string contract)
+        {
+            string srt = getCookie("tokenMain");
+            banimo.AdminPanel.ViewModel.CookieVM cookieVM = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(srt);
+            cookieVM.result = result;
+            cookieVM.mallID = mallID;
+            TempData["contract"] = contract;
+            SetCookie(JsonConvert.SerializeObject(cookieVM), "tokenMain");
+        }
+        public void setQuery(string query, string cityID, string countryID)
+        {
+            string srt = getCookie("tokenMain");
+            AdminPanel.ViewModel.CookieVM cookieVM = JsonConvert.DeserializeObject<AdminPanel.ViewModel.CookieVM > (srt);
+            cookieVM.city = cityID;
+            cookieVM.country = countryID;
+            cookieVM.query = query;
+            SetCookie(JsonConvert.SerializeObject(cookieVM), "tokenMain");
+        }
+        public async Task<ActionResult> searchResult(string fromForm)
+        {
+
+            // string result, string mallID, string floorID
+            AdminPanel.ViewModel.CookieVM model = JsonConvert.DeserializeObject<AdminPanel.ViewModel.CookieVM> (getCookie("tokenMain"));
+            if (fromForm == null)
+            {
+                model.page = "1";
+            }
+            model.currentpage = "searchResult";
+            model.controller = "home";
+            string lang = Session["lang"] as string;
+            SetCookie(JsonConvert.SerializeObject(model), "tokenMain");
+            string subcat = model.result != null ? model.result.Split('-')[0] : "";
+            string catlevel = model.result != null ? model.result.Split('-')[1] : "";
+            string contract = TempData["contract"] as string;
+            banimo.ViewModel.searchResultVM VMmodel = new ViewModel.searchResultVM()
+            {
+                searchq = model.query,
+                city = model.city == null ? "" : model.city,
+                country = model.country == null ? "" : model.country,
+                mobile = "",
+                subcat = subcat,
+                catLevel = catlevel,
+                code = code,
+                device = device,
+                lan = lang,
+                floorID = model.floorID,
+                mallID = model.mallID,
+                page = model.page,
+                contract = contract
+
+                //02122517428@tct2
+                //650038
+            };
+            string searchResultPayload = JsonConvert.SerializeObject(VMmodel);
+            string resu = await wb.doPostData(server + "/Main/GetSearchResult.php", searchResultPayload);
+            banimo.ViewModel.BzListVM viewModel = JsonConvert.DeserializeObject<ViewModel.BzListVM>(resu);
+            ViewBag.result = model.result;
+            ViewBag.mallID = model.mallID;
+            ViewBag.floorID = model.floorID;
+            if (fromForm != null)
+            {
+                return Content(JsonConvert.SerializeObject(viewModel));
+            }
+            return View(viewModel);
+            // return View();
+        }
+    }
+}

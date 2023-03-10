@@ -1,0 +1,280 @@
+﻿@model IEnumerable<banimo.ViewModePost.Newest>
+@using Newtonsoft.Json;
+
+@{
+    banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+    string typeID = "";
+    if (userApp != null)
+    {
+        typeID = userApp.userTypeID;
+    }
+}
+
+
+
+
+
+@foreach (var item in Model)
+{
+    string addID = "addtocarto" + item.ID;
+    string minusID = "minus" + item.ID;
+    string imagefile = "/images/placeholder.jpg";
+    string src2 = "";
+    List<string> srtlist = new List<string>();
+    double metaPrice = double.Parse(item.price);
+    double oldPrice = double.Parse(item.oldPrice);
+    if (typeID == "2")
+    {
+        banimo.AdminPanelBoom.ViewModel.metaVM metaModel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+        metaPrice = metaModel.price;
+        oldPrice = 0;
+    }
+    if (item.title != null)
+    {
+        srtlist = item.image.Trim(',').Split(',').ToList();
+        imagefile = srtlist[0];
+        if (srtlist.Count == 2)
+        {
+            src2 = srtlist[1];
+        }
+    }
+    string ID = "N" + item.ID.ToString();
+    string addtocartid = "addtocart" + ID;
+    string price = item.price;
+
+    string src = imagefile;
+
+
+    <div class="item showmedetail" id=@ID >
+
+        <div class="showmedetailFirstDiv showmedetailx">
+            @{
+
+
+
+                string newurl = "/Home/ProductDetail?id=" + ID;
+                if (item.meta != "null" && item.meta != null)
+                {
+                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                    newurl = metaModel.curl;
+                }
+                else
+                {
+
+                }
+            }
+            <div class="mainParent" style="">
+                <a onclick="newProductDetail('@newurl')">
+                    <div class="imageholderindex">
+                        <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
+                    </div>
+
+                    <div class="titleholder">
+                        @{
+                            if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                            {
+                                <p class="numEn"> @item.title</p>
+                            }
+                            else
+                            {
+                                <p>@item.title</p>
+                            }
+
+                        }
+                    </div>
+                </a>
+
+
+
+                <div style="margin-top:10px">
+                    @{
+                        if (item.isAvailable == "0")
+                        {
+                            <div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>
+                        }
+                        else
+                        {
+                            if (item.price == "0")
+                            {
+                                <div class="row" style="margin: 0px 15px; min-height: 49px; margin-bottom: 10px;">
+                                    <p style="display:inline-block"> تماس بگیرید</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="wholeSectionPrice">
+                                    <div class="discountParent" style="">
+                                        @if (oldPrice != metaPrice)
+                                        {
+                                            <span style="" class="vitrinDiscount">
+                                                @item.discount%
+                                            </span>
+                                        }
+
+                                    </div>
+                                    <div style="flex:1">
+                                        <div>
+                                            <div class="sectionPrice" style="">
+                                                <div class="">
+                                                    <div class="">
+                                                        @if (metaPrice != oldPrice)
+                                                        {
+                                                            <p style="display: inline-block; "> تومان </p> <del class="oldPrice" style=""> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice)/10) </del>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sectionPrice" >
+                                                <p style="display: inline-block; color: black"> تومان </p> <p class="newPrice" style="">@string.Format("{0:n0}", metaPrice/10)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+
+
+                </div>
+
+                @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
+                {
+                    string valueID = "value" + item.ID;
+
+                    <div class="addButton " style="height:40px">
+                        <div id="@addID" class="value-plus addButtonP"  style="">
+                            <i class="fa fa-shopping-basket" style=""></i>
+                            <p style="color:white">افزودن به سبد خرید</p>
+                        </div>
+                    </div>
+                    <div class="addholder" style="display:none; min-height:40px">
+                        <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; color: #FF4500;height:20px "></i>
+                        <div class="entry value @valueID " style=";height:20px;margin:0; border:0px; padding:0; width:10px"><span>0</span></div>
+                        <i id="@addID" class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #FF4500;height:20px "></i>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+
+
+    </div>
+
+}
+
+<script>
+    var newProductDetail = function (e) {
+
+        window.location.href = "/" + e;
+
+    }
+    $(".imageitself").hover(function () {
+        var url = $(this).attr('srt2');
+        if (url != "") {
+            $(this).attr('src', url);
+        }
+
+
+    }, function () {
+        var url = $(this).attr('srt1');
+        $(this).attr('src', url);
+    });
+</script>
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
+
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+    .discountParent {
+        width: 20%;
+        margin-right: 5px;
+        text-align: right
+    }
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+    }
+</style>

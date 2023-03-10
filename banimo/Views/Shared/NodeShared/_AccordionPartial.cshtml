@@ -1,0 +1,7 @@
+﻿
+@model  neshanak.viewModel.pagesVM
+
+@if(Model.)
+<div>
+    @Html.DropDownList("dropdown", new SelectList(Model.items, "ID", "title"), new { @class = "form-control", id = "selectPage" })
+</div>

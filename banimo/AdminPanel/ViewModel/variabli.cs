@@ -14,7 +14,7 @@ namespace banimo.AdminPanel.ViewModel
     }
     public class CookieVM
     {
-
+      
         public string result { get; set; }
         public string mallID = "0";
         public string floorID = "0";
@@ -30,5 +30,6 @@ namespace banimo.AdminPanel.ViewModel
         public string Username { get; set; }
         public string Password { get; set; }
         public string page { get; set; }
+        
     }
 }

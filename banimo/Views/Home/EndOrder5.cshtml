@@ -22,7 +22,6 @@
 @section scripts{
 
 
-
     <script src="~/Scripts/bootstrap-3.1.1.min.js"></script>
     <script src="~/Scripts/imagezoom.js"></script>
     <script src="~/Scripts/toastr.js"></script>
@@ -43,7 +42,6 @@
             return x1 + x2;
         }
     </script>
-
     <script>
         $("#mellat").click(function () {
             $(".banky").css("display", "none");
@@ -73,7 +71,6 @@
             $("#payment").val("1");
         })
     </script>
-
     <script>
 
         $(".panel").css("display", "block");
@@ -656,9 +653,6 @@
                 })
 
     </script>
-
-
-
 }
 
 
@@ -781,8 +775,6 @@
 </div>
 
 @{
-
-
 
     userdata user = @Session["LogedInUser"] as userdata;
     string fullname = user.fullname;

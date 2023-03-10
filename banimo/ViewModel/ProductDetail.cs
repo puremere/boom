@@ -69,6 +69,7 @@ namespace banimo.ViewModel
         public int productid { get; set; }
         public int quantity { get; set; }
         public int tarafH { get; set; }
+        public string addson { get; set; }
     }
 
     public class ProductDetail 

@@ -1,0 +1,521 @@
+﻿@model neshanak.viewModelPost.OrderList
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "مدیریت سفارشات";
+
+}
+@section scripts{
+
+    <style>
+        .nav-tabs {
+            padding-right: 0px;
+        }
+
+            .nav-tabs li {
+                float: right !important;
+            }
+
+        td {
+            white-space: nowrap;
+            padding: 15px;
+            text-align: center
+        }
+
+        th {
+            white-space: nowrap;
+            padding: 15px;
+            text-align: center
+        }
+    </style>
+
+    <link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+}
+
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin:0">
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>لطفا یکی از پیک ها را انتخاب کنید</p>
+                        <div style="display:inline-block">
+                            @if (Model.myUsers != null)
+                            {
+
+                                @Html.DropDownList("deliverDromdown", new SelectList(Model.myUsers, "ID", "fullname"), new { @class = "form-control", })
+
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="padding:25px">
+                        <p>توضحات ادمین</p>
+                        <textarea id="adminDesc" class="form-control" cols="8" style="height:150px"></textarea>
+                    </div>
+                </div>
+
+
+                <div id="setDeliver" style="display:inline-block" class="btn  btn-default">تایید</div>
+                <div id="rowSelectd"></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+
+
+
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">آخرین سفارشات </a></li>
+
+        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست زمان مجاز ارسال</a></li>
+        <li><a data-toggle="tab" href="#menu2" style=" color: #8d8d8d; ">افزودن زمان جدید</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active" style="padding-top:20px">
+
+
+
+            <div class="row">
+                <div class="col-lg-5">
+                    <p style="display:inline-block">وضعیت سفارش :</p>
+                    <select class="form-control" style="width:70%; display:inline-block" id="selectOrderType">
+                        <option value="">همه</option>
+                        <option value="1">پرداخت آنلاین</option>
+                        <option value="2">پرداخت در محل</option>
+                        <option value="3">درحال بررسی</option>
+                        <option value="4">ارسال شده</option>
+                        <option value="5">تحویل شده</option>
+                    </select>
+                </div>
+            </div>
+            <p class="ORDERBUTT" style="display:none" id="dataOrder">11</p>
+            <div id="OrderTableHolder">
+                <div class="row">
+                    <div style="overflow-x:auto;padding:10px">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> آخرین سفارشات  </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="morris-area-chart">
+                                    <div style="overflow:auto; max-height:400px; overflow-y:scroll">
+
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="cursor:pointer" class="orderID">ردیف</th>
+                                                    <th>شماره سفارش</th>
+                                                    <th style="white-space: nowrap; ">کاربر</th>
+                                                    <th>موبایل کاربر</th>
+                                                    <th>مبلغ (تومان)</th>
+                                                    <th>تاریخ سفارش</th>
+                                                    <th style="cursor:pointer" class="order">تاریخ تحویل</th>
+                                                    <th>روز تحویل</th>
+                                                    <th>ساعت تحویل</th>
+                                                    <th>آدرس</th>
+                                                    <th>وضعیت</th>
+
+                                                    <th>جزئیات</th>
+                                                    <th>اقدامات</th>
+                                                    <th>دلیور</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    if (Model.myOrder != null)
+                                                    {
+                                                        foreach (var item in Model.myOrder)
+                                                        {
+
+                                                            int i = Model.myOrder.IndexOf(item) + 1;
+
+                                                            <tr style=" ">
+                                                                <td>@i</td>
+                                                                <td>@item.orderNumber</td>
+                                                                <td style="white-space: nowrap;">@item.fullname</td>
+                                                                <td>@item.phone</td>
+                                                                <td>@item.price</td>
+                                                                <td>@item.date</td>
+                                                                <td>@item.Rdate</td>
+                                                                <td>@item.DayText</td>
+                                                                <td>@item.TimeFrom  - @item.TimeTo</td>
+                                                                <td style="min-width:140px">@item.address</td>
+                                                                <td>@item.statusTitle</td>
+                                                                <td><div class="btn btn-default orderdetail" id="@item.ID">مشاهده جزئیات</div></td>
+                                                                <td>
+                                                                    @{
+                                                                        if (item.statusTitle == "ارسال شده")
+                                                                        {
+                                                                            <div class="btn btn-default deliverorder" id="@item.ID">تحویل سفارش</div>
+
+
+                                                                        }
+                                                                        else if (item.statusTitle == "تحویل شده")
+                                                                        {
+
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="btn btn-default finalorder" id="@item.ID">ارسال سفارش</div>
+                                                                        }
+
+                                                                    }
+                                                                </td>
+                                                                <td class="deliver" id="@item.ID" style="cursor:pointer">
+                                                                    @item.deliver
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+
+
+
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
+                    var idselected = "";
+                    $(".order").click(function () {
+
+                        if ($("#dataOrder").text() == "11") {
+                            $("#dataOrder").text("12");
+
+                        }
+                        else {
+
+                            $("#dataOrder").text("11");
+
+                        }
+
+                        order = $("#dataOrder").text();
+                        type = $("#selectOrderType").val();
+
+                        $.ajax({
+                            url: '/Admin/ChangeOrderList',
+                            dataType: 'html',
+                            data: {
+                                type: type,
+                                order: order
+
+                            },
+
+                            success: function (data) {
+
+                                $("#OrderTableHolder").html(data);
+                            }
+
+
+
+                        });
+                    });
+                    $(".orderID").click(function () {
+
+                        if ($("#dataOrder").text() == "21") {
+                            $("#dataOrder").text("22");
+
+                        }
+                        else {
+
+                            $("#dataOrder").text("21");
+
+                        }
+
+                        order = $("#dataOrder").text();
+                        type = $("#selectOrderType").val();
+
+                        $.ajax({
+                            url: '/Admin/ChangeOrderList',
+                            dataType: 'html',
+                            data: {
+                                type: type,
+                                order: order
+
+                            },
+
+                            success: function (data) {
+
+                                $("#OrderTableHolder").html(data);
+                            }
+
+
+
+                        });
+                    });
+                    $(".orderdetail").click(function () {
+
+                        var ID = $(this).attr('id');
+                        //alert("aaa");
+                        //alert(ID);
+                        $.ajax({
+                            url: '/Admin/goGetOrderDetail',
+                            dataType: 'html',
+                            data: {
+                                id: ID,
+
+                            },
+
+                            success: function (data) {
+
+                                $(".detailHolder").html(data);
+
+                            }
+
+
+
+                        });
+                    })
+                    $(".deliverorder").click(function () {
+                        var ID = $(this).attr('id');
+
+                        $.ajax({
+
+                            url: '/Admin/finalizeOrderAndDeliver',
+                            dataType: 'html',
+                            data: {
+                                id: ID,
+                                type: "5"
+                            },
+
+                            success: function (data) {
+
+                                window.location.reload();
+                            }
+
+
+
+                        });
+                    })
+                    $("#setDeliver").click(function () {
+                        $("#myModal").modal('toggle');
+                        var deliverID = $("#deliverDromdown").val();
+                        var description = $('textarea#adminDesc').val();
+                        $.ajax({
+                            url: '/Admin/finalizeOrderAndDeliver',
+                            dataType: 'html',
+                            data: {
+                                id: idselected,
+                                deliverID: deliverID,
+                                type: "4",
+                                desc: description
+                            },
+
+                            success: function (data) {
+
+                                window.location.reload();
+                            }
+
+
+
+                        });
+                    })
+
+                    $(".deliver").click(function () {
+                        $("#myModal").modal('toggle');
+                        idselected = $(this).attr('id');
+                    })
+                    //comment
+                    $(".finalorder").click(function () {
+                        $("#myModal").modal('toggle');
+                        idselected = $(this).attr('id');
+
+                    })
+                </script>
+                <div class="detailHolder">
+
+                </div>
+            </div>
+            <script>
+                $("#selectOrderType").change(function () {
+
+                    order = "12";
+                    type = $("#selectOrderType").val();
+
+                    $.ajax({
+                        url: '/Admin/ChangeOrderList',
+                        dataType: 'html',
+                        data: {
+                            type: type,
+                            order: order
+
+                        },
+
+                        success: function (data) {
+
+                            $("#OrderTableHolder").html(data);
+                        }
+
+
+
+                    });
+                });
+
+            </script>
+
+        </div>
+
+        <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+            <script>
+                $.ajax({
+                    url: '/Admin/GetTheListOfDeliveryTime',
+                    dataType: 'html',
+                    success: function (data) {
+
+                        $('#listholder').html(data);
+                        $('#listholder').css("display", "block");
+                    },
+                    error: function () {
+                        alert("timeFail")
+                    }
+                });
+
+            </script>
+            <div id="listholder" style="display:none;padding-top:10px">
+
+            </div>
+
+
+
+
+        </div>
+        <div id="menu2" class="tab-pane fade" style="padding-top:20px">
+            <div class="form-group ">
+                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                    روز
+                </label>
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "شنبه",
+                        Value = "1"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "یک شنبه",
+                        Value = "2"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "دو شنبه",
+                        Value = "3"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "سه شنبه",
+                        Value = "4"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "چهار شنبه",
+                        Value = "5"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "پنچ شنبه",
+                        Value = "6"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "جمعه",
+                        Value = "7"
+                    });
+
+                }
+                <div class="component ">
+                    @Html.DropDownList("daysOfWeek", listItems, "-- Select Status --", new { id = "daysOfWeek", style = "width:100%", @class = "DRPd form-control" })
+                </div>
+                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                    از ساعت
+                </label>
+                <div class="component ">
+                    <input type="text" id="timefrom" class="form-control" />
+                </div>
+                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                    تا ساعت
+                </label>
+                <div class="component ">
+                    <input type="text" id="timeto" class="form-control" />
+                </div>
+                <div class="component " style="direction: rtl; ">
+                    <button id="addTimeOfDeliver" class="btn btn-success">تایید</button>
+                    <script>
+                        $(document).ready(function () {
+                            $("#addTimeOfDeliver").click(function () {
+
+                                var DayOfWeek = $("#daysOfWeek").val();
+                                var TimeFrom = $("#timefrom").val();
+                                var TimeTo = $("#timeto").val();
+                                $.ajax({
+                                    url: '/Admin/addNewTimeOfDeliver',
+                                    dataType: 'html',
+                                    data: {
+                                        DayOfWeek: DayOfWeek,
+                                        TimeFrom: TimeFrom,
+                                        TimeTo: TimeTo
+                                    },
+                                    success: function (data) {
+                                        if (data === "success") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+
+                                            toastr.success('با موقیت ثبت شد');
+                                            location.reload();
+                                        }
+
+                                    },
+                                    error: function () {
+                                        alert("خطا")
+                                    }
+                                });
+                            })
+                        })
+
+                    </script>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

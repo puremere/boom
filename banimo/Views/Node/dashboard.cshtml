@@ -1,0 +1,235 @@
+﻿@model banimo.ViewModel.AdminDashbaordNodeVM
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = " dashboard";
+}
+
+<style>
+    .dashdata {
+        padding: 10px;
+    }
+
+    .dirLeft {
+        float: left;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .heading-blog {
+        color: #fff;
+        line-height: 26px;
+        background-image: linear-gradient(to bottom, #2a85ae 0, #246388 100%) !important;
+        height: 110px !important;
+    }
+
+    .huge-head {
+        font-size: 28px;
+        margin-top: 5px;
+    }
+
+    .heading-blog {
+        color: #fff;
+        line-height: 26px;
+    }
+
+    .titr-head {
+        font-size: 16px;
+        margin-top: 35px;
+    }
+
+    .panel-footer {
+        padding: 10px 15px;
+        background-color: #f5f5f5;
+        border-top: 1px solid #ddd;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        color: #337ab7;
+    }
+
+    .page-header {
+        padding-bottom: 9px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .header-wellcom {
+        margin: 0 !important;
+        direction: rtl;
+        font-size: 20px;
+        color: #029fca;
+        float: left;
+    }
+
+    .breadcrumb {
+        float: right;
+        text-align: right;
+    }
+
+    .breadcrumb {
+        padding: 8px 15px;
+        margin-bottom: 20px;
+        list-style: none;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+    }
+
+    .breadcrumb {
+        position: relative;
+        font-size: 14px;
+    }
+
+        .breadcrumb > .active {
+            color: #777;
+        }
+
+
+        .breadcrumb > li {
+            display: inline-block;
+        }
+
+        .breadcrumb > li {
+            font-size: 12px;
+            direction: rtl;
+        }
+</style>
+<div class="col-lg-12">
+    <h1 class="page-header header-wellcom">
+        admin <small>@Resources.res.wellcome</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="active">
+            <i class="fa fa-dashboard"></i> @Resources.res.dashbaord
+        </li>
+    </ol>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
+        <div class="panel panel-green" style="border: 0">
+            <div class="panel-heading heading-blog ">
+                <div class="row">
+                    <div class="col-xs-4 dirLeft">
+                        <i class="fa fa-product-hunt fa-4x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge-head">@Model.installNumRows</div>
+                        <div class="titr-head">@Resources.res.activeinstall</div>
+                    </div>
+                </div>
+            </div>
+            <a href="" >
+                <div class="panel-footer ">
+                    
+                    <span class="pull-right"><i class="fa  fa-product-hunt" aria-hidden="true"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
+        <div class="panel panel-green" style="border: 0">
+            <div class="panel-heading heading-blog ">
+                <div class="row">
+                    <div class="col-xs-4 dirLeft">
+                        <i class="fa fa-product-hunt fa-4x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge-head">@Model.nodeNumRows</div>
+                        <div class="titr-head">@Resources.res.registerdbusi</div>
+                    </div>
+                </div>
+            </div>
+            <a >
+                <div class="panel-footer ">
+                  
+                    <span class="pull-right"><i class="fa  fa-product-hunt" aria-hidden="true"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
+        <div class="panel panel-green" style="border: 0">
+            <div class="panel-heading heading-blog ">
+                <div class="row">
+                    <div class="col-xs-4 dirLeft">
+                        <i class="fa fa-shopping-basket fa-4x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge-head">@Model.userNumRows</div>
+                        <div class="titr-head">@Resources.res.registerduser</div>
+                    </div>
+                </div>
+            </div>
+            <a href="" >
+                <div class="panel-footer ">
+                   
+                    <span class="pull-right"><i class="fa  fa-shopping-basket" aria-hidden="true"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+   
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> @Resources.res.lastbusi </h3>
+            </div>
+            <div class="panel-body">
+                <div id="morris-area-chart">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.res.col</th>
+                                    <th>@Resources.res.buscode </th>
+                                    <th>@Resources.res.bustitle</th>
+                                   
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.lastProducts != null)
+                                    {
+                                        foreach (var pro in Model.lastProducts)
+                                        {
+
+                                            int index = Model.lastProducts.IndexOf(pro) + 1;
+
+                                            <tr style=" ">
+                                                <td>@index</td>
+                                                <td>@pro.ID</td>
+                                                <td>
+                                                    @pro.title
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

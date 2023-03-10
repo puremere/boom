@@ -1,0 +1,714 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cat" xml:space="preserve">
+    <value>طبقه بندی اصلی</value>
+  </data>
+  <data name="chooscat" xml:space="preserve">
+    <value>طبقه بندی را انتخاب کنید</value>
+  </data>
+  <data name="chooseCity" xml:space="preserve">
+    <value>شهر خود را انتخاب کنید</value>
+  </data>
+  <data name="chooseCountry" xml:space="preserve">
+    <value>کشور خود را انتخاب کنید</value>
+  </data>
+  <data name="choossubcat" xml:space="preserve">
+    <value>طبقه بندی فرعی را انتخاب کنید</value>
+  </data>
+  <data name="city" xml:space="preserve">
+    <value>شهر</value>
+  </data>
+  <data name="coosesubcattwo" xml:space="preserve">
+    <value>طبقه بندی فرعی دو را انتخاب کنید</value>
+  </data>
+  <data name="country" xml:space="preserve">
+    <value>کشور</value>
+  </data>
+  <data name="fax" xml:space="preserve">
+    <value>فکس</value>
+  </data>
+  <data name="createAddress" xml:space="preserve">
+    <value>آدرس</value>
+  </data>
+  <data name="createButt" xml:space="preserve">
+    <value>تایید</value>
+  </data>
+  <data name="createDesc" xml:space="preserve">
+    <value>توضیحات</value>
+  </data>
+  <data name="createImage" xml:space="preserve">
+    <value>افزودن عکس</value>
+  </data>
+  <data name="createLocation" xml:space="preserve">
+    <value>موقعیت</value>
+  </data>
+  <data name="createPhone" xml:space="preserve">
+    <value>شماره تلفن 1</value>
+  </data>
+  <data name="createPhone2" xml:space="preserve">
+    <value>شماره تلفن 2</value>
+  </data>
+  <data name="createTitle" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>ایمیل</value>
+  </data>
+  <data name="footeraboutus" xml:space="preserve">
+    <value>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد</value>
+  </data>
+  <data name="footertag" xml:space="preserve">
+    <value>برچسب ها</value>
+  </data>
+  <data name="forgetPass" xml:space="preserve">
+    <value>رمز عبور خود را فراموش کرده ام</value>
+  </data>
+  <data name="headerFormInput1" xml:space="preserve">
+    <value>مقصد مورد نظر خود را تایپ نمایید</value>
+  </data>
+  <data name="headerFormInput2" xml:space="preserve">
+    <value>جستجو</value>
+  </data>
+  <data name="headerFormInput3" xml:space="preserve">
+    <value>انتخاب کشور</value>
+  </data>
+  <data name="headerFormInput4" xml:space="preserve">
+    <value>انتخاب شهر</value>
+  </data>
+  <data name="headertext1" xml:space="preserve">
+    <value>در اینجا بهترین ها را پیدا کنید</value>
+  </data>
+  <data name="headertext2" xml:space="preserve">
+    <value>بهترین مکان ها برای خرید،استراحت و تفریح منتظر شماس</value>
+  </data>
+  <data name="instagram" xml:space="preserve">
+    <value>اینستاگرام</value>
+  </data>
+  <data name="login" xml:space="preserve">
+    <value>ورود</value>
+  </data>
+  <data name="loginEmail" xml:space="preserve">
+    <value>ایمیل خود را وارد نمایید</value>
+  </data>
+  <data name="loginEmailError" xml:space="preserve">
+    <value>ایمیل صحیح وارد نمایید</value>
+  </data>
+  <data name="loginPass" xml:space="preserve">
+    <value>رمز عبور خود را وارد نمایید</value>
+  </data>
+  <data name="loginPassError" xml:space="preserve">
+    <value>رمز عبور را وارد نمایید</value>
+  </data>
+  <data name="logosection1" xml:space="preserve">
+    <value>ورود و ثبت نام</value>
+  </data>
+  <data name="logosection2" xml:space="preserve">
+    <value>تماس با ما</value>
+  </data>
+  <data name="logosection3" xml:space="preserve">
+    <value>پشتیبانی</value>
+  </data>
+  <data name="logosection4" xml:space="preserve">
+    <value>افزودن مورد جدید</value>
+  </data>
+  <data name="more" xml:space="preserve">
+    <value>بیشتر</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>تایید</value>
+  </data>
+  <data name="popularText1" xml:space="preserve">
+    <value>موارد محبوب در تمامی طبقه بندی ها</value>
+  </data>
+  <data name="popularText2" xml:space="preserve">
+    <value>تنها بخشی از موارد نشان داده شده اند</value>
+  </data>
+  <data name="randomtext1" xml:space="preserve">
+    <value>پیشنهادات تصادفی</value>
+  </data>
+  <data name="randomtext2" xml:space="preserve">
+    <value>تنها بخشی از موارد نشان داده شده اند</value>
+  </data>
+  <data name="recenttext1" xml:space="preserve">
+    <value>موارد مشاهده شده اخیر</value>
+  </data>
+  <data name="recenttext2" xml:space="preserve">
+    <value>تنها بخشی از موارد نشان داده شده اند</value>
+  </data>
+  <data name="register" xml:space="preserve">
+    <value>ثبت نام</value>
+  </data>
+  <data name="registration" xml:space="preserve">
+    <value>رجیستر</value>
+  </data>
+  <data name="rememberme" xml:space="preserve">
+    <value>مرا به خاطر بسپار</value>
+  </data>
+  <data name="subcat" xml:space="preserve">
+    <value>طبقه بندی فرعی</value>
+  </data>
+  <data name="subcat2" xml:space="preserve">
+    <value>طبقه بندی فرعی دو</value>
+  </data>
+  <data name="telegram" xml:space="preserve">
+    <value>تلگرام</value>
+  </data>
+  <data name="viewProductContent1" xml:space="preserve">
+    <value>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد</value>
+  </data>
+  <data name="viewProductContent2" xml:space="preserve">
+    <value>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد</value>
+  </data>
+  <data name="viewProductContent3" xml:space="preserve">
+    <value>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد</value>
+  </data>
+  <data name="viewProductHeader1" xml:space="preserve">
+    <value>صرفه جویی در زمان</value>
+  </data>
+  <data name="viewProductHeader2" xml:space="preserve">
+    <value>در تیم خود بدرخشید</value>
+  </data>
+  <data name="viewProductHeader3" xml:space="preserve">
+    <value>خصوصیات طراحی</value>
+  </data>
+  <data name="viewProductText1" xml:space="preserve">
+    <value>در هر جا و هر مکانی به یاری شما می آییم</value>
+  </data>
+  <data name="viewProductText2" xml:space="preserve">
+    <value>و قطعا انجام میشود</value>
+  </data>
+  <data name="website" xml:space="preserve">
+    <value>وبسایت</value>
+  </data>
+  <data name="whatsapp" xml:space="preserve">
+    <value>واتساپ</value>
+  </data>
+  <data name="captchatext" xml:space="preserve">
+    <value>لطفا کد بالا را وارد نمایید</value>
+  </data>
+  <data name="changeEmail" xml:space="preserve">
+    <value>تغییر ایمیل</value>
+  </data>
+  <data name="confirmRuleText" xml:space="preserve">
+    <value>برای ثبت نام باید با موافقت خود را با این شرایط اعلام نمایید</value>
+  </data>
+  <data name="logosection0" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="logosection5" xml:space="preserve">
+    <value>خانه</value>
+  </data>
+  <data name="registerEmail" xml:space="preserve">
+    <value>ایمیل خود را وارد کنید</value>
+  </data>
+  <data name="registerEmailError" xml:space="preserve">
+    <value>ایمیل صحیح وارد کنید</value>
+  </data>
+  <data name="registerPassword" xml:space="preserve">
+    <value>رمز عبور خود را وارد نمایید</value>
+  </data>
+  <data name="registerPasswordError" xml:space="preserve">
+    <value>طول رمز عبور باید بیش از 6 حرف باشد</value>
+  </data>
+  <data name="registerPasswordRepeat" xml:space="preserve">
+    <value>تکرار رمز عبور</value>
+  </data>
+  <data name="registerPasswordRepeatError" xml:space="preserve">
+    <value>رمز عبور باید مشابه باشد</value>
+  </data>
+  <data name="resendCode" xml:space="preserve">
+    <value>ارسال مجدد کد</value>
+  </data>
+  <data name="verifyCode" xml:space="preserve">
+    <value>کد تایید را وارد نمایید</value>
+  </data>
+  <data name="maptext1" xml:space="preserve">
+    <value>هر جا، هر مکان نزد شما هستیم تا به یاری شما بیاییم</value>
+  </data>
+  <data name="maptext2" xml:space="preserve">
+    <value>و برای انجام ان برنامه ریزی داریم</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="comment" xml:space="preserve">
+    <value>نظرات</value>
+  </data>
+  <data name="magnoitem" xml:space="preserve">
+    <value>نتیجه ای یافت نشد</value>
+  </data>
+  <data name="magSeedetail" xml:space="preserve">
+    <value>مشاهده جزئیات</value>
+  </data>
+  <data name="blogtext1" xml:space="preserve">
+    <value>آخرین اخبار</value>
+  </data>
+  <data name="blogtext2" xml:space="preserve">
+    <value>و تنها بخشی از اخبار نمایش داده میشود</value>
+  </data>
+  <data name="registerName" xml:space="preserve">
+    <value>نام خود را وارد کنید</value>
+  </data>
+  <data name="registerNameError" xml:space="preserve">
+    <value>نام باید وارد شود</value>
+  </data>
+  <data name="registerPhone" xml:space="preserve">
+    <value>تلفن خود را وارد کنید</value>
+  </data>
+  <data name="registerPhoneError" xml:space="preserve">
+    <value>تلفن باید وارد شود</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="maincitychoose" xml:space="preserve">
+    <value>شهر مورد نظر را انتخاب کنید</value>
+  </data>
+  <data name="noItemFound" xml:space="preserve">
+    <value>موردی یافت نشد</value>
+  </data>
+  <data name="address" xml:space="preserve">
+    <value>آدرس</value>
+  </data>
+  <data name="mobile" xml:space="preserve">
+    <value>موبایل</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>تلفن</value>
+  </data>
+  <data name="activeinstall" xml:space="preserve">
+    <value>نصب فعال</value>
+  </data>
+  <data name="adminPanel" xml:space="preserve">
+    <value>پنل مدیریت</value>
+  </data>
+  <data name="bannman" xml:space="preserve">
+    <value>مدیریت بنر</value>
+  </data>
+  <data name="buscode" xml:space="preserve">
+    <value>کد صنف</value>
+  </data>
+  <data name="busiadd" xml:space="preserve">
+    <value>افزودن صنف</value>
+  </data>
+  <data name="busilist" xml:space="preserve">
+    <value>لیست اصناف</value>
+  </data>
+  <data name="busiman" xml:space="preserve">
+    <value>مدیریت اصناف</value>
+  </data>
+  <data name="bustitle" xml:space="preserve">
+    <value>عنوان صنف</value>
+  </data>
+  <data name="category" xml:space="preserve">
+    <value>طبقه بندی</value>
+  </data>
+  <data name="catnam" xml:space="preserve">
+    <value>مدیریت طبقه بندی</value>
+  </data>
+  <data name="col" xml:space="preserve">
+    <value>ردیف</value>
+  </data>
+  <data name="comman" xml:space="preserve">
+    <value>مدیریت نظرات</value>
+  </data>
+  <data name="dashbaord" xml:space="preserve">
+    <value>داشبورد</value>
+  </data>
+  <data name="delbusi" xml:space="preserve">
+    <value>آیا از حذف محصول اطمینان دارید</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="inactive" xml:space="preserve">
+    <value>غیر فعال</value>
+  </data>
+  <data name="lastbusi" xml:space="preserve">
+    <value>آخرین محصولات ثبت شده</value>
+  </data>
+  <data name="link" xml:space="preserve">
+    <value>لینک</value>
+  </data>
+  <data name="mobile1" xml:space="preserve">
+    <value>شماره موبایل 1</value>
+  </data>
+  <data name="mobile2" xml:space="preserve">
+    <value>شماره موبایل 2</value>
+  </data>
+  <data name="newsman" xml:space="preserve">
+    <value>مدیریت اخبار</value>
+  </data>
+  <data name="offer" xml:space="preserve">
+    <value>پیشنهاد ویژه</value>
+  </data>
+  <data name="pageman" xml:space="preserve">
+    <value>مدیریت صفحات</value>
+  </data>
+  <data name="registerdbusi" xml:space="preserve">
+    <value>اصناف ثبت شده</value>
+  </data>
+  <data name="registerduser" xml:space="preserve">
+    <value>کاربران ثبت شده</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>جستجو</value>
+  </data>
+  <data name="slideman" xml:space="preserve">
+    <value>مدیریت اسلاید</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="userman" xml:space="preserve">
+    <value>مدیریت کاربران</value>
+  </data>
+  <data name="wellcome" xml:space="preserve">
+    <value>خوش آمدید</value>
+  </data>
+  <data name="adminEntryTitle" xml:space="preserve">
+    <value>سامانه مدیریت مطالب</value>
+  </data>
+  <data name="supectPanel" xml:space="preserve">
+    <value>پنل کاربری گروه سوپکت</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>درباره ما</value>
+  </data>
+  <data name="completeAll" xml:space="preserve">
+    <value>لطفاً تمامی موارد را کامل کنید</value>
+  </data>
+  <data name="contact" xml:space="preserve">
+    <value>تماس با ما</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>حریم خصوصی</value>
+  </data>
+  <data name="recoverDate" xml:space="preserve">
+    <value>بازیابی اطلاعات</value>
+  </data>
+  <data name="addBlogCat" xml:space="preserve">
+    <value>افزودن سرفصل جدید</value>
+  </data>
+  <data name="BlogCat" xml:space="preserve">
+    <value>سرفصل مقالات</value>
+  </data>
+  <data name="blogCatList" xml:space="preserve">
+    <value>لیست سرفصل ها</value>
+  </data>
+  <data name="blogList" xml:space="preserve">
+    <value>لیست مقالات</value>
+  </data>
+  <data name="codeWrong" xml:space="preserve">
+    <value>کد تایید صحیح نیست</value>
+  </data>
+  <data name="content" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>تاریخ</value>
+  </data>
+  <data name="image" xml:space="preserve">
+    <value>عکس </value>
+  </data>
+  <data name="newBlog" xml:space="preserve">
+    <value>مقاله جدید</value>
+  </data>
+  <data name="noemail" xml:space="preserve">
+    <value>ایمیل ثبت نشده است</value>
+  </data>
+  <data name="tags" xml:space="preserve">
+    <value>تگ ها</value>
+  </data>
+  <data name="writer" xml:space="preserve">
+    <value>نویسنده</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>افزودن</value>
+  </data>
+  <data name="newName" xml:space="preserve">
+    <value>نام جدید</value>
+  </data>
+  <data name="countryman" xml:space="preserve">
+    <value>مدیریت لوکیشن</value>
+  </data>
+  <data name="video" xml:space="preserve">
+    <value>ویدیو</value>
+  </data>
+  <data name="confrimAction" xml:space="preserve">
+    <value>آیا از انجام عملیات اطمینان دارید</value>
+  </data>
+  <data name="recommended" xml:space="preserve">
+    <value>توصیه شده</value>
+  </data>
+  <data name="recommendText" xml:space="preserve">
+    <value>موارد توصیه شده</value>
+  </data>
+  <data name="state" xml:space="preserve">
+    <value>استان/ایالت</value>
+  </data>
+  <data name="registerError1" xml:space="preserve">
+    <value>این ایمیل قبلا ثبت شده است</value>
+  </data>
+  <data name="registerError2" xml:space="preserve">
+    <value>عبارت امنیتی نادرست است</value>
+  </data>
+  <data name="registerError3" xml:space="preserve">
+    <value>خطا ! لطفاً مجددا تلاش کنید</value>
+  </data>
+  <data name="loginError1" xml:space="preserve">
+    <value>عبارت امنیتی نادرست است</value>
+  </data>
+  <data name="loginError2" xml:space="preserve">
+    <value>نام کاربری یا رمز عبور اشتباه است</value>
+  </data>
+  <data name="forum" xml:space="preserve">
+    <value>اتاق گفتگو</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>آموزش زبان</value>
+  </data>
+  <data name="mastercart" xml:space="preserve">
+    <value>مستر کارت</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>سوالات متداول</value>
+  </data>
+  <data name="mohasebeBank" xml:space="preserve">
+    <value>محاسبه سود بانکی</value>
+  </data>
+  <data name="mohasebeMaster" xml:space="preserve">
+    <value>محاسبه سود مستر کارت</value>
+  </data>
+  <data name="page" xml:space="preserve">
+    <value>صفحه</value>
+  </data>
+  <data name="regandsign" xml:space="preserve">
+    <value>ثبت و نام و رجیستر</value>
+  </data>
+  <data name="sampleEmail" xml:space="preserve">
+    <value>ایمیل های نمونه</value>
+  </data>
+  <data name="addNewAccordion" xml:space="preserve">
+    <value>افزودن آیتم جدید</value>
+  </data>
+  <data name="bankINTf1" xml:space="preserve">
+    <value>مبلغ برداشت شده از بانک</value>
+  </data>
+  <data name="chooseItem" xml:space="preserve">
+    <value>آیتم مورد نظر را انتخاب کنید</value>
+  </data>
+  <data name="editAccordion" xml:space="preserve">
+    <value>ویرایش آیتم</value>
+  </data>
+  <data name="faqandemail" xml:space="preserve">
+    <value>سوالات و ایمیل های متداول</value>
+  </data>
+  <data name="masterINTf1" xml:space="preserve">
+    <value>مبلغ کردیت شما</value>
+  </data>
+  <data name="masterINTf2" xml:space="preserve">
+    <value>مبلغ قسط به دلخواه</value>
+  </data>
+  <data name="masterINTf3" xml:space="preserve">
+    <value>مبلغی که میخواهید پداخت کنید</value>
+  </data>
+  <data name="reload" xml:space="preserve">
+    <value>ریلود</value>
+  </data>
+  <data name="totalB" xml:space="preserve">
+    <value>سود پرداخت شده</value>
+  </data>
+  <data name="totalM" xml:space="preserve">
+    <value>تعداد ماه</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="enterSupermarket" xml:space="preserve">
+    <value>ورود به سوپرمارکت</value>
+  </data>
+  <data name="supermarket" xml:space="preserve">
+    <value>سوپرمارکت</value>
+  </data>
+  <data name="book" xml:space="preserve">
+    <value>کتاب</value>
+  </data>
+  <data name="course" xml:space="preserve">
+    <value>دوره</value>
+  </data>
+  <data name="lan" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="section" xml:space="preserve">
+    <value>بخش</value>
+  </data>
+  <data name="tutorial" xml:space="preserve">
+    <value>مدیریت آموزش</value>
+  </data>
+  <data name="live" xml:space="preserve">
+    <value>پخش زنده</value>
+  </data>
+  <data name="enrollment" xml:space="preserve">
+    <value>ثبت نام</value>
+  </data>
+  <data name="installmentMinimum" xml:space="preserve">
+    <value>حداقل مبلغ قسط باید برابر باشد با: </value>
+  </data>
+  <data name="overwithdraw" xml:space="preserve">
+    <value>مقدار اعتبار شما باید بیشتر از مقدار برداشت باشد</value>
+  </data>
+  <data name="rgst" xml:space="preserve">
+    <value>رجیستر</value>
+  </data>
+  <data name="place" xml:space="preserve">
+    <value>محل</value>
+  </data>
+  <data name="setting" xml:space="preserve">
+    <value>ستینگ</value>
+  </data>
+  <data name="itemAdded" xml:space="preserve">
+    <value>پروفایل شما با موفقیت ثبت شد</value>
+  </data>
+  <data name="letter" xml:space="preserve">
+    <value>نامه</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>انگلیسی</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>فرانسه</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="Spanish" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="Turkish" xml:space="preserve">
+    <value>Turkish</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>انتخاب کنید</value>
+  </data>
+</root>

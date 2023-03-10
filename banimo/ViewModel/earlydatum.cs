@@ -35,12 +35,18 @@ namespace banimo.ViewModel
         public string title { get; set; }
         public string ID { get; set; }
     }
-
+    public class Addson
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public double price { get; set; }
+    }
     public class Datum
     {
         public string ID { get; set; }
         public string count { get; set; }
         public string vahed { get; set; }
+        public string meta { get; set; }
         public string limit { get; set; }
         public string tag { get; set; }
 
@@ -58,7 +64,9 @@ namespace banimo.ViewModel
         public string isActive { get; set; }
         public string partnerTitle { get; set; }
         public string partnerID { get; set; }
-        
+        public List<Addson> addson { get; set; }
+        public string addsonsrt { get; set; }
+
     }
 
     public class earlydatumfinal

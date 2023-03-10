@@ -13,7 +13,7 @@ namespace banimo.ViewModel
     public class Item
     {
         public int ID { get; set; }
-        public object title { get; set; }
+        public string title { get; set; }
         public string content { get; set; }
     }
 

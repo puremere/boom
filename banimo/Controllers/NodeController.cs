@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using banimo.AdminPanel.ViewModel;
-
+using banimo.Classes;
 
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -37,15 +37,19 @@ using System.Text.RegularExpressions;
 
 namespace banimo.Controllers
 {
+
+    [NodeSessionCheck]
     public class NodeController : Controller
     {
-       // GET: Node
-        string servername = "";
-        static string server = "http://neschank.de/neshanak/api/v1";
+        // GET: Node
+        string servername = "test";
+        string server = ConfigurationManager.AppSettings["server"];
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
-
+        webservise wb = new webservise();
+        public static string device = RandomString();
+        public static string code = MD5Hash(device + "ncase8934f49909");
         private void SetCookie(string mymodel, string name)
         {
 
@@ -225,7 +229,7 @@ namespace banimo.Controllers
                     collection.Add("mobile", phone);
                     collection.Add("pass", pass);
 
-                    byte[] response = client.UploadValues(server + "/Node/getuserid.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getuserid.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -799,7 +803,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            OrderList log = JsonConvert.DeserializeObject<OrderList>(result);
+            banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
 
             return View(log);
@@ -826,7 +830,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            neshanak.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<neshanak.ViewModelPost.OrderList>(result);
+            banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
 
             return PartialView("/Views/Shared/NodeShared/_OrderList.cshtml", log);
@@ -1058,7 +1062,7 @@ namespace banimo.Controllers
             }
 
 
-            ListOfDeliveryTimeViewModel log = JsonConvert.DeserializeObject<ListOfDeliveryTimeViewModel>(result);
+            banimo.ViewModel.ListOfDeliveryTimeViewModel log = JsonConvert.DeserializeObject<ViewModel.ListOfDeliveryTimeViewModel>(result);
 
 
 
@@ -1087,7 +1091,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            neshanak.ViewModelPost.OrderList log2 = JsonConvert.DeserializeObject<neshanak.ViewModelPost.OrderList>(result);
+            banimo.ViewModelPost.OrderList log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
 
 
             return PartialView("/Views/Shared/_gogetOrderList.cshtml", log2);
@@ -1153,7 +1157,7 @@ namespace banimo.Controllers
 
                 result = Encoding.UTF8.GetString(response);
             }
-            List<viewModel.pList> model = JsonConvert.DeserializeObject<List<viewModel.pList>>(result);
+            List<banimo.ViewModel.pList> model = JsonConvert.DeserializeObject<List<banimo.ViewModel.pList>>(result);
             string resultstring = JsonConvert.SerializeObject(model);
             return Content(resultstring);
 
@@ -1185,7 +1189,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            neshanak.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<neshanak.ViewModelPost.responseModel>(result);
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
 
         }
@@ -1213,7 +1217,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            neshanak.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<neshanak.ViewModelPost.responseModel>(result);
+            banimo.ViewModelPost.responseModel model = JsonConvert.DeserializeObject<banimo.ViewModelPost.responseModel>(result);
             return Content(model.status);
         }
         public void finalizeOrderAndDeliver(string id, string type, string deliverID, string desc)
@@ -1800,6 +1804,7 @@ namespace banimo.Controllers
                 collection.Add("token", token);
                 collection.Add("catID", catID);
                 collection.Add("lan", lan);
+                collection.Add("servername", servername);
                 collection.Add("image", finalimage);
 
                 byte[] response = client.UploadValues(server + "/Node/editcat.php", collection);
@@ -1967,7 +1972,8 @@ namespace banimo.Controllers
                 collection.Add("title", title);
                 collection.Add("token", token);
                 collection.Add("catID", catID);
-                collection.Add("lan", lan);
+                collection.Add("lan", "en");
+                collection.Add("servername", servername);
                 collection.Add("image", finalimage.Trim(','));
 
                 byte[] response = client.UploadValues(server + "/Node/setnewcat.php", collection);
@@ -2051,6 +2057,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("catID", catid);
                 collection.Add("lan", lan);
+                collection.Add("servername", servername);
 
                 byte[] response = client.UploadValues(server + "/Node/deletefromcat.php", collection);
 
@@ -2157,6 +2164,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("catID", catid);
                 collection.Add("lan", lan);
+                collection.Add("servername", servername);
                 byte[] response = client.UploadValues(server + "/Node/getcatsItem.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -2221,7 +2229,7 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult setnewsubcat(string catid, string subcattitle, string neshanak)
+        public ActionResult setnewsubcat(string catid, string subcattitle, string banimo)
         {
 
             string device = RandomString(10);
@@ -2236,7 +2244,7 @@ namespace banimo.Controllers
                 collection.Add("title", subcattitle);
                 collection.Add("id", catid);
                 collection.Add("servername", servername);
-                collection.Add("neshanak", neshanak);
+                collection.Add("banimo", banimo);
 
                 byte[] response = client.UploadValues(server + "/Node/setnewsubcat.php", collection);
 
@@ -2258,7 +2266,7 @@ namespace banimo.Controllers
                 return Content("3");
             }
         }
-        public ActionResult setnewsubcat2(string subcatid, string subcat2, string catid, string neshanak)
+        public ActionResult setnewsubcat2(string subcatid, string subcat2, string catid, string banimo)
         {
 
             string device = RandomString(10);
@@ -2274,7 +2282,7 @@ namespace banimo.Controllers
                 collection.Add("subcatid", subcatid);
                 collection.Add("catid", catid);
                 collection.Add("servername", servername);
-                collection.Add("neshanak", neshanak);
+                collection.Add("banimo", banimo);
 
                 byte[] response = client.UploadValues(server + "/Node/setnewsubcat2.php", collection);
 
@@ -2924,7 +2932,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            viewModel.adminMoneyVM model = JsonConvert.DeserializeObject<viewModel.adminMoneyVM>(result);
+            banimo.ViewModel.adminMoneyVM model = JsonConvert.DeserializeObject<banimo.ViewModel.adminMoneyVM>(result);
             return View(model);
         }
 
@@ -3146,7 +3154,7 @@ namespace banimo.Controllers
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("catID", catid);
-                    collection.Add("servername", "neshanak");
+                    collection.Add("servername", "banimo");
 
                     byte[] response = client.UploadValues(server + "/Node/getfilterslist.php", collection);
 
@@ -3199,7 +3207,7 @@ namespace banimo.Controllers
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("CatID", catid);
-                    collection.Add("servername", "neshanak");
+                    collection.Add("servername", "banimo");
 
                     byte[] response = client.UploadValues(server + "/Node/getListOfFeaturesCombine.php", collection);
 
@@ -3306,16 +3314,16 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            ArticleCommentList log = JsonConvert.DeserializeObject<ArticleCommentList>(result);
+            ViewModel.ArticleCommentList log = JsonConvert.DeserializeObject<ViewModel.ArticleCommentList>(result);
 
-            articlesListAdmin log2 = JsonConvert.DeserializeObject<articlesListAdmin>(getArticleList("", ""));
+            ViewModel.articlesListAdmin log2 = JsonConvert.DeserializeObject<ViewModel.articlesListAdmin>(getArticleList("", ""));
             //foreach(var item in log2.articles)
             //{
             //    item.hashtags = "['" + item.hashtags;
             //    item.hashtags = item.hashtags.Replace("-", "','");
             //    item.hashtags =  item.hashtags + "']";
             //}
-            viewModel.AdminBlogVM model = new viewModel.AdminBlogVM()
+            ViewModel.AdminBlogVM model = new ViewModel.AdminBlogVM()
             {
                 Articlelist = log2,
                 // comment list is list of cats here!!!
@@ -3349,7 +3357,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult setNewArticle(viewModel.newArcticelVM model)
+        public ActionResult setNewArticle(ViewModel.newArcticelVM model)
         {
 
             if (model.description.Contains("script"))
@@ -3438,7 +3446,7 @@ namespace banimo.Controllers
             }
             return RedirectToAction("blog");
         }
-        public ActionResult updateArticle(viewModel.updateArticleVM model)
+        public ActionResult updateArticle(ViewModel.updateArticleVM model)
         {
 
             model.tagupdate = model.tagupdate.Replace(",", "-");
@@ -3604,7 +3612,7 @@ namespace banimo.Controllers
         {
 
 
-            articlesListAdmin log = JsonConvert.DeserializeObject<articlesListAdmin>(getArticleList(cat, search));
+            ViewModel.articlesListAdmin log = JsonConvert.DeserializeObject<ViewModel.articlesListAdmin>(getArticleList(cat, search));
             return PartialView("/Views/Shared/NodeShared/_ListOfArticles.cshtml", log);
         }
 
@@ -3629,7 +3637,7 @@ namespace banimo.Controllers
             }
 
 
-            UserListOfAdmin log2 = JsonConvert.DeserializeObject<UserListOfAdmin>(result);
+            ViewModel.UserListOfAdmin log2 = JsonConvert.DeserializeObject<ViewModel.UserListOfAdmin>(result);
 
             return View(log2);
         }
@@ -3735,7 +3743,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            UserListOfAdmin log = JsonConvert.DeserializeObject<UserListOfAdmin>(result);
+            ViewModel.UserListOfAdmin log = JsonConvert.DeserializeObject<ViewModel.UserListOfAdmin>(result);
             return PartialView("/Views/Shared/NodeShared/_ListOfUsers.cshtml", log);
         }
 
@@ -3760,13 +3768,14 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("lan", lang);
+                collection.Add("servername", servername);
 
                 byte[] response = client.UploadValues(server + "/Node/getDashboard.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            AdminDashbaordVM log = JsonConvert.DeserializeObject<AdminDashbaordVM>(result);
+            ViewModel.AdminDashbaordNodeVM log = JsonConvert.DeserializeObject<ViewModel.AdminDashbaordNodeVM>(result);
 
 
             return View(log);
@@ -3826,8 +3835,6 @@ namespace banimo.Controllers
             log.query = query;
             log.location = Countryname;
             return PartialView("/Views/Shared/NodeShared/_ProductList.cshtml", log);
-
-
 
 
         }
@@ -4044,10 +4051,10 @@ namespace banimo.Controllers
 
                     //using (WebClient client = new WebClient())
                     //{
-                    //    string ftpUsername = @"meri@neshanakco.com";
+                    //    string ftpUsername = @"meri@banimoco.com";
                     //    string ftpPassword = @"!)lAx3_-h43s";
                     //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-                    //    client.UploadFile("ftp://www.neshanakco.com/public_html/webs/neshanak/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
+                    //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
                     //}
                 }
 
@@ -4131,7 +4138,7 @@ namespace banimo.Controllers
                     client.UploadValues(server + "/Node/addProductPostTest.php?", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
-                    neshanak.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<neshanak.ViewModelPost.addProductRespond>(result);
+                    banimo.ViewModelPost.addProductRespond log = JsonConvert.DeserializeObject<banimo.ViewModelPost.addProductRespond>(result);
 
 
                     if (log.status == 400)
@@ -4191,10 +4198,10 @@ namespace banimo.Controllers
 
                                 //using (WebClient client = new WebClient())
                                 //{
-                                //    string ftpUsername = @"meri@neshanakco.com";
+                                //    string ftpUsername = @"meri@banimoco.com";
                                 //    string ftpPassword = @"!)lAx3_-h43s";
                                 //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-                                //    client.UploadFile("ftp://www.neshanakco.com/public_html/webs/neshanak/api/portal/uploads/thum" + hpf.FileName, "STOR", thumsavedFileName);
+                                //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/thum" + hpf.FileName, "STOR", thumsavedFileName);
                                 //}
                                 //destImage.Dispose();
                                 //image.Dispose();
@@ -4204,10 +4211,10 @@ namespace banimo.Controllers
 
                                 //using (WebClient client = new WebClient())
                                 //{
-                                //    string ftpUsername = @"meri@neshanakco.com";
+                                //    string ftpUsername = @"meri@banimoco.com";
                                 //    string ftpPassword = @"!)lAx3_-h43s";
                                 //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-                                //    client.UploadFile("ftp://www.neshanakco.com/public_html/webs/neshanak/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
+                                //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
                                 //}
 
                             }
@@ -4248,7 +4255,7 @@ namespace banimo.Controllers
             return RedirectToAction("product", "Admin", new { MSG = message, error = result });
         }
 
-        public void addToServer(string productID, string selectedfilter, string filter, string range, string neshanakCat)
+        public void addToServer(string productID, string selectedfilter, string filter, string range, string banimoCat)
 
         {
             string json = "";
@@ -4266,7 +4273,7 @@ namespace banimo.Controllers
                 collection.Add("selectedfilter", selectedfilter);
                 collection.Add("filter", filter);
                 collection.Add("range", range);
-                collection.Add("neshanakCat", neshanakCat);
+                collection.Add("banimoCat", banimoCat);
                 collection.Add("nodeID", nodeID);
 
                 byte[] response = client.UploadValues(server + "/Node/addtoserver.php", collection);
@@ -4313,7 +4320,7 @@ namespace banimo.Controllers
             string ss = Session["imageListAdd"] as string;
             // ss = ss + filename;
             ss = ss.Substring(0, ss.Length - 1);
-            imageForEMCVM model = new viewModel.imageForEMCVM();
+            ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             model.data = ss;
             model.type = filename;
             return PartialView("/Views/Shared/NodeShared/_imageForMCE.cshtml", model);
@@ -4335,7 +4342,7 @@ namespace banimo.Controllers
             string ss = Session["imageListEdit"] as string;
             // ss = ss + filename;
             ss = ss.Substring(0, ss.Length - 1);
-            viewModel.imageForEMCVM model = new viewModel.imageForEMCVM();
+            ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             return PartialView("/Views/Shared/NodeShared/_imageForMCEEdit.cshtml", ss);
             // return Content(tobeaddedtoimagename);
         }
@@ -4343,7 +4350,7 @@ namespace banimo.Controllers
         public ActionResult GetImageForPages(string filename, HttpPostedFileBase blob)
         {
 
-            viewModel.imageForEMCVM model = new viewModel.imageForEMCVM();
+            ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             string pathString = "~/images/panelimages";
             if (!Directory.Exists(Server.MapPath(pathString)))
             {
@@ -4384,7 +4391,7 @@ namespace banimo.Controllers
 
         public ActionResult getImageList(string filename)
         {
-            viewModel.imageForEMCVM model = new viewModel.imageForEMCVM();
+            ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             string ss = "";
             if (filename == "aboutus")
             {
@@ -4427,7 +4434,7 @@ namespace banimo.Controllers
         {
 
             string cookie = "";
-            imageForEMCVM model = new viewModel.imageForEMCVM();
+            ViewModel.imageForEMCVM model = new ViewModel.imageForEMCVM();
             model.data = "";
             model.type = "";
             if (srt != "")
@@ -4644,16 +4651,16 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-
+            List<string> lst = result.Trim(',').Split(',').ToList();
             // return Content("1");
-            imagelistViwModel log = JsonConvert.DeserializeObject<imagelistViwModel>(result);
+            //banimo.ViewModel.imagelistViwModel log = JsonConvert.DeserializeObject<banimo.ViewModel.imagelistViwModel>(result);
 
-            if (log != null)
+            if (lst != null)
             {
-                foreach (var item in log.List)
+                foreach (var item in lst)
                 {
                     string pathString = "~/images/";
-                    string savedFileName = Path.Combine(Server.MapPath(pathString), Path.GetFileName(item.title));
+                    string savedFileName = Path.Combine(Server.MapPath(pathString), Path.GetFileName(item));
                     System.IO.File.Delete(savedFileName);
                 }
                 return Content("1");
@@ -4664,6 +4671,27 @@ namespace banimo.Controllers
             }
 
 
+        }
+
+        public ActionResult EditBuss(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lang = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                collection.Add("ID", id.ToString());
+                collection.Add("lan", lang);
+                byte[] response = client.UploadValues(server + "/Node/getBusnessdetail.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return View();
         }
         public ActionResult Edit(int id)
         {
@@ -4687,7 +4715,7 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(server + "/Node/getorderdetail.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            viewModel.itemDetailVM model = JsonConvert.DeserializeObject<viewModel.itemDetailVM>(result);
+            ViewModel.itemDetailVM model = JsonConvert.DeserializeObject<ViewModel.itemDetailVM>(result);
 
 
             cookimodel.images = model.img;
@@ -4696,21 +4724,22 @@ namespace banimo.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<ActionResult> Edit(itemDetailVM model)
+        public async Task<ActionResult> Edit(ViewModel.itemDetailVM model)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-            CookieVM cookie = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            banimo.AdminPanel.ViewModel.CookieVM cookie = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(getCookie("token"));
             string lang = Session["lang"] as string;
             model.desc = model.desc.Replace("\r\n", " ");
             model.code = code;
             model.device = device;
             model.lan = lang;
-            model.img = cookie.images;
+            model.img = cookie.images.Trim(',');
+            model.servername = servername;
             string searchResultPayload = JsonConvert.SerializeObject(model);
-            webService wb = new webService();
-            string resu = await wb.doPostData(server + "/additem.php", searchResultPayload);
-            countryCityCatVM viewModel = JsonConvert.DeserializeObject<countryCityCatVM>(resu);
+            banimo.Classes.webservise  wb = new banimo.Classes.webservise();
+            string resu = await wb.doPostData(server + "/Node/additem.php", searchResultPayload);
+            ViewModel.countryCityCatVM viewModel = JsonConvert.DeserializeObject<ViewModel.countryCityCatVM>(resu);
 
             cookie.images = "";
             SetCookie(JsonConvert.SerializeObject(cookie), "token");
@@ -4738,27 +4767,144 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(server + "/Node/getsliderlist.php", collection);
+                byte[] response = client.UploadValues(server + "/Node/getSlide.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
 
-            var log = JsonConvert.DeserializeObject<sliderlst>(result);
-            List<sliderDT> mylist = new List<sliderDT>();
-            //getmemyearlydataViewModel model = new getmemyearlydataViewModel();
-            sliderDT newearlydatum = new sliderDT();
-            // newearlydatum = log.data[0];
-            if (log.data != null)
+            sliderlst log = JsonConvert.DeserializeObject<sliderlst>(result);
+           
+
+            return View(log);
+        }
+
+        public ActionResult Banner(string message)
+        {
+
+            if (message == "1")
             {
-                foreach (var myvar in log.data)
-                {
-                    mylist.Add(myvar);
-                }
+                ViewBag.mess = "1";
             }
 
-            return View(mylist);
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+
+                byte[] response = client.UploadValues(server + "/Node/getBanner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            sliderlst log = JsonConvert.DeserializeObject<sliderlst>(result);
+
+
+            return View(log);
         }
+
+        [HttpPost]
+        public ActionResult Banner(sliderforedit detail)
+        {
+
+
+
+            string tobeaddedtosliderimage = RandomString(5);
+
+
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+
+
+
+
+            try
+            {
+                List<string> imagelist = new List<string>();
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    HttpPostedFileBase hpf = Request.Files[i];
+                    imagelist.Add(tobeaddedtosliderimage + hpf.FileName);
+                    if (hpf.ContentLength == 0)
+                        continue;
+                    string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtosliderimage + Path.GetFileName(hpf.FileName));
+                    hpf.SaveAs(savedFileName); // Save the file
+
+                    //using (WebClient client = new WebClient())
+                    //{
+                    //    string ftpUsername = @"meri@banimoco.com";
+                    //    string ftpPassword = @"!)lAx3_-h43s";
+                    //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
+                    //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
+                    //}
+                }
+                string imglst = "";
+                foreach (var item in imagelist)
+                {
+                    imglst += item + ",";
+                }
+
+                string json;
+
+
+
+
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("imagelist", imglst);
+                    collection.Add("servername", servername);
+
+                    byte[] response = client.UploadValues(server + "/Node/addBanner.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+
+
+                ViewBag.message = "محصول مورد نظر اضافه شد";
+
+                return RedirectToAction("Banner", "Node", new { message = "1" });
+            }
+            catch (WebException exception)
+            {
+
+                string responseText;
+                var responseStream = exception.Response.GetResponseStream();
+
+                // var responseStream = exception.Response?"":.GetResponseStream();
+
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+                throw exception.InnerException;
+            }
+
+
+        }
+
         public ActionResult myProfile(int? num)
         {
 
@@ -4889,10 +5035,10 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            neshanak.viewModel.Comments log = JsonConvert.DeserializeObject<viewModel.Comments>(result);
+            banimo.ViewModel.Comments log = JsonConvert.DeserializeObject<ViewModel.Comments>(result);
             return View(log);
         }
-        public ActionResult banner()
+        public ActionResult bannerr()
         {
 
             string device = RandomString(10);
@@ -4909,7 +5055,7 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            BannerListAdmin BannerListModel = JsonConvert.DeserializeObject<BannerListAdmin>(result);
+            ViewModel.BannerListAdmin BannerListModel = JsonConvert.DeserializeObject<ViewModel.BannerListAdmin>(result);
             if (BannerListModel.filters != "")
             {
                 BannerListModel.filters = BannerListModel.filters.Substring(1, BannerListModel.filters.Length - 1);
@@ -5027,7 +5173,7 @@ namespace banimo.Controllers
 
 
 
-            var log = JsonConvert.DeserializeObject<slideRequst>(result);
+            var log = JsonConvert.DeserializeObject<ViewModel.slideRequst>(result);
             return View(log);
         }
         public ActionResult getSlide(string catid, string locationID, string type, string page)
@@ -5080,6 +5226,7 @@ namespace banimo.Controllers
 
             return Content(result);
         }
+
         public void changeCommnetActive(string id, string value)
         {
 
@@ -5174,7 +5321,7 @@ namespace banimo.Controllers
 
 
                 result = System.Text.Encoding.UTF8.GetString(response);
-                AdminDiscountVM model = JsonConvert.DeserializeObject<AdminDiscountVM>(result);
+                ViewModel.AdminDiscountVM model = JsonConvert.DeserializeObject<ViewModel.AdminDiscountVM>(result);
                 return View(model);
             }
 
@@ -5279,7 +5426,7 @@ namespace banimo.Controllers
             }
 
 
-            neshanak.ViewModelPost.removeImageRespond mylog = JsonConvert.DeserializeObject<neshanak.ViewModelPost.removeImageRespond>(result);
+            banimo.ViewModelPost.removeImageRespond mylog = JsonConvert.DeserializeObject<banimo.ViewModelPost.removeImageRespond>(result);
             if (mylog.status == 200 && mylog.count == 1)
             {
                 string pathString = "~/images/panelimages";
@@ -5300,6 +5447,150 @@ namespace banimo.Controllers
             }
 
             return Content("1");
+        }
+        public ActionResult deleteimageB(string id, string title)
+        {
+
+            string str = id;
+            str = str.Substring(9, str.Length - 9);
+            ViewBag.Message = "Your application description page.";
+
+
+
+
+            productinfoviewdetail model = new productinfoviewdetail();
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", str);
+                collection.Add("servername", servername);
+
+                byte[] response = client.UploadValues(server + "/Node/deleteBanner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            banimo.ViewModelPost.removeImageRespond mylog = JsonConvert.DeserializeObject<banimo.ViewModelPost.removeImageRespond>(result);
+            if (mylog.status == 200 && mylog.count == 1)
+            {
+                string pathString = "~/images/panelimages";
+
+                string savedFileName = Path.Combine(Server.MapPath(pathString), Path.GetFileName(title));
+                string pathString2 = "~/images/panelimages/app";
+
+                string savedFileName2 = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
+                if (System.IO.File.Exists(savedFileName))
+                {
+                    System.IO.File.Delete(savedFileName);
+                }
+                if (System.IO.File.Exists(savedFileName2))
+                {
+                    System.IO.File.Delete(savedFileName2);
+                }
+
+            }
+
+            return Content("1");
+        }
+        [HttpPost]
+        public ActionResult Slider(sliderforedit detail)
+        {
+
+
+
+            string tobeaddedtosliderimage = RandomString(5);
+
+
+            string pathString = "~/images/panelimages";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+
+
+
+
+            try
+            {
+                List<string> imagelist = new List<string>();
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    HttpPostedFileBase hpf = Request.Files[i];
+                    imagelist.Add(tobeaddedtosliderimage + hpf.FileName);
+                    if (hpf.ContentLength == 0)
+                        continue;
+                    string savedFileName = Path.Combine(Server.MapPath(pathString), tobeaddedtosliderimage + Path.GetFileName(hpf.FileName));
+                    hpf.SaveAs(savedFileName); // Save the file
+
+                    //using (WebClient client = new WebClient())
+                    //{
+                    //    string ftpUsername = @"meri@banimoco.com";
+                    //    string ftpPassword = @"!)lAx3_-h43s";
+                    //    client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
+                    //    client.UploadFile("ftp://www.banimoco.com/public_html/webs/banimo/api/portal/uploads/" + hpf.FileName, "STOR", savedFileName);
+                    //}
+                }
+                string imglst = "";
+                foreach (var item in imagelist)
+                {
+                    imglst +=  item + ",";
+                }
+
+                string json;
+
+
+
+
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection(); 
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("imagelist", imglst);
+                    collection.Add("servername", servername); 
+
+                    byte[] response = client.UploadValues(server + "/Node/addslider.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+
+
+                ViewBag.message = "محصول مورد نظر اضافه شد";
+
+                return RedirectToAction("Slider", "Node", new { message = "1" });
+            }
+            catch (WebException exception)
+            {
+
+                string responseText;
+                var responseStream = exception.Response.GetResponseStream();
+
+                // var responseStream = exception.Response?"":.GetResponseStream();
+
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+                throw exception.InnerException;
+            }
+
+
         }
         public ActionResult Pages()
         {
@@ -5328,10 +5619,10 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            pagesVM model = JsonConvert.DeserializeObject<pagesVM>(result);
+            ViewModel.pagesVM model = JsonConvert.DeserializeObject<ViewModel.pagesVM>(result);
             return View(model);
         }
-        public ActionResult updatePages(viewModel.updatePagesVM model)
+        public ActionResult updatePages(ViewModel.updatePagesVM model)
         {
 
             string device = RandomString(10);
@@ -5407,10 +5698,10 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
-            PartnerOrders model = JsonConvert.DeserializeObject<PartnerOrders>(result);
+            ViewModel.PartnerOrders model = JsonConvert.DeserializeObject<ViewModel.PartnerOrders>(result);
             model.partnerID = id;
 
-            List<PartnerOrder> list = model.partnerOrders.Where(x => x.Rdate == "1399/3/1").ToList();
+            List<ViewModel.PartnerOrder> list = model.partnerOrders.Where(x => x.Rdate == "1399/3/1").ToList();
 
             return PartialView("/Views/Shared/NodeShared/_ListOfPartnerOrders.cshtml", model);
 
@@ -5527,7 +5818,7 @@ namespace banimo.Controllers
         public ActionResult portfolio()
         {
 
-            articlesListAdmin log2 = JsonConvert.DeserializeObject<articlesListAdmin>(getPortfolioList("", ""));
+            ViewModel.articlesListAdmin log2 = JsonConvert.DeserializeObject<ViewModel.articlesListAdmin>(getPortfolioList("", ""));
 
             //viewModel.AdminBlogVM model = new viewModel.AdminBlogVM()
             //{
@@ -5718,7 +6009,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            pagesVM model = JsonConvert.DeserializeObject<pagesVM>(result);
+            ViewModel.pagesVM model = JsonConvert.DeserializeObject<ViewModel.pagesVM>(result);
             if (model.items != null)
             {
                 foreach (var item in model.items)
@@ -5728,150 +6019,13 @@ namespace banimo.Controllers
             }
             else
             {
-                model.items = new List<Item>();
+                model.items = new List<ViewModel.Item>();
             }
 
             return PartialView("/Views/Shared/NodeShared/_AccordionPartial.cshtml", model);
         }
 
-        public ActionResult addNewAccordion(viewModel.updatePagesVM model)
-        {
-
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string lang = Session["lang"] as string;
-            string parent = "";
-            switch (model.type)
-            {
-                case ("0"):
-                    parent = model.questionPlace;
-                    break;
-                case ("1"):
-                    parent = model.emailPlace;
-                    break;
-                default:
-                    parent = model.letterPlace;
-                    break;
-            }
-
-
-
-
-            string newContent = Regex.Replace(model.content, @">\s*<", "><", RegexOptions.Multiline);
-            newContent = newContent.Replace("\\", "").Replace("&nbsp;", "");
-            newContent = model.content.Replace("\"", "*");
-            languageVM contentvm = new languageVM();
-            languageVM namevm = new languageVM();
-
-            if (!String.IsNullOrEmpty(model.newName))
-            {
-                model.name = model.newName;
-            }
-            if (lang == "en")
-            {
-                contentvm.en = newContent;
-                contentvm.fa = "";
-                contentvm.de = "";
-                namevm.en = model.name;
-                namevm.fa = "";
-                namevm.de = "";
-
-            }
-            else if (lang == "fa")
-            {
-                contentvm.fa = newContent;
-                contentvm.en = "";
-                contentvm.de = "";
-                namevm.fa = model.name;
-                namevm.en = "";
-                namevm.de = "";
-
-            }
-            else
-            {
-                contentvm.fa = "";
-                contentvm.en = "";
-                contentvm.de = newContent;
-                namevm.de = model.name;
-                namevm.en = "";
-                namevm.fa = "";
-            }
-            string finalcontent = JsonConvert.SerializeObject(contentvm);
-            string finalname = JsonConvert.SerializeObject(namevm);
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("type", model.type);
-                collection.Add("ItemID", model.dropdown);
-                if (model.update == "1")
-                {
-                    collection.Add("content", newContent);
-                    collection.Add("name", model.name);
-                }
-                else
-                {
-                    collection.Add("content", finalcontent);
-                    collection.Add("name", finalname);
-                }
-
-
-                collection.Add("lan", lang);
-                collection.Add("parent", parent);
-
-                byte[] response = client.UploadValues(server + "/Node/addNewAccordion.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-            Response.Cookies["IMG"].Value = "";
-            return RedirectToAction("accordion");
-        }
-        public ActionResult getAccordionDetail(string type, string ID)
-        {
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string lang = Session["lang"] as string;
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                collection.Add("lan", lang);
-                collection.Add("ID", ID);
-                byte[] response = client.UploadValues(server + "/Node/getAccordionList.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-            pagesVM model = JsonConvert.DeserializeObject<pagesVM>(result);
-            string content = model.items.First().content.Replace("\"", "").Replace("*", "\"").Replace("\\r", "").Replace("\\n", "");
-            return Content(content);
-        }
-        public void delAccordionDetail(string type, string ID)
-        {
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string lang = Session["lang"] as string;
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                collection.Add("ID", ID);
-                byte[] response = client.UploadValues(server + "/Node/delAccordionItem.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-        }
+       
 
         public void imageUrl(string filename, string type)
         {
@@ -5972,6 +6126,34 @@ namespace banimo.Controllers
                 response.End();
             }
         }
+
+
+
+      
+        [HttpPost]
+        public async Task<ActionResult> addITem(ViewModel.itemDetailVM model)
+        {
+           
+        CookieVM cookie = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            string lang = Session["lang"] as string;
+            string user = Session["token"] as string;
+            model.code = code;
+            model.device = device;
+            model.lan = lang;
+            model.address = model.address.Replace(',', '-').Replace("\'","");
+            model.img = cookie.images;
+            model.user = user;
+            model.servername = servername;
+            string searchResultPayload = JsonConvert.SerializeObject(model);
+            string resu = await wb.doPostData(server + "/Node/additem.php", searchResultPayload);
+            ViewModel.countryCityCatVM viewModel = JsonConvert.DeserializeObject<ViewModel.countryCityCatVM>(resu);
+            cookie.images = "";
+            SetCookie(JsonConvert.SerializeObject(cookie), "token");
+            return RedirectToAction("product", new { message = "1" });
+
+        }
+
+
 
     }
 }

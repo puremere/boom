@@ -140,7 +140,34 @@ namespace banimo.Classes
 
         }
     }
+    public class NodeSessionCheck : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+            var descriptor = filterContext.ActionDescriptor;
+            var actionName = descriptor.ActionName;
 
+            if (session["lang"] == null)
+            {
+                session["lang"] = "en";
+            }
+
+            if (actionName != "Index" && actionName != "CustomerLogin")
+            {
+
+                //if (session["LogedInUser2"] == null)
+                //{
+                //    filterContext.Result = new RedirectToRouteResult(
+                //        new RouteValueDictionary {
+                //                { "Controller", "Node" },
+                //                { "Action", "Index" }
+                //                    });
+                //}
+            }
+
+        }
+    }
     public class HomeSessionCheck : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -175,6 +202,8 @@ namespace banimo.Classes
                     if (!string.IsNullOrEmpty(request))
                     {
                         session["PartnerUser"] = request.ToString();
+                        session["PartnerCat"] = filterContext.HttpContext.Request.Cookies["PC"].Value;
+
                         string[] lst = { "Index", "product", "structure", "draft", "bank", "partner", "access" };
                         if (lst.Contains(actionName))
                         {

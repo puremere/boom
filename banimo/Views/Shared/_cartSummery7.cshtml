@@ -1,0 +1,131 @@
+﻿@model banimo.ViewModel.earlyRoot
+
+<div class="class=" products"">
+
+
+    @{
+
+
+
+
+        foreach (var item in Model.data)
+        {
+
+            //string imagefile = "placeholder.jpg";
+            //if (item.imagelist != null)
+            //{
+            //    string firstimage = item.imagelist.First().title;
+            //    imagefile = item.firstimage;
+            //}
+
+
+            //int i = item.ID;
+            //string classremname = "rem" + i;
+            //string classclosename = "close" + i;
+            //string classminusname = "minus" + i;
+            //string classaddname = "add" + i;
+            //string finaltotal = "total" + i;
+            //string imagesrc = "/images/panelimages/" + imagefile;
+            //string quantity = item.quantity.ToString();
+            //string price = item.price.ToString();
+            //string baseprice = item.baseprice.ToString();
+            //string discount = item.discount.ToString();
+            //decimal total = item.quantity * item.price;
+            //string name = item.productname;
+
+
+
+
+            @*<div class="product product-cart @classremname">
+                <div class="product-detail">
+                    <a href="product-default.html" class="product-name">
+                        @name
+                    </a>
+                    <div class="price-box">
+                        <span class="product-quantity">@quantity</span>
+                        <span class="product-price">$@price</span>
+                    </div>
+                </div>
+                <figure class="product-media">
+                    <a href="product-default.html">
+                        <img src="@imagesrc" alt="product" height="84"
+                             width="94" />
+                    </a>
+                </figure>
+                <button id=@classremname class="btn btn-link btn-close removeFromSummery" aria-label="button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>*@
+
+
+        }
+
+
+    }
+
+
+
+
+</div>
+
+<script>
+
+                        $(document).ready(function (c) {
+
+
+
+                            $('.removeFromSummery').on('click', function (c) {
+
+                                var ID = this.id
+
+                                $.ajax({
+                                    url: '/Home/deletefromcart',
+                                    dataType: 'html',
+                                    data: {
+                                        id: ID
+
+                                    },
+                                    success: function (data) {
+                                        $.ajax({
+                                            url: '/Home/gogetfinalprice',
+
+
+                                            success: function (data) {
+                                                var array = data.split(',');
+                                                $("#basepriceholder").text(addCommas(array[1]))
+                                                $("#spanfortotal").text(addCommas(array[0]))
+                                                $("#spanfortotal2").text(addCommas(array[0]))
+                                                $(".simpleCart_quantityy").text(array[2])
+                                                $(".discountfinal").text(addCommas(array[3]))
+                                                $(".discountpercent").text(array[4])
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+
+                                        $('#' + ID).fadeOut('fast', function (c) {
+                                            $('#' + ID).remove();
+                                        });
+
+
+                                    },
+                                    error: function () {
+
+                                    }
+
+
+                                });
+
+
+
+
+
+                            })
+                        });
+</script>
+<div class="cart-total">
+    <label>Subtotal:</label>
+    <span class="price basepriceholder"></span>
+</div>

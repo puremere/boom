@@ -540,7 +540,7 @@
             $(".mySlide").click(function () {
                 var val = $(this).attr('id');
 
-                if (!val.contain('image')) {
+                if (!val.includes('image')) {
                     window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
                 }
@@ -699,7 +699,7 @@
             $(".mySlide").click(function () {
                 var val = $(this).attr('id');
 
-                if (!val.contain('image')) {
+                if (!val.includes('image')) {
                     window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
                 }
@@ -853,7 +853,7 @@
             $(".mySlide").click(function () {
                 var val = $(this).attr('id');
 
-                if (!val.contain('image')) {
+                if (!val.includes('image')) {
                     window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
                 }
@@ -873,7 +873,7 @@
             {
                 <a href="/brands/@item.title">
                     <div class="item brandItem img-hover-zooom" style="border-radius:8px">
-                        <img src="~/images/brands/@item.image" style="border-radius: 8px" class="grayscale" />
+                        <img src="~/images/@item.image" style="border-radius: 8px" class="grayscale" />
                         <p style="display:none; padding: 10px;text-align: center;background-color: rgba(0,0,0,0.5);color: white;position: absolute;bottom: 0;width: 100%;"> @item.title</p>
                     </div>
                 </a>

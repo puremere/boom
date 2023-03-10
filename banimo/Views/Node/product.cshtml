@@ -1,0 +1,1578 @@
+﻿@using System.Web
+@model  banimo.AdminPanel.ViewModel.AdminProductVM
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "مدیریت مطالب";
+
+}
+
+
+
+@section scripts{
+    <link href="~/Content/croppie.css" rel="stylesheet" />
+    <script src="~/Scripts/croppie.js">
+    </script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
+}
+
+
+@{
+    if (@ViewBag.msg == 1)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.success('محصول مورد نظر با موفقیت اضافه شد')
+                     @ViewBag.msg == 4
+        </script>
+    }
+    if (@ViewBag.msg == 2)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('خطا لطفاً مجدداً تلاش کنید')
+                     @ViewBag.msg == 4
+        </script>
+    }
+    if (@ViewBag.msg == 3)
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('محصول با همین مشخصات وجود دارد')
+                     @ViewBag.msg == 4
+        </script>
+    }
+
+    if (ViewBag.message == "1")
+    {
+        <script>
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-full-width",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 150000,
+                "extendedTimeOut": 10000,
+
+
+
+            }
+            toastr.success('@Resources.res.itemAdded');
+        </script>
+    }
+
+
+
+}
+
+
+<style>
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+</style>
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">@Resources.res.busilist </a></li>
+        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; "> @Resources.res.busiadd</a></li>
+
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in  active" style="padding-top:20px">
+
+
+            <div class="">
+                <div class="form-group " style="display:flex; align-items:center">
+
+
+                    @{
+                        List<SelectListItem> listItems = new List<SelectListItem>();
+                        if (Model.log.filtersModel != null)
+                        {
+                            foreach (var item in Model.log.filtersModel)
+                            {
+                                listItems.Add(new SelectListItem
+                                {
+                                    Text = item.title,
+                                    Value = "1" + item.ID
+                                });
+                                if (item.filtersubcat != null)
+                                {
+                                    foreach (var subcat in item.filtersubcat)
+                                    {
+                                        listItems.Add(new SelectListItem
+                                        {
+                                            Text = "---" + subcat.title,
+                                            Value = "2" + subcat.ID
+                                        });
+                                        if (subcat.filtersubcat2 != null)
+                                        {
+                                            foreach (var subcat2 in subcat.filtersubcat2)
+                                            {
+                                                listItems.Add(new SelectListItem
+                                                {
+                                                    Text = "------" + subcat2.title,
+                                                    Value = "3" + subcat2.ID
+                                                });
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                        List<SelectListItem> listItems2 = new List<SelectListItem>();
+                        if (Model.log.locationAll != null)
+                        {
+                            foreach (var item in Model.log.locationAll)
+                            {
+                                listItems2.Add(new SelectListItem
+                                {
+                                    Text = item.title,
+                                    Value = "1" + item.ID
+                                });
+                                if (item.cityList != null)
+                                {
+                                    foreach (var subcat in item.cityList)
+                                    {
+                                        listItems2.Add(new SelectListItem
+                                        {
+                                            Text = "---" + subcat.title,
+                                            Value = "2" + subcat.ID
+                                        });
+
+
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    <form method="post" action="ExportToExcel" style="display:inline-block; margin-left:8px">
+
+
+                        <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                            <label> @Resources.res.category </label>
+                            <div style="width:100%">
+                                @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, "-- Select Status --", new { id = "listofproductfirst", @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                            <label> @Resources.res.createLocation </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="autocomplete col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                            <label> @Resources.res.search </label>
+                            <div style="width:100%">
+                                <input id="SearchQuery" name="SearchQuery" type="text" placeholder=" @Resources.res.search" class="form-control" style="padding:8px" />
+
+                            </div>
+                        </div>
+                        <div style="display:flex; margin-top:25px;margin-left:15px; min-width:250px">
+                            <div style="padding:7px 40px" id="Verify" class="btn btn-primary lgnsubmitt"> @Resources.res.OK</div>
+
+                        </div>
+
+
+                        <script>
+
+
+                            var getlist = function () {
+
+                                var query = $("#SearchQuery").val();
+                                var value = $("#listofproductfirst").val();
+                                var partner = $("#partnerList").val();
+                                var Countryname = $("#listofLocation2").val()
+                                $.ajax({
+                                    url: '/Node/GetTheListOfItems',
+                                    data:
+                                    {
+                                        value: value,
+                                        query: query,
+                                        partner: partner,
+                                        Countryname: Countryname
+                                    },
+                                    dataType: 'html',
+                                    success: function (data) {
+
+                                        $('#listholder').html(data);
+                                        $('#listholder').css("display", "block");
+                                    },
+                                    error: function () {
+                                        alert("nashod")
+                                    }
+                                });
+                            };
+
+                            $("#Verify").click(function () {
+
+
+                                $.ajax({
+                                    url: '/Node/resetAdminProductPage',
+                                    dataType: 'html',
+                                    success: function (data) {
+                                        getlist();
+                                    },
+                                    error: function () {
+                                        alert("nashod")
+                                    }
+                                });
+
+
+                            })
+
+
+
+
+
+
+                        </script>
+                    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <div class="form-group ">
+
+                </div>
+
+                <div class="form-group rowholder" id="listholder" style="display:none">
+                </div>
+            </div>
+
+        </div>
+        <div id="menu1" class="tab-pane fade in " style="padding-top:20px">
+
+            <style>
+                .itemRow {
+                    margin: 10px 0;
+                }
+                .imageCover{
+                    position:relative;
+
+                }
+                .imageCover img{
+                    max-width:150px
+                }
+            </style>
+            <main id="loginMain" style="padding: 50px 150px">
+                <div class="row  parent">
+                    <div class="ItemsHome">
+                        <div class="itemRow">
+                            <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> @Resources.res.createImage <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
+                            <div id="imageHolder" style="display:flex">
+
+                                <input multiple type="file" id="imageFileHolder" name="image" required="required" class="form-control  imageinput" style="display:none">
+
+                                <div class="imageItemParent">
+
+                                    @{
+                                        if (@ViewBag.images != null)
+                                        {
+                                            string[] lst = (ViewBag.images).Split(',');
+
+
+                                            foreach (var item in lst)
+
+                                            {
+
+                                                <div class="imageCover">
+                                                    <img src="/images/@item" />
+                                                    <img id="@item" class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /> <i class="fa fa-remove" style="font-size: 12px;position: absolute;bottom: 5px;left: 0px;color: white;"></i>
+                                                </div>
+
+                                            }
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <form id="createForm" action="addItem" method="post">
+                            @*<div class="itemRow">
+
+
+            <input placeholder="@Resources.res.link" value="@Model.link" id="link" name="link" class="form-control " />
+        </div>*@
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createTitle </p>*@
+                                <input placeholder="@Resources.res.createTitle" id="title" name="title" class="form-control inputform" />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createTitle </p>*@
+                                <input placeholder="Vendor Password" id="password" name="password" class="form-control inputform" />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createTitle </p>*@
+                                <input placeholder="Vendor Percent" id="percent" type="number" name="percent" class="form-control inputform" />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createTitle </p>*@
+                                <input placeholder="Delivery Price" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createTitle </p>*@
+                                <select name="deliverType" class="form-control" >
+                                    <option >vehicle type</option>
+                                    <option value="1">take away</option>
+                                    <option value="2">motor cycle</option>
+                                    <option value="3">van</option>
+                                </select>
+                            </div>
+
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createDesc </p>*@
+                                <input placeholder="@Resources.res.createDesc" style="flex:1; height:100px" id="desc" name="desc" class="form-control " />
+
+                            </div>
+                            <div class="itemRow">
+
+
+                                @Html.DropDownList("catid", listItems, "-- Select Status --", new { id = "listofproduct", @class = "form-control" })
+                                @*  @Html.DropDownList("catid", new SelectList(Model.SelectedlistProduct, "ID", "title"), Resources.res.chooscat, new { @class = "form-control inputform", id = "cat", style = "" })*@
+
+                            </div>
+                            @*<div class="itemRow">
+
+            <div id="subcatHolder" style="flex:1">
+                @Html.DropDownList("subcatid", new SelectList(Model.cat, "ID", "title"), Resources.res.choossubcat, new { @class = "form-control", id = "subcat", @disabled = "disabled" })
+
+            </div>
+
+        </div>*@
+                            @*<div class="itemRow">
+
+            <div id="subcatHolder2" style="flex:1">
+                @Html.DropDownList("subcatid2", new SelectList(Model.cat, "ID", "title"), Resources.res.coosesubcattwo, new { @class = "form-control", id = "subcat2", @disabled = "disabled" })
+
+            </div>
+
+        </div>*@
+
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createPhone </p>*@
+
+                                <input placeholder="@Resources.res.createPhone" id="phone1" name="phone1" class="form-control " />
+
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createPhone2 </p>*@
+
+                                <input placeholder="@Resources.res.createPhone2" id="phone2" name="phone2" class="form-control " />
+
+                            </div>
+
+                            <div class="itemRow">
+                                @*<p>@Resources.res.fax </p>*@
+                                <input placeholder="@Resources.res.fax" id="fax" name="fax" class="form-control " />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.mobile1 </p>*@
+
+                                <input placeholder="@Resources.res.mobile1" id="mobile1" name="mobile1" class="form-control " />
+
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.mobile2 </p>*@
+
+                                <input placeholder="@Resources.res.mobile2" id="mobile2" name="mobile2" class="form-control " />
+
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.email </p>*@
+                                <input placeholder="@Resources.res.email" id="email" name="email" class="form-control " />
+                            </div>
+
+
+                            <div class="itemRow">
+                                @*<p>@Resources.res.website </p>*@
+                                <input placeholder="@Resources.res.website" id="website" name="website" class="form-control " />
+                            </div>
+                            @*
+        <div class="itemRow">
+            <p>@Resources.res.telegram </p>
+            <input placeholder="@Resources.res.telegram" id="telegram" name="telegram" class="form-control" />
+        </div>
+        <div class="itemRow">
+            <p>@Resources.res.whatsapp </p>
+            <input placeholder="@Resources.res.whatsapp" id="whatsapp" name="whatsapp" class="form-control" />
+        </div>*@
+
+                            @*<div class="itemRow">
+
+            @Html.DropDownList("country", new SelectList(Model.lands, "ID", "title"), Resources.res.chooseCountry, new { @class = "form-control inputform", id = "country", style = "" })
+
+        </div>*@
+                            @*<div class="itemRow">
+
+            <div id="cityHolder" style="flex:1">
+                @Html.DropDownList("city", new SelectList(Model.lands, "ID", "title"), Resources.res.chooseCity, new { @class = "form-control", id = "city", @disabled = "disabled", style = "" })
+
+            </div>
+
+        </div>*@
+                            <div class="itemRow">
+                                @*<p>@Resources.res.instagram </p>*@
+                                <input placeholder="@Resources.res.city" id="instagram" name="instagram" class="form-control " />
+                            </div>
+                            <div class="itemRow">
+                                @*<p>@Resources.res.createAddress </p>*@
+                                <input placeholder="@Resources.res.createAddress" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
+
+                            </div>
+                            <div class="" style="    padding: 10PX;">
+
+
+                                <div id="mapid" style=" width:100% ; display:none"></div>
+                            </div>
+                            <input style="display:none" id="lat" name="lat" />
+                            <input style="display:none" id="lng" name="lng" />
+
+
+                            <div class="itemRow " style="border:none">
+                                <div class="creatButt btn btn-success">@Resources.res.createButt</div>
+                            </div>
+                        </form>
+                    </div>
+                    @{
+                        int w = Request.Browser.ScreenPixelsWidth;
+                        int h = Request.Browser.ScreenPixelsHeight;
+                        if (Request.Browser.IsMobileDevice || (w < 720 && h > 720))
+                        {
+
+                        }
+                        else
+                        {
+
+
+                        }
+                    }
+
+
+
+                </div>
+            </main>
+
+
+            @*<div style="display:flex; width:100%; justify-content:center;align-items:center">
+                    <div id="goToAddPage" class="btn btn-success" style="width:150px">@Resources.res.busiadd</div>
+                </div>
+                <script>
+                    $("#goToAddPage").click(function () {
+                        window.open("/Home/CreateItem");
+                    })
+                </script>*@
+            @*@using (Html.BeginForm("setproduct", "Admin", FormMethod.Post,new { enctype = "multipart/form-data", id = "addproduct00" }))
+                {
+
+                <div class="row" style="padding:0 25px">
+                    <div class="row fieldholder col-lg-3">
+                        <label> @Resources.res.category</label>
+
+                        @{
+                            List<SelectListItem> listItemsadd = new List<SelectListItem>();
+                            if (Model.log.filtersModel != null)
+                            {
+                                foreach (var item in Model.log.filtersModel)
+                                {
+                                    listItemsadd.Add(new SelectListItem
+                                    {
+                                        Text = item.title,
+                                        Value = "1" + item.ID
+                                    });
+                                    if (item.filtersubcat != null)
+                                    {
+                                        foreach (var subcat in item.filtersubcat)
+                                        {
+                                            listItemsadd.Add(new SelectListItem
+                                            {
+                                                Text = "---" + subcat.title,
+                                                Value = "2" + subcat.ID
+                                            });
+                                            if (subcat.filtersubcat2 != null)
+                                            {
+                                                foreach (var subcat2 in subcat.filtersubcat2)
+                                                {
+                                                    listItemsadd.Add(new SelectListItem
+                                                    {
+                                                        Text = "------" + subcat2.title,
+                                                        Value = "3" + subcat2.ID
+                                                    });
+                                                }
+                                            }
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                        <div class=" ">
+                            @Html.DropDownListFor(m => m.SelectedaddProduct, listItems, "-- Select Status --", new { id = "addproduct", style = "", @class = "form-control" })
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="row" style="padding:0 25px">
+
+
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.title :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productname" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.title :
+                        </label>
+                        <div>
+                            <input placeholder="FA" type="text" id="productname" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.title :
+                        </label>
+                        <div>
+                            <input placeholder="DE" type="text" id="productname" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row" style="padding:0 25px">
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createDesc :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createDesc :
+                        </label>
+                        <div>
+                            <input placeholder="FA" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createDesc :
+                        </label>
+                        <div>
+                            <input placeholder="DE" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="row" style="padding:0 25px">
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createPhone :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createPhone :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.fax :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row" style="padding:0 25px">
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createPhone2 :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.createPhone2 :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row" style="padding:0 25px">
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.email :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.email :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                    <div class="row fieldholder col-lg-4">
+
+                        <label for="first-name" style="text-align:right">
+                            @Resources.res.email :
+                        </label>
+                        <div>
+                            <input placeholder="EN" type="text" id="productdesc" name="productname" required="required" class="form-control ">
+                        </div>
+
+
+                    </div>
+                </div>
+                    <div class="row" style=" padding:10px 25px; margin:10px;border:1px solid #ddd; border-radius:5px">
+                        <div>
+                            <div class=" fieldholder col-lg-3">
+                                <div class="webview">
+                                    <input class="" style="display: inline-block; float: right" id="fileupload11" type="file" name="file" multiple="multiple" accept="image/*">
+
+                                    <div class="col-md-4 col-sm-4 col-xs-12 " style="direction:rtl">
+
+
+                                        <div id="istrueimage" style="display:none">سلام</div>
+                                        <script>
+                                            var _URL = window.URL;
+                                            $("#fileupload11").change(function (e) {
+                                                var formdata = new FormData();
+                                                document.getElementById("istrueimage").innerHTML = "0";
+                                                var file, img;
+                                                for (var i = 0; i <this.files.length; i++) {
+                                                    if ((file = this.files[i])) {
+                                                        size = this.files[i].size;
+                                                        filename = this.files[i].filename;
+
+
+                                                        img = new Image();
+                                                        img.onload = function () {
+
+                                                            // if (this.width !== 500 && this.height !== 500 ) {
+                                                            if (size > 1000000) {
+                                                                document.getElementById("istrueimage").innerHTML = "1";
+                                                                toastr.options = {
+                                                                    "debug": false,
+                                                                    "positionClass": "toast-top-center",
+                                                                    "onclick": null,
+                                                                    "fadeIn": 300,
+                                                                    "fadeOut": 1000,
+                                                                    "timeOut": 5000,
+                                                                    "extendedTimeOut": 1000
+                                                                }
+                                                                toastr.error('  بیش از 1 مگا بایت است ' + file.name + ' سایز عکس')
+                                                            }
+                                                            else {
+                                                                formdata.append(this.files[i].name, this.files[i]);
+                                                            }
+                                                            // alert("Width:" + this.width + "   Height: " + this.height);//this will give you image width and height and you can easily validate here....
+                                                        };
+                                                        img.src = _URL.createObjectURL(file);
+                                                    }
+
+
+                                                }
+
+                                            });
+
+
+
+
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <div class="appview">
+                                    <div>
+                                        <div style="width:100%">
+                                            <a class="button actionSelect" style="display:inline-block">
+                                                <input type="file" id="select" value="Choose Image" accept="image/*">
+                                            </a>
+                                            <div class="actionUpload btn btn-success" style="display:none;">Upload</div>
+                                        </div>
+
+
+                                        <div id="main-cropper" style="display:none; overflow:scroll; max-width:350px; max-height:480px; z-index:99999999 "></div>
+                                    </div>
+
+                                    <script>
+
+                                    var basic = $('#main-cropper').croppie({
+                                        viewport: { width: 850, height: 300 },
+                                        boundary: { width: 300, height: 330 },
+                                        showZoomer: true,
+
+                                    });
+
+                                    function readFile(input)
+                                    {
+                                        if (input.files && input.files[0])
+                                        {
+
+                                            $("#main-cropper").css("display", "inline-block");
+                                            var reader = new FileReader();
+                                            reader.onload = function(e) {
+
+                                                $('#main-cropper').croppie('bind', {
+                                                url: e.target.result
+                                              });
+                                            }
+
+                                            reader.readAsDataURL(input.files[0]);
+                                        }
+                                    }
+
+                                    $('.actionSelect input').on('change', function () {
+                                        $('.actionUpload').css("display", "inline-block")
+                                        readFile(this);
+                                        });
+                                    $('.actionUpload').on('click', function () {
+                                           $("#loading").css("display", "inline-block");
+                                            basic.croppie('result', 'blob').then(function(blob) {
+                                                var formData = new FormData();
+                                                formData.append('filename', 'testFileName.png');
+                                                formData.append('blob', blob);
+                                                var MyAppUrlSettings = {
+                                                    MyUsefulUrl: '@Url.Action("GetImage", "admin")'
+                                                }
+
+                                                var request = new XMLHttpRequest();
+                                                request.open('POST', MyAppUrlSettings.MyUsefulUrl);
+                                                request.send(formData);
+                                                request.onreadystatechange = function() {
+                                                    if (request.readyState == 4 && request.status == 200)
+                                                    {
+                                                                                            $('#thumbholder').html(request.responseText);
+                                                                                            $("#main-cropper").css("display", "none");
+                                                                                            $("#loading").css("display", "none");
+                                                        //var img = $('<img style="max-width: 100px;border-radius: 5px;" id="">'); //Equivalent: $(document.createElement('img'))
+                                                        //img.attr('src', '/images/panelimages/' + request.responseText + '.jpg');
+                                                        //var del = $('<div  class="btn btn-default" >حذف</div>')
+                                                        //del.attr('id', request.responseText + '.jpg')
+                                                        //del.addClass('REM')
+                                                        //var parDiv = $('<div  style="padding:5px;border:1px solid #ddd;border-radius:5px;display: inline-block;margin-left:10px"></div>')
+                                                        //img.appendTo(parDiv);
+                                                        //del.appendTo(parDiv)
+                                                        //parDiv.appendTo('#thumbholder');
+                                                        //$("#main-cropper").css("display", "none");
+
+                                                    }
+                                                    }
+                                                });
+                                                $(this).css("display", "none");
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="fieldholder col-lg-3" style="float:right">
+
+                                <div style="display:inline-block">
+                                    <button style="margin:0" type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
+                                        مشاهده فیلتر
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width:800px">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="filterholderforproduct">
+                                                    فیلتر
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:inline-block">
+                                    <button style="margin:0" type="button" class="btn btn-primary" data-toggle="modal" data-target="#featureModal">
+                                        مشاهده ویژگی
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="featureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="featureholderforproduct">
+                                                    فیچر
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+
+                            <div class="appview">
+                                <div class="col-lg-12" id="thumbholder" style="margin-bottom:20px">
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                    <div class=" row fieldholder col-lg-12">
+                        <p id="allfilterid" style="display:none"></p>
+                        <p id="allfeaturetext" style="display:none"></p>
+
+                        <p id="allfilteridServer" style="display:none"></p>
+                        <p id="allfeaturetextServer" style="display:none"></p>
+
+
+                        <div class=" " style="padding : 0 10px">
+                            <a id="CRprocuct" class="btn btn-primary" style=" width: 185px">تایید</a>
+                            <script>
+                                if (screen.width > 900) {
+
+                                    $("#CRprocuct").click(function () {
+
+                                        var value = $("#addproduct").val();
+                                        var FF = document.getElementById("istrueimage").innerHTML;
+                                        var name = productname.value;
+                                        var desc = productdesc.value;
+                                        var file = fileupload11.value;
+                                        var color = $("#inputallcolid").val();
+                                        var filters = $("#inputallfilterid").val();
+                                        var ragnes = $("#inputallrangeid").val();
+                                        var colorServer = $("#inputallcolidServer").val();
+                                        var filtersServer = $("#inputallfilteridServer").val();
+                                        var ragnesServer = $("#inputallrangeidServer").val();
+                                        var count = $("#productCount").val();
+                                        var features = $("#allfeaturetext").text();
+                                        $("#inputallfeatureid").val(features);
+                                        //var featuresServer = $("#allfeaturetextServer").text();
+                                        //$("#inputallfeatureidServer").val(features);
+
+
+
+                                        //if (color == "") {
+                                        //
+                                        //}
+                                        if (count == "0") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error('تعداد محصول نباید صفر باشد')
+                                        }
+                                        if (name == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error('نام محصول را وارد نمایید')
+                                        }
+                                        if (filters == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' فیلتر های محصول انتخاب نشده است')
+
+                                        }
+
+                                        if (features == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' ویژگی های محصول انتخاب نشده است')
+                                        }
+                                        if (file == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' عکس محصول انتخاب نشده است')
+                                        }
+                                        //if (desc == "") {
+                                        //    toastr.options = {
+                                        //        "debug": false,
+                                        //        "positionClass": "toast-top-center",
+                                        //        "onclick": null,
+                                        //        "fadeIn": 300,
+                                        //        "fadeOut": 1000,
+                                        //        "timeOut": 5000,
+                                        //        "extendedTimeOut": 1000
+                                        //    }
+                                        //    toastr.error(' توضیحات محصول وارد نشده است')
+                                        //}
+                                        if (ragnes.indexOf("-;") >= 0) {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' همه فیلدهای عددی بخش فیلتر باید کامل شوند')
+                                        }
+
+                                        // name != "" && file != "" && desc != "" && cat != "" && ragnes != ""  && filters != ""
+
+
+                                        if (name != "" && file != "" && value != "" && ragnes.indexOf("-;") <0) {
+                                            //  alert(features)
+                                            $("#addproduct00").submit();
+                                            //if (FF == "1") {
+                                            //    toastr.options = {
+                                            //        "debug": false,
+                                            //        "positionClass": "toast-top-center",
+                                            //        "onclick": null,
+                                            //        "fadeIn": 300,
+                                            //        "fadeOut": 1000,
+                                            //        "timeOut": 5000,
+                                            //        "extendedTimeOut": 1000
+                                            //    }
+                                            //    toastr.error('عکس های آپلود شده باید حجم کمتر از 1 مگا بایت داشته باشند')
+                                            //    //$("#addproduct00").submit();
+                                            //}
+                                            //else {
+
+
+
+
+                                            //}
+
+                                        }
+                                        else {
+
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error('تمامی موارد را کامل کنید')
+                                        }
+                                    })
+                                }
+                                else {
+                                    $("#CRprocuct").click(function () {
+
+                                        var value = $("#addproduct").val();
+                                        // var FF = document.getElementById("istrueimage").innerHTML;
+                                        var name = productname.value;
+                                        var desc = productdesc.value;
+                                        //var file = fileupload11.value;
+                                        var color = $("#productcolor").val();
+                                        var filters = $("#inputallfilterid").val();
+                                        var ragnes = $("#inputallrangeid").val();
+                                        var colorServer = $("#inputallcolidServer").val();
+                                        var filtersServer = $("#inputallfilteridServer").val();
+                                        var ragnesServer = $("#inputallrangeidServer").val();
+                                        var features = $("#allfeaturetext").text();
+                                        $("#inputallfeatureid").val(features);
+                                        //var featuresServer = $("#allfeaturetextServer").text();
+                                        //$("#inputallfeatureidServer").val(features);
+
+                                        //if (color == "") {
+                                        //
+                                        //}
+                                        if (name == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error('نام محصول را وارد نمایید')
+                                        }
+                                        if (filters == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' فیلتر های محصول انتخاب نشده است')
+
+                                        }
+
+                                        if (features == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' ویژگی های محصول انتخاب نشده است')
+                                        }
+                                        //if (file == "") {
+                                        //    toastr.options = {
+                                        //        "debug": false,
+                                        //        "positionClass": "toast-top-center",
+                                        //        "onclick": null,
+                                        //        "fadeIn": 300,
+                                        //        "fadeOut": 1000,
+                                        //        "timeOut": 5000,
+                                        //        "extendedTimeOut": 1000
+                                        //    }
+                                        //    toastr.error(' عکس محصول انتخاب نشده است')
+                                        //}
+                                        if (desc == "") {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' توضیحات محصول وارد نشده است')
+                                        }
+                                        if (ragnes.indexOf("-;") >= 0) {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error(' همه فیلدهای عددی بخش فیلتر باید کامل شوند')
+                                        }
+                                        // name != "" && file != "" && desc != "" && cat != ""
+                                        if (name != "" && desc != "" && value != "" && filters != "" && features != "" && ragnes.indexOf("-;") <0) {
+                                            //alert(features);
+                                            $("#addproduct00").submit();
+                                            //if (FF == "1") {
+                                            //    toastr.options = {
+                                            //        "debug": false,
+                                            //        "positionClass": "toast-top-center",
+                                            //        "onclick": null,
+                                            //        "fadeIn": 300,
+                                            //        "fadeOut": 1000,
+                                            //        "timeOut": 5000,
+                                            //        "extendedTimeOut": 1000
+                                            //    }
+                                            //    toastr.error('عکس های آپلود شده باید حجم کمتر از 1 مگا بایت داشته باشند')
+                                            //    //$("#addproduct00").submit();
+                                            //}
+                                            //else {
+
+
+
+
+                                            //}
+
+                                        }
+                                        else {
+
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+                                            toastr.error('تمامی موارد را کامل کنید')
+                                        }
+                                    })
+                                }
+
+
+                            </script>
+                        </div>
+
+                    </div>
+                    <div class="row" style="padding:25px">
+
+                    </div>
+
+
+
+                    <script>
+
+
+
+
+                        $(".REM").click(function () {
+
+                            var id = $(this).attr('id');
+
+                        })
+                    </script>
+                    <script>
+                        if (screen.width > 900) {
+                            $(".appview").css("display", "none")
+                        }
+                        else {
+                            $(".webview").css("display", "none")
+                        }
+                    </script>
+
+                }*@
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@if (ViewBag.page != null)
+{
+    <script>
+    var item = @ViewBag.page
+
+    $.ajax({
+    url: '/Admin/GetTheListOfItems',
+    dataType: 'html',
+    data:
+    {
+    page: item
+    },
+    success: function(data) {
+
+    $('#listholder').html(data);
+    $('#listholder').css("display", "block");
+
+    },
+    error: function() {
+    alert("nashod")
+    }
+    });
+    </script>
+}
+
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin="">
+</script>
+
+<script src="~/Scripts/createItem.js"></script>
+<script>
+        if ('@Session["lang"]' == 'fa') {
+            $("body").get(0).style.setProperty("--align", "right");
+            $("body").get(0).style.setProperty("--direction", "rtl");
+        }
+        else {
+            $("body").get(0).style.setProperty("--align", "left");
+            $("body").get(0).style.setProperty("--direction", "ltr");
+        }
+        $(".creatButt").click(function () {
+            $(".imageDefault").css("border", "none");
+            var value = 0;
+
+            if ($(".imageItemParent").height() > 20) {
+
+            }
+            else {
+                alert($(".imageItemParent").height())
+                $(".imageDefault").css("border", "1px solid red");
+                value = 1;
+            }
+            $(".inputform").each(function () {
+               
+                $(this).css("border", "none");
+                if ($(this).val() == "") {
+                    $(this).css("border", "1px solid red");
+                    value = 1;
+                }
+            })
+            if (value == 0) {
+                $("#createForm").submit();
+            }
+            else {
+                alert("@Resources.res.completeAll")
+            }
+
+        });
+        var getSubcatTree = function (val, type) {
+            if (val != "") {
+                var id = val;
+
+                $.ajax({
+                    url: "/Home/getSubcatJson",
+                    dataType: "html",
+                    data: {
+                        result: id,
+                        level: type
+                    },
+                    success: function (data) {
+
+                        if (type == "1") {
+
+                            $("#subcatHolder").html(data);
+                        }
+                        else {
+                            $("#subcatHolder2").html(data);
+
+                        }
+
+                    }
+                })
+            }
+        }
+        $("#cat").change(function () {
+            getSubcatTree($(this).val(),"1")
+        })
+
+        $("#country").change(function () {
+            var val = $(this).val();
+            $.ajax({
+                url: "/Home/getcityPartial",
+                dataType: "html",
+                data: {
+                    result: val
+                },
+                success: function (data) {
+                    //alert(data);
+                    $("#cityHolder").html(data);
+
+                }
+            })
+        })
+
+</script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>
+<script type="text/javascript">
+    var mymap;
+    var theMarker = {};
+    getLocation();
+    
+    function showLocation(position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+        }).addTo(mymap);
+        mymap.panTo(new L.LatLng(lat, lon));
+
+
+
+        mymap.on('click', function (e) {
+
+            lat = e.latlng.lat;
+            lon = e.latlng.lng;
+
+            console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+            //Clear existing marker,
+
+            if (theMarker != undefined) {
+                mymap.removeLayer(theMarker);
+            };
+
+            //Add a marker to show where you clicked.
+            theMarker = L.marker([lat, lon]).addTo(mymap);
+            $("#lat").val(lat);
+            $("#lon").val(lon);
+        });
+    }
+    function errorHandler(err) {
+
+        alert("locatin not found")
+
+        mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+        }).addTo(mymap);
+        mymap.panTo(new L.LatLng('35.7442005749', '51.473131743990'));
+
+
+        mymap.on('click', function (e) {
+
+            lat = e.latlng.lat;
+            lon = e.latlng.lng;
+
+            console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+            //Clear existing marker,
+
+            if (theMarker != undefined) {
+                mymap.removeLayer(theMarker);
+            };
+
+            //Add a marker to show where you clicked.
+            theMarker = L.marker([lat, lon]).addTo(mymap);
+            $("#lat").val(lat);
+            $("#lng").val(lon);
+        });
+
+
+
+        if (err.code == 1) {
+            //alert("Error: Access is denied!");
+        } else if (err.code == 2) {
+            //alert("Error: Position is unavailable!");
+        }
+
+
+
+
+
+    }
+    function getLocation() {
+        if (navigator.geolocation) {
+            // timeout at 60000 milliseconds (60 seconds)
+            var options = { timeout: 3000 };
+            navigator.geolocation.getCurrentPosition
+                (showLocation, errorHandler, options);
+
+
+        } else {
+            alert("Sorry, browser does not support geolocation!");
+        }
+    }
+    $("#mapid").height("250px");
+
+    google.maps.event.addDomListener(window, 'load', function () {
+        var places = new google.maps.places.Autocomplete(document.getElementById('address'));
+        google.maps.event.addListener(places, 'place_changed', function () {
+            var place = places.getPlace();
+
+
+            if (theMarker != undefined) {
+                mymap.removeLayer(theMarker);
+            };
+            mymap.panTo(new L.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
+            theMarker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]).addTo(mymap);
+            $("#lat").val(place.geometry.location.lat());
+            $("#lng").val(place.geometry.location.lng());
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

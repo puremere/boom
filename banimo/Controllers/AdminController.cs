@@ -7110,7 +7110,7 @@ namespace banimo.Controllers
                     collection.Add("imaglist", imglst);
                     collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
 
-                    byte[] response = client.UploadValues(server + "/Admin/addslider.php", collection);
+                    byte[] response = client.UploadValues(server + "/Node/addslider.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }

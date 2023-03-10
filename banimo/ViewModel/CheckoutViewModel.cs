@@ -17,7 +17,11 @@ namespace banimo.ViewModel
         public string  productname { get; set; }
         public int productid { get; set; }
         public string partnerTitle { get; set; }
-        
+        public string partner { get; set; }
+        public string meta { get; set; }
+        public string addsonstring { get; set; }
+        public List<Addson> addson { get; set; }
+
 
     }
 }

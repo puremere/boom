@@ -69,11 +69,27 @@ namespace banimo.ViewModelPost
         public string pID { get; set; }
         
     }
+    public class AddsonList
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string isMultiple { get; set; }
+        public string isRquired { get; set; }
+        public string productID { get; set; }
+        public string nodeID { get; set; }
+        public List<Detail> detail { get; set; }
+    }
+    public class Detail
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string price { get; set; }
+    }
     public class viewProductViewModel
     {
 
         public List<BrandInfo> BrandInfo { get; set; }
-        
+        public List<AddsonList> addsonList { get; set; }
         public List<PartnerList> partnerList { get; set; }
         public List<CatTreeList> catTreeList { get; set; }
         public string vahed { get; set; }
