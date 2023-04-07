@@ -7,6 +7,11 @@ using System.Web.Mvc;
 
 namespace banimo.AdminPanel.ViewModel
 {
+    public class userDataNew
+    {
+        public string token { get; set; }
+        public string action { get; set; }
+    }
     public class Book
     {
         public string ID { get; set; }
@@ -288,6 +293,7 @@ namespace banimo.AdminPanel.ViewModel
         public string recommended { get; set; }
         public string specialOffer { get; set; }
         public string IsAvailable { get; set; }
+        public string Cover { get; set; }
 
         public string serverRowID { get; set; }
 

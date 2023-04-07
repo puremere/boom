@@ -9,6 +9,7 @@ namespace banimo.ViewModel
     {
         public string images = "";
         public string partnerID = "0";
+        public string name = "";
         public string invite = "";
         public string brand = "";
         public string pagenumberactive = "1";

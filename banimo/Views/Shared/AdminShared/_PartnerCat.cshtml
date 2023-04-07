@@ -1,0 +1,26 @@
+﻿@model banimo.ViewModel.MainViewModel.partnerCat
+
+
+
+@if (@Model.catsdata != null)
+{
+    foreach (var item in Model.catsdata)
+    {
+        string catmode = "1" + @item.ID;
+
+        <div class="category   ">
+            <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                <a href="/Home/ProductList?catmode=@catmode" class="category-media">
+                    <img src="/images/@item.image" alt="Category"
+                         width="130" height="130">
+                </a>
+
+            </div>
+
+            <p>@item.title</p>
+        </div>
+    }
+}
+
+
+

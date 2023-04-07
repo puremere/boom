@@ -1333,14 +1333,9 @@
 
                 <div class="">
                     <nav class="menuparentsection" id="mainmenu" style="">
-
-
                         <!-- Sample menu definition -->
 
-                        @*@{ Html.RenderAction("getmenue", "Home"); }*@
-
-
-
+                        @{ Html.RenderAction("getmenue", "Home"); }
                     </nav>
                 </div>
 
@@ -1386,11 +1381,11 @@
 
                     })
 
-                    $('.showmedetail').click(function () {
-                        var ID = this.id;
-                        var url = "/Home/ProductDetail?id=" + ID;
-                        window.location.href = url;
-                    })
+                    //$('.showmedetail').click(function () {
+                    //    var ID = this.id;
+                    //    var url = "/Home/ProductDetail?id=" + ID;
+                    //    window.location.href = url;
+                    //})
 
                     $('.tracotdda').click(function () {
                         var ID = this.id;

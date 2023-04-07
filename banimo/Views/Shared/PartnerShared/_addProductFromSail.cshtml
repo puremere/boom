@@ -2,7 +2,7 @@
 
 @using (Html.BeginForm("setMainProductFromSail", "Partner", FormMethod.Post, new { enctype = "multipart/form-data", id = "addproduct00" }))
 {
-    <input id="selectedColor" name="selectedColor" hidden/>
+    <input id="selectedColor" name="selectedColor" hidden />
     <input id="SFilter" name="selectedFilter" hidden />
     string address = Model.address != null ? Model.address : "";
     string title = Model.title != null ? Model.title : "";
@@ -12,142 +12,141 @@
     string description = Model.description != null ? Model.description : "";
     string initCount = Model.initCount != null ? Model.initCount : "0";
     <input name="ID" hidden value="@Model.ID" />
-    <div style="padding:10px; border-radius:10px; box-shadow:2px 2px 5px -1px rgb(148 149 153)">
-        <div class="row " style="padding:0 25px">
-            <div class="row fieldholder col-lg-3">
-                <label for="first-name" style="text-align:right">
-                    نام :
-                </label>
-                <div>
-                    <input value="@title" type="text" id="productname" name="title" required="required" class="form-control ">
-                </div>
-            </div>
-            <div class="row fieldholder col-lg-3">
-                <label> دسته بندی</label>
 
 
-                <div class=" ">
-                    @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), "-- انتخاب دسته بندی--", new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
-                </div>
-
-
-            </div>
-            <div  style="display:none" class="row fieldholder col-lg-3">
-                <label> برند</label>
-                <div class=" ">
-                    @if (Model.brandCore != null)
-                    {
-                        @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
-
-                    }
-                </div>
-
-
-            </div>
-
-            <div style="display:none" class="row fieldholder col-lg-3">
-                <label style="text-align: right">
-                    آدرس :
-                </label>
-                <div>
-                    <input value="@address" type="text" id="productAddress" name="address" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-            </div>
-            <div style="display:none" class="row fieldholder col-lg-3">
-                <label style="text-align: right">
-                    کد :
-                </label>
-                <div>
-                    <input value="@code" type="text" id="productCode" name="code" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-            </div>
-            <div style="display:none" class="row fieldholder col-lg-3">
-                <label style="text-align: right">
-                    تعداد اولیه :
-                </label>
-                <div>
-                    <input value="@initCount" type="text" id="productInitCount" name="initCount" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-
-            </div>
-
+    <div class="mb-4 row align-items-center">
+        <label class="form-label-title col-sm-2 mb-0">
+            Product Title
+        </label>
+        <div class="col-sm-10">
+            <input value="@title" id="productname" name="title" class="form-control" type="text" placeholder="Enter Product Title">
         </div>
-        <div class="row" style="padding:0 25px">
-           
-            <div class="row fieldholder col-lg-3">
-                <label> رنگ</label>
+    </div>
 
-                @if (Model.ID != 0)
-                {
-                    <div class=" ">
-                        @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control" })
-                    </div>
-                }
-                else
-                {
-                    <div class=" ">
-                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
-                    </div>
-                }
-
-
-            </div>
-            <div class="row fieldholder col-lg-3">
-                <label style="display:flex"> <span style="flex:1" >شاخص</span>   <span id="addShakhesButton" style="margin:0 10px"><i class="fa fa-plus"></i></span></label>
-                @if (@Model.filterCore !=null)
-                {
-                    if (Model.ID != 0)
-                    {
-                        <div class=" ">
-
-                            @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
-                        </div>
-                    }
-                    else
-                    {<div class=" ">
-                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
-                        </div>
-
-                    }
-                }
-                else
-                {
-                    <select class="form-control">
-
-                    </select>
-                }
-
-
-
-            </div>
-
-        </div>
-
-
-
-        <div class="row " style="padding:0 25px; display:none">
-            <div class="row fieldholder col-lg-3">
-                <label for="first-name" style="text-align:right">
-                    بارکد :
-                </label>
-                <div>
-                    <input value="@barcode" type="text" id="productBarcode" name="barcode" required="required" class="form-control ">
-                </div>
-            </div>
-            <div class="row fieldholder col-lg-3">
-                <label for="first-name" style="text-align:right">
-                    توضیحات :
-                </label>
-                <div>
-                    <input value="@description" type="text" id="productDesc" name="description" required="required" class="form-control ">
-                </div>
-            </div>
-        </div>
-        <div class=" " style="padding : 50px 15px">
-            <a id="CRprocuctpartner" class="btn btn-primary" style=" width: 185px">تایید</a>
+    <div class="mb-4 row align-items-center" style="display:none">
+        <label class="form-label-title col-sm-2 mb-0">Category</label>
+        <div class="col-sm-10">
+            @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
 
         </div>
     </div>
+    <div class="mb-4 row align-items-center">
+        <label class="form-label-title col-sm-2 mb-0">Color</label>
+        <div class="col-sm-10">
+            <span id="addColorButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">Add New Color</span></span>
+            @if (Model.ID != 0)
+            {
+                <div class=" ">
+                    @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), "-- Choose Color--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                <div class=" ">
+                    @if (Model.color != null)
+                    {
+                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), "-- Choose Color--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
+
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mb-4 row align-items-center">
+        <label class="form-label-title col-sm-2 mb-0">Variation   </label>
+        <div class="col-sm-10">
+            <div class="row"><span id="addShakhesButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">Add New Variation</span></span></div>
+            @if (@Model.filterCore != null)
+            {
+                if (Model.ID != 0)
+                {
+                    <div class=" ">
+
+                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- Choose Variation--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
+                    </div>
+                }
+                else
+                {
+                    if (Model.filterCore != null)
+                    {
+                        <div class=" ">
+                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- Choose Variation --", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                        </div>
+                    }
+
+
+                }
+            }
+            else
+            {
+                <select class="form-control">
+                </select>
+            }
+        </div>
+    </div>
+
+
+    <div style="display:none" class="row fieldholder col-lg-3">
+        <label> brand</label>
+        <div class=" ">
+            @if (Model.brandCore != null)
+            {
+                @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+
+            }
+        </div>
+
+
+    </div>
+
+    <div style="display:none" class="row fieldholder col-lg-3">
+        <label style="text-align: right">
+            Address :
+        </label>
+        <div>
+            <input value="@address" type="text" id="productAddress" name="address" required="required" class="form-control col-md-7 col-xs-12">
+        </div>
+    </div>
+    <div style="display:none" class="row fieldholder col-lg-3">
+        <label style="text-align: right">
+            code :
+        </label>
+        <div>
+            <input value="@code" type="text" id="productCode" name="code" required="required" class="form-control col-md-7 col-xs-12">
+        </div>
+    </div>
+    <div style="display:none" class="row fieldholder col-lg-3">
+        <label style="text-align: right">
+            count :
+        </label>
+        <div>
+            <input value="@initCount" type="text" id="productInitCount" name="initCount" required="required" class="form-control col-md-7 col-xs-12">
+        </div>
+
+    </div>
+    <div class="row " style="padding:0 25px; display:none">
+        <div class="row fieldholder col-lg-3">
+            <label for="first-name" style="text-align:right">
+                barcode :
+            </label>
+            <div>
+                <input value="@barcode" type="text" id="productBarcode" name="barcode" required="required" class="form-control ">
+            </div>
+        </div>
+        <div class="row fieldholder col-lg-3">
+            <label for="first-name" style="text-align:right">
+                desc :
+            </label>
+            <div>
+                <input value="@description" type="text" id="productDesc" name="description" required="required" class="form-control ">
+            </div>
+        </div>
+    </div>
+
+    <div id="CRprocuctpartner" class="row">
+        <div class="btn btn-primary lgnsubmitt">Create Product</div>
+    </div>
+
 
     if (Model.ID != 0)
     {
@@ -175,89 +174,89 @@
 
         </script>
     }
-<script>
+    <script>
 
-    $("#CRprocuctpartner").click(function () {
-
-
-
-
-        var name = productname.value;
-        var addMPCat = $("#addMPCat").val();
-        var brandC = $("#brandC").val();
+        $("#CRprocuctpartner").click(function () {
 
 
 
 
+            var name = productname.value;
+            var addMPCat = $("#addMPCat").val();
+            var brandC = $("#brandC").val();
 
-        if (name == "") {
-            toastr.options = {
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "fadeIn": 300,
-                "fadeOut": 1000,
-                "timeOut": 5000,
-                "extendedTimeOut": 1000
+
+
+
+
+            if (name == "") {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error('Insert Name')
             }
-            toastr.error('نام محصول را وارد نمایید')
-        }
-        if (brandC == "") {
-            toastr.options = {
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "fadeIn": 300,
-                "fadeOut": 1000,
-                "timeOut": 5000,
-                "extendedTimeOut": 1000
+            //if (brandC == "") {
+            //    toastr.options = {
+            //        "debug": false,
+            //        "positionClass": "toast-top-center",
+            //        "onclick": null,
+            //        "fadeIn": 300,
+            //        "fadeOut": 1000,
+            //        "timeOut": 5000,
+            //        "extendedTimeOut": 1000
+            //    }
+            //    toastr.error(' لطفا برند را انتخاب کنید')
+
+            //}
+            if (addMPCat == "") {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error(' Choose Category ')
+
             }
-            toastr.error(' لطفا برند را انتخاب کنید')
 
-        }
-        if (addMPCat == "") {
-            toastr.options = {
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "fadeIn": 300,
-                "fadeOut": 1000,
-                "timeOut": 5000,
-                "extendedTimeOut": 1000
+
+            if (name != ""  && addMPCat != "") {
+
+
+                $("#SFilter").val($("#filterC").val());
+                $("#selectedColor").val($("#ColorC").val());
+
+
+                //alert($("#filterC").val());
+                $("#addproduct00").submit();
+
             }
-            toastr.error(' لطفا دسته بندی را انتخاب کنید ')
+            else {
 
-        }
-
-
-        if (name != "" && brandC != "" && addMPCat != "") {
-
-            
-            $("#SFilter").val($("#filterC").val());
-            $("#selectedColor").val($("#ColorC").val());
-          
-           
-            //alert($("#filterC").val());
-            $("#addproduct00").submit();
-
-        }
-        else {
-
-            toastr.options = {
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "fadeIn": 300,
-                "fadeOut": 1000,
-                "timeOut": 5000,
-                "extendedTimeOut": 1000
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error('@Resources.res.insetAllData')
             }
-            toastr.error('تمامی موارد را کامل کنید')
-        }
-    })
+        })
 
 
-</script>
+    </script>
     <script>
 
 
@@ -281,5 +280,8 @@
         $("#addShakhesButton").click(function () {
             $("#addShakhes").modal('toggle');
         })
+        $("#addColorButton").click(function () {
+            $("#addColorModal").modal('toggle');
+        });
     </script>
 }

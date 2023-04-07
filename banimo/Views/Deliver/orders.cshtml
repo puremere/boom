@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "orders";
+    Layout = "~/Views/Shared/_DeliverLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>Search Panel</h5>
+                </div>
+
+                <div class="row">
+                    <div class="form-group " style="display:flex; align-items:center">
+
+
+
+
+                        <form method="post" action="ExportToExcel" style="display:inline-block; width:100%">
+
+                            <div class="autocomplete col-md-5 col-sm-3 col-xs-12" style="margin:20px ;display:inline-block">
+                                <label> Sender Address Search </label>
+                                <div style="width:100%">
+                                    <input id="SenderQuery" name="SenderQuery" type="text" placeholder=" @Resources.res.search" class="form-control" style="padding:8px" />
+                                </div>
+                               
+                            </div>
+                            <div class="autocomplete col-md-5 col-sm-3 col-xs-12" style="margin:20px ;display:inline-block">
+                                <label> Reciever Address Search </label>
+                               
+                                <div style="width:100%">
+                                    <input id="ReceiverQuery" name="ReceiverQuery" type="text" placeholder=" @Resources.res.search" class="form-control" style="padding:8px" />
+                                </div>
+                            </div>
+                            <div style="display:flex; margin-top:25px;margin-left:15px; min-width:250px">
+                                <div style="padding:7px 40px" id="Verify" class="btn btn-primary lgnsubmitt"> @Resources.res.OK</div>
+                            </div>
+
+                            <script>
+                                var getlist = function () {
+
+                                    var query = $("#SearchQuery").val();
+
+                                    $.ajax({
+                                        url: '/Deliver/GetTheListOfOrders',
+                                        data:
+                                        {
+                                            query: query,
+
+                                        },
+                                        dataType: 'html',
+                                        success: function (data) {
+
+                                            $('#listholder').html(data);
+                                            $('#listholder').css("display", "block");
+                                        },
+                                        error: function () {
+                                            alert("nashod")
+                                        }
+                                    });
+                                };
+
+                                $("#Verify").click(function () {
+
+                                    $.ajax({
+                                        url: '/Deliver/resetOrderPage',
+                                        dataType: 'html',
+                                        success: function (data) {
+                                            getlist();
+                                        },
+                                        error: function () {
+                                            alert("nashod")
+                                        }
+                                    });
+
+
+                                })
+
+
+
+
+
+
+                            </script>
+                        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div id="prnt" class="card-body">
+                <div class="title-header option-title">
+                    <h5>Order List</h5>
+                </div>
+                <div class="row">
+                    <div class="form-group rowholder" id="listholder" style="display:none">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

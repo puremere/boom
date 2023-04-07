@@ -1,40 +1,139 @@
-﻿@model neshanak.viewModel.itemDetailVM
+﻿@model banimo.ViewModel.itemDetailVM
 
 @{
     ViewBag.Title = "createItem";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@section styles{
-
-
-    <link href="~/Content/indexStyle.css" rel="stylesheet" />
-    <link href="~/Extra/leaflet/leaflet.css" rel="stylesheet" />
-
-
-    <link href="~/Content/slick.css" rel="stylesheet" />
-    <link href="~/Content/slick-theme.css" rel="stylesheet" />
-    <link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
-
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
 }
 
 @section scripts{
+    <link href="~/Content/croppie.css" rel="stylesheet" />
+    <script src="~/Scripts/croppie.js">
+    </script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin="">
     </script>
-
-
-    <script src="~/Scripts/editItem.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>
+    
+    <script src="~/Scripts/createItemNode.js"></script>
     <script>
+        if ('@Session["lang"]' == 'fa') {
+            $("body").get(0).style.setProperty("--align", "right");
+            $("body").get(0).style.setProperty("--direction", "rtl");
+        }
+        else {
+            $("body").get(0).style.setProperty("--align", "left");
+            $("body").get(0).style.setProperty("--direction", "ltr");
+        }
+        $(".creatButt").click(function () {
+            $(".imageDefault").css("border", "none");
+            var value = 0;
+
+            if ($(".imageItemParent").height() > 20) {
+
+            }
+            else {
+                alert($(".imageItemParent").height())
+                $(".imageDefault").css("border", "1px solid red");
+                value = 1;
+            }
+            //$(".inputform").each(function () {
+
+            //    //$(this).css("border", "none");
+            //    if ($(this).val() == "") {
+            //        $(this).css("border", "1px solid red");
+            //        value = 1;
+            //    }
+            //})
+            //if (value == 0) {
+            //    $("#createForm").submit();
+            //}
+            //else {
+            //    alert("Fill All Fields")
+            //}
+            $("#createForm").submit();
+
+        });
+        var getSubcatTree = function (val, type) {
+            if (val != "") {
+                var id = val;
+
+                $.ajax({
+                    url: "/Home/getSubcatJson",
+                    dataType: "html",
+                    data: {
+                        result: id,
+                        level: type
+                    },
+                    success: function (data) {
+
+                        if (type == "1") {
+
+                            $("#subcatHolder").html(data);
+                        }
+                        else {
+                            $("#subcatHolder2").html(data);
+
+                        }
+
+                    }
+                })
+            }
+        }
+        $("#cat").change(function () {
+            getSubcatTree($(this).val(),"1")
+        })
+
+        $("#country").change(function () {
+            var val = $(this).val();
+            $.ajax({
+                url: "/Home/getcityPartial",
+                dataType: "html",
+                data: {
+                    result: val
+                },
+                success: function (data) {
+                    //alert(data);
+                    $("#cityHolder").html(data);
+
+                }
+            })
+        })
+
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>
+    <script type="text/javascript">
         var mymap;
         var theMarker = {};
         getLocation();
+
         function showLocation(position) {
             var lat = @Model.lat;
             var lon = @Model.lng;
-            mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+            mymap = L.map('mapid', { attributionControl: false }).setView([lat, lon], 13);
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
@@ -45,10 +144,9 @@
 
             }).addTo(mymap);
             mymap.panTo(new L.LatLng(lat, lon));
-
-
-
             theMarker = L.marker([lat, lon]).addTo(mymap);
+
+
             mymap.on('click', function (e) {
 
                 lat = e.latlng.lat;
@@ -68,10 +166,11 @@
             });
         }
         function errorHandler(err) {
-             var lat = @Model.lat;
-            var lon = @Model.lng;
 
-             mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+
+            var lat = @Model.lat;
+            var lon = @Model.lng;
+            mymap = L.map('mapid', { attributionControl: false }).setView([lat, lon], 13);
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
@@ -82,10 +181,8 @@
 
             }).addTo(mymap);
             mymap.panTo(new L.LatLng(lat, lon));
-
-
-
             theMarker = L.marker([lat, lon]).addTo(mymap);
+
             mymap.on('click', function (e) {
 
                 lat = e.latlng.lat;
@@ -120,7 +217,7 @@
         function getLocation() {
             if (navigator.geolocation) {
                 // timeout at 60000 milliseconds (60 seconds)
-                var options = { timeout: 60000 };
+                var options = { timeout: 3000 };
                 navigator.geolocation.getCurrentPosition
                     (showLocation, errorHandler, options);
 
@@ -130,6 +227,7 @@
             }
         }
         $("#mapid").height("250px");
+
         google.maps.event.addDomListener(window, 'load', function () {
             var places = new google.maps.places.Autocomplete(document.getElementById('address'));
             google.maps.event.addListener(places, 'place_changed', function () {
@@ -146,244 +244,178 @@
             });
         });
     </script>
-    <script>
-        if ('@Session["lang"]' == 'fa') {
-            $("body").get(0).style.setProperty("--align", "right");
-            $("body").get(0).style.setProperty("--direction", "rtl");
-        }
-        else {
-            $("body").get(0).style.setProperty("--align", "left");
-            $("body").get(0).style.setProperty("--direction", "ltr");
-        }
-        $(".creatButt").click(function () {
-            $("#createForm").submit();
-        });
-        var getSubcatTree = function (val, type) {
-            if (val != "") {
-                var id = val.split('-')[0];
-                var isfinal = val.split('-')[1];
-
-                if (isfinal == "0") {
-                    id = id + "-" + type
-                    $.ajax({
-                        url: "/Home/getSubcatJson",
-                        dataType: "html",
-                        data: {
-                            result: id
-                        },
-                        success: function (data) {
-
-                            if (type == "1") {
-
-                                $("#subcatHolder").html(data);
-                            }
-                            else {
-                                $("#subcatHolder2").html(data);
-
-                            }
-
-                        }
-                    })
-
-                }
-                else {
-                    if (type == "1") {
-                        $("#subcat").val("");
-                        $("#subcat2").var("");
-                        $("#subcat").attr("disabled", "disabled");
-                        $("#subcat2").attr("disabled", "disabled");
-                    }
-                    else {
-                        $("#subcat2").var("");
-                        $("#subcat2").attr("disabled", "disabled");
-
-                    }
-                }
-            }
-        }
-        $("#cat").change(function () {
-            getSubcatTree($(this).val(),"1")
-        })
-
-        $("#country").change(function () {
-            var val = $(this).val();
-            $.ajax({
-                url: "/Home/getcityPartial",
-                dataType: "html",
-                data: {
-                    result: val
-                },
-                success: function (data) {
-                    $("#cityHolder").html(data);
-
-                }
-            })
-        })
-
-    </script>
 }
 
 
-
-
-<div>
-    <main id="loginMain" style="">
-        <div class="row  parent">
-            <div class="ItemsHome">
-                @{
-                    int w = Request.Browser.ScreenPixelsWidth;
-                    int h = Request.Browser.ScreenPixelsHeight;
-                    if (Request.Browser.IsMobileDevice || (w < 720 && h > 720))
-                    {
-
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Edit Vendor</h5>
+                </div>
+                <style>
+                    .itemRow {
+                        margin: 10px 0;
                     }
-                    else
-                    {
 
+                    .imageCover {
+                        position: relative;
+                    }
 
-                        <div class="itemRow">
-                            <div class="default" style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;">@Resources.res.createImage <img style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
-                            <div id="imageHolder" style="display:flex">
+                        .imageCover img {
+                            max-width: 150px
+                        }
+                </style>
+                <main id="loginMain" style="padding: 50px 150px">
+                    <div class="row  parent">
+                        <div class="ItemsHome">
+                            <div class="itemRow">
+                                <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> Create Image <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
+                                <div id="imageHolder" style="display:flex">
 
-                                <input multiple type="file" id="imageFileHolder" name="image" required="required" class="form-control " style="display:none">
+                                    <input multiple type="file" id="imageFileHolder" name="image" required="required" class="form-control  imageinput" style="display:none">
 
+                                    <div class="imageItemParent" style="display:flex">
 
-
-                                @{
-                                    if (Model.img != null && Model.img != "")
-                                    {
-                                        string[] lst = (Model.img.Trim(',')).Split(',');
-
-
-                                        foreach (var item in lst)
-
-                                        {
-                                            if (item != "")
+                                        @{
+                                            if (Model.img != null)
                                             {
-                                                <div class="imageCover">
-                                                    <img src="/images/@item" />
-                                                    <img id="@item" class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /> <i class="fa fa-remove" style="font-size: 12px;position: absolute;bottom: 5px;left: 0px;color: white;"></i>
-                                                </div>
+                                                string[] lst = (Model.img).Split(',');
+
+
+                                                foreach (var item in lst)
+
+                                                {
+                                                    if (item != "")
+                                                    {
+                                                        <div class="imageCover">
+                                                            <img src="https://www.marsools.com/images/@item" />
+                                                            <img id="@item" class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /> <i class="fa fa-remove" style="font-size: 12px;position: absolute;bottom: 5px;left: 0px;color: white;"></i>
+                                                        </div>
+                                                    }
+
+
+                                                }
                                             }
-
-
                                         }
-                                    }
-                                }
-                            </div>
-
-
-                        </div>
-
-
-                        <form id="createForm" action="Edit" method="post">
-                            <div class="itemRow">
-                                @*<p>@Resources.res.link </p>*@
-
-                                <input placeholder="@Resources.res.link" value="@Model.link" id="link" name="link" class="form-control" />
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createTitle </p>*@
-
-                                <input placeholder="@Resources.res.createTitle" value="@Model.title" id="title" name="title" class="form-control" />
-                            </div>
-
-
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createDesc </p>*@
-                                <textarea placeholder="@Resources.res.createDesc" style="height:100px" id="desc" name="desc" class="form-control">@Model.desc</textarea>
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.cat </p>*@
-                                @Html.DropDownListFor(x => x.catid, new SelectList(Model.cat, "ID", "title"), Resources.res.chooscat, new { @class = "form-control", id = "cat" })
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.subcat </p>*@
-                                <div id="subcatHolder">
-                                    @{
-
-                                        if (Model.subcatid == 0)
-                                        {
-
-                                            @Html.DropDownList("subcatID", new SelectList(@Model.cat, "id", "title"), Resources.res.choossubcat, new { @class = "form-control", id = "subcat", @disabled = "disable" })
-
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(x => x.subcatid, new SelectList(Model.subcat, "ID", "title"), Resources.res.choossubcat, new { @class = "form-control", id = "subcat2" })
-
-                                        }
-
-                                    }
+                                    </div>
 
                                 </div>
 
+
                             </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.subcat2 </p>*@
-                                <div id="subcatHolder2">
-                                    @{
+                            <form id="createForm" action="addItem" method="post">
 
-                                        if (Model.subcatid2 == 0)
-                                        {
-                                            @Html.DropDownList("subcat2ID", new SelectList(Model.cat.Select(c => new { Id = c.id + "-" + c.catLevel, title = c.title }), "ID", "title"), Resources.res.coosesubcattwo, new { @class = "form-control", id = "subcat2", @disabled = "disable" })
+                                <input name="id" type="hidden" value="@Model.id" />
+                                @*<div class="itemRow">
 
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(x => x.subcatid2, new SelectList(Model.subcat2, "ID", "title"), Resources.res.coosesubcattwo, new { @class = "form-control", id = "subcat2" })
 
-                                        }
+            <input placeholder="@Resources.res.link" value="@Model.link" id="link" name="link" class="form-control " />
+        </div>*@
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createTitle </p>*@
+                                    <input value="@Model.title" placeholder="Insert Title" id="title" name="title" class="form-control inputform" />
+                                </div>
+                                <div class="itemRow" style="">
+                                    @*<p>@Resources.res.createTitle </p>*@
+                                    <input placeholder="fill if you want change password" id="password" name="password" class="form-control inputform" />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createTitle </p>*@
+                                    <input value="@Model.percent" placeholder="Vendor Percent" id="percent" type="number" name="percent" class="form-control inputform" />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createTitle </p>*@
+                                    <input value="@Model.deliverPrice" placeholder="Delivery Price" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createTitle </p>*@
+                                    <select id="deliverType" name="deliverType" class="form-control">
+                                        <option>vehicle type</option>
+                                        <option value="1">take away</option>
+                                        <option value="2">motor cycle</option>
+                                        <option value="3">van</option>
+                                    </select>
+                                </div>
+                                <script>
+                                    $("#deliverType").val(@Model.deliverType)
+                                </script>
 
-                                    }
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createDesc </p>*@
+                                    <textarea placeholder="Insert Desc" style="flex:1; height:100px" id="desc" name="desc" class="form-control ">@Model.desc</textarea>
+
+                                </div>
+                                <div class="itemRow">
+
+
+                                    @Html.DropDownListFor(x => x.catid, new SelectList(Model.cat, "id", "title"), "-- Select Status --", new { id = "listofproduct", @class = "form-control" })
+                                    @* @Html.DropDownList("catid", new SelectList(Model.cat, "ID", "title"),"-select category-", new { @class = "form-control inputform", id = "catid", style = "" })*@
+
+                                </div>
+                                @*<div class="itemRow">
+
+            <div id="subcatHolder" style="flex:1">
+                @Html.DropDownList("subcatid", new SelectList(Model.cat, "ID", "title"), Resources.res.choossubcat, new { @class = "form-control", id = "subcat", @disabled = "disabled" })
+
+            </div>
+
+        </div>*@
+                                @*<div class="itemRow">
+
+            <div id="subcatHolder2" style="flex:1">
+                @Html.DropDownList("subcatid2", new SelectList(Model.cat, "ID", "title"), Resources.res.coosesubcattwo, new { @class = "form-control", id = "subcat2", @disabled = "disabled" })
+
+            </div>
+
+        </div>*@
+
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createPhone </p>*@
+
+                                    <input value="@Model.phone1" placeholder="Insert Phone" id="phone1" name="phone1" class="form-control " />
+
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createPhone2 </p>*@
+
+                                    <input value="@Model.phone2" placeholder="Insert phone 2" id="phone2" name="phone2" class="form-control " />
+
+                                </div>
+
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.fax </p>*@
+                                    <input value="@Model.fax" placeholder="Insert Fax" id="fax" name="fax" class="form-control " />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.mobile1 </p>*@
+
+                                    <input value="@Model.mobile1" placeholder="Insert Mobile" id="mobile1" name="mobile1" class="form-control " />
+
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.mobile2 </p>*@
+
+                                    <input value="@Model.mobile2" placeholder="Insert Mobile 2" id="mobile2" name="mobile2" class="form-control " />
+
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.email </p>*@
+                                    <input value="@Model.email" placeholder="@Resources.res.email" id="email" name="email" class="form-control " />
                                 </div>
 
 
-
-                            </div>
-
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createPhone </p>*@
-
-                                <input value="@Model.phone1" placeholder="@Resources.res.createPhone " id="phone1" name="phone1" class="form-control" />
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createPhone </p>*@
-
-                                <input value="@Model.phone2" placeholder="@Resources.res.createPhone" id="phone2" name="phone2" class="form-control" />
-
-                            </div>
-
-                            <div class="itemRow">
-                                @*<p>@Resources.res.fax </p>*@
-                                <input value="@Model.fax" placeholder="@Resources.res.fax" id="fax" name="fax" class="form-control" />
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createPhone2 </p>*@
-
-                                <input value="@Model.mobile1" placeholder="@Resources.res.createPhone2 " id="mobile1" name="mobile1" class="form-control" />
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createPhone2 </p>*@
-
-                                <input value="@Model.mobile2" placeholder="@Resources.res.createPhone2" id="mobile2" name="mobile2" class="form-control" />
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.email </p>*@
-                                <input value="@Model.email" placeholder="@Resources.res.email" id="email" name="email" class="form-control" />
-                            </div>
-
-
-                            <div class="itemRow">
-                                @*<p>@Resources.res.website </p>*@
-                                <input value="@Model.website" placeholder="@Resources.res.website" id="website" name="website" class="form-control" />
-                            </div>
-                            @*
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.website </p>*@
+                                    <input value="@Model.website" placeholder="Insert Website" id="website" name="website" class="form-control " />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.website </p>*@
+                                    <input value="@Model.tag" placeholder="Insert tag" id="tag" name="tag" class="form-control " />
+                                </div>
+                                @*
         <div class="itemRow">
             <p>@Resources.res.telegram </p>
             <input placeholder="@Resources.res.telegram" id="telegram" name="telegram" class="form-control" />
@@ -393,66 +425,53 @@
             <input placeholder="@Resources.res.whatsapp" id="whatsapp" name="whatsapp" class="form-control" />
         </div>*@
 
-                            <div class="itemRow">
-                                @*<p>@Resources.res.country </p>*@
-                                @Html.DropDownListFor(x => x.country, new SelectList(Model.lands, "ID", "title"), Resources.res.chooseCountry, new { @class = "form-control", id = "country" })
+                                @*<div class="itemRow">
 
+            @Html.DropDownList("country", new SelectList(Model.lands, "ID", "title"), Resources.res.chooseCountry, new { @class = "form-control inputform", id = "country", style = "" })
 
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.city </p>*@
-                                <div id="cityHolder">
-                                    @Html.DropDownListFor(x => x.city, new SelectList(Model.cities, "ID", "title"), Resources.res.chooseCity, new { @class = "form-control", id = "city" })
+        </div>*@
+                                @*<div class="itemRow">
 
-                                </div>
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.instagram </p>*@
-                                <input value="@Model.instagram" placeholder="@Resources.res.instagram" id="instagram" name="instagram" class="form-control" />
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createAddress </p>*@
-                                <textarea placeholder="@Resources.res.createAddress" style="height:100px" id="address" name="address" class="form-control">@Model.address</textarea>
-
-                            </div>
-                            <div class="itemRow">
-                                @*<p>@Resources.res.createLocation </p>*@
-                                <div id="mapid" style=""></div>
-                            </div>
-                            <input value="@Model.lat" style="display:none" id="lat" name="lat" />
-                            <input value="@Model.lng" style="display:none" id="lng" name="lng" />
-                            <input hidden value="@Model.id" name="id" />
-
-
-                            <div class="itemRow " style="border:none">
-                                <div class="creatButt btn btn-success">@Resources.res.createButt</div>
-                            </div>
-                        </form>
-
-
-
-
-
-
-                    }
-
-
-
-                }
+            <div id="cityHolder" style="flex:1">
+                @Html.DropDownList("city", new SelectList(Model.lands, "ID", "title"), Resources.res.chooseCity, new { @class = "form-control", id = "city", @disabled = "disabled", style = "" })
 
             </div>
 
+        </div>*@
+                                
+                                <div class="itemRow">
+                                    <input value="@Model.linkedin" placeholder="State" id="linkedin" name="linkedin" class="form-control " />
+                                </div>
+                                <div class="itemRow">
+                                    <input value="@Model.instagram" placeholder="City" id="instagram" name="instagram" class="form-control " />
+                                </div>
+                                <div class="itemRow">
+                                    @*<p>@Resources.res.createAddress </p>*@
+                                    <input value="@Model.address" placeholder="Insert Address" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
+                                </div>
+                                <div class="" style="    padding: 10PX;">
+                                    <div id="mapid" style=" width:100% ; "></div>
+                                </div>
+                                <input style="display:none" id="lat" name="lat" value="@Model.lat" />
+                                <input style="display:none" id="lng" name="lng" value="@Model.lng" />
 
 
+                                <div class="itemRow " style="border:none">
+                                    <div class="creatButt btn btn-success">Verify</div>
+                                </div>
+                            </form>
+                        </div>
+                      
+
+
+
+                    </div>
+                </main>
+            </div>
         </div>
-    </main>
+    </div>
 </div>
 
-
-
-
-
-
-
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin="" />

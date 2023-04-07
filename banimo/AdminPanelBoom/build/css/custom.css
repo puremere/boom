@@ -1,8 +1,16 @@
 
+:root {
+    --mainColor: #38414a;
+    --subColor: #38414a;
+    --mainFont: 'wolmart';
+    --mainDirection : 'left';
+    --mainOpposit : 'right';
+}
+
 html , body{
 	
  height:100%;
- font-family:  sans-serif;
+ font-family:  var(--mainFont);
  
 }
 a:hover , a:focus{
@@ -35,6 +43,7 @@ a:hover , a:focus{
             padding: 2%;
          
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius:15px
         }
 
 .component {
@@ -189,14 +198,15 @@ a:hover , a:focus{
     padding: 0 0 4px 0
 }
 .left_col {
-    background: #2A3F54
+    background: var(--mainColor)
 }
 .nav-sm .container.body .col-md-3.left_col {
     min-height: 100%;
     width: 70px;
     padding: 0;
     z-index: 9999;
-    position: absolute
+    position: absolute;
+    left:0
 }
 .nav-sm .container.body .col-md-3.left_col.menu_fixed {
     position: fixed;
@@ -211,7 +221,7 @@ a:hover , a:focus{
 }
 .nav-sm .container.body .right_col {
     padding: 10px 20px;
-    margin-right: 70px;
+    margin-left: 70px;
     z-index: 2
 }
 .nav-sm .navbar.nav_title {
@@ -224,10 +234,13 @@ a:hover , a:focus{
     font-size: 27px;
     margin: 13px 0 0 3px
 }
+.site_title{
+   
+}
 .site_title i {
     border: 1px solid #EAEAEA;
     padding: 5px 6px;
-    border-radius: 50%
+    border-radius: 50%;
 }
 .site_title img {
     max-height: 66px;
@@ -235,7 +248,7 @@ a:hover , a:focus{
 }
 .nav-sm .main_container .top_nav {
     display: block;
-    margin-right: 70px;
+    margin-left: 70px;
     z-index: 2
 }
 .nav-sm .nav.side-menu li a {
@@ -371,7 +384,7 @@ a:hover , a:focus{
 }
 .nav_menu {
     float: left;
-    background: #246388;
+    background: var(--subColor);
     border-bottom: 1px solid #D9DEE4;
     margin-bottom: 10px;
     width: 100%;
@@ -389,7 +402,8 @@ a:hover , a:focus{
     position: absolute;
     display: -ms-flexbox;
     display: flex;
-    z-index: 1
+    z-index: 1;
+    left:0
 }
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
     height: 100%;
@@ -400,14 +414,22 @@ body .container.body .right_col {
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 0;
-    margin-right: 230px
+    margin-left: 230px
 }
 .nav_title {
     width: 230px;
     float: left;
-    background-color: #007EA1 !important;
+    background-color: var(--mainColor);
     border-radius: 0;
     height: 57px
+}
+@font-face {
+    font-family: "wolmart";
+    src: url("../../../webAsset/wolmart/assets/fonts/wolmart.eot?png09e");
+    src: url("../../../webAsset/wolmart/assets/fonts/wolmart.woff?png09e") format("woff"),url("../../../webAsset/wolmart/assets/fonts/wolmart.eot?png09e#iefix") format("embedded-opentype"),url("../../../webAsset/wolmart/assets/fonts/wolmart.ttf?png09e") format("truetype"),url("../../../webAsset/wolmart/assets/fonts/fonts/wolmart.svg?png09e#wolmart") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap
 }
 @media (max-width: 991px) {
     .nav-md .container.body .right_col,
@@ -546,7 +568,7 @@ body {
 }
 .main_container .top_nav {
     display: block;
-    margin-right: 230px
+    margin-left: 230px
 }
 .no-padding {
     padding: 0 !important
@@ -766,10 +788,22 @@ a:focus {
 .sidebar-header:first-of-type {
     margin-top: 0
 }
-.nav.side-menu>li {
+
+.nav.side-menu > li:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+.nav.side-menu > li.activve {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+.nav.side-menu > li {
     position: relative;
     display: block;
-    cursor: pointer
+    cursor: pointer;
+    margin: 0 15px !important;
 }
 .nav.side-menu>li>a {
     margin-bottom: 6px
@@ -871,7 +905,9 @@ a:focus {
     display: block;
     height: 55px;
     margin: 0;
-    padding-right: 10px
+    padding-right: 10px;
+    display: flex;
+    justify-content: center
 }
 .site_title:hover,
 .site_title:focus {
@@ -913,10 +949,11 @@ a:focus {
     margin-bottom: 0 !important
 }
 .toggle {
-    float: right;
+    float: var(--mainDirection);
     margin: 0;
     padding-top: 1px;
-    width: 50px
+    width: 100%;
+    display:flex
 }
 .toggle a {
     padding: 15px 15px 0;
@@ -2221,11 +2258,102 @@ span.section {
     border-bottom: 1px solid #e5e5e5
 }
 .form-control {
-    border-radius: 0;
+    border-radius: 10px;
     width: 100%;
+    background-color:#ddd;
+    color:black
    
     
 }
+
+
+.buttonParent{
+    position:relative;
+   
+    display:flex
+}
+
+    .button-86 {
+        margin: 10px;
+        all: unset;
+        min-width: 70px;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        position: relative;
+        color: #f0f0f0;
+        cursor: pointer;
+        z-index: 1;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        padding: 10px;
+        margin:10px
+    }
+th{
+    background-color:var(--mainColor);
+    color:white;
+    text-align:center;
+}
+td{
+    text-align:center
+}
+
+.button-86::after,
+.button-86::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: -99999;
+    transition: all .4s;
+}
+
+
+
+
+        .button-86::before {
+            transform: translate(0%, 0%);
+            width: 100%;
+            height: 100%;
+            background: var(--mainColor);
+            border-radius: 10px;
+        }
+.button-86::after {
+    transform: translate(10px, 10px);
+    width: 35px;
+    height: 35px;
+    background: #ffffff15;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 50px;
+}
+
+.button-86:hover::before {
+    transform: translate(5%, 20%);
+    width: 110%;
+    height: 110%;
+}
+
+.button-86:hover::after {
+    border-radius: 10px;
+    transform: translate(0, 0);
+    width: 100%;
+    height: 100%;
+}
+
+.button-86:active::after {
+    transition: 0s;
+    transform: translate(0, 5%);
+}
+
+
+
 .form-horizontal .control-label {
     padding-top: 8px;
     text-align:right;
@@ -2234,6 +2362,13 @@ span.section {
 .form-control:focus {
     border-color: #CCD0D7;
     box-shadow: none !important
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 500;
+    padding: 10px;
 }
 legend {
     font-size: 18px;
@@ -4293,8 +4428,26 @@ ul.notifications {
     border-radius: 10px;
     background-color: #ffffff;
 }
-
-
+.formSection {
+    padding:20px;
+    width:100%;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.padding10{
+    padding:10px
+}
+.mainContainer {
+    margin-top: 100px;
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
+}
 
 /* CSS3 Checkbox */
 /*

@@ -1,0 +1,915 @@
+﻿@model banimo.ViewModel.AccessVM
+@{
+    ViewBag.Title = "bank";
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+}
+
+
+<style>
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        margin: 10px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+</style>
+
+
+<div class="modal fade" id="delmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p class="idToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeU">Verify</button>
+
+                   
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delRolemodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p class="idRoleToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeRole">Verify</button>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                <div>
+                    <div class="row">
+                        @using (Html.BeginForm("setNewUser", "Node", FormMethod.Post,
+new { enctype = "multipart/form-data", id = "addUser" }))
+                        {
+                            <input hidden name="UserListUpdate" value="0"/>
+                            <input hidden name="password" value="password" />
+
+                            <div >
+                                <div class="row">
+
+
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            Phone :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="phone" name="phone" required="required" class="form-control REM">
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            Fullname :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="fullname" name="fullname" required="required" class="form-control ">
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label >
+                                            Email :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="email" name="email" required="required" class="form-control ">
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">Verify</button>
+
+                    <script>
+
+
+                        $("#CreateButt").click(function () {
+                            // alert("aa");
+
+                            var int = 0;
+                            $(".REM").each(function () {
+
+                                if ($(this).val() === "") {
+                                    $(this).siblings("span").css("display", "inline-block");
+                                    int = 1;
+                                }
+                            })
+                            if (int === 0) {
+                                $("#addUser").submit();
+                            }
+                            else {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+
+                            }
+
+
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addRoleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New Role</h5>
+                <div class="row">
+                    <div>
+                        @using (Html.BeginForm("setNewRoll", "Node", FormMethod.Post,
+new { enctype = "multipart/form-data", id = "addRoll" }))
+                        {
+
+
+                            <div>
+
+
+                                <div class="row">
+
+                                    <div class="row fieldholder col-lg-12">
+                                        <label >
+                                            Role Title :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="roleTitle" name="roleTitle" required="required" class="form-control addRoleItem">
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-12">
+                                        <label >
+                                            Choose Section : 
+                                        </label>
+                                        <div>
+
+                                            <span style="color:red; display:none">*</span>
+                                            @if (Model.Sections != null)
+                                            {
+                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- choose section --", new { id = "sectionList", name = "sectionList", style = "", @class = "addRoleItem form-control", multiple = "multiple" })
+                                            }
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleCreate">Verify</button>
+                    <script>
+
+
+                        $("#roleCreate").click(function () {
+                            // alert("aa");
+
+                            var int = 0;
+                            $(".addRoleItem").each(function () {
+
+                                if ($(this).val() === "") {
+                                    $(this).siblings("span").css("display", "inline-block");
+                                    int = 1;
+                                }
+                            })
+
+                            if (int == 0) {
+
+                                $("#addRoll").submit();
+                            }
+                            else {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.error('Fill All Fields')
+
+                            }
+
+
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addRoleSectionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Section</h5>
+
+                <div class="row">
+                    <div>
+                        @using (Html.BeginForm("setNewRoll", "Node", FormMethod.Post,
+new { enctype = "multipart/form-data", id = "editRoll" }))
+                        {
+
+                            <input id="roleSelected" type="hidden" name="itemID" />
+                            <div style="padding: 15px 5px;border: 1px solid #d8d8d8;border-radius: 5px;">
+
+
+                                <div class="row">
+
+
+                                    <div class="row fieldholder col-lg-10">
+                                        <label style="">
+                                           Select New Section :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            @if (Model.Sections != null)
+                                            {
+                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- Select Section --", new { id = "sectionList", name = "sectionList", style = "", @class = "editRoleItem form-control", multiple = "multiple" })
+                                            }
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleEdit">Verify</button>
+                    <script>
+
+
+                        $("#roleEdit").click(function () {
+                            // alert("aa");
+
+                            var int = 0;
+                            $(".editRoleItem").each(function () {
+
+                                if ($(this).val() === "") {
+                                    $(this).siblings("span").css("display", "inline-block");
+                                    int = 1;
+                                }
+                            })
+
+                            if (int == 0) {
+
+                                $("#editRoll").submit();
+                            }
+                            else {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+
+                            }
+
+
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="editUserModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <div class="row" id="detailholder" style="padding: 0px 20px;display:none;width: 100%;margin: 0px;">
+
+
+
+                    @using (Html.BeginForm("updateUser", "Node", FormMethod.Post, new { enctype = "multipart/form-data", id = "updateUser" }))
+                    {
+
+                        <div style="padding: 15px 15px; border: 1px solid #d8d8d8; border-radius: 5px">
+
+                            <div class="row">
+
+                                <div class="row fieldholder col-lg-6" style="margin:15px 0">
+                                    <label style="text-align: right">
+                                        Full name
+                                    </label>
+                                    <div>
+                                        <span style="color:red; display:none">*</span>
+                                        <input value="" type="text" id="fullnameUpdate" name="fullnameUpdate" required="required" class="form-control ">
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row fieldholder col-lg-6" style="margin:15px 0">
+                                    <label style="text-align: right">
+                                        Phone
+                                    </label>
+                                    <div>
+                                        <span style="color:red; display:none">*</span>
+                                        <input value="" type="text" id="phoneupdate" name="phoneupdate" required="required" class="form-control REM2">
+                                    </div>
+
+
+                                </div>
+                                <div class="row fieldholder col-lg-6" style="margin:15px 0">
+                                    <label style="text-align: right">
+                                        Email :
+                                    </label>
+                                    <div>
+                                        <span style="color:red; display:none">*</span>
+                                        <input value="" type="text" id="emailupdate" name="emailupdate" required="required" class="form-control ">
+                                    </div>
+                                </div>
+
+                                <input id="IDupdate" name="IDupdate" value="" hidden />
+                                <input id="UserListUpdate" name="UserListUpdate" value="0" hidden />
+                                <input name="addressupdate" value="" hidden />
+
+                            </div>
+                      
+
+
+                        </div>
+
+                    }
+
+
+                </div>
+
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-dismiss="modal" data-bs-original-title="" title="" id="UserUpdateButt">Verify</button>
+
+                    <script>
+
+                        $("#UserUpdateButt").click(function () {
+                            // alert("aa");
+
+                            var int = 0;
+                            $(".REM2").each(function () {
+
+                                if ($(this).val() === "") {
+                                    $(this).siblings("span").css("display", "inline-block");
+                                    int = 1;
+                                }
+                            })
+                            if (int === 0) {
+                                $("#updateUser").submit();
+                            }
+                            else {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+
+                            }
+
+
+                        })
+                    </script>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<div>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">User List</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Role List</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5>Search Panel</h5>
+                            </div>
+                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                                <div class=" ">
+                                    <span style="color:red; display:none">*</span>
+                                    <input class="form-control" style="min-width:250px" type="text" id="searchinput" name="searchinput" placeholder="Search Item" />
+                                </div>
+                            </div>
+
+                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                                <a id="changeUserList" class="lgnsubmitt btn btn-primary">Search</a>
+                            </div>
+                            <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                                <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary">Add New User</a>
+                            </div>
+                            <script>
+                                $("#changeUserList").click(function () {
+                                    var search = $("#searchinput").val();
+
+                                    $.ajax({
+                                        url: '/Node/getNewListUser',
+                                        dataType: 'html',
+                                        data: {
+                                            search: search,
+
+                                        },
+                                        success: function (data) {
+
+                                            $("#Listholder").html(data);
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+
+                                })
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5>User List</h5>
+                            </div>
+                            <div id="Listholder">
+                                <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                                    <thead>
+                                        <tr>
+
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Email</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Phone</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @if (Model.Users != null)
+                                        {
+                                            foreach (var item in Model.Users)
+                                            {
+
+                                                string cls = "odd";
+                                                if (Model.Users.IndexOf(item) + 1 % 2 == 0)
+                                                {
+                                                    cls = "even";
+                                                }
+
+                                                <tr class="@cls">
+
+                                                    <td style="display: none" id="mobileHolder">@item.token</td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.fullname)
+                                                    </td>
+                                                    <td style=" ">
+                                                        @Html.DisplayFor(modelItem => item.email)
+                                                    </td>
+
+                                                    <td style="">
+                                                        @Html.DisplayFor(modelItem => item.mobile)
+                                                    </td>
+
+
+
+
+                                                    <td>
+                                                        <ul>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+
+                                                                    <i id=@item.token class="ri-user-2-line checkPartnerbutton"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+                                                                    <a href="javascript:void(0)">
+                                                                        <i id=@item.ID class="ri-pencil-fill Pbutton"></i>
+                                                                    </a>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+
+                                                                    <i id=@item.ID class="ri-delete-bin-line Dbutton"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+
+
+
+                                    </tbody>
+                                </table>
+
+
+
+                                <script>
+                                    var id
+                                $(".checkPartnerbutton").click(function () {
+                                    var id = $(this).attr("id");
+                                    var phone = $(this).parent().parent().find('#mobileHolder').text().trim();
+
+                                    $.ajax({
+                                        url: '/Node/checkPartnerStatus',
+                                        dataType: 'html',
+                                        data: {
+                                            id: id,
+                                        },
+                                        success: function (data) {
+
+                                            $("#partnerDataHolder").html(data);
+                                            $("#partnerDataHolder").scroll();
+                                            $(".patnerUsername").val(phone); 
+                                            //$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+                                            
+                                           
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+                                });
+                                    $("#removeU").click(function () {
+                                        var id = $(".idToRemove").text();
+                                      
+                                        $.ajax({
+                                            url: '/Node/DeleteUser',
+                                            dataType: 'html',
+                                            data: {
+                                                id: id,
+                                            },
+                                            success: function (data) {
+
+                                                $("#changeUserList").click();
+                                                $("#delmodal").modal("toggle");
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+                                    })
+
+                                $(".Dbutton").click(function () {
+
+                                    var id = $(this).attr("id");
+                                    $(".idToRemove").text(id);
+                                    $("#delmodal").modal("toggle");
+
+                                });
+                                  $(".Pbutton").click(function () {
+                                    var rowid = $(this).attr("id");
+                                    var articles = @Html.Raw(Json.Encode(Model.Users));
+                                    $("#editUserModal").modal("toggle");
+                                    $("#detailholder").css("display", "inline-block");
+                                    $('html,body').animate({
+                                        scrollTop: $("#detailholder").offset().top
+                                    }, 'fast');
+
+                                    $.each(articles, function (index, item) {
+                                        if (item.ID.toString() === rowid) {
+
+                                            $("#UserListUpdate option").each(function () {
+
+                                                if ($(this).val() === item.userTypeID) {
+
+                                                    $("option:selected").removeAttr("selected");
+                                                    $(this).attr("selected", "selected");
+                                                }
+                                            })
+
+                                            var imagaddress = "/images/panelimages/" + item.image;
+                                            $("#fullnameUpdate").val(item.fullname);
+                                            $("#emailupdate").val(item.email);
+                                            $("#phoneupdate").val(item.mobile);
+                                            $("#addressupdate").val(item.address);
+                                            $("#IDupdate").val(item.ID);
+
+
+
+                                        }
+
+
+                                    });
+
+                                });
+                                  
+                                </script>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="partnerDataHolder"></div>
+            
+
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- Details Start -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-header option-title">
+                                    <h5>Role List</h5>
+                                </div>
+                                <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                                    <a id="addRoleModalIcon" class="lgnsubmitt btn btn-primary">Add New Role</a>
+                                </div>
+                                <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @if (Model.Roles != null)
+                                        {
+                                            foreach (var item in Model.Roles)
+                                            {
+
+                                                string cls = "odd";
+                                                if (Model.Roles.IndexOf(item) + 1 % 2 == 0)
+                                                {
+                                                    cls = "even";
+                                                }
+
+                                                <tr class="@cls">
+
+
+                                                    <td>@Html.DisplayFor(modelItem => item.roleName)</td>
+
+
+
+                                                    <td>
+                                                        <ul>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+                                                                    @{
+
+                                                                        <a href="javascript:void(0)">
+                                                                            <i id=@item.ID class="ri-eye-fill editAccess"></i>
+                                                                        </a>
+
+                                                                    }
+
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+
+                                                                    <i id=@item.ID class="ri-delete-bin-line DRbutton"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                   
+                    $("#removeRole").click(function () {
+                        var id = $(".idRoleToRemove").text();
+
+                        $.ajax({
+                            url: '/Node/DeleteRoleUser',
+                            dataType: 'html',
+                            data: {
+                                id: id,
+                            },
+                            success: function (data) {
+
+                                window.location.reload();
+
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    })
+
+                    $(".DRbutton").click(function () {
+
+                        var id = $(this).attr("id");
+                        $(".idRoleToRemove").text(id);
+                        $("#delRolemodal").modal("toggle");
+
+                    });
+                    $(".editAccess").click(function () {
+
+                        var id = $(this).attr("id");
+
+                        $.ajax({
+                            url: '/Node/getRoleSection',
+                            dataType: 'html',
+                            data: {
+                                id: id,
+                            },
+                            success: function (data) {
+                                $("#roleSelected").val(id);
+                                $("#accessListholder").html(data);
+
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    });
+
+
+                </script>
+
+
+
+                <div id="accessListholder">
+
+                </div>
+             
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $("#addUserModalIcon").click(function () {
+        $("#addUserModal").modal("toggle");
+    })
+    $("#addRoleModalIcon").click(function () {
+        $("#addRoleModal").modal("toggle");
+    })
+
+
+</script>
+<style>
+th,td{
+    text-align:center;
+}
+</style>

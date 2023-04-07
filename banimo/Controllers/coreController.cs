@@ -533,24 +533,7 @@ namespace banimo.Controllers
         }
 
 
-        public ActionResult draft()
-        {
-            string result = "";
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            using (WebClient client = new WebClient())
-            {
 
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
-                collection.Add("device", device);
-                collection.Add("code", code);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDraft.php", collection);
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-            draftVM log = JsonConvert.DeserializeObject<draftVM>(result);
-            return View(log);
-        }
 
         //public ActionResult getNewListProduct(string val)
         //{
@@ -581,6 +564,25 @@ namespace banimo.Controllers
 
 
         //}
+
+        public ActionResult draft()
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDraft.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            draftVM log = JsonConvert.DeserializeObject<draftVM>(result);
+            return View(log);
+        }
         public ActionResult returnDraftList(string factornum, string residnum, string taraf, string factorType, string amani, string nodeID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string desc)
         {
             double finalTimeFrom = 0;

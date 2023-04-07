@@ -1,0 +1,100 @@
+﻿@model  banimo.ViewModel.TimeListMarketPlace
+
+<div class="row  deliverVendor" style="direction:ltr">
+    @{
+        if (Model.deliver_node != null)
+        {
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            col
+                        </th>
+                        <th>
+                            vendor
+                        </th>
+                        <th>
+                            deliverPrice
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.deliver_node)
+                    {
+                        int index = Model.deliver_node.IndexOf(item) + 1;
+                        <tr>
+                            <td>@index.ToString()</td>
+                            <td>@item.title</td>
+                            <td>@item.price</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+            <style>
+                .deliverVendor td {
+                    text-align: center;
+                    padding: 10px;
+                    border: 1px solid #ddd
+                }
+            </style>
+
+            @*<div class="col-lg-6 col-sm-6 Mmaster">
+                    @foreach (var item in Model.times)
+                    {
+                        int index = Model.times.IndexOf(item);
+                        string checkname = "check" + index;
+                        <div class="halfrow master" checkS="@checkname">
+
+                            <i class="fa fa-check dispath" checkID="@checkname"  style="display:none"></i>
+                            <p  class="priceItem">@item.title</p>
+                        </div>
+                    }
+                </div>*@
+
+        }
+
+        <script>
+            let price = '@Model.deliver_node.Sum(c=>c.price)';
+            let finalAmount = $("#finalamount").text().trim();
+            let final = parseFloat(price) + parseFloat(finalAmount);
+
+            $("#deliveramount").text(price);
+            $("#finalamount").text(final);
+
+            $(".infoD").text("true")
+      
+        </script>
+    }
+
+</div>
+
+
+<script>
+    $(".master").click(function () {
+
+        $(".dispath").css("display", "none");
+        var i = $(this).children();
+        i.css("display", "block");
+
+        var id = i.attr("checkID");
+
+
+        $(".slave").css("display", "none");
+        $("#" + id).show();
+        $(this).find('i').css("display", "block");
+        $("#" + id).children().children().first().css("display", "block");
+        $("#hourid").val($("#" + id).children().children().first().attr("id"));
+
+
+    })
+    $(".slave .halfrow").click(function () {
+        $(".finalrow").css("display", "none");
+        var i = $(this).children();
+        i.css("display", "block");
+        var id = i.attr("id");
+        $("#hourid").val(id);
+    })
+</script>

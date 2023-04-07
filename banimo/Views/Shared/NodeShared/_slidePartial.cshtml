@@ -1,0 +1,12 @@
+﻿@model banimo.ViewModel.slideVM
+
+
+@foreach (var item in Model.slideList)
+{
+    <div class="imageCover" style="postion:relative !important; width:150px">
+        <div style="position:relative">
+            <img src="/images/` + image + `" style="width:150px" " src="#" id="` + processID + `" />
+            <img onclick=removeImage("` + processID + `***` + image + `","imageName") id="R` + processID + `" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" />
+        </div>
+    </div>
+}

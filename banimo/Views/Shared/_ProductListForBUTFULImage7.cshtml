@@ -3,11 +3,29 @@
 @using banimo.Classes;
 
 
-    <div class="product-wrapper row cols-md-3 cols-sm-2 cols-2" id="productlist">
-        @{
-            if (Model.products != null)
-            {
-                foreach (var item in Model.products)
+
+
+
+<!-- Start of Shop Content -->
+
+
+
+
+
+
+@{
+    if (Model.products != null)
+    {
+        if (Model.products.Count == 0)
+        {
+            <div class="product-wrapper row ">
+                <p style="text-align:center"><img src="~/images/noitem.png" /></p>
+            </div>
+        }
+        else
+        {
+            <div class="product-wrapper row cols-md-5 cols-sm-2 cols-3 boxshadow" >
+                @foreach (var item in Model.products)
                 {
                     string newurl = "/Home/ProductDetail?id=" + item.ID;
                     if (item.meta != null)
@@ -15,7 +33,7 @@
                         banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
                         newurl = metaModel.curl;
                     }
-                   
+
                     string imagefile = "placeholder.jpg";
                     List<string> srtlist = new List<string>();
                     string src2 = "";
@@ -28,13 +46,13 @@
                             src2 = srtlist[1];
                         }
                     }
-                  
+
                     int price = item.price;
 
                     string src = imagefile;
                     <div class="product-wrap">
-                        <div class="product text-center">
-                            <figure class="product-media">
+                        <div class="product text-center shadowbox" style="border-radius:8px">
+                            <figure class="product-media" style="margin:auto; max-width:90%">
                                 <a href="/products/@newurl">
                                     <img src="@src" alt="Product"
                                          width="300" height="338" />
@@ -50,10 +68,10 @@
                                 }
                             </figure>
                             <div class="product-details">
-                                <h4 class="product-name"><a href="product-default.html">@item.title</a></h4>
+                                <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
 
                                 <div class="product-price">
-                                    <ins class="new-price">$@item.price</ins>
+                                    <ins class="new-price">@item.price AED</ins>
                                     @if (item.price != item.oldPrice)
                                     {
                                         <del class="old-price">@item.oldPrice AED</del>
@@ -61,14 +79,36 @@
 
                                 </div>
                             </div>
+                            <div style="padding:4%">
+                                <div class="input-group">
+                                    @{
+                                        string clsname = "value" + @item.ID;
+                                        string partnerID = Request.Cookies["tarafID"] != null ? Request.Cookies["tarafID"].Value : "";
+                                        string ads = @item.ID + "*";
+                                    }
+                                    <input addson="@ads" class=" form-control @clsname" type="number" min="1" max="100000" value="0">
+
+                                    <button class="quantity-plus w-icon-plus" onclick="addtocart('@partnerID','@item.ID','')"></button>
+                                    <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@partnerID','@item.ID','')"></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 }
 
-            }
+            </div>
+
         }
 
-    </div>
+
+    }
+    else
+    {
+        <p>ddlsdj;lsjdf;lskjdf</p>
+    }
+}
+
+
 
 
 
@@ -76,9 +116,9 @@
 
 
 <div class="toolbox toolbox-pagination justify-content-between">
-    <p class="showing-info mb-2 mb-sm-0">
-        Showing<span>1-12 of 60</span>Products
-    </p>
+    @*<p class="showing-info mb-2 mb-sm-0">
+            Showing<span>1-12 of 60</span>Products
+        </p>*@
 
     @{
         var total = Convert.ToInt32(Model.pageNumber);
@@ -412,4 +452,4 @@
 <script>
     getquntity();
 </script>
-
+<!-- End of Shop Content -->

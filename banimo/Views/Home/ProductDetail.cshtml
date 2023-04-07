@@ -596,8 +596,27 @@
                                                         <script>
                                                             $('.otherColor').click(function () {
                                                                 var ID = this.id;
-                                                                var url = "/Home/ProductDetail?id=" + ID;
-                                                                window.location.href = url;
+                                                                $.ajax({
+                                                                    url: "/Home/changeLastNumber",
+                                                                    data: {
+                                                                        value: ID
+                                                                    },
+                                                                    success: function (data) {
+                                                                        //$.ajax({
+                                                                        //    url: "/Home/ProductDetailPartial",
+                                                                        //    success: function (data) {
+                                                                        //        $("#pvDataHolder").html(data)
+
+                                                                        //    }
+                                                                        //});
+
+                                                                        window.location.reload();
+
+                                                                    }
+                                                                });
+                                                                
+                                                                //var url = "/Home/ProductDetail?id=" + ID;
+                                                                //window.location.href = url;
                                                             })
                                                         </script>
                                                     }
@@ -896,11 +915,19 @@
 
                                     <script>
                                         $('.showmeOtherdetail').click(function () {
-
-
                                             var ID = this.id;
-                                            var url = "/Home/ProductDetail?id=" + ID;
-                                            window.location.href = url;
+                                            $.ajax({
+                                                url: "/Home/changeLastNumber",
+                                                data: {
+                                                    value: ID
+                                                },
+                                                success: function (data) {
+
+                                                    window.location.reload();
+
+                                                }
+                                            });
+
                                         })
                                     </script>
 
@@ -1894,7 +1921,7 @@
             dataType: 'html',
             data: {
                 id: tobeid,
-                price: tobeadded
+                price: ""
 
             },
             success: function (data) {

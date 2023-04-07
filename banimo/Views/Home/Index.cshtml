@@ -1,6 +1,7 @@
 ﻿
 @using BotDetect.Web.Mvc;
 @using banimo.Classes;
+@using Newtonsoft.Json;
 
 @model banimo.ViewModePost.getMaindataViewModel
 
@@ -271,6 +272,12 @@
                     <div class="owl-carousel">
                         @foreach (var item in Model.wonderList)
                         {
+                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                newurl = "/product/" + metaModel.curl;
+                            }
                             string addID = "addtocarto" + item.ID;
                             string minusID = "minus" + item.ID;
                             string imagefile = "placeholder.jpg";
@@ -289,7 +296,7 @@
                                     <div class="showmedetailFirstDiv showmedetailx" style="background-color:white;">
                                         <div style="padding: 20px">
 
-                                            <a href="/Home/ProductDetail?id=@ID">
+                                            <a href="@newurl">
                                                 <div class="imageholderindex">
                                                     <img style="max-width:100%; max-height:100%" class="imageitself" src="@src" alt="@item.ID" />
                                                 </div>
@@ -414,6 +421,12 @@
                     <div class="resCarousel-inner" style="direction:rtl">
                         @foreach (var item in Model.specialOffers)
                         {
+                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                newurl = "/product/" +metaModel.curl;
+                            }
                             string addID = "addtocarto" + item.ID;
                             string minusID = "minus" + item.ID;
                             string imagefile = "placeholder.jpg";
@@ -431,7 +444,7 @@
 
                                 <div class="showmedetailx">
                                     <div style="padding:2px  ">
-                                        <a href="/Home/ProductDetail?id=@ID">
+                                        <a href="@newurl">
                                             <div class="imageholderindex" style="width:100%; ">
                                                 <img alt="@item.ID" class="imageitself" src="@src" style="max-width:100%;max-height:100%; object-fit:scale-down" />
                                             </div>
@@ -670,6 +683,12 @@
                     <div class="resCarousel-inner" style="direction:rtl">
                         @foreach (var item in Model.newest)
                         {
+                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                newurl = "/product/" + metaModel.curl;
+                            }
                             string addID = "addtocarto" + item.ID;
                             string minusID = "minus" + item.ID;
                             string imagefile = "placeholder.jpg";
@@ -686,7 +705,7 @@
                             <div class="item showmedetail" id=@ID style="cursor:pointer;  max-width:34%">
                                 <div class="showmedetailx">
                                     <div style="padding:2px  ">
-                                        <a href="/Home/ProductDetail?id=@ID">
+                                        <a href="@newurl">
 
                                             <div class="imageholderindex" style="width:100%; ">
                                                 <img alt="@item.title" class="imageitself" src="@src" style="max-width:100%;max-height:100%; object-fit:scale-down" />
@@ -817,6 +836,12 @@
                     <div class="resCarousel-inner" style="direction:rtl">
                         @foreach (var item in Model.bestseller)
                         {
+                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                newurl = "/product/" + metaModel.curl;
+                            }
                             string addID = "addtocarto" + item.ID;
                             string minusID = "minus" + item.ID;
                             string imagefile = "placeholder.jpg";
@@ -834,7 +859,7 @@
 
                                 <div class="showmedetailx">
                                     <div style="padding:2px  ">
-                                        <a href="/Home/ProductDetail?id=@ID">
+                                        <a href="@newurl">
                                             <div class="imageholderindex" style="width:100%; ">
                                                 <img alt="@item.title" class="imageitself" src="@src" style="max-width:100%;max-height:100%; object-fit:scale-down" />
                                             </div>
@@ -956,6 +981,12 @@
 
                                 @foreach (var item in group.value)
                                 {
+                                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        newurl = "/product/" + metaModel.curl;
+                                    }
                                     string addID = "addtocarto" + item.ID;
                                     string minusID = "minus" + item.ID;
                                     string imagefile = "placeholder.jpg";
@@ -973,7 +1004,7 @@
 
                                         <div class="showmedetailx">
                                             <div style="padding:2px  ">
-                                                <a href="/Home/ProductDetail?id=@ID">
+                                                <a href="@newurl">
                                                     <div class="imageholderindex" style="width:100%; ">
                                                         <img alt="@item.title" class="imageitself" src="@src" style="max-width:100%;max-height:100%; object-fit:scale-down" />
                                                     </div>
@@ -1208,6 +1239,12 @@
                             <div class="resCarousel-inner">
                                 @foreach (var item in Model.wonderList)
                                 {
+                                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        newurl = "/product/" + metaModel.curl;
+                                    }
                                     string addID = "addtocarto" + item.ID;
                                     string minusID = "minus" + item.ID;
                                     string imagefile = "placeholder.jpg";
@@ -1225,7 +1262,7 @@
 
                                         <div class="showmedetailFirstDiv showmedetailx" style="background-color:white;">
                                             <div style="padding: 20px">
-                                                <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                <a href="@newurl" >
                                                     <div class="imageholderindex">
                                                         <img alt="@item.title" class="imageitself" src="@src" />
                                                     </div>
@@ -1361,6 +1398,12 @@
                                 </div>
                                 @foreach (var item in Model.specialOffers)
                                 {
+                                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        newurl = "/product/" + metaModel.curl;
+                                    }
                                     string addID = "addtocarto" + item.ID;
                                     string minusID = "minus" + item.ID;
                                     string imagefile = "placeholder.jpg";
@@ -1380,7 +1423,7 @@
                                         <div class="showmedetailFirstDiv showmedetailx">
                                             <div style="padding:15px">
 
-                                                <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                <a href="@newurl" >
                                                     <div class="imageholderindex">
                                                         <img alt="@item.title" class="imageitself" src="@src" />
                                                     </div>
@@ -1532,6 +1575,12 @@
                                 </div>
                                 @foreach (var item in Model.newest)
                                 {
+                                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        newurl = "/product/" + metaModel.curl;
+                                    }
                                     string addID = "addtocarto" + item.ID;
                                     string minusID = "minus" + item.ID;
                                     string imagefile = "placeholder.jpg";
@@ -1549,7 +1598,7 @@
 
                                         <div class="showmedetailFirstDiv showmedetailx">
                                             <div style="padding:15px">
-                                                <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                <a href="@newurl" >
                                                     <div class="imageholderindex">
                                                         <img alt="@item.title" class="imageitself" src="@src" />
                                                     </div>
@@ -1721,6 +1770,12 @@
                                 </div>
                                 @foreach (var item in Model.bestseller)
                                 {
+                                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        newurl = "/product/" + metaModel.curl;
+                                    }
                                     string addID = "addtocarto" + item.ID;
                                     string minusID = "minus" + item.ID;
                                     string imagefile = "placeholder.jpg";
@@ -1738,7 +1793,7 @@
 
                                         <div class="showmedetailFirstDiv showmedetailx">
                                             <div style="padding:15px">
-                                                <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                <a href="@newurl" >
                                                     <div class="imageholderindex">
                                                         <img alt="@item.title" class="imageitself" src="@src" />
                                                     </div>
@@ -1866,6 +1921,12 @@
                                         </div>
                                         @foreach (var item in group.value)
                                         {
+                                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                            if (item.meta != "null" && item.meta != null)
+                                            {
+                                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                                newurl = "/product/" + metaModel.curl;
+                                            }
                                             string addID = "addtocarto" + item.ID;
                                             string minusID = "minus" + item.ID;
                                             string imagefile = "placeholder.jpg";
@@ -1883,7 +1944,7 @@
 
                                                 <div class="showmedetailFirstDiv showmedetailx">
                                                     <div style="padding:15px">
-                                                        <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                        <a href="@newurl" >
                                                             <div class="imageholderindex">
                                                                 <img alt="@item.title" class="imageitself" src="@src" />
                                                             </div>
@@ -2023,9 +2084,9 @@
     })
     $(".mySlide").click(function () {
 
-       
+
         var val = $(this).attr('id');
-       
+
         if (!val.includes('image')) {
             window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
@@ -2138,7 +2199,10 @@
 
     })
 
-
+    $("a").click(function () {
+        var url = $(this).attr('href');
+        window.location.href = url
+    })
 </script>
 
 

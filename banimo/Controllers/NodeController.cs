@@ -37,8 +37,10 @@ using System.Text.RegularExpressions;
 
 namespace banimo.Controllers
 {
-
+    //09130798220
+    //09127221066
     [NodeSessionCheck]
+  
     public class NodeController : Controller
     {
         // GET: Node
@@ -47,6 +49,7 @@ namespace banimo.Controllers
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
+        static readonly string nodeID = "1";
         webservise wb = new webservise();
         public static string device = RandomString();
         public static string code = MD5Hash(device + "ncase8934f49909");
@@ -209,6 +212,8 @@ namespace banimo.Controllers
             }
             return deserializedPerson;
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
         {
 
@@ -229,49 +234,36 @@ namespace banimo.Controllers
                     collection.Add("mobile", phone);
                     collection.Add("pass", pass);
 
-                    byte[] response = client.UploadValues(server + "/Admin/getuserid.php", collection);
+                    byte[] response = client.UploadValues(server + "/Node/getuseridNew.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
-                var log = JsonConvert.DeserializeObject<List<AdminPanel.ViewModel.userdata>>(result);
-                if (log != null)
+                userDataNew log = JsonConvert.DeserializeObject<userDataNew>(result);
+                if (log.token != null && log.action != null)
                 {
-                    AdminPanel.ViewModel.userdata user = log[0];
-                    if (user.ID != "" && (user.userTypeID == 10 || user.userTypeID == 1))
+                    if (log.action.Contains("Core"))
                     {
-                        Session["LogedInUser2"] = user.token;
-                        if (Request.Cookies["productcookiie"] != null)
-                        {
-                            HttpCookie currentUserCookie = Request.Cookies["productcookiie"];
-                            Response.Cookies.Remove("productcookiie");
-                            currentUserCookie.Expires = DateTime.Now.AddDays(-10);
-                            currentUserCookie.Value = null;
-                            Response.SetCookie(currentUserCookie);
-                        }
-
-
-
-
-                        if (ischecked == "checked")
-                        {
-                            //HttpCookie Username = new HttpCookie("Username");
-                            //HttpCookie Password = new HttpCookie("Password");
-                            //DateTime now = DateTime.Now;
-                            //Username.Value = phone;
-                            //Username.Expires = now.AddMonths(1);
-                            //Password.Value = pass;
-                            //Password.Expires = now.AddMonths(1);
-                            //Response.Cookies.Add(Username);
-                            //Response.Cookies.Add(Password);
-                        }
-
+                        Session["CoreUser"] = log.token;
                     }
-                    return Content("1/Node/dashboard");
+                    else if (log.action.Contains("partner"))
+                    {
+                        Session["PartnerUser"] = log.token;
+                    }
+                    else
+                    {
+                        Session["LogedInUser2"] = log.token;
+                    }
+
+                    HttpContext.Response.Cookies["AT"].Value = log.token;
+
+                    List<string> lst = log.action.Split('/').ToList();
+                    return RedirectToAction(lst[1], lst[0]);
                 }
                 else
                 {
-                    return Content("2/Node/index");
+                    return RedirectToAction("index", "Node", new { error = 2 });
+
                 }
             }
             catch (Exception e)
@@ -313,7 +305,7 @@ namespace banimo.Controllers
         }
         public ActionResult gotoindex()
         {
-            return RedirectToAction("Index", "Admin");
+            return RedirectToAction("Index", "Node");
         }
 
         public ActionResult productdetail()
@@ -419,40 +411,7 @@ namespace banimo.Controllers
             };
             return View(model);
         }
-        public ActionResult location()
-        {
-            CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-            cookiemodel.currentpage = "Menu";
-            cookiemodel.controller = "admin";
-            SetCookie(JsonConvert.SerializeObject(cookiemodel), "token");
-            // CatPageViewModel model = new CatPageViewModel();
-            string token = Session["LogedInUser2"] as string;
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            string json = "";
-            string lan = Session["lang"] as string;
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("token", token);
-                collection.Add("lan", lan);
-
-
-                byte[] response = client.UploadValues(server + "/Node/getCountrylistAll.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-
-
-            var log = JsonConvert.DeserializeObject<countryAll>(result);
-            return View(log);
-        }
+       
         public ActionResult Menu()
         {
             CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -544,7 +503,7 @@ namespace banimo.Controllers
                     collection.Add("aim", "admin");
 
 
-                    byte[] response = client.UploadValues(server + "/Node/getfilterslist.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/getfilterslist.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -592,7 +551,7 @@ namespace banimo.Controllers
                     collection.Add("ID", id);
                     collection.Add("servername", servername);
 
-                    byte[] response = client.UploadValues(server + "/Node/delRangeFilter.php", collection);
+                    byte[] response = client.UploadValues(server + "/Admin/delRangeFilter.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -784,32 +743,7 @@ namespace banimo.Controllers
             }
         }
 
-        public ActionResult Orders()
-        {
-
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("servername", servername);
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("order", "");
-                byte[] response = client.UploadValues(server + "/Node/getDataAdminOrders.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-            banimo.ViewModelPost.OrderList log = JsonConvert.DeserializeObject<banimo.ViewModelPost.OrderList>(result);
-
-
-            return View(log);
-
-
-        }
+       
         public ActionResult ChangeOrderList(string type, string order)
         {
 
@@ -1520,7 +1454,33 @@ namespace banimo.Controllers
 
 
         }
+        public void ChangeProductFree(string id, string value)
+        {
+            if (true)
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("id", id);
+                    collection.Add("value", value);
+                    collection.Add("servername", servername);
 
+                    byte[] response =
+                    client.UploadValues(server + "/Node/ChangeProductFree.php?", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+            }
+
+
+
+        }
+        
         public ActionResult setnewfilter(string filterid, string detailtitle)
         {
 
@@ -1537,7 +1497,7 @@ namespace banimo.Controllers
                 collection.Add("filterID", filterid);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(server + "/Node/setnewfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/setnewfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1573,7 +1533,7 @@ namespace banimo.Controllers
                 collection.Add("id", detailid);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(server + "/Node/deletefromfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/deletefromfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1606,7 +1566,7 @@ namespace banimo.Controllers
                 collection.Add("newvalue", newvalue);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(server + "/Node/editfilterdetail.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/editfilterdetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1951,6 +1911,131 @@ namespace banimo.Controllers
             }
 
         }
+
+
+
+        public ActionResult Group()
+        {
+            CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            cookiemodel.currentpage = "Menu";
+            cookiemodel.controller = "admin";
+            SetCookie(JsonConvert.SerializeObject(cookiemodel), "token");
+            // CatPageViewModel model = new CatPageViewModel();
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("lan", lan);
+
+
+                byte[] response = client.UploadValues(server + "/Node/getcatlistAll.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            var log = JsonConvert.DeserializeObject<catAll>(result);
+            return View(log);
+        }
+        public ActionResult setnewTags(string catID, string title,string priority, string tag,string Type)
+        {
+
+
+            
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("priority", priority);
+                collection.Add("type", Type);
+                collection.Add("tag", tag);
+                collection.Add("token", token);
+                collection.Add("catID", catID.Remove(0, 1));
+                collection.Add("lan", "en");
+                collection.Add("servername", servername);
+              
+
+                byte[] response = client.UploadValues(server + "/Node/setnewTags.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        public ActionResult removetag(string id)
+        {
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("token", token);
+                collection.Add("servername", servername);
+
+
+                byte[] response = client.UploadValues(server + "/Node/removeTags.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            if (result.Contains("1"))
+            {
+                return Content("1");
+            }
+
+            else if (result.Contains("0"))
+            {
+                return Content("0");
+            }
+            else
+            {
+                return Content("3");
+            }
+        }
+        
+
         public ActionResult setnewcat(string catID, string title, string image)
         {
 
@@ -2149,6 +2234,30 @@ namespace banimo.Controllers
 
 
             return Content(result);
+        }
+
+        
+        public ActionResult getTagDetail(string catid)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            string lascat = catid.Remove(0, 1);
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", lascat);
+                collection.Add("lan", lan);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/gettagsItem.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.tagsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.tagsVM>(result);
+            return PartialView("/Views/Shared/nodeShared/_tagPartial.cshtml", model);
         }
         public ActionResult getCatDetail(string catid)
         {
@@ -3485,7 +3594,31 @@ namespace banimo.Controllers
         }
 
 
+        public ActionResult comment()
+        {
 
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                //collection.Add("DayOfWeek", DayOfWeek);
+                //collection.Add("TimeFrom", TimeFrom);
+                //collection.Add("TimeTo", TimeTo);
+                byte[] response =
+                client.UploadValues(server + "/Node/GetComments.php?", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ViewModel.Comments log = JsonConvert.DeserializeObject<banimo.ViewModel.Comments>(result);
+            return View(log);
+        }
         public ActionResult updateCArticle(string CIDupdate, string Cimageupdate, string Ctitleupdate)
         {
             string imagename = "";
@@ -3653,22 +3786,22 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("address", address);
+                collection.Add("address", "");
                 collection.Add("email", email);
                 collection.Add("mobile", phone);
                 collection.Add("fullname", fullname);
                 collection.Add("password", MD5Hash(password));
                 collection.Add("type", "add");
-                collection.Add("UserType", UserList);
+                collection.Add("UserType", "0");
                 collection.Add("servername", servername);
 
 
-                byte[] response = client.UploadValues(server + "/Node/UpdateUsers.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/UpdateUsers.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            return RedirectToAction("Users");
+            return RedirectToAction("Access");
         }
         public ActionResult updateUser(string IDupdate, string addressupdate, string emailupdate, string phoneupdate, string fullnameUpdate, string UserListUpdate)
         {
@@ -3698,9 +3831,10 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            return RedirectToAction("Users");
+            return RedirectToAction("access");
         }
-
+        
+    
         public void DeleteUser(string id)
         {
             if (true)
@@ -3739,7 +3873,7 @@ namespace banimo.Controllers
                 collection.Add("search", search);
                 collection.Add("servername", servername);
 
-                byte[] response = client.UploadValues(server + "/Node/getDataUserList.php", collection);
+                byte[] response = client.UploadValues(server + "/Admin/getDataUserList.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -3781,7 +3915,36 @@ namespace banimo.Controllers
             return View(log);
         }
 
+        public ContentResult sendToServer(string srt)
+        {
 
+            string pathString = "~/images";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+
+                HttpPostedFileBase hpf = Request.Files[i];
+
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString() + hpf.FileName;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+                CookieVM model = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+                model.images += filename + ",";
+                SetCookie(JsonConvert.SerializeObject(model), "token");
+
+
+
+            }
+            return Content(filename);
+
+        }
         public void resetAdminProductPage()
         {
             Response.Cookies["lastpage"].Value = "1";
@@ -3896,6 +4059,7 @@ namespace banimo.Controllers
             CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             cookiemodel.currentpage = "product";
             cookiemodel.controller = "admin";
+            cookiemodel.images = "";
             SetCookie(JsonConvert.SerializeObject(cookiemodel), "token");
             if (true)
             {
@@ -3949,8 +4113,6 @@ namespace banimo.Controllers
 
                     newjson = System.Text.Encoding.UTF8.GetString(response);
                 }
-
-
 
 
                 partnerVM newlog = JsonConvert.DeserializeObject<partnerVM>(newjson);
@@ -4649,6 +4811,7 @@ namespace banimo.Controllers
 
                 byte[] response = client.UploadValues(server + "/Node/deleteproduct.php", collection);
 
+                
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             List<string> lst = result.Trim(',').Split(',').ToList();
@@ -4699,6 +4862,7 @@ namespace banimo.Controllers
             CookieVM cookimodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             cookimodel.currentpage = "Edit/" + id;
             cookimodel.controller = "admin";
+           
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
@@ -4743,7 +4907,7 @@ namespace banimo.Controllers
 
             cookie.images = "";
             SetCookie(JsonConvert.SerializeObject(cookie), "token");
-            return RedirectToAction("product", "admin");
+            return RedirectToAction("Edit", "Node",new { id = model.id});
 
 
         }
@@ -4779,37 +4943,7 @@ namespace banimo.Controllers
             return View(log);
         }
 
-        public ActionResult Banner(string message)
-        {
-
-            if (message == "1")
-            {
-                ViewBag.mess = "1";
-            }
-
-
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            using (WebClient client = new WebClient())
-            {
-
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-
-                byte[] response = client.UploadValues(server + "/Node/getBanner.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
-            }
-
-
-            sliderlst log = JsonConvert.DeserializeObject<sliderlst>(result);
-
-
-            return View(log);
-        }
+       
 
         [HttpPost]
         public ActionResult Banner(sliderforedit detail)
@@ -5013,30 +5147,31 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult comment()
+
+        public ContentResult sendToServerByJS(FormCollection formCollection)
         {
 
-            string device = RandomString(10);
-            string code = MD5Hash(device + "ncase8934f49909");
-            string result = "";
-            using (WebClient client = new WebClient())
+            string path = formCollection["path"];
+            string pathString = "~/images";
+            if (!Directory.Exists(Server.MapPath(pathString)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
+            }
+            string filename = "";
+            for (int i = 0; i < Request.Files.Count; i++)
             {
 
-                var collection = new NameValueCollection();
-                collection.Add("device", device);
-                collection.Add("code", code);
-                collection.Add("servername", servername);
-                //collection.Add("DayOfWeek", DayOfWeek);
-                //collection.Add("TimeFrom", TimeFrom);
-                //collection.Add("TimeTo", TimeTo);
-                byte[] response =
-                client.UploadValues(server + "/Node/GetComments.php?", collection);
+                HttpPostedFileBase hpf = Request.Files[i];
 
-                result = System.Text.Encoding.UTF8.GetString(response);
+                if (hpf.ContentLength == 0)
+                    continue;
+                filename = RandomString(7) + hpf.FileName; ;
+                string savedFileName = Path.Combine(Server.MapPath(pathString), filename);
+                string savedFileNameThumb = Path.Combine(Server.MapPath(pathString), "0" + filename);
+                hpf.SaveAs(savedFileName);
+
             }
-
-            banimo.ViewModel.Comments log = JsonConvert.DeserializeObject<ViewModel.Comments>(result);
-            return View(log);
+            return Content(filename);
         }
         public ActionResult bannerr()
         {
@@ -5142,6 +5277,8 @@ namespace banimo.Controllers
             }
             return RedirectToAction("banner");
         }
+
+
         public ActionResult slide()
         {
             CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -5155,6 +5292,7 @@ namespace banimo.Controllers
             string result = "";
             string json = "";
             string lan = Session["lang"] as string;
+            TempData["witch"] = "slide";
             using (WebClient client = new WebClient())
             {
 
@@ -5189,19 +5327,21 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("catID", catid);
+                collection.Add("catID", catid.Remove(0, 1));
                 collection.Add("locationID", locationID);
                 collection.Add("type", type);
                 collection.Add("lan", lan);
                 collection.Add("page", page);
+                collection.Add("servername", servername);
                 byte[] response = client.UploadValues(server + "/Node/getSlide.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
+            ViewModel.slideVM model = JsonConvert.DeserializeObject<ViewModel.slideVM>(result);
 
-
-            return Content(result);
+            return PartialView("/Views/Shared/NodeShared/_nodeSlidePartial.cshtml", model);
+            //return Content(result.Replace("\\n",""));
         }
-        public ActionResult addSlide(string catid, string image, string locationID, string type, string page)
+        public ActionResult addSlide(string catid, string image, string locationID, string type, string page,string link)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -5213,20 +5353,133 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("catID", catid);
+                collection.Add("catID", catid.Remove(0, 1));
                 collection.Add("type", type);
                 collection.Add("locationID", locationID);
                 collection.Add("image", image.Trim(','));
                 collection.Add("lan", lan);
                 collection.Add("page", page);
-                byte[] response = client.UploadValues(server + "/Node/addSlide.php", collection);
+                collection.Add("link", link);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/addslider.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
 
             return Content(result);
         }
+        
+        public ActionResult addBanner(string catid, string image, string locationID, string type, string page, string link,string title)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid.Remove(0, 1));
+                collection.Add("type", type);
+                collection.Add("locationID", locationID);
+                collection.Add("imagelist", image.Trim(','));
+                collection.Add("lan", lan);
+                collection.Add("page", page);
+                collection.Add("link", link);
+                collection.Add("title", title);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/addBanner.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content(result);
+        }
+        public ActionResult getBanner(string catid, string locationID, string type, string page)
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catID", catid.Remove(0, 1));
+                collection.Add("locationID", locationID);
+                collection.Add("type", type);
+                collection.Add("lan", lan);
+                collection.Add("page", page);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/getBanner.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            ViewModel.slideVM model = JsonConvert.DeserializeObject<ViewModel.slideVM>(result);
+            return PartialView("/Views/Shared/NodeShared/_nodeBannerPartial.cshtml", model);
+            //return Content(result.Replace("\\n", ""));
+        }
+        public ActionResult Banner(string message)
+        {
+
+            CookieVM cookiemodel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            cookiemodel.currentpage = "slide";
+            cookiemodel.controller = "admin";
+            SetCookie(JsonConvert.SerializeObject(cookiemodel), "token");
+            TempData["witch"] = "banner";
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("lan", lan);
+
+
+                byte[] response = client.UploadValues(server + "/Node/getSlideRequest.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+
+            var log = JsonConvert.DeserializeObject<ViewModel.slideRequst>(result);
+            return View(log);
+        }
+
+
+
+        public void removeImage(string id)
+        {
+            string pathString = "~/images";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), id);
+            System.IO.File.Delete(savedFileName);
+            if (Request.Cookies["adminimages"] != null)
+            {
+                ViewModel.CookieVM model = JsonConvert.DeserializeObject<ViewModel.CookieVM>(Request.Cookies["adminimages"].Value);
+                if (model.images != null)
+                {
+                    model.images = model.images.Replace(id + ",", "");
+                }
+                Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
+            }
+
+
+
+
+
+
+        }
         public void changeCommnetActive(string id, string value)
         {
 
@@ -5400,24 +5653,23 @@ namespace banimo.Controllers
         public ActionResult deleteimage(string id, string title)
         {
 
-            string str = id;
-            str = str.Substring(9, str.Length - 9);
+            //string str = id;
+            //str = str.Substring(0, str.Length - 1);
             ViewBag.Message = "Your application description page.";
-
-
-
-
             productinfoviewdetail model = new productinfoviewdetail();
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
+            string type = TempData["witch"].ToString();
+            TempData.Keep("witch");
             using (WebClient client = new WebClient())
             {
 
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("id", str);
+                collection.Add("id", id);
+                collection.Add("type", type);
                 collection.Add("servername", servername);
 
                 byte[] response = client.UploadValues(server + "/Node/deleteimage.php", collection);
@@ -5429,10 +5681,10 @@ namespace banimo.Controllers
             banimo.ViewModelPost.removeImageRespond mylog = JsonConvert.DeserializeObject<banimo.ViewModelPost.removeImageRespond>(result);
             if (mylog.status == 200 && mylog.count == 1)
             {
-                string pathString = "~/images/panelimages";
+                string pathString = "~/images";
 
                 string savedFileName = Path.Combine(Server.MapPath(pathString), Path.GetFileName(title));
-                string pathString2 = "~/images/panelimages/app";
+                string pathString2 = "~/images/app";
 
                 string savedFileName2 = Path.Combine(Server.MapPath(pathString2), Path.GetFileName(title));
                 if (System.IO.File.Exists(savedFileName))
@@ -5770,7 +6022,11 @@ namespace banimo.Controllers
 
 
         }
-
+        public ActionResult CustomerLogout()
+        {
+            Session.Remove("LogedInUser2");
+            return RedirectToAction("index");
+        }
         protected void GenerateInvoicePDF(object sender, EventArgs e)
         {
 
@@ -6154,6 +6410,2386 @@ namespace banimo.Controllers
         }
 
 
+      
 
+        //location 
+        public ActionResult location()
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            //string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                //collection.Add("partnerID", partner);
+
+                byte[] response = client.UploadValues(server + "/Admin/getLocation.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.locationVM model = JsonConvert.DeserializeObject<ViewModel.locationVM>(result);
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult setNewLocation(string title, string parentID, string ID,string type)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", title);
+                collection.Add("type", type);
+                collection.Add("parentID", parentID);
+                collection.Add("servername", servername);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/UpdateLocation.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return RedirectToAction("location");
+        }
+
+        public ActionResult DeleteLocation(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername);
+                collection.Add("nodeID", "1");
+                byte[] response = client.UploadValues(server + "/Admin/DeleteLocation.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("");
+        }
+
+        // order
+        public ActionResult orders(string tf, string tt, string q, string c)
+        {
+
+
+            double timestamptf = 0;
+            timestamptf = !String.IsNullOrEmpty(tf) ? dateTimeConvert.ConvertDateTimeToTimestamp(DateTime.Parse(tf)) : 0;
+            double timestamptt = 0;
+            timestamptt = !String.IsNullOrEmpty(tt) ? dateTimeConvert.ConvertDateTimeToTimestamp(DateTime.Parse(tt)) : 0;
+            //string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            //string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                //collection.Add("token", token);
+                collection.Add("timeFrom", timestamptf.ToString());
+                collection.Add("timeTo", timestamptt.ToString());
+                collection.Add("status", c);
+                collection.Add("query", q);
+                //collection.Add("partnerID", partner);
+
+                byte[] response = client.UploadValues(server + "/Admin/getOrdersPartner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.PartnerOrders model = JsonConvert.DeserializeObject<ViewModel.PartnerOrders>(result);
+
+            //model.partnerID = partner;
+
+            if (model.partnerOrders != null)
+            {
+                foreach (var item in model.partnerOrders)
+                {
+
+                    item.Rdate = dateTimeConvert.UnixTimeStampToDateTime(double.Parse(item.Rdate)).Date.ToString("yyyy-MM-dd");
+                }
+            }
+
+
+            return View(model);
+        }
+        public ActionResult changeOrderPartnerStatus(string id)
+        {
+            string token = Session["LogedInUser2"] as string;
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("servername", servername);
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("orderID", id);
+                collection.Add("partnerID", partner);
+
+                byte[] response = client.UploadValues(server + "/Node/changePartnerOrderStatus.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("");
+        }
+
+
+
+        // draft
+        public ActionResult draft()
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Index/getDraft.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.draftVM log = JsonConvert.DeserializeObject<banimo.ViewModel.draftVM>(result);
+            return View(log);
+        }
+        public ActionResult returnDraftList(string factornum, string residnum, string taraf, string factorType, string amani, string nodeID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string desc)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "" && timeFrom != null)
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "" && timeFrom != null)
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("type", type);
+                collection.Add("tarafID", taraf);
+
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", desc);
+                collection.Add("amani", amani);
+                collection.Add("factorType", factorType);
+                collection.Add("number", residnum);
+                collection.Add("fnumber", factornum);
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/getFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/CoreShared/_returnDraftList.cshtml", log);
+        }
+
+        public ActionResult returnFactorList(string factorType, string amani, string nodeID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string desc)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "")
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "")
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("type", type);
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", desc);
+                collection.Add("amani", amani);
+                collection.Add("factorType", factorType);
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/getParentFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/CoreShared/_returnFactorList.cshtml", log);
+        }
+
+        public ActionResult FreturnFactorList(string factorType, string amani, string nodeID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string desc)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "")
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "")
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date.AddDays(1));
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("type", type);
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", desc);
+                collection.Add("amani", amani);
+                collection.Add("factorType", "1");
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getParentFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/NodeShared/_FreturnFactorList.cshtml", log);
+        }
+
+
+
+        public ActionResult returnDraftListA(string number, string factorType, string amani, string nodeID, string tarafID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string description, string parentID)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "" && timeFrom != null)
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "" && timeTTo != null)
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("tarafID", tarafID);
+                collection.Add("type", type);
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", description);
+                collection.Add("amani", amani);
+                collection.Add("number", number);
+                collection.Add("parentID", parentID);
+
+                collection.Add("factorType", factorType);
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/getFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/CoreShared/_returnDraftListA.cshtml", log);
+        }
+
+        public ActionResult returnDraftListFactor(string number, string factorType, string amani, string nodeID, string tarafID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string description, string parentID)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "" && timeFrom != null)
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "" && timeTTo != null)
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("tarafID", tarafID);
+                collection.Add("type", type);
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", description);
+                collection.Add("amani", amani);
+                collection.Add("number", number);
+                collection.Add("parentID", parentID);
+
+                collection.Add("factorType", factorType);
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/getFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/CoreShared/_returnDraftListFactor.cshtml", log);
+        }
+        public ActionResult FreturnDraftListFactor(string number, string factorType, string amani, string nodeID, string tarafID, string type, string productID, string priceFrom, string priceTo, string timeFrom, string timeTTo, string countFrom, string countTo, string status, string description, string parentID)
+        {
+            double finalTimeFrom = 0;
+            double finalTimeTo = 0;
+            if (timeFrom != "" && timeFrom != null)
+            {
+
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeFrom) / 1000);
+                finalTimeFrom = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+            }
+
+            if (timeTTo != "" && timeTTo != null)
+            {
+                DateTime datetime = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(timeTTo) / 1000);
+                finalTimeTo = Classes.dateTimeConvert.ConvertDateTimeToTimestamp(datetime.Date);
+
+            }
+
+
+
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("tarafID", tarafID);
+                collection.Add("type", type);
+                collection.Add("productID", productID);
+                collection.Add("priceFrom", priceFrom);
+                collection.Add("priceTo", priceTo);
+                collection.Add("timeFrom", finalTimeFrom.ToString());
+                collection.Add("timeTo", finalTimeTo.ToString());
+                collection.Add("countFrom", countFrom);
+                collection.Add("countTo", countTo);
+                collection.Add("status", status);
+                collection.Add("desc", description);
+                collection.Add("amani", amani);
+                collection.Add("number", number);
+                collection.Add("parentID", parentID);
+
+                collection.Add("factorType", factorType);
+
+
+
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getFactorMain.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.MainFactorListVM log = JsonConvert.DeserializeObject<banimo.ViewModel.MainFactorListVM>(result);
+
+            return PartialView("/Views/Shared/NodeShared/_FreturnDraftListFactor.cshtml", log);
+        }
+
+
+        //factor
+
+        public ContentResult editFactor(string amani, string factorPrice, string factorCount, string id)
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string finalamani = amani == "true" ? "1" : "0";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("amani", finalamani);
+                collection.Add("factorPrice", factorPrice);
+                collection.Add("factorCount", factorCount);
+                collection.Add("id", id);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/editFactorFromHesab.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+
+            }
+            banimo.AdminPanelBoom.ViewModel.responsVM model = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.responsVM>(result);
+            return Content(model.status.ToString());
+        }
+        public ContentResult removeFactor(string id)
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Node/removeFactorFromHesab.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+
+            }
+            banimo.AdminPanelBoom.ViewModel.responsVM model = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.responsVM>(result);
+            return Content(model.status.ToString());
+        }
+        public ActionResult factor()
+        {
+            string result = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("nodeID", finalNodeID);
+                collection.Add("code", code);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/getDraft.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.draftVM log = JsonConvert.DeserializeObject<banimo.ViewModel.draftVM>(result);
+            return View(log);
+        }
+
+        public string setNewFactor(string itemID, string type, string description, string date, string anabr, string PID, string nodeID, string affID, string number, string amani)
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["token"] as string;
+
+            affID = affID == "" ? "0" : affID;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("date", date.Replace("000", ""));
+                collection.Add("anabr", anabr);
+                collection.Add("description", description);
+                collection.Add("nodeID", nodeID);
+                collection.Add("PID", PID);
+                collection.Add("affID", affID);
+                collection.Add("number", number);
+                collection.Add("amani", amani);
+                collection.Add("token", token);
+                collection.Add("type", type);
+                collection.Add("itemID", itemID);
+
+
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/setNewFactor.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return result;
+        }
+
+        public ActionResult removeFactorParent(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["token"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                byte[] response = client.UploadValues(server + "/Node/removeFactorParent.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.AdminPanelBoom.ViewModel.responsVM model = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.responsVM>(result);
+            return Content(model.status.ToString());
+        }
+
+        public ActionResult getFactorSayer(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["token"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/getFactorSayer.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.factorSayerVM model = JsonConvert.DeserializeObject<banimo.ViewModel.factorSayerVM>(result);
+            return PartialView("/Views/Shared/CoreShared/_factoSayer.cshtml", model);
+        }
+        public ActionResult FgetFactorSayer(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["token"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Node/getFactorSayer.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.factorSayerVM model = JsonConvert.DeserializeObject<banimo.ViewModel.factorSayerVM>(result);
+            return PartialView("/Views/Shared/NodeShared/_FfactoSayer.cshtml", model);
+        }
+        public string setFactorSayer(string isFroosh, string Tbaha, string Obaha, string Hbaha, string dbaha, string dPercent, string dPrice, string TPercent, string TPrice, string OPercent, string OPrice, string HPercent, string HPrice, string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("dPercent", dPercent);
+                collection.Add("dPrice", dPrice);
+                collection.Add("TPercent", TPercent);
+                collection.Add("TPrice", TPrice);
+                collection.Add("HPercent", HPercent);
+                collection.Add("HPrice", HPrice);
+                collection.Add("OPercent", OPercent);
+                collection.Add("OPrice", OPrice);
+                collection.Add("Tbaha", Tbaha);
+                collection.Add("Hbaha", Hbaha);
+                collection.Add("dbaha", dbaha);
+                collection.Add("Obaha", Obaha);
+                collection.Add("isForoosh", isFroosh);
+
+
+
+                collection.Add("ID", ID);
+                string serveraddress = server + "/Node/setFactorSayer.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return ID;
+
+        }
+        public ActionResult getFactorDetail(string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", ID);
+                string serveraddress = server + "/Node/getFactorDetail.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.RecietArticle log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietArticle>(result);
+
+            return PartialView("/Views/Shared/CoreShared/_RecitArticleListForEdit.cshtml", log);
+
+        }
+
+
+
+        //bank
+
+        public ActionResult bank()
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getBank.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            ViewModel.adminBankVM model = JsonConvert.DeserializeObject<ViewModel.adminBankVM>(result);
+
+            model.CodingList = model.CodingList != null ? model.CodingList : new List<ViewModel.CodingList>();
+
+
+            return View(model);
+
+        }
+
+        public ActionResult getCodingTrazList(double dateFrom, double dateTo, string TNode, string TTaraf, string M111, string M222, string M333, string M444, string M555, string columnCount, string baseReport)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+
+            DateTime datefFrom = dateTimeConvert.UnixTimeStampToDateTime(dateFrom / 1000).Date;
+            string finalFrom = dateTimeConvert.ConvertDateTimeToTimestamp(datefFrom).ToString();
+
+            DateTime datetTo = dateTimeConvert.UnixTimeStampToDateTime(dateTo / 1000).Date.AddDays(1);
+            string finalTo = dateTimeConvert.ConvertDateTimeToTimestamp(datetTo).ToString();
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+
+                collection.Add("M222", M222);
+                collection.Add("M111", M111);
+                collection.Add("M333", M333);
+                collection.Add("M444", M444);
+                collection.Add("M555", M555);
+                collection.Add("nodeID", TNode);
+                collection.Add("dateFrom", finalFrom);
+                collection.Add("dateTo", finalTo);
+                collection.Add("taraf", TTaraf);
+                collection.Add("count", columnCount);
+                collection.Add("baseReport", baseReport);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTrazList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+           banimo.ViewModel.TrazVM model = JsonConvert.DeserializeObject<banimo.ViewModel.TrazVM>(result);
+            return PartialView("/Views/Shared/NodeShared/_TrazList.cshtml", model);
+        }
+        public ActionResult getCodingTrazListPring(string project, string dateFrom, string dateTo, string TNode, string TTaraf, string M111, string M222, string M333, string M444, string M555, string columnCount, string baseReport, string sharhdescription, string dateFromtxt, string dateTotxt)
+        {
+
+            sharhdescription = sharhdescription.Replace("_", "\n");
+
+            // ردیف/شماره سند/تاریخ/ شرح/ بدهکار/بستانکار/وضعیت مانده/ مانده
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            int PcolspanEF = 4;
+            int PcolspanGA = 4;
+            int PcolspanMa = 4;
+            int colspanEF = 2;
+            int colspanGA = 2;
+            int colspanMa = 2;
+
+            switch (columnCount)
+            {
+                case "2":
+                    PcolspanEF = 0;
+                    PcolspanGA = 0;
+                    PcolspanMa = 12;
+                    colspanEF = 0;
+                    colspanGA = 0;
+                    colspanMa = 6;
+
+                    break;
+                case "4":
+                    PcolspanEF = 0;
+                    PcolspanGA = 6;
+                    PcolspanMa = 6;
+                    colspanEF = 0;
+                    colspanGA = 3;
+                    colspanMa = 3;
+
+                    break;
+
+            }
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+
+                collection.Add("M222", M222);
+                collection.Add("M111", M111);
+                collection.Add("M333", M333);
+                collection.Add("M444", M444);
+                collection.Add("M555", M555);
+                collection.Add("nodeID", TNode);
+                collection.Add("dateFrom", dateFrom.Replace("000", ""));
+                collection.Add("dateTo", dateTo.Replace("000", ""));
+                collection.Add("taraf", TTaraf);
+                collection.Add("count", columnCount);
+                collection.Add("baseReport", baseReport);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTrazList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.TrazVM model = JsonConvert.DeserializeObject<banimo.ViewModel.TrazVM>(result);
+            int counter = 12;
+
+
+            double loopCount = model.lst.Count / counter;
+            int remaining = model.lst.Count % counter;
+            loopCount = remaining > 0 ? loopCount + 1 : loopCount;
+            List<List<banimo.ViewModel.Lst>> parentlist = new List<List<banimo.ViewModel.Lst>>();
+            for (int i = 1; i <= loopCount; i++)
+            {
+                int skipnum = (i - 1) * counter;
+                List<banimo.ViewModel.Lst> tranVMLIst = model.lst.Skip(skipnum).Take(counter).ToList();
+                parentlist.Add(tranVMLIst);
+            }
+
+
+
+            Document document = new Document(PageSize.A4.Rotate());
+            document.SetMargins(0f, 0f, 10f, 0f);
+            string pdfFileName = Server.MapPath("/files/" + "sample2" + ".pdf");
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            string pathString = "~/fonts/ttf";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
+            BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
+            Font font = new Font(bfTimes, 9);
+            Font fontbig = new Font(bfTimes, 14);
+            Font fontSMALL = new Font(bfTimes, 10);
+            Font fontSMALLHeader = new Font(bfTimes);
+            Font fontbigBold = new Font(bfTimes, 14, Font.BOLD);
+            fontSMALLHeader.SetColor(0, 0, 0);
+
+
+            double totalEfbedehkar = 0;
+            double totalEfbestankar = 0;
+            double totalGabedehkar = 0;
+            double totalGabestankar = 0;
+            double totalBedmande = 0;
+            double totalBesmande = 0;
+            foreach (var groupList in parentlist)
+            {
+                document.NewPage();
+
+                PdfPTable toptable = new PdfPTable(12);
+                toptable.TotalWidth = 750f;
+                toptable.DefaultCell.NoWrap = false;
+                toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                toptable.PaddingTop = 200;
+
+
+
+
+                PdfPCell celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(project, fontbigBold))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شرح ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(sharhdescription, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("از تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateFromtxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("تراز آزمایشی", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                string vasiat = "";// M22 + " " + M33 + " " + M44 + " " + M55 + " " + trafText;
+
+
+                celltop = new PdfPCell(new Phrase(vasiat, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+                celltop = new PdfPCell(new Phrase("تار تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateTotxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("صفحه : ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                int currentpage = parentlist.IndexOf(groupList) + 1;
+                int kollpage = parentlist.Count();
+                celltop = new PdfPCell(new Phrase(currentpage + "/" + kollpage, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+
+                document.Add(toptable);
+
+
+                PdfPTable table = new PdfPTable(16);
+                table.TotalWidth = 550f;
+                table.DefaultCell.NoWrap = false;
+                table.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                table.PaddingTop = 100;
+
+                PdfPCell countIN = new PdfPCell(new Phrase("", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 4;
+                countIN.Padding = 10;
+                table.AddCell(countIN);
+
+                countIN = new PdfPCell(new Phrase("افتتاحیه", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanEF;
+                countIN.Padding = 10;
+                if (PcolspanEF != 0)
+                {
+                    table.AddCell(countIN);
+                }
+
+
+                countIN = new PdfPCell(new Phrase("گردش", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanGA;
+                countIN.Padding = 10;
+                if (PcolspanGA != 0)
+                {
+                    table.AddCell(countIN);
+                }
+
+
+                countIN = new PdfPCell(new Phrase("مانده", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = PcolspanMa;
+                countIN.Padding = 10;
+                if (PcolspanMa != 0)
+                {
+                    table.AddCell(countIN);
+                }
+
+
+
+
+                countIN = new PdfPCell(new Phrase("کد حساب", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 2;
+                table.AddCell(countIN);
+
+                PdfPCell num = new PdfPCell(new Phrase("شرح", font));
+                num.Padding = 10;
+                num.HorizontalAlignment = Element.ALIGN_CENTER;
+                num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                num.Colspan = 2;
+                table.AddCell(num);
+
+
+                PdfPCell detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                PdfPCell sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(sharh);
+                }
+
+
+                detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(sharh);
+                }
+
+
+                detail = new PdfPCell(new Phrase("بد", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+
+
+                sharh = new PdfPCell(new Phrase("بس", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(sharh);
+                }
+
+
+
+
+                foreach (var item in groupList)
+                {
+                    countIN = new PdfPCell(new Phrase(item.codeHesab, font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 2;
+                    table.AddCell(countIN);
+
+                    countIN = new PdfPCell(new Phrase(item.title, font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 2;
+                    table.AddCell(countIN);
+
+
+                    countIN = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.eftetahbed)), font));
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = colspanEF;
+                    if (colspanEF != 0)
+                    {
+                        table.AddCell(countIN);
+                    }
+
+
+                    num = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.eftetahbes)), font));
+                    num.Padding = 10;
+                    num.HorizontalAlignment = Element.ALIGN_CENTER;
+                    num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    num.Colspan = colspanEF;
+                    if (colspanEF != 0)
+                    {
+                        table.AddCell(num);
+                    }
+
+
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.garddeshbed)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanGA;
+                    if (colspanGA != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+
+
+                    sharh = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(item.garddeshbes)), font));
+                    sharh.Padding = 10;
+                    sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                    sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    sharh.Colspan = colspanGA;
+                    if (colspanGA != 0)
+                    {
+                        table.AddCell(sharh);
+                    }
+
+
+                    double finalmande = @Math.Abs(item.mandebed) - @Math.Abs(item.mandebes);
+                    double mandeBed = 0;
+                    double mandeBes = 0;
+                    if (finalmande >= 0)
+                    {
+                        mandeBed = Math.Abs(finalmande);
+                        mandeBes = 0;
+                    }
+                    else
+                    {
+                        mandeBes = Math.Abs(finalmande);
+                        mandeBed = 0;
+                    }
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(mandeBed)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanMa;
+                    if (colspanMa != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(mandeBes)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = colspanMa;
+                    if (colspanMa != 0)
+                    {
+                        table.AddCell(detail);
+                    }
+
+
+
+                }
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                countIN = new PdfPCell(new Phrase("جمع کل", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 4;
+                table.AddCell(countIN);
+
+
+                double efbed = groupList.Sum(x => x.eftetahbed);
+                double efbes = groupList.Sum(x => x.eftetahbes);
+                double garbed = groupList.Sum(x => x.garddeshbed);
+                double garbes = groupList.Sum(x => x.garddeshbes);
+                double mandebed = groupList.Where(x => Math.Abs(x.mandebed) > Math.Abs(x.mandebes)).Sum(x => Math.Abs(x.mandebed) - Math.Abs(x.mandebes));
+                double mandebes = groupList.Where(x => Math.Abs(x.mandebes) > Math.Abs(x.mandebed)).Sum(x => Math.Abs(x.mandebes) - Math.Abs(x.mandebed));
+                totalEfbedehkar += efbed;
+                totalEfbestankar += efbes;
+                totalGabedehkar += garbed;
+                totalGabestankar += garbes;
+                totalBedmande += mandebed;
+                totalBesmande += mandebes;
+
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalEfbedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalEfbestankar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanEF;
+                if (colspanEF != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalGabedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalGabestankar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanGA;
+                if (colspanGA != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalBedmande)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", @Math.Abs(totalBesmande)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = colspanMa;
+                if (colspanMa != 0)
+                {
+                    table.AddCell(detail);
+                }
+
+
+
+
+
+                document.Add(table);
+
+            }
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
+
+            //return PartialView("/Views/Shared/CoreShared/_TransactionList.cshtml", model);
+        }
+
+
+        public ActionResult getCodingTranList(string GNode, string GTaraf, string M22, string M33, string M44, string M55, string type, string dateTotxt, string dateFromtxt)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+
+            //DateTime datefFrom = dateTimeConvert.UnixTimeStampToDateTime(datefrom / 1000).Date;
+            string finalFrom = !string.IsNullOrEmpty(dateFromtxt) ?  dateTimeConvert.ConvertDateTimeToTimestamp(DateTime.Parse(dateFromtxt)).ToString() : "";
+
+            //DateTime datetTo = dateTimeConvert.UnixTimeStampToDateTime(dateTo / 1000).Date.AddDays(1);
+            string finalTo = !string.IsNullOrEmpty(dateTotxt) ? dateTimeConvert.ConvertDateTimeToTimestamp(DateTime.Parse(dateTotxt)).ToString(): "";
+
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("datefrom", finalFrom);
+                collection.Add("dateTo", finalTo);
+                collection.Add("type", type);
+                collection.Add("M22", M22);
+                collection.Add("M33", M33);
+                collection.Add("taraf", GTaraf);
+                collection.Add("M44", M44);
+                collection.Add("M55", M55);
+                collection.Add("nodeID", GNode);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTranList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.TranList model = JsonConvert.DeserializeObject<banimo.ViewModel.TranList>(result);
+            return PartialView("/Views/Shared/NodeShared/_TransactionList.cshtml", model);
+        }
+
+        public ActionResult getCodingTranListPrint(string trafText, string GNode, string GTaraf, string M22, string M33, string M44, string M55, string type, string datefrom, string dateTo, string dateFromtxt, string dateTotxt, string project, string sharhdescription)
+        {
+            DateTime gdateTo = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(dateTo) / 1000);
+            DateTime gdateFrom = Classes.dateTimeConvert.UnixTimeStampToDateTime(double.Parse(datefrom) / 1000);
+            sharhdescription = sharhdescription.Replace("_", "\n");
+            trafText = trafText.Replace("انتخاب طرف حساب", "");
+            // ردیف/شماره سند/تاریخ/ شرح/ بدهکار/بستانکار/وضعیت مانده/ مانده
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("datefrom", datefrom.Replace("000", ""));
+                collection.Add("dateTo", dateTo.Replace("000", ""));
+                collection.Add("type", type);
+                collection.Add("M22", M22);
+                collection.Add("M33", M33);
+                collection.Add("taraf", GTaraf);
+                collection.Add("M44", M44);
+                collection.Add("M55", M55);
+                collection.Add("nodeID", GNode);
+
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getCodingTranList.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.TranList model = JsonConvert.DeserializeObject<banimo.ViewModel.TranList>(result);
+            List<banimo.ViewModel.MyTransactionVM> modelVM = new List<banimo.ViewModel.MyTransactionVM>();
+
+            if (model.myTransaction == null)
+            {
+                return Content("");
+            }
+
+            double mandefinal = 0;
+            foreach (var item in model.myTransaction)
+            {
+                int index = model.myTransaction.IndexOf(item) + 1;
+                banimo.ViewModel.MyTransactionVM tranVM = new banimo.ViewModel.MyTransactionVM();
+                tranVM.radif = index.ToString();
+                tranVM.sanadID = item.sanadID;
+                tranVM.date = item.date;
+                tranVM.description = item.description;
+                if (item.type == "0")
+                {
+                    tranVM.bedehkar = item.price;
+                    tranVM.vaziatMande = "بد";
+                    tranVM.bestankar = 0;
+                }
+                else
+                {
+                    tranVM.bedehkar = 0;
+                    tranVM.bestankar = item.price;
+                    tranVM.vaziatMande = "بس";
+                }
+                mandefinal += item.price;
+                tranVM.mande = mandefinal;
+                tranVM.type = item.type;
+                tranVM.price = item.price;
+                modelVM.Add(tranVM);
+
+
+
+            }
+
+
+            banimo.ViewModel.parentTrandListVM parentModel = new banimo.ViewModel.parentTrandListVM();
+            List<banimo.ViewModel.TranListVM> MainList = new List<banimo.ViewModel.TranListVM>();
+            parentModel.parentList = MainList;
+            int counter = 12;
+
+            banimo.ViewModel.TranListVM listmodel = new banimo.ViewModel.TranListVM();
+            List<banimo.ViewModel.MyTransactionVM> rookeshlist = new List<banimo.ViewModel.MyTransactionVM>();
+            listmodel.myTransaction = rookeshlist;
+
+
+            double loopCount = modelVM.Count / counter;
+            int remaining = modelVM.Count % counter;
+            loopCount = remaining > 0 ? loopCount + 1 : loopCount;
+
+            for (int i = 1; i <= loopCount; i++)
+            {
+                int skipnum = (i - 1) * counter;
+                List<banimo.ViewModel.MyTransactionVM> tranVMLIst = modelVM.Skip(skipnum).Take(counter).ToList();
+                banimo.ViewModel.TranListVM listList = new banimo.ViewModel.TranListVM();
+                listList.myTransaction = tranVMLIst;
+                parentModel.parentList.Add(listList);
+            }
+
+
+
+            Document document = new Document(PageSize.A4.Rotate());
+            document.SetMargins(0f, 0f, 10f, 0f);
+            string pdfFileName = Server.MapPath("/files/" + "sample2" + ".pdf");
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFileName, FileMode.Create));
+            document.Open();
+            string pathString = "~/fonts/ttf";
+            string savedFileName = Path.Combine(Server.MapPath(pathString), "IRANSansWeb(FaNum).ttf");
+            BaseFont bfTimes = BaseFont.CreateFont(savedFileName, BaseFont.IDENTITY_H, false);
+            Font font = new Font(bfTimes, 8);
+            Font fontbig = new Font(bfTimes, 14);
+            Font fontSMALL = new Font(bfTimes, 10);
+            Font fontSMALLHeader = new Font(bfTimes);
+            Font fontbigBold = new Font(bfTimes, 14, Font.BOLD);
+            fontSMALLHeader.SetColor(0, 0, 0);
+
+
+            double totalbedehkar = 0;
+            double totalbestankar = 0;
+            double totalmande = 0;
+            foreach (var groupList in parentModel.parentList)
+            {
+                document.NewPage();
+
+                PdfPTable toptable = new PdfPTable(12);
+                toptable.TotalWidth = 750f;
+                toptable.DefaultCell.NoWrap = false;
+                toptable.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                toptable.PaddingTop = 200;
+
+
+
+
+                PdfPCell celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER | PdfPCell.TOP_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(project, fontbigBold))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("شرح ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(sharhdescription, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("از تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateFromtxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+                celltop = new PdfPCell(new Phrase("گردش حساب", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+                celltop = new PdfPCell(new Phrase("کد حساب", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                string vasiat = "";// M22 + " " + M33 + " " + M44 + " " + M55 + " " + trafText;
+                vasiat = M22 != "0" ? vasiat + M22 + "\n " : vasiat;
+                vasiat = M33 != "0" ? vasiat + M33 + "\n  " : vasiat;
+                vasiat = M44 != "0" ? vasiat + M44 + "\n   " : vasiat;
+                vasiat = M55 != "0" ? vasiat + M55 + "\n     " : vasiat;
+                vasiat = trafText != "" ? vasiat + GTaraf + "\n     " : vasiat;
+
+
+                celltop = new PdfPCell(new Phrase(vasiat, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+                celltop = new PdfPCell(new Phrase("تار تاریخ:", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 2;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase(dateTotxt, font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_LEFT;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+                celltop = new PdfPCell(new Phrase("صفحه : ", font))
+                {
+                    Border = PdfPCell.NO_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 1;
+                toptable.AddCell(celltop);
+
+                int currentpage = parentModel.parentList.IndexOf(groupList) + 1;
+                int kollpage = parentModel.parentList.Count();
+                celltop = new PdfPCell(new Phrase(currentpage + "/" + kollpage, font))
+                {
+                    Border = PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 3;
+                toptable.AddCell(celltop);
+
+
+
+
+
+                celltop = new PdfPCell(new Phrase("", font))
+                {
+                    Border = PdfPCell.RIGHT_BORDER | PdfPCell.LEFT_BORDER,
+                };
+                celltop.HorizontalAlignment = Element.ALIGN_CENTER;
+                celltop.VerticalAlignment = Element.ALIGN_MIDDLE;
+                celltop.Padding = 5;
+                celltop.Colspan = 12;
+                toptable.AddCell(celltop);
+
+
+                document.Add(toptable);
+
+
+                PdfPTable table = new PdfPTable(19);
+                table.TotalWidth = 550f;
+                table.DefaultCell.NoWrap = false;
+                table.RunDirection = PdfWriter.RUN_DIRECTION_RTL;
+                table.PaddingTop = 100;
+
+
+                PdfPCell countIN = new PdfPCell(new Phrase("ردیف", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 1;
+                table.AddCell(countIN);
+
+                PdfPCell num = new PdfPCell(new Phrase("شماره سند", font));
+                num.Padding = 10;
+                num.HorizontalAlignment = Element.ALIGN_CENTER;
+                num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                num.Colspan = 2;
+                table.AddCell(num);
+                PdfPCell detail = new PdfPCell(new Phrase("تاریخ", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                PdfPCell sharh = new PdfPCell(new Phrase("شرح", font));
+                sharh.Padding = 10;
+                sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                sharh.Colspan = 6;
+                table.AddCell(sharh);
+
+                detail = new PdfPCell(new Phrase("بدهکار", font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                PdfPCell bedehkar = new PdfPCell(new Phrase("بستانکار", font));
+                bedehkar.Padding = 10;
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                PdfPCell bestankar = new PdfPCell(new Phrase("وضعیت مانده", font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                bestankar = new PdfPCell(new Phrase("مانده", font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                foreach (var item in groupList.myTransaction)
+                {
+                    countIN = new PdfPCell(new Phrase(item.radif, font));
+
+                    countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                    countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    countIN.Colspan = 1;
+                    table.AddCell(countIN);
+
+                    num = new PdfPCell(new Phrase(item.sanadID, font));
+                    num.Padding = 10;
+                    num.HorizontalAlignment = Element.ALIGN_CENTER;
+                    num.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    num.Colspan = 2;
+                    table.AddCell(num);
+                    detail = new PdfPCell(new Phrase(item.date, font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = 2;
+                    table.AddCell(detail);
+
+                    sharh = new PdfPCell(new Phrase(item.description, font));
+                    sharh.Padding = 10;
+                    sharh.HorizontalAlignment = Element.ALIGN_CENTER;
+                    sharh.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    sharh.Colspan = 6;
+                    table.AddCell(sharh);
+
+                    detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.bedehkar)), font));
+                    detail.Padding = 10;
+                    detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                    detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    detail.Colspan = 2;
+                    table.AddCell(detail);
+
+                    bedehkar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.bestankar)), font));
+                    bedehkar.Padding = 10;
+                    bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bedehkar.Colspan = 2;
+                    table.AddCell(bedehkar);
+
+                    bestankar = new PdfPCell(new Phrase(item.vaziatMande, font));
+                    bestankar.Padding = 10;
+                    bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bestankar.Colspan = 2;
+                    table.AddCell(bestankar);
+
+                    bestankar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(item.mande)), font));
+                    bestankar.Padding = 10;
+                    bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bestankar.Colspan = 2;
+                    table.AddCell(bestankar);
+                }
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                countIN = new PdfPCell(new Phrase("جمع کل", font));
+
+                countIN.HorizontalAlignment = Element.ALIGN_CENTER;
+                countIN.VerticalAlignment = Element.ALIGN_MIDDLE;
+                countIN.Colspan = 11;
+                table.AddCell(countIN);
+
+
+
+
+
+                totalbedehkar += groupList.myTransaction.Where(x => x.type == "0").Sum(x => x.price);
+                totalbestankar += groupList.myTransaction.Where(x => x.type == "1").Sum(x => x.price);
+                totalmande += groupList.myTransaction.Sum(x => x.price);
+
+                detail = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalbedehkar)), font));
+                detail.Padding = 10;
+                detail.HorizontalAlignment = Element.ALIGN_CENTER;
+                detail.VerticalAlignment = Element.ALIGN_MIDDLE;
+                detail.Colspan = 2;
+                table.AddCell(detail);
+
+                bedehkar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalbestankar)), font));
+                bedehkar.Padding = 10;
+                bedehkar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bedehkar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bedehkar.Colspan = 2;
+                table.AddCell(bedehkar);
+
+                string status = "";
+                if (totalmande > 0)
+                {
+                    status = "بد";
+                }
+                else if (totalmande < 0)
+                {
+                    status = "بس";
+                }
+
+                bestankar = new PdfPCell(new Phrase(status, font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+                bestankar = new PdfPCell(new Phrase(string.Format("{0:n0}", Math.Abs(totalmande)), font));
+                bestankar.Padding = 10;
+                bestankar.HorizontalAlignment = Element.ALIGN_CENTER;
+                bestankar.VerticalAlignment = Element.ALIGN_MIDDLE;
+                bestankar.Colspan = 2;
+                table.AddCell(bestankar);
+
+
+
+
+                document.Add(table);
+
+            }
+
+
+
+            document.Close();
+            return File(pdfFileName, "application/pdf");
+
+            //return PartialView("/Views/Shared/CoreShared/_TransactionList.cshtml", model);
+        }
+        public ActionResult ChangeRecietList(string atf, string sanad, string nodeSelected, string type, string page, double dateFrom, double dateTo)
+        {
+
+            page = page == null ? "1" : page;
+            //dateFrom = string.IsNullOrEmpty(dateFrom) ? "" : (Int64.Parse(dateFrom) / 1000).ToString();
+            //dateTo = string.IsNullOrEmpty(dateTo) ? "" : (Int64.Parse(dateTo) / 1000).ToString();
+
+
+            DateTime datefFrom = dateTimeConvert.UnixTimeStampToDateTime(dateFrom / 1000).Date;
+            string finalFrom = dateTimeConvert.ConvertDateTimeToTimestamp(datefFrom).ToString();
+
+            DateTime datetTo = dateTimeConvert.UnixTimeStampToDateTime(dateTo / 1000).Date.AddDays(1);
+            string finalTo = dateTimeConvert.ConvertDateTimeToTimestamp(datetTo).ToString();
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("page", page);
+                collection.Add("atf", atf);
+                collection.Add("sanad", sanad);
+                collection.Add("page", page);
+                collection.Add("timeFrom", finalFrom);
+                collection.Add("timeTo", finalTo);
+                collection.Add("type", type == null ? "" : type);
+                collection.Add("nodeID", nodeSelected);
+                string serveraddress = server + "/Admin/getDataRecietInfo.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.RecietVM log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietVM>(result);
+           
+
+            log.current = page;
+            return PartialView("/Views/Shared/NodeShared/_RecitFirstList.cshtml", log);
+        }
+
+
+        public ActionResult getRecietArticle(string id, string type)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                string serveraddress = server + "/Admin/getRecietArticle.php";
+                byte[] response = client.UploadValues(serveraddress, collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModel.RecietArticle log = JsonConvert.DeserializeObject<banimo.ViewModel.RecietArticle>(result);
+
+            if (type == "1")
+            {
+                return PartialView("/Views/Shared/NodeShared/_RecitArticleListForEdit.cshtml", log);
+            }
+            else
+            {
+
+                return PartialView("/Views/Shared/NodeShared/_RecitArticleList.cshtml", log);
+            }
+        }
+
+        //access
+        public ActionResult access()
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("type", "1");
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Node/getAccess.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+
+            banimo.ViewModel.AccessVM log2 = JsonConvert.DeserializeObject<banimo.ViewModel.AccessVM>(result);
+
+            return View(log2);
+        }
+        public PartialViewResult getRoleSection(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(server + "/Admin/getRoleSection.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.AccessVM log2 = JsonConvert.DeserializeObject<banimo.ViewModel.AccessVM>(result);
+            log2.RolID = id;
+            return PartialView("/Views/Shared/NodeShared/_ListOfRoleSection.cshtml", log2);
+        }
+
+         
+        [HttpPost]
+        public ActionResult setNewRoll(string roleTitle, List<string> sectionList, string itemID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+
+            string Lst = "";
+            string result = "";
+            if (sectionList != null)
+            {
+                foreach (var item in sectionList)
+                {
+                    Lst += item.ToString() + ",";
+                }
+            }
+            string ID = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("title", roleTitle);
+                collection.Add("itemID", itemID);
+                collection.Add("sectionList", Lst.Trim(','));
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/setNewRole.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return RedirectToAction("access");
+        }
+        public void DeleteRoleSectin(string id)
+        {
+            if (true)
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("ID", id);
+                    collection.Add("servername", servername);
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteRoleSection.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+            }
+
+
+        }
+        public void DeleteRoleUser(string id)
+        {
+            if (true)
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("ID", id);
+                    collection.Add("servername", servername);
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteRole.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+            }
+
+
+        }
+        public void DeleteUserAccess(string id)
+        {
+            if (true)
+            {
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection();
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("id", id);
+                    collection.Add("servername", servername);
+                    collection.Add("nodeID", "1");
+                    byte[] response = client.UploadValues(server + "/Admin/DeleteUserAccess.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+            }
+
+
+        }
+        public PartialViewResult checkPartnerStatus(string id)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("id", id);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/getPartnerStatus.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.UserStatus log = JsonConvert.DeserializeObject<banimo.ViewModel.UserStatus>(result);
+            return PartialView("/Views/Shared/NodeShared/_partnerStatus.cshtml", log);
+            //0561535217
+        }
+
+        public ActionResult addPartner(List<int> partnerType, string patnerUsername, string patnerPassword,string token)
+        {
+            string device = RandomString(10);
+            string partnerString = "";
+            if (partnerType != null)
+            {
+                foreach (var item in partnerType)
+                {
+                    partnerString += item + ",";
+                }
+            }
+            patnerUsername = string.IsNullOrEmpty(patnerUsername) ? token : patnerUsername;
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("partnerType", partnerString.Trim(','));
+                collection.Add("patnerUsername", patnerUsername);
+                collection.Add("patnerPassword", patnerPassword);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+                byte[] response = client.UploadValues(server + "/Admin/addPartner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return RedirectToAction("access");
+        }
+
+
+        //filter
+        public ActionResult filter()
+        {
+
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909") + "";
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            RootObjectFilter log = JsonConvert.DeserializeObject<RootObjectFilter>(result);
+
+
+            return View(log);
+
+
+
+        }
     }
 }

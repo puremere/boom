@@ -6,6 +6,7 @@
 
 
 <style>
+
     .mainForParent {
         background-color: #f6f5f5;
     }
@@ -81,11 +82,12 @@
                         string srtcat = "";
                         string subsrtcat = "";
                         string subsrtcat2 = "";
+                        string url = "/category/" + cat.entitle;
 
                         if (cat.IsFinal == "1")
                         {
                             srtcat = "1" + cat.ID;
-                            <li style="cursor: pointer"><a href="@Url.Action("ProductList", "Home", new { catmode = srtcat})">@cat.title</a></li>
+                            <li style="cursor: pointer"><a href="@Url.Action("submenu", "Home", new { catmode = srtcat})">@cat.title</a></li>
                         }
                         else
                         {
@@ -93,10 +95,11 @@
                             srtcat = "1" + cat.ID;
                             int finalint = 0;
 
+
                             <li style="cursor:pointer;" class="li catItem @pID">
 
                                 <div style="cursor:pointer;">
-                                    <a style="cursor:pointer;" href="@Url.Action("submenu", "Home", new { catmode = srtcat})">@cat.title</a>
+                                    <a style="cursor:pointer;" href="@url">@cat.title</a>
 
                                 </div>
                                 <ul style="min-height:410px; background-color:rgba(0,0,0,0.5); width:100%">
@@ -113,14 +116,15 @@
                                                             if (SB.IsFinal == "1" && SB.CatID == cat.ID)
                                                             {
                                                                 subsrtcat = "2" + SB.ID;
-                                                                <li style="display:flex; align-items:center;"> <i style="height:15px; width:2px; background-color:red"></i><a style="font-weight:500; font-size:14px" href="/Home/ProductList?catmode=@subsrtcat">@SB.title  </a> <i class="fa fa-angle-left" style="color:black"></i></li>
+                                                                <li style="display:flex; align-items:center;"> <i style="height:15px; width:2px; background-color:red"></i><a style="font-weight:500; font-size:14px" href="/productlist/@SB.entitle">@SB.title  </a> <i class="fa fa-angle-left" style="color:black"></i></li>
                                                             }
                                                             else if (SB.IsFinal == "0" && SB.CatID == cat.ID)
                                                             {
                                                                 subsrtcat = "2" + SB.ID;
+                                                                string url2 = "/category" + cat.entitle + "/" + SB.entitle;
                                                                 <li class="li" style="display:flex; align-items:center;">
 
-                                                                    <i style="height:15px; width:2px; background-color:red"></i> <a style="font-weight:500; font-size:14px" href="/Home/submenu?catmode=@subsrtcat&value=@SB.title">@SB.title </a> <i class="fa fa-angle-left" style="color:black"></i>
+                                                                    <i style="height:15px; width:2px; background-color:red"></i> <a style="font-weight:500; font-size:14px" href="@url2">@SB.title </a> <i class="fa fa-angle-left" style="color:black"></i>
 
                                                                 </li>
                                                                 if (Model.catsdata.First().mysubcatcollection2 != null)
@@ -132,7 +136,7 @@
 
 
                                                                             subsrtcat2 = "3" + SB2.ID;
-                                                                            <li><a style="font-weight:400; font-size:11px; color:#6d6d6d" href="@Url.Action("ProductList", "Home", new { catmode = subsrtcat2, value = @SB2.title })">@SB2.title</a></li>
+                                                                            <li><a style="font-weight:400; font-size:11px; color:#6d6d6d" href=" /productlist/@SB2.entitle ">@SB2.title</a></li>
                                                                         }
                                                                     }
                                                                 }
@@ -186,16 +190,16 @@
 
     </nav>
     @*<script src="~/Scripts/jquery.smartmenus.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#main-menuu').smartmenus({
-                subMenusSubOffsetX: 1,
-                subMenusSubOffsetY: -8
-            });
-        })
-    </script>*@
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#main-menuu').smartmenus({
+                    subMenusSubOffsetX: 1,
+                    subMenusSubOffsetY: -8
+                });
+            })
+        </script>*@
     <script>
-      
+
         $('#back').click(function () {
 
             if ($(window).width() < 960) {
@@ -232,17 +236,17 @@
 
     }
     <script>
-                 $(".catItem").hover(function () {
-                     $(this).css("position", "unset");
-                     $(this).find('ul').css('display', "flex");
+        $(".catItem").hover(function () {
+            $(this).css("position", "unset");
+            $(this).find('ul').css('display', "flex");
 
-                    
-                 }
-                     , function () {
-                     $(this).css("position", "relative");
-                     $(this).find('ul').css('display',"none");
-                     }
-                 )
+
+        }
+            , function () {
+                $(this).css("position", "relative");
+                $(this).find('ul').css('display', "none");
+            }
+        )
     </script>
 
 }

@@ -1,7 +1,7 @@
 ﻿@model banimo.AdminPanel.ViewModel.catAll
 @{
     Layout = "~/Views/Shared/_NodeLayout.cshtml";
-    ViewBag.Title = "مدیریت مطالب";
+    ViewBag.Title = "Menu";
 }
 <style>
     .nav-tabs {
@@ -55,12 +55,21 @@
 
 }
 
+<style>
+    .classhide {
+        display: none;
+    }
+    .component{
+        margin:5px
+    }
+</style>
+
 <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <div class="modal-body">
-                <p class="modalDelQuestion">@Resources.res.delbusi</p>
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
 
             </div>
             <div class="modal-footer">
@@ -70,201 +79,245 @@
         </div>
     </div>
 </div>
-<div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
-    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
-        <label> @Resources.res.category </label>
-        <div style="width:100%">
-            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Set New Item</h5>
+                </div>
+                <div style="">
+
+                    <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                        <label> set title </label>
+                        <input type="text" id="title" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                        <label> image </label>
+                        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                        <div style="width:100%">
+                            <div id="imageHolder" style="display:flex; ">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div style="display:flex">
+                        <div class="component classshow">
+                            <div id="addCat" class="btn btn-success">add</div>
+                        </div>
+
+                        <div class="component classhide">
+                            <div id="verifEdit" class="btn btn-success">@Resources.res.OK  </div>
+                        </div>
+                        <div class="component classhide">
+                            <div id="cancelEdit" class="btn btn-success">@Resources.res.cancel</div>
+                        </div>
+                    </div>
+
+                    <p hidden class="imageName"></p>
+                    
+                </div>
+            </div>
         </div>
     </div>
-    <div class="component">
-        <label> @Resources.res.registerName </label>
-        <input type="text" id="title" required="required" class="form-control INP">
-    </div>
-    <div class="component">
-        <label> @Resources.res.image </label>
-        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
-    </div>
-    <div class="component classshow">
-        <div id="addCat" class="btn btn-success">@Resources.res.add</div>
-    </div>
-    <div class="component classshow">
-        <div id="edit" class="btn btn-success">@Resources.res.edit</div>
-    </div>
-    <div class="component classshow">
-        <div id="removeButt" class="btn btn-success">@Resources.res.delete</div>
-    </div>
-    <div class="component classhide">
-        <div id="verifEdit" class="btn btn-success">@Resources.res.OK  </div>
-    </div>
-    <div class="component classhide" >
-        <div id="cancelEdit" class="btn btn-success">@Resources.res.cancel</div>
-    </div>
-    <p hidden class="imageName"></p>
-    <div style="width:100%">
-        <div id="imageHolder" style="display:flex; ">
-            
+
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Edit Menu</h5>
+                </div>
+                <div>
+                    <label> @Resources.res.category </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+                    </div>
+                </div>
+
+                <div style="display:flex">
+                   
+                    <div class="component classshow">
+                        <div id="edit" class="btn btn-success">@Resources.res.edit</div>
+                    </div>
+                    <div class="component classshow">
+                        <div id="removeButt" class="btn btn-success">@Resources.res.remove</div>
+                    </div>
+                   
+                </div>
+            </div>
         </div>
     </div>
 </div>
+@section scripts{
 
 
 
+    <script src="~/Scripts/download.js"></script>
 
-<script src="~/Scripts/download.js"></script>
+    <script>
+        $("#imageFileHolder").on('change', function () {
 
-<script>
-    $("#imageFileHolder").on('change', function () {
+            uploadImage("imageHolder", "imageName", this)
+        });
+        $("#addCat").click(function () {
 
-        uploadImage("imageHolder", "imageName", this)
-    });
-    $("#addCat").click(function () {
+            var catname = $("#listofcat").val();
+            if (catname == "") {
+                catname = "00";
+            }
+            var name = $("#title").val();
+            var image = $(".imageName").text();
 
-        var catname = $("#listofcat").val();
-        if (catname == "") {
-            catname = "00";
-        }
-        var name = $("#title").val();
-        var image = $(".imageName").text();
+            if (catname != "" && name != "" && image != "") {
+                $.ajax({
+                    url: "/node/setnewcat",
+                    dataType: "html",
+                    data: {
+                        catID: catname,
+                        title: name,
+                        image: image
+                    },
+                    success: function (data) {
+                        if (data == "1") {
+                            location.reload();
 
-        if (catname != "" && name != "" && image != "") {
-            $.ajax({
-                url: "/node/setnewcat",
-                dataType: "html",
-                data: {
-                    catID: catname,
-                    title: name,
-                    image: image
-                },
-                success: function (data) {
-                    if (data == "1") {
-                        location.reload();
+                        }
+                    }
+                })
+            }
+        })
+        $("#removeButt").click(function () {
+            $("#delmodal").modal('toggle');
+
+        })
+        $("#remove").click(function () {
+
+            var catname = $("#listofcat").val();
+            if (catname != "") {
+                $.ajax({
+                    url: "/node/delnewcat",
+                    dataType: "html",
+                    data: {
+                        catid: catname,
+
+                    },
+                    success: function (data) {
+                        if (data == "1") {
+                            location.reload();
+
+                        }
+                        else {
+                            $("#delmodal").modal('toggle');
+                            alert(data)
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#edit").click(function () {
+            var catname = $("#listofcat").val();
+            if (catname != "") {
+                $.ajax({
+                    url: "/node/getCatDetail",
+                    dataType: "html",
+                    data: {
+                        catid: catname,
+
+                    },
+                    success: function (data) {
+                        $(".classhide").css("display", "inline-block");
+                        $(".classshow").css("display", "none");
+                        var obj = JSON.parse(data);
+                        var image = obj[0]["image"];
+                        var title = obj[0]["title"];
+                        $("#title").val(title);
+
+
+                        var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
+                        $("#imageHolder").append(htmldiv);
+
+
+                        var srt = $(".imageName").text();
+                        $(".imageName").text(obj[0]["image"] + "," + srt);
 
                     }
+                })
+            }
+        })
+        var deletImage = function (name) {
+            var srt = $(".imageName").text();
+            srt = srt.replace(name + ",", "");
+            $(".imageName").text(srt);
+            $.ajax({
+                url: "/node/deletImage",
+                data: {
+                    name: name
+                },
+                success: function () {
+                    var element = document.getElementById(name);
+                    element.style.display = "none";
                 }
             })
         }
-    })
-    $("#removeButt").click(function () {
-        $("#delmodal").modal('toggle');
-        
-    })
-    $("#remove").click(function () {
-       
-        var catname = $("#listofcat").val();
-        if (catname != "") {
-            $.ajax({
-                url: "/node/delnewcat",
-                dataType: "html",
-                data: {
-                    catid: catname,
+        $("#verifEdit").click(function () {
+            var catname = $("#listofcat").val();
+            var name = $("#title").val();
+            var image = $(".imageName").text();
 
-                },
-                success: function (data) {
-                    if (data == "1") {
-                        location.reload();
+            if (catname != "" && name != "" && image != "") {
+                $.ajax({
+                    url: "/node/editcat",
+                    dataType: "html",
+                    data: {
+                        catID: catname,
+                        title: name,
+                        image: image
+                    },
+                    success: function (data) {
+                        if (data == "1") {
+                            location.reload();
 
+                        }
                     }
-                    else {
-                        $("#delmodal").modal('toggle');
-                        alert(data)
-                    }
-                }
-            })
-        }
-    })
+                })
+            }
+        })
+        $("#cancelEdit").click(function () {
+            $(".classhide").css("display", "none");
+            $(".classshow").css("display", "inline-block");
+            $("#imageHolder").css("display", "none");
+            $("#title").val("");
+        })
+        $(".ImageDelete").click(function () {
 
-    $("#edit").click(function () {
-        var catname = $("#listofcat").val();
-        if (catname != "") {
+            var name = $(".imageName").text();
             $.ajax({
-                url: "/node/getCatDetail",
-                dataType: "html",
+                url: "/Node/deleteImage",
                 data: {
-                    catid: catname,
-
+                    id: name
                 },
-                success: function (data) {
-                    $(".classhide").css("display","inline-block");
-                    $(".classshow").css("display", "none");
-                    var obj = JSON.parse(data);
-                    var image =  obj[0]["image"];
-                    var title = obj[0]["title"];
-                    $("#title").val(title);
-                   
-
-                    var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
-                    $("#imageHolder").append(htmldiv);
-
-
+                success: function () {
                     var srt = $(".imageName").text();
-                    $(".imageName").text(obj[0]["image"] + ","+ srt );
-
+                    $(".imageName2").text(srt.replace(name + ","), "");
+                    $("#imageHolder0").css("display", "none")
                 }
             })
-        }
-    })
-    var deletImage = function (name) {
-        var srt = $(".imageName").text();
-        srt = srt.replace(name + ",", "");
-        $(".imageName").text(srt);
-        $.ajax({
-            url: "/node/deletImage",
-            data: {
-                name: name
-            },
-            success: function () {
-                var element = document.getElementById(name);
-                element.style.display = "none";
-            }
-        })
-    }
-    $("#verifEdit").click(function () {
-        var catname = $("#listofcat").val();
-        var name = $("#title").val();
-        var image = $(".imageName").text();
 
-        if (catname != "" && name != "" && image != "") {
-            $.ajax({
-                url: "/node/editcat",
-                dataType: "html",
-                data: {
-                    catID: catname,
-                    title: name,
-                    image: image
-                },
-                success: function (data) {
-                    if (data == "1") {
-                        location.reload();
-
-                    }
-                }
-            })
-        }
-    })
-    $("#cancelEdit").click(function () {
-        $(".classhide").css("display", "none");
-        $(".classshow").css("display", "inline-block");
-        $("#imageHolder").css("display", "none");
-        $("#title").val("");
-    })
-    $(".ImageDelete").click(function () {
-       
-        var name = $(".imageName").text();
-        $.ajax({
-            url: "/Node/deleteImage",
-            data: {
-                id: name
-            },
-            success: function () {
-                var srt = $(".imageName").text();
-                $(".imageName2").text(srt.replace(name+ ","),"" );
-                $("#imageHolder0").css("display","none")
-            }
-        })
-       
-    });
-</script>
+        });
+    </script>
+}
 
 
 

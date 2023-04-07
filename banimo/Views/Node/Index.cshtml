@@ -1,165 +1,124 @@
-﻿@model  banimo.AdminPanel.ViewModel.BaseViewModel
-
-@{
-    Layout = null;
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin Login</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>پرتال مشتریان </title>
-    <link href="~/AdminPanel/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/AdminPanel/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <!-- Custom Theme Style -->
-    <link href="~/AdminPanel/build/css/custom.css" rel="stylesheet">
-    @*<link href="~/AdminPanel/build/css/bootstrap-rlt.css" rel="stylesheet" />*@
-    <link href="~/AdminPanel/build/css/toastr.css" rel="stylesheet" />
-
-
-    @Styles.Render("~/AdminPanel/Content/css")
-    @Scripts.Render("~/AdminPanel/bundles/modernizr")
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript"></script>
-    <!-- Bootstrap -->
-    <script src="~/AdminPanel/Scripts/bootstrap.min.js"></script>
-    <script src="~/AdminPanel/Scripts/toastr.js"></script>
-    <script>
-        $(document).ajaxStart(function () {
-            $("#loading").css("display", "block");
-        });
-        $(document).ajaxComplete(function () {
-            $("#loading").css("display", "none");
-        });
-
-    </script>
-  
-    <script>
-        if ('@Session["lang"]' == 'fa') {
-
-            $("body").get(0).style.setProperty("--align", "right");
-            $("body").get(0).style.setProperty("--direction", "rtl");
-            $("body").get(0).style.setProperty("--font", "IRANSans");
-
-        }
-        else {
-
-            $("body").get(0).style.setProperty("--align", "left");
-            $("body").get(0).style.setProperty("--direction", "ltr");
-            $("body").get(0).style.setProperty("--font", "Myriad");
-
-
-        }
-
-    </script>
-
+    <!--===============================================================================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/css/main.css">
+    <!--===============================================================================================-->
 </head>
+<body style="background-color: #666666;">
 
-<body class="login">
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <form method="post" id="loginform" class="login100-form validate-form" action="/node/CustomerLogin">
+                    @Html.AntiForgeryToken()
+                    <span class="login100-form-title p-b-43">
+                        Login to continue
+                    </span>
 
-    <script>
-        var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-        if (true) {
-            $('#iosModal').modal('show');
-        }
-    </script>
-    <div id="loading" style="display:none">
-        <div style="z-index:99999; padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
 
-            <img style="max-width:80px; display:block; margin:auto" src="~/images/logo.png" />
-            <img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" />
+                    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                        <input id="login-urser" class="input100" type="text" name="phone">
+                        <span class="focus-input100"></span>
+                        <span class="label-input100">Username</span>
+                    </div>
 
+
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+                        <input id="login-password" class="input100" type="password" name="pass">
+                        <span class="focus-input100"></span>
+                        <span class="label-input100">Password</span>
+                    </div>
+
+                    <div class="flex-sb-m w-full p-t-3 p-b-32">
+                        <div class="contact100-form-checkbox">
+                            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                            <label class="label-checkbox100" for="ckb1">
+                                Remember me
+                            </label>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="container-login100-form-btn">
+                        <p class="login100-form-btn" id="lgnsubmitt">
+                            Login
+                        </p>
+                    </div>
+
+                    @*<div class="text-center p-t-46 p-b-20">
+            <span class="txt2">
+                or sign up using
+            </span>
         </div>
-    </div>
-    <script>
 
-    </script>
-    <div>
-        <a class="hiddenanchor" id="signup"></a>
-        <a class="hiddenanchor" id="signin"></a>
+        <div class="login100-form-social flex-c-m">
+            <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg1 m-r-5">
+                <i class="fa fa-facebook-f" aria-hidden="true"></i>
+            </a>
 
-        <div class="login_wrapper">
-            <div class="animate form login_form">
-                <section class="login_content">
-                    <form>
-                        <h1 style="">@Resources.res.adminEntryTitle</h1>
-                        <div style="text-align:left">
-                            <div style="display:inline-block;" class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @Session["lang"].ToString().ToUpper()
-                                </button>
-                                <div class="dropdown-menu lanParent" aria-labelledby="dropdownMenuButton" style=" margin: 5px">
-                                    <div class="row langHolder" style="margin:5px"><a style="color:white" class="dropdown-item" href="#">EN <img src="~/Images/en.png" /></a></div>
-                                    <div class="row langHolder" style="margin:5px"><a style="color:white" class="dropdown-item" href="#">FA <img src="~/Images/fa.png" /></a></div>
-                                    <div class="row langHolder" style="margin:5px"><a style="color:white" class="dropdown-item" href="#">DE <img src="~/Images/de.png" /></a></div>
-                                </div>
-                            </div>
+            <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg2 m-r-5">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+        </div>*@
+                </form>
 
-                        </div>
-
-
-                        @{
-                            if (Model.username != null)
-                            {
-                                <div>
-                                    <input value=@Model.username id="login-urser" type="text" class="form-control" placeholder="@Resources.res.userman" required="" />
-                                </div>
-                                <div>
-                                    <input value=@Model.pass id="login-password" type="password" class="form-control" placeholder="@Resources.res.loginPass" required="" />
-                                </div>
-                            }
-                            else
-                            {
-                                <div>
-                                    <input id="login-urser" type="text" class="form-control" placeholder="@Resources.res.userman" required="" />
-                                </div>
-                                <div>
-                                    <input id="login-password" type="password" class="form-control" placeholder="@Resources.res.loginPass" required="" />
-                                </div>
-                            }
-                        }
-
-                        <div style="margin-bottom: 120px; margin-top: -20px;">
-                            <input style="float:right " type="checkbox" id="rememberme" value="">
-                            <label style="float: right; margin-right: 10px;" for="rememberme"><span></span>@Resources.res.rememberme</label>
-                        </div>
-
-
-                        <div>
-                            @*<a class="btn btn-default submit" href="index.html">وارد </a>*@
-                            <a id="lgnsubmitt">@Resources.res.OK</a>
-                        </div>
-
-
-
-
-
-                        <div class="clearfix"></div>
-
-                        <div class="separator">
-                            @*<p class="change_link">
-                                    New to site?
-                                    <a href="#signup" class="to_register"> Create Account </a>
-                                </p>*@
-
-                            <div class="clearfix"></div>
-                            <br />
-
-                            <div>
-
-                                <p></p>
-                            </div>
-                        </div>
-                    </form>
-                </section>
+                <div class="login100-more" style="background-image: url('/AdminPanel/loginasset/images/bg-01.jpg');">
+                </div>
             </div>
-
-
         </div>
     </div>
+
+
+
+
+
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/AdminPanel/loginasset/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/AdminPanel/loginasset/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/AdminPanel/loginasset/js/main.js"></script>
     <script>
 
         document.getElementById("lgnsubmitt").onclick = function () {
@@ -182,67 +141,68 @@
 
             if (Phone != "" & Pass != "") {
 
-                $("#loading").css("display", "block");
-                $.ajax({
-                    url: '/Node/CustomerLogin',
-                    dataType: 'html',
-                    data: {
+                $("#loginform").submit();
+                //$("#loading").css("display", "block");
+                //$.ajax({
+                //    url: '/Node/CustomerLogin',
+                //    dataType: 'html',
+                //    data: {
 
-                        pass: Pass,
-                        ischecked: ischecked,
-                        phone: Phone
+                //        pass: Pass,
+                //        ischecked: ischecked,
+                //        phone: Phone
 
-                    },
-                    success: function (data) {
-
-
-                        var srt = data.substring(0, 1);
-                        var URL = data.substring(1, data.length);
+                //    },
+                //    success: function (data) {
 
 
-                        if (srt === "1") {
+                //        var srt = data.substring(0, 1);
+                //        var URL = data.substring(1, data.length);
 
 
-                            window.location.href = "/Node/dashboard";
+                //        if (srt === "1") {
 
 
-                        }
-
-                        else {
-                            toastr.options = {
-                                "debug": false,
-                                "positionClass": "toast-top-center",
-                                "onclick": null,
-                                "fadeIn": 300,
-                                "fadeOut": 1000,
-                                "timeOut": 8000,
-                                "extendedTimeOut": 1000,
+                //            window.location.href = "/Node/dashboard";
 
 
-                            }
-                            toastr.error("نام کاربری یا رمز عبور اشتباه است")
-                            //toastr.error(data)
+                //        }
 
-                        }
-
-
-                    },
-                    error: function () {
-                        toastr.options = {
-                            "debug": false,
-                            "positionClass": "toast-top-center",
-                            "onclick": null,
-                            "fadeIn": 300,
-                            "fadeOut": 1000,
-                            "timeOut": 8000,
-                            "extendedTimeOut": 1000,
+                //        else {
+                //            toastr.options = {
+                //                "debug": false,
+                //                "positionClass": "toast-top-center",
+                //                "onclick": null,
+                //                "fadeIn": 300,
+                //                "fadeOut": 1000,
+                //                "timeOut": 8000,
+                //                "extendedTimeOut": 1000,
 
 
-                        }
-                        toastr.error("خطا در سرور")
+                //            }
+                //            toastr.error("نام کاربری یا رمز عبور اشتباه است")
+                //            //toastr.error(data)
 
-                    }
-                });
+                //        }
+
+
+                //    },
+                //    error: function () {
+                //        toastr.options = {
+                //            "debug": false,
+                //            "positionClass": "toast-top-center",
+                //            "onclick": null,
+                //            "fadeIn": 300,
+                //            "fadeOut": 1000,
+                //            "timeOut": 8000,
+                //            "extendedTimeOut": 1000,
+
+
+                //        }
+                //        toastr.error("خطا در سرور")
+
+                //    }
+                //});
             }
             else {
                 toastr.options = {
@@ -264,12 +224,6 @@
 
 
         }
-    </script>
-    <script>
-        $(".langHolder").click(function () {
-            let id = $(this).find('a').text();
-            window.location.href = "/Node/ChangeLanguage?lang=" + id;
-        })
     </script>
 </body>
 </html>

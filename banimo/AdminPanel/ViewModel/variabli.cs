@@ -19,7 +19,6 @@ namespace banimo.AdminPanel.ViewModel
         public string mallID = "0";
         public string floorID = "0";
         public string query = "";
-
         public string country { get; set; }
         public string city { get; set; }
         public string images { get; set; }
@@ -30,6 +29,7 @@ namespace banimo.AdminPanel.ViewModel
         public string Username { get; set; }
         public string Password { get; set; }
         public string page { get; set; }
-        
+        public string tag { get; set; }
+
     }
 }

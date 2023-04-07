@@ -1,0 +1,139 @@
+﻿@model banimo.ViewModel.MainFactorListVM
+
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>Receipt / Remittance List</h5>
+                </div>
+
+
+
+
+
+                @if (Model.mainFactor != null)
+                {
+
+
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="">
+                        <thead>
+                            <tr>
+
+
+
+
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">col</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Number</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Title</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Count</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price</th>
+
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Document Number</th>
+
+
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+
+
+                            @foreach (var item in Model.mainFactor)
+                            {
+                                string image = "";
+                                int i = Model.mainFactor.IndexOf(item) + 1;
+                                string deleteid = item.ID;
+                                string cls = "odd";
+                                if (Model.mainFactor.IndexOf(item) + 1 % 2 == 0)
+                                {
+                                    cls = "even";
+                                }
+                                <tr id="@item.ID" class="@cls">
+
+                                    <td>@i</td>
+                                    <td>@item.ID</td>
+                                  
+
+                                    <td>@item.title</td>
+
+
+                                    <td>@Math.Abs(@item.count)</td>
+                                    <td>@string.Format("{0:n0}", @item.price) </td>
+
+                                   
+                                    <td>@item.atf</td>
+                                    
+                                </tr>
+
+                            }
+
+
+
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(".FaddNewResidHavale").click(function () {
+
+        $("#FaddNewResidHavaleModal").modal('toggle');
+    })
+</script>
+<script>
+    $(".editItem").click(function () {
+        $(this).parent().parent().find(".phase1").toggle();
+        $(this).parent().parent().find(".phase2").toggle();
+
+    })
+    $(".editItemVerif").click(function () {
+
+
+        var amani = $(this).parent().parent().find(".amanicheckbox").is(":checked");
+        var factorPrice = $(this).parent().parent().find(".factorPrice").val();
+        var factorPercent = $(this).parent().parent().find(".factorPercent").val();
+        var id = $(this).parent().parent().attr("id");
+
+        $.ajax({
+            url: '/Core/editFactor',
+            dataType: 'html',
+            data: {
+                amani: amani,
+                factorPrice: factorPrice,
+                factorPercent: factorPercent,
+                id: id,
+            },
+            success: function (data) {
+
+                $("#verifyCodeingTran").click();
+            }
+
+        })
+
+
+    })
+
+
+    $(".BKItem").click(function () {
+        var FactorID = $(this).parent().parent().attr('id');
+        $("#BKID").val(FactorID);
+        $("#BKModal").modal('toggle');
+    })
+</script>

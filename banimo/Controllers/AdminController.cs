@@ -3545,14 +3545,14 @@ namespace banimo.Controllers
             {
                 foreach (var item in log.recietList)
                 {
-                    long lng = Int64.Parse(item.date) / 1000;
+                    long lng = Int64.Parse(item.endate);
                     DateTime dt = dateTimeConvert.UnixTimeStampToDateTime(lng);
-                    item.date = dateTimeConvert.ToPersianDateString(dt);
+                    item.date = dt.ToShortDateString();
                 }
             }
 
             log.current = page;
-            return PartialView("/Views/Shared/AdminShared/_RecitList.cshtml", log);
+            return PartialView("/Views/Shared/NodeShared/_RecitList.cshtml", log);
         }
         public void setCustomTransaction(string fromSource, string toSource, string price, string desc, string typeto, string typefrom, string sourseID)
         {
@@ -9536,8 +9536,6 @@ namespace banimo.Controllers
             banimo.ViewModel.AccessVM log2 = JsonConvert.DeserializeObject<banimo.ViewModel.AccessVM>(result);
             return PartialView("/Views/Shared/AdminShared/_ListOfRoleSection.cshtml", log2);
         }
-
-
         [HttpPost]
         public ActionResult setNewRoll(string roleTitle, List<string> sectionList, string itemID)
         {
@@ -9571,9 +9569,6 @@ namespace banimo.Controllers
             }
             return RedirectToAction("access");
         }
-
-
-
         public PartialViewResult checkPartnerStatus(string id)
         {
             string device = RandomString(10);

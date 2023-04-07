@@ -20,6 +20,7 @@ namespace banimo.ViewModel
         public string lan { get; set; }
         public string page = "0";
         public string searchq { get; set; }
+        public string tag { get; set; }
 
     }
 
@@ -34,6 +35,7 @@ namespace banimo.ViewModel
     {
         public int id { get; set; }
         public string img { get; set; }
+        public string logo { get; set; }
         public string title { get; set; }
         public object cat { get; set; }
         public int eshop { get; set; }

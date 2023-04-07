@@ -33,21 +33,50 @@ namespace banimo.ViewModel
         public int userNumRows { get; set; }
         public int orderNumRows { get; set; }
     }
-    public class LastProductNode
+
+    public class Bestseller
     {
-        public object title { get; set; }
+        public int ID { get; set; }
+        public string title { get; set; }
+        public string price { get; set; }
+        public string image { get; set; }
+        public string count { get; set; }
+        public string ramaining { get; set; }
+    }
+
+    public class Dacats
+    {
+        public string title { get; set; }
+        public string image { get; set; }
+    }
+
+    public class LastOrdre
+    {
+        public int ID { get; set; }
+        public string timestamp { get; set; }
+        public string status { get; set; }
+        public string TotalPrice { get; set; }
+        public string peigiry { get; set; }
+    }
+
+    public class LastVendor
+    {
+        public string title { get; set; }
         public string ID { get; set; }
     }
 
     public class AdminDashbaordNodeVM
     {
-
-        public List<LastProduct> lastProducts { get; set; }
-        public int installNumRows { get; set; }
+        public List<LastVendor> lastVendors { get; set; }
+        public List<LastOrdre> lastOrdres { get; set; }
+        public List<Dacats> dacats { get; set; }
+        public List<Bestseller> bestseller { get; set; }
+        public int productsNum { get; set; }
         public int nodeNumRows { get; set; }
         public int userNumRows { get; set; }
-
+        public int ordersNum { get; set; }
     }
+    
     public class articlesComment
     {
         public int ID { get; set; }

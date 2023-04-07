@@ -104,10 +104,10 @@ $MENU_TOGGLE.on('click', function() {
 		console.log('clicked - menu toggle');
 		
 		if ($BODY.hasClass('nav-md')) {
-			$SIDEBAR_MENU.find('li.active ul').hide();
+			$SIDEBAR_MENU.find('li.active ul').fadeOut();
 			$SIDEBAR_MENU.find('li.active').addClass('active-sm').removeClass('active');
 		} else {
-			$SIDEBAR_MENU.find('li.active-sm ul').show();
+			$SIDEBAR_MENU.find('li.active-sm ul').fadeIn();
 			$SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
 		}
 

@@ -136,6 +136,7 @@ namespace banimo.ViewModePost
         public contactSectionVM conmodel { get; set; }
         public List<Brand> brands { get; set; }
         public string iosCookie { get; set; }
+        public string trafCode { get; set; }
         public List<Slide> slides { get; set; }
         public List<Cat> cats { get; set; }
        
@@ -148,6 +149,7 @@ namespace banimo.ViewModePost
 
         public List<Catsdata> catsdata { get; set; }
         public List<CatsParent> catsParents { get; set; }
+        
         //public List<CatsParent> catsParents { get; set; }
     }
 }

@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/versionAsset/omirom/css/home.css">
 
 }
-@{ 
+@{
     banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
 
     string userType = userApp != null ? userApp.userTypeID : "0";
@@ -41,45 +41,49 @@
                             <div class="swiper-wrapper" id="swiper-wrapper-f10715100f7d99c4cd"
                                  aria-live="off"
                                  style="transform: translate3d(7740px, 0px, 0px); transition-duration: 0ms;">
-                                @foreach (var item in Model.slides)
+                                @if (Model.slides != null)
                                 {
-                                    string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
-                                    string imagetitle = item.title;
-                                    string imagedesc = item.Ptitle;
-                                    string index = Model.slides.IndexOf(item).ToString();
-                                    string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val=" + item.type + "-" + item.catIDOrLink;
+                                    foreach (var item in Model.slides)
+                                    {
+                                        string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
+                                        string imagetitle = item.title;
+                                        string imagedesc = item.Ptitle;
+                                        string index = Model.slides.IndexOf(item).ToString();
+                                        string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val=" + item.type + "-" + item.catIDOrLink;
 
-                                    <div class="swiper-slide "
-                                         data-image="@src"
-                                         data-color="#000000" role="group" aria-label="@index / 7"
-                                         style="width: 1280px; margin-left: 10px;">
-                                        <div class="row">
-                                            <div class="col-5 col-xl-4">
-                                                <div class="text-product">
-                                                    <h2 style="color: #000000">
-                                                        @imagetitle
-                                                    </h2>
-                                                    <p style="color: #000000">
-                                                        @imagedesc
-                                                    </p>
-                                                    <a style="" class="mySlide" id='@item.type-@item.catIDOrLink' href="@urlvalue"
-                                                       dideo-checked="true">
+                                        <div class="swiper-slide "
+                                             data-image="@src"
+                                             data-color="#000000" role="group" aria-label="@index / 7"
+                                             style="width: 1280px; margin-left: 10px;">
+                                            <div class="row">
+                                                <div class="col-5 col-xl-4">
+                                                    <div class="text-product">
+                                                        <h2 style="color: #000000">
+                                                            @imagetitle
+                                                        </h2>
+                                                        <p style="color: #000000">
+                                                            @imagedesc
+                                                        </p>
+                                                        <a style="" class="mySlide" id='@item.type-@item.catIDOrLink' href="@urlvalue"
+                                                           dideo-checked="true">
 
-                                                        بررسی و خرید
-                                                    </a>
+                                                            بررسی و خرید
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-7 col-xl-8">
-                                                <div class="img-gallery">
-                                                    <img alt="@imagedesc"
-                                                         class="img-fluid"
-                                                         src="@src"
-                                                         loading="lazy">
+                                                <div class="col-7 col-xl-8">
+                                                    <div class="img-gallery">
+                                                        <img alt="@imagedesc"
+                                                             class="img-fluid"
+                                                             src="@src"
+                                                             loading="lazy">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 }
+
 
 
 
@@ -101,28 +105,32 @@
                             <div class="swiper-wrapper" id="swiper-wrapper-91b3daa8279a5893"
                                  aria-live="polite"
                                  style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
-                                @foreach (var item in Model.slides)
+                                @if (Model.slides != null)
                                 {
-                                    string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
-                                    string index = Model.slides.IndexOf(item).ToString();
-                                    string imagetitle = item.title;
-                                    string imagedesc = item.Ptitle;
-                                    <div class="swiper-slide swiper-slide-visible swiper-slide-active"
-                                         role="group"
-                                         aria-label="@index / 7" style="margin-left: 16px;">
-                                        <img width="50" height="25"
-                                             src="@src"
-                                             alt="@imagetitle" loading="lazy">
-                                    </div>
+                                    foreach (var item in Model.slides)
+                                    {
+                                        string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
+                                        string index = Model.slides.IndexOf(item).ToString();
+                                        string imagetitle = item.title;
+                                        string imagedesc = item.Ptitle;
+                                        <div class="swiper-slide swiper-slide-visible swiper-slide-active"
+                                             role="group"
+                                             aria-label="@index / 7" style="margin-left: 16px;">
+                                            <img width="50" height="25"
+                                                 src="@src"
+                                                 alt="@imagetitle" loading="lazy">
+                                        </div>
+                                    }
+
                                 }
 
                                 @*<div class="swiper-slide swiper-slide-visible swiper-slide-next"
-                                         role="group"
-                                         aria-label="2 / 7" style="margin-left: 16px;">
-                                        <img width="50" height="25"
-                                             src="/versionAsset/omirom/image/4ArbquYrpl22T1KjilQUYJomu96k1Lb2pCDdR8lS_thumbnail.webp"
-                                             alt="apple-macbook.jpg" loading="lazy">
-                                    </div>*@
+             role="group"
+             aria-label="2 / 7" style="margin-left: 16px;">
+            <img width="50" height="25"
+                 src="/versionAsset/omirom/image/4ArbquYrpl22T1KjilQUYJomu96k1Lb2pCDdR8lS_thumbnail.webp"
+                 alt="apple-macbook.jpg" loading="lazy">
+        </div>*@
 
 
                             </div>
@@ -147,7 +155,7 @@
                                 string src = System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + item.image;
                                 string imagetitle = item.title;
                                 string imagedesc = item.Ptitle;
-                                string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val="+  item.type + "-" + item.catIDOrLink;
+                                string urlvalue = item.type == "image" ? "" : "/Home/ManageSlide?val=" + item.type + "-" + item.catIDOrLink;
                                 string index = Model.slides.IndexOf(item).ToString();
                                 {
 
@@ -249,7 +257,7 @@
                         if (Model.banners.Count > 4)
                         {
                             string banner5 = @System.Configuration.ConfigurationManager.AppSettings["domain"] + "/images/panelimages/" + @Model.banners[4].image;
-                           
+
                             string urlvalue = Model.banners[4].type == "image" ? "" : "/Home/ManageSlide?val=" + Model.banners[4].type + "-" + Model.banners[4].catIDOrLink;
                             <div class="swiper-slide swiper-slide-active" role="group"
                                  style="width: 421.333px; margin-left: 16px;">
@@ -321,11 +329,18 @@
                                     string src = item.image.Split(',').ToList().First();
                                     string prID = "o" + @item.ID;
                                     DateTime itemdate = DateTime.Now.AddSeconds(double.Parse(item.time));
+
+
+
+                                    
+
+
+
                                     <div class="swiper-slide swiper-slide-active" key="6016" role="group"
                                          aria-label="1 / 4" style="width: 306px; margin-left: 24px;">
                                         <div class="product-card product-card-purple">
 
-                                            <a href="/Home/productDetail?ID=@prID"
+                                            <a href=""
                                                dideo-checked="true">
                                                 <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
                                                     <div class="product-price">
@@ -501,26 +516,36 @@
                         <div class="swiper-wrapper" id="swiper-wrapper-10c25b165a110c694" aria-live="off"
                              style="transition-duration: 15000ms; transform: translate3d(2640px, 0px, 0px);">
 
-                            @foreach (var item in Model.newest)
+                            @if (Model.newest != null)
                             {
-                                string url = item.image.Split(',').ToList().First();
-                                string index = Model.newest.IndexOf(item).ToString();
-                                string number = (Model.newest.IndexOf(item) + 1).ToString();
-                                string purl = "/Home/ProductDetail/o" + @item.ID;
-                                int total = Model.newest.Count();
-                                <div class="swiper-slide" data-swiper-slide-index="@index" role="group"
-                                     aria-label="@number / @total" style="width: 179.077px; margin-left: 24px;">
-                                    <a href="@purl"
-                                       dideo-checked="true">
-                                        <div class="new-product-slide-box d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid"
-                                                 alt="@item.title"
-                                                 src="@url"
-                                                 loading="lazy">
-                                        </div>
-                                    </a>
-                                </div>
+                                foreach (var item in Model.newest)
+                                {
+                                    string url = item.image.Split(',').ToList().First();
+                                    string index = Model.newest.IndexOf(item).ToString();
+                                    string number = (Model.newest.IndexOf(item) + 1).ToString();
+                                    string purl = "/Home/ProductDetail/o" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        purl = "/product/" + metaModel.curl;
+                                    }
+
+                                    int total = Model.newest.Count();
+                                    <div class="swiper-slide" data-swiper-slide-index="@index" role="group"
+                                         aria-label="@number / @total" style="width: 179.077px; margin-left: 24px;">
+                                        <a href="@purl"
+                                           dideo-checked="true">
+                                            <div class="new-product-slide-box d-flex justify-content-center align-items-center">
+                                                <img class="img-fluid"
+                                                     alt="@item.title"
+                                                     src="@url"
+                                                     loading="lazy">
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
                             }
+
 
 
 
@@ -538,25 +563,34 @@
                              aria-live="off"
                              style="transition-duration: 15000ms; transform: translate3d(2640px, 0px, 0px);">
 
-                            @foreach (var item in Model.specialOffers)
+                            @if (Model.specialOffers != null)
                             {
-                                string url = item.image.Split(',').ToList().First();
-                                string index = Model.newest.IndexOf(item).ToString();
-                                string number = (Model.newest.IndexOf(item) + 1).ToString();
-                                string purl = "/Home/ProductDetail/o" + @item.ID;
-                                int total = Model.newest.Count();
-                                <div class="swiper-slide" data-swiper-slide-index="@index" role="group"
-                                     aria-label="@number / @total" style="width: 179.077px; margin-left: 24px;">
-                                    <a href="@purl"
-                                       dideo-checked="true">
-                                        <div class="new-product-slide-box d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid" alt="@item.title "
-                                                 src="@url"
-                                                 loading="lazy">
-                                        </div>
-                                    </a>
-                                </div>
+                                foreach (var item in Model.specialOffers)
+                                {
+                                    string url = item.image.Split(',').ToList().First();
+                                    string index = Model.newest.IndexOf(item).ToString();
+                                    string number = (Model.newest.IndexOf(item) + 1).ToString();
+                                    string purl = "/Home/ProductDetail/o" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        purl = "/product/" + metaModel.curl;
+                                    }
+                                    int total = Model.newest.Count();
+                                    <div class="swiper-slide" data-swiper-slide-index="@index" role="group"
+                                         aria-label="@number / @total" style="width: 179.077px; margin-left: 24px;">
+                                        <a href="@purl"
+                                           dideo-checked="true">
+                                            <div class="new-product-slide-box d-flex justify-content-center align-items-center">
+                                                <img class="img-fluid" alt="@item.title "
+                                                     src="@url"
+                                                     loading="lazy">
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
                             }
+
 
 
 
@@ -627,67 +661,73 @@
                                         string imagetitle = item.title;
                                         string index = (group.value.IndexOf(item) + 1).ToString();
                                         string count = group.value.Count() + "";
-                                     
+                                        string purl = "/Home/productDetail?ID=" + prID;
+                                        if (item.meta != "null" && item.meta != null)
+                                        {
+                                            banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                            purl = "/product/" + metaModel.curl;
+                                        }
 
-                                        
 
-                                                    <div class="swiper-slide swiper-slide-active" key="6137" role="group"
-                                                         aria-label="@index / @count" style="width: 306px; margin-left: 24px;">
-                                                        <div class="product-card product-card-blue">
-                                                            <a href="/Home/productDetail?ID=@prID"
-                                                               dideo-checked="true">
-                                                                <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
-                                                                    <div class="product-price">
-                                                                        @{ 
-                                                                            if (item.oldPrice != item.price)
-                                                                            {
-                                                                                <span class="discount">
-                                                                                    @string.Format("{0:n0}", decimal.Parse(item.oldPrice)) ت
-                                                                                </span>
-                                                                            }
-                                                                        }
 
-                                                                        <span class="total-price" style="z-index:9">
-                                                                            @{
-                                                                                if (userType == "5")
-                                                                                {
-                                                                                    banimo.AdminPanelBoom.ViewModel.metaVM metmodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
-                                                                                    <span>@string.Format("{0:n0}", metmodel.price) ت</span>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <span>@string.Format("{0:n0}", decimal.Parse(item.price)) ت</span>
-                                                                                }
-                                                                            }
 
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="product-img xmb-3">
-                                                                        <img class="img-fluid rounded"
-                                                                             alt="@item.title"
-                                                                             src="@src"
-                                                                             loading="lazy">
-                                                                    </div>
-                                                                    <div class="product-text">
-                                                                        <h3 class="title">
-                                                                            @item.title
-                                                                        </h3>
-                                                                    </div>
-                                                                    <div class="color-range">
-                                                                        @*@{
-                                                                                List<string> srt = item.image.Split(',').ToList();
-                                                                                foreach(var IMGITEM in srt)
-                                                                                {
-                                                                                    <img src="@IMGITEM" style="width:70px"/>
-                                                                                }
-                                                                            }*@
-                                                                        @*<span title="سفید" class="range" style=" background: #FFFFFF; "></span>*@
-                                                                    </div>
-                                                                </div>
-                                                            </a>
+                                        <div class="swiper-slide swiper-slide-active" key="6137" role="group"
+                                             aria-label="@index / @count" style="width: 306px; margin-left: 24px;">
+                                            <div class="product-card product-card-blue">
+                                                <a href="@purl"
+                                                   dideo-checked="true">
+                                                    <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
+                                                        <div class="product-price">
+                                                            @{
+                                                                if (item.oldPrice != item.price)
+                                                                {
+                                                                    <span class="discount">
+                                                                        @string.Format("{0:n0}", decimal.Parse(item.oldPrice)) ت
+                                                                    </span>
+                                                                }
+                                                            }
+
+                                                            <span class="total-price" style="z-index:9">
+                                                                @{
+                                                                    if (userType == "5")
+                                                                    {
+                                                                        banimo.AdminPanelBoom.ViewModel.metaVM metmodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+                                                                        <span>@string.Format("{0:n0}", metmodel.price) ت</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>@string.Format("{0:n0}", decimal.Parse(item.price)) ت</span>
+                                                                    }
+                                                                }
+
+                                                            </span>
+                                                        </div>
+                                                        <div class="product-img xmb-3">
+                                                            <img class="img-fluid rounded"
+                                                                 alt="@item.title"
+                                                                 src="@src"
+                                                                 loading="lazy">
+                                                        </div>
+                                                        <div class="product-text">
+                                                            <h3 class="title">
+                                                                @item.title
+                                                            </h3>
+                                                        </div>
+                                                        <div class="color-range">
+                                                            @*@{
+                                                                    List<string> srt = item.image.Split(',').ToList();
+                                                                    foreach(var IMGITEM in srt)
+                                                                    {
+                                                                        <img src="@IMGITEM" style="width:70px"/>
+                                                                    }
+                                                                }*@
+                                                            @*<span title="سفید" class="range" style=" background: #FFFFFF; "></span>*@
                                                         </div>
                                                     </div>
-                                                }
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
 
 
                                 </div>
@@ -734,26 +774,36 @@
                     <div class="swiper numbered-products-swiper xpr-8 swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl">
                         <div class="swiper-wrapper" id="swiper-wrapper-1091fb1ed107279a22" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
 
-                            @foreach (var item in Model.newest.Take(9))
+                            @if (Model.newest != null)
                             {
-                                string url = item.image.Split(',').ToList().First();
-                                string index = Model.newest.IndexOf(item).ToString();
-                                string number = (Model.newest.IndexOf(item) + 1).ToString();
-                                string purl = "/Home/ProductDetail/o" + @item.ID;
-                                int total = Model.newest.Count();
-                                <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
-                                    <a href="@purl" dideo-checked="true">
-                                        <div style="z-index:100" class="numbered-products-box-product d-flex justify-content-center align-items-center flex-column first-number">
-                                            <div class="img-numbered-products">
-                                                <div class="number-numbered-products position-absolute">@number</div>
-                                                <img style="" class="img-fluid" alt="@item.title" src="@url" loading="lazy">
+                                foreach (var item in Model.newest.Take(9))
+                                {
+                                    string url = item.image.Split(',').ToList().First();
+                                    string index = Model.newest.IndexOf(item).ToString();
+                                    string number = (Model.newest.IndexOf(item) + 1).ToString();
+                                    string purl = "/Home/ProductDetail/o" + item.ID;
+                                    if (item.meta != "null" && item.meta != null)
+                                    {
+                                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                        purl = "/product/" + metaModel.curl;
+                                    }
+
+                                    int total = Model.newest.Count();
+                                    <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
+                                        <a href="@purl" dideo-checked="true">
+                                            <div style="z-index:100" class="numbered-products-box-product d-flex justify-content-center align-items-center flex-column first-number">
+                                                <div class="img-numbered-products">
+                                                    <div class="number-numbered-products position-absolute">@number</div>
+                                                    <img style="" class="img-fluid" alt="@item.title" src="@url" loading="lazy">
+                                                </div>
+                                                <div class="text-numbered-products xmt-1 xmt-md-4">
+                                                    <h3>@item.title</h3>
+                                                </div>
                                             </div>
-                                            <div class="text-numbered-products xmt-1 xmt-md-4">
-                                                <h3>@item.title</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                        </a>
+                                    </div>
+                                }
+
                             }
 
 
@@ -770,7 +820,12 @@
                                 string url = item.image.Split(',').ToList().First();
                                 string index = Model.bestseller.IndexOf(item).ToString();
                                 string number = (Model.bestseller.IndexOf(item) + 1).ToString();
-                                string purl = "/Home/ProductDetail/o" + @item.ID;
+                                string purl = "/Home/ProductDetail/o" + item.ID;
+                                if (item.meta != "null" && item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    purl = "/product/" + metaModel.curl;
+                                }
                                 int total = Model.bestseller.Count();
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
                                     <a href="@purl" dideo-checked="true">
@@ -800,7 +855,12 @@
                                 string url = item.image.Split(',').ToList().First();
                                 string index = Model.specialOffers.IndexOf(item).ToString();
                                 string number = (Model.specialOffers.IndexOf(item) + 1).ToString();
-                                string purl = "/Home/ProductDetail/o" + @item.ID;
+                                string purl = "/Home/ProductDetail/o" + item.ID;
+                                if (item.meta != "null" && item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    purl = "/product/" + metaModel.curl;
+                                }
                                 int total = Model.specialOffers.Count();
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="@number / @total" style="width: 306.595px; margin-left: 48px;">
                                     <a href="@purl" dideo-checked="true">
@@ -900,7 +960,7 @@
     $(".mySlide").click(function () {
 
         var val = $(this).attr('id');
-       
+
         if (!val.contain('image')) {
             window.location.href = "/Home/ManageSlide?val=" + $(this).attr('id');
 
@@ -925,5 +985,5 @@
     <!--start header -->
     <!-- لاگین و رجیستر-->
     <script src="~/versionAsset/omirom/js/signUp.js"></script>
-   
+
 } 

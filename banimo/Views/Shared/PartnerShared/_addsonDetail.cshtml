@@ -5,10 +5,10 @@
     <div>
         <div class="addpanel" style="display:flex">
             <div class="">
-                <input id="addsonDetail" class="form-control" placeholder="نام " />
+                <input id="addsonDetail" class="form-control" placeholder="Title " />
             </div>
             <div class="">
-                <input id="addsonDetailPrice" class="form-control" placeholder="قیمت " />
+                <input id="addsonDetailPrice" class="form-control" placeholder="Price " />
             </div>
             <div class="">
                 <button class="btn btn-success" id="setAddsOnDetail">Verify</button>
@@ -56,86 +56,76 @@
 
             @if (Model.addsDetail != null)
             {
-                <div class="row" style="padding:20px">
-                    <div style="overflow-x:auto;padding:10px">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> addsondetail  </h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart">
-                                    <div style="overflow:auto">
-                                        <table class="table table-bordered table-hover table-striped">
-                                            <thead>
-                                                <tr>
+            <div class="row" style="padding:20px">
+                <div class="panel-body">
+                    <div id="morris-area-chart">
+                        <div style="overflow:auto">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
 
-                                                    <th>
-                                                        عنوان
-                                                    </th>
-                                                    <th>
-                                                        قیمت
-                                                    </th>
-                                                    <th>
+                                        <th>
+                                            Title
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                        <th>
 
-                                                    </th>
+                                        </th>
 
-                                                    <th>
+                                        <th>
 
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @{
-                                                    if (Model.addsDetail != null)
-                                                    {
-                                                        foreach (var item in Model.addsDetail)
-                                                        {
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.addsDetail != null)
+                                        {
+                                            foreach (var item in Model.addsDetail)
+                                            {
 
-                                                                                                <tr id="@item.ID">
+                                                <tr id="@item.ID">
 
-                                                                                                    <td  class="tableTitle">
-                                                                                                        @item.title
-                                                                                                    </td>
-                                                                                                    <td class="tablePrice">
-                                                                                                        @item.price
-                                                                                                    </td>
-                                                                                                    <td style="text-align: center;">
+                                                    <td class="tableTitle">
+                                                        @item.title
+                                                    </td>
+                                                    <td class="tablePrice">
+                                                        @item.price
+                                                    </td>
+                                                    <td style="text-align: center;">
 
-                                                                                                        @{
-                                                                                                            var ID = @item.ID;
-                                                                                                            <a id=@ID class="btn btn-primary editDetail" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+                                                        @{
+                                                            var ID = @item.ID;
+                                                            <a id=@ID class="btn btn-primary editDetail" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Edit</a>
 
-                                                                                                        }
-
-                                                                                                    </td>
-                                                                                                    <td style="text-align: center;">
-
-                                                                                                        @{
-
-                                                                                                            <a id=@ID class="btn btn-primary deleteDetail" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
-
-                                                                                                        }
-
-                                                                                                    </td>
-                                                                                                </tr>
                                                         }
-                                                    }
-                                                }
+
+                                                    </td>
+                                                    <td style="text-align: center;">
+
+                                                        @{
+
+                                                            <a id=@ID class="btn btn-primary deleteDetail" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+
+                                                        }
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
 
 
 
-                                            </tbody>
-                                        </table>
+                                </tbody>
+                            </table>
 
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
             }
 
         </div>

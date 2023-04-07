@@ -1,0 +1,2424 @@
+﻿@model banimo.ViewModel.adminBankVM
+@{
+    ViewBag.Title = "bank";
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+}
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+
+    .formItem {
+        margin: 5px
+    }
+</style>
+<div id="newArticleModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div id="articleForm" class="row" style="background-color:white; padding:10px; margin:0px; ">
+
+                    <form id="addTransaction" action="addCodingTransaction">
+                        <input hidden id="fromADD" />
+                        <input hidden id="recietID" />
+                        <input hidden id="articleID" />
+                        <div class="row" style=" margin: 20px; padding: 35px; ">
+
+                            <div class="autocomplete row" style="display:flex">
+
+
+                                @{
+                                    List<banimo.ViewModel.CodingList> M1 = Model.CodingList.Where(x => x.codingType == "1").ToList();
+                                }
+
+                                <div class="formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M2 = Model.CodingList.Where(x => x.codingType == "2").ToList();
+                                        <select name="M2" id="M2" class="form-control">
+                                            <option value="0">انتخاب کل</option>
+                                            @foreach (var item in M2)
+                                            {
+                                                <option parentValue="" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M3 = Model.CodingList.Where(x => x.codingType == "3").ToList();
+                                        <select name="M3" id="M3" class="form-control">
+                                            <option value="0">انتخاب معین</option>
+                                            @foreach (var item in M3)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class="formItem " style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M4 = Model.CodingList.Where(x => x.codingType == "4").ToList();
+                                        <select name="M4" id="M4" class="form-control">
+                                            <option value="0">انتخاب تفصیلی</option>
+                                            @foreach (var item in M4)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+                                <div class=" formItem" style="width:100%">
+                                    @{
+                                        List<banimo.ViewModel.CodingList> M5 = Model.CodingList.Where(x => x.codingType == "5").ToList();
+                                        <select name="M5" id="M5" class="form-control">
+                                            <option value="0">انتخاب تفصیلی2</option>
+                                            @foreach (var item in M5)
+                                            {
+                                                <option parentValue="@item.parentID" value="@item.ID" code="@item.codeHesab">@item.title</option>
+                                            }
+                                        </select>
+                                    }
+
+                                </div>
+
+
+                            </div>
+                            <script>
+
+                                $("#M2").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M3 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                    $("#M4 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        $(this).hide();
+                                    });
+                                })
+                                $("#M3").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M4 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                })
+                                $("#M4").change(function () {
+                                    var id = $(this).val();
+                                    console.log(id)
+                                    $("#M5 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                })
+
+                            </script>
+
+
+
+                            <div class="row" style="display:flex">
+
+                                <div class="formItem" style="width:100%">
+                                    <select name="RTaraf" id="RTaraf" class="form-control">
+                                        <option value="0">طرف حساب</option>
+                                        @if (Model.tarafList != null)
+                                        {
+                                            foreach (var item in Model.tarafList)
+                                            {
+                                                string name = item.name + " - " + item.phone;
+                                                <option value="@item.code">@name </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+                                    <select name="Rtype" id="Rtype" class="form-control">
+                                        <option value="">نوع تراکنش</option>
+                                        <option value="1">بستانکار</option>
+                                        <option value="0">بدهکار</option>
+                                    </select>
+                                </div>
+
+                                <div class="formItem" style="width:100%">
+
+                                    @{
+                                        <div class=" " style="width:100%">
+                                            <input placeholder="قیمت" name="price" id="price" class="form-control inputnumber" style="width:100%; " />
+                                        </div>
+                                    }
+                                </div>
+                                <div class="formItem" style="width:100%">
+
+                                    <select name="RNode" id="RNode" class="form-control">
+                                        <option value="">انتخاب پروژه</option>
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row" style="display:flex">
+
+                                <div class="formItem" style="width:100%">
+
+                                    @{
+
+                                        <div class=" " style="width:100%">
+                                            @*<input id="Desc" class="form-control" style="width:100%; " />*@
+                                            <textarea placeholder="شرح سند" name="description" id="description" class="form-control" style="width:100%; height:100px"></textarea>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="verifynewArticle" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="newRecietModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="newSalemaliModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <div style="display:flex">
+
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>عنوان سال مالی</p>
+                        <div class=" " style="width:100%">
+                            <input placeholder="توضیحات" name="salmaliTitle" id="salmaliTitle" class="form-control " style="width:100%; " />
+                        </div>
+                    </div>
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>شروع سال مالی</p>
+                        <input name="dateFrom" id="saldateFrom" style="display:inline-block" class="form-control inputForm datePicker" />
+                        <input name="abserver" style="display:none" class="form-control  " />
+
+
+                    </div>
+                    <div class=" " style="width:100%; margin:5px;">
+                        <p>پایان سال مالی</p>
+                        <input name="dateFrom" id="saldateTo" style="display:inline-block" class="form-control inputForm datePicker" />
+                        <input name="abserver" style="display:none" class="form-control  " />
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="newSaleMali" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <script>
+                    $("#newSaleMali").click(function () {
+                        var dateFrom = $("#saldateFrom").val();
+
+                        var dateTo = $("#saldateTo").val();
+                        var salmaliTitle = $("#salmaliTitle").val();
+                        $.ajax({
+                            url: "/core/addNewSaleMali",
+                            data: {
+                                dateFrom: dateFrom,
+                                dateTo: dateTo,
+                                title: salmaliTitle
+                            },
+                            success: function (data) {
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/AdminPanel/Portal/assets/js/select2.min.js"></script>
+<link href="~/AdminPanel/Portal/assets/css/select2.min.css" rel="stylesheet" />
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Document List</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Reports</button>
+        <button class="nav-link " id="nav-coding-tab" data-bs-toggle="tab" data-bs-target="#nav-coding" type="button" role="tab" aria-controls="nav-coding" aria-selected="true">Coding</button>
+    </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Search Panel</h5>
+                        </div>
+                        <div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
+
+                            <div class="col-4">
+                                <div class="" style="margin : 0 5px">
+                                    <p style="display:inline-block">Atf Number :</p>
+                                    <input id="atfNum" style="display:inline-block" class="form-control inputForm " />
+
+                                </div>
+                            </div>
+                            @*<div class="col-6">
+                                    <div class="" style="margin : 0 5px">
+                                        <p style="display:inline-block">Document Number :</p>
+                                        <input id="sanadNum" style="display:inline-block" class="form-control inputForm " />
+
+                                    </div>
+                                </div>*@
+                            <div class="col-4">
+                                <div class="" style="margin : 0 5px">
+                                    <p style="display:inline-block">Date From :</p>
+                                    <input type="date" id="Fromabserver" style="display:inline-block" class="form-control inputForm " />
+
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="" style="margin : 0 5px">
+                                    <p style="display:inline-block">Date To :</p>
+                                    <input type="date" id="Toabserver" style="display:inline-block" class="form-control inputForm " />
+
+                                </div>
+                            </div>
+
+                            @*<div class="col-6" style="margin : 0 5px">
+                                    <p style="display:inline-block">Doument Satus :</p>
+                                    <select class="form-control" style=" display:inline-block" id="selectOrderType">
+                                        <option value="">All</option>
+                                        <option value="0">Preliminary</option>
+                                        <option value="1">Initial</option>
+                                        <option value="2">Final</option>
+                                        <option value="3">Permanent</option>
+
+                                    </select>
+                                </div>*@
+
+
+                            <div>
+                                <div class="" style="padding-top:30px">
+                                    <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> Verify</p>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        @*<script>
+
+                                $.ajax({
+                                    url: '/Core/ChangeRecietList',
+                                    dataType: 'html',
+                                    data: {
+                                        page: "1",
+
+                                    },
+
+                                    success: function (data) {
+
+                                        $("#notCompleteReciet").html(data);
+                                        $("#loading").hide();
+                                    }
+
+
+
+                                });
+                            </script>*@
+
+                        <script>
+                            var getlofo = function (page) {
+                                $("#loading").show();
+                                order = "22";
+                                type = $("#selectOrderType").val();
+                                dateFrom = $("#Fromabserver").val();
+                                dateTo = $("#Toabserver").val();
+                                atf = $("#atfNum").val();
+                                sanad = $("#sanadNum").val();
+                                nodeSelected = "1";
+                                $.ajax({
+                                    url: '/Admin/ChangeRecietList',
+                                    dataType: 'html',
+                                    data: {
+                                        type: type,
+                                        page: page,
+                                        dateTo: dateTo,
+                                        dateFrom: dateFrom,
+                                        nodeSelected: nodeSelected,
+                                        atf: atf,
+                                        sanad: sanad
+                                    },
+
+                                    success: function (data) {
+
+                                        $("#notCompleteReciet").html(data);
+                                        document.getElementById("#notCompleteReciet").scrollIntoView();
+                                        $("#loading").hide();
+
+                                    }
+
+
+
+                                });
+
+                            }
+                            $("#orderFormSearch").click(function () {
+                                $("#loading").show();
+                                getlofo(1)
+                            });
+                            // getlofo(1);
+
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Reciet List</h5>
+                        </div>
+                        <div id="notCompleteReciet">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="articleHolder">
+
+        </div>
+
+
+
+
+
+    </div>
+    <div class="tab-pane fade show " id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Search Panel</h5>
+                        </div>
+                        <div style="display:flex ; flex-wrap:wrap">
+                            <div style="padding:10px; width:33%">
+                                <p>Level 1</p>
+                                @{
+                                    <select name="M22" id="M22" class="form-control">
+                                        <option value="0">level 1</option>
+                                        @foreach (var item in M2)
+                                        {
+                                            <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+                            </div>
+                            <div style="padding:10px; width:33%">
+                                <p>Level 2</p>
+                                @{
+                                    <select name="M33" id="M33" class="form-control">
+                                        <option value="0">level 2</option>
+                                        @foreach (var item in M3)
+                                        {
+                                            <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                            <div style="padding:10px;width:33%">
+                                <p>Level 3</p>
+                                <select name="M44" id="M44" class="form-control">
+                                    <option value="0">level 3</option>
+                                    @foreach (var item in M4)
+                                    {
+                                        <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="padding:10px;width:33%">
+                                <p>Level 4</p>
+                                <select name="M55" id="M55" class="form-control">
+                                    <option value="0">level 4</option>
+                                    @foreach (var item in M5)
+                                    {
+                                        <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="padding:10px;width:33%">
+                                <p>Transaction Type :</p>
+                                <select id="trantype" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="1">deposit</option>
+                                    <option value="0">Withdraw</option>
+                                </select>
+                            </div>
+
+                            <div style="padding:10px;width:33%" id="dateHolder">
+                                <p>From Date :</p>
+                                <input name="datefrom" id="gardeshFrom" type="date" class="PDabserver form-control  " />
+                            </div>
+                            <div style="padding:10px;width:33%" id="dateHolder2">
+                                <p>From To :</p>
+                                <input name="dateTo" id="gardeshTo" type="date" class="PD2abserver form-control  inputfield" />
+                            </div>
+                            <div style="padding:10px;width:33%">
+                                <p>Transaction Side :</p>
+                                <select class="js-example-basic-single form-control" name="GTaraf" id="GTaraf">
+                                    <option value="0">all</option>
+                                    @if (Model.tarafList != null)
+                                    {
+                                        foreach (var item in Model.tarafList)
+                                        {
+                                            string name = item.name + " - " + item.phone;
+                                            <option value="@item.code">@name </option>
+                                        }
+                                    }
+
+
+                                </select>
+                            </div>
+                            @*<div style="margin:10px;width:100%">
+                                    <p>انتخاب پروژه</p>
+                                    <select name="GNode" id="GNode" class="form-control">
+
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>*@
+
+
+                        </div>
+                        <div style="display:flex">
+
+
+                            <div style="margin:10px;width:100%;display: flex; align-items:center">
+                                <div style="position:relative; margin:5px" id="">
+                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">View</div>
+                                </div>
+                                @*<div style="position:relative; margin:5px" id="">
+                                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardeshPrint">چاپ</div>
+                                    </div>*@
+                            </div>
+                            <div style="margin:10px;width:100%"></div>
+                            <div style="margin:10px;width:100%"></div>
+                        </div>
+
+                        <div>
+
+                            <script>
+                                $("#verifyCodeingTranGardeshPrint").click(function () {
+                                    var M22 = $("#M22").val();
+                                    var M33 = $("#M33").val();
+                                    var M44 = $("#M44").val();
+                                    var M55 = $("#M55").val();
+                                    var finalText = "";
+                                    var m2text = $("#M22 option:selected").text();
+                                    var m3text = $("#M33 option:selected").text();
+                                    var m4text = $("#M44 option:selected").text();
+                                    var m5text = $("#M55 option:selected").text();
+                                    var trafText = $("#GTaraf option:selected").text();
+
+                                    if (m2text != "انتخاب کل") {
+                                        finalText += m2text + "_ ";
+                                    }
+                                    if (m3text != "انتخاب معین") {
+                                        finalText += m3text + "_  ";
+                                    }
+                                    if (m4text != "انتخاب تفصیلی") {
+                                        finalText += m4text + "_   ";
+                                    }
+                                    if (m5text != "انتخاب تفصیلی 2") {
+                                        finalText += m5text + "_    ";
+                                    }
+                                    if (trafText != "انتخاب طرف حساب") {
+                                        finalText += trafText + "_     ";
+                                    }
+
+
+
+
+
+                                    var datefrom = $("#gardeshFrom").val();
+                                    var dateTo = $("#gardeshTo").val();
+                                    var datefromtxt = $("#gardeshFrom").val();
+                                    var dateTotxt = $("#gardeshTo").val();
+                                    var transactionType = $("#trantype").val();
+                                    var GTaraf = $("#GTaraf").val();
+                                    var GNode = "1"; // $("#GNode").val();
+                                    var type = $("#trantype").val();
+                                    var project = $("#GNode  option:selected").text();
+
+
+                                    var url = "/Core/getCodingTranListPrint?dateTotxt=" + dateTotxt + "&dateFromtxt=" + datefromtxt + "&M22=" + M22 + "&trafText=" + trafText + "&sharhdescription=" + finalText + "&project=" + project + "&M33=" + M33 + "&M44=" + M44 + "&M55=" + M55 + "&datefrom=" + datefrom + "&dateTo=" + dateTo + "&transactionType=" + transactionType + "&GTaraf=" + GTaraf + "&GNode=" + GNode + "&type=" + type;
+                                    window.open(
+                                        url, '_blank' // <- This is what makes it open in a new window.
+                                    );
+
+
+                                });
+                                $("#verifyCodeingTranGardesh").click(function () {
+
+
+                                    $.ajax({
+                                        url: 'getCodingTranList',
+                                        dataType: 'html',
+                                        data: {
+                                            M22: $("#M22").val(),
+                                            M33: $("#M33").val(),
+                                            M44: $("#M44").val(),
+                                            M55: $("#M55").val(),
+                                            datefrom: $(".PDabserver").val(),
+                                            dateTo: $(".PD2abserver").val(),
+                                            transactionType: $("#trantype").val(),
+                                            GTaraf: $("#GTaraf").val(),
+                                            GNode: $("#GNode").val(),
+                                            type: $("#trantype").val(),
+
+                                        },
+                                        success: function (data) {
+
+                                            $("#TrasactionListHolder").html(data)
+                                        }
+                                    })
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <script>
+
+                var doParents = function (el) {
+
+                    var parent = el.attr('parentValue')
+
+                    if (parent != "") {
+                        var selement = $('option[itemvalue="' + parent + '"]');
+                        doParents(selement)
+                    }
+                    el.parent().val(el.val());
+
+
+
+                };
+
+                $('#handMadeCode').keyup(function (e) {
+                    if (this.value == "") {
+                        $('option').each(function () {
+                            $(this).removeAttr("selected");
+                        })
+                    }
+                    if (e.keyCode == 13) {
+
+
+                        var id = $(this).val();
+
+                        var element = $('option[value="' + id + '"]');
+                        doParents(element);
+
+                    }
+                })
+                $("#getTransactoin").click(function () {
+
+                })
+                $("#M22").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+
+                    // console.log(id)
+                    $("#M33 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+                    $("#M44 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        $(this).hide();
+                    });
+                })
+                $("#M33").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+                    console.log(id)
+                    $("#M44 option").each(function () {
+
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+
+
+                })
+                $("#M44").change(function () {
+                    var id = $('option:selected', this).attr('itemvalue');
+                    console.log(id)
+                    $("#M55 option").each(function () {
+                        var val = $(this).val();
+                        if (val == "0") {
+                            $(this).prop('selected', true);
+                        }
+                        else {
+                            $(this).prop('selected', false);
+                        }
+                        var optionid = $(this).attr('parentValue');
+                        if (optionid != id) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    })
+                });
+
+            </script>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Transaction List</h5>
+                        </div>
+                        <div id="TrasactionListHolder" class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*<div>
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-R1-tab" data-bs-toggle="tab" data-bs-target="#nav-R1" type="button" role="tab" aria-controls="nav-R1" aria-selected="true">Turnover</button>
+                            <button class="nav-link" id="nav-R2-tab" data-bs-toggle="tab" data-bs-target="#nav-R2" type="button" role="tab" aria-controls="nav-R2" aria-selected="false">Trial balance</button>
+                            <button class="nav-link" id="nav-R3-tab" data-bs-toggle="tab" data-bs-target="#nav-R3" type="button" role="tab" aria-controls="nav-R3" aria-selected="false">Product Report</button>
+                            <button class="nav-link" id="nav-R4-tab" data-bs-toggle="tab" data-bs-target="#nav-R4" type="button" role="tab" aria-controls="nav-R4" aria-selected="false">warehouse circulation</button>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-R1" role="tabpanel" aria-labelledby="nav-R1-tab">
+
+                        </div>
+                        <div class="tab-pane fade show " id="nav-R2" role="tabpanel" aria-labelledby="nav-R2-tab">
+
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+
+
+                                <div style="display:flex; align-items:center">
+
+                                    <div class=" " style="width:100% ; margin:10px">
+                                        @{
+                                            <select name="M111" id="M111" class="form-control">
+                                                <option value="0">انتخاب گروه</option>
+                                                @foreach (var item in M1)
+                                                {
+                                                    <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+                                    <div class=" " style="width:100% ; margin:10px">
+                                        @{
+                                            <select name="M222" id="M222" class="form-control">
+                                                <option value="0">انتخاب کل</option>
+                                                @foreach (var item in M2)
+                                                {
+                                                    <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+                                    <div class=" " style="width:100% ; margin:10px">
+                                        @{
+                                            <select name="M333" id="M333" class="form-control">
+                                                <option value="0">انتخاب معین</option>
+                                                @foreach (var item in M3)
+                                                {
+                                                    <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+
+                                    <div class=" " style="width:100% ; margin:10px">
+                                        @{
+                                            <select name="M444" id="M444" class="form-control">
+                                                <option value="0">انتخاب تفصیلی</option>
+                                                @foreach (var item in M4)
+                                                {
+                                                    <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+                                    <div class=" " style="width:100% ; margin:10px">
+
+                                        @{
+                                            <select name="M555" id="M555" class="form-control">
+                                                <option value="0">انتخاب تفصیلی 2</option>
+                                                @foreach (var item in M5)
+                                                {
+                                                    <option parentValue="@item.parentID" value="@item.codeHesab" itemvalue="@item.ID">@item.title</option>
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                                <div style="display:flex">
+
+
+
+                                    <div style="margin:10px;width:100%" id="dateHolder">
+                                        <p>از تاریخ :</p>
+                                        <input id="tgardeshFrom" type="text" class="form-control  inputfield" />
+                                        <input class="tPDabserver" style="display:none" />
+                                    </div>
+                                    <div style="margin:10px;width:100%" id="dateHolder2">
+                                        <p>تا تاریخ :</p>
+                                        <input id="tgardeshTo" type="text" class="form-control  inputfield" />
+                                        <input class="tPD2abserver" style="display:none" />
+
+                                    </div>
+
+                                    <div style="margin:10px;width:100%">
+                                        <p>Account Side :</p>
+                                        <select name="TTaraf" id="TTaraf" class="form-control">
+
+
+                                            <option value="0">Choose Account Side</option>
+                                            @if (Model.tarafList != null)
+                                            {
+                                                foreach (var item in Model.tarafList)
+                                                {
+                                                    string name = item.name + " - " + item.phone;
+                                                    <option value="@item.code">@name </option>
+                                                }
+                                            }
+
+
+                                        </select>
+                                    </div>
+                                    <div style="margin:10px;width:100%">
+                                        <p>پروژه :</p>
+                                        <select name="TNode" id="TNode" class="form-control">
+
+                                            @if (Model.nodeList != null)
+                                            {
+                                                foreach (var item in Model.nodeList)
+                                                {
+                                                    <option value="@item.ID">@item.title </option>
+                                                }
+                                            }
+
+
+                                        </select>
+                                    </div>
+                                    <div class=" " style="width:100% ; margin:10px">
+                                        <p>سطح تراز :</p>
+                                        @{
+                                            <select name="baseReport" id="baseReport" class="form-control">
+                                                <option value="1">تراز آزمایشی در سطح گروه</option>
+                                                <option value="2">تراز آزمایشی در سطح کل</option>
+                                                <option value="3">تراز آزمایشی در سطح معین</option>
+                                                <option value="4">تراز آزمایشی در سطح تفصیل 1</option>
+                                                <option value="5">تراز آزمایشی در سطح تفصیل 2</option>
+                                            </select>
+                                        }
+
+                                    </div>
+
+
+                                </div>
+                                <div style="display:flex">
+
+
+                                    <div style="margin:10px;width:100%; display: flex; align-items:center">
+                                        <div style="position:relative; margin:5px" id="">
+                                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTraz">مشاهده</div>
+                                        </div>
+                                        <div style="position:relative; margin:5px" id="">
+                                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTrazPrint">چاپ</div>
+                                        </div>
+                                    </div>
+                                    <div style="margin:10px;width:100%"></div>
+                                    <div style="margin:10px;width:100%"></div>
+                                </div>
+
+                                <div>
+
+                                    <script>
+
+
+                                        $("#verifyCodeingTrazPrint").click(function () {
+
+                                            var finalText = "";
+
+                                            var m5text = $("#M555  option:selected").text();
+                                            var m4text = $("#M444  option:selected").text();
+                                            var m3text = $("#M333 option:selected").text();
+                                            var m2text = $("#M222  option:selected").text();
+                                            var trafText = $("#TTaraf option:selected").text();
+                                            if (m5text != "انتخاب تفصیلی 2") {
+                                                finalText = " تراز آزمایشی در سطح تفصیل 2 " + m5text;
+                                            }
+                                            else {
+                                                finalText = $("#baseReport option:selected").text();
+                                            }
+                                            if (m4text != "انتخاب تفصیلی") {
+                                                finalText = "تراز آزمایشی در سطح تفصیل  " + m4text;
+                                            }
+                                            else {
+                                                finalText = $("#baseReport option:selected").text();
+                                            }
+                                            if (m3text != "انتخاب معین") {
+                                                finalText = "تراز آزمایشی در سطح معین  " + m3text;
+                                            }
+                                            else {
+                                                finalText = $("#baseReport option:selected").text();
+                                            }
+                                            if (m2text != "انتخاب کل") {
+                                                finalText = "تراز آزمایشی در سطح کل  " + m3text;
+                                            }
+                                            else {
+                                                finalText = $("#baseReport option:selected").text();
+                                            }
+
+
+                                            if (trafText != "انتخاب طرف حساب") {
+                                                finalText += trafText + "_     ";
+                                            }
+
+
+                                            var baseReport = $("#baseReport").val();
+                                            var M111 = $("#M111").val();
+                                            var M222 = $("#M222").val();
+                                            var M333 = $("#M333").val();
+                                            var M444 = $("#M444").val();
+                                            var M555 = $("#M555").val();
+                                            var dateFrom = $(".tPDabserver").val();
+                                            var dateTo = $(".tPD2abserver").val();
+                                            var TTaraf = $("#TTaraf").val();
+                                            var TNode = $("#TNode").val();
+                                            var datefromtxt = $("#tgardeshFrom").val();
+                                            var dateTotxt = $("#tgardeshTo").val();
+                                            var project = "1";// $("#TNode  option:selected").text();
+                                            var columnCount = $("#columnCount").val();
+
+
+                                            var url = "/Core/getCodingTrazListPring?dateTotxt=" + dateTotxt + "&columnCount=" + columnCount + "&baseReport=" + baseReport + "&dateFromtxt=" + datefromtxt + "&M111=" + M111 + "&M222=" + M222 + "&sharhdescription=" + finalText + "&project=" + project + "&M333=" + M333 + "&M444=" + M444 + "&M555=" + M555 + "&datefrom=" + dateFrom + "&dateTo=" + dateTo + "&TTaraf=" + TTaraf + "&TNode=" + TNode + "&project=" + project;
+                                            window.open(
+                                                url, '_blank' // <- This is what makes it open in a new window.
+                                            );
+
+
+                                        });
+                                        $("#verifyCodeingTraz").click(function () {
+
+
+                                            $("#columnCount").val("2");
+                                            $.ajax({
+                                                url: 'getCodingTrazList',
+                                                dataType: 'html',
+                                                data: {
+                                                    baseReport: $("#baseReport").val(),
+                                                    M111: $("#M111").val(),
+                                                    M222: $("#M222").val(),
+                                                    M333: $("#M333").val(),
+                                                    M444: $("#M444").val(),
+                                                    M555: $("#M555").val(),
+                                                    dateFrom: $(".tPDabserver").val(),
+                                                    dateTo: $(".tPD2abserver").val(),
+                                                    TTaraf: $("#TTaraf").val(),
+                                                    TNode: $("#TNode").val(),
+                                                },
+                                                success: function (data) {
+
+                                                    $("#TrazListHolder").html(data)
+                                                }
+                                            })
+                                        })
+                                    </script>
+                                </div>
+                                <div class="row">
+                                    <div class="row">
+                                        <div style="margin:10px;">
+
+                                            <select name="columnCount" id="columnCount" class="form-control">
+                                                <option class="2soton" value="2">دو ستون</option>
+                                                <option class="4soton" value="4">چهار ستون</option>
+                                                <option class="6soton" value="6">شش ستون</option>
+
+
+
+                                            </select>
+                                        </div>
+                                        <script>
+                                            $("#baseReport").change(function () {
+                                                $("#M111").val("0");
+                                                $("#M222").val("0");
+                                                $("#M333").val("0");
+                                                $("#M444").val("0");
+                                                $("#M555").val("0");
+                                            })
+                                            $("#columnCount").change(function () {
+                                                var value = $(this).val();
+                                                if (value == 2) {
+                                                    $(".ga").hide()
+                                                    $(".ef").hide()
+                                                    $(".ma").show();
+
+                                                } else if (value == 4) {
+                                                    $(".ga").show();
+                                                    $(".ef").hide();
+                                                    $(".ma").show();
+                                                }
+                                                else if (value == 6) {
+                                                    $(".ga").show();
+                                                    $(".ef").show();
+                                                    $(".ma").show();
+                                                }
+
+
+                                            })
+                                        </script>
+                                        <style>
+                                            .ga {
+                                                display: none;
+                                            }
+
+                                            .ef {
+                                                display: none;
+                                            }
+                                        </style>
+                                        <div id="TrazListHolder">
+                                            <div style="overflow-x:auto;padding:10px">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+            background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+            background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+            background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+
+                                                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> تراز آزمایشی </h3>
+                                                    </div>
+                                                    <div class="panel-body">
+
+                                                        <div id="morris-area-chart">
+                                                            <div style="overflow:auto">
+                                                                <table class="table table-bordered table-hover table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th colspan="2">
+                                                                            </th>
+                                                                            <th class=" ef" colspan="2">
+                                                                                افتتاحیه
+                                                                            </th>
+                                                                            <th class="ga" colspan="2">
+                                                                                گردش
+                                                                            </th>
+                                                                            <th class="ma" colspan="2">
+                                                                                مانده
+                                                                            </th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>
+                                                                                ردیف
+
+                                                                            </th>
+                                                                            <th>
+                                                                                شرح
+                                                                            </th>
+                                                                            <th class="ef">
+                                                                                بد
+                                                                            </th>
+                                                                            <th class="ef">
+                                                                                بس
+                                                                            </th>
+                                                                            <th class="ga">
+                                                                                بد
+                                                                            </th>
+                                                                            <th class="ga">
+                                                                                بس
+                                                                            </th>
+                                                                            <th class="ma">
+                                                                                بد
+                                                                            </th>
+                                                                            <th class="ma">
+                                                                                بس
+                                                                            </th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+
+
+
+                                                                    <tbody id="tarazHolder">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                $("#getTransactoin").click(function () {
+
+                                })
+                                $("#M222").change(function () {
+                                    var id = $('option:selected', this).attr('itemvalue');
+                                    // console.log(id)
+                                    $("#M333 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                    $("#M44 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        $(this).hide();
+                                    });
+                                })
+                                $("#M333").change(function () {
+
+                                    var id = $('option:selected', this).attr('itemvalue');
+
+                                    $("#M444 option").each(function () {
+
+
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+
+
+                                })
+                                $("#M444").change(function () {
+                                    var id = $('option:selected', this).attr('itemvalue');
+
+                                    $("#M555 option").each(function () {
+                                        var val = $(this).val();
+                                        if (val == "0") {
+                                            $(this).prop('selected', true);
+                                        }
+                                        else {
+                                            $(this).prop('selected', false);
+                                        }
+                                        var optionid = $(this).attr('parentValue');
+                                        if (optionid != id) {
+                                            $(this).hide();
+                                        }
+                                        else {
+                                            $(this).show();
+                                        }
+                                    })
+                                });
+
+                            </script>
+
+                        </div>
+                        <div class="tab-pane fade show " id="nav-R3" role="tabpanel" aria-labelledby="nav-R3-tab">
+                            <div style="display:flex">
+                                <div style="margin:10px;width:50%">
+                                    <p>پروژه :</p>
+                                    <select name="TNode" id="productChoosNode" class="form-control">
+
+                                        @if (Model.nodeList != null)
+                                        {
+                                            foreach (var item in Model.nodeList)
+                                            {
+                                                <option value="@item.ID">@item.title </option>
+                                            }
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div style="margin:10px;width:100%" id="autoProduct2">
+                                    <p> محصول :</p>
+                                    <input type="text" class="form-control  inputfield" id="addItemToOrderInput2" />
+                                    <input id="IDholder2" hidden />
+
+
+                                </div>
+                                <div style="margin:10px;width:50%" id="">
+                                    <div class="btn btn-success" id="getProductHistory" style="margin-top:30px">تایید</div>
+
+                                </div>
+                            </div>
+
+                            <div id="productHistorySection"></div>
+                        </div>
+                        <div class="tab-pane fade show " id="nav-R4" role="tabpanel" aria-labelledby="nav-R4-tab">
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                                <div style="display:flex">
+
+
+
+                                    <div style="margin:10px;width:100%" id="dateHolder">
+                                        <p>از تاریخ :</p>
+                                        <input id="tgardeshFrom" type="text" class="form-control anbardateFrom inputfield" />
+                                        <input class="anbardateFromOB" style="display:none" />
+                                    </div>
+                                    <div style="margin:10px;width:100%" id="dateHolder2">
+                                        <p>تا تاریخ :</p>
+                                        <input id="tgardeshTo" type="text" class="form-control anbardateTo inputfield" />
+                                        <input class="anbardateToOB" style="display:none" />
+
+                                    </div>
+
+
+
+
+                                </div>
+                                <div style="display:flex">
+                                    <div style="margin:10px;width:100%">
+                                        <p>پروژه :</p>
+                                        <select name="anbarNode" id="anbarNode" class="form-control">
+
+                                            @if (Model.nodeList != null)
+                                            {
+                                                foreach (var item in Model.nodeList)
+                                                {
+                                                    <option value="@item.ID">@item.title </option>
+                                                }
+                                            }
+
+
+                                        </select>
+                                    </div>
+
+                                    <div style="margin:10px;width:100%" id="autoProduct3">
+                                        <p> محصول :</p>
+                                        <input type="text" class="form-control  inputfield" id="addItemToOrderInput3" />
+                                        <input id="IDholder3" hidden />
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+
+
+                                <div style="margin:10px;width:50%" id="autoProduct2">
+                                    <div class="btn btn-success" id="getProductKardex" style="margin-top:30px">تایید</div>
+                                </div>
+                            </div>
+
+                            <div id="kardexKala"></div>
+                        </div>
+
+                    </div>
+                </div>*@
+    </div>
+    <div class="tab-pane fade show " id="nav-coding" role="tabpanel" aria-labelledby="nav-coding-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="modal fade" id="delAccountModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="delAccountForm" action="DelAccount" method="post">
+                                        <input id="deleteID" name="deleteID" hidden />
+                                        <div class="modal-body">
+                                            <p>Are You Sure Deleting this Item</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button i type="button" class="btn btn-primary" id="modalDelVerify">Verify</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="createAccount" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="accountForm" action="setNewAccount" method="post">
+                                        <input name="typeID" hidden id="typeID" />
+                                        <input name="parentID" hidden id="parentID" />
+
+                                        <div class="formsection main1" style="display:none">
+                                            <div class="modal-body">
+                                                <div style="display:flex">
+                                                    <div style="margin:5px">
+                                                        <p id="codingTitle"></p>
+                                                        <input id="codeTitle" name="codeTitle" class="form-control" />
+                                                    </div>
+                                                    <div style="margin:5px">
+                                                        <p>Code </p>
+                                                        <input id="codeHesab" name="codeHesab" class="form-control" />
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" id="addAccountVerify">Verify</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <script>
+                                        $("#addAccountVerify").click(function () {
+
+
+                                            var typeID = $("#typeID").val();
+
+
+                                            if (typeID == "1") {
+                                                var title = $("#daramadTitle").val();
+
+                                                if (title == "") {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error('Fill All Fields')
+                                                }
+                                                else {
+                                                    $("#accountForm").submit();
+                                                }
+                                            }
+                                            else if (typeID == "2") {
+                                                var title = $("#hazineTitle").val();
+                                                if (title == "") {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error('Fill All Fields')
+                                                }
+                                                else {
+                                                    $("#accountForm").submit();
+                                                }
+                                            }
+                                            else if (typeID == "3") {
+                                                var title = $("#sandoghTitle").val();
+                                                if (title == "") {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error('Fill All Fields')
+                                                }
+                                                else {
+                                                    $("#accountForm").submit();
+                                                }
+                                            }
+                                            else if (typeID == "4") {
+                                                var title = $("#bankTitle").val();
+                                                var shobe = $("#bankshobe").val();
+                                                var shomare = $("#bankShomare").val();
+                                                if (title == "" || shobe == "" || shomare == "") {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error('Fill All Fields')
+                                                }
+                                                else {
+                                                    $("#accountForm").submit();
+                                                }
+                                            }
+                                            else {
+                                                var title = $("#daramadTitle").val();
+
+                                                if (title == "") {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error('Fill All Fields')
+                                                }
+                                                else {
+                                                    $("#accountForm").submit();
+                                                }
+                                            }
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row" style="background-color:white; padding:10px; margin:0px;">
+                            <div class="row">
+                                <div id="Listholder" style="overflow-y:scroll">
+                                    <div class="panel-body">
+                                        <div id="morris-area-chart">
+                                            <div style="overflow:auto">
+
+                                                <table id="table_id" class="table role-table all-package theme-table dataTable no-footer">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Coding</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Group</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Koll</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Moin</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Tafsil</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Tafsil2</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Remove Level</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Add Sublevel</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">View Sublevel</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        @if (Model.CodingList != null)
+                                                        {
+
+                                                            List<banimo.ViewModel.CodingList> groupList = Model.CodingList.Where(x => x.codingType == "1").ToList();
+                                                            foreach (var group in groupList)
+                                                            {
+                                                                string groupclassname = "group" + group.ID;
+                                                                List<banimo.ViewModel.CodingList> kollList = Model.CodingList.Where(x => x.parentID == group.ID.ToString()).ToList();
+                                                                <tr style="background-color:#f9f9f9; ">
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => group.codeHesab)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => group.title)
+                                                                    </td>
+                                                                    <td>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+
+
+                                                                    <td style="text-align: center;">
+                                                                        @if (kollList.Count() == 0)
+                                                                        {
+                                                                            <a id=@group.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>
+                                                                        <a myparent="@group.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add level1</a>
+
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (kollList.Count() != 0)
+                                                                        {
+                                                                            <a myparent="@group.ID" mytype="1" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level1 list</a>
+
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                foreach (var koll in kollList)
+                                                                {
+                                                                    string kollclassname = "koll" + koll.ID;
+                                                                    List<banimo.ViewModel.CodingList> moinList = Model.CodingList.Where(x => x.parentID == koll.ID.ToString()).ToList();
+                                                                    <tr class="@groupclassname" style="background-color:#f5cbcb;">
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => koll.codeHesab)
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => koll.title)
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+
+                                                                        <td style="text-align: center;">
+                                                                            @if (moinList.Count() == 0)
+                                                                            {
+                                                                                <a id=@koll.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <a myparent="@koll.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level 2</a>
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (moinList.Count() != 0)
+                                                                            {
+                                                                                <a myparent="@koll.ID" mytype="2" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 2 list</a>
+
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                    foreach (var moin in moinList)
+                                                                    {
+                                                                        string moinclassname = "moin" + moin.ID;
+                                                                        List<banimo.ViewModel.CodingList> tafsilList = Model.CodingList.Where(x => x.parentID == moin.ID.ToString()).Distinct().ToList();
+
+                                                                        <tr class="@kollclassname" style=" background-color:#88e5f2">
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => moin.codeHesab)
+                                                                            </td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => moin.title)
+                                                                            </td>
+                                                                            <td></td>
+                                                                            <td></td>
+
+                                                                            <td style="text-align: center;">
+                                                                                @if (tafsilList.Count() == 0)
+                                                                                {
+                                                                                    <a id=@moin.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+
+                                                                                }
+
+                                                                            </td>
+                                                                            <td>
+                                                                                <a myparent="@moin.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level3</a>
+
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (tafsilList.Count() != 0)
+                                                                                {
+                                                                                    <a myparent="@moin.ID" mytype="3" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 3 List</a>
+
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                        foreach (var tafsil in tafsilList)
+                                                                        {
+                                                                            string tafsilclassname = "tafsil" + tafsil.ID;
+                                                                            List<banimo.ViewModel.CodingList> tafsil2List = Model.CodingList.Where(x => x.parentID == tafsil.ID.ToString()).OrderBy(x => x.ID).ToList();
+
+
+                                                                            <tr class="@moinclassname" style=" background-color:#b57ccc">
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => tafsil.codeHesab)
+                                                                                </td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => tafsil.title)
+                                                                                </td>
+                                                                                <td></td>
+
+                                                                                <td style="text-align: center;">
+                                                                                    @if (tafsil2List.Count() == 0)
+                                                                                    {
+                                                                                        <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+
+                                                                                    }
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a myparent="@tafsil.ID" mytype="5" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level 4 </a>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (tafsil2List.Count() != 0)
+                                                                                    {
+                                                                                        <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 4 List</a>
+
+                                                                                    }
+                                                                                </td>
+                                                                            </tr>
+                                                                            foreach (var tafsil2 in tafsil2List)
+                                                                            {
+                                                                                string tafsil2classname = "tafsil2" + tafsil.ID;
+                                                                                <tr class="@tafsil2classname" style=" background-color:#e88baa">
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(modelItem => tafsil2.codeHesab)
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(modelItem => tafsil2.title)
+                                                                                    </td>
+
+                                                                                    <td style="text-align: center;">
+                                                                                        <a id=@tafsil2.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                            }
+
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+                                                        <tr class="odd">
+                                                            <td>1</td>
+                                                            <td>Dummy</td>
+                                                            <td>3 weeks ago</td>
+                                                            <td>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </a>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="even">
+                                                            <td>2</td>
+                                                            <td>Self</td>
+                                                            <td>3 weeks ago</td>
+                                                            <td>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </a>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="odd">
+                                                            <td>3</td>
+                                                            <td>Dummy</td>
+                                                            <td>3 weeks ago</td>
+                                                            <td>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </a>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="even">
+                                                            <td>4</td>
+                                                            <td>Author</td>
+                                                            <td>3 weeks ago</td>
+                                                            <td>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </a>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/persian-date.js"></script>
+<script src="~/Scripts/persian-datepicker.js"></script>
+<script src="~/Scripts/html2canvas.min.js"></script>
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+<script>
+    $("#getProductKardex").click(function () {
+        var nodeID = $("#anbarNode").val();
+        var prID = $("#IDholder3").val();
+        var dateFrom = $(".anbardateFromOB").val();
+        var dateTo = $(".anbardateToOB").val();
+        $.ajax({
+            url: '/Core/getProductKardex',
+            dataType: 'html',
+            data: {
+                prID: prID,
+                nodeID: nodeID,
+                dateFrom: dateFrom,
+                dateTo: dateTo
+            },
+            success: function (data) {
+
+                $("#kardexKala").html(data);
+
+            }
+
+        })
+    })
+    $("#getProductHistory").click(function () {
+        var nodeID = $("#productChoosNode").val();
+        var prID = $("#IDholder2").val();
+        $.ajax({
+            url: '/Core/getProductHistory',
+            dataType: 'html',
+            data: {
+                prID: prID,
+                nodeID: nodeID
+            },
+            success: function (data) {
+
+                $("#productHistorySection").html(data);
+
+
+            }
+
+        })
+    })
+</script>
+<script>
+    var takePic = function () {
+        $(". ").each(function () {
+
+            var id = "#" + this.id;
+            var ele = document.getElementById(this.id);
+            html2canvas(ele).then(canvas => {
+
+                var r = new XMLHttpRequest();
+                r.open("POST", "/Core/SaveImage", true);
+                r.onreadystatechange = function () {
+                    if (r.readyState != 4 || r.status != 200) {
+                        return;
+                    }
+                    else {
+                        window.location.href = "/Home/PrintALl";
+                    }
+
+                };
+                var p = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+
+                if (p != "data:,") {
+
+                    p = id + "*" + p;
+                    r.send(p);
+                }
+
+
+                //window.location.href = image; // it will save locally
+                //document.body.appendChild(canvas)
+            });
+
+
+        });
+    };
+    //takePic();
+</script>
+<script>
+
+    $(function () {
+
+        $(".addSanaddatePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.addSanadData',
+            autoClose: true
+
+            // minDate: new persianDate().add('day', 2).valueOf(),
+            // options & callbacks here
+        });
+        $(".FromdatePicker2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.Fromabserver2',
+            autoClose: true
+        });
+        $(".FromdatePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.Fromabserver',
+            autoClose: true
+        });
+        $(".TodatePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.Toabserver',
+            autoClose: true
+        });
+        $(".projectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PD2abserver',
+            autoClose: true
+        });
+        $(".projectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver',
+            autoClose: true
+        });
+        $(".tprojectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.tPD2abserver',
+            autoClose: true
+        });
+        $(".tprojectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.tPDabserver',
+            autoClose: true
+        });
+
+
+        $(".anbardateFrom").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.anbardateFromOB',
+            autoClose: true
+        });
+        $(".anbardateTo").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.anbardateToOB',
+            autoClose: true
+        });
+
+    });
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+<script>
+    $('input.inputnumber').keyup(function (event) {
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
+</script>
+<script>
+    $(".Dbutton").click(function () {
+        var ID = $(this).attr('id');
+        $("#deleteID").val(ID);
+        $("#delAccountModal").modal('toggle')
+    })
+    $("#modalDelVerify").click(function () {
+        var title = $("#daramadTitle").val();
+
+
+        $("#delAccountForm").submit();
+    })
+    $(".openacount").click(function () {
+        var parnetID = $(this).attr('myparent');
+        var codingType = $(this).attr('mytype');
+        switch (codingType) {
+            case ("0"):
+                var title = "variTafsil" + parnetID;
+                break;
+            case ("1"):
+                var title = "group" + parnetID;
+                break;
+            case ("2"):
+                var title = "koll" + parnetID;
+                break;
+            case ("3"):
+                var title = "moin" + parnetID;
+                break;
+            case ("4"):
+                var title = "tafsil" + parnetID;
+                break;
+            case ("5"):
+                var title = "tafsil2" + parnetID;
+                break;
+            case ("6"):
+                var title = "varitafsil" + parnetID;
+                break;
+
+        }
+
+        $("." + title).each(function () {
+            if ($(this).is(":visible")) {
+                $(this).fadeOut();
+            }
+            else {
+                $(this).fadeIn();
+            }
+
+        })
+    })
+    $(".addacount").click(function () {
+
+
+        var codingType = $(this).attr('mytype');
+
+        switch (codingType) {
+            case ("0"):
+                var title = "عنوان تفصیل متغیر";
+                break;
+            case ("1"):
+                var title = "";
+                break;
+            case ("2"):
+                var title = "نام کل جدید";
+                break;
+            case ("3"):
+                var title = "نام معین جدید";
+                break;
+            case ("4"):
+                var title = "نام تفصیلی جدید";
+                break;
+            case ("5"):
+                var title = "نام تفصیلی 2 جدید";
+                break;
+            case ("6"):
+                var title = "عنوان جزئیات تفصیل";
+                break;
+
+        }
+        $("#codingTitle").text(title);
+        $("#typeID").val(codingType);
+        $("#parentID").val($(this).attr('myparent'));
+        $(".formsection").css("display", "none");
+        $(".main1").css("display", "inline-block");
+        $("#createAccount").modal('toggle');
+    })
+</script>
+
+<script>
+    $("#verifynewArticle").click(function () {
+
+        var frm = $("#fromADD").val();
+
+
+
+        var type = $("#Rtype").val();
+        var M1 = $("#M1").find(':selected').attr('code');
+        var M2 = $("#M2").find(':selected').attr('code');
+        var M3 = $("#M3").find(':selected').attr('code');
+        var M4 = $("#M4").find(':selected').attr('code');
+        var M5 = $("#M5").find(':selected').attr('code');
+        var price = $("#price").val().replace(',', '');
+        var description = $("#description").val();
+        var recietID = $("#recietID").val();
+        var articleID = $("#articleID").val();
+        var RTaraf = $("#RTaraf").val();
+        var RNode = $("#RNode").val();
+
+
+        $.ajax({
+            url: "/Core/addCodingTransaction",
+            dataType: "",
+            data: {
+
+                M2: M2,
+                M3: M3,
+                M4: M4,
+                M5: M5,
+                price: price,
+                description: description,
+                recietID: recietID,
+                type: type,
+                RTaraf: RTaraf,
+                nodeID: RNode,
+                articleID: articleID
+            },
+            success: function (data) {
+                var type;
+                if (frm != "add") {
+                    type = 1
+                }
+                else {
+                    $("#EditarticleHolder").html(data);
+                }
+                if (data == "200") {
+                    $("#M2").val('0');
+                    $("#M3").val('0');
+                    $("#M4").val('0');
+                    $("#M5").val('0');
+                    $("#Rtype").val('');
+                    $("#RTaraf").val('0');
+
+
+                    $("#M12").val('0');
+                    $("#M13").val('0');
+                    $("#M14").val('0');
+                    $("#price").val('');
+                    $("#description").val('');
+                    $("#abserver").val('');
+
+
+
+                    $.ajax({
+                        url: '/Core/getRecietArticle',
+                        dataType: 'html',
+                        data: {
+                            id: recietID,
+                            type: type
+                        },
+                        success: function (data) {
+
+                            if (frm == "add") {
+                                $("#newRecietArticle").html(data);
+                            }
+                            else {
+                                $("#EditarticleHolder").html(data);
+                            }
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+
+
+                    }
+                    toastr.success('سند شما با موفقیت ثبت شد')
+                }
+                //window.location.reload();
+            }
+        })
+    })
+</script>
+<script>
+    $("#autoProduct").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        if (value.length == 0) {
+            $("#IDholder").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+    $("#autoProduct2").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput2").val();
+        if (value.length == 0) {
+            $("#IDholder2").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#productChoosNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput2").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput2").getSelectedItemData().ID;
+                                $("#IDholder2").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput2").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput2").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+
+    $("#autoProduct3").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput3").val();
+        if (value.length == 0) {
+            $("#IDholder3").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var nodeID = $("#anbarNode").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput3").val(),
+                    chNodeID: nodeID
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput3").getSelectedItemData().ID;
+                                $("#IDholder3").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput3").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput3").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2();
+    });
+</script>

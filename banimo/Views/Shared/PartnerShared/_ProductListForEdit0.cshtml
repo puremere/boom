@@ -1,0 +1,921 @@
+﻿@model banimo.AdminPanelBoom.ViewModel.oderdetaillistNew
+@using Newtonsoft.Json;
+@*@model PagedList.IPagedList<AdminPanelBoom.ViewModel.orderdetail>*@
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "لیست محصولات";
+}
+
+
+@*@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }*@
+@{
+
+
+    <!-- Modal -->
+    <p style="display:none" id="modalValue"></p>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Admin/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addItemCountModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="addCountLable"></p>
+                    <div style="display:flex">
+                        <input id="ProductSelectedID" style="display:none" />
+
+                        <div style="margin:5px;">
+                            <p id="modalmessage">قیمت خرید</p>
+                            <input id="addprice" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">تعداد</p>
+                            <input id="addcount" class="form-control" value="1" />
+                        </div>
+                        @*<div style="margin:5px;">
+                            <p id="modalmessage">امانی</p>
+                            <input id="addamani" type="checkbox" class="form-control" />
+                        </div>*@
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
+                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                    <script>
+                        $("#confirmAddItemCount").click(function () {
+                            $("#myModal").modal('hide');
+                            var amani = "";
+                            if ($("#addamani").is(':checked')) {
+                                amani = "1";
+                            }
+                            else {
+                                amani = "0";
+                            }
+                            var price = $("#addprice").val();
+                            var count = $("#addcount").val();
+                            var ID = $("#ProductSelectedID").val();
+                           
+                            $.ajax({
+                                url: '/Partner/SetNewFactorFromSail',
+                                dataType: 'html',
+                                data: {
+                                    amani: amani,
+                                    price: price,
+                                    count: count,
+                                    ID: ID,
+                                   
+
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        window.location.reload();
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="returnItemCountModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="returnCountLable"></p>
+                    <div style="display:flex">
+                        <input id="ProductSelectedID0" style="display:none" />
+
+                        <div style="margin:5px;">
+                            <p id="modalmessage">قیمت خرید</p>
+                            <input id="returnprice" class="form-control" value="1" />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage">تعداد</p>
+                            <input id="returncount" class="form-control" value="1" />
+                        </div>
+                        @*<div style="margin:5px;">
+                            <p id="modalmessage">امانی</p>
+                            <input id="returnamani" type="checkbox" class="form-control" />
+                        </div>*@
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
+                    <button id="confirmReturnItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                    <script>
+                        $("#confirmReturnItemCount").click(function () {
+                            $("#returnItemCount").modal('hide');
+                            var amani = "";
+                            if ($("#returnamani").is(':checked')) {
+                                amani = "1";
+                            }
+                            else {
+                                amani = "0";
+                            }
+                            var price = $("#returnprice").val();
+                            var count = $("#returncount").val();
+                            var ID = $("#ProductSelectedID0").val();
+                            $.ajax({
+                                url: '/Partner/SetReturnFactorFromSail',
+                                dataType: 'html',
+                                data: {
+                                    amani: amani,
+                                    price: price,
+                                    count: count,
+                                    ID: ID
+
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        window.location.reload();
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="repeatOrder" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*<div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Modal Header</h4>
+                    </div>*@
+                <div class="modal-body">
+                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <script>
+                        $("#confirmdelete").click(function () {
+                            $("#myModal").modal('hide');
+                            var id = $("#modalValue").text();
+                            $.ajax({
+                                url: '/Admin/Delete',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('محصول مورد نظر حذف شد')
+                                        var value = $("#listofproduct").val();
+                                        var partner = $("#partnerList").val();
+                                        $.ajax({
+                                            url: '/Partner/GetTheListOfItems',
+                                            dataType: 'html',
+                                            data: {
+                                                value: value,
+                                                partner: partner
+                                            },
+                                            success: function (data) {
+
+                                                $('#listholder').html(data);
+                                                $('#listholder').css("display", "block");
+                                            },
+                                            error: function () {
+                                                alert("nashod")
+                                            }
+                                        });
+                                    }
+
+
+                                },
+                                error: function () {
+                                    alert("nashod")
+                                }
+                            });
+                        })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div> if (Model.data == null)
+    {
+        <p style="text-align:center">موردی وجود ندارد</p>
+    }
+    else
+    {
+
+        <style>
+
+            .imagelistholderEdit {
+                display: inline-block;
+                width: 65px;
+                padding: 5px;
+                border: 1px solid #eee;
+                box-shadow: 3px 3px #eee;
+                border-radius: 25px;
+                margin: 3px
+            }
+
+            .conEdit {
+                position: relative;
+                width: 100%;
+            }
+
+                /* Make the image responsive */
+                .conEdit img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 25px;
+                }
+
+                /* Style the button and place it in the middle of the container/image */
+                .conEdit .btn {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    -ms-transform: translate(-50%, -50%);
+                    background-color: #555;
+                    color: white;
+                    font-size: 8px;
+                    padding: 2px;
+                    border: none;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+
+            .con .btn:hover {
+                background-color: black;
+            }
+        </style>
+
+
+        <div class="row">
+            <div style="overflow-x:auto;padding:10px">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="">
+                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست محصولات </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-area-chart">
+                            <div style="overflow:auto">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                ID
+                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                                            </th>
+                                            <th>
+                                                عنوان
+                                            </th>
+                                            <th>
+                                                رنگ
+                                            </th>
+                                            <th>
+                                                شاخص
+                                            </th>
+                                            <th>
+
+                                                تعداد
+                                            </th>
+                                            <th>
+                                                قیمت قبل از تخفیف
+                                            </th>
+                                            <th>
+                                                قیمت بعد از تخفیف
+                                            </th>
+                                            <th>
+                                                تخفیف
+                                            </th>
+                                            <th>
+                                                فعال
+                                            </th>
+                                            <th>
+                                                موجود
+                                            </th>
+                                            @*<th>
+                                                پرفروش
+                                            </th>
+                                            <th>
+                                                پیشنهاد ویژه
+                                            </th>*@
+                                            <th></th>
+
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+
+
+                                    <tbody>
+
+                                        @foreach (var item in Model.data.OrderBy(x => x.color))
+                                        {
+                                            Int64 coWorkerPrice = 0;
+                                            if (!String.IsNullOrEmpty(item.meta) && item.meta != "null")
+                                            {
+                                                banimo.AdminPanelBoom.ViewModel.metaVM metamodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+                                                coWorkerPrice = metamodel.price;
+                                            }
+
+
+                                            string color = item.color;
+                                            <tr id="@item.ID">
+                                                <td style="display:none" class="metaHolder">@item.meta</td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ID)
+                                                </td>
+                                                <td class="titemHOlder">
+                                                    @Html.DisplayFor(modelItem => item.title)
+                                                </td>
+                                                <td>
+                                                    <div style="width:20px; height:20px ; border-radius:50%; background-color:@color; border:1px solid #ddd"><span>@color</span></div>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.selectedFilter)
+                                                </td>
+
+                                                <td id="@item.parentID" style="text-align: center; align-items:center; border:none">
+                                                    @{
+                                                        <p class=" addItemCount" style=" font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
+
+                                                        if (item.count == "-1")
+                                                        {
+                                                            <p style="color : green">موجود</p>
+                                                        }
+                                                        else if (item.count == "0")
+                                                        {
+                                                            <p style="color : red">نا موجود</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="">@Html.DisplayFor(modelItem => item.count)</p>
+
+                                                        }
+
+                                                        <p class=" minusItemCount" style=" font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+
+                                                        <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
+
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        @*<p>کاربر</p>*@
+                                                        <p class="quickEditInput">@item.oldPrice</p>
+                                                        <input style="display:none" value="@item.oldPrice" class="quickEditInput  quickPrice" />
+                                                    </div>
+                                                    @*<div>
+                                                            <p>همکار</p>
+                                                            <p class="quickEditInput  ">@string.Format("{0:n0}", @coWorkerPrice) </p>
+                                                            <input style="display:none" value="@coWorkerPrice" class="quickEditInput  quickFinalWorkerPrice" />
+                                                        </div>*@
+
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        @*<p>کاربر</p>*@
+                                                        <p class="quickEditInput  ">@item.price</p>
+                                                        <input style="display:none" value="@item.price" class="quickEditInput  quickFinalPrice" />
+                                                    </div>
+
+
+                                                </td>
+                                                <td>
+                                                    <p class="discountLable">@item.discount</p>
+                                                    @*<input style="display:none" value="@item.discount" class="quickEditInput  quickDiscount" />*@
+                                                </td>
+
+                                                <td style="text-align: center;">
+                                                    @if (item.isActive == "1")
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Active checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Active />
+
+                                                    }
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    @if (item.IsAvailable == "1")
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Available checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input id=@item.ID type="checkbox" class=Available />
+
+                                                    }
+                                                </td>
+                                                @*<td style="text-align: center;">
+                                                    @{
+
+                                                        if (item.isOffer == "1")
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class=Offer checked />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class=Offer />
+
+                                                        }
+
+                                                    }
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    @{
+
+                                                        if (item.specialOffer == "1")
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="specialOffer" checked />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input id=@item.ID type="checkbox" class="specialOffer" />
+
+                                                        }
+
+                                                    }
+                                                </td>*@
+                                                <td>
+                                                    @{
+                                                        string myListOfImage = "";
+                                                        string uploadID = "uploadimg" + item.ID;
+                                                        string imageName = "imagesName" + item.ID;
+
+                                                        if (item.images != null)
+                                                        {
+
+                                                            foreach (var img in item.images)
+                                                            {
+                                                                myListOfImage = myListOfImage + img.title + ",";
+
+                                                                string ID = img.ID.ToString();
+                                                                string deletetid = "addtocart" + ID;
+                                                                string title = "titleofEdit" + ID;
+                                                                string id = item.ID;
+
+                                                                <div class="imagelistholderEdit">
+
+                                                                    <div class="conEdit">
+
+                                                                        <img src="@img.title" data-imagezoom="true" class=" back">
+                                                                        <div id=@deletetid class="btn deleteimageForEdit "><i class="fa fa-remove"></i></div>
+                                                                        <div style="display:none" id=@title>@img.title</div>
+                                                                    </div>
+
+
+
+
+                                                                </div>
+
+                                                            }
+                                                        }
+
+                                                        <div class="imagelistholderEdit">
+
+                                                            <div itemToShow="@uploadID" class="conEdit addMoreImage">
+
+                                                                <img src="~/images/add.png" data-imagezoom="true" class=" back">
+
+                                                            </div>
+
+
+
+
+                                                        </div>
+                                                        <p style="display:none" class="@imageName"></p>
+                                                        <input style="display:none" id="@uploadID" imageName="@imageName" type="file" required="required" class="form-control INP imageFileHolderAdd">
+
+
+                                                        <input id="ImageList" name="ImageList" type="hidden" value="@myListOfImage" />
+                                                    }
+
+
+
+                                                </td>
+
+                                                <td>
+                                                    @*<a class="btn btn-primary quickEdit">ویرایش سریع</a>*@
+                                                    <a class="btn btn-primary quickEdit quickVerify" style="display:none">تایید</a>
+
+                                                </td>
+
+                                                @if (string.IsNullOrEmpty(item.parentID))
+                                                {
+                                                    <td>
+                                                        <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
+                                                    </td>
+                                                }
+
+                                            </tr>
+                                        }
+
+
+
+                                    </tbody>
+                                </table>
+
+                                <script>
+                                    $(".deleteimageForEdit").click(function () {
+                                        var el = $(this).parent().parent();
+                                        var orderid = $(this).parent().parent().parent().parent().attr('id');
+                                        var id = this.id;
+                                        var res = id.substring(9, id.length);
+                                        var titleid = "titleofEdit" + res;
+                                        var name = $('#' + titleid).text();
+
+
+                                        $.ajax({
+                                            url: '/Admin/Deleteimage',
+                                            dataType: 'html',
+                                            data: {
+                                                id: id,
+                                                title: name,
+                                                orderid: orderid
+                                            },
+                                            success: function (data) {
+
+                                                el.hide();
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <br />
+        @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+        <p id="selectedForServer"></p>
+
+        <script>
+            $(".quickEdit").click(function () {
+
+                $(this).parent().parent().find(".quickEdit").toggle();
+                $(this).parent().parent().find(".quickEditInput").toggle();
+            })
+
+            $(".quickVerify").click(function () {
+
+
+                var meta = $(this).parent().parent().find(".metaHolder");
+                var price = $(this).parent().parent().find(".quickPrice");
+                var count = $(this).parent().parent().find(".quickCount");
+                var finalprice = $(this).parent().parent().find(".quickFinalPrice");
+                var finalCoworkerPrice = $(this).parent().parent().find(".quickFinalWorkerPrice");
+                var discount = $(this).parent().parent().find(".discountLable");
+
+
+
+
+                var ID = $(this).parent().parent().attr('id')
+
+
+                $.ajax({
+                    url: '/Admin/ChangeProductPriceForEdit',
+                    dataType: 'html',
+                    data: {
+
+                        ID: ID,
+                        price: price.val(),
+                        finalprice: finalprice.val(),
+                        count: count.val(),
+                        finalCoworkerPrice: finalCoworkerPrice.val(),
+                        meta: meta.text()
+                    },
+                    success: function (data) {
+                        finalCoworkerPrice.parent().find(".quickEditInput").text(finalCoworkerPrice.val());
+                        finalprice.parent().find(".quickEditInput").text(finalprice.val());
+                        count.siblings().text(count.val());
+                        price.parent().find(".quickEditInput").text(price.val())
+                        var percent = parseInt(100 - (100 * parseInt(finalprice.val())) / parseInt(price.val()));
+                        discount.text(percent)
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+        </script>
+        <script>
+            $(".addtoserver").click(function () {
+
+                $("#selectedForServer").text($(this).attr('id'));
+
+            })
+            $(".specialOffer").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Admin/ChangeProductSpecialOffer',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+            $(".Offer").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Admin/ChangeProductOffer',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+            $(".Active").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Admin/ChangeProductActive',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+            $(".Available").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Admin/ChangeProductAvailable',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+
+            $(".minusItemCount").click(function () {
+                var id = $(this).parent().attr('id');
+                $("#ProductSelectedID0").val(id);
+                var text = $(this).parent().parent().find(".titemHOlder").text().trim();
+                var lableText = "عودت محصول " + text;
+                $("#returnCountLable").text(lableText)
+                $("#returnItemCountModal").modal('toggle');
+            })
+
+            $(".addItemCount").click(function () {
+                var id = $(this).parent().attr('id');
+                $("#ProductSelectedID").val(id);
+                var text = $(this).parent().parent().find(".titemHOlder").text().trim();
+                var lableText = "افزایش موجودی " + text;
+                $("#addCountLable").text(lableText)
+
+                $("#addItemCountModal").modal('toggle');
+
+            })
+
+            $(".returnItemCount").click(function () {
+                
+            })
+
+
+        </script>
+
+
+
+
+    }
+}
+
+<script src="~/Scripts/downloadIMGPartner.js"></script>
+<script>
+    $(".addMoreImage").click(function () {
+        var id = $(this).attr('itemtoshow');
+        $("#" + id).click();
+    })
+    $(".imageFileHolderAdd").on('change', function () {
+        var id = $(this).attr('id');
+        var imageName = $(this).attr('imageName');
+        var productid = $(this).parent().parent().attr('id');
+
+        uploadImage(id, imageName, this, productid)
+    });
+</script>

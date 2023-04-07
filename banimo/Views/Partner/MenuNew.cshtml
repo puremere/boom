@@ -107,85 +107,94 @@
     </div>
 </div>
 
-
-
-<div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#layer1def" style=" color: #8d8d8d; ">تعریف </a></li>
-        <li><a data-toggle="tab" href="#layer1edit" style=" color: #8d8d8d; ">ویرایش </a></li>
-        <li><a data-toggle="tab" href="#layer1del" style=" color: #8d8d8d; ">حذف </a></li>
-
-    </ul>
-
-    <div class="tab-content">
-        <div id="layer1def" class="tab-pane fade in active" style="padding-top:20px">
-
-            <div class="row addParent">
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> طبقه بندی </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatAdd", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> عنوان </label>
-                    <div style="width:100%">
-                        <input type="text" id="titleAdd" required="required" class="form-control INP">
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> عنوان انگلیسی </label>
-                    <div style="width:100%">
-                        <input type="text" id="entitleAdd" required="required" class="form-control INP">
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> اولویت </label>
-                    <div style="width:100%">
-                        <input type="text" id="priorityAdd" required="required" class="form-control INP">
-                    </div>
-                </div>
-
-
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label>عکس </label>
-                    <div style="width:100%">
-                        <input id="imageFileHolderAdd" type="file" required="required" class="form-control INP">
-                    </div>
-                </div>
-
-
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> انتخاب برند </label>
-                    <div style="width:100%">
-                        @if (Model.brands != null)
-                        {
-                            @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
-
-                        }
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <p hidden class="imageNameEdit"></p>
-                    <div style="width:100%">
-                        <div id="imageHolderAdd" style="display:flex; ">
-
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Set Category</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Edit Category</button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <style>
+        .itemform {
+            min-width: 250px;
+            margin: 5px;
+        }
+    </style>
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Create New Category</h5>
                         </div>
-                    </div>
-                </div>
-                <p hidden class="imageNameAdd"></p>
-                <div class="col-lg-12 col-md-12" style="margin-top:30px">
 
-                    <div>
-                        <p> توضیحات </p>
-                        <input type="file" style="display:none" id="descriptionUpload0" />
-                        <div class="col-md-8 col-sm-8 col-xs-12">
-                            <p id="addDescButt0" class="btn btn-default">افزودن عکس توضیحات</p>
-                            <div id="thumbholderEdior0" style="display:flex; overflow-x:scroll">
-
+                        <div class="row">
+                            <div class=" itemform component col-md-5 col-sm-5 col-xs-12" style="">
+                                <label> @Resources.res.category </label>
+                                <div style="width:100%">
+                                    @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatAdd", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <script>
+                            <div class="itemform component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> @Resources.res.title </label>
+                                <div style="width:100%">
+                                    <input type="text" id="titleAdd" required="required" class="form-control INP">
+                                </div>
+                            </div>
+                            @*<div class="itemform component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> @Resources.res.title </label>
+                                <div style="width:100%">
+                                    <input type="text" id="entitleAdd" required="required" class="form-control INP">
+                                </div>
+                            </div>*@
+                            <div class="itemform component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> Priority </label>
+                                <div style="width:100%">
+                                    <input type="text" id="priorityAdd" required="required" class="form-control INP">
+                                </div>
+                            </div>
+
+
+                            <div class="itemform component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label>Category Image </label>
+                                <div style="width:100%">
+                                    <input id="imageFileHolderAdd" type="file" required="required" class="form-control INP">
+                                </div>
+                            </div>
+
+
+                            @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> انتخاب برند </label>
+                                <div style="width:100%">
+                                    @if (Model.brands != null)
+                                    {
+                                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+
+                                    }
+                                </div>
+                            </div>*@
+                            <div class="itemform component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <p hidden class="imageNameEdit"></p>
+                                <div style="width:100%">
+                                    <div id="imageHolderAdd" style="display:flex; ">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <p hidden class="imageNameAdd"></p>
+                            <div class="col-lg-12 col-md-12" style="margin-top:30px">
+
+                                <div>
+                                    <p> Description </p>
+                                    @*<input type="file" style="display:none" id="descriptionUpload0" />
+                                    <div class="col-md-8 col-sm-8 col-xs-12">
+                                        <p id="addDescButt0" class="btn btn-default">Add Image To Desc</p>
+                                        <div id="thumbholderEdior0" style="display:flex; overflow-x:scroll">
+
+                                        </div>
+                                    </div>*@
+                                    <script>
                                    $("#addDescButt0").click(function () {
                                        $("#descriptionUpload0").click();
                                     })
@@ -221,105 +230,105 @@
                                         }
 
                                     });
-                        </script>
+                                    </script>
+                                </div>
+                            </div>
+                            <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+
+                                <div style="width:100%">
+                                    <input id="descAdd" required="required" class="form-control" name="descAdd" style="height:170px"/>
+
+                                    @*<input type="text" id="descAdd" required="required" class="form-control INP">*@
+                                </div>
+                            </div>
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <div class="component classshow">
+                                    <div id="addCat" class="btn btn-success">Verify</div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
                     </div>
                 </div>
-                <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
-
-                    <div style="width:100%">
-                        <textarea id="descAdd" required="required" class="form-control" name="descAdd" style="height:170px"></textarea>
-
-                        @*<input type="text" id="descAdd" required="required" class="form-control INP">*@
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <div class="component classshow">
-                        <div id="addCat" class="btn btn-success">تایید</div>
-                    </div>
-                </div>
-
-
-
-
             </div>
-
         </div>
-        <div id="layer1del" class="tab-pane fade" style="padding-top:20px">
-            <div class=" component col-md-6 col-sm-6 col-xs-12" style="min-width:250px">
-                <label> طبقه بندی </label>
+
+       
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Edit Category</h5>
+                        </div>
+                        <div class="row editParent">
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> Category </label>
+                                <div style="width:100%">
+                                    @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> Title </label>
+                                <div style="width:100%">
+                                    <input type="text" id="titleEdit" required="required" class="form-control INP">
+                                </div>
+                            </div>
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px; display:none" >
+                                <label> عنوان انگلیسی </label>
+                                <div style="width:100%">
+                                    <input type="text" id="entitleEdit" required="required" class="form-control INP">
+                                </div>
+                            </div>
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> priority </label>
+                                <div style="width:100%">
+                                    <input type="text" id="priorityEdit" required="required" class="form-control INP">
+                                </div>
+                            </div>
+
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <label> picture </label>
+                                <div style="width:100%">
+                                    <input id="imageFileHolderEdit" type="file" required="required" class="form-control INP">
+                                </div>
+                            </div>
+
+                            @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                <label> انتخاب برند </label>
                 <div style="width:100%">
-                    @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatDel", @class = "form-control" })
+                    @if (Model.brands != null)
+                    {
+                        @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+
+                    }
                 </div>
-            </div>
-
-            <div class="component classshow" style="margin-top:35px">
-                <div id="removeButt" class="btn btn-success">حذف</div>
-            </div>
-        </div>
-        <div id="layer1edit" class="tab-pane fade" style="padding-top:20px">
-            <div class="row editParent">
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> طبقه بندی </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> عنوان </label>
-                    <div style="width:100%">
-                        <input type="text" id="titleEdit" required="required" class="form-control INP">
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> عنوان انگلیسی </label>
-                    <div style="width:100%">
-                        <input type="text" id="entitleEdit" required="required" class="form-control INP">
-                    </div>
-                </div>
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> اولویت </label>
-                    <div style="width:100%">
-                        <input type="text" id="priorityEdit" required="required" class="form-control INP">
-                    </div>
-                </div>
-
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <label> عکس </label>
-                    <div style="width:100%">
-                        <input id="imageFileHolderEdit" type="file" required="required" class="form-control INP">
-                    </div>
-                </div>
-
-                @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                        <label> انتخاب برند </label>
-                        <div style="width:100%">
-                            @if (Model.brands != null)
-                            {
-                                @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
-
-                            }
-                        </div>
-                    </div>*@
+            </div>*@
 
 
-                <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                    <p hidden class="imageNameEdit"></p>
-                    <div style="width:100%">
-                        <div id="imageHolderEdit" style="display:flex; ">
+                            <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                <p hidden class="imageNameEdit"></p>
+                                <div style="width:100%">
+                                    <div id="imageHolderEdit" style="display:flex; ">
 
-                        </div>
-                    </div>
-                </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <input type="file" style="display:none" id="descriptionUpload" />
-                <div>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <p id="addDescButt" class="btn btn-default">افزودن عکس</p>
-                        <div id="thumbholderEdior" style="display:flex; overflow-x:scroll">
+                            <input type="file" style="display:none" id="descriptionUpload" />
+                            <div>
+                                @*<div class="col-md-8 col-sm-8 col-xs-12">
+                                    <p id="addDescButt" class="btn btn-default">Add picture to Description</p>
+                                    <div id="thumbholderEdior" style="display:flex; overflow-x:scroll">
 
-                        </div>
-                    </div>
-                    <script>
+                                    </div>
+                                </div>*@
+                                <script>
                                     $("#addDescButt").click(function () {
                                         $("#descriptionUpload").click();
                                     })
@@ -355,23 +364,52 @@
                                         }
 
                                     });
-                    </script>
-                </div>
-                <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
-                    <label> توضیحات </label>
-                    <div style="width:100%">
-                        <textarea cols="8" id="descEdit" required="required" class="form-control INP"></textarea>
+                                </script>
+                            </div>
+                            <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+                                <label> descritpion </label>
+                                <div style="width:100%">
+                                    <textarea cols="8" id="descEdit" required="required" class="form-control INP"></textarea>
 
+                                </div>
+                            </div>
+
+                            <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+                                <div class="component ">
+                                    <div id="verifEdit" class="btn btn-success">Verify  </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-
-                <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
-                    <div class="component ">
-                        <div id="verifEdit" class="btn btn-success">تایید  </div>
-                    </div>
-                </div>
-
             </div>
+        </div>
+
+       
+    </div>
+    
+</div>
+
+@*<div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#layer1def" style=" color: #8d8d8d; ">تعریف </a></li>
+        <li><a data-toggle="tab" href="#layer1edit" style=" color: #8d8d8d; ">ویرایش </a></li>
+        <li><a data-toggle="tab" href="#layer1del" style=" color: #8d8d8d; ">حذف </a></li>
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="layer1def" class="tab-pane fade in active" style="padding-top:20px">
+
+           
+
+        </div>
+        <div id="layer1del" class="tab-pane fade" style="padding-top:20px">
+           
+        </div>
+        <div id="layer1edit" class="tab-pane fade" style="padding-top:20px">
+           
         </div>
     </div>
 
@@ -396,12 +434,12 @@
 
 
 
-</div>
+</div>*@
 
 
 
 
-<script src="~/Scripts/download.js"></script>
+<script src="~/Scripts/downloadPartner.js"></script>
 
 <script>
 
@@ -420,12 +458,12 @@
             catname = "00";
         }
         var name = $("#titleAdd").val();
-        var entitle = $("#entitleAdd").val();
+        //var entitle = $("#entitleAdd").val();
         var priority = $("#priorityAdd").val();
-        var description = tinymce.get("descAdd").getContent();
+        var description = $("#descAdd").val();// tinymce.get("").getContent();
         var image = $(".imageNameAdd").text();
 
-        if ( catname != "" && name != "" && image != "" && entitle != "" && priority != "" && description != "") {
+        if (  name != "" && image != ""  && priority != "" && description != "") {
 
 
             $.post(
@@ -434,7 +472,7 @@
                     catID: catname,
                     brandID: '',
                     title: name,
-                    entitle: entitle,
+                    entitle: name,
                     description: description,
                     priority: priority,
                     image: image,
@@ -450,7 +488,7 @@
 
         }
         else {
-            alert("همه موارد را کامل کنید")
+            alert("Fill All Fields")
         }
     })
     $("#removeButt").click(function () {

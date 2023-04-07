@@ -1,0 +1,346 @@
+﻿@model banimo.ViewModel.deliverTypeVM
+
+@{
+    ViewBag.Title = "deliver-type";
+    Layout = "~/Views/Shared/_DeliverLayout.cshtml";
+}
+<div class="modal fade" id="delmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p class="idToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeU">Verify</button>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                <div>
+                    <div class="row">
+                        @using (Html.BeginForm("setNewDeliver", "Deliver", FormMethod.Post,
+new { enctype = "multipart/form-data", id = "addUser" }))
+                        {
+                            <input hidden name="UserListUpdate" value="0" />
+                            <input hidden name="password" value="password" />
+
+                            <div>
+                                <div class="row">
+
+
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            title :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="title" name="name" required="required" class="form-control REM">
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            description :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="description" name="description" required="required" class="form-control ">
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            price :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="price" name="price" required="required" class="form-control ">
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            weight :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="weight" name="weight" required="required" class="form-control ">
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row fieldholder col-lg-5">
+                                        <label>
+                                            dimension :
+                                        </label>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+                                            <input value="" type="text" id="dimension" name="dimension" required="required" class="form-control ">
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">Verify</button>
+
+                    <script>
+
+
+                        $("#CreateButt").click(function () {
+                            // alert("aa");
+
+                            var int = 0;
+                            $(".REM").each(function () {
+
+                                if ($(this).val() === "") {
+                                    $(this).siblings("span").css("display", "inline-block");
+                                    int = 1;
+                                }
+                            })
+                            if (int === 0) {
+                                $("#addUser").submit();
+                            }
+                            else {
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.error('Fill All Fields')
+
+                            }
+
+
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Deliver Type List</h5>
+                    <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                        <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary">Add New Type</a>
+                    </div>
+                </div>
+                <div id="Listholder">
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                        <thead>
+                            <tr>
+
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Description</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Weight</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Dimension</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.delivertypeList != null)
+                            {
+                                foreach (var item in Model.delivertypeList)
+                                {
+
+                                    string cls = "odd";
+                                    if (Model.delivertypeList.IndexOf(item) + 1 % 2 == 0)
+                                    {
+                                        cls = "even";
+                                    }
+
+                                    <tr class="@cls">
+
+                                        <td >@item.name</td>
+                                        <td>
+                                            @item.description
+                                        </td>
+                                        <td style=" ">
+                                            @item.price
+                                        </td>
+
+                                        <td style="">
+                                            @item.weight
+                                        </td>
+                                        <td style="">
+                                            @item.dimension
+                                        </td>
+
+
+
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+
+                                                        <i id=@item.ID class="ri-delete-bin-line Dbutton"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+                    <script>
+                                    var id
+                                $(".checkPartnerbutton").click(function () {
+                                    var id = $(this).attr("id");
+                                    var phone = $(this).parent().parent().find('#mobileHolder').text().trim();
+
+                                    $.ajax({
+                                        url: '/Deliver/checkPartnerStatus',
+                                        dataType: 'html',
+                                        data: {
+                                            id: id,
+                                        },
+                                        success: function (data) {
+
+                                            $("#partnerDataHolder").html(data);
+                                            $("#partnerDataHolder").scroll();
+                                            $(".patnerUsername").val(phone);
+                                            //$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    });
+                                });
+                                    $("#removeU").click(function () {
+                                        var id = $(".idToRemove").text();
+
+                                        $.ajax({
+                                            url: '/Deliver/DeleteDeliverType',
+                                            dataType: 'html',
+                                            data: {
+                                                id: id,
+                                            },
+                                            success: function (data) {
+
+                                                window.location.reload();
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+                                    })
+
+                                $(".Dbutton").click(function () {
+
+                                    var id = $(this).attr("id");
+                                    $(".idToRemove").text(id);
+                                    $("#delmodal").modal("toggle");
+
+                                });
+                                  @*$(".Pbutton").click(function () {
+                                    var rowid = $(this).attr("id");
+                                    var articles = @Html.Raw(Json.Encode(Model.Users));
+                                    $("#editUserModal").modal("toggle");
+                                    $("#detailholder").css("display", "inline-block");
+                                    $('html,body').animate({
+                                        scrollTop: $("#detailholder").offset().top
+                                    }, 'fast');
+
+                                    $.each(articles, function (index, item) {
+                                        if (item.ID.toString() === rowid) {
+
+                                            $("#UserListUpdate option").each(function () {
+
+                                                if ($(this).val() === item.userTypeID) {
+
+                                                    $("option:selected").removeAttr("selected");
+                                                    $(this).attr("selected", "selected");
+                                                }
+                                            })
+
+                                            var imagaddress = "/images/panelimages/" + item.image;
+                                            $("#fullnameUpdate").val(item.fullname);
+                                            $("#emailupdate").val(item.email);
+                                            $("#phoneupdate").val(item.mobile);
+                                            $("#addressupdate").val(item.address);
+                                            $("#IDupdate").val(item.ID);
+
+
+
+                                        }
+
+
+                                    });
+
+                                });*@
+
+                    </script>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#addUserModalIcon").click(function () {
+        $("#addUserModal").modal("toggle");
+    })
+    $("#addRoleModalIcon").click(function () {
+        $("#addRoleModal").modal("toggle");
+    })
+
+
+</script>

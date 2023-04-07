@@ -9,5 +9,7 @@ namespace banimo.AdminPanelBoom.ViewModel
     {
         public int status { get; set; }
         public string message { get; set; }
+        public string withdraw { get; set; }
+        
     }
 }

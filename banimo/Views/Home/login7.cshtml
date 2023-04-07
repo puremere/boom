@@ -11,13 +11,13 @@
 
 <div>
     <main class="main login-page">
-
+      
         <!-- End of Page Header -->
         <!-- Start of Breadcrumb -->
         <nav class="breadcrumb-nav">
             <div class="container">
                 <ul class="breadcrumb">
-                    <li><a href="demo1.html">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <li>My account</li>
                 </ul>
             </div>
@@ -57,39 +57,39 @@ new { @class = "c-form-account", enctype = "multipart/form-data", id = "register
                                         <a href="#">Sing Up?</a>
                                     </div>
                                     @*if (Convert.ToInt32(Session["LoginTime"]) > 2)
-                                        {
-                                            <div class="form-group mb-0">
-                                                <div class="c-form-account__row js-valid-row">
-                                                    <div class="c-form-account__col">
+                                    {
+                                        <div class="form-group mb-0">
+                                            <div class="c-form-account__row js-valid-row">
+                                                <div class="c-form-account__col">
 
-                                                        @{MvcCaptcha registrationCaptcha = CaptchaHelper.GetRegistrationCaptcha(); }
-                                                        @if (!registrationCaptcha.IsSolved)
-                                                        {
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    @Html.Captcha(registrationCaptcha)
-                                                                </div>
-                                                                <div class="col-lg-12" style="margin-top:10px">
-                                                                    @Html.Label("کد را وارد نمایید", new
-                                                                    {
-                                                                        @class = "col-md-4 control-label",
-                                                                     @for = "CaptchaCode",
-                                                                        style = "float:right; margin-top:15px"
-                                                                    })
-
-                                                                    <div class="col-md-6" style="float:right">
-                                                                        @Html.TextBox("CaptchaCode", null, new { @class = "form-control captchaVal" })
-                                                                    </div>
-                                                                </div>
-
+                                                    @{MvcCaptcha registrationCaptcha = CaptchaHelper.GetRegistrationCaptcha(); }
+                                                    @if (!registrationCaptcha.IsSolved)
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                @Html.Captcha(registrationCaptcha)
                                                             </div>
-                                                        }
-                                                    </div>
+                                                            <div class="col-lg-12" style="margin-top:10px">
+                                                                @Html.Label("کد را وارد نمایید", new
+                                                                {
+                                                                    @class = "col-md-4 control-label",
+                                                                 @for = "CaptchaCode",
+                                                                    style = "float:right; margin-top:15px"
+                                                                })
+
+                                                                <div class="col-md-6" style="float:right">
+                                                                    @Html.TextBox("CaptchaCode", null, new { @class = "form-control captchaVal" })
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
+                                        </div>
 
 
-                                        }*@
+                                    }*@
                                     <p id="verifyyy" class="btn btn-primary">Sign In</p>
                                 }
 

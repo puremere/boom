@@ -1,0 +1,182 @@
+﻿@model banimo.ViewModel.TranList
+
+
+
+
+@if (Model.myTransaction != null)
+{
+
+    double finalMande = 0;
+
+    <div class="row">
+
+
+        <div class="panel-body">
+            <div id="morris-area-chart">
+                <div style="overflow:auto">
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="">
+                        <thead>
+                            <tr>
+                               
+                                <th>
+                                    Atf Num
+                                </th>
+                                <th>
+                                    Document Num
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Debt
+                                </th>
+                                <th>
+                                    credit
+                                </th>
+                                <th>remaining</th>
+                                <th>remaining Status </th>
+                                <th>Option</th>
+                                @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">Vendor ID</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Venor Title</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Inactive?</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Popular?</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Recommended?</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> freeDelivry?</th>
+
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>*@
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.myTransaction)
+                            {
+                                string cls = "odd";
+                                if (Model.myTransaction.IndexOf(item) + 1 % 2 == 0)
+                                {
+                                    cls = "even";
+                                }
+                                int index = Model.myTransaction.IndexOf(item) + 1;
+                                string rcid = "rc" + item.ID;
+                                finalMande += item.price;
+                                <tr class="@cls" id="@rcid">
+
+                                    <td>@item.atf</td>
+                                    <td>@item.sanadID</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.date)
+                                    </td>
+
+
+                                    <td>
+                                        @if (item.type == "0")
+                                        {
+
+                                            @String.Format("{0:n0}", Math.Abs(item.price))
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (item.type == "1")
+                                        {
+                                            @String.Format("{0:n0}", Math.Abs(item.price))
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @String.Format("{0:n0}", Math.Abs(finalMande))
+
+                                    </td>
+                                    <td>
+                                        @if (finalMande > 0)
+                                        {
+                                            <p>Debt</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Credit</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        <ul>
+
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <a href="edit/@item.ID">
+
+                                                        <i id=@item.ID class="ri-file-2-fill "></i>
+                                                    </a>
+
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+
+                                    </td>
+
+
+                                </tr>
+                            }
+
+
+                            <tr>
+                                
+                                <td colspan="2">
+                                    Total
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    @{
+                                        double plusSum = Model.myTransaction.Where(x => x.type == "0").Sum(x => x.price);
+                                    }
+                                    <p>@String.Format("{0:n0}", Math.Abs(plusSum))</p>
+                                </td>
+                                <td>
+                                    @{
+                                        double minusSum = Model.myTransaction.Where(x => x.type == "1").Sum(x => x.price);
+                                    }
+                                    <p>@String.Format("{0:n0}", Math.Abs(minusSum))</p>
+                                </td>
+                                <td>
+                                    @{
+                                        double finalSum = Model.myTransaction.Sum(x => x.price);
+                                        
+                                    }
+                                    <p>@String.Format("{0:n0}", Math.Abs(finalSum))</p>
+                                </td>
+                                <td>
+                                    @if (finalMande > 0)
+                                    {
+                                        <p>Debt</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Credit</p>
+                                    }
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}

@@ -1,0 +1,483 @@
+﻿@using System.Web
+@model banimo.ViewModel.draftVM
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "مدیریت مطالب";
+
+}
+
+
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+</style>
+@**@
+
+
+<div class="modal fade" id="addNewResidHavaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                فرم رسید/حواله
+            </div>
+            <div class="modal-body">
+                <div style="display:flex">
+                    <div style="margin-left:20px; width:100%">
+                        <p>نوع تراکنش</p>
+                        <select id="partnertype" class="form-control">
+
+                            <option value="0">
+                                رسید
+                            </option>
+                            <option value="1">
+                                حواله
+                            </option>
+                        </select>
+                    </div>
+                    <div style="margin-left:20px; width:100%">
+                        <p>تعداد</p>
+                        <input id="count" class="form-control" />
+                    </div>
+                    <div style="margin-left:20px; width:100%">
+                        <p>طرف حساب</p>
+                        @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "partnerItem" })
+
+                    </div>
+                    <input hidden id="residID" />
+                </div>
+                <div style="display:flex; margin-top:25px">
+                    <div style="margin-left:20px; width:100%">
+                        <p>کالا</p>
+                        <input id="kala" class="form-control" />
+                    </div>
+                    <input id="IDholder" hidden />
+
+                    <div style="margin-left:20px; width:100%">
+                        <p>توضیحات</p>
+                        <input id="reciever" class="form-control" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
+                <button id="confirmResid" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+
+                <script>
+                    $("#confirmResid").click(function () {
+                        //$("#residModal").modal('hide');
+                        var reciever = $("#reciever").val();
+                        var count = $("#count").val();
+                        var ID = $("#IDholder").val();
+                        var PID = $("#partnerItem").val();
+                        var type = $("#partnertype").val();
+
+
+
+
+                        $.ajax({
+                            url: '/Core/resid',
+                            dataType: 'html',
+                            data: {
+                                count: count,
+                                deliver: reciever,
+                                ID: ID,
+                                PID: PID,
+                                type: type,
+
+
+                            },
+                            success: function (data) {
+                                if (data == "error") {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                }
+                                else {
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.success('محصول مورد نظر حذف شد')
+                                    window.location.reload();
+                                }
+
+
+                            },
+                            error: function () {
+                                alert("nashod")
+                            }
+                        });
+                    })
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+    <div class="row">
+
+        <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+            <div class="row" style="">
+
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>پروژه :</p>
+                    <select id="nodeID" class="form-control">
+
+
+                        @foreach (var item in Model.NodeList)
+                        {
+
+                            <option value="@item.ID">@item.title</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>طرف حساب :</p>
+                    <select id="tarafID" class="form-control">
+                        <option value="">همه</option>
+
+                        @foreach (var item in Model.TarafList)
+                        {
+                            <option value="@item.ID">@item.name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>نوع فاکتور :</p>
+                    <select id="trantype" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">رسید</option>
+                        <option value="0">حواله</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="">
+                    <p>شماره رسید/حواله :</p>
+                    <input id="number" type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                    <p>از تاریخ :</p>
+                    <input type="text" class="form-control projectDate inputfield" />
+                    <input class="PDabserver" style="display:none" />
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تا تاریخ :</p>
+                    <input type="text" class="form-control projectDate2 inputfield" />
+                    <input class="PD2abserver" style="display:none" />
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت از :</p>
+                    <input id="priceFrom" type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>قیمت تا :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد از :</p>
+                    <input type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>تعداد تا :</p>
+                    <input id="priceTo" type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                    <p> محصول :</p>
+                    <input type="text" class="form-control  inputfield" id="addItemToOrderInput" />
+                    <input id="IDholder" hidden />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>توضیحات :</p>
+                    <input id="description" type="text" class="form-control  inputfield" />
+
+
+                </div>
+                <div class="col-lg-3" style="padding:10px;">
+                    <p>وضعیت :</p>
+                    <select id="factorStatus" class="form-control">
+                        <option value="">همه</option>
+                        <option value="1">اولیه</option>
+                        <option value="0">نهایی</option>
+                    </select>
+                </div>
+                <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                    <p>محصول امانی :</p>
+                    <select id="amani" class="form-control">
+                        <option value="">همه</option>
+                        <option value="0">خیر</option>
+                        <option value="1">بله</option>
+
+                    </select>
+
+
+
+                </div>
+
+            </div>
+
+            <div class="row" style="">
+
+                <div style="width:20%;padding:10px;">
+                    <div style="position:relative; margin:5px" id="">
+                        <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTran">تایید</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+
+                <script>
+                    var getDraft = function () {
+                        $.ajax({
+                            url: 'returnDraftListA',
+                            dataType: 'html',
+                            data: {
+                                number: $("#number").val(),
+                                timeFrom: $(".PDabserver").val(),
+                                timeTTo: $(".PD2abserver").val(),
+                                transactionType: $("#trantype").val(),
+                                factorStatus: $("#factorStatus").val(),
+                                priceFrom: $("#priceFrom").val(),
+                                priceTo: $("#priceTo").val(),
+                                countFrom: $("#countFrom").val(),
+                                countTo: $("#countTo").val(),
+                                amani: $("#amani").val(),
+                                nodeID: $("#nodeID").val(),
+                                tarafID: $("#tarafID").val(),
+                                productID: $("#IDholder").val(),
+                                description: $("#description").val(),
+
+                            },
+                            success: function (data) {
+
+                                $("#detailHolder").html(data)
+                            }
+                        })
+                    };
+                    $("#verifyCodeingTran").click(function () {
+                        getDraft();
+                    })
+                    getDraft();
+                </script>
+            </div>
+            <div id="detailHolder" class="row">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+
+
+
+<script src="~/Scripts/persian-date.js"></script>
+<script src="~/Scripts/persian-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $(".datePicker").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.abserver',
+            autoClose: true
+
+            // minDate: new persianDate().add('day', 2).valueOf(),
+            // options & callbacks here
+        });
+
+        $(".projectDate").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PDabserver',
+            autoClose: true
+        });
+        $(".projectDate2").pDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '.PD2abserver',
+            autoClose: true
+        });
+
+    });
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".PD2abserver").val("");
+        $(".projectDate2").val("");
+    });
+</script>
+<script>
+    $('input.inputnumber').keyup(function (event) {
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
+</script>
+<script>
+
+    $("#autoProduct").on('keyup', function (e) {
+        var value = $("#addItemToOrderInput").val();
+        if (value.length == 0) {
+            $("#IDholder").val("");
+        }
+        // console.log(e.key);
+        if (e.key === 'Enter' || e.keyCode === 13) {
+
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: $("#addItemToOrderInput").val(),
+                    server: ""
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#addItemToOrderInput").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+
+
+                    };
+                    $("#addItemToOrderInput").easyAutocomplete(productItems);
+                    $("#addItemToOrderInput").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+        else {
+
+        }
+    });
+</script>
+<script>
+
+    $("#addNewResidHavaleModal").on("keyup", function (e) {
+        console.log('d');
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            var value = $("#kala").val();
+            $.ajax({
+                url: '/Core/getNewListProduct',
+                dataType: 'html',
+                data: {
+                    val: value,
+
+                },
+                success: function (data) {
+
+                    var productItems = {
+                        data: JSON.parse(data),
+
+                        getValue: "title",
+                        list: {
+                            maxNumberOfElements: 100,
+                            match: {
+                                enabled: true
+                            },
+                            onSelectItemEvent: function () {
+                                var value = $("#kala").getSelectedItemData().ID;
+                                $("#IDholder").val(value).trigger("change");
+                            }
+                        }
+
+                        //  list: {
+                        //    maxNumberOfElements: 100,
+                        //    match: {
+                        //        enabled: true
+                        //    }
+                        //},
+                        //template: {
+                        //    type: "custom",
+                        //    method: function (value, item) {
+                        //        return   item.title + " | <div style='background-color:#ddd; border-radius:50%; width:30px'></div> "
+                        //    }
+                        //},
+
+
+                    };
+
+                    $("#kala").easyAutocomplete(productItems);
+                    $("#kala").focus();
+                    //$("#addItemToOrderInput").parent.css("width", "100%")
+                }
+
+            })
+        }
+
+
+    })
+
+
+</script>

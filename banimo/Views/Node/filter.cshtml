@@ -1,0 +1,378 @@
+﻿
+@model banimo.AdminPanel.ViewModel.RootObjectFilter 
+
+@using System.Data.Entity
+
+
+@{
+    ViewBag.Title = "productdetail";
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+}
+
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    if (Model.filtersModel != null)
+    {
+
+        foreach (var item in Model.filtersModel)
+        {
+
+
+            if (item.filtersubcat != null)
+            {
+                listItems.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "0"
+                });
+                foreach (var subcat in item.filtersubcat)
+                {
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "------" + subcat.title,
+                            Value = "0"
+                        });
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listItems.Add(new SelectListItem
+                            {
+                                Text = "--------------" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+
+                    }
+                    else
+                    {
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "------" + subcat.title,
+                            Value = "2" + subcat.ID
+                        });
+
+                    }
+
+
+                }
+            }
+            else
+            {
+                listItems.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "1" + item.ID
+                });
+
+            }
+
+
+
+        }
+    }
+    List<SelectListItem> listOfCatsForEdit = new List<SelectListItem>();
+    if (Model.filtersModel != null)
+    {
+        foreach (var item in Model.filtersModel)
+        {
+
+
+            if (item.filtersubcat != null)
+            {
+
+                listOfCatsForEdit.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "0"
+                });
+                foreach (var subcat in item.filtersubcat)
+                {
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        listOfCatsForEdit.Add(new SelectListItem
+                        {
+                            Text = "------" + subcat.title,
+                            Value = "0"
+                        });
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listOfCatsForEdit.Add(new SelectListItem
+                            {
+                                Text = "--------------" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+
+                    }
+                    else
+                    {
+                        listOfCatsForEdit.Add(new SelectListItem
+                        {
+                            Text = "------" + subcat.title,
+                            Value = "2" + subcat.ID
+                        });
+
+                    }
+
+
+                }
+            }
+            else
+            {
+                listOfCatsForEdit.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "1" + item.ID
+                });
+
+            }
+
+
+
+        }
+
+    }
+
+}
+
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Filter Management</button>
+        <button class="nav-link " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Clone Filter</button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Search Panel</h5>
+                        </div>
+
+                        <div class="component " style="display:flex">
+                            <div class="col-md-5" style="">
+                                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                    Choose Category
+                                </label>
+                                <div class="component ">
+                                    @Html.DropDownList("selectedCatForEdit", listItems, "-- Select Status --", new { id = "selectedCatForEdit", style = "width:100%", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-5" style="">
+                                <button id="getfilters" class="btn btn-primary " style="margin:30px">Bring Data</button>
+                                <script>
+                                    $("#getfilters").click(function () {
+
+                                        var VALUE = $("#selectedCatForEdit").val();
+
+
+                                        if (VALUE != "" && VALUE != "0") {
+
+
+                                            $.ajax({
+                                                url: '/Node/getfilters',
+                                                dataType: 'html',
+                                                data: {
+                                                    catID: VALUE,
+                                                },
+                                                success: function (data) {
+
+                                                    $("#mainDetailHolder").html(data)
+                                                    $("#questioncolorholder").css("display", "inline")
+
+
+                                                },
+                                                error: function () {
+                                                    alert("Error")
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000
+                                            }
+
+                                            toastr.error(' No Access for this category ')
+                                        }
+
+                                    })</script>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Filter Result</h5>
+                        </div>
+                        <div id="mainDetailHolder">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade " id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Search Panel</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6" style="margin:15px 0px">
+                                <div class="col-lg-6">
+                                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                       set all filter of category  -
+                                    </label>
+                                </div>
+
+
+
+                                <div class="col-lg-6">
+                                    @{
+
+
+
+                                    }
+                                    @Html.DropDownList("maincat", listItems, "-- Select Status --", new { id = "maindrop", style = "width:100%", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="margin:15px 0px">
+                                <div class="col-lg-6">
+                                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                        For category  -
+                                    </label>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    @Html.DropDownList("clonedrop", listItems, "-- Select Status --", new { id = "clonedrop", style = "width:100%; height:300px", @class = "form-control", @multiple = "" })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="component " style="direction:rtl">
+
+                            @* <button id="DEFcatok" class="btn btn-primary " onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
+                            <button id="clonefilter" class="btn btn-primary ">Verify</button>
+
+                            <script>
+                                $("#clonefilter").click(function () {
+                                    var cloneVAL = $("#clonedrop").val().toString();
+                                    var mainval = $("#maindrop").val();
+
+                                    if (cloneVAL != "" && mainval != "" && cloneVAL != "0" && mainval != "0") {
+                                        alert(cloneVAL);
+                                        $.ajax({
+                                            url: '/Node/doclonefilter',
+                                            dataType: 'html',
+                                            data: {
+                                                mainval: mainval,
+                                                cloneval: cloneVAL
+                                            },
+                                            success: function (data) {
+
+                                                toastr.options = {
+                                                    "debug": false,
+                                                    "positionClass": "toast-top-center",
+                                                    "onclick": null,
+                                                    "fadeIn": 300,
+                                                    "fadeOut": 1000,
+                                                    "timeOut": 5000,
+                                                    "extendedTimeOut": 1000
+                                                }
+
+                                                toastr.success('Done')
+
+                                            },
+                                            error: function () {
+                                                alert("Error")
+                                            }
+                                        });
+
+                                    }
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+
+                                        toastr.error(' Error ! call admin ')
+                                    }
+
+                                })
+
+                            </script>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="//code.jquery.com/jquery-3.2.1.js"></script>
+<script src="~/Scripts/bootstrap-colorpicker.js"></script>
+<script>
+    $(function () {
+        $('#colorcode').colorpicker();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,263 @@
+﻿@model banimo.AdminPanelBoom.ViewModel.productCore
+
+@using (Html.BeginForm("setMainProduct", "Core", FormMethod.Post, new { enctype = "multipart/form-data", id = "addproduct00" }))
+{
+    <input id="selectedColor" name="selectedColor" hidden/>
+    <input id="SFilter" name="selectedFilter" hidden />
+    string address = Model.address != null ? Model.address : "";
+    string title = Model.title != null ? Model.title : "";
+    string code = Model.code != null ? Model.code : "0";
+    string barcode = Model.barcode != null ? Model.barcode : "";
+    string multiple = Model.ID != 0 ? "" : "multiple";
+    string description = Model.description != null ? Model.description : "";
+    string initCount = Model.initCount != null ? Model.initCount : "0";
+    <input name="ID" hidden value="@Model.ID" />
+    <div style="padding:10px; border-radius:10px; box-shadow:2px 2px 5px -1px rgb(148 149 153)">
+        <div class="row " style="padding:0 25px">
+            <div class="row fieldholder col-lg-3">
+                <label for="first-name" style="text-align:right">
+                    نام :
+                </label>
+                <div>
+                    <input value="@title" type="text" id="productname" name="title" required="required" class="form-control ">
+                </div>
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label style="text-align: right">
+                    آدرس :
+                </label>
+                <div>
+                    <input value="@address" type="text" id="productAddress" name="address" required="required" class="form-control col-md-7 col-xs-12">
+                </div>
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label style="text-align: right">
+                    کد :
+                </label>
+                <div>
+                    <input value="@code" type="text" id="productCode" name="code" required="required" class="form-control col-md-7 col-xs-12">
+                </div>
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label style="text-align: right">
+                    تعداد اولیه :
+                </label>
+                <div>
+                    <input value="@initCount" type="text" id="productInitCount" name="initCount" required="required" class="form-control col-md-7 col-xs-12">
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row" style="padding:0 25px">
+            <div class="row fieldholder col-lg-3">
+                <label> دسته بندی</label>
+
+
+                <div class=" ">
+                    @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), "-- انتخاب دسته بندی--", new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
+                </div>
+
+
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label> برند</label>
+                <div class=" ">
+                    @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+                </div>
+
+
+            </div>
+
+            <div class="row fieldholder col-lg-3">
+                <label> رنگ</label>
+
+                @if (Model.ID != 0)
+                {
+                    <div class=" ">
+                        @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control" })
+                    </div>
+                }
+                else
+                {
+                    <div class=" ">
+                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), "-- انتخاب رنگ--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
+                    </div>
+                }
+
+
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label> شاخص</label>
+
+                @if (Model.ID != 0)
+                {
+                    <div class=" ">
+                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
+                    </div>
+                }
+                else
+                {<div class=" ">
+                        @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                    </div>
+
+                }
+
+
+            </div>
+
+        </div>
+
+        <div class="row " style="padding:0 25px">
+            <div class="row fieldholder col-lg-3">
+                <label for="first-name" style="text-align:right">
+                    بارکد :
+                </label>
+                <div>
+                    <input value="@barcode" type="text" id="productBarcode" name="barcode" required="required" class="form-control ">
+                </div>
+            </div>
+            <div class="row fieldholder col-lg-3">
+                <label for="first-name" style="text-align:right">
+                    توضیحات :
+                </label>
+                <div>
+                    <input value="@description" type="text" id="productDesc" name="description" required="required" class="form-control ">
+                </div>
+            </div>
+        </div>
+        <div class=" " style="padding : 50px 15px">
+            <a id="CRprocuct" class="btn btn-primary" style=" width: 185px">تایید</a>
+
+        </div>
+    </div>
+
+    if (Model.ID != 0)
+    {
+        <script>
+            $("#filterC option").each(function () {
+                if ($(this).text() == "@Model.filter") {
+                    $(this).attr('selected', 'selected');
+                }
+            });
+            $("#ColorC option").each(function () {
+                if ($(this).text() == "@Model.color") {
+                    $(this).attr('selected', 'selected');
+                }
+            });
+            $("#brandC option").each(function () {
+                if ($(this).text() == "@Model.brand") {
+                    $(this).attr('selected', 'selected');
+                }
+            });
+            $("#addMPCat option").each(function () {
+                if ($(this).val() == "@Model.cat") {
+                    $(this).attr('selected', 'selected');
+                }
+            });
+
+        </script>
+    }
+<script>
+
+    $("#CRprocuct").click(function () {
+
+
+
+
+        var name = productname.value;
+        var addMPCat = $("#addMPCat").val();
+        var brandC = $("#brandC").val();
+
+
+
+
+
+        if (name == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('نام محصول را وارد نمایید')
+        }
+        if (brandC == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error(' لطفا برند را انتخاب کنید')
+
+        }
+        if (addMPCat == "") {
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error(' لطفا دسته بندی را انتخاب کنید ')
+
+        }
+
+
+        if (name != "" && brandC != "" && addMPCat != "") {
+
+            
+            $("#SFilter").val($("#filterC").val());
+            $("#selectedColor").val($("#ColorC").val());
+          
+           
+            //alert($("#filterC").val());
+            $("#addproduct00").submit();
+
+        }
+        else {
+
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 5000,
+                "extendedTimeOut": 1000
+            }
+            toastr.error('تمامی موارد را کامل کنید')
+        }
+    })
+
+
+</script>
+    <script>
+
+
+
+
+        $(".REM").click(function () {
+
+            var id = $(this).attr('id');
+
+        })
+    </script>
+    <script>
+        if (screen.width > 900) {
+            $(".appview").css("display", "none")
+        }
+        else {
+            $(".webview").css("display", "none")
+        }
+    </script>
+}

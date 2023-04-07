@@ -4,13 +4,10 @@
     ViewBag.Title = "مدیریت مطالب";
 }
 <style>
-    .nav-tabs {
-        padding-right: 0px;
+    .component {
+        display: inline-block;
+        margin: 10px
     }
-
-        .nav-tabs li {
-            float: right !important;
-        }
 </style>
 <link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
 
@@ -71,6 +68,11 @@
     List<SelectListItem> listItems = new List<SelectListItem>();
     if (Model.filtercatsAll != null)
     {
+        listItems.Add(new SelectListItem
+        {
+            Text = "Main Page",
+            Value = "00"
+        });
         foreach (var item in Model.filtercatsAll)
         {
             listItems.Add(new SelectListItem
@@ -108,16 +110,16 @@
 
 
     List<SelectListItem> listItems2 = new List<SelectListItem>();
-    
+
 
 
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            
+
             <div class="modal-body">
-                 <p>@Resources.res.confrimAction</p>
+                <p>Are You Sure?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
@@ -131,7 +133,7 @@
         <div class="modal-content">
 
             <div class="modal-body">
-                <p>@Resources.res.confrimAction</p>
+                <p>Are You Sure?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
@@ -141,120 +143,141 @@
     </div>
 </div>
 
-<div style="background-color:white; padding:10px; margin:0px; margin-top:65px">
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">@Resources.res.image  </a></li>
-        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">@Resources.res.video</a></li>
-    </ul>
-    <div  class="tab-content">
-        <div id="home" class="tab-pane fade in active" style="padding-top:20px">
-            <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
 
-                        <div class="modal-body">
-                            <p class="modalDelQuestion">@Resources.res.delbusi</p>
+<div id="home" class="" style="padding-top:20px">
+    <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
-                <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                    <label> @Resources.res.page </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                    <label> @Resources.res.category </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                    <label> @Resources.res.createLocation </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("Countryname", listItems2, "select item", new { id = "listofLocation", @class = "form-control" })
-                    </div>
-                </div>
-                <div class="component">
-                    <label> @Resources.res.image </label>
-                    <input id="imageFileHolder" type="file" required="required" class="form-control INP">
-                </div>
-                <div style="margin:25px">
-                    <div class="component ">
-                        <div id="veri" class="btn btn-success">@Resources.res.OK  </div>
-                    </div>
-                    <div class="component ">
-                        <div id="edit" class="btn btn-success">@Resources.res.edit</div>
-                    </div>
-                </div>
-                
+                <div class="modal-body">
+                    <p class="modalDelQuestion">Remove Vendor</p>
 
-                <p hidden class="imageName"></p>
-                <div style="width:100%">
-                    <div id="imageHolder" style="display:flex; ">
-                        <div></div>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
                 </div>
             </div>
         </div>
-        <div id="menu1" class="tab-pane fade" style="padding-top:20px">
-            <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+    </div>
 
-                        <div class="modal-body">
-                            <p class="modalDelQuestion">@Resources.res.delbusi</p>
+</div>
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="remove2">@Resources.res.OK</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>Set New Slide </h5>
+                </div>
+                <div style="">
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+            <label> page </label>
+            <div style="width:100%">
+                @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
+            </div>
+        </div>*@
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> @Resources.res.category </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
                         </div>
                     </div>
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> Link </label>
+                        <div style="width:100%">
+                            <input id="link" name="link" class="form-control" />
+                        </div>
+                    </div>
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> For : </label>
+                        <div style="width:100%">
+                            <select class="form-control" name="type" id="type">
+                                <option value="app">App</option>
+                                <option value="web">Web</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="component col-md-4 col-sm-3 col-xs-12">
+                        <label> image </label>
+                        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-4 col-sm-3 col-xs-12">
+                        <div style="width:100%">
+                            <div id="imageHolder" style="display:flex; flex-wrap:wrap">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:25px; display:flex">
+                        <div class="component " ; style="margin:8px">
+                            <div id="veri" class="btn btn-success">@Resources.res.OK  </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <p hidden class="imageName"></p>
+
                 </div>
             </div>
-            <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
-                <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                    <label> @Resources.res.page </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("pagename2", pageList, "select item", new { id = "listofpage2", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
-                    <label> @Resources.res.category </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("catname2", listItems, "select item", new { id = "listofcat2", @class = "form-control" })
-                    </div>
-                </div>
-                <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
-                    <label> @Resources.res.createLocation </label>
-                    <div style="width:100%">
-                        @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
-                    </div>
-                </div>
-                <div class="component">
-                    <label> @Resources.res.image </label>
-                    <input id="imageFileHolder2" type="file" required="required" class="form-control INP">
-                </div>
-                <div class="component ">
-                    <div id="veri2" class="btn btn-success">@Resources.res.OK  </div>
-                </div>
-                <div class="component ">
-                    <div id="edit2" class="btn btn-success">@Resources.res.edit</div>
-                </div>
+        </div>
+    </div>
+</div>
 
-                <p hidden class="imageName2"></p>
-                <div style="width:100%">
-                    <div id="imageHolder2" style="display:flex; ">
 
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>Manage Slide</h5>
+                </div>
+                <div style="">
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> page </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
+                            </div>
+                        </div>*@
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> @Resources.res.category </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                        </div>
                     </div>
+
+                    <div component col-md-4 col-sm-3 col-xs-12>
+                        <div style="width:100%">
+                            <div id="imageHolderEdit" style="display:flex;flex-wrap:wrap ">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> Location </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("Countryname", listItems2, "select item", new { id = "listofLocation", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    <div style="margin:25px; display:flex">
+
+                        <div class="component " ; style="margin:8px">
+                            <div id="edit" class="btn btn-success">Bring slides</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
                 </div>
             </div>
         </div>
@@ -263,21 +286,87 @@
 
 
 
+@*<div style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">Image  </a></li>
+            <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">Video</a></li>
+        </ul>
+        <div  class="tab-content">
+
+            <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+                <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                <p class="modalDelQuestion">Remove Vendor?</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="remove2">@Resources.res.OK</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> page </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("pagename2", pageList, "select item", new { id = "listofpage2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> @Resources.res.category </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("catname2", listItems, "select item", new { id = "listofcat2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> Location </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="component">
+                        <label> image </label>
+                        <input id="imageFileHolder2" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component ">
+                        <div id="veri2" class="btn btn-success">@Resources.res.OK  </div>
+                    </div>
+                    <div class="component ">
+                        <div id="edit2" class="btn btn-success">@Resources.res.edit</div>
+                    </div>
+
+                    <p hidden class="imageName2"></p>
+                    <div style="width:100%">
+                        <div id="imageHolder2" style="display:flex; ">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
 
 
 
-<script src="~/Scripts/download.js"></script>
+
+
+
+<script src="~/Scripts/downloadNode.js"></script>
 
 <script>
 
-    
+
     $("#imageFileHolder2").on('change', function () {
         //alert("sss");
         uploadImage("imageHolder2", "imageName2", this)
     });
     $("#doAction2").click(function () {
-       
-       
+
+
         var catname = $("#listofcat2").val();
         var Countryname = $("#listofLocation2").val()
         var page = $("#listofpage2").val();
@@ -289,12 +378,12 @@
 
         if ((catname != "" || Countryname != "") || page != "") {
             $.ajax({
-                url: "/admin/addSlide",
+                url: "/Node/addSlide",
                 dataType: "html",
                 data: {
                     catID: catname,
                     locationID: Countryname,
-                    image: image, 
+                    image: image,
                     page: page,
                     type: "0"
                 },
@@ -302,10 +391,11 @@
                     location.reload();
                 }
             })
-        }    })
+        }
+    })
     $("#veri2").click(function () {
         $("#exampleModal2").modal('toggle');
-        
+
     })
     $("#edit2").click(function () {
         var catname = $("#listofcat2").val();
@@ -313,16 +403,16 @@
         var page = $("#listofpage2").val();
         if ((catname != "" || Countryname != "") || page != "") {
             $.ajax({
-                url: "/admin/getSlide",
+                url: "/Node/getSlide",
                 dataType: "html",
                 data: {
                     catid: catname,
                     locationID: Countryname,
-                    page:page,
-                    type : "0"
+                    page: page,
+                    type: "0"
                 },
                 success: function (data) {
-                  
+
                     var item = JSON.parse(data);
                     var srt = "";
                     if (item != null) {
@@ -331,23 +421,24 @@
 
                             var obj = item[i];
                             var image = obj.image
-                          
+                            var itemid = obj.id
+                            alert(itemid)
                             if (image != "undefined") {
                                 srt = image + "," + srt;
                                 var processID = makeid();
 
-                                htmldiv = htmldiv + `<div  class="imageCover" style="postion:relative !important; width:150px"><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#"  id="` + processID + `" /> <img  onclick= removeImage("` + processID + `***` + image + `","imageName2")   id="R` + processID + `"src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div><p>` + image + `</p></div> `;
-                              
+                                htmldiv = htmldiv + `<div  class="imageCover" style="postion:relative !important; width:150px"><div  style="position:relative"><img src="/images/panelimages/` + image + `" style="width:150px"" src="#"  id="` + processID + `" /> <img  onclick= removeImage("` + itemid + `***` + image + `","imageName2")   id="R` + processID + `"src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div><p>` + image + `</p></div> `;
+
                             }
-                           
+
                         }
                         $("#imageHolder2").html(htmldiv);
 
                         var last = $(".imageName2").text();
                         $(".imageName2").text(srt + last);
                     }
-                   
-                    
+
+
                 }
             })
         }
@@ -359,10 +450,10 @@
 
         if (catname != "" && image != "") {
             $.ajax({
-                url: "/admin/addSlide",
+                url: "/Node/addSlide",
                 dataType: "html",
                 data: {
-                    catID: catname,
+                    catID: "o" + catname,
                     locationID: Countryname,
                     image: image,
                     page: page,
@@ -382,7 +473,7 @@
         $("#title2").val("");
     })
 
-    
+
 </script>
 
 
@@ -396,23 +487,26 @@
         var catname = $("#listofcat").val();
         var Countryname = $("#listofLocation").val()
         var page = $("#listofpage").val();
+        var link = $("#link").val();
+        var type = $("#type").val();
 
-       
         if (catname == "") {
             catname = "00";
         }
 
         var image = $(".imageName").text();
-        if ((catname != "" && Countryname != "") || page != "" ) {
+
+        if (catname != "") {
             $.ajax({
-                url: "/admin/addSlide",
+                url: "/Node/addSlide",
                 dataType: "html",
                 data: {
                     catID: catname,
                     locationID: Countryname,
                     image: image,
                     page: page,
-                    type: "1"
+                    type: type,
+                    link: link
                 },
                 success: function (data) {
                     //alert(data)
@@ -423,50 +517,55 @@
     })
     $("#veri").click(function () {
         $("#exampleModal").modal('toggle');
-       
-        
+
+
     })
 
 
     $("#edit").click(function () {
-        var catname = $("#listofcat").val();
+        var catname = $("#listofcatEdit").val();
         var Countryname = $("#listofLocation").val()
         var page = $("#listofpage").val();
+        var link = $("#link").val();
         if ((catname != "" || Countryname != "") || page != "") {
             $.ajax({
-                url: "/admin/getSlide",
+                url: "/Node/getSlide",
                 dataType: "html",
                 data: {
                     catid: catname,
                     locationID: Countryname,
-                    page : page,
+                    page: page,
                     type: "1"
                 },
                 success: function (data) {
-                   
-                    var item = JSON.parse(data);
-                    var srt = "";
-                    if (item != null) {
-                        var htmldiv = "";
-                        for (var i = 0; i < item.length; i++) {
+                    $("#imageHolderEdit").html(data);
 
-                            var obj = item[i];
-                            var image = obj.image
+                    //var item = JSON.parse(data);
+                    //var srt = "";
+                    //if (item.slideList != null) {
+                    //    var htmldiv = "";
 
-                            if (image != "undefined") {
-                                srt = image + "," + srt;
-                                var processID = makeid();
+                    //    for (var i = 0; i < item.slideList.length; i++) {
 
-                                htmldiv = htmldiv + `<div  class="imageCover" style="postion:relative !important; width:150px"><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#"  id="` + processID + `" /> <img  onclick= removeImage("` + processID + `***` + image + `","imageName")   id="R` + processID + `"src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div></div> `;
+                    //        var obj = item.slideList[i];
 
-                            }
+                    //        var image = obj.title
+                    //        var itemid = obj.ID
+                    //        if (image != "undefined") {
+                    //            srt = image + "," + srt;
+                    //            var processID = makeid();
 
-                        }
-                        $("#imageHolder").html(htmldiv);
+                    //            htmldiv = htmldiv + `<div  class="imageCover" style="postion:relative !important; width:250px; margin:5px"><div  style="position:relative"><img src="/images/` + image + `" style="width:250px"" src="#"  id="` + processID + `" /> <img  onclick= removeImageFromItem("` + itemid + `***` + image + `","imageName")   id="R` + processID + `"src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div></div> `;
 
-                        var last = $(".imageName").text();
-                        $(".imageName").text(srt + last);
-                    }
+                    //        }
+
+                    //    }
+                        
+
+                    //}
+                    //else {
+                    //    $("#imageHolderEdit").html('');
+                    //}
 
 
                 }
@@ -480,7 +579,7 @@
     //    var page = $("#pageList").val();
     //    if (catname != "" && image != "") {
     //        $.ajax({
-    //            url: "/admin/addSlide",
+    //            url: "/Node/addSlide",
     //            dataType: "html",
     //            data: {
     //                catID: catname,

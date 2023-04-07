@@ -1,0 +1,66 @@
+﻿@model banimo.ViewModel.slideVM
+
+
+
+
+<table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+    <thead>
+        <tr>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Image</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Link</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.slideList != null)
+        {
+            foreach (var item in Model.slideList)
+            {
+                string cls = "odd";
+                if (Model.slideList.IndexOf(item) + 1 % 2 == 0)
+                {
+                    cls = "even";
+                }
+
+                <tr class="@cls">
+                    <td>
+                        <div class="table-image">
+                            <img src="/images/@item.title" class="img-fluid" alt="">
+                        </div>
+                    </td>
+
+
+                    <td>@item.link</td>
+
+
+
+                    <td>
+                        <ul>
+                            @*<li>
+                                <a href="javascript:void(0)">
+                                    <i class="ri-pencil-line  editSBItem"></i>
+
+                                </a>
+                            </li>*@
+                            <li>
+                                @{
+                                    string itemid = item.ID;
+                                    string image = item.title;
+                                    string dat = itemid + "***" + image; //  " +  +  + `","imageName"
+                                }
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                    <i onclick="removeImageFromSlide('@dat','imageName')" idtoremove=@item.ID class="ri-delete-bin-line removeProduct" id=""></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+
+        }
+
+
+
+    </tbody>
+</table>

@@ -1,0 +1,189 @@
+﻿@model banimo.ViewModel.UserStatus
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Details Start -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="title-header option-title">
+                        <h5>User Role</h5>
+                    </div>
+
+                    @{
+                        if (Model.ID != null)
+                        {
+                            <div class="row" id="detailholder" style="padding: 0px 20px;width: 100%;margin: 0px;">
+
+
+
+                                @using (Html.BeginForm("addPartner", "Node", FormMethod.Post, new { enctype = "multipart/form-data", id = "updateUser" }))
+                                {
+
+                                   
+                                    <div >
+
+                                        <div class="row">
+                                            <div class="row fieldholder " style="margin:15px 0">
+                                                <label> User Role</label>
+
+                                                <div class=" ">
+                                                    <span style="color:red; display:none">*</span>
+                                                    <div class=" ">
+                                                        <span style="color:red; display:none">*</span>
+                                                        <select name="partnerType" class="form-control">
+
+                                                            @foreach (var item in Model.roleList)
+                                                            {
+
+                                                                string selected = "";
+                                                                foreach (var useritem in Model.userRoleList)
+                                                                {
+                                                                    if (item.ID == useritem.RoleID)
+                                                                    {
+                                                                        selected = "selected";
+                                                                        continue;
+                                                                    }
+                                                                }
+                                                                <option value="@item.ID" @selected>@item.roleName</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
+                                            <input type="hidden" name="patnerUsername" class="patnerUsername" value="@Model.token" />
+
+                                            <div class="row fieldholder" style="">
+
+                                                <div class="btn btn-success" style="width:45%;margin:2%">
+                                                    <input style="color:white; background:none; border:none" type="submit" value="Edit User Role" />
+
+                                                </div>
+                                                <div id="@Model.token" class="btn btn-danger Terminate" style="width:45%;margin:2%">
+                                                    Terminate Access
+                                                </div>
+
+
+                                            </div>
+
+                                            @Html.HiddenFor(x => x.token)
+
+                                            <input id="partnerToken" name="partnerToken" value="@Model.token" hidden />
+
+
+                                        </div>
+
+                                    </div>
+
+                                }
+
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row" id="detailholder" style="padding: 0px 20px;width: 100%;margin: 0px;">
+
+
+
+                                @using (Html.BeginForm("addPartner", "Node", FormMethod.Post, new { enctype = "multipart/form-data", id = "editPartner" }))
+                                {
+                                    <p> Set New Access </p>
+                                    @Html.AntiForgeryToken()
+                                    <div >
+
+                                        <div class="row">
+                                            <div class="row fieldholder " style="margin:15px 0; display:flex">
+                                                <div style="margin:15px 0">
+                                                    <label> Select Role</label>
+                                                    <div class=" ">
+                                                        <span style="color:red; display:none">*</span>
+                                                        <div class=" ">
+                                                            <span style="color:red; display:none">*</span>
+                                                            <select name="partnerType" class="form-control" >
+
+                                                                @foreach (var item in Model.roleList)
+                                                                {
+
+                                                                    <option value="@item.ID">@item.roleName</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              
+                                                <div class="" style="margin:15px 0">
+                                                    <label style="">
+                                                        Password :
+                                                    </label>
+                                                    <div>
+                                                        <span style="color:red; display:none">*</span>
+                                                        <input style="color:black" value="" type="text" id="patnerPassword" name="patnerPassword" required="required" class="form-control ">
+
+                                                    </div>
+
+
+                                                </div>
+
+
+
+                                            </div>
+                                           @Html.HiddenFor(x => x.token)
+                                            <input type="hidden" name="patnerUsername" class="patnerUsername"  value="@Model.token" />
+                                           
+
+
+                                            <div class="row fieldholder " style="margin:15px 0; padding-top:25px">
+
+                                                <div class="btn btn-success">
+                                                    <input style="color:white; background:none; border:none" type="submit" value="Verify" />
+                                                </div>
+
+
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                }
+
+
+                            </div>
+                        }
+
+                    }
+                    <script>
+                        $(".Terminate").click(function () {
+                            var token = $(this).attr('id');
+                            $.ajax({
+                                url: '/Node/DeleteUserAccess',
+                                dataType: 'html',
+                                data: {
+                                    id: token,
+                                },
+                                success: function (data) {
+
+                                    window.location.reload();
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        })
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+

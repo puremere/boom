@@ -1,0 +1,198 @@
+﻿
+@model  banimo.ViewModel.factorSayerVM
+
+<table>
+    <thead>
+        <tr>
+            <td>ردیف</td>
+            <td>عنوان</td>
+            <td>درصد</td>
+            <td>قیمت</td>
+            <td>محاسبه در بهای تمام شده</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model.sayerList != null)
+        {
+            banimo.ViewModel.SayerList discount = Model.sayerList.Where(x => x.title == "discount").FirstOrDefault();
+            banimo.ViewModel.SayerList haml = Model.sayerList.Where(x => x.title == "haml").FirstOrDefault();
+
+            banimo.ViewModel.SayerList ayab = Model.sayerList.Where(x => x.title == "ayab").FirstOrDefault();
+            banimo.ViewModel.SayerList ojrat = Model.sayerList.Where(x => x.title == "ojrat").FirstOrDefault();
+
+
+            string dbahachechekd = "";
+            if (discount != null)
+            {
+                dbahachechekd = discount.baha == "1" ? "checked" : "";
+            }
+            string Tbahachechekd = "";
+            if (ayab != null)
+            {
+                Tbahachechekd = ayab.baha == "1" ? "checked" : "";
+            }
+            string Hbahachechekd = "";
+            if (haml != null)
+            {
+                Hbahachechekd = haml.baha == "1" ? "checked" : "";
+            }
+            string Obahachechekd = "";
+            if (ojrat != null)
+            {
+                Obahachechekd = ojrat.baha == "1" ? "checked" : "";
+            }
+
+
+        <tr>
+            @{
+                string per1 = discount == null ? "0" : discount.percent;
+                string pri1 = discount == null ? "0" : discount.price;
+            }
+            <td>1</td>
+            <td>تخفیف</td>
+
+            <td><input id="dPercent" class="form-control" value="@per1" /></td>
+            <td><input id="dPrice" class="form-control" value="@pri1.Replace("-","")" /></td>
+            @if (discount != null)
+            {
+                if (discount.baha == "1")
+                {
+                    <td><input checked id="dcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input id="dcheck" class="form-control" type="checkbox" /></td>
+
+                }
+            }
+
+        </tr>
+        <tr>
+            @{
+                string per2 = ayab == null ? "0" : ayab.percent;
+                string pri2 = ayab == null ? "0" : ayab.price;
+            }
+            <td>2</td>
+            <td>ایاب و ذهاب</td>
+            <td><input id="TPercent" class="form-control" value="@per2" /></td>
+            <td><input id="TPrice" class="form-control" value="@pri2" /></td>
+            @if (ayab != null)
+            {
+                if (ayab.baha == "1")
+                {
+                    <td><input checked id="Tcheck" class="form-control" type="checkbox" /></td>
+
+                }
+                else
+                {
+                    <td><input id="Tcheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+            }
+            else
+            {
+                <td><input id="Tcheck" class="form-control" type="checkbox" /></td>
+
+            }
+
+        </tr>
+            <tr>
+                @{
+                    string per = ojrat == null ? "0" : ojrat.percent;
+                    string pri = ojrat == null ? "0" : ojrat.price;
+                }
+                <td>3</td>
+                <td>اجرت</td>
+                <td><input id="OPercent" class="form-control" value="@per" /></td>
+                <td><input id="OPrice" class="form-control" value="@pri" /></td>
+                @if (ojrat != null)
+                {
+
+                    if (ojrat.baha == "1")
+                    {
+                        <td><input checked id="Ocheck" class="form-control" type="checkbox" /></td>
+                    }
+                    else
+                    {
+                        <td><input id="Ocheck" class="form-control" type="checkbox" /></td>
+
+                    }
+
+                }
+                else
+                {
+                    <td><input id="Ocheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+            </tr>
+            <tr>
+                @{
+                    string per4 = haml == null ? "0" : haml.percent;
+                    string pri4 = haml == null ? "0" : haml.price;
+                }
+                <td>4</td>
+                <td>حمل و نقل</td>
+                <td><input id="HPercent" class="form-control" value="@per4" /></td>
+                <td><input id="HPrice" class="form-control" value="@pri4" /></td>
+
+                @if (haml != null)
+                {
+                    if (haml.baha == "1")
+                    {
+                        <td><input checked id="Hcheck" class="form-control" type="checkbox" /></td>
+
+                    }
+                    else
+                    {
+                        <td><input id="Hcheck" class="form-control" type="checkbox" /></td>
+
+                    }
+                }
+                else
+                {
+                    <td><input id="Hcheck" class="form-control" type="checkbox" /></td>
+
+                }
+
+
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>1</td>
+                <td>تخفیف</td>
+
+                <td><input id="dPercent" class="form-control" value="0" /></td>
+                <td><input id="dPrice" class="form-control" value="0" /></td>
+                <td><input id="dcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>ایاب و ذهاب</td>
+                <td><input id="TPercent" class="form-control" value="0" /></td>
+                <td><input id="TPrice" class="form-control" value="0" /></td>
+                <td><input id="Tcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>اجرت</td>
+                <td><input id="OPercent" class="form-control" value="0" /></td>
+                <td><input id="OPrice" class="form-control" value="0" /></td>
+                <td><input id="Ocheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>حمل و نقل</td>
+                <td><input id="HPercent" class="form-control" value="0" /></td>
+                <td><input id="HPrice" class="form-control" value="0" /></td>
+                <td><input id="Hcheck" class="form-control" type="checkbox" value="" /></td>
+            </tr>
+        }
+
+    </tbody>
+</table>

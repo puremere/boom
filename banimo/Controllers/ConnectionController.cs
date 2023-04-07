@@ -271,11 +271,14 @@ namespace banimo.Controllers
                 string ids = "";
                 string nums = "";
                 string ths = "";
+                string addson = "";
                 foreach (var item in data)
                 {
                     ids = ids + "," + (item.productid);
                     nums = nums + "," + (item.quantity);
                     ths = ths + "," + (item.tarafH);
+                    addson = addson + "," + (item.addson);
+                    
                 }
 
                 userdata user = Session["LogedInUser"] as userdata;
@@ -328,7 +331,7 @@ namespace banimo.Controllers
                     collection.Add("auth", auth);
                     collection.Add("latitude", model.lat);
                     collection.Add("longitude", model.lon);
-
+                    collection.Add("addsOn", addson.Trim(','));
                     collection.Add("mbrand", servername);
 
 
@@ -338,7 +341,7 @@ namespace banimo.Controllers
                     //}
                     byte[] response =
                     //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestNewVersionV2.php", collection);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestMarsool.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
@@ -722,7 +725,7 @@ namespace banimo.Controllers
         public ActionResult verifyByAdmin(string payment, string id, string isPayed, string fromUser)
         {
 
-            payment = "6";
+            //payment = "6";
             isPayed = isPayed == null ? "" : isPayed;
             string result2 = "";
             string device = RandomString();
@@ -767,11 +770,12 @@ namespace banimo.Controllers
                 collection2.Add("paymentStatus", paymentstatus);
                 collection2.Add("payment", payment);
                 collection2.Add("isPayed", isPayed);
-
+                collection2.Add("market", ConfigurationManager.AppSettings["market"]);
                 collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
+                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
                // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
                 res = System.Text.Encoding.UTF8.GetString(response);
@@ -1844,7 +1848,6 @@ namespace banimo.Controllers
                     Details = "جزییات تراکنش",
                     max_credit = null,
                     min_credit = null,
-
                 };
                 var payload = JsonConvert.SerializeObject(payloadModel);
                 result = await wb.doPostData(url, payload);

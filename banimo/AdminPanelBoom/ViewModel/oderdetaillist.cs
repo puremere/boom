@@ -11,6 +11,8 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string price { get; set; }
+       
+        
         public string oldPrice { get; set; }
         public string parentID { get; set; }
 
@@ -27,6 +29,7 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string subcatid { get; set; }
         public string subcatid2 { get; set; }
         public string meta { get; set; }
+        public string image { get; set; }
         public List<Image> images { get; set; }
 
     }

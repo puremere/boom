@@ -1,0 +1,79 @@
+﻿
+@model banimo.ViewModel.tagsVM
+
+
+<table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+    <thead>
+        <tr>
+
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> ID</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Name</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Tag</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Tag Type</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> Priority</th>
+            @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">category</th>*@
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">operation</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.tags != null)
+        {
+            foreach (var item in Model.tags)
+            {
+                string cls = "odd";
+                if (Model.tags.IndexOf(item) + 1 % 2 == 0)
+                {
+                    cls = "even";
+                }
+
+        <tr class="@cls">
+
+
+            <td>@item.ID</td>
+
+            <td>@item.title</td>
+            <td>@item.tag</td>
+            <td>
+                @{ 
+                    string tagtype = @item.type == "1" ? "Vendor" : "Product";
+
+                    
+                }
+                <span>
+                   @tagtype
+                </span>
+           
+            </td>
+            <td>@item.priority</td>
+            @*<td>@item.catTitle</td>*@
+            <td>
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                            <i id="@item.ID" class="ri-delete-bin-line removeButt"></i>
+                        </a>
+                    </li>
+                </ul>
+            </td>
+
+        </tr>
+            }
+        }
+
+
+
+
+    </tbody>
+</table>
+
+<script>
+   
+    $(".removeButt").click(function () {
+        var idtoremove = $(this).attr('id');
+
+        $(".idToRemove").text(idtoremove);
+            $("#delmodal").modal('toggle');
+
+       })
+</script>

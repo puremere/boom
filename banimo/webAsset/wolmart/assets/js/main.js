@@ -3089,6 +3089,7 @@ window.Wolmart = {};
      * @return {void}
      */
     function clickRatingForm(e) {
+        alert("ddddd");
         var $star = $(this);
         $star.addClass('active').siblings().removeClass('active');
         $star.parent().addClass('selected');

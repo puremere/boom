@@ -1,6 +1,7 @@
 ﻿@model banimo.ViewModelPost.ProductListViewModel
 @using banimo.Classes;
-
+@using BotDetect.Web.Mvc;
+@using Newtonsoft.Json;
 
 
 <style>
@@ -36,13 +37,19 @@
                             {
                                 imagefile = item.image.Trim(',').Split(',').First();
                             }
-                            string src = imagefile;
 
+                            string src = imagefile;
+                            string purl = "/Home/ProductDetail/o" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                purl = "/product/" + metaModel.curl;
+                            }
                             <div class="col-6 col-lg-4 col-xl-4 col-xxl-3" style="margin-top:15px; padding:15px">
                                 <div class="box-cards">
 
                                     <div class="product-card product-card-blue  @blurred">
-                                        <a href="/Home/productDetail?ID=@ID"
+                                        <a href="@purl"
                                            dideo-checked="true">
                                             <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
 
@@ -56,20 +63,20 @@
                                                 }
                                                 else
                                                 {
-                                                    
-                                                        
-                                                    
-                                            <div class="product-price">
-                                                @if (item.oldPrice != item.price)
-                                                {
-                                                <span class="discount priceItem">
-                                                    @string.Format("{0:n0}", item.oldPrice) ت
-                                                </span>
-                                                }
-                                                <span class="total-price priceItem">
-                                                    @string.Format("{0:n0}", item.price) ت
-                                                </span>
-                                            </div>
+
+
+
+                                                    <div class="product-price">
+                                                        @if (item.oldPrice != item.price)
+                                                        {
+                                                            <span class="discount priceItem">
+                                                                @string.Format("{0:n0}", item.oldPrice) ت
+                                                            </span>
+                                                        }
+                                                        <span class="total-price priceItem">
+                                                            @string.Format("{0:n0}", item.price) ت
+                                                        </span>
+                                                    </div>
                                                 }
 
                                                 <div class="product-img xmb-3">
@@ -145,7 +152,12 @@
                                 imagefile = item.image.Trim(',').Split(',').First();
                             }
                             string src = imagefile;
-
+                            string purl = "/Home/ProductDetail/o" + item.ID;
+                            if (item.meta != "null" && item.meta != null)
+                            {
+                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                purl = "/product/" + metaModel.curl;
+                            }
 
                             <style>
                                 .listitemholder {
@@ -153,26 +165,27 @@
                                     display: inline-block !important;
                                     padding-right: 30px
                                 }
+
                                 .listitemImageHolder {
                                     display: inline-block;
                                 }
+
                                 .listitemDataholder {
                                     display: inline-block;
                                     margin-right: 50px
                                 }
 
                                 @@media only screen and (max-width: 600px) {
-                                  
+
                                     .listitemDataholder {
-                                       
                                         margin-top: 50px;
-                                        margin-right:0;
+                                        margin-right: 0;
                                     }
                                 }
                             </style>
                             <div class="box-cards">
                                 <div class="card-list card-list-box-blue" style="background-color:white; margin:10px 0">
-                                    <a href="/Home/productDetail?ID=@ID" dideo-checked="true">
+                                    <a href="@purl" dideo-checked="true">
                                         <div class="card-list-box xpt-8 xpb-6 xpl-5 position-relative listitemholder" style="">
                                             <div class="listitemImageHolder col-lg-4 col-md-12 col-sm-12 card-img" style="">
                                                 <img alt="@item.title" class="img-fluid rounded" src="@src" loading="lazy">

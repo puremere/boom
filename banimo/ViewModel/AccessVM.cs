@@ -13,8 +13,9 @@ namespace banimo.ViewModel
         public List<Role> Roles { get; set; }
         public List<Node> Nodes { get; set; }
         public List<Section> Sections { get; set; }
-       
-        
+        public string RolID { get; set; }
+
+
     }
 
     public class Role
@@ -33,7 +34,8 @@ namespace banimo.ViewModel
     {
         public string ID { get; set; }
         public string actionF { get; set; }
-       
+        
+
     }
 
 

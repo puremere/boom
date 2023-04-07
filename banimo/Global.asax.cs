@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -25,6 +27,17 @@ namespace banimo
             AuthConfig.RegisterAuth();
             MvcHandler.DisableMvcResponseHeader = true;
 
+        }
+        protected void Application_AcquireRequestState(Object sender, EventArgs e)
+        {
+            HttpContext context = HttpContext.Current;
+            var languageSession = "en";
+            if (context != null && context.Session != null)
+            {
+                languageSession = context.Session["lang"] != null ? context.Session["lang"].ToString() : "en";
+            }
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(languageSession);
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(languageSession);
         }
         protected void Application_BeginRequest(object sender, EventArgs e)
         {

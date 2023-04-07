@@ -37,6 +37,8 @@ namespace banimo.ViewModelPost
         public string productsCounts { get; set; }
         public string currentPage { get; set; }
         public string pageNumber { get; set; }
+        public string trafCode { get; set; }
+        
     }
 
     public class WishList

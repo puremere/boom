@@ -1,0 +1,151 @@
+﻿@model  banimo.ViewModel.DriverListVM
+@*@model PagedList.IPagedList<AdminPanel.ViewModel.orderdetail>*@
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Driver List";
+}
+
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div id="Listholder">
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                        <thead>
+                            <tr>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">image</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">fullname</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">phone</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">type</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">action</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.staffList != null)
+                            {
+                                foreach (var item in Model.staffList)
+                                {
+
+                                    string cls = "odd";
+                                    if (Model.staffList.IndexOf(item) + 1 % 2 == 0)
+                                    {
+                                        cls = "even";
+                                    }
+
+                                    <tr class="@cls">
+
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="/images/@item.image" class="img-fluid" alt="">
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @item.fullname
+                                        </td>
+                                        <td style=" ">
+                                            @item.phone
+                                        </td>
+
+                                        <td style="">
+                                            @item.type
+                                        </td>
+
+
+
+
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+
+                                                        <i idToRemove=@item.ID class="ri-delete-bin-line Dbutton"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+                
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="delmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p class="idToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeU">Verify</button>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $("#removeU").click(function () {
+        var id = $(".idToRemove").text();
+
+        $.ajax({
+            url: '/Deliver/DeleteDeliverStaff',
+            dataType: 'html',
+            data: {
+                id: id,
+            },
+            success: function (data) {
+
+                window.location.reload();
+
+            },
+            error: function () {
+
+            }
+        });
+    })
+
+    $(".Dbutton").click(function () {
+
+        var id = $(this).attr("idToRemove");
+        $(".idToRemove").text(id);
+        $("#delmodal").modal("toggle");
+
+    });
+</script>
+
+
+

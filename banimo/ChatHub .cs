@@ -7,6 +7,7 @@ using Microsoft.AspNet.SignalR;
 using banimo.ScreenModels;
 using System.Net;
 using System.IO;
+using System.Collections.Specialized;
 
 namespace education2
 {
@@ -34,6 +35,7 @@ namespace education2
         {
            
         }
+
         public void Join(string groupname , string username,string type)
         {
             User user = Users.SingleOrDefault(x => x.Username == username && x.GroupName == groupname);
@@ -69,13 +71,22 @@ namespace education2
             // Hang up any calls the user is in
             HangUp(""); // Gets the user from "Context" which is available in the whole hub
 
-            string groupname = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId).GroupName;
-            // Remove the user
-            Users.RemoveAll(u => u.ConnectionId == Context.ConnectionId);
-            string Groupname = Users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId).GroupName;
-            Groups.Remove(Context.ConnectionId, groupname);
+            
+
+
+             User usr  = Users.SingleOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (usr != null)
+            {
+                string groupname = usr.GroupName;
+                // Remove the user
+                Users.RemoveAll(u => u.ConnectionId == Context.ConnectionId);
+
+                Groups.Remove(Context.ConnectionId, groupname);
+            }
+
+           
             // Send down the new user list to all clients
-            SendUserListUpdate(Groupname);
+            //SendUserListUpdate(groupname);
 
             return base.OnDisconnected(boolian);
         }
@@ -490,6 +501,50 @@ namespace education2
 
         #endregion
 
+
+
+        public void JoinDeliver(string groupname, string username, string type,string lat, string lon)
+        {
+            User user = Users.SingleOrDefault(x => x.Username == username && x.GroupName == groupname);
+            if (user != null )
+            {
+                Groups.Remove(user.ConnectionId, groupname);
+                if (type == "0")
+                {
+                    
+                    Groups.Add(Context.ConnectionId, groupname);
+                    user.ConnectionId = Context.ConnectionId;
+                    
+                }
+               
+
+            }
+            else
+            {
+                // Add the new user
+
+                if (type == "0")
+                {
+                    Users.Add(new User
+                    {
+                        Username = username,
+                        ConnectionId = Context.ConnectionId,
+                        GroupName = groupname,
+                        Type = type
+                    });
+                    Groups.Add(Context.ConnectionId, groupname);
+                    Clients.Client(Context.ConnectionId).wellcom();
+                }
+                    
+                // Send down the new list to all clients
+                //SendUserListUpdate(groupname);
+            }
+
+
+        }
+
+      
+        
 
     }
 }

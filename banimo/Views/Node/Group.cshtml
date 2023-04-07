@@ -1,0 +1,335 @@
+﻿@model banimo.AdminPanel.ViewModel.catAll
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "Menu";
+}
+<style>
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+</style>
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    if (Model.filtercatsAll != null)
+    {
+        listItems.Add(new SelectListItem
+        {
+            Text = "Main Page",
+            Value = "00"
+        }) ;
+        foreach (var item in Model.filtercatsAll)
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = item.title,
+                Value = "1" + item.ID
+            });
+            if (item.filtersubcat != null)
+            {
+                foreach (var subcat in item.filtersubcat)
+                {
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "---" + subcat.title,
+                        Value = "2" + subcat.ID
+                    });
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listItems.Add(new SelectListItem
+                            {
+                                Text = "------" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+
+
+}
+
+<style>
+    .classhide {
+        display: none;
+    }
+
+    .component {
+        margin: 5px
+    }
+</style>
+
+<div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p class="idToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Set New Tag</h5>
+                </div>
+                <div style="">
+
+                    <div style="display:flex; flex-wrap:wrap">
+                        <div class="component col-md-3 col-sm-3 col-xs-12">
+                            <label> @Resources.res.category </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                            <label> Group List Type </label>
+                            <select class="form-control " name="type" id="hashtype">
+                                <option value="1">Vendor</option>
+                                <option value="0">Product</option>
+                            </select>
+                           
+                        </div>
+                        <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                            <label> Hashtag title </label>
+                            <input type="text" id="title" required="required" class="form-control ">
+                        </div>
+                        <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                            <label> Hashtag Priority </label>
+                            <input type="text" id="priority" required="required" class="form-control ">
+                        </div>
+                        <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                            <label> Hashtag Content </label>
+                            <input type="text" id="tag" required="required" class="form-control ">
+                        </div>
+                    </div>
+                   
+
+
+
+
+                    <div style="display:flex">
+                        <div class="component classshow">
+                            <div id="addCat" class="btn btn-success">add</div>
+                        </div>
+
+                        <div class="component classhide">
+                            <div id="verifEdit" class="btn btn-success">@Resources.res.OK  </div>
+                        </div>
+                        <div class="component classhide">
+                            <div id="cancelEdit" class="btn btn-success">@Resources.res.cancel</div>
+                        </div>
+                    </div>
+
+                    <p hidden class="imageName"></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Edit Group Item</h5>
+                </div>
+                <div class="component col-md-3 col-sm-3 col-xs-12">
+                    <label> @Resources.res.category </label>
+                    <div style="width:100%">
+                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="component col-md-3 col-sm-3 col-xs-12">
+
+                    <div class="component ">
+                        <div id="edit" class="btn btn-success">@Resources.res.edit</div>
+                    </div>
+                   
+
+                </div>
+                <div id="tasholder"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+
+
+    <script src="~/Scripts/download.js"></script>
+
+    <script>
+
+        $("#addCat").click(function () {
+
+            var catname = $("#listofcat").val();
+            
+            if (catname == "") {
+                catname = "00";
+            }
+            var name = $("#title").val();
+            var tag = $("#tag").val();
+            var Priority = $("#priority").val();
+            var Type = $("#hashtype").val();
+
+            if (catname != "" && name != "" && tag != "" && Priority != "" ) {
+                $.ajax({
+                    url: "/node/setnewTags",
+                    dataType: "html",
+                    data: {
+                        catID: catname,
+                        title: name,
+                        priority: Priority,
+                        tag: tag,
+                        Type: Type
+
+                    },
+                    success: function (data) {
+                        if (data == "1") {
+                            location.reload();
+
+                        }
+                    }
+                })
+            }
+        })
+        
+        $("#remove").click(function () {
+
+            var ID = $(".idToRemove").text();
+            
+            //alert(ID);
+            $.ajax({
+                url: "/node/removetag",
+                dataType: "html",
+                data: {
+                    id: ID,
+
+                },
+                success: function (data) {
+                    if (data == "1") {
+                        location.reload();
+
+                    }
+                    else {
+                        $("#delmodal").modal('toggle');
+                        alert(data)
+                    }
+                }
+            })
+        })
+
+        $("#edit").click(function () {
+            var catname = $("#listofcatEdit").val();
+            if (catname != "") {
+                $.ajax({
+                    url: "/node/getTagDetail",
+                    dataType: "html",
+                    data: {
+                        catid: catname,
+
+                    },
+                    success: function (data) {
+
+                        $("#tasholder").html(data);
+
+
+                    }
+                })
+            }
+        })
+        var deletImage = function (name) {
+            var srt = $(".imageName").text();
+            srt = srt.replace(name + ",", "");
+            $(".imageName").text(srt);
+            $.ajax({
+                url: "/node/deletImage",
+                data: {
+                    name: name
+                },
+                success: function () {
+                    var element = document.getElementById(name);
+                    element.style.display = "none";
+                }
+            })
+        }
+        $("#verifEdit").click(function () {
+            var catname = $("#listofcat").val();
+            var name = $("#title").val();
+            var image = $(".imageName").text();
+
+            if (catname != "" && name != "" && image != "") {
+                $.ajax({
+                    url: "/node/editcat",
+                    dataType: "html",
+                    data: {
+                        catID: catname,
+                        title: name,
+                        image: image
+                    },
+                    success: function (data) {
+                        if (data == "1") {
+                            location.reload();
+
+                        }
+                    }
+                })
+            }
+        })
+        $("#cancelEdit").click(function () {
+            $(".classhide").css("display", "none");
+            $(".classshow").css("display", "inline-block");
+            $("#imageHolder").css("display", "none");
+            $("#title").val("");
+        })
+        $(".ImageDelete").click(function () {
+
+            var name = $(".imageName").text();
+            $.ajax({
+                url: "/Node/deleteImage",
+                data: {
+                    id: name
+                },
+                success: function () {
+                    var srt = $(".imageName").text();
+                    $(".imageName2").text(srt.replace(name + ","), "");
+                    $("#imageHolder0").css("display", "none")
+                }
+            })
+
+        });
+    </script>
+}
+
+
+
+

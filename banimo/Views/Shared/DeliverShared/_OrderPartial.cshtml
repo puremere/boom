@@ -1,0 +1,236 @@
+﻿@model banimo.ViewModel.orderDeliverList
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div id="Listholder">
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                        <thead>
+                            <tr>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width:210px">senderAddress</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1"> Receiverlocation</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width:210px">ReceiverAddress</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">Receiverlocation</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">status</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">action</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.orderList != null)
+                            {
+                                foreach (var item in Model.orderList)
+                                {
+
+                                    string cls = "odd";
+                                    if (Model.orderList.IndexOf(item) + 1 % 2 == 0)
+                                    {
+                                        cls = "even";
+                                    }
+
+                            <tr class="@cls">
+
+
+                                <td>
+                                    @{
+                                        string senderaddress = @item.sender_state + " - " + @item.sender_city + " - " + @item.sender_address;
+                                    }
+                                    <span>@senderaddress</span>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <i style="margin:0 6px" lat="@item.sender_lat" lon="@item.sender_lon" id="" class="ri-user-location-fill showMap"></i>
+                                        </li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    @{
+                                        string recieveraddress = @item.receiver_city + " - " + @item.receiver_city + " - " + @item.receiver_address;
+                                    }
+                                    <span>@recieveraddress</span>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <i style="margin:0 6px" lat="@item.receiver_lat" lon="@item.receiver_lon" id="" class="ri-user-location-fill showMap"></i>
+                                        </li>
+                                    </ul>
+                                </td>
+                                @{
+                                    switch (item.transportaion_status)
+                                    {
+                                        case "0":
+                                            <td class="order-pending">
+                                                <span>Pending</span>
+                                            </td>
+                                            break;
+                                        case "1":
+                                            <td class="order-success">
+                                                <span>Accepted</span>
+                                            </td>
+                                            break;
+                                        case "2":
+                                            <td class="order-cancle">
+                                                <span>Rejected</span>
+                                            </td>
+                                            break;
+                                        case "3":
+                                            <td class="order-success">
+                                                <span>Preparing</span>
+                                            </td>
+                                            break;
+                                        case "4":
+                                            <td class="order-success">
+                                                <span>Sending</span>
+                                            </td>
+                                            break;
+                                        case "5":
+                                            <td class="order-success">
+                                                <span>Delivered</span>
+                                            </td>
+                                            break;
+
+                                    }
+                                }
+
+
+
+
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void(0)">
+
+                                                <i id=@item.ID class="ri-delete-bin-line Dbutton"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                                }
+                            }
+
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+                    <script>
+                        var id
+                        $(".checkPartnerbutton").click(function () {
+                            var id = $(this).attr("id");
+                            var phone = $(this).parent().parent().find('#mobileHolder').text().trim();
+
+                            $.ajax({
+                                url: '/Node/checkPartnerStatus',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+
+                                    $("#partnerDataHolder").html(data);
+                                    $("#partnerDataHolder").scroll();
+                                    $(".patnerUsername").val(phone);
+                                    //$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        });
+                        $("#removeU").click(function () {
+                            var id = $(".idToRemove").text();
+
+                            $.ajax({
+                                url: '/Node/DeleteDeliverType',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+
+                                    window.location.reload();
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        })
+
+                        $(".Dbutton").click(function () {
+
+                            var id = $(this).attr("id");
+                            $(".idToRemove").text(id);
+                            $("#delmodal").modal("toggle");
+
+                        });
+
+
+                    </script>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin="">
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin="" />
+<script type="text/javascript">
+    var mymap;
+    var theMarker = {};
+
+    function showLocation(lat, lon) {
+        mymap = L.map('mapid', { attributionControl: false }).setView([lat, lon], 13);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+        }).addTo(mymap);
+        mymap.panTo(new L.LatLng(lat, lon));
+        theMarker = L.marker([lat, lon]).addTo(mymap);
+
+    }
+    $("#mapid").height("250px");
+</script>
+<script>
+    $(".showMap").click(function () {
+        var lat = $(this).attr('lat');
+        var lon = $(this).attr('lon');
+        if ($('#mapid').length) {
+            $('#mapid').remove();
+        }
+        var el = "<div> <div id = 'mapid' style = 'margin-top:20px; width:100% ; height:300px'></div></div >"
+        $("#prnt").append(el)
+
+        showLocation(lat, lon);
+        document.getElementById('mapid').scrollIntoView();
+    })
+</script>

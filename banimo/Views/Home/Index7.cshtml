@@ -3,80 +3,126 @@
 @{
     Layout = "~/Views/Shared/_Layout7.cshtml";
 }
-<main class="main">
+    <main class="main">
 
-    @if (Model.slides != null)
-    {
-        <section class="intro-section">
-            <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide nav-xxl-show nav-hide"
+        <section class="intro-wrapper" style="padding:15px">
+            
+
+            <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide pg-show nav-xxl-show nav-hide"
                  data-swiper-options="{
+                    'slidesPerView': 1,
+                 'spaceBetween': 15,
+                    'breakpoints': {
+                        '1500': {
+                            'nav': true,
+                            'dots': false
+                        }
+                    },
+                    'autoplay': {
+                        'delay': 8000,
+                        'disableOnInteraction': false
+                    }
+                }">
+                <div class="swiper-wrapper row gutter-no cols-1">
+                    @if (Model.slides != null)
+                    {
+                        foreach (var item in Model.slides)
+                        {
+                            int i = Model.slides.IndexOf(item) + 1;
+                            string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
+                            <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" background-image: url(@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
+                                <div class="container">
+
+                                    <div class="banner-content y-50 d-inline-block">
+                                        <div class="slide-animate" data-animation-options="{
+                                        'name': 'flipInY', 'duration': '1s'
+                                    }">
+                                            <h5 class="banner-subtitle text-uppercase font-weight-bold ls-10">
+                                                @item.Ptitle
+                                            </h5>
+                                            <h3 class="banner-title text-capitalize font-weight-normal ls-25">
+                                                <strong>@item.title</strong><br>
+                                            </h3>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        }
+                    }
+
+
+
+
+
+                </div>
+                <div class="swiper-pagination"></div>
+                <button class="swiper-button-next"></button>
+                <button class="swiper-button-prev"></button>
+            </div>
+        </section>
+
+        <!-- End of .intro-section -->
+
+        <div class="container">
+
+            @if (Model.slides != null)
+            {
+
+                var list = Model.slides;// Request.Browser.IsMobileDevice ? Model.slides.Where(x => x.type == "app").ToList() : Model.slides.Where(x => x.type == "web").ToList();
+                <section class="intro-section">
+
+
+                    <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide nav-xxl-show nav-hide"
+                         data-swiper-options="{
                     'slidesPerView': 1,
                     'autoplay': {
                         'delay': 8000,
                         'disableOnInteraction': false
                     }
                 }">
-                <div class="swiper-wrapper">
-                    @foreach (var item in Model.slides)
-                    {
-                        int i = Model.slides.IndexOf(item) + 1;
-                        string src = "/images/panelimages/" + item.image;
-                        if (i % 3 == 0)
-                        {
-                            <div class="swiper-slide banner banner-fixed intro-slide intro-slide1"
-                                 style="background-image: url(@src); background-color: #ebeef2;">
-                                <div class="container">
-                                    <figure class="slide-image skrollable slide-animate">
-                                        @*<img src="@src" alt="Banner"
+                        <div class="swiper-wrapper">
+                            @foreach (var item in Model.slides)
+                            {
+                                int i = Model.slides.IndexOf(item) + 1;
+                                string src = "";// "/images/" + item.image;
+                                <div class="swiper-slide banner banner-fixed intro-slide intro-slide1"
+                                     style="background-image: url(/images/XSF32G8cat2.jpg); background-color: #ebeef2;">
+                                    <div class="container">
+                                        <figure class="slide-image skrollable slide-animate">
+                                            @*<img src="@src" alt="Banner"
                                             data-bottom-top="transform: translateY(10vh);"
                                             data-top-bottom="transform: translateY(-10vh);" width="474" height="397">*@
-                                    </figure>
+                                        </figure>
 
-                                    <!-- End of .banner-content -->
+                                        <!-- End of .banner-content -->
+                                    </div>
+                                    <!-- End of .container -->
                                 </div>
-                                <!-- End of .container -->
-                            </div>
-                        }
-                        else if (i % 3 == 1)
-                        {
-                            <div class="swiper-slide banner banner-fixed intro-slide intro-slide2"
-                                 style="background-image: url(@src); background-color: #ebeef2;">
-
-                                <!-- End of .container -->
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="swiper-slide banner banner-fixed intro-slide intro-slide3"
-                                 style="background-image: url(@src); background-color: #f0f1f2;">
-
-                            </div>
-                        }
-                    }
+                            }
 
 
-                    <!-- End of .intro-slide1 -->
-                    <!-- End of .intro-slide2 -->
-                    <!-- End of .intro-slide3 -->
-                </div>
-                <div class="swiper-pagination"></div>
-                <button class="swiper-button-next"></button>
-                <button class="swiper-button-prev"></button>
-            </div>
-            <!-- End of .swiper-container -->
-        </section>
-    }
-
-    <!-- End of .intro-section -->
-
-<div class="container">
-
-
-    @if (Model.catsParents != null)
-    {
-        <h2 class="title mb-5 appear-animate">  </h2>
-        <div class="swiper-container swiper-theme shadow-swiper category-wrapper appear-animate"
-             data-swiper-options="{
+                            <!-- End of .intro-slide1 -->
+                            <!-- End of .intro-slide2 -->
+                            <!-- End of .intro-slide3 -->
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <button class="swiper-button-next"></button>
+                        <button class="swiper-button-prev"></button>
+                    </div>
+                    <!-- End of .swiper-container -->
+                </section>
+            }
+            @if (Model.catsParents != null)
+            {
+                <h2 class="title mb-5 appear-animate">  </h2>
+                <div class="swiper-container swiper-theme shadow-swiper category-wrapper appear-animate"
+                     data-swiper-options="{
                     'spaceBetween': 20,
                     'slidesPerView': 2,
                     'breakpoints': {
@@ -94,692 +140,356 @@
                         }
                     }
                 }">
-            <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" >
-                @foreach (var item in Model.catsParents)
+                    <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2">
+                        @foreach (var item in Model.catsParents)
+                        {
+                            <div id="@item.ID" class="categoryParent final swiper-slide category category-ellipse">
+                                <figure class="category-media">
+                                    <a href="javascript:void(0)">
+                                        <img src="/images/@item.image" alt="Categroy" width="190" @*http://www.ratasanat.com/images/*@
+                                             height="190" style="background-color: #5C92C0;" />
+                                    </a>
+                                </figure>
+                                <div class="category-content">
+                                    <h4 class="category-name">
+                                        <a href="shop-banner-sidebar.html">@item.title</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            }
+
+            @{
+                string display = "unset";
+                if (Model.catsParents != null)
                 {
-                    <div id="@item.ID" class="categoryParent final swiper-slide category category-ellipse">
-                        <figure class="category-media">
-                            <a href="javascript:void(0)">
-                                <img src="@item.image" alt="Categroy" width="190"  @*http://www.ratasanat.com/images/*@
-                                     height="190" style="background-color: #5C92C0;" />
-                            </a>
-                        </figure>
-                        <div class="category-content">
-                            <h4 class="category-name">
-                                <a href="shop-banner-sidebar.html">@item.title</a>
-                            </h4>
-                        </div>
-                    </div>
+                    display = "none";
                 }
-
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-    }
-
-    @{ 
-        string display = "unset";
-        if(Model.catsParents != null)
-        {
-            display = "none";
-        }
-    }
-
-<section class="childcategory  category-section top-category bg-grey pt-10 pb-10 appear-animate" style="margin-top:50px ; display : @display">
-    <h2 class="title mb-5 appear-animate">  </h2>
-    <div class="container pb-2" style="display:flex; flex-wrap:wrap; justify-content:center">
-
-        @foreach (var item in Model.catsdata.First().mycatcollection)
-        {
-            string catmode = "1" + @item.ID;
-            string classname = "p" + item.parentID;
-            <div class="category @classname  categoryitemchild">
-                <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs">
-                    <a href="/Home/ProductList?catmode=@catmode" class="category-media">
-                        <img src="@item.image" alt="Category"
-                             width="130" height="130">
-                    </a>
-
-                </div>
-
-                <p>@item.title</p>
-            </div>
-        }
-
-        <style>
-            .category {
-                width: 15%;
-                display: inline-block;
-                padding: 0 10px;
-                border-radius: 8px;
-                vertical-align: top
             }
 
-                .category p {
-                    padding: 20px;
-                    text-align: center;
-                    font-weight: 600;
-                    font-size: 16px;
-                }
+            <section class="childcategory  category-section top-category bg-grey pt-10 pb-10 appear-animate" style="margin-top:50px ; display : @display">
+                <h2 class="title mb-5 appear-animate">  </h2>
+                <div class="container pb-2" style="display:flex; flex-wrap:wrap; justify-content:center">
 
-                .category img {
-                    border-radius: 10px
-                }
+                    @if (Model.catsdata != null)
+                    {
+                        if (Model.catsdata.First().mycatcollection != null)
+                        {
+                            foreach (var item in Model.catsdata.First().mycatcollection)
+                            {
+                                string catmode = "1" + @item.ID;
+                                string classname = "p" + item.parentID;
+                                <div class="category @classname  categoryitemchild">
+                                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                                        <a href="/Home/ProductList?catmode=@catmode" class="category-media">
+                                            <img src="/images/@item.image" alt="Category"
+                                                 width="130" height="130">
+                                        </a>
 
-            @@media (max-width : 600px) {
-                .category {
-                    width: 33%;
-                }
+                                    </div>
 
-                    .category p {
-                        padding: 8px 0;
-                        text-align: center;
-                        font-weight: 600;
-                        font-size: 12px;
-                        width: 100%;
+                                    <p>@item.title</p>
+                                </div>
+                            }
+                        }
+
                     }
-            }
-        </style>
-    </div>
-</section>
 
-    <div class="row category-banner-wrapper appear-animate pt-6 pb-8">
-        @if (Model.banners.Count() > 0)
-        {
-            <div class="col-md-6 mb-4">
-                <div class="banner banner-fixed br-xs">
-                    <figure>
-                        <img src="~/images/panelimages/@Model.banners[0].image" alt="Category Banner"
-                             width="610" height="160" style="background-color: #ecedec;" />
-                    </figure>
 
+
+                    <style>
+                        .category {
+                            width: 15%;
+                            display: inline-block;
+                            padding: 0 10px;
+                            border-radius: 8px;
+                            vertical-align: top
+                        }
+
+                            .category p {
+                                padding: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 16px;
+                            }
+
+                            .category img {
+                                border-radius: 10px
+                            }
+
+                        @@media (max-width : 600px) {
+                            .category {
+                                width: 33%;
+                            }
+
+                                .category p {
+                                    padding: 8px 0;
+                                    text-align: center;
+                                    font-weight: 600;
+                                    font-size: 12px;
+                                    width: 100%;
+                                }
+                        }
+                    </style>
                 </div>
-            </div>
-        }
-        @if (Model.banners.Count() > 1)
-        {
-            <div class="col-md-6 mb-4">
-                <div class="banner banner-fixed br-xs">
-                    <figure>
-                        <img src="~/images/panelimages/@Model.banners[1].image" alt="Category Banner"
-                             width="610" height="160" style="background-color: #ecedec;" />
-                    </figure>
+            </section>
 
-                </div>
-            </div>
-        }
+            <div class="row category-banner-wrapper appear-animate pt-6 pb-8">
 
 
-    </div>
-    <!-- End of Category Banner Wrapper -->
-    @*<div class="row deals-wrapper appear-animate mb-8">
-            <div class="col-lg-12 mb-4">
-                <div class="single-product h-100 br-sm">
-                    <h4 class="title-sm title-underline font-weight-bolder ls-normal">
-                        Deals Hot of The Day
-                    </h4>
-                    <div class="swiper">
-                        <div class="swiper-container swiper-theme nav-top swiper-nav-lg" data-swiper-options="{
-                                    'spaceBetween': 20,
-                                    'slidesPerView': 1
-                                }">
-                            <div class="swiper-wrapper row cols-1 gutter-no">
-                                <div class="swiper-slide">
-                                    <div class="product product-single row">
-                                        <div class="col-md-6">
-                                            <div class="product-gallery product-gallery-sticky product-gallery-vertical">
-                                                <div class="swiper-container product-single-swiper swiper-theme nav-inner">
-                                                    <div class="swiper-wrapper row cols-1 gutter-no">
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-1-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/1-1-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-2-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/1-2-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-3-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/1-3-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-4-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/1-4-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                    </div>
-                                                    <button class="swiper-button-next"></button>
-                                                    <button class="swiper-button-prev"></button>
-                                                    <div class="product-label-group">
-                                                        <label class="product-label label-discount">
-                                                            25%
-                                                            Off
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="product-thumbs-wrap swiper-container"
-                                                     data-swiper-options="{
-                                                            'direction': 'vertical',
-                                                            'breakpoints': {
-                                                                '0': {
-                                                                    'direction': 'horizontal',
-                                                                    'slidesPerView': 4
-                                                                },
-                                                                '992': {
-                                                                    'direction': 'vertical',
-                                                                    'slidesPerView': 'auto'
-                                                                }
-                                                            }
-                                                        }">
-                                                    <div class="product-thumbs swiper-wrapper row cols-lg-1 cols-4 gutter-sm">
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-1-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-2-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-3-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/1-4-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="product-details scrollable">
-                                                <h2 class="product-title mb-1">
-                                                    <a href="product-default.html">
-                                                        Coat Pool
-                                                        Comfort Jacket
-                                                    </a>
-                                                </h2>
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 0)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img src="~/images/@Model.banners[0].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
 
-                                                <hr class="product-divider">
-
-                                                <div class="product-price">
-                                                    <ins class="new-price ls-50">
-                                                        $150.00
-                                                        -
-                                                        $180.00
-                                                    </ins>
-                                                </div>
-
-                                                <div class="product-countdown-container flex-wrap">
-                                                    <label class="mr-2 text-default">Offer Ends In:</label>
-                                                    <div class="product-countdown countdown-compact"
-                                                         data-until="2022, 12, 31" data-compact="true">
-                                                        629 days, 11: 59: 52
-                                                    </div>
-                                                </div>
-
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width: 80%;"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                    <a href="#" class="rating-reviews">(3 Reviews)</a>
-                                                </div>
-
-                                                <div class="product-form product-variation-form product-size-swatch mb-3">
-                                                    <label class="mb-1">Size:</label>
-                                                    <div class="flex-wrap d-flex align-items-center product-variations">
-                                                        <a href="#" class="size">Extra Large</a>
-                                                        <a href="#" class="size">Large</a>
-                                                        <a href="#" class="size">Medium</a>
-                                                        <a href="#" class="size">Small</a>
-                                                    </div>
-                                                    <a href="#" class="product-variation-clean">Clean All</a>
-                                                </div>
-
-                                                <div class="product-variation-price">
-                                                    <span></span>
-                                                </div>
-
-                                                <div class="product-form pt-4">
-                                                    <div class="product-qty-form mb-2 mr-2">
-                                                        <div class="input-group">
-                                                            <input class="quantity form-control" type="number"
-                                                                   min="1" max="10000000">
-                                                            <button class="quantity-plus w-icon-plus"></button>
-                                                            <button class="quantity-minus w-icon-minus"></button>
-                                                        </div>
-                                                    </div>
-                                                    <button class="btn btn-primary btn-cart">
-                                                        <i class="w-icon-cart"></i>
-                                                        <span>Add to Cart</span>
-                                                    </button>
-                                                </div>
-
-                                                <div class="social-links-wrapper mt-1">
-                                                    <div class="social-links">
-                                                        <div class="social-icons social-no-color border-thin">
-                                                            <a href="#"
-                                                               class="social-icon social-facebook w-icon-facebook"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-twitter w-icon-twitter"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-youtube fab fa-linkedin-in"></a>
-                                                        </div>
-                                                    </div>
-                                                    <span class="divider d-xs-show"></span>
-                                                    <div class="product-link-wrapper d-flex">
-                                                        <a href="#"
-                                                           class="btn-product-icon btn-wishlist w-icon-heart"></a>
-                                                        <a href="#"
-                                                           class="btn-product-icon btn-compare btn-icon-left w-icon-compare"></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product product-single row">
-                                        <div class="col-md-6">
-                                            <div class="product-gallery product-gallery-sticky product-gallery-vertical">
-                                                <div class="swiper-container product-single-swiper swiper-theme nav-inner">
-                                                    <div class="swiper-wrapper row cols-1 gutter-no">
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-1-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/2-1-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-2-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/2-2-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-3-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/2-3-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <figure class="product-image">
-                                                                <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-4-600x675.jpg"
-                                                                     data-zoom-image="/webAsset/wolmart/assets/images/demos/demo1/products/2-4-800x900.jpg"
-                                                                     alt="Product Image" width="800"
-                                                                     height="900">
-                                                            </figure>
-                                                        </div>
-                                                    </div>
-                                                    <button class="swiper-button-next"></button>
-                                                    <button class="swiper-button-prev"></button>
-                                                    <div class="product-label-group">
-                                                        <label class="product-label label-discount">
-                                                            25%
-                                                            Off
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="product-thumbs-wrap swiper-container"
-                                                     data-swiper-options="{
-                                                            'breakpoints': {
-                                                                '992': {
-                                                                    'direction': 'vertical',
-                                                                    'slidesPerView': 'auto'
-                                                                }
-                                                            }
-                                                        }">
-                                                    <div class="product-thumbs swiper-wrapper row cols-lg-1 cols-4 gutter-sm">
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-1-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-2-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-3-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                        <div class="product-thumb swiper-slide">
-                                                            <img src="/webAsset/wolmart/assets/images/demos/demo1/products/2-4-600x675.jpg"
-                                                                 alt="Product thumb" width="60" height="68" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="product-details scrollable">
-                                                <h2 class="product-title mb-1">
-                                                    <a href="product-default.html">
-                                                        Coat Pool
-                                                        Comfort Jacket
-                                                    </a>
-                                                </h2>
-
-                                                <hr class="product-divider">
-
-                                                <div class="product-price">
-                                                    <ins class="new-price ls-50">
-                                                        $150.00
-                                                        -
-                                                        $180.00
-                                                    </ins>
-                                                </div>
-
-                                                <div class="product-countdown-container flex-wrap">
-                                                    <label class="mr-2 text-default">Offer Ends In:</label>
-                                                    <div class="product-countdown countdown-compact"
-                                                         data-until="2022, 12, 31" data-compact="true">
-                                                        629 days, 11: 59: 52
-                                                    </div>
-                                                </div>
-
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width: 80%;"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                    <a href="#" class="rating-reviews">(3 Reviews)</a>
-                                                </div>
-
-                                                <div class="product-form product-variation-form product-size-swatch mb-3">
-                                                    <label class="mb-1">Size:</label>
-                                                    <div class="flex-wrap d-flex align-items-center product-variations">
-                                                        <a href="#" class="size">Extra Large</a>
-                                                        <a href="#" class="size">Large</a>
-                                                        <a href="#" class="size">Medium</a>
-                                                        <a href="#" class="size">Small</a>
-                                                    </div>
-                                                    <a href="#" class="product-variation-clean">Clean All</a>
-                                                </div>
-
-                                                <div class="product-variation-price">
-                                                    <span></span>
-                                                </div>
-
-                                                <div class="product-form pt-4">
-                                                    <div class="product-qty-form mb-2 mr-2">
-                                                        <div class="input-group">
-                                                            <input class="quantity form-control" type="number"
-                                                                   min="1" max="10000000">
-                                                            <button class="quantity-plus w-icon-plus"></button>
-                                                            <button class="quantity-minus w-icon-minus"></button>
-                                                        </div>
-                                                    </div>
-                                                    <button class="btn btn-primary btn-cart">
-                                                        <i class="w-icon-cart"></i>
-                                                        <span>Add to Cart</span>
-                                                    </button>
-                                                </div>
-
-                                                <div class="social-links-wrapper mt-1">
-                                                    <div class="social-links">
-                                                        <div class="social-icons social-no-color border-thin">
-                                                            <a href="#"
-                                                               class="social-icon social-facebook w-icon-facebook"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-twitter w-icon-twitter"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                                            <a href="#"
-                                                               class="social-icon social-youtube fab fa-linkedin-in"></a>
-                                                        </div>
-                                                    </div>
-                                                    <span class="divider d-xs-show"></span>
-                                                    <div class="product-link-wrapper d-flex">
-                                                        <a href="#"
-                                                           class="btn-product-icon btn-wishlist w-icon-heart"></a>
-                                                        <a href="#"
-                                                           class="btn-product-icon btn-compare btn-icon-left w-icon-compare"></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <button class="swiper-button-prev"></button>
-                            <button class="swiper-button-next"></button>
                         </div>
+                    }
+                }
+
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 1)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img src="~/images/@Model.banners[1].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+                            </div>
+                        </div>
+                    }
+                }
+
+
+            </div>
+
+        </div>
+
+
+        <!-- End of .category-section top-category -->
+
+        <div class="container">
+            <h2 class="title justify-content-center ls-normal mb-4 mt-10 pt-1 appear-animate">
+                @Resources.res.SomeOfOurItems
+            </h2>
+            <div class="tab tab-nav-boxed tab-nav-outline appear-animate">
+                <ul class="nav nav-tabs justify-content-center" role="tablist">
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link active br-sm font-size-md ls-normal" href="#tab1-1">@Resources.res.TrendingNow</a>
+                    </li>
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-2">@Resources.res.RecommendedItems</a>
+                    </li>
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-3">@Resources.res.PopularItems</a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- End of Tab -->
+            <div class="tab-content product-wrapper appear-animate">
+                <div class="tab-pane active pt-4" id="tab1-1">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.newest != null)
+                        {
+                            foreach (var item in Model.newest)
+                            {
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
+                                }
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
+
+                                string src = imagefile;
+                                <div class="product-wrap ">
+                                    <div class="product text-center shadowbox" style="padding:2px">
+                                        <figure class="product-media">
+                                            <a href="/products/@newurl">
+                                                <img src="@src" alt="Product"
+                                                     width="300" height="338" />
+                                                <img src="@src2" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
+                                        </figure>
+                                        <div class="product-details">
+
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                            <div class="product-price">
+                                                <ins class="new-price">@item.price AED</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@item.oldPrice AED</del>
+                                                }
+
+                                            </div>
+                                            <div style="padding:4%">
+                                                <div class="input-group">
+                                                    @{
+                                                        string clsname = "value" + @item.ID;
+                                                        string partnerID = Response.Cookies["tarafID"] != null ? Response.Cookies["tarafID"].Value : "";
+                                                        string ads = @item.ID + "*";
+                                                    }
+                                                    <input addson="@ads" class=" form-control @clsname" type="number" min="1" max="100000" value="0">
+
+                                                    <button class="quantity-plus w-icon-plus" onclick="addtocart('@partnerID','@item.ID','')"></button>
+                                                    <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@partnerID','@item.ID','')"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+
                     </div>
                 </div>
-            </div>
-
-        </div>*@
-    <!-- End of Deals Wrapper -->
-</div>
-
-
-    <!-- End of .category-section top-category -->
-
-    <div class="container">
-        <h2 class="title justify-content-center ls-normal mb-4 mt-10 pt-1 appear-animate">
-            Some Of Our Product
-        </h2>
-        <div class="tab tab-nav-boxed tab-nav-outline appear-animate">
-            <ul class="nav nav-tabs justify-content-center" role="tablist">
-                <li class="nav-item mr-2 mb-2">
-                    <a class="nav-link active br-sm font-size-md ls-normal" href="#tab1-1">New arrivals</a>
-                </li>
-                <li class="nav-item mr-2 mb-2">
-                    <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-2">Special Offer</a>
-                </li>
-                <li class="nav-item mr-2 mb-2">
-                    <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-3">Best seller</a>
-                </li>
-
-            </ul>
-        </div>
-        <!-- End of Tab -->
-        <div class="tab-content product-wrapper appear-animate">
-            <div class="tab-pane active pt-4" id="tab1-1">
-                <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
-                    @if (Model.newest != null)
-                    {
-                        foreach (var item in Model.newest)
+                <!-- End of Tab Pane -->
+                <div class="tab-pane pt-4" id="tab1-2">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.specialOffers != null)
                         {
-                            string newurl = "/Home/ProductDetail?id=" + item.ID;
-                            if (item.meta != null)
+                            foreach (var item in Model.specialOffers)
                             {
-                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
-                                newurl = metaModel.curl;
-                            }
-                            string addID = "addtocarto" + item.ID;
-                            string minusID = "minus" + item.ID;
-                            string imagefile = "placeholder.jpg";
-                            List<string> srtlist = new List<string>();
-                            string src2 = "";
-                            if (item.title != null)
-                            {
-                                srtlist = item.image.Trim(',').Split(',').ToList();
-                                imagefile = srtlist[0];
-                                if (srtlist.Count == 2)
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
                                 {
-                                    src2 = srtlist[1];
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
                                 }
-                            }
-                            string ID = "N" + item.ID.ToString();
-                            string addtocartid = "addtocart" + ID;
-                            string price = item.price;
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
 
-                            string src = imagefile;
-                            <div class="product-wrap">
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
-                                                 width="300" height="338" />
-                                            <img src="@src2" alt="Product"
-                                                 width="300" height="338" />
-                                        </a>
-
-                                        @if (item.price != item.oldPrice)
-                                        {
-                                            <div class="product-label-group">
-                                                <label class="product-label label-discount">@item.discount% Off</label>
-                                            </div>
-                                        }
-                                    </figure>
-                                    <div class="product-details">
-                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
-
-                                        <div class="product-price">
-                                            <ins class="new-price">$@item.price</ins>
+                                string src = imagefile;
+                                <div class="product-wrap">
+                                    <div class="product text-center">
+                                        <figure class="product-media">
+                                            <a href="/products/@newurl">
+                                                <img src="@src" alt="Product"
+                                                     width="300" height="338" />
+                                                <img src="@src2" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
                                             @if (item.price != item.oldPrice)
                                             {
-                                                <del class="old-price">$@item.oldPrice</del>
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
                                             }
+                                        </figure>
+                                        <div class="product-details">
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
 
+                                            <div class="product-price">
+                                                <ins class="new-price">@item.price AED</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@item.oldPrice AED</del>
+                                                }
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
-
-
+                    </div>
                 </div>
-            </div>
-            <!-- End of Tab Pane -->
-            <div class="tab-pane pt-4" id="tab1-2">
-                <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
-                    @if (Model.specialOffers != null)
-                    {
-                        foreach (var item in Model.specialOffers)
+                <!-- End of Tab Pane -->
+                <div class="tab-pane pt-4" id="tab1-3">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.bestseller != null)
                         {
-                            string newurl = "/Home/ProductDetail?id=" + item.ID;
-                            if (item.meta != null)
+                            foreach (var item in Model.bestseller)
                             {
-                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
-                                newurl = metaModel.curl;
-                            }
-                            string addID = "addtocarto" + item.ID;
-                            string minusID = "minus" + item.ID;
-                            string imagefile = "placeholder.jpg";
-                            List<string> srtlist = new List<string>();
-                            string src2 = "";
-                            if (item.title != null)
-                            {
-                                srtlist = item.image.Trim(',').Split(',').ToList();
-                                imagefile = srtlist[0];
-                                if (srtlist.Count == 2)
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
                                 {
-                                    src2 = srtlist[1];
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
                                 }
-                            }
-                            string ID = "N" + item.ID.ToString();
-                            string addtocartid = "addtocart" + ID;
-                            string price = item.price;
-
-                            string src = imagefile;
-                            <div class="product-wrap">
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
-                                                 width="300" height="338" />
-                                            <img src="@src2" alt="Product"
-                                                 width="300" height="338" />
-                                        </a>
-                                        @if (item.price != item.oldPrice)
-                                        {
-                                            <div class="product-label-group">
-                                                <label class="product-label label-discount">@item.discount% Off</label>
-                                            </div>
-                                        }
-                                    </figure>
-                                    <div class="product-details">
-                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
-
-                                        <div class="product-price">
-                                            <ins class="new-price">$@item.price</ins>
-                                            @if (item.price != item.oldPrice)
-                                            {
-                                                <del class="old-price">$@item.oldPrice</del>
-                                            }
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-            <!-- End of Tab Pane -->
-            <div class="tab-pane pt-4" id="tab1-3">
-                <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
-                    @if (Model.bestseller != null)
-                    {
-                        foreach (var item in Model.bestseller)
-                        {
-                            string newurl = "/Home/ProductDetail?id=" + item.ID;
-                            if (item.meta != null)
-                            {
-                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
-                                newurl = metaModel.curl;
-                            }
-                            string addID = "addtocarto" + item.ID;
-                            string minusID = "minus" + item.ID;
-                            string imagefile = "placeholder.jpg";
-                            List<string> srtlist = new List<string>();
-                            string src2 = "";
-                            if (item.title != null)
-                            {
-                                srtlist = item.image.Trim(',').Split(',').ToList();
-                                imagefile = srtlist[0];
-                                if (srtlist.Count == 2)
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
                                 {
-                                    src2 = srtlist[1];
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
                                 }
-                            }
-                            string ID = "N" + item.ID.ToString();
-                            string addtocartid = "addtocart" + ID;
-                            string price = item.price;
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
 
-                            string src = imagefile;
-                            <div class="product-wrap">
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
-                                                 width="300" height="338" />
-                                            <img src="@src2" alt="Product"
-                                                 width="300" height="338" />
-                                        </a>
-                                        @*<div class="product-action-vertical">
+                                string src = imagefile;
+                                <div class="product-wrap">
+                                    <div class="product text-center shadowbox" style="padding:10px; border-radius:8px ">
+                                        <figure class="product-media" style="margin:auto; max-width:90%">
+                                            <a href="/products/@newurl">
+                                                <img src="@src" alt="Product"
+                                                     width="300" height="338" />
+                                                <img src="@src2" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+                                            @*<div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-cart w-icon-cart"
                                                    title="Add to cart"></a>
                                                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
@@ -791,91 +501,100 @@
                                             </div>*@
 
 
-                                        @if (item.price != item.oldPrice)
-                                        {
-                                            <div class="product-label-group">
-                                                <label class="product-label label-discount">@item.discount% Off</label>
-                                            </div>
-                                        }
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
 
-                                    </figure>
-                                    <div class="product-details">
-                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
-                                        @*<div class="ratings-container">
+                                        </figure>
+                                        <div class="product-details">
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+                                            @*<div class="ratings-container">
                                                 <div class="ratings-full">
                                                     <span class="ratings" style="width: 60%;"></span>
                                                     <span class="tooltiptext tooltip-top"></span>
                                                 </div>
                                                 <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
                                             </div>*@
-                                        <div class="product-price">
-                                            <ins class="new-price">$@item.price</ins>
-                                            @if (item.price != item.oldPrice)
-                                            {
-                                                <del class="old-price">$@item.oldPrice</del>
-                                            }
+                                            <div class="product-price">
+                                                <ins class="new-price">@item.price AED</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@item.oldPrice AED</del>
+                                                }
 
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
+                    </div>
                 </div>
+                <!-- End of Tab Pane -->
+
             </div>
-            <!-- End of Tab Pane -->
+            <!-- End of Tab Content -->
+
+            <div class="row category-cosmetic-lifestyle appear-animate mb-5">
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 2)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img src="~/images/@Model.banners[2].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+
+                            </div>
+                        </div>
+                    }
+                }
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 3)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img src="~/images/@Model.banners[3].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+
+                            </div>
+                        </div>
+                    }
+                }
+
+
+            </div>
+            <!-- End of Category Cosmetic Lifestyle -->
+
 
         </div>
-        <!-- End of Tab Content -->
-
-        <div class="row category-cosmetic-lifestyle appear-animate mb-5">
-            @if (Model.banners.Count() > 2)
-            {
-                <div class="col-md-6 mb-4">
-                    <div class="banner banner-fixed br-xs">
-                        <figure>
-                            <img src="~/images/panelimages/@Model.banners[2].image" alt="Category Banner"
-                                 width="610" height="160" style="background-color: #ecedec;" />
-                        </figure>
-
-                    </div>
-                </div>
-            }
-            @if (Model.banners.Count() > 3)
-            {
-                <div class="col-md-6 mb-4">
-                    <div class="banner banner-fixed br-xs">
-                        <figure>
-                            <img src="~/images/panelimages/@Model.banners[3].image" alt="Category Banner"
-                                 width="610" height="160" style="background-color: #ecedec;" />
-                        </figure>
-
-                    </div>
-                </div>
-            }
-        </div>
-        <!-- End of Category Cosmetic Lifestyle -->
-
-
-    </div>
-    <!--End of Catainer -->
-</main>
+        <!--End of Catainer -->
+    </main>
 
 
 @section scripts{
     <script>
         $(".categoryParent").click(function () {
             var id = "p" + $(this).attr('id');
-           
+
             $(".childcategory").css("display", "block");
             $(".categoryitemchild").css("display", "none");
             $("." + id).css("display", "inline-block");
         })
     </script>
-    <style>
-        .swiper-slide{
-            height:unset !important
+    @*<style>
+        .swiper-slide {
+            height: unset !important
         }
-    </style>
-    }
+    </style>*@
+
+}

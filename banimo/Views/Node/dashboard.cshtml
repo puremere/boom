@@ -4,232 +4,286 @@
     ViewBag.Title = " dashboard";
 }
 
-<style>
-    .dashdata {
-        padding: 10px;
-    }
-
-    .dirLeft {
-        float: left;
-    }
-
-    .panel-heading {
-        padding: 10px 15px;
-        border-bottom: 1px solid transparent;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-
-    .heading-blog {
-        color: #fff;
-        line-height: 26px;
-        background-image: linear-gradient(to bottom, #2a85ae 0, #246388 100%) !important;
-        height: 110px !important;
-    }
-
-    .huge-head {
-        font-size: 28px;
-        margin-top: 5px;
-    }
-
-    .heading-blog {
-        color: #fff;
-        line-height: 26px;
-    }
-
-    .titr-head {
-        font-size: 16px;
-        margin-top: 35px;
-    }
-
-    .panel-footer {
-        padding: 10px 15px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        color: #337ab7;
-    }
-
-    .page-header {
-        padding-bottom: 9px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .header-wellcom {
-        margin: 0 !important;
-        direction: rtl;
-        font-size: 20px;
-        color: #029fca;
-        float: left;
-    }
-
-    .breadcrumb {
-        float: right;
-        text-align: right;
-    }
-
-    .breadcrumb {
-        padding: 8px 15px;
-        margin-bottom: 20px;
-        list-style: none;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-    }
-
-    .breadcrumb {
-        position: relative;
-        font-size: 14px;
-    }
-
-        .breadcrumb > .active {
-            color: #777;
-        }
 
 
-        .breadcrumb > li {
-            display: inline-block;
-        }
 
-        .breadcrumb > li {
-            font-size: 12px;
-            direction: rtl;
-        }
-</style>
-<div class="col-lg-12">
-    <h1 class="page-header header-wellcom">
-        admin <small>@Resources.res.wellcome</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li class="active">
-            <i class="fa fa-dashboard"></i> @Resources.res.dashbaord
-        </li>
-    </ol>
-</div>
-<div class="row">
-    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
-        <div class="panel panel-green" style="border: 0">
-            <div class="panel-heading heading-blog ">
-                <div class="row">
-                    <div class="col-xs-4 dirLeft">
-                        <i class="fa fa-product-hunt fa-4x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <div class="huge-head">@Model.installNumRows</div>
-                        <div class="titr-head">@Resources.res.activeinstall</div>
+<div class="container-fluid">
+    <div class="row">
+        <!-- chart caard section start -->
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 border-0  card-hover card o-hidden">
+                <div class="custome-1-bg b-r-4 card-body">
+                    <div class="media align-items-center static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Users</span>
+                            <h4 class="mb-0 counter">
+                                @Model.userNumRows
+                                <span class="badge badge-light-primary grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="ri-database-2-line"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-            <a href="" >
-                <div class="panel-footer ">
-                    
-                    <span class="pull-right"><i class="fa  fa-product-hunt" aria-hidden="true"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
-    </div>
-    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
-        <div class="panel panel-green" style="border: 0">
-            <div class="panel-heading heading-blog ">
-                <div class="row">
-                    <div class="col-xs-4 dirLeft">
-                        <i class="fa fa-product-hunt fa-4x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <div class="huge-head">@Model.nodeNumRows</div>
-                        <div class="titr-head">@Resources.res.registerdbusi</div>
+
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                <div class="custome-2-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Products</span>
+                            <h4 class="mb-0 counter">
+                                @Model.productsNum
+                                <span class="badge badge-light-danger grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="ri-shopping-bag-3-line"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-            <a >
-                <div class="panel-footer ">
-                  
-                    <span class="pull-right"><i class="fa  fa-product-hunt" aria-hidden="true"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
-    </div>
-    <div class="col-lg-3 col-md-6 col-xs-12 floatRight">
-        <div class="panel panel-green" style="border: 0">
-            <div class="panel-heading heading-blog ">
-                <div class="row">
-                    <div class="col-xs-4 dirLeft">
-                        <i class="fa fa-shopping-basket fa-4x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <div class="huge-head">@Model.userNumRows</div>
-                        <div class="titr-head">@Resources.res.registerduser</div>
+
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0  card o-hidden">
+                <div class="custome-3-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Orders</span>
+                            <h4 class="mb-0 counter">
+                                @Model.ordersNum
+                                <a href="add-new-product.html" class="badge badge-light-secondary grow" data-bs-original-title="" title="">
+                                    ADD NEW
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="align-self-center text-center">
+                            <i class="ri-chat-3-line"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-            <a href="" >
-                <div class="panel-footer ">
-                   
-                    <span class="pull-right"><i class="fa  fa-shopping-basket" aria-hidden="true"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
-    </div>
-   
-</div>
 
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                <div class="custome-4-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Vendors</span>
+                            <h4 class="mb-0 counter">
+                                @Model.nodeNumRows
+                                <span class="badge badge-light-success grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
 
-
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> @Resources.res.lastbusi </h3>
+                        <div class="align-self-center text-center">
+                            <i class="ri-user-add-line"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div id="morris-area-chart">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>@Resources.res.col</th>
-                                    <th>@Resources.res.buscode </th>
-                                    <th>@Resources.res.bustitle</th>
-                                   
+        </div>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    if (Model.lastProducts != null)
+        <div class="col-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header border-0 pb-1">
+                    <div class="card-header-title p-0">
+                        <h4>Category</h4>
+                    </div>
+                </div>
+                <div class="card-body p-0" style="display:flex">
+                    @foreach (var item in Model.dacats)
+                    {
+                        <div class=" " style="width: 125px">
+                            <div class="dashboard-category">
+                                <div style="width:100px">
+                                    <img src="https://marsools.com/images/@item.image" class="img-fluid" alt="">
+                                </div>
+                                <a href="javascript:void(0)" class="category-name" tabindex="-1" data-bs-original-title="" title="">
+                                    <h6> @item.title</h6>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-md-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title">
+                        <h4>Best Selling Product</h4>
+                    </div>
+
+                    @*<div class="best-selling-box d-sm-flex d-none">
+                        <span>Short By:</span>
+                        <div class="dropdown">
+                            <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-auto-close="true" data-bs-original-title="" title="">Today</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Another action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Something else here</a></li>
+                            </ul>
+                        </div>
+                    </div>*@
+                </div>
+
+                <div class="card-body p-0">
+                    <div>
+                        <div class="table-responsive">
+                            <table class="best-selling-table w-image
+                                            w-image
+                                            w-image table border-0">
+                                <tbody>
+                                    @foreach (var item in @Model.bestseller)
                                     {
-                                        foreach (var pro in Model.lastProducts)
-                                        {
+                                        string url =  item.image.Split(',').ToList().First();
+                                        <tr>
+                                            <td>
+                                                <div class="best-product-box">
+                                                    <div class="product-image">
+                                                        <img src="@url" class="img-fluid" alt="Product">
+                                                    </div>
+                                                    <div class="product-name">
+                                                        <h5>@item.title </h5>
+                                                        <h6>26-08-2022</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                            int index = Model.lastProducts.IndexOf(pro) + 1;
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Price</h6>
+                                                    <h5>@item.price</h5>
+                                                </div>
+                                            </td>
 
-                                            <tr style=" ">
-                                                <td>@index</td>
-                                                <td>@pro.ID</td>
-                                                <td>
-                                                    @pro.title
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Orders</h6>
+                                                    <h5>@item.count</h5>
+                                                </div>
+                                            </td>
 
-                                                </td>
-                                            </tr>
-                                        }
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Stock</h6>
+                                                    <h5>@item.ramaining</h5>
+                                                </div>
+                                            </td>
+
+                                            @*<td>
+                                                <div class="product-detail-box">
+                                                    <h6>Amount</h6>
+                                                    <h5>$1,798</h5>
+                                                </div>
+                                            </td>*@
+                                        </tr>
                                     }
-                                }
 
 
-
-
-                            </tbody>
-                        </table>
+                                  
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Best Selling Product End -->
+        <!-- Recent orders start-->
+        <div class="col-xl-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title">
+                        <h4>Recent Orders</h4>
+                    </div>
+
+                    <div class="best-selling-box d-sm-flex d-none">
+                        <span>Short By:</span>
+                        <div class="dropdown">
+                            <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-auto-close="true" data-bs-original-title="" title="">Today</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Another action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Something else here</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div>
+                        <div class="table-responsive">
+                            <table class="best-selling-table table border-0">
+                                <tbody>
+                                    @foreach (var item in Model.lastOrdres)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="best-product-box">
+                                                    <div class="product-name">
+                                                        <h5>Order Number</h5>
+                                                        <h6>#@item.peigiry</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Date Placed</h6>
+                                                    <h5>@item.timestamp</h5>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Price</h6>
+                                                    <h5>@item.TotalPrice AED</h5>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Order Status</h6>
+                                                    <h5>@item.status</h5>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="product-detail-box">
+                                                    <h6>Payment</h6>
+                                                    <h5 class="text-danger">Unpaid</h5>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
     </div>
 </div>

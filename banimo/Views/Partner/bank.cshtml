@@ -1,0 +1,357 @@
+﻿
+@model banimo.AdminPanelBoom.ViewModel.responsVM
+@{
+    ViewBag.Title = "bank";
+    Layout = "~/Views/Shared/_PartnerLayout.cshtml";
+}
+<link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .fieldholder {
+        /*width: 30%;
+            display: inline-block;*/
+        padding: 15px;
+    }
+
+    .REM {
+        border-radius: 5px;
+    }
+
+    .formItem {
+        margin: 5px
+    }
+</style>
+
+
+<script src="~/AdminPanel/Portal/assets/js/select2.min.js"></script>
+<link href="~/AdminPanel/Portal/assets/css/select2.min.css" rel="stylesheet" />
+
+<div class="modal fade" id="Withdraw" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+                <p>Insert Amount?</p>
+                <input id="withdrawInput" class="form-control" type="number" style="margin-bottom:25px"/>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">No</button>
+                    <button id="withdrawbtn" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Yes</button>
+                </div>
+                <script>
+                    $("#withdrawbtn").click(function () {
+                        $.ajax({
+                                url: 'setWithdraw',
+                                dataType: 'html',
+                                data: {
+                                    value: $("#withdrawInput").val(),
+                                },
+                                success: function (data) {
+
+                                    window.location.reload();
+                                }
+                            })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+
+                    @if (string.IsNullOrEmpty(Model.withdraw))
+                    {
+                        <h5>Account Balance : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED</h5>
+                        <div style="position:relative; margin:5px" id="">
+                              <div class="btn btn-success" style="margin-top:20px" data-bs-toggle="modal" data-bs-target="#Withdraw" data-bs-original-title="" title="">withdraw money</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <h5>Account Balance : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED  <span style="color:green">(Requested Amount : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.withdraw))) AED)</span></h5>
+                    }
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Search Panel</h5>
+
+                </div>
+                <div style="display:flex ; flex-wrap:wrap">
+
+                    <div style="padding:10px;width:33%">
+                        <p>Transaction Type :</p>
+                        <select id="trantype" class="form-control">
+                            <option value="">All</option>
+                            <option value="1">deposit</option>
+                            <option value="0">Withdraw</option>
+                        </select>
+                    </div>
+
+                    <div style="padding:10px;width:33%" id="dateHolder">
+                        <p>From Date :</p>
+                        <input name="datefrom" id="gardeshFrom" type="date" class="PDabserver form-control  " />
+                    </div>
+                    <div style="padding:10px;width:33%" id="dateHolder2">
+                        <p>From To :</p>
+                        <input name="dateTo" id="gardeshTo" type="date" class="PD2abserver form-control  inputfield" />
+                    </div>
+
+                    @*<div style="margin:10px;width:100%">
+                            <p>انتخاب پروژه</p>
+                            <select name="GNode" id="GNode" class="form-control">
+
+                                @if (Model.nodeList != null)
+                                {
+                                    foreach (var item in Model.nodeList)
+                                    {
+                                        <option value="@item.ID">@item.title </option>
+                                    }
+                                }
+
+
+                            </select>
+                        </div>*@
+
+
+                </div>
+                <div style="display:flex">
+
+
+                    <div style="margin:10px;width:100%;display: flex; align-items:center">
+                        <div style="position:relative; margin:5px" id="">
+                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">View</div>
+                        </div>
+                        @*<div style="position:relative; margin:5px" id="">
+                                <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardeshPrint">چاپ</div>
+                            </div>*@
+                    </div>
+                    <div style="margin:10px;width:100%"></div>
+                    <div style="margin:10px;width:100%"></div>
+                </div>
+
+                <div>
+
+                    <script>
+                        $("#verifyCodeingTranGardeshPrint").click(function () {
+                            var M22 = $("#M22").val();
+                            var M33 = $("#M33").val();
+                            var M44 = $("#M44").val();
+                            var M55 = $("#M55").val();
+                            var finalText = "";
+                            var m2text = $("#M22 option:selected").text();
+                            var m3text = $("#M33 option:selected").text();
+                            var m4text = $("#M44 option:selected").text();
+                            var m5text = $("#M55 option:selected").text();
+                            var trafText = ""; //
+
+
+
+
+
+
+                            var datefrom = $("#gardeshFrom").val();
+                            var dateTo = $("#gardeshTo").val();
+                            var datefromtxt = $("#gardeshFrom").val();
+                            var dateTotxt = $("#gardeshTo").val();
+                            var transactionType = $("#trantype").val();
+                            var GTaraf = '@Model.status';
+                            var GNode = '1'; // $("#GNode").val();
+                            var type = $("#trantype").val();
+                            var project = $("#GNode  option:selected").text();
+
+                            alert(GTaraf);
+
+                            //var url = "/Partner/getCodingTranListPrint?dateTotxt=" + dateTotxt + "&dateFromtxt=" + datefromtxt +  "&trafText=" + trafText  +  "&datefrom=" + datefrom + "&dateTo=" + dateTo + "&transactionType=" + transactionType + "&GTaraf=" + GTaraf + "&type=" + type;
+                            //window.open(
+                            //    url, '_blank' // <- This is what makes it open in a new window.
+                            //);
+
+
+                        });
+                        $("#verifyCodeingTranGardesh").click(function () {
+
+
+                            $.ajax({
+                                url: 'getCodingTranList',
+                                dataType: 'html',
+                                data: {
+                                    M22: $("#M22").val(),
+                                    M33: $("#M33").val(),
+                                    M44: $("#M44").val(),
+                                    M55: $("#M55").val(),
+                                    datefrom: $(".PDabserver").val(),
+                                    dateTo: $(".PD2abserver").val(),
+                                    transactionType: $("#trantype").val(),
+                                    GTaraf: '@Model.status',
+                                    GNode: $("#GNode").val(),
+                                    type: $("#trantype").val(),
+
+                                },
+                                success: function (data) {
+
+                                    $("#TrasactionListHolder").html(data)
+                                }
+                            })
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+        var doParents = function (el) {
+
+            var parent = el.attr('parentValue')
+
+            if (parent != "") {
+                var selement = $('option[itemvalue="' + parent + '"]');
+                doParents(selement)
+            }
+            el.parent().val(el.val());
+
+
+
+        };
+
+        $('#handMadeCode').keyup(function (e) {
+            if (this.value == "") {
+                $('option').each(function () {
+                    $(this).removeAttr("selected");
+                })
+            }
+            if (e.keyCode == 13) {
+
+
+                var id = $(this).val();
+
+                var element = $('option[value="' + id + '"]');
+                doParents(element);
+
+            }
+        })
+        $("#getTransactoin").click(function () {
+
+        })
+        $("#M22").change(function () {
+            var id = $('option:selected', this).attr('itemvalue');
+
+            // console.log(id)
+            $("#M33 option").each(function () {
+                var val = $(this).val();
+                if (val == "0") {
+                    $(this).prop('selected', true);
+                }
+                else {
+                    $(this).prop('selected', false);
+                }
+                var optionid = $(this).attr('parentValue');
+                if (optionid != id) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            })
+            $("#M44 option").each(function () {
+                var val = $(this).val();
+                if (val == "0") {
+                    $(this).prop('selected', true);
+                }
+                else {
+                    $(this).prop('selected', false);
+                }
+                $(this).hide();
+            });
+        })
+        $("#M33").change(function () {
+            var id = $('option:selected', this).attr('itemvalue');
+            console.log(id)
+            $("#M44 option").each(function () {
+
+                var val = $(this).val();
+                if (val == "0") {
+                    $(this).prop('selected', true);
+                }
+                else {
+                    $(this).prop('selected', false);
+                }
+
+                var optionid = $(this).attr('parentValue');
+                if (optionid != id) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            })
+
+
+        })
+        $("#M44").change(function () {
+            var id = $('option:selected', this).attr('itemvalue');
+            console.log(id)
+            $("#M55 option").each(function () {
+                var val = $(this).val();
+                if (val == "0") {
+                    $(this).prop('selected', true);
+                }
+                else {
+                    $(this).prop('selected', false);
+                }
+                var optionid = $(this).attr('parentValue');
+                if (optionid != id) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            })
+        });
+
+    </script>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Transaction List</h5>
+                </div>
+                <div id="TrasactionListHolder" class="row">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

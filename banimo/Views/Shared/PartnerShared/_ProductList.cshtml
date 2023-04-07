@@ -19,20 +19,17 @@
 
     <!-- Modal -->
     <p style="display:none" id="modalValue"></p>
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
+    <div id="myModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
-                @*<div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Modal Header</h4>
-                    </div>*@
                 <div class="modal-body">
-                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
-                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Remove Item</h5>
+                    <p id="modalmessage">Are You Sure Removing This Item?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">No</button>
+                        <button id="confirmdelete" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Yes</button>
+                    </div>
                     <script>
                         $("#confirmdelete").click(function () {
                             $("#myModal").modal('hide');
@@ -54,7 +51,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                        toastr.error('This Product has work flow')
                                     }
                                     else {
                                         toastr.options = {
@@ -66,7 +63,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.success('محصول مورد نظر حذف شد')
+                                        toastr.success('Item is deleted successfully')
                                         var value = $("#listofproduct").val();
                                         var partner = $("#partnerList").val();
                                         $.ajax({
@@ -100,124 +97,105 @@
             </div>
         </div>
     </div>
-
+  
     if (Model.data == null)
     {
-        <p style="text-align:center">موردی وجود ندارد</p>
+        <p style="text-align:center">No Item To Show</p>
     }
     else
     {
 
+        <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+            <thead>
+                <tr>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Image</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product ID</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Name</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.data)
+                {
+                    string cls = "odd";
+                    if (Model.data.IndexOf(item) + 1 % 2 == 0)
+                    {
+                        cls = "even";
+                    }
+
+                    <tr class="@cls">
+                        <td>
+                            <div class="table-image">
+                                <img src="@item.image" class="img-fluid" alt="">
+                            </div>
+                        </td>
+
+                        <td>@item.ID</td>
+
+                        <td>@item.title</td>
 
 
 
-        <div class="row">
-            <div style="overflow-x:auto;padding:10px">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست محصولات </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="morris-area-chart">
-                            <div style="overflow:auto">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                ID
-                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
-                                            </th>
-                                            <th>
-                                                عنوان
-                                            </th>
+                        <td>
+                            <ul>
+                                @*<li>
+                                        <a href="order-detail.html">
+                                            <i class="ri-eye-line"></i>
+                                        </a>
+                                    </li>*@
 
+                                <li>
+                                    <a href="javascript:void(0)">
+                                        @{
+                                            string selectedCatID = "";
 
+                                            if (item.subcatid2 == "0")
+                                            {
+                                                if (item.subcatid == "0")
+                                                {
+                                                    selectedCatID = "1" + @item.catid;
+                                                }
+                                                else
+                                                {
+                                                    selectedCatID = "2" + @item.subcatid;
+                                                }
+                                            }
+                                            else
+                                            {
 
+                                                selectedCatID = "3" + @item.subcatid2;
+                                            }
+                                            string url = "Edit?id=" + @item.ID + "&catID=" + selectedCatID;
 
-                                            <th>
-                                            </th>
-
-                                        </tr>
-                                    </thead>
-
-
-
-                                    <tbody>
-                                        @foreach (var item in Model.data)
-                                        {
-                                            string color = item.color;
-                                            <tr id="@item.ID">
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.title)
-                                                </td>
-
-                                                <td>
-                                                    @{
-                                                        var editclassname = "editproduct" + item.ID;
-                                                        <a id=@item.ID class="btn btn-primary @editclassname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a> @Html.ActionLink("حذف", "Delete", new { id = item.ID })
-                                                        <script>
-                                                        var editclassname = "editproduct" + "@item.ID";
-                                                        let selectedCatID = "";
-                                                        //var selectedCatID = $("#listofproduct").val();
-                                                        if (@item.subcatid2 == 0) {
-                                                            if (@item.subcatid == 0) {
-                                                                selectedCatID = "1" + @item.catid;
-                                                            } else {
-                                                                selectedCatID = "2" + @item.subcatid;
-                                                            }
-                                                        }
-                                                        else {
-
-                                                            selectedCatID = "3" + @item.subcatid2;
-                                                        }
-                                                        $("." + editclassname).click(function () {
-
-                                                            var url = "@Url.Action("Edit", "Partner", new { id = "__id__", catID = "__catID__" })";
-                                                            var url2 = url.replace("__id__", this.id);
-                                                            var url3 = url2.replace("__catID__", selectedCatID);
-                                                            window.open(url3);
-
-                                                        });
-                                                        </script>
-                                                    }
-
-                                                </td>
-
-                                                @*<td>
-                                                    @{
-                                                        var classname = "deleteproduct" + item.ID;
-                                                        <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary @classname" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a> 
-                                                        <script>
-                                                        var classname = "deleteproduct" + @item.ID
-
-                                                            $("." + classname).click(function () {
-                                                                $("#modalValue").text(this.id);
-
-
-                                                            });
-                                                        </script>
-                                                    }
-                                                </td>*@
-
-
-
-                                            </tr>
+                                            <a href="@url">
+                                                  <i id=@item.ID class="ri-pencil-line "></i>
+                                            </a>
+                                          
                                         }
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+
+                                        @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
+                                        <i idtoremove=@item.ID class="ri-delete-bin-line removeProduct" id=""></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                }
+
+
+
+            </tbody>
+        </table>
+
+
+
 
 
 
@@ -225,8 +203,19 @@
         <br />
         @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
         <p id="selectedForServer"></p>
-
         <script>
+
+
+
+            $(".removeProduct").click(function () {
+                var id = $(this).attr('idtoremove')
+                $("#modalValue").text(id);
+                $("#myModal").modal('toggle');
+
+            });
+        </script>
+        <script>
+
             $(".quickEdit").click(function () {
 
                 $(".quickEdit").toggle();

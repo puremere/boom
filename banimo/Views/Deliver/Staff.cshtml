@@ -1,0 +1,263 @@
+﻿@model banimo.ViewModel.staffPageVM 
+@{
+    ViewBag.Title = "Staff";
+    Layout = "~/Views/Shared/_DeliverLayout.cshtml";
+}
+
+  
+<div class="row" style=" padding:10px; margin:0px; ">
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">New Deliver</button>
+            <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Deliver Report</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5>Set New Deliver</h5>
+                            </div>
+                            <style>
+                                .itemRow {
+                                    margin: 10px 0;
+                                }
+
+                                .imageCover {
+                                    position: relative;
+                                }
+
+                                    .imageCover img {
+                                        max-width: 150px
+                                    }
+                            </style>
+                            <main id="loginMain" style="padding: 50px 150px">
+                                <div class="row  parent">
+                                    <div class="ItemsHome">
+                                        
+                                        <form id="createForm" action="setStaff" method="post" enctype="multipart/form-data">
+
+                                            <div class="itemRow">
+                                                <input type="file" id="imageFileHolder" name="image" required="required" class="form-control  imageinput" >
+                                            </div>
+                                            <div class="itemRow">
+                                                @*<p>@Resources.res.createTitle </p>*@
+                                                <input placeholder="Full name" id="title" name="title" class="form-control inputform" />
+                                            </div>
+                                            <div class="itemRow">
+                                                @*<p>@Resources.res.createTitle </p>*@
+                                                <input placeholder=" Password" id="password" name="password" class="form-control inputform" />
+                                            </div>
+                                            <div class="itemRow">
+                                                @*<p>@Resources.res.createTitle </p>*@
+                                                <input placeholder="phone " id="staffPhone" type="number" name="phone" class="form-control inputform" />
+                                            </div>
+
+                                            <div class="itemRow">
+                                                @*<p>@Resources.res.createTitle </p>*@
+                                                @Html.DropDownList("deliverType", new SelectList(@Model.delivertypeList, "ID", "name"), "select type", new { @class = "form-control" })
+
+                                               
+                                            </div>
+
+
+
+                                            <div class="itemRow">
+                                                @*<p>@Resources.res.email </p>*@
+                                                <input placeholder="@Resources.res.email" id="email" name="email" class="form-control " />
+                                            </div>
+
+                                            <div class="itemRow">
+                                                @Html.DropDownList("state",new  SelectList (@Model.locations.Where(x=>x.type == "State"),"ID","Title"),"select state", new { @class = "form-control" })
+                                               
+                                            </div>
+                                            <div class="itemRow">
+                                                @Html.DropDownList("city", new SelectList(@Model.locations.Where(x => x.type == "City"), "ID", "Title"), "select city", new { @class = "form-control" })
+
+                                            </div>
+                                            @*<div class="itemRow">
+                                                @Html.DropDownList("Zone", new SelectList(@Model.location.locations.Where(x => x.type == "Zone"), "ID", "Zone"), "select city", new { @class = "form-control" })
+
+                                            </div>*@
+
+                                            <div class="itemRow " style="border:none">
+                                                <button class="creatButt btn btn-success">Verify</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+
+
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="title-header option-title">
+                                <h5>Search Panel</h5>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group " style="display:flex; align-items:center">
+
+
+
+
+                                    <form method="post" action="ExportToExcel" style="display:inline-block; width:100%">
+
+                                        <div class="autocomplete col-md-5 col-sm-3 col-xs-12" style="margin:20px ;display:inline-block">
+                                            <label> @Resources.res.search </label>
+                                            <div style="width:100%">
+                                                <input id="SearchQuery" name="SearchQuery" type="text" placeholder=" @Resources.res.search" class="form-control" style="padding:8px" />
+
+                                            </div>
+                                        </div>
+                                        <div style="display:flex; margin-top:25px;margin-left:15px; min-width:250px">
+                                            <div style="padding:7px 40px" id="Verify" class="btn btn-primary lgnsubmitt"> @Resources.res.OK</div>
+
+                                        </div>
+
+                                        <script>
+
+
+                                            var getlist = function () {
+
+                                                var query = $("#SearchQuery").val();
+                                               
+                                                $.ajax({
+                                                    url: '/Deliver/GetTheListOfDeliverStaff',
+                                                    data:
+                                                    {
+                                                       
+                                                        query: query,
+                                                       
+                                                    },
+                                                    dataType: 'html',
+                                                    success: function (data) {
+
+                                                        $('#listholder').html(data);
+                                                        $('#listholder').css("display", "block");
+                                                    },
+                                                    error: function () {
+                                                        alert("nashod")
+                                                    }
+                                                });
+                                            };
+
+                                            $("#Verify").click(function () {
+
+                                                $.ajax({
+                                                    url: '/Deliver/resetStaffPage',
+                                                    dataType: 'html',
+                                                    success: function (data) {
+                                                        getlist();
+                                                    },
+                                                    error: function () {
+                                                        alert("nashod")
+                                                    }
+                                                });
+
+
+                                            })
+
+
+
+
+
+
+                                        </script>
+                                    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5>Deliver List</h5>
+                            </div>
+                            <div class="row">
+                                <div class="form-group rowholder" id="listholder" style="display:none">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.page != null)
+{
+    <script>
+        var item = @ViewBag.page
+
+            $.ajax({
+                url: '/Admin/GetTheListOfDeliverStaff',
+                dataType: 'html',
+                data:
+                {
+                    page: item
+                },
+                success: function (data) {
+
+                    $('#listholder').html(data);
+                    $('#listholder').css("display", "block");
+
+                },
+                error: function () {
+                    alert("nashod")
+                }
+            });
+    </script>
+}
+

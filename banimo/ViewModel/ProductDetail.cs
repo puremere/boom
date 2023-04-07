@@ -35,6 +35,26 @@ namespace banimo.ViewModel
         public string lat { get; set; }
         public string lng { get; set; }
     }
+    public class DeliverNode
+    {
+        public int ID { get; set; }
+        public double price { get; set; }
+        public string title { get; set; }
+    }
+    public class TimeListMarketPlace
+    {
+        public List<DeliverNode> deliver_node { get; set; }
+        public PaymentTypeVM deliverType { get; set; }
+        public List<Address> address { get; set; }
+        public List<Time> times { get; set; }
+        public string latitiude { get; set; }
+        public string longitude { get; set; }
+        public string credit { get; set; }
+        public string baseDeliver { get; set; }
+        public string priceDeliver { get; set; }
+        public string finalAmount { get; set; }
+        public string poly { get; set; }
+    }
     public class TimeList
     {
         public PaymentTypeVM deliverType { get; set; }

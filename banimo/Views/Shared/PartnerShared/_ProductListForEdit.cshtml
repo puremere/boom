@@ -29,11 +29,11 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
-                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                    <p id="modalmessage">@Resources.res.removeConfirm </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
-                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                     <script>
                         $("#confirmdelete").click(function () {
                             $("#myModal").modal('hide');
@@ -115,24 +115,24 @@
                         <input id="ProductSelectedID" style="display:none" />
 
                         <div style="margin:5px;">
-                            <p id="modalmessage">قیمت خرید</p>
+                            <p id="modalmessage">Product Price</p>
                             <input id="addprice" class="form-control" value="1" />
                         </div>
                         <div style="margin:5px;">
-                            <p id="modalmessage">تعداد</p>
+                            <p id="modalmessage">Count</p>
                             <input id="addcount" class="form-control" value="1" />
                         </div>
                         @*<div style="margin:5px;">
-                            <p id="modalmessage">امانی</p>
-                            <input id="addamani" type="checkbox" class="form-control" />
-                        </div>*@
+                                <p id="modalmessage">امانی</p>
+                                <input id="addamani" type="checkbox" class="form-control" />
+                            </div>*@
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
-                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">Cancel</button>
+                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">Verify</button>
                     <script>
                         $("#confirmAddItemCount").click(function () {
                             $("#myModal").modal('hide');
@@ -146,7 +146,7 @@
                             var price = $("#addprice").val();
                             var count = $("#addcount").val();
                             var ID = $("#ProductSelectedID").val();
-                           
+
                             $.ajax({
                                 url: '/Partner/SetNewFactorFromSail',
                                 dataType: 'html',
@@ -155,7 +155,7 @@
                                     price: price,
                                     count: count,
                                     ID: ID,
-                                   
+
 
                                 },
                                 success: function (data) {
@@ -210,9 +210,9 @@
                             <input id="returncount" class="form-control" value="1" />
                         </div>
                         @*<div style="margin:5px;">
-                            <p id="modalmessage">امانی</p>
-                            <input id="returnamani" type="checkbox" class="form-control" />
-                        </div>*@
+                                <p id="modalmessage">امانی</p>
+                                <input id="returnamani" type="checkbox" class="form-control" />
+                            </div>*@
                     </div>
 
 
@@ -364,11 +364,9 @@
 
             .imagelistholderEdit {
                 display: inline-block;
-                width: 65px;
+               
                 padding: 5px;
-                border: 1px solid #eee;
-                box-shadow: 3px 3px #eee;
-                border-radius: 25px;
+                
                 margin: 3px
             }
 
@@ -404,313 +402,267 @@
                 background-color: black;
             }
         </style>
-
-
-        <div class="row">
-            <div style="overflow-x:auto;padding:10px">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست محصولات </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="morris-area-chart">
-                            <div style="overflow:auto">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                ID
-                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
-                                            </th>
-                                            <th>
-                                                عنوان
-                                            </th>
-                                            <th>
-                                                رنگ
-                                            </th>
-                                            <th>
-                                                شاخص
-                                            </th>
-                                            <th>
-
-                                                تعداد
-                                            </th>
-                                            <th>
-                                                قیمت قبل از تخفیف
-                                            </th>
-                                            <th>
-                                                قیمت بعد از تخفیف
-                                            </th>
-                                            <th>
-                                                تخفیف
-                                            </th>
-                                            <th>
-                                                فعال
-                                            </th>
-                                            <th>
-                                                موجود
-                                            </th>
-                                            @*<th>
-                                                پرفروش
-                                            </th>
-                                            <th>
-                                                پیشنهاد ویژه
-                                            </th>*@
-                                            <th></th>
-
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-
-
-
-                                    <tbody>
-
-                                        @foreach (var item in Model.data.OrderBy(x => x.color))
-                                        {
-                                            Int64 coWorkerPrice = 0;
-                                            if (!String.IsNullOrEmpty(item.meta) && item.meta != "null")
-                                            {
-                                                banimo.AdminPanelBoom.ViewModel.metaVM metamodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
-                                                coWorkerPrice = metamodel.price;
-                                            }
-
-
-                                            string color = item.color;
-                                            <tr id="@item.ID">
-                                                <td style="display:none" class="metaHolder">@item.meta</td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                </td>
-                                                <td class="titemHOlder">
-                                                    @Html.DisplayFor(modelItem => item.title)
-                                                </td>
-                                                <td>
-                                                    <div style="width:20px; height:20px ; border-radius:50%; background-color:@color; border:1px solid #ddd"><span>@color</span></div>
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.selectedFilter)
-                                                </td>
-
-                                                <td id="@item.parentID" style="text-align: center; align-items:center; border:none">
-                                                    @{
-                                                        <p class=" addItemCount" style=" font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
-
-                                                        if (item.count == "-1")
-                                                        {
-                                                            <p style="color : green">موجود</p>
-                                                        }
-                                                        else if (item.count == "0")
-                                                        {
-                                                            <p style="color : red">نا موجود</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p class="">@Html.DisplayFor(modelItem => item.count)</p>
-
-                                                        }
-
-                                                        <p class=" minusItemCount" style=" font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
-
-                                                        <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
-
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        @*<p>کاربر</p>*@
-                                                        <p class="quickEditInput">@item.oldPrice</p>
-                                                        <input style="display:none" value="@item.oldPrice" class="quickEditInput  quickPrice" />
-                                                    </div>
-                                                    @*<div>
-                                                            <p>همکار</p>
-                                                            <p class="quickEditInput  ">@string.Format("{0:n0}", @coWorkerPrice) </p>
-                                                            <input style="display:none" value="@coWorkerPrice" class="quickEditInput  quickFinalWorkerPrice" />
-                                                        </div>*@
-
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        @*<p>کاربر</p>*@
-                                                        <p class="quickEditInput  ">@item.price</p>
-                                                        <input style="display:none" value="@item.price" class="quickEditInput  quickFinalPrice" />
-                                                    </div>
-
-
-                                                </td>
-                                                <td>
-                                                    <p class="discountLable">@item.discount</p>
-                                                    @*<input style="display:none" value="@item.discount" class="quickEditInput  quickDiscount" />*@
-                                                </td>
-
-                                                <td style="text-align: center;">
-                                                    @if (item.isActive == "1")
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Active checked />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Active />
-
-                                                    }
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    @if (item.IsAvailable == "1")
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Available checked />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Available />
-
-                                                    }
-                                                </td>
-                                                @*<td style="text-align: center;">
-                                                    @{
-
-                                                        if (item.isOffer == "1")
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class=Offer checked />
-                                                        }
-                                                        else
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class=Offer />
-
-                                                        }
-
-                                                    }
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    @{
-
-                                                        if (item.specialOffer == "1")
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="specialOffer" checked />
-                                                        }
-                                                        else
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="specialOffer" />
-
-                                                        }
-
-                                                    }
-                                                </td>*@
-                                                <td>
-                                                    @{
-                                                        string myListOfImage = "";
-                                                        string uploadID = "uploadimg" + item.ID;
-                                                        string imageName = "imagesName" + item.ID;
-
-                                                        if (item.images != null)
-                                                        {
-
-                                                            foreach (var img in item.images)
-                                                            {
-                                                                myListOfImage = myListOfImage + img.title + ",";
-
-                                                                string ID = img.ID.ToString();
-                                                                string deletetid = "addtocart" + ID;
-                                                                string title = "titleofEdit" + ID;
-                                                                string id = item.ID;
-
-                                                                <div class="imagelistholderEdit">
-
-                                                                    <div class="conEdit">
-
-                                                                        <img src="@img.title" data-imagezoom="true" class=" back">
-                                                                        <div id=@deletetid class="btn deleteimageForEdit "><i class="fa fa-remove"></i></div>
-                                                                        <div style="display:none" id=@title>@img.title</div>
-                                                                    </div>
-
-
-
-
-                                                                </div>
-
-                                                            }
-                                                        }
-
-                                                        <div class="imagelistholderEdit">
-
-                                                            <div itemToShow="@uploadID" class="conEdit addMoreImage">
-
-                                                                <img src="~/images/add.png" data-imagezoom="true" class=" back">
-
-                                                            </div>
-
-
-
-
-                                                        </div>
-                                                        <p style="display:none" class="@imageName"></p>
-                                                        <input style="display:none" id="@uploadID" imageName="@imageName" type="file" required="required" class="form-control INP imageFileHolderAdd">
-
-
-                                                        <input id="ImageList" name="ImageList" type="hidden" value="@myListOfImage" />
-                                                    }
-
-
-
-                                                </td>
-
-                                                <td>
-                                                    @*<a class="btn btn-primary quickEdit">ویرایش سریع</a>*@
-                                                    <a class="btn btn-primary quickEdit quickVerify" style="display:none">تایید</a>
-
-                                                </td>
-
-                                                @if (string.IsNullOrEmpty(item.parentID))
-                                                {
-                                                    <td>
-                                                        <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
-                                                    </td>
-                                                }
-
-                                            </tr>
-                                        }
-
-
-
-                                    </tbody>
-                                </table>
-
-                                <script>
-                                    $(".deleteimageForEdit").click(function () {
-                                        var el = $(this).parent().parent();
-                                        var orderid = $(this).parent().parent().parent().parent().attr('id');
-                                        var id = this.id;
-                                        var res = id.substring(9, id.length);
-                                        var titleid = "titleofEdit" + res;
-                                        var name = $('#' + titleid).text();
-
-
-                                        $.ajax({
-                                            url: '/Admin/Deleteimage',
-                                            dataType: 'html',
-                                            data: {
-                                                id: id,
-                                                title: name,
-                                                orderid: orderid
-                                            },
-                                            success: function (data) {
-
-                                                el.hide();
-                                            },
-                                            error: function () {
-
-                                            }
-                                        });
-                                    })
-                                </script>
+        <div class="row" style="overflow-x:scroll">
+            <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                <thead>
+                    <tr>
+
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product ID</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Name</th>
+                        @if (!string.IsNullOrEmpty(Model.data.First().color))
+                        {
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Selected Color</th>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.data.First().selectedFilter))
+                        {
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Selected Feature</th>
+                        }
+
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Count</th>
+                        @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price Befor Discount</th>*@
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price</th>
+                        @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Discount(percent)</th>*@
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Active?</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Available?</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Images</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+
+                    @foreach (var item in Model.data.OrderBy(x => x.color))
+                    {
+                        string cls = "odd";
+                        if (Model.data.IndexOf(item) + 1 % 2 == 0)
+                        {
+                            cls = "even";
+                        }
+                        Int64 coWorkerPrice = 0;
+                        if (!String.IsNullOrEmpty(item.meta) && item.meta != "null")
+                        {
+                            banimo.AdminPanelBoom.ViewModel.metaVM metamodel = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(item.meta);
+                            coWorkerPrice = metamodel.price;
+                        }
+
+
+                        string color = item.color;
+
+                    <tr id="@item.ID" class="@cls">
+                        <td style="display:none" class="metaHolder">@item.meta</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td class="titemHOlder">
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        @if (!string.IsNullOrEmpty(Model.data.First().color))
+                        {
+                            <td>
+                                <div style=" height:40px ; border-radius:15px; background-color:@color; border:1px solid #ddd"></div>
+                            </td>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.data.First().selectedFilter))
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.selectedFilter)
+                            </td>
+                        }
+
+
+                        <td >
+                          
+                            <div id="@item.parentID" style="text-align: center; align-items:center; border:none; display:flex; justify-content:center; align-items:center">
+                                @{
+                                    <p class=" addItemCount" style=" font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
+
+                                    if (item.count == "-1")
+                                    {
+                                        <p style="color : green;margin:0 10px">Available</p>
+                                    }
+                                    else if (item.count == "0")
+                                    {
+                                        <p style="color : red;margin:0 10px">Not Availble</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="margin:0 10px" class="">@Html.DisplayFor(modelItem => item.count)</p>
+
+                                    }
+
+                                    <p class=" minusItemCount" style=" font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+
+                                    <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
+
+                                }
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            
+                           
+                        </td>
+                        @* <td>
+        <div>
+
+             <p class="quickEditInput">@item.oldPrice</p>
+             <input style="display:none" value="@item.oldPrice" class="quickEditInput  quickPrice" />
+         </div>
+                        <div>
+            <p>همکار</p>
+            <p class="quickEditInput  ">@string.Format("{0:n0}", @coWorkerPrice) </p>
+            <input style="display:none" value="@coWorkerPrice" class="quickEditInput  quickFinalWorkerPrice" />
         </div>
+
+                        </td>*@
+                        <td>
+                            <div>
+
+                                <p class="quickEditInput  ">@item.price</p>
+                                <input style="display:none" value="@item.price" class="quickEditInput  quickFinalPrice" />
+                            </div>
+
+
+                        </td>
+                        @*<td>
+            <p class="discountLable">@item.discount</p>
+          <input style="display:none" value="@item.discount" class="quickEditInput  quickDiscount" />
+        </td>*@
+
+                        <td style="text-align: center;">
+                            @if (item.isActive == "1")
+                            {
+                                <input id=@item.ID type="checkbox" class=Active checked />
+                            }
+                            else
+                            {
+                                <input id=@item.ID type="checkbox" class=Active />
+
+                            }
+                        </td>
+                        <td style="text-align: center;">
+                            @if (item.IsAvailable == "1")
+                            {
+                                <input id=@item.ID type="checkbox" class=Available checked />
+                            }
+                            else
+                            {
+                                <input id=@item.ID type="checkbox" class=Available />
+
+                            }
+                        </td>
+                        @*<td style="text-align: center;">
+            @{
+
+                if (item.isOffer == "1")
+                {
+                    <input id=@item.ID type="checkbox" class=Offer checked />
+                }
+                else
+                {
+                    <input id=@item.ID type="checkbox" class=Offer />
+
+                }
+
+            }
+        </td>
+        <td style="text-align: center;">
+            @{
+
+                if (item.specialOffer == "1")
+                {
+                    <input id=@item.ID type="checkbox" class="specialOffer" checked />
+                }
+                else
+                {
+                    <input id=@item.ID type="checkbox" class="specialOffer" />
+
+                }
+
+            }
+        </td>*@
+                        <td>
+                            @{
+                                string myListOfImage = "";
+                                string uploadID = "uploadimg" + item.ID;
+                                string imageName = "imagesName" + item.ID;
+
+                                if (item.images != null)
+                                {
+
+                                    foreach (var img in item.images)
+                                    {
+                                        myListOfImage = myListOfImage + img.title + ",";
+
+                                        string ID = img.ID.ToString();
+                                        string deletetid = "addtocart" + ID;
+                                        string title = "titleofEdit" + ID;
+                                        string id = item.ID;
+
+                                        <div class="imagelistholderEdit">
+
+                                            <div class="conEdit">
+
+                                                <img src="@img.title" data-imagezoom="true" class=" back">
+                                                <div id=@deletetid class="btn deleteimageForEdit "><i class="fa fa-remove"></i></div>
+                                                <div style="display:none" id=@title>@img.title</div>
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    }
+                                }
+
+                                <div class="imagelistholderEdit">
+
+                                    <div itemToShow="@uploadID" class="conEdit addMoreImage">
+
+                                        <i class="fa fa-plus-circle" style="font-size:20px; color:green"></i>
+
+
+                                    </div>
+
+
+
+
+                                </div>
+                                <p style="display:none" class="@imageName"></p>
+                                <input style="display:none" id="@uploadID" imageName="@imageName" type="file" required="required" class="form-control INP imageFileHolderAdd">
+
+
+                                <input id="ImageList" name="ImageList" type="hidden" value="@myListOfImage" />
+                            }
+
+
+
+                        </td>
+
+                        <td>
+                            @*<a class="btn btn-primary quickEdit">ویرایش سریع</a>*@
+                            <a class="btn btn-primary quickEdit quickVerify" style="display:none">تایید</a>
+
+                        </td>
+
+                        @if (string.IsNullOrEmpty(item.parentID))
+                        {
+                            <td>
+                                <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">مطابقت</button>
+                            </td>
+                        }
+
+                    </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+
 
 
 
@@ -718,7 +670,34 @@
         <br />
         @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
         <p id="selectedForServer"></p>
+        <script>
+            $(".deleteimageForEdit").click(function () {
+                var el = $(this).parent().parent();
+                var orderid = $(this).parent().parent().parent().parent().attr('id');
+                var id = this.id;
+                var res = id.substring(9, id.length);
+                var titleid = "titleofEdit" + res;
+                var name = $('#' + titleid).text();
 
+
+                $.ajax({
+                    url: '/Admin/Deleteimage',
+                    dataType: 'html',
+                    data: {
+                        id: id,
+                        title: name,
+                        orderid: orderid
+                    },
+                    success: function (data) {
+
+                        el.hide();
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
+        </script>
         <script>
             $(".quickEdit").click(function () {
 
@@ -888,7 +867,7 @@
                 var id = $(this).parent().attr('id');
                 $("#ProductSelectedID").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "افزایش موجودی " + text;
+                var lableText = "Add Inventory For " + text;
                 $("#addCountLable").text(lableText)
 
                 $("#addItemCountModal").modal('toggle');
@@ -896,7 +875,7 @@
             })
 
             $(".returnItemCount").click(function () {
-                
+
             })
 
 
@@ -922,3 +901,8 @@
         uploadImage(id, imageName, this, productid)
     });
 </script>
+<style>
+    .imageCover{
+        margin:auto;
+    }
+</style>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace banimo.ViewModel
 {
@@ -33,6 +34,11 @@ namespace banimo.ViewModel
         public string website { get; set; }
         public string link { get; set; }
         public string instagram { get; set; }
+        public string linkedin { get; set; }
+
+        
+
+        [AllowHtml]
         public string desc { get; set; }
         public string lat { get; set; }
         public string lng { get; set; }
@@ -49,7 +55,8 @@ namespace banimo.ViewModel
         public string percent { get; set; }
         public string deliverType { get; set; }
         public string deliverPrice { get; set; }
-        
+        public string tag { get; set; }
+
     }
 
 

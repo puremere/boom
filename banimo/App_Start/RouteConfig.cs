@@ -14,14 +14,26 @@ namespace banimo
             // BotDetect requests must not be routed
             routes.IgnoreRoute("{*botdetect}",
             new { botdetect = @"(.*)BotDetectCaptcha\.ashx" });
-
-
             routes.IgnoreRoute("{*botdetect}",
                new { botdetect = @"(.*)BotDetectCaptcha\.ashx" });
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            
-            routes.MapRoute(
+
+          routes.MapRoute(
           name: "DisplayProduct",
+          url: "productlist/{name}",
+          defaults: new { controller = "Home", action = "ProductList", id = UrlParameter.Optional }
+          //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
+          );
+
+
+            routes.MapRoute(
+         name: "DisplayProduct0",
+         url: "product/{name}",
+         defaults: new { controller = "Home", action = "productDetail", id = UrlParameter.Optional }
+         //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
+         );
+            routes.MapRoute(
+          name: "ProductList",
           url: "products/{name}",
           defaults: new { controller = "Home", action = "productDetail", id = UrlParameter.Optional }
           //constraints: new { name = "aukey|anker|baseus|beyond|jbl|ldnio|lepow|sony" }
@@ -37,7 +49,7 @@ namespace banimo
                name: "Default",
                url: "{controller}/{action}/{id}",
                defaults: new { controller = "Main", action = "Index", id = UrlParameter.Optional },
-               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner|Main|Node" }
+               constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner|Main|Node|Deliver|Transport|Driver" }
 
            );
 

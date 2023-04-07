@@ -1,29 +1,45 @@
 ﻿@model AdminPanelBoom.ViewModel.NewDatumm
 
 
-<div class="form-group " style="display:inline-block; width:100%">
-
-
+<div>
     <div>
-        <div class="addpanel" style="display:flex">
-            <input id="addsonItem" style="display:none" />
-            <div class="">
-                <input id="addsonName" class="form-control" placeholder="نام " />
-            </div>
+        <div>
+            <div>
 
-            <div class="itemform">
-                <label>انتخاب چندگانه</label>
-                <input id="addsonMultiple" type="checkbox" />
             </div>
-            <div class="itemform">
-                <label>انتخاب اجباری</label>
-                <input id="addsonRequired" type="checkbox" />
-            </div>
-            <div class="">
-                <button class="btn btn-success" id="setAddsOn">Verify</button>
-            </div>
+        </div>
+    </div>
 
-            <script>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group " style="display:inline-block; width:100%">
+
+
+                    <div>
+                        <div class="addpanel" style="display:flex">
+                            <input id="addsonItem" style="display:none" />
+                            <div class="">
+                                <input id="addsonName" class="form-control" placeholder="Name " />
+                            </div>
+
+                            <div class="itemform">
+                                <label>Multiple?</label>
+                                <input id="addsonMultiple" type="checkbox" />
+                            </div>
+                            <div class="itemform">
+                                <label>Required?</label>
+                                <input id="addsonRequired" type="checkbox" />
+                            </div>
+                            <div class="">
+                                <button class="btn btn-success" id="setAddsOn">Verify</button>
+                            </div>
+
+                            <script>
                                   $("#setAddsOn").click(function () {
                                       var title = $("#addsonName").val();
                                       var multiple = "";
@@ -67,187 +83,181 @@
                                           }
                                       });
                                   })
-            </script>
-        </div>
-        <div class="tablepanel">
+                            </script>
+                        </div>
+                        <div class="tablepanel">
 
-            @if (Model.addson != null)
-            {
-                <div class="row" style="padding:20px">
-                    <div style="overflow-x:auto;padding:10px">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                                <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> آخرین نظرات تایید نشده  </h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart">
-                                    <div style="overflow:auto">
-                                        <table class="table table-bordered table-hover table-striped">
-                                            <thead>
-                                                <tr>
+                            @if (Model.addson != null)
+                            {
+                                <div class="row" style="padding:20px">
+                                    <div class="panel-body">
+                                        <div id="morris-area-chart">
+                                            <div style="overflow:auto">
+                                                <table class="table table-bordered table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
 
-                                                    <th>
-                                                        عنوان
-                                                    </th>
-                                                    <th>
-                                                        چندگانه
-                                                    </th>
-                                                    <th>
-                                                        اجباری
-                                                    </th>
-                                                    <th>
+                                                            <th>
+                                                                Title
+                                                            </th>
+                                                            <th>
+                                                                Multiple?
+                                                            </th>
+                                                            <th>
+                                                                Required?
+                                                            </th>
+                                                            <th>
 
-                                                    </th>
+                                                            </th>
 
-                                                    <th>
+                                                            <th>
 
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @{
-                                                    if (Model.addson.adds != null)
-                                                    {
-                                                        foreach (var item in Model.addson.adds)
-                                                        {
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            if (Model.addson.adds != null)
+                                                            {
+                                                                foreach (var item in Model.addson.adds)
+                                                                {
 
-                                                            <tr id="@item.ID">
+                                                                    <tr id="@item.ID">
 
-                                                                <td>
-                                                                    <span class="tableTitle"> @Html.DisplayFor(modelItem => item.title)</span>
+                                                                        <td>
+                                                                            <span class="tableTitle"> @Html.DisplayFor(modelItem => item.title)</span>
 
-                                                                </td>
-                                                                <td>
-                                                                    @{
-                                                                        string ischecked = "";
-                                                                        if (item.isMultiple == "on")
-                                                                        {
-                                                                            ischecked = "checked";
-                                                                        }
-                                                                        <input type="checkbox" @ischecked class="form-control tableMultiple" />
-                                                                    }
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                string ischecked = "";
+                                                                                if (item.isMultiple == "on")
+                                                                                {
+                                                                                    ischecked = "checked";
+                                                                                }
+                                                                                <input type="checkbox" @ischecked class="checkbox_animated tableMultiple" />
+                                                                            }
 
-                                                                </td>
-                                                                <td>
-                                                                    @{
-                                                                        ischecked = "";
-                                                                        if (item.isRquired == "on")
-                                                                        {
-                                                                            ischecked = "checked";
-                                                                        }
-                                                                        <input type="checkbox" @ischecked class="form-control tableRequired" />
-                                                                    }
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                ischecked = "";
+                                                                                if (item.isRquired == "on")
+                                                                                {
+                                                                                    ischecked = "checked";
+                                                                                }
+                                                                                <input type="checkbox" @ischecked class="checkbox_animated tableRequired" />
+                                                                            }
 
-                                                                </td>
-                                                                <td style="text-align: center;">
+                                                                        </td>
+                                                                        <td style="text-align: center;">
 
-                                                                    @{
+                                                                            @{
 
-                                                                        <a class="btn btn-primary addsonDetailButton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> جزئیات</a>
+                                                                                <a class="btn btn-primary addsonDetailButton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Detail</a>
 
-                                                                    }
+                                                                            }
 
-                                                                </td>
-                                                                <td style="text-align: center;">
+                                                                        </td>
+                                                                        <td style="text-align: center;">
 
-                                                                    @{
-                                                                        var ID = @item.ID;
-                                                                        <a class="btn btn-primary editAddson" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+                                                                            @{
+                                                                                var ID = @item.ID;
+                                                                                <a class="btn btn-primary editAddson" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Edit</a>
 
-                                                                    }
+                                                                            }
 
-                                                                </td>
-                                                                <td style="text-align: center;">
+                                                                        </td>
+                                                                        <td style="text-align: center;">
 
-                                                                    @{
+                                                                            @{
 
-                                                                        <a class="btn btn-primary addsonRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                                                                                <a class="btn btn-primary addsonRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
 
-                                                                    }
+                                                                            }
 
-                                                                </td>
-                                                            </tr>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            }
                                                         }
-                                                    }
-                                                }
 
 
 
-                                            </tbody>
-                                        </table>
-                                        <script>
-                                            var idtosend;
-                                            $(".addsonDetailButton").click(function () {
-                                                var addsonid = $(this).parent().parent().attr('id');
-                                                $("#addsonItem").val(addsonid);
+                                                    </tbody>
+                                                </table>
+                                                <script>
+                                                    var idtosend;
+                                                    $(".addsonDetailButton").click(function () {
+                                                        var addsonid = $(this).parent().parent().attr('id');
+                                                        $("#addsonItem").val(addsonid);
 
-                                                $.ajax({
-                                                    url: '/partner/getAddsonDetail',
-                                                    dataType: 'html',
-                                                    data: {
-                                                        id: addsonid,
-                                                    },
-                                                    success: function (data) {
+                                                        $.ajax({
+                                                            url: '/partner/getAddsonDetail',
+                                                            dataType: 'html',
+                                                            data: {
+                                                                id: addsonid,
+                                                            },
+                                                            success: function (data) {
 
-                                                        $("#addsonDetailHolder").html(data)
-                                                    },
-                                                    error: function () {
+                                                                $("#addsonDetailHolder").html(data)
+                                                            },
+                                                            error: function () {
 
-                                                    }
-                                                });
-                                            })
-                                            $(".editAddson").click(function () {
-                                                var addsonid = $(this).parent().parent().attr('id');
-                                                idtosend = addsonid;
-                                                var addsontitle = $(this).parent().parent().find(".tableTitle").text().trim();
-                                                var addsonRequired = $(this).parent().parent().find(".tableRequired").is(":checked");
-                                                var addsonMultiple = $(this).parent().parent().find(".tableMultiple").is(":checked");
+                                                            }
+                                                        });
+                                                    })
+                                                    $(".editAddson").click(function () {
+                                                        var addsonid = $(this).parent().parent().attr('id');
+                                                        idtosend = addsonid;
+                                                        var addsontitle = $(this).parent().parent().find(".tableTitle").text().trim();
+                                                        var addsonRequired = $(this).parent().parent().find(".tableRequired").is(":checked");
+                                                        var addsonMultiple = $(this).parent().parent().find(".tableMultiple").is(":checked");
 
 
-                                                $("#addsonName").val(addsontitle);
-                                                if (addsonMultiple == true) {
-                                                    $("#addsonMultiple").attr("checked", "checked");
-                                                }
-                                                if (addsonRequired == true) {
-                                                    $("#addsonRequired").attr("checked", "checked");
-                                                }
-                                            })
-                                            $(".addsonRemove").click(function () {
-                                                var addsonid = $(this).parent().parent().attr('id');
-                                                var parent = $(this).parent().parent();
-                                                $.ajax({
-                                                    url: '/partner/removeAddsonTitle',
-                                                    dataType: 'html',
-                                                    data: {
-                                                        id: addsonid,
-                                                    },
-                                                    success: function (data) {
-                                                        parent.remove();
-                                                    },
-                                                    error: function () {
+                                                        $("#addsonName").val(addsontitle);
+                                                        if (addsonMultiple == true) {
+                                                            $("#addsonMultiple").attr("checked", "checked");
+                                                        }
+                                                        if (addsonRequired == true) {
+                                                            $("#addsonRequired").attr("checked", "checked");
+                                                        }
+                                                    })
+                                                    $(".addsonRemove").click(function () {
+                                                        var addsonid = $(this).parent().parent().attr('id');
+                                                        var parent = $(this).parent().parent();
+                                                        $.ajax({
+                                                            url: '/partner/removeAddsonTitle',
+                                                            dataType: 'html',
+                                                            data: {
+                                                                id: addsonid,
+                                                            },
+                                                            success: function (data) {
+                                                                parent.remove();
+                                                            },
+                                                            error: function () {
 
-                                                    }
-                                                });
+                                                            }
+                                                        });
 
-                                            })
-                                        </script>
+                                                    })
+                                                </script>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+
                         </div>
                     </div>
-                </div>
-            }
 
+
+                    <div id="addsonDetailHolder"></div>
+
+
+
+                </div>
+            </div>
         </div>
     </div>
-
-
-    <div id="addsonDetailHolder"></div>
-
-
-
 </div>

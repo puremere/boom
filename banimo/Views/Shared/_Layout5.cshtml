@@ -389,6 +389,8 @@
 
                                                 <ul class="swiper-wrapper nav nav-tabs" id="myTab" role="tablist" aria-live="polite" style="transition-duration: 0ms;">
 
+                                                   
+                                                    
                                                     @foreach (var item in menumodel.First().mycatcollection)
                                                     {
                                                         string navID = "nav-" + item.ID;
@@ -487,24 +489,28 @@
                                                                                 string subindexactive = sublist.IndexOf(subcat) == 0 ? "active" : "";
                                                                                 string srtcat = "2" + subcat.ID;
                                                                                 <li>
-                                                                                    <a style="font-weight" href="/Home/ProductList?catmode=@srtcat"
+                                                                                    <a style="font-weight" href="/ProductList/@subcat.entitle"
                                                                                        class="@subindexactive" dideo-checked="true">
                                                                                         @subcat.title
                                                                                     </a>
                                                                                 </li>
-                                                                                foreach (var subcat2 in menumodel.First().mysubcatcollection2)
+                                                                                if (menumodel.First().mysubcatcollection2 != null)
                                                                                 {
-                                                                                    if (subcat2.subcatid == subcat.ID)
+                                                                                    foreach (var subcat2 in menumodel.First().mysubcatcollection2)
                                                                                     {
-                                                                                        string srtcat2 = "3" + subcat.ID;
-                                                                                        <li>
-                                                                                            <a href="/Home/ProductList?catmode=@srtcat2"
-                                                                                               class="" dideo-checked="true">
-                                                                                                &nbsp;----&nbsp;@subcat2.title
-                                                                                            </a>
-                                                                                        </li>
+                                                                                        if (subcat2.subcatid == subcat.ID)
+                                                                                        {
+                                                                                            string srtcat2 = "3" + subcat.ID;
+                                                                                            <li>
+                                                                                                <a href="/ProductList/@subcat2.entitle"
+                                                                                                   class="" dideo-checked="true">
+                                                                                                    &nbsp;----&nbsp;@subcat2.title
+                                                                                                </a>
+                                                                                            </li>
+                                                                                        }
                                                                                     }
                                                                                 }
+
 
 
                                                                             }
@@ -810,27 +816,32 @@
                                                                 string srtcat = "2" + subcatItem.ID;
                                                                 if (subcatItem.CatID == catitem.ID)
                                                                 {
-                                                                    <li>
-                                                                        <a href="/Home/ProductList?catmode=@srtcat"
-                                                                           dideo-checked="true">
-                                                                            @subcatItem.title
-                                                                        </a>
-                                                                        <ul>
-                                                                            @foreach (var subcatItem2 in menumodel.First().mysubcatcollection2)
+                                                            <li>
+                                                                <a href="/ProductList/@subcatItem.entitle"
+                                                                   dideo-checked="true">
+                                                                    @subcatItem.title
+                                                                </a>
+                                                                @if (menumodel.First().mysubcatcollection2 != null)
+                                                                {
+                                                                    <ul>
+
+                                                                        @foreach (var subcatItem2 in menumodel.First().mysubcatcollection2)
+                                                                        {
+                                                                            string srtcat2 = "3" + subcatItem2.ID;
+                                                                            if (subcatItem2.subcatid == subcatItem.ID)
                                                                             {
-                                                                                string srtcat2 = "3" + subcatItem2.ID;
-                                                                                if (subcatItem2.subcatid == subcatItem.ID)
-                                                                                {
-                                                                                    <li>
-                                                                                        <a href="/Home/ProductList?catmode=@srtcat2"
-                                                                                           dideo-checked="true">
-                                                                                            @subcatItem2.title
-                                                                                        </a>
-                                                                                    </li>
-                                                                                }
+                                                                                <li>
+                                                                                    <a href="/ProductList/@subcatItem2.entitle"
+                                                                                       dideo-checked="true">
+                                                                                        @subcatItem2.title
+                                                                                    </a>
+                                                                                </li>
                                                                             }
-                                                                        </ul>
-                                                                    </li>
+                                                                        }
+                                                                    </ul>
+                                                                }
+
+                                                            </li>
                                                                 }
                                                             }
 

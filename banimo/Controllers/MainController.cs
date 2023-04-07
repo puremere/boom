@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace banimo.Controllers
 {
+    [doForAll]
     public class MainController : Controller
     {
         string servername = ConfigurationManager.AppSettings["serverName"];
@@ -127,7 +128,39 @@ namespace banimo.Controllers
             cryptoStream.Close();
             return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
         }
-        public ActionResult Index()
+        public ActionResult Index(string catMode)
+        {
+
+            Response.Cookies["partnerID"].Value = "";
+            Response.Cookies["tarafID"].Value = "";
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string tokenMain = Session["LogedInUser2"] as string;
+            string srt = getCookie("tokenMain");
+            banimo.AdminPanel.ViewModel.CookieVM cookieVM = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(srt);
+            cookieVM.tag = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", "test");
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("catMode", catMode);
+
+                byte[] response =
+                client.UploadValues(server + "/Main/GetMain.php?", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            mainIndex model = JsonConvert.DeserializeObject<mainIndex>(result);
+            string design = ConfigurationManager.AppSettings["design"] as string;
+            string action = "Index" + design;
+            return View(action,model);
+        }
+
+        public PartialViewResult getCatPartner(string id)
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
@@ -141,18 +174,20 @@ namespace banimo.Controllers
                 collection.Add("servername", "test");
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("catID", id);
 
                 byte[] response =
-                client.UploadValues(server + "/Main/GetMain.php?", collection);
-
+                client.UploadValues(server + "/Admin/getCatForPartner.php?", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            mainIndex model = JsonConvert.DeserializeObject<mainIndex>(result);
-            return View(model);
+            partnerCat model = JsonConvert.DeserializeObject<partnerCat>(result);
+            Response.Cookies["tarafID"].Value = model.TH;
+            return PartialView("/Views/Shared/AdminShared/_PartnerCat.cshtml", model);
+
         }
 
-        
+
 
         public void setPage()
         {
@@ -161,13 +196,14 @@ namespace banimo.Controllers
             model.page = (current + 1).ToString();
             SetCookie(JsonConvert.SerializeObject(model), "token");
         }
-        public void setValues(string result, string mallID, string contract)
+        public void setValues(string result, string mallID, string contract,string tag, string query)
         {
             string srt = getCookie("tokenMain");
             banimo.AdminPanel.ViewModel.CookieVM cookieVM = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(srt);
             cookieVM.result = result;
             cookieVM.mallID = mallID;
-            TempData["contract"] = contract;
+            cookieVM.tag = tag;
+            cookieVM.query = query;
             SetCookie(JsonConvert.SerializeObject(cookieVM), "tokenMain");
         }
         public void setQuery(string query, string cityID, string countryID)
@@ -192,9 +228,12 @@ namespace banimo.Controllers
             model.controller = "home";
             string lang = Session["lang"] as string;
             SetCookie(JsonConvert.SerializeObject(model), "tokenMain");
-            string subcat = model.result != null ? model.result.Split('-')[0] : "";
-            string catlevel = model.result != null ? model.result.Split('-')[1] : "";
-            string contract = TempData["contract"] as string;
+            string subcat = "";
+            string catlevel = "";
+            subcat = model.result != null ? model.result.Split('-')[0] : "";
+            catlevel = model.result != null ? model.result.Split('-')[1] : "";
+
+
             banimo.ViewModel.searchResultVM VMmodel = new ViewModel.searchResultVM()
             {
                 searchq = model.query,
@@ -209,13 +248,17 @@ namespace banimo.Controllers
                 floorID = model.floorID,
                 mallID = model.mallID,
                 page = model.page,
-                contract = contract
+                tag = model.tag,
+
 
                 //02122517428@tct2
                 //650038
             };
             string searchResultPayload = JsonConvert.SerializeObject(VMmodel);
+
             string resu = await wb.doPostData(server + "/Main/GetSearchResult.php", searchResultPayload);
+
+            //return Content(resu);
             banimo.ViewModel.BzListVM viewModel = JsonConvert.DeserializeObject<ViewModel.BzListVM>(resu);
             ViewBag.result = model.result;
             ViewBag.mallID = model.mallID;
@@ -224,7 +267,9 @@ namespace banimo.Controllers
             {
                 return Content(JsonConvert.SerializeObject(viewModel));
             }
-            return View(viewModel);
+            string design = ConfigurationManager.AppSettings["design"] as string;
+            string action = "Index" + design;
+            return View(action,viewModel);
             // return View();
         }
     }

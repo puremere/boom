@@ -94,12 +94,13 @@
 <style>
 
     .SECTIONHOLDER0 {
-        width: 98%;
+        width: 95%;
         background-color: #fff;
         padding: 10px;
         border-radius: 8px;
         box-shadow: 2px 2px 5px -1px rgb(148 149 153);
-        margin-bottom: 20px
+        margin: auto !important;
+        margin-bottom: 20px !important;
     }
 
         .SECTIONHOLDER0 .item {
@@ -130,6 +131,30 @@
             font-size: 16px;
             font-weight: 600
         }
+
+    .desciptionholder {
+        width: 95%;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px -1px rgb(148 149 153);
+        margin: auto !important;
+        margin-bottom: 20px !important;
+    }
+        .desciptionholder p {
+            
+            padding: 10px;
+            font-size: 13px;
+            line-height:2.2;
+            
+        }
+        .desciptionholder img {
+            object-fit: cover;
+            border-radius: 5px;
+        }
+         h3,  h2, h1{
+            padding:20px !important
+        }
 </style>
 @{
 
@@ -141,10 +166,10 @@
 
             @foreach (var newitem in Model.mycat)
             {
-                string url = "/Home/productList?catmode=" + newitem.ID + "&value=" + newitem.title;
+                string url = "/Home/productList?catmode=" + newitem.ID;
                 if (newitem.isFinal == 0)
                 {
-                    url = "/Home/submenu?catmode=" + newitem.ID + "&value=" + newitem.title; ;
+                    url = "/Home/submenu?catmode=" + newitem.ID;
                 }
 
                 string imagaddress = newitem.image == null ? "/images/placeholder.jpg" : "/images/" + newitem.image;
@@ -173,6 +198,13 @@
 }
 
 
+
+@if(!String.IsNullOrWhiteSpace(Model.desc))
+{
+    <div class="row desciptionholder" style="direction:rtl; text-align:right; padding:50px">
+        @Html.Raw(Model.desc);
+    </div>
+}
 
 
 @*@if (Model.gourpList != null)

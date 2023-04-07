@@ -92,6 +92,7 @@ namespace banimo.ViewModelPost
         public List<AddsonList> addsonList { get; set; }
         public List<PartnerList> partnerList { get; set; }
         public List<CatTreeList> catTreeList { get; set; }
+        public List<banimo.ViewModel.Comment> comment { get; set; }
         public string vahed { get; set; }
         public string tag { get; set; }
         public string cattree { get; set; }

@@ -5,7 +5,7 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = Resources.res.busilist;
+    ViewBag.Title = "Vendor List";
 }
 
 <link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
@@ -20,10 +20,8 @@
     }*@
 
 @{
-    <script src="~/Scripts/download.js"></script>
-    <input type="file" style="display:none" id="fileupload" />
-    <p id="parent" style="display:none"></p>
-    <p class="imageName" style="display:none"></p>
+    
+    
 
     <!-- Modal -->
     <p style="display:none" id="modalValue"></p>
@@ -37,7 +35,7 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
-                    <p id="modalmessage">@Resources.res.delbusi</p>
+                    <p id="modalmessage">Are you sure removing this item?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
@@ -62,7 +60,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.success('محصول مورد نظر حذف شد')
+                                    toastr.success('Successfully deleted')
                                     var value = $("#listofproduct").val();
                                     var partner = $("#partnerList").val();
                                     $.ajax({
@@ -98,211 +96,159 @@
     </div>
     if (Model.data == null)
     {
-        <p style="text-align:center">@Resources.res.noItemFound</p>
+        <p style="text-align:center">@Resources.res.noItemAlert</p>
     }
     else
     {
 
         <div class="row">
-            <div style="overflow-x:auto;padding:10px">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> @Resources.res.busilist </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="morris-area-chart">
-                            <div style="overflow:auto">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                ID
-                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
-                                            </th>
-                                            <th>
-                                                @Resources.res.title
-                                            </th>
-                                            <th>
-                                                @Resources.res.inactive
-                                            </th>
-                                            <th>
-                                                @Resources.res.offer
-                                            </th>
-                                            <th>
-                                                @Resources.res.recommended
+            <div class="panel-body">
+                <div id="morris-area-chart">
+                    <div style="overflow:auto">
+                        <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="">
+                            <thead>
+                                <tr>
 
-                                            </th>
-                                            <th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">Vendor ID</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Venor Title</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Inactive?</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Popular?</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Recommended?</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> freeDelivry?</th>
 
-                                            </th>
-                                            <th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                                </tr>
+                            </thead>
 
-                                            </th>
-                                         
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.data)
-                                        {
+                            <tbody>
+                                @foreach (var item in Model.data)
+                                {
+                                    string cls = "odd";
+                                    if (Model.data.IndexOf(item) + 1 % 2 == 0)
+                                    {
+                                        cls = "even";
+                                    }
 
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.title)
-                                                </td>
-
-
-                                                <td style="text-align: center;">
-                                                    @if (item.isActive == "1")
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Active checked />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input id=@item.ID type="checkbox" class=Active />
-
-                                                    }
-                                                </td>
-
-
-                                                <td style="text-align: center;">
-                                                    @{
-
-                                                        if (item.specialOffer == "1")
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="specialOffer" checked />
-                                                        }
-                                                        else
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="specialOffer" />
-
-                                                        }
-
-                                                    }
-
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    @{
-
-                                                        if (item.recommended == "1")
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="recomended" checked />
-                                                        }
-                                                        else
-                                                        {
-                                                            <input id=@item.ID type="checkbox" class="recomended" />
-
-                                                        }
-
-                                                    }
-
-                                                </td>
-
-
-                                                <td>
-
-                                                    <a id=@item.ID class="btn btn-primary editproduct" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.edit</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-
-                                                </td>
-                                                <td>
-                                                    <a data-toggle="modal" data-target="#myModal" id=@item.ID class="btn btn-primary deleteproduct" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.delete</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-
-                                                </td>
-
-                                                @{
-                                                    int count = item.video.Count();
-                                                    string imageHolder = "holder" + item.ID;
-                                                    if (count == 33)
-                                                    {
-                                                        <td>
-                                                            <a id=@item.ID class="btn btn-primary addVideo" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.video</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-                                                            <a id=@item.ID class="btn btn-primary confirmVideo" style=" display:none;  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.OK</a> @*@Html.ActionLink("حذف", "Delete", new { id = item.ID })*@
-
-                                                            <span id="@imageHolder"></span>
-                                                        </td>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        
-
-                                            @*<td>
-                                                @foreach (var im in item.video.Trim(',').Split(','))
+                                <tr class="@cls">
+                                    <td>
+                                        <div class="table-image">
+                                            @{
+                                                string url = "";
+                                                if (!string.IsNullOrEmpty(item.video))
                                                 {
-                                                    <div class="imageCover" style="position:relative !important; width:150px"><div style="position:relative"><img style="width:150px" src="~/images/@im" /> <img class="removeVideo" id="@item.ID" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /></div></div>
+                                                    List<string> lst = item.video.Trim(',').Split(',').ToList();
+                                                    url = lst.Count() > 1 ? "https://www.marsools.com/images/" + lst[1] : "https://www.marsools.com/images/" + lst[0];
 
                                                 }
-                                               
-                                            </td>*@
-                                                    }
+                                                <img src="@url" class="img-fluid" alt="">
+                                            }
 
-                                                }
+                                        </div>
+                                    </td>
 
+                                    <td>@item.title</td>
+                                    <td style="text-align: center;">
+                                        @if (item.isActive == "1")
+                                        {
+                                            <input id=@item.ID type="checkbox" class="Active checkbox_animated check-it11" checked />
+                                        }
+                                        else
+                                        {
+                                            <input id=@item.ID type="checkbox" class="Active checkbox_animated check-it11" />
 
+                                        }
+                                    </td>
 
+                                    <td style="text-align: center;">
+                                        @{
 
-                                            </tr>
+                                            if (item.specialOffer == "1")
+                                            {
+                                                <input id=@item.ID type="checkbox" class="specialOffer checkbox_animated check-it11" checked />
+                                            }
+                                            else
+                                            {
+                                                <input id=@item.ID type="checkbox" class="specialOffer checkbox_animated check-it11" />
+
+                                            }
+
                                         }
 
+                                    </td>
+                                    <td style="text-align: center;">
+                                        @{
 
-
-                                    </tbody>
-                                </table>
-                                <script>
-                                    $(".addVideo").click(function () {
-
-                                        $(this).parent().find(".confirmVideo").css("display","inline")
-                                        var parentName = $(this).parent().find('span').attr('id');
-                                        $("#parent").text(parentName);
-                                        $("#fileupload").click();
-
-
-                                    })
-                                    $("#fileupload").on('change', function () {
-                                        //alert("sss");
-                                        var pr = $("#parent").text();
-                                        uploadImage(pr, "imageName", this)
-                                    });
-                                    $(".confirmVideo").click(function () {
-                                        
-                                        var val = $(this).attr('id');
-                                        var image = $(".imageName").text();
-                                        $.ajax({
-                                            url: "/Node/setvideo",
-                                            dataType: "html",
-                                            data: {
-                                                val: val,
-                                                image : image
-                                            },
-                                            success: function (data) {
-                                                window.location.reload();
+                                            if (item.recommended == "1")
+                                            {
+                                                <input id=@item.ID type="checkbox" class="recomended checkbox_animated check-it11" checked />
                                             }
-                                        })
-                                    })
-                                    $(".removeVideo").click(function () {
-                                        var id = $(this).siblings().attr('src');
-                                        var val = $(this).attr('id');
-                                        $(this).remove();
-                                        $.ajax({
-                                            url: "/Node/RemoveVideo",
-                                            dataType: "html",
-                                            data: {
-                                                image: id,
-                                                val : val
-                                            },
-                                            success: function (data) {
-                                                window.location.reload();
+                                            else
+                                            {
+                                                <input id=@item.ID type="checkbox" class="recomended checkbox_animated check-it11" />
+
                                             }
-                                        })
-                                    })
-                                </script>
-                            </div>
-                        </div>
+
+                                        }
+
+                                    </td>
+                                    <td style="text-align: center;">
+                                        @{
+
+                                            if (item.Cover.Contains("freeDelivery"))
+                                            {
+                                                <input id=@item.ID type="checkbox" class="FreeD checkbox_animated check-it11" checked />
+                                            }
+                                            else
+                                            {
+                                                <input id=@item.ID type="checkbox" class="FreeD checkbox_animated check-it11" />
+
+                                            }
+
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            @*<li>
+                    <a href="order-detail.html">
+                        <i class="ri-eye-line"></i>
+                    </a>
+                </li>*@
+
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <a href="edit/@item.ID">
+
+                                                        <i id=@item.ID class="ri-pencil-line "></i>
+                                                    </a>
+
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+
+
+                                                    <i id="@item.ID" data-target="#myModal" idtoremove=@item.ID class="ri-delete-bin-line deleteproduct" id=""></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+
+                                </tr>
+                                                                    }
+
+
+
+                            </tbody>
+                        </table>
+
+
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -315,8 +261,57 @@
         @*Page @(Model.PageCount <Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
         <p id="selectedForServer"></p>
         <script>
+            $(".addVideo").click(function () {
+
+                $(this).parent().find(".confirmVideo").css("display", "inline")
+                var parentName = $(this).parent().find('span').attr('id');
+                $("#parent").text(parentName);
+                $("#fileupload").click();
+
+
+            })
+            $("#fileupload").on('change', function () {
+                //alert("sss");
+                var pr = $("#parent").text();
+                uploadImage(pr, "imageName", this)
+            });
+            $(".confirmVideo").click(function () {
+
+                var val = $(this).attr('id');
+                var image = $(".imageName").text();
+                $.ajax({
+                    url: "/Node/setvideo",
+                    dataType: "html",
+                    data: {
+                        val: val,
+                        image: image
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                })
+            })
+            $(".removeVideo").click(function () {
+                var id = $(this).siblings().attr('src');
+                var val = $(this).attr('id');
+                $(this).remove();
+                $.ajax({
+                    url: "/Node/RemoveVideo",
+                    dataType: "html",
+                    data: {
+                        image: id,
+                        val: val
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                })
+            })
+        </script>
+        <script>
             $(".deleteproduct").click(function () {
                 $("#modalValue").text(this.id);
+                $("#myModal").modal('toggle');
             });
             $(".editproduct").click(function () {
                 var id = $(this).attr('id');
@@ -380,7 +375,31 @@
                 });
             })
 
+            $(".FreeD").click(function () {
+                if ($(this).is(':checked')) {
+                    var productValue = "1";
+                }
+                else {
+                    var productValue = "0";
+                }
+                var Prodcutid = $(this).attr("id");
 
+                $.ajax({
+                    url: '/Node/ChangeProductFree',
+                    dataType: 'html',
+                    data: {
+                        id: Prodcutid,
+                        value: productValue
+                    },
+                    success: function (data) {
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            })
             $(".recomended").click(function () {
                 if ($(this).is(':checked')) {
                     var productValue = "1";
@@ -412,94 +431,94 @@
 
         <div class="row">
             @{
-                var total = (Convert.ToInt32(Model.count) / 12);
-                var remain = (Convert.ToInt32(Model.count) % 12);
-                if (remain != 0)
-                {
-                    total = total + 1;
-                }
-                var activ = Convert.ToInt32(Model.current);
-                var activminus2 = activ - 2;
-                var activminus1 = activ - 1;
-                var activplus1 = activ + 1;
-                var activplus2 = activ + 2;
+                                var total = (Convert.ToInt32(Model.count) / 12);
+var remain = (Convert.ToInt32(Model.count) % 12);
+                                if (remain != 0)
+                                {
+                                    total = total + 1;
+                                }
+                                var activ = Convert.ToInt32(Model.current);
+var activminus2 = activ - 2;
+var activminus1 = activ - 1;
+var activplus1 = activ + 1;
+var activplus2 = activ + 2;
 
 
 
-                if ((total - activ) > 3 & activ > 3)
-                {
-                    <ul class="pagination">
+                                if ((total - activ) > 3 & activ > 3)
+                                {
+                <ul class="pagination">
 
-                        <li><a>«</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
-                        @if (activminus2 > 2)
-                        {
-                            <li><a>...</a></li>
-                        }
+                    <li><a>«</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                    @if (activminus2 > 2)
+                                            {
+                    <li><a>...</a></li>
+                                            }
 
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
-                        <li class="active"><a>@activ</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
-                        <li><a> ...</a></li>
-                        <li><a>@total</a></li>
-                        <li><a>»</a></li>
-                    </ul>
-                }
-                else if ((total - activ > 3) && !(activ > 3))
-                {
-                    <ul class="pagination">
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                    <li class="active"><a>@activ</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                    <li><a> ...</a></li>
+                    <li><a>@total</a></li>
+                    <li><a>»</a></li>
+                </ul>
+                                }
+                                else if ((total - activ > 3) && !(activ > 3))
+                                {
+                <ul class="pagination">
 
-                        @for (int i = 1; i < activ; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li class="active"><a>@activ </a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
-                        <li><a href="#">...</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
-                        <li><a href="#">»</a></li>
-                    </ul>
+                    @for (int i = 1; i<activ; i++)
+                                            {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                                            }
+                    <li class="active"><a>@activ </a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus1</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activplus2</a></li>
+                    <li><a href="#">...</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@total</a></li>
+                    <li><a href="#">»</a></li>
+                </ul>
 
-                }
-                else if (!(total - activ > 3) && activ > 3)
-                {
-                    <ul class="pagination">
+                                }
+                                else if (!(total - activ > 3) && activ > 3)
+                                {
+                <ul class="pagination">
 
-                        <li><a>«</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
-                        <li><a>...</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
-                        <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
-                        <li style="cursor:pointer" class="active"><a>@activ </a></li>
-                        @for (int i = activ + 1; i <= total; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li><a>»</a></li>
-                    </ul>
+                    <li><a>«</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>1</a></li>
+                    <li><a>...</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus2</a></li>
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@activminus1</a></li>
+                    <li style="cursor:pointer" class="active"><a>@activ </a></li>
+                    @for (int i = activ + 1; i <= total; i++)
+                                            {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                                            }
+                    <li><a>»</a></li>
+                </ul>
 
-                }
-                else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
-                {
+                                }
+                                else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
+                                {
 
-                    <ul class="pagination">
+                <ul class="pagination">
 
-                        @for (int i = 1; i < activ; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
-                        <li class="active"><a href="#">@activ</a></li>
-                        @for (int i = activ + 1; i <= total; i++)
-                        {
-                            <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
-                        }
+                    @for (int i = 1; i<activ; i++)
+                                            {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                                            }
+                    <li class="active"><a href="#">@activ</a></li>
+                    @for (int i = activ + 1; i <= total; i++)
+                                            {
+                    <li style="cursor:pointer" class="pagingnumberforall"><a>@i</a></li>
+                                            }
 
-                    </ul>
+                </ul>
 
-                }
+                                }
 
             }
 
@@ -539,7 +558,7 @@
         @*@Html.PagedListPager(Model, page => Url.Action("product", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "listholder" }))*@
 
 
-    }
+            }
 }
 
 

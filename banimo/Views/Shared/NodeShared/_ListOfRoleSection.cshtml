@@ -1,0 +1,176 @@
+﻿@model banimo.ViewModel.AccessVM
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+                <div class="title-header option-title">
+                    <h5>Action List</h5>
+                </div>
+
+
+                <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
+                    <a id="addRoleSectionModalIcon" class="lgnsubmitt btn btn-primary">Set New Action</a>
+                </div>
+                <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                    <thead>
+                        <tr>
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model.Sections != null)
+                        {
+                            foreach (var item in Model.Sections)
+                            {
+
+
+                                string cls = "odd";
+                                if (Model.Sections.IndexOf(item) + 1 % 2 == 0)
+                                {
+                                    cls = "even";
+                                }
+
+                                <tr class="@cls">
+
+
+                                    <td> @Html.DisplayFor(modelItem => item.actionF)</td>
+
+
+
+                                    <td>
+                                        <ul>
+
+
+                                            <li>
+                                                <a href="javascript:void(0)">
+
+                                                    <i id=@item.ID class="ri-delete-bin-line roleSectionRemove"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+
+
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(".roleSectionRemove").click(function () {
+        var id = $(this).attr('id');
+        $("#roleSectionToRemove").text(id);
+        $("#delRoleSectionmodal").modal('toggle');
+    })
+    $("#removeRoleSectionButton").click(function () {
+        var id = $("#roleSectionToRemove").text();
+        $.ajax({
+            url: '/Node/DeleteRoleSectin',
+            dataType: 'html',
+            data: {
+                id: id,
+            },
+            success: function (data) {
+               
+                var id = '@Model.RolID'
+                $.ajax({
+                    url: '/Node/getRoleSection',
+                    dataType: 'html',
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        $("#roleSelected").val(id);
+                        $("#accessListholder").html(data);
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            },
+            error: function () {
+
+            }
+        });
+    })
+    //$(".editAccess").click(function () {
+
+    //    var id = $(this).attr("id");
+
+    //    $.ajax({
+    //        url: '/Core/getRoleSection',
+    //        dataType: 'html',
+    //        data: {
+    //            id: id,
+    //        },
+    //        success: function (data) {
+
+    //            var search = $("#searchinput").val();
+
+    //            $.ajax({
+    //                url: '/Admin/getNewListUser',
+
+    //                dataType: 'html',
+    //                data: {
+    //                    search: search,
+
+    //                },
+    //                success: function (data) {
+
+    //                    $("#Listholder").html(data);
+    //                },
+    //                error: function () {
+
+    //                }
+    //            });
+
+    //        },
+    //        error: function () {
+
+    //        }
+    //    });
+    //});
+
+
+</script>
+<script>
+    $("#addRoleSectionModalIcon").click(function () {
+        $("#addRoleSectionModal").modal("toggle");
+    })
+</script>
+
+<div class="modal fade" id="delRoleSectionmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <p id="roleSectionToRemove" style="display:none"></p>
+            <div class="modal-body">
+                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-dismiss="modal" data-bs-original-title="" title="" id="removeRoleSectionButton">Verify</button>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

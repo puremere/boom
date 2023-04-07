@@ -36,6 +36,7 @@ namespace banimo.ViewModel
     {
         public string ID { get; set; }
         public string name { get; set; }
+        public decimal rate { get; set; }
         public string time { get; set; }
         public string rtime { get; set; }
         public string comment { get; set; }

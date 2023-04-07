@@ -1,0 +1,298 @@
+﻿@model banimo.ViewModel.AdminDashbaordNodeVM
+@{
+    Layout = "~/Views/Shared/_PartnerLayout.cshtml";
+    ViewBag.Title = " dashboard";
+}
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- chart caard section start -->
+        @*<div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 border-0  card-hover card o-hidden">
+                <div class="custome-1-bg b-r-4 card-body">
+                    <div class="media align-items-center static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Users</span>
+                            <h4 class="mb-0 counter">
+                                @Model.userNumRows
+                                <span class="badge badge-light-primary grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="ri-database-2-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                <div class="custome-2-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Products</span>
+                            <h4 class="mb-0 counter">
+                                @Model.productsNum
+                                <span class="badge badge-light-danger grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="ri-shopping-bag-3-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0  card o-hidden">
+                <div class="custome-3-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Orders</span>
+                            <h4 class="mb-0 counter">
+                                @Model.ordersNum
+                                <a href="add-new-product.html" class="badge badge-light-secondary grow" data-bs-original-title="" title="">
+                                    ADD NEW
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="align-self-center text-center">
+                            <i class="ri-chat-3-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="col-sm-6 col-xxl-3 col-lg-6">
+            <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                <div class="custome-4-bg b-r-4 card-body">
+                    <div class="media static-top-widget">
+                        <div class="media-body p-0">
+                            <span class="m-0">Total Vendors</span>
+                            <h4 class="mb-0 counter">
+                                @Model.nodeNumRows
+                                <span class="badge badge-light-success grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                </span>
+                            </h4>
+                        </div>
+
+                        <div class="align-self-center text-center">
+                            <i class="ri-user-add-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header border-0 pb-1">
+                    <div class="card-header-title p-0">
+                        <h4>Category</h4>
+                    </div>
+                </div>
+                <div class="card-body p-0" style="display:flex">
+                    @foreach (var item in Model.dacats)
+                    {
+                        <div class=" " style="width: 125px">
+                            <div class="dashboard-category">
+                                <div style="width:100px">
+                                    <img src="https://marsools.com/images/@item.image" class="img-fluid" alt="">
+                                </div>
+                                <a href="javascript:void(0)" class="category-name" tabindex="-1" data-bs-original-title="" title="">
+                                    <h6> @item.title</h6>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-md-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title">
+                        <h4>Best Selling Product</h4>
+                    </div>
+
+                    @*<div class="best-selling-box d-sm-flex d-none">
+                            <span>Short By:</span>
+                            <div class="dropdown">
+                                <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-auto-close="true" data-bs-original-title="" title="">Today</button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Action</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Another action</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Something else here</a></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                </div>
+
+                <div class="card-body p-0">
+                    <div>
+                        <div class="table-responsive">
+                            <table class="best-selling-table w-image
+                                            w-image
+                                            w-image table border-0">
+                                <tbody>
+                                    @if (@Model.bestseller != null)
+                                    {
+                                        foreach (var item in @Model.bestseller)
+                                        {
+                                            string url = item.image.Split(',').ToList().First();
+                                            <tr>
+                                                <td>
+                                                    <div class="best-product-box">
+                                                        <div class="product-image">
+                                                            <img src="@url" class="img-fluid" alt="Product">
+                                                        </div>
+                                                        <div class="product-name">
+                                                            <h5>@item.title </h5>
+                                                            <h6>26-08-2022</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Price</h6>
+                                                        <h5>@item.price</h5>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Orders</h6>
+                                                        <h5>@item.count</h5>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Stock</h6>
+                                                        <h5>@item.ramaining</h5>
+                                                    </div>
+                                                </td>
+
+                                                @*<td>
+                        <div class="product-detail-box">
+                            <h6>Amount</h6>
+                            <h5>$1,798</h5>
+                        </div>
+                    </td>*@
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Best Selling Product End -->
+        <!-- Recent orders start-->
+        <div class="col-xl-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title">
+                        <h4>Recent Orders</h4>
+                    </div>
+
+                    <div class="best-selling-box d-sm-flex d-none">
+                        <span>Short By:</span>
+                        <div class="dropdown">
+                            <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-auto-close="true" data-bs-original-title="" title="">Today</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Another action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-original-title="" title="">Something else here</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div>
+                        <div class="table-responsive">
+                            <table class="best-selling-table table border-0">
+                                <tbody>
+
+                                    @if (Model.lastOrdres != null)
+                                    {
+                                        foreach (var item in Model.lastOrdres)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="best-product-box">
+                                                        <div class="product-name">
+                                                            <h5>Order Number</h5>
+                                                            <h6>#@item.peigiry</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Date Placed</h6>
+                                                        <h5>@item.timestamp</h5>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Price</h6>
+                                                        <h5>@item.TotalPrice AED</h5>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Order Status</h6>
+                                                        <h5>@item.status</h5>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>Payment</h6>
+                                                        <h5 class="text-danger">Unpaid</h5>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

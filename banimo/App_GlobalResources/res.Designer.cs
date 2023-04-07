@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace neshanak.App_GlobalResources {
+namespace banimo.App_GlobalResources {
     using System;
     
     
@@ -201,15 +201,6 @@ namespace neshanak.App_GlobalResources {
         public static string blogtext2 {
             get {
                 return ResourceManager.GetString("blogtext2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to book.
-        /// </summary>
-        public static string book {
-            get {
-                return ResourceManager.GetString("book", resourceCulture);
             }
         }
         
@@ -475,15 +466,6 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to course.
-        /// </summary>
-        public static string course {
-            get {
-                return ResourceManager.GetString("course", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string createAddress {
@@ -619,24 +601,6 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to English.
-        /// </summary>
-        public static string English {
-            get {
-                return ResourceManager.GetString("English", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to enrollment.
-        /// </summary>
-        public static string enrollment {
-            get {
-                return ResourceManager.GetString("enrollment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to enter supermarket.
         /// </summary>
         public static string enterSupermarket {
@@ -705,24 +669,6 @@ namespace neshanak.App_GlobalResources {
         public static string forum {
             get {
                 return ResourceManager.GetString("forum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to French.
-        /// </summary>
-        public static string French {
-            get {
-                return ResourceManager.GetString("French", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Germany.
-        /// </summary>
-        public static string Germany {
-            get {
-                return ResourceManager.GetString("Germany", resourceCulture);
             }
         }
         
@@ -808,33 +754,6 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to minimum installment amount is : .
-        /// </summary>
-        public static string installmentMinimum {
-            get {
-                return ResourceManager.GetString("installmentMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to your profile is added successfully.
-        /// </summary>
-        public static string itemAdded {
-            get {
-                return ResourceManager.GetString("itemAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to language.
-        /// </summary>
-        public static string lan {
-            get {
-                return ResourceManager.GetString("lan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to last registerd business.
         /// </summary>
         public static string lastbusi {
@@ -853,29 +772,11 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to letter.
-        /// </summary>
-        public static string letter {
-            get {
-                return ResourceManager.GetString("letter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to link.
         /// </summary>
         public static string link {
             get {
                 return ResourceManager.GetString("link", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to live.
-        /// </summary>
-        public static string live {
-            get {
-                return ResourceManager.GetString("live", resourceCulture);
             }
         }
         
@@ -1195,15 +1096,6 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to your credit amount must be bigger than withdraw amount.
-        /// </summary>
-        public static string overwithdraw {
-            get {
-                return ResourceManager.GetString("overwithdraw", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to page.
         /// </summary>
         public static string page {
@@ -1227,15 +1119,6 @@ namespace neshanak.App_GlobalResources {
         public static string phone {
             get {
                 return ResourceManager.GetString("phone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to place.
-        /// </summary>
-        public static string place {
-            get {
-                return ResourceManager.GetString("place", resourceCulture);
             }
         }
         
@@ -1519,15 +1402,6 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to register.
-        /// </summary>
-        public static string rgst {
-            get {
-                return ResourceManager.GetString("rgst", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to sample emails.
         /// </summary>
         public static string sampleEmail {
@@ -1546,47 +1420,11 @@ namespace neshanak.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to section.
-        /// </summary>
-        public static string section {
-            get {
-                return ResourceManager.GetString("section", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to select.
-        /// </summary>
-        public static string select {
-            get {
-                return ResourceManager.GetString("select", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to setting.
-        /// </summary>
-        public static string setting {
-            get {
-                return ResourceManager.GetString("setting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to slider management.
         /// </summary>
         public static string slideman {
             get {
                 return ResourceManager.GetString("slideman", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Spanish.
-        /// </summary>
-        public static string Spanish {
-            get {
-                return ResourceManager.GetString("Spanish", resourceCulture);
             }
         }
         
@@ -1677,24 +1515,6 @@ namespace neshanak.App_GlobalResources {
         public static string totalM {
             get {
                 return ResourceManager.GetString("totalM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Turkish.
-        /// </summary>
-        public static string Turkish {
-            get {
-                return ResourceManager.GetString("Turkish", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to tutorial managment.
-        /// </summary>
-        public static string tutorial {
-            get {
-                return ResourceManager.GetString("tutorial", resourceCulture);
             }
         }
         
