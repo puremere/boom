@@ -116,8 +116,10 @@ namespace banimo.Controllers
                 string id = lst[5];
                 var myHub = GlobalHost.ConnectionManager.GetHubContext<education2.ChatHub>();
                 myHub.Clients.Group(model.vehicle_type.ToString()).newOrder(senderAddress, reieverAddress, slat, slon, rlat, rlon, id);
-
+                resultmodel.message = "successfull";
+                Fresult = JsonConvert.SerializeObject(resultmodel);
             }
+            
 
             JObject jObject = JObject.Parse(Fresult); return jObject;
            

@@ -140,8 +140,77 @@
     }
 </style>
 <main class="main">
+    @if (Model.cat.Count() > 1)
+    {
 
-    
+
+        <section class="  btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color: #f8f8f8; position: relative; overflow: hidden;">
+            <div class="container">
+                @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
+                <div class="row">
+
+                    <div class="col-lg-12 col">
+                        <div class="btn-group" style="justify-content:center">
+
+                            <div class="btn-wrap show-code-action">
+                                <a href="/" class="btn btn-secondary btn-outline btn-rounded" style="background-color:#5b2871; color:white">بازار </a>
+                            </div>
+                            <div class="btn-wrap show-code-action">
+                                <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded">فشن </a>
+                            </div>
+                            @*<div class="btn-wrap show-code-action">
+                                @if (Session["LogedInUser"] != null)
+                                {
+                                <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
+
+                                }
+                                else
+                                {
+                                    <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
+
+                                }
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color:#f8f8f8; position: relative; overflow: hidden;">
+            <div class="container">
+                @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
+                <div class="row">
+
+                    <div class="col-lg-12 col">
+                        <div class="btn-group" style="justify-content:center">
+
+                            <div class="btn-wrap show-code-action">
+                                <a href="/" class="btn btn-secondary btn-outline btn-rounded">بازار </a>
+                            </div>
+                            <div class="btn-wrap show-code-action">
+                                <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded"  style="background-color:#5b2871; color:white">فشن </a>
+                            </div>
+                            @*<div class="btn-wrap show-code-action">
+                    @if (Session["LogedInUser"] != null)
+                    {
+                    <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
+
+                    }
+                    else
+                    {
+                        <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
+
+                    }
+                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
 
     @if (Request.Browser.IsMobileDevice && Model.cat.Count() == 1)
     {
@@ -236,7 +305,7 @@
                     int i = Model.sld.IndexOf(item) + 1;
                     string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
                     <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" background-image: url(@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
-                        <div class="container">
+                        <div class="container; ">
 
                             <div class="banner-content y-50 d-inline-block">
                                 <div class="slide-animate" data-animation-options="{
@@ -535,7 +604,7 @@
 
             </div>
             <div class="swiper">
-                <div  class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
+                <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
                      data-swiper-options="{
                         'spaceBetween': 20,
                         'slidesPerView': 1.3,
@@ -630,49 +699,49 @@
 
         @if (Model.cat.Count() > 1)
         {
-    <div class="row category-banner-2cols cols-md-2 appear-animate">
-        @if (Model.banners.Count() > 3)
-        {
-            string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
-            <div urltogo="@url"  class="slideitem col-md-6 mb-4">
-                <div class="banner banner-fixed br-sm">
-                    <figure>
-                        <img src="@Model.banners[3].image" alt="Category Banner" width="610"
-                             height="150" style="background-color: #263032;" />
-                    </figure>
-                    <div class="banner-content y-50">
-                        <h5 class="banner-subtitle text-white text-uppercase font-weight-bold">
-                            @Model.banners[3].title
-                        </h5>
-                        <h3 class="banner-title text-white text-capitalize ls-25">@Model.banners[3].Ptitle</h3>
+            <div class="row category-banner-2cols cols-md-2 appear-animate">
+                @if (Model.banners.Count() > 3)
+                {
+                    string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
+                    <div urltogo="@url" class="slideitem col-md-6 mb-4">
+                        <div class="banner banner-fixed br-sm">
+                            <figure>
+                                <img src="@Model.banners[3].image" alt="Category Banner" width="610"
+                                     height="150" style="background-color: #263032;" />
+                            </figure>
+                            <div class="banner-content y-50">
+                                <h5 class="banner-subtitle text-white text-uppercase font-weight-bold">
+                                    @Model.banners[3].title
+                                </h5>
+                                <h3 class="banner-title text-white text-capitalize ls-25">@Model.banners[3].Ptitle</h3>
+
+                            </div>
+                        </div>
 
                     </div>
-                </div>
+                }
+                @if (Model.banners.Count() > 4)
+                {
+                    string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
+                    <div urltogo="@url" class="slideitem col-md-6 mb-4">
+                        <div class="banner banner-fixed br-sm">
+                            <figure>
+                                <img src="@Model.banners[4].image" alt="Category Banner" width="610"
+                                     height="150" style="background-color: #F3F3F1;" />
+                            </figure>
+                            <div class="banner-content y-50">
+                                <h5 class="banner-subtitle text-white text-uppercase font-weight-bold">
+                                    @Model.banners[4].title
+                                </h5>
+                                <h3 class="banner-title text-white text-capitalize ls-25">@Model.banners[4].Ptitle</h3>
 
-            </div>
-        }
-        @if (Model.banners.Count() > 4)
-        {
-            string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
-            <div urltogo="@url"  class="slideitem col-md-6 mb-4">
-                <div class="banner banner-fixed br-sm">
-                    <figure>
-                        <img src="@Model.banners[4].image" alt="Category Banner" width="610"
-                             height="150" style="background-color: #F3F3F1;" />
-                    </figure>
-                    <div class="banner-content y-50">
-                        <h5 class="banner-subtitle text-white text-uppercase font-weight-bold">
-                            @Model.banners[4].title
-                        </h5>
-                        <h3 class="banner-title text-white text-capitalize ls-25">@Model.banners[4].Ptitle</h3>
+                            </div>
+                        </div>
 
                     </div>
-                </div>
+                }
 
             </div>
-        }
-
-    </div>
         }
 
 
@@ -703,7 +772,7 @@
                     <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
                         @foreach (var spec in Model.spc)
                         {
-                            string url = "https://www.marsools.com" + @spec.logo;
+                            string url = "https://heson.supect.com" + @spec.logo;
                             <div class="swiper-slide vendor-widget">
                                 <figure class="brandHolder">
                                     <a class="" href="/home/index?partnerID=@spec.url">
@@ -739,28 +808,28 @@
 
         @if (Model.cat.Count() > 1)
         {
-    <div class="row grid grid-float mb-10 appear-animate">
-        @if (Model.banners.Count() > 5)
-        {
-            string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
-            
-                <div urltogo="@url" class="slideitem grid-item col-md-6 height-x2">
-                    <div class="banner banner-fixed banner-lg br-sm">
-                        <figure>
-                            <img src="@Model.banners[5].image" alt="Banner" width="610"
-                                 height="420" style="background-color: #828994" />
-                        </figure>
-                        <div class="banner-content y-50">
-                            <h5 class="banner-subtitle text-white text-uppercase ls-25">
-                                @Model.banners[5].Ptitle
-                            </h5>
-                            <h3 class="banner-title text-white text-capitalize ls-25">
-                                @Model.banners[5].title
-                            </h3>
+            <div class="row grid grid-float mb-10 appear-animate">
+                @if (Model.banners.Count() > 5)
+                {
+                    string url = string.IsNullOrEmpty(Model.banners[3].catIDOrLink) ? "" : Model.banners[3].catIDOrLink;
 
+                    <div urltogo="@url" class="slideitem grid-item col-md-6 height-x2">
+                        <div class="banner banner-fixed banner-lg br-sm">
+                            <figure>
+                                <img src="@Model.banners[5].image" alt="Banner" width="610"
+                                     height="420" style="background-color: #828994" />
+                            </figure>
+                            <div class="banner-content y-50">
+                                <h5 class="banner-subtitle text-white text-uppercase ls-25">
+                                    @Model.banners[5].Ptitle
+                                </h5>
+                                <h3 class="banner-title text-white text-capitalize ls-25">
+                                    @Model.banners[5].title
+                                </h3>
+
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
 
                 <!-- End of Grid Item -->
@@ -900,11 +969,11 @@
                     </div>
                     <div class="row">
                         @*<div class="col-lg-3 col-sm-4 mb-4">
-                            <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
-                                background-color: #ebeced;">
+                                <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
+                                    background-color: #ebeced;">
 
-                            </div>
-                        </div>*@
+                                </div>
+                            </div>*@
                         <!-- End of Banner -->
                         <div class="col-lg-12 col-sm-12">
                             <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
@@ -962,15 +1031,15 @@
                                                                  width="300" height="338" />
                                                         </a>
                                                         @*<div class="product-action-vertical">
-                                                            <a href="#" class="btn-product-icon btn-cart w-icon-cart"
-                                                               title="Add to cart"></a>
-                                                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
-                                                               title="Add to wishlist"></a>
-                                                            <a href="#" class="btn-product-icon btn-quickview w-icon-search"
-                                                               title="Quickview"></a>
-                                                            <a href="#" class="btn-product-icon btn-compare w-icon-compare"
-                                                               title="Add to Compare"></a>
-                                                        </div>*@
+                                                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                                                   title="Add to cart"></a>
+                                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                                                   title="Add to wishlist"></a>
+                                                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                                                   title="Quickview"></a>
+                                                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                                                   title="Add to Compare"></a>
+                                                            </div>*@
 
 
                                                         @if (item.price != item.oldPrice)
@@ -984,12 +1053,12 @@
                                                     <div class="product-details">
                                                         <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
                                                         @*<div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 60%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
-                                                        </div>*@
+                                                                <div class="ratings-full">
+                                                                    <span class="ratings" style="width: 60%;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                                                            </div>*@
                                                         <div class="product-price">
                                                             <ins class="new-price">@item.price AED</ins>
                                                             @if (item.price != item.oldPrice)
@@ -1028,7 +1097,7 @@
                         <h2 class="title title-link title-vendor pt-2 pb-2">@tag.title</h2>
                         <p style="flex:1"></p>
                         <div tag="@tag.tag" class="moretag font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
-                          @Resources.res.seeMore
+                            @Resources.res.seeMore
 
                         </div>
                     </div>

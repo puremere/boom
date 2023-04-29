@@ -140,8 +140,8 @@
 
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Filter Management</button>
-        <button class="nav-link " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Clone Filter</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.filterManagement </button>
+        <button class="nav-link " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.cloneFilter </button>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -152,20 +152,20 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Search Panel</h5>
+                            <h5>@Resources.res.searchPanel</h5>
                         </div>
 
                         <div class="component " style="display:flex">
                             <div class="col-md-5" style="">
                                 <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                                    Choose Category
+                                    @Resources.res.category
                                 </label>
                                 <div class="component ">
-                                    @Html.DropDownList("selectedCatForEdit", listItems, "-- Select Status --", new { id = "selectedCatForEdit", style = "width:100%", @class = "form-control" })
+                                    @Html.DropDownList("selectedCatForEdit", listItems, Resources.res.selectitem, new { id = "selectedCatForEdit", style = "width:100%", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="col-md-5" style="">
-                                <button id="getfilters" class="btn btn-primary " style="margin:30px">Bring Data</button>
+                                <button id="getfilters" class="btn btn-primary " style="margin:30px">@Resources.res.bringData</button>
                                 <script>
                                     $("#getfilters").click(function () {
 
@@ -189,7 +189,7 @@
 
                                                 },
                                                 error: function () {
-                                                    alert("Error")
+                                                    alert("@Resources.res.error")
                                                 }
                                             });
                                         }
@@ -204,7 +204,7 @@
                                                 "extendedTimeOut": 1000
                                             }
 
-                                            toastr.error(' No Access for this category ')
+                                            toastr.error('@Resources.res.noAccessToCat  ')
                                         }
 
                                     })</script>
@@ -225,7 +225,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Filter Result</h5>
+                            <h5>@Resources.res.filterResult </h5>
                         </div>
                         <div id="mainDetailHolder">
 
@@ -242,13 +242,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Search Panel</h5>
+                            <h5>@Resources.res.searchPanel</h5>
                         </div>
                         <div class="row">
                             <div class="col-lg-6" style="margin:15px 0px">
                                 <div class="col-lg-6">
                                     <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                                       set all filter of category  -
+                                       @Resources.res.setAllFilterFor 
                                     </label>
                                 </div>
 
@@ -260,18 +260,18 @@
 
 
                                     }
-                                    @Html.DropDownList("maincat", listItems, "-- Select Status --", new { id = "maindrop", style = "width:100%", @class = "form-control" })
+                                    @Html.DropDownList("maincat", listItems, Resources.res.selectitem, new { id = "maindrop", style = "width:100%", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="col-lg-6" style="margin:15px 0px">
                                 <div class="col-lg-6">
                                     <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                                        For category  -
+                                      @Resources.res.forCat  
                                     </label>
                                 </div>
 
                                 <div class="col-lg-6">
-                                    @Html.DropDownList("clonedrop", listItems, "-- Select Status --", new { id = "clonedrop", style = "width:100%; height:300px", @class = "form-control", @multiple = "" })
+                                    @Html.DropDownList("clonedrop", listItems, Resources.res.selectitem, new { id = "clonedrop", style = "width:100%; height:300px", @class = "form-control", @multiple = "" })
                                 </div>
                             </div>
                         </div>
@@ -286,7 +286,7 @@
                         <div class="component " style="direction:rtl">
 
                             @* <button id="DEFcatok" class="btn btn-primary " onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
-                            <button id="clonefilter" class="btn btn-primary ">Verify</button>
+                            <button id="clonefilter" class="btn btn-primary ">@Resources.res.OK</button>
 
                             <script>
                                 $("#clonefilter").click(function () {
@@ -314,11 +314,11 @@
                                                     "extendedTimeOut": 1000
                                                 }
 
-                                                toastr.success('Done')
+                                                toastr.success('@Resources.res.done')
 
                                             },
                                             error: function () {
-                                                alert("Error")
+                                                alert("@Resources.res.error")
                                             }
                                         });
 
@@ -334,7 +334,7 @@
                                             "extendedTimeOut": 1000
                                         }
 
-                                        toastr.error(' Error ! call admin ')
+                                        toastr.error("@Resources.res.error")
                                     }
 
                                 })

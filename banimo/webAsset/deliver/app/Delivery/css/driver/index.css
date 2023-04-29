@@ -1,0 +1,330 @@
+:root{
+  --themeMain1: #5F3077;
+  --themeMain2:#F6BC40;
+  --sectionBG:#f1f1f1;
+}
+
+html,body{
+  width: 100%;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+body{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+.container-main{
+  margin-top: 1rem;
+  padding-bottom: 70px;
+}
+.links, .links:hover{
+  text-decoration: unset;
+  color: currentColor;
+}
+.theme-bg{
+  background: var(--themeMain1);
+}
+.theme-bg2{
+  background: var(--themeMain2);
+}
+
+.divider{
+  display: flex;
+  align-items: center;
+  justify-content:space-between  ;
+}
+.divider div{
+  display: flex;
+  height: 2px;
+  width: 40%;
+  background: var(--sectionBG);
+}
+
+/* ========= Navbar ======*/
+.main-navbar{
+  background: var(--themeMain1) !important;
+  color: #fff !important;
+}
+
+
+
+
+/*======= Drawer ====== */
+.mainDrawer{
+  background: rgba(0, 0, 0, 0.5);
+  max-width: 70vw !important;
+  color: #fff;
+  border-left: solid 2px #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.27);
+}
+.drawerTitle{
+  font-size: 25px;
+  margin-top: 1rem;
+/*  background: rgba(0,0,0,0.5);*/
+  padding: 10px;
+  border-radius: 11px;
+}
+
+
+.siteMap .list-group-item {
+  background: transparent;
+  color: #fff;
+  border-color: #ccc6;
+  padding: 20px 10px;
+}
+
+
+
+/**============ app-bar ========*/
+.app-bar{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 13px;
+  background: var(--themeMain1);
+  color: #fff;
+}
+.app-bar i{
+  font-size: 20px;
+}
+/**========  Login Page =======**/
+.login-main-brand{
+  width: 150px;
+  height: 150px;
+  
+/*  border-radius: 100%;*/
+/*  background: var(--sectionBG);*/
+
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+  
+/*  padding: 8px;*/
+  object-fit: contain;
+}
+
+.login-form{
+  background: var(--sectionBG);
+  padding: 2rem 1rem;
+  border-radius: 5px; 
+}
+
+
+.login-btn{
+  font-size: 14px;
+  color: #fff;
+  background: var(--themeMain1);
+}
+
+
+.login-input input{
+  font-size: 12px;
+  border-color: #5f4f9c33;
+}
+
+.login-input span{
+  background: var(--themeMain1) ;
+  color: #fff;
+  border-color: var(--themeMain1);
+
+}
+
+.forgot{
+  font-size: 13px;
+  color: #888;
+}
+
+.btn-signup{
+  font-size: 14px;
+  color: #fff;
+  background: var(--themeMain2);
+}
+
+
+/*========== HOME PAGE =========*/
+.main-comp-title{
+
+}
+
+.home-alerts{
+  font-size: 14px;
+}
+
+/*maps*/
+.mapouter{
+  position:relative;
+  text-align:right;
+  height:200px;
+  width:100%;
+  border-radius: 10px;
+}
+.gmap_canvas {
+  overflow:hidden;
+  background:none!important;
+  width:100%;
+  height:200px;
+  border-radius: 10px;
+}
+
+
+
+
+
+/** ======== Orders List Page =====*/
+
+.list-tile{
+  background: #fff;
+  padding: 11px 11px;
+  border-radius: 10px;
+  
+  margin-bottom: 1rem;
+  border:solid 1px #ccc !important;
+}
+.list-title-child {
+    display: flex;
+    justify-content: space-between;
+}
+.list-tile-title{
+  color: var(--themeMain1);
+  margin-top: 10px;
+  font-size: 20px;
+}
+.list-tile-date{
+  font-size: 10px;
+  color: #858585;
+}
+.list-tile-desc{
+  font-size: 12px;
+  color: #343434;
+}
+.list-tile-trailing{
+  width: 40px;
+  height: 40px;
+  background: gray;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  color: #fff;
+}
+
+.list-tile-icons{
+  min-width: 77px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-tile-price{
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.date-time{
+  font-size: 14px;
+  color: #747474;
+}
+
+
+/*=======   Schudle Page   ========*/
+.dates-wraper{
+  display: flex;
+
+}
+.date-tap{
+  width: 80px;
+  height: 100px;
+  background: var(--sectionBG) ;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
+  margin: 5px;
+}
+
+
+.active-date{
+  width: 90px;
+  height: 110px;
+  background: var(--themeMain1);
+  color: #fff;
+  font-weight: bold;
+}
+
+.not-active{
+  background: none;
+  border:solid 2px var(--sectionBG);
+}
+
+
+
+
+/*======== Statistics Page =====*/
+.tab-box{
+/*  background: #ccc;*/
+  width: 150px;
+  height: 120px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: #fff;
+}
+.tab-box-title{
+
+}
+.rating{
+
+}
+.rating i{
+  color: #f7d000;
+}
+
+#chart{
+  width: 100%;
+  height: 200px;
+  background: var(--sectionBG);
+}
+
+
+
+/*==== Profle Area ===== */
+
+.profile-wraper{
+  margin-top: 3rem;
+  background: var(--themeMain1) ;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+
+.user-img{
+  width: 120px;
+  height: 120px;
+  background: var(--sectionBG);
+  border-radius: 100%;
+  border:solid 2px #ccc;
+
+  margin-top: -3rem;
+}
+
+.user-name{
+  margin-top: 10px;
+  color: var(--themeMain2);
+
+}

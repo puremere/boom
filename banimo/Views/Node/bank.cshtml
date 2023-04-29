@@ -357,9 +357,9 @@
 
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Document List</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Reports</button>
-        <button class="nav-link " id="nav-coding-tab" data-bs-toggle="tab" data-bs-target="#nav-coding" type="button" role="tab" aria-controls="nav-coding" aria-selected="true">Coding</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">@Resources.res.ducumentList </button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.reports </button>
+        <button class="nav-link " id="nav-coding-tab" data-bs-toggle="tab" data-bs-target="#nav-coding" type="button" role="tab" aria-controls="nav-coding" aria-selected="true">@Resources.res.coding</button>
     </div>
 </nav>
 
@@ -372,13 +372,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Search Panel</h5>
+                            <h5>@Resources.res.searchPanel</h5>
                         </div>
                         <div id="moreFilterSection" class="row " style="margin:40px 0px; display:flex">
 
                             <div class="col-4">
                                 <div class="" style="margin : 0 5px">
-                                    <p style="display:inline-block">Atf Number :</p>
+                                    <p style="display:inline-block">@Resources.res.atfNum  :</p>
                                     <input id="atfNum" style="display:inline-block" class="form-control inputForm " />
 
                                 </div>
@@ -392,7 +392,7 @@
                                 </div>*@
                             <div class="col-4">
                                 <div class="" style="margin : 0 5px">
-                                    <p style="display:inline-block">Date From :</p>
+                                    <p style="display:inline-block">@Resources.res.dateFrom  :</p>
                                     <input type="date" id="Fromabserver" style="display:inline-block" class="form-control inputForm " />
 
 
@@ -400,7 +400,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="" style="margin : 0 5px">
-                                    <p style="display:inline-block">Date To :</p>
+                                    <p style="display:inline-block">@Resources.res.dateTo  :</p>
                                     <input type="date" id="Toabserver" style="display:inline-block" class="form-control inputForm " />
 
                                 </div>
@@ -421,7 +421,7 @@
 
                             <div>
                                 <div class="" style="padding-top:30px">
-                                    <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> Verify</p>
+                                    <p class="btn btn-success" style="display:inline-block" id="orderFormSearch"> @Resources.res.OK</p>
 
                                 </div>
                             </div>
@@ -461,7 +461,7 @@
                                 sanad = $("#sanadNum").val();
                                 nodeSelected = "1";
                                 $.ajax({
-                                    url: '/Admin/ChangeRecietList',
+                                    url: '/Node/ChangeRecietList',
                                     dataType: 'html',
                                     data: {
                                         type: type,
@@ -504,7 +504,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Reciet List</h5>
+                            <h5>@Resources.res.ducumentList </h5>
                         </div>
                         <div id="notCompleteReciet">
 
@@ -532,14 +532,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Search Panel</h5>
+                            <h5>@Resources.res.searchPanel</h5>
                         </div>
                         <div style="display:flex ; flex-wrap:wrap">
                             <div style="padding:10px; width:33%">
-                                <p>Level 1</p>
+                                <p>@Resources.res.level1 </p>
                                 @{
                                     <select name="M22" id="M22" class="form-control">
-                                        <option value="0">level 1</option>
+                                        <option value="0">@Resources.res.level1</option>
                                         @foreach (var item in M2)
                                         {
                                             <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
@@ -548,10 +548,10 @@
                                 }
                             </div>
                             <div style="padding:10px; width:33%">
-                                <p>Level 2</p>
+                                <p>@Resources.res.level2 </p>
                                 @{
                                     <select name="M33" id="M33" class="form-control">
-                                        <option value="0">level 2</option>
+                                        <option value="0">@Resources.res.level2</option>
                                         @foreach (var item in M3)
                                         {
                                             <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -563,7 +563,7 @@
                             <div style="padding:10px;width:33%">
                                 <p>Level 3</p>
                                 <select name="M44" id="M44" class="form-control">
-                                    <option value="0">level 3</option>
+                                    <option value="0">@Resources.res.level3 </option>
                                     @foreach (var item in M4)
                                     {
                                         <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -573,7 +573,7 @@
                             <div style="padding:10px;width:33%">
                                 <p>Level 4</p>
                                 <select name="M55" id="M55" class="form-control">
-                                    <option value="0">level 4</option>
+                                    <option value="0">@Resources.res.level4 </option>
                                     @foreach (var item in M5)
                                     {
                                         <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -581,26 +581,26 @@
                                 </select>
                             </div>
                             <div style="padding:10px;width:33%">
-                                <p>Transaction Type :</p>
+                                <p>@Resources.res.transactionType  :</p>
                                 <select id="trantype" class="form-control">
-                                    <option value="">All</option>
-                                    <option value="1">deposit</option>
-                                    <option value="0">Withdraw</option>
+                                    <option value="">@Resources.res.all </option>
+                                    <option value="1">@Resources.res.deposit </option>
+                                    <option value="0">>@Resources.res.withdraw </option>
                                 </select>
                             </div>
 
                             <div style="padding:10px;width:33%" id="dateHolder">
-                                <p>From Date :</p>
+                                <p>@Resources.res.dateFrom  :</p>
                                 <input name="datefrom" id="gardeshFrom" type="date" class="PDabserver form-control  " />
                             </div>
                             <div style="padding:10px;width:33%" id="dateHolder2">
-                                <p>From To :</p>
+                                <p>@Resources.res.dateTo  :</p>
                                 <input name="dateTo" id="gardeshTo" type="date" class="PD2abserver form-control  inputfield" />
                             </div>
                             <div style="padding:10px;width:33%">
-                                <p>Transaction Side :</p>
+                                <p>@Resources.res.transactionSide :</p>
                                 <select class="js-example-basic-single form-control" name="GTaraf" id="GTaraf">
-                                    <option value="0">all</option>
+                                    <option value="0">@Resources.res.all </option>
                                     @if (Model.tarafList != null)
                                     {
                                         foreach (var item in Model.tarafList)
@@ -636,7 +636,7 @@
 
                             <div style="margin:10px;width:100%;display: flex; align-items:center">
                                 <div style="position:relative; margin:5px" id="">
-                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">View</div>
+                                    <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">@Resources.res.View </div>
                                 </div>
                                 @*<div style="position:relative; margin:5px" id="">
                                         <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardeshPrint">چاپ</div>
@@ -853,7 +853,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Transaction List</h5>
+                            <h5>@Resources.res.trasactionList </h5>
                         </div>
                         <div id="TrasactionListHolder" class="row">
                         </div>
@@ -1445,11 +1445,11 @@
                                     <form id="delAccountForm" action="DelAccount" method="post">
                                         <input id="deleteID" name="deleteID" hidden />
                                         <div class="modal-body">
-                                            <p>Are You Sure Deleting this Item</p>
+                                            <p>@Resources.res.removeConfirm</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button i type="button" class="btn btn-primary" id="modalDelVerify">Verify</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button i type="button" class="btn btn-primary" id="modalDelVerify">@Resources.res.OK</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
                                         </div>
                                     </form>
 
@@ -1471,7 +1471,7 @@
                                                         <input id="codeTitle" name="codeTitle" class="form-control" />
                                                     </div>
                                                     <div style="margin:5px">
-                                                        <p>Code </p>
+                                                        <p>@Resources.res.Code  </p>
                                                         <input id="codeHesab" name="codeHesab" class="form-control" />
                                                     </div>
                                                 </div>
@@ -1483,8 +1483,8 @@
                                     </form>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" id="addAccountVerify">Verify</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="addAccountVerify">@Resources.res.OK</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel </button>
                                     </div>
                                     <script>
                                         $("#addAccountVerify").click(function () {
@@ -1506,7 +1506,7 @@
                                                         "timeOut": 5000,
                                                         "extendedTimeOut": 1000
                                                     }
-                                                    toastr.error('Fill All Fields')
+                                                    toastr.error('@Resources.res.fillAllField')
                                                 }
                                                 else {
                                                     $("#accountForm").submit();
@@ -1524,7 +1524,7 @@
                                                         "timeOut": 5000,
                                                         "extendedTimeOut": 1000
                                                     }
-                                                    toastr.error('Fill All Fields')
+                                                    toastr.error('@Resources.res.fillAllField')
                                                 }
                                                 else {
                                                     $("#accountForm").submit();
@@ -1542,7 +1542,7 @@
                                                         "timeOut": 5000,
                                                         "extendedTimeOut": 1000
                                                     }
-                                                    toastr.error('Fill All Fields')
+                                                    toastr.error('@Resources.res.fillAllField')
                                                 }
                                                 else {
                                                     $("#accountForm").submit();
@@ -1562,7 +1562,7 @@
                                                         "timeOut": 5000,
                                                         "extendedTimeOut": 1000
                                                     }
-                                                    toastr.error('Fill All Fields')
+                                                    toastr.error('@Resources.res.fillAllField')
                                                 }
                                                 else {
                                                     $("#accountForm").submit();
@@ -1581,7 +1581,7 @@
                                                         "timeOut": 5000,
                                                         "extendedTimeOut": 1000
                                                     }
-                                                    toastr.error('Fill All Fields')
+                                                    toastr.error('@Resources.res.fillAllField')
                                                 }
                                                 else {
                                                     $("#accountForm").submit();
@@ -1604,15 +1604,15 @@
                                                 <table id="table_id" class="table role-table all-package theme-table dataTable no-footer">
                                                     <thead>
                                                         <tr>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Coding</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Group</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Koll</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Moin</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Tafsil</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Tafsil2</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Remove Level</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">Add Sublevel</th>
-                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">View Sublevel</th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.coding </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.group </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.koll </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.moin </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.tafsil </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.tafsil2 </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.removeLevel </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.addSubLevel </th>
+                                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 215.406px;">@Resources.res.viewSubLevel </th>
                                                         </tr>
                                                     </thead>
 
@@ -1641,19 +1641,19 @@
                                                                     <td style="text-align: center;">
                                                                         @if (kollList.Count() == 0)
                                                                         {
-                                                                            <a id=@group.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+                                                                            <a id=@group.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove </a>
 
                                                                         }
 
                                                                     </td>
                                                                     <td>
-                                                                        <a myparent="@group.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add level1</a>
+                                                                        <a myparent="@group.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.addLevel1  </a>
 
                                                                     </td>
                                                                     <td>
                                                                         @if (kollList.Count() != 0)
                                                                         {
-                                                                            <a myparent="@group.ID" mytype="1" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level1 list</a>
+                                                                        <a myparent="@group.ID" mytype="1" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.level1List </a>
 
                                                                         }
                                                                     </td>
@@ -1677,19 +1677,19 @@
                                                                         <td style="text-align: center;">
                                                                             @if (moinList.Count() == 0)
                                                                             {
-                                                                                <a id=@koll.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+                                                                                <a id=@koll.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove</a>
 
                                                                             }
 
                                                                         </td>
                                                                         <td>
-                                                                            <a myparent="@koll.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level 2</a>
+                                                                            <a myparent="@koll.ID" mytype="3" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.addLevel2 </a>
 
                                                                         </td>
                                                                         <td>
                                                                             @if (moinList.Count() != 0)
                                                                             {
-                                                                                <a myparent="@koll.ID" mytype="2" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 2 list</a>
+                                                                            <a myparent="@koll.ID" mytype="2" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.level2List </a>
 
                                                                             }
                                                                         </td>
@@ -1714,19 +1714,19 @@
                                                                             <td style="text-align: center;">
                                                                                 @if (tafsilList.Count() == 0)
                                                                                 {
-                                                                                    <a id=@moin.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+                                                                                    <a id=@moin.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove</a>
 
                                                                                 }
 
                                                                             </td>
                                                                             <td>
-                                                                                <a myparent="@moin.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level3</a>
+                                                                                <a myparent="@moin.ID" mytype="4" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.addLevel3  </a>
 
                                                                             </td>
                                                                             <td>
                                                                                 @if (tafsilList.Count() != 0)
                                                                                 {
-                                                                                    <a myparent="@moin.ID" mytype="3" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 3 List</a>
+                                                                                <a myparent="@moin.ID" mytype="3" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.level3List </a>
 
                                                                                 }
                                                                             </td>
@@ -1752,19 +1752,19 @@
                                                                                 <td style="text-align: center;">
                                                                                     @if (tafsil2List.Count() == 0)
                                                                                     {
-                                                                                        <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+                                                                                        <a id=@tafsil.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove</a>
 
                                                                                     }
 
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a myparent="@tafsil.ID" mytype="5" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Add Level 4 </a>
+                                                                                    <a myparent="@tafsil.ID" mytype="5" class="btn btn-primary addacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> @Resources.res.addLevel4  </a>
 
                                                                                 </td>
                                                                                 <td>
                                                                                     @if (tafsil2List.Count() != 0)
                                                                                     {
-                                                                                        <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Level 4 List</a>
+                                                                                    <a myparent="@tafsil.ID" mytype="4" class="btn btn-primary  openacount" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.level4List </a>
 
                                                                                     }
                                                                                 </td>
@@ -1785,7 +1785,7 @@
                                                                                     </td>
 
                                                                                     <td style="text-align: center;">
-                                                                                        <a id=@tafsil2.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                                                                                        <a id=@tafsil2.ID class="btn btn-primary Dbutton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove</a>
 
                                                                                     </td>
                                                                                     <td></td>
@@ -1799,86 +1799,7 @@
                                                                 }
                                                             }
                                                         }
-                                                        <tr class="odd">
-                                                            <td>1</td>
-                                                            <td>Dummy</td>
-                                                            <td>3 weeks ago</td>
-                                                            <td>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a href="javascript:void(0)">
-                                                                            <i class="ri-pencil-line"></i>
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-                                                                            <i class="ri-delete-bin-line"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="even">
-                                                            <td>2</td>
-                                                            <td>Self</td>
-                                                            <td>3 weeks ago</td>
-                                                            <td>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a href="javascript:void(0)">
-                                                                            <i class="ri-pencil-line"></i>
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-                                                                            <i class="ri-delete-bin-line"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="odd">
-                                                            <td>3</td>
-                                                            <td>Dummy</td>
-                                                            <td>3 weeks ago</td>
-                                                            <td>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a href="javascript:void(0)">
-                                                                            <i class="ri-pencil-line"></i>
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-                                                                            <i class="ri-delete-bin-line"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="even">
-                                                            <td>4</td>
-                                                            <td>Author</td>
-                                                            <td>3 weeks ago</td>
-                                                            <td>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a href="javascript:void(0)">
-                                                                            <i class="ri-pencil-line"></i>
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-                                                                            <i class="ri-delete-bin-line"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
+                                                       
                                                     </tbody>
                                                 </table>
 

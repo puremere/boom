@@ -4,7 +4,7 @@
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
-    ViewBag.Title = "لیست محصولات";
+    ViewBag.Title = Resources.res.productList;
 }
 
 
@@ -55,7 +55,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                        toastr.error(@Resources.res.workFlowAlert)
                                     }
                                     else {
                                         toastr.options = {
@@ -67,7 +67,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.success('محصول مورد نظر حذف شد')
+                                        toastr.success('@Resources.res.done')
                                         var value = $("#listofproduct").val();
                                         var partner = $("#partnerList").val();
                                         $.ajax({
@@ -83,7 +83,7 @@
                                                 $('#listholder').css("display", "block");
                                             },
                                             error: function () {
-                                                alert("nashod")
+                                                alert("@Resources.res.error")
                                             }
                                         });
                                     }
@@ -91,7 +91,7 @@
 
                                 },
                                 error: function () {
-                                    alert("nashod")
+                                    alert("@Resources.res.error")
                                 }
                             });
                         })
@@ -115,11 +115,11 @@
                         <input id="ProductSelectedID" style="display:none" />
 
                         <div style="margin:5px;">
-                            <p id="modalmessage">Product Price</p>
+                            <p id="modalmessage">@Resources.res.price </p>
                             <input id="addprice" class="form-control" value="1" />
                         </div>
                         <div style="margin:5px;">
-                            <p id="modalmessage">Count</p>
+                            <p id="modalmessage">@Resources.res.count</p>
                             <input id="addcount" class="form-control" value="1" />
                         </div>
                         @*<div style="margin:5px;">
@@ -131,8 +131,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">Cancel</button>
-                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">Verify</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
+                    <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                     <script>
                         $("#confirmAddItemCount").click(function () {
                             $("#myModal").modal('hide');
@@ -169,7 +169,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                        toastr.error('@Resources.res.workFlowAlert')
                                     }
                                     else {
                                         window.location.reload();
@@ -178,7 +178,7 @@
 
                                 },
                                 error: function () {
-                                    alert("nashod")
+                                    alert("@Resources.res.error")
                                 }
                             });
                         })
@@ -202,11 +202,11 @@
                         <input id="ProductSelectedID0" style="display:none" />
 
                         <div style="margin:5px;">
-                            <p id="modalmessage">قیمت خرید</p>
+                            <p id="modalmessage">@Resources.res.purchasePrice</p>
                             <input id="returnprice" class="form-control" value="1" />
                         </div>
                         <div style="margin:5px;">
-                            <p id="modalmessage">تعداد</p>
+                            <p id="modalmessage">@Resources.res.count</p>
                             <input id="returncount" class="form-control" value="1" />
                         </div>
                         @*<div style="margin:5px;">
@@ -218,8 +218,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">لغو</button>
-                    <button id="confirmReturnItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
+                    <button id="confirmReturnItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                     <script>
                         $("#confirmReturnItemCount").click(function () {
                             $("#returnItemCount").modal('hide');
@@ -254,7 +254,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                        toastr.error('@Resources.res.workFlowAlert')
                                     }
                                     else {
                                         window.location.reload();
@@ -263,7 +263,7 @@
 
                                 },
                                 error: function () {
-                                    alert("nashod")
+                                    alert(" @Resources.res.error")
                                 }
                             });
                         })
@@ -282,11 +282,11 @@
                       <h4 class="modal-title">Modal Header</h4>
                     </div>*@
                 <div class="modal-body">
-                    <p id="modalmessage">آیا از حذف محصول اطمینان دارید</p>
+                    <p id="modalmessage">@Resources.res.removeConfirm ?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">خیر</button>
-                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">بله</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;"> @Resources.res.cancel</button>
+                    <button id="confirmdelete" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;"> @Resources.res.OK </button>
                     <script>
                         $("#confirmdelete").click(function () {
                             $("#myModal").modal('hide');
@@ -308,7 +308,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                        toastr.error('@Resources.res.workFlowAlert')
                                     }
                                     else {
                                         toastr.options = {
@@ -320,7 +320,7 @@
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.success('محصول مورد نظر حذف شد')
+                                        toastr.success('@Resources.res.done')
                                         var value = $("#listofproduct").val();
                                         var partner = $("#partnerList").val();
                                         $.ajax({
@@ -336,7 +336,7 @@
                                                 $('#listholder').css("display", "block");
                                             },
                                             error: function () {
-                                                alert("nashod")
+                                                alert("@Resources.res.error")
                                             }
                                         });
                                     }
@@ -344,7 +344,7 @@
 
                                 },
                                 error: function () {
-                                    alert("nashod")
+                                    alert("@Resources.res.error")
                                 }
                             });
                         })
@@ -355,7 +355,7 @@
         </div>
     </div> if (Model.data == null)
     {
-        <p style="text-align:center">موردی وجود ندارد</p>
+        <p style="text-align:center">@Resources.res.itemNotFound</p>
     }
     else
     {
@@ -407,24 +407,24 @@
                 <thead>
                     <tr>
 
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product ID</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Name</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> @Resources.res.ID </th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productTitle </th>
                         @if (!string.IsNullOrEmpty(Model.data.First().color))
                         {
-                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Selected Color</th>
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.color </th>
                         }
                         @if (!string.IsNullOrEmpty(Model.data.First().selectedFilter))
                         {
-                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Selected Feature</th>
+                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.feature </th>
                         }
 
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Count</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.count</th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price Befor Discount</th>*@
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price</th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Discount(percent)</th>*@
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Active?</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Available?</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Images</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.active?</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.available?</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.image</th>
 
                     </tr>
                 </thead>
@@ -479,11 +479,11 @@
 
                                     if (item.count == "-1")
                                     {
-                                        <p style="color : green;margin:0 10px">Available</p>
+                                        <p style="color : green;margin:0 10px">@Resources.res.available </p>
                                     }
                                     else if (item.count == "0")
                                     {
-                                        <p style="color : red;margin:0 10px">Not Availble</p>
+                                        <p style="color : red;margin:0 10px">@Resources.res.notAvailable</p>
                                     }
                                     else
                                     {
@@ -858,7 +858,7 @@
                 var id = $(this).parent().attr('id');
                 $("#ProductSelectedID0").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "عودت محصول " + text;
+                var lableText = "@Resources.res.returningProduct   " + text;
                 $("#returnCountLable").text(lableText)
                 $("#returnItemCountModal").modal('toggle');
             })
@@ -867,7 +867,7 @@
                 var id = $(this).parent().attr('id');
                 $("#ProductSelectedID").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "Add Inventory For " + text;
+                var lableText = "  Add Inventory For " + text;
                 $("#addCountLable").text(lableText)
 
                 $("#addItemCountModal").modal('toggle');

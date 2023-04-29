@@ -2,3 +2,16 @@
     margin-left: 1.5rem;
     margin-right: 0
 }
+
+
+input{
+    text-align:right !important;
+}
+.input-group button{
+    left:1.5rem !important;
+    right:unset !important;
+}
+    .input-group button + button {
+        margin-right: unset !important;
+        margin-left: 3.3rem !important;
+    }

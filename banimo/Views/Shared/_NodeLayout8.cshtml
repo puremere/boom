@@ -1,0 +1,409 @@
+﻿<!DOCTYPE HTML>
+<html lang="en" dir="rtl">
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 10 Mar 2023 16:17:08 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>Marsool - Dashboard</title>
+
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+
+    <!-- Linear Icon css -->
+    <link rel="stylesheet" href="/AdminPanel/Portal/assets/css/linearicon.css">
+
+    <!-- fontawesome css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/font-awesome.css">
+
+    <!-- Themify icon css-->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/themify.css">
+
+    <!-- ratio css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/ratio.css">
+
+    <!-- remixicon css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/remixicon.css">
+
+    <!-- Feather icon css-->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/feather-icon.css">
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/animate.css">
+
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vendors/bootstrap.css">
+
+    <!-- vector map css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/vector-map.css">
+
+    <!-- Slick Slider Css -->
+    <link rel="stylesheet" href="/AdminPanel/Portal/assets/css/vendors/slick.css">
+
+    <!-- Select2 css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/select2.min.css">
+
+    <!-- latest js -->
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <script src="/AdminPanel/Portal/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/style.css">
+
+</head>
+
+<body>
+    <!-- tap on top start -->
+    <div class="tap-top">
+        <span class="lnr lnr-chevron-up"></span>
+    </div>
+    <!-- tap on tap end -->
+    <!-- page-wrapper Start-->
+    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+        <!-- Page Header Start-->
+        <div class="page-header close_icon">
+            <div class="header-wrapper m-0">
+                <div class="header-logo-wrapper p-0">
+                    <div class="logo-wrapper">
+                        <a href="index.html" data-bs-original-title="" title="">
+                            <img class="img-fluid main-logo" src="/AdminPanel/Portal/assets/images/logo/1.png" alt="logo">
+                            <img class="img-fluid white-logo" src="/AdminPanel/Portal/assets/images/logo/1-white.png" alt="logo">
+                        </a>
+                    </div>
+                    <div class="toggle-sidebar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-align-center status_toggle middle sidebar-toggle"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
+                        <a href="index.html" data-bs-original-title="" title="">
+                            <img src="/AdminPanel/Portal/assets/images/logo/1.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+
+                @*<form class="form-inline search-full" action="javascript:void(0)" method="get">
+                        <div class="form-group w-100">
+                            <div class="Typeahead Typeahead--twitterUsers">
+                                <div class="u-posRelative">
+                                    <input class="demo-input Typeahead-input form-control-plaintext w-100" type="text" placeholder="Search Fastkart .." name="q" title="" autofocus="" data-bs-original-title="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close-search"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    <div class="spinner-border Typeahead-spinner" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="Typeahead-menu"></div>
+                            </div>
+                        </div>
+                    </form>*@
+                <div class="nav-right col-6 pull-right right-header p-0">
+                    <ul class="nav-menus">
+                        @*<li>
+                                 <span class="header-search">
+                                     <i class="ri-search-line"></i>
+                                 </span>
+                             </li>
+                            <li class="onhover-dropdown">
+                                 <div class="notification-box">
+                                     <i class="ri-notification-line"></i>
+                                     <span class="badge rounded-pill badge-theme">4</span>
+                                 </div>
+                                 <ul class="notification-dropdown onhover-show-div">
+                                     <li>
+                                         <i class="ri-notification-line"></i>
+                                         <h6 class="f-18 mb-0">Notitications</h6>
+                                     </li>
+                                     <li>
+                                         <p>
+                                             <i class="fa fa-circle me-2 font-primary"></i>Delivery processing <span class="pull-right">10 min.</span>
+                                         </p>
+                                     </li>
+                                     <li>
+                                         <p>
+                                             <i class="fa fa-circle me-2 font-success"></i>Order Complete<span class="pull-right">1 hr</span>
+                                         </p>
+                                     </li>
+                                     <li>
+                                         <p>
+                                             <i class="fa fa-circle me-2 font-info"></i>Tickets Generated<span class="pull-right">3 hr</span>
+                                         </p>
+                                     </li>
+                                     <li>
+                                         <p>
+                                             <i class="fa fa-circle me-2 font-danger"></i>Delivery Complete<span class="pull-right">6 hr</span>
+                                         </p>
+                                     </li>
+                                     <li>
+                                         <a class="btn btn-primary" href="javascript:void(0)" data-bs-original-title="" title="">Check all notification</a>
+                                     </li>
+                                 </ul>
+                             </li>*@
+
+                        <li>
+                            <div class="mode">
+                                <i class="ri-moon-line"></i>
+                            </div>
+                        </li>
+                        <li class="profile-nav onhover-dropdown pe-0 me-0">
+                            <div class="media profile-media">
+                                <img class="user-profile rounded-circle" src="/AdminPanel/Portal/assets/images/users/4.jpg" alt="">
+                                <div class="user-name-hide media-body">
+                                    <span>Emay Walter</span>
+                                    <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
+                                </div>
+                            </div>
+                            <ul class="profile-dropdown onhover-show-div">
+                              
+                                <li>
+                                    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="javascript:void(0)" data-bs-original-title="" title="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                        <span>Log out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header Ends-->
+        <!-- Page Body Start-->
+        <div class="page-body-wrapper">
+            <!-- Page Sidebar Start-->
+            <div class="sidebar-wrapper close_icon">
+                <div id="sidebarEffect"><canvas width="375" height="667"></canvas></div>
+                <div>
+                    <div class="logo-wrapper logo-wrapper-center">
+                        <a href="index.html" data-bs-original-title="" title="">
+                            <img class="img-fluid for-white" src="/AdminPanel/Portal/assets/images/logo/logo.png" alt="logo">
+                        </a>
+                        <div class="back-btn">
+                            <i class="fa fa-angle-left"></i>
+                        </div>
+                        <div class="toggle-sidebar">
+                            <i class="ri-apps-line status_toggle middle sidebar-toggle"></i>
+                        </div>
+                    </div>
+                    <div class="logo-icon-wrapper">
+                        <a href="index.html" data-bs-original-title="" title="">
+                            <img class="img-fluid main-logo main-white" src="/AdminPanel/Portal/assets/images/logo/short.png" alt="logo">
+                            <img class="img-fluid main-logo main-dark" src="/AdminPanel/Portal/assets/images/logo/logo.png" alt="logo">
+                        </a>
+                    </div>
+                    <nav class="sidebar-main">
+                        <div class="left-arrow disabled" id="left-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        </div>
+
+                        <div id="sidebar-menu">
+                            <ul class="sidebar-links" id="simple-bar" data-simplebar="init" style="display: block;">
+                                <div class="simplebar-wrapper" style="margin: 0px;">
+                                    <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask">
+                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                            <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
+                                                <div class="simplebar-content" style="padding: 0px;">
+                                                    <li class="back-btn"></li>
+
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav active" href="/Node/dashboard" data-bs-original-title="" title="">
+                                                            <i class="ri-home-line"></i>
+                                                            <span>Dashboard</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/product" data-bs-original-title="" title="">
+                                                            <i class="ri-star-line"></i>
+                                                            <span>Vendor Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/orders" data-bs-original-title="" title="">
+                                                            <i class="ri-order-play-fill"></i>
+                                                            <span>Order Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/Menu" data-bs-original-title="" title="">
+                                                            <i class="ri-menu-2-line"></i>
+                                                            <span>Menu Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/Slide" data-bs-original-title="" title="">
+                                                            <i class="ri-picture-in-picture-2-fill"></i>
+                                                            <span>Slide Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/banner" data-bs-original-title="" title="">
+                                                            <i class="ri-picture-in-picture-line"></i>
+                                                            <span>Banner Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/Comment" data-bs-original-title="" title="">
+                                                            <i class="ri-text"></i>
+                                                            <span>Comment Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/Group" data-bs-original-title="" title="">
+                                                            <i class="ri-group-2-fill"></i>
+                                                            <span>Group List Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/access" data-bs-original-title="" title="">
+                                                            <i class="ri-user-2-fill"></i>
+                                                            <span>HR Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/Filter" data-bs-original-title="" title="">
+                                                            <i class="ri-user-2-fill"></i>
+                                                            <span>Filter Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/location" data-bs-original-title="" title="">
+                                                            <i class="ri-user-2-fill"></i>
+                                                            <span>location Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                   
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/bank" data-bs-original-title="" title="">
+                                                            <i class="ri-file-2-fill"></i>
+                                                            <span>Accounting</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/factor" data-bs-original-title="" title="">
+                                                            <i class="ri-star-line"></i>
+                                                            <span>Factor Management</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><div class="simplebar-placeholder" style="width: auto; height: 848px;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div>
+                                <div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 438px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div>
+                            </ul>
+                        </div>
+
+                        <div class="right-arrow" id="right-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- Page Sidebar Ends-->
+            <!-- index body start -->
+            <div class="page-body">
+                @RenderBody()
+            </div>
+            <!-- index body end -->
+
+        </div>
+        <!-- Page Body End -->
+    </div>
+    <!-- page-wrapper End-->
+    <!-- Modal Start -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">No</button>
+                        <button id="logoutuser" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!-- Bootstrap js -->
+    <script src="/AdminPanel/Portal/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/AdminPanel/Portal/assets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/AdminPanel/Portal/assets/js/scrollbar/simplebar.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar jquery -->
+    <script src="/AdminPanel/Portal/assets/js/config.js"></script>
+
+    <!-- tooltip init js -->
+    <script src="/AdminPanel/Portal/assets/js/tooltip-init.js"></script>
+
+    <!-- Plugins JS -->
+    <script src="/AdminPanel/Portal/assets/js/sidebar-menu.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/notify/bootstrap-notify.min.js"></script>
+    @*<script src="/AdminPanel/Portal/assets/js/notify/index.js"></script>*@
+
+    <!-- Apexchar js -->
+    <script src="/AdminPanel/Portal/assets/js/chart/apex-chart/apex-chart1.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/chart/apex-chart/moment.min.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/chart/apex-chart/apex-chart.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/chart/apex-chart/stock-prices.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/chart/apex-chart/chart-custom1.js"></script>
+
+
+    <svg id="SvgjsSvg1194" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1195"></defs><polyline id="SvgjsPolyline1196" points="0,0"></polyline><path id="SvgjsPath1197" d="M-1 152.81760000000003L-1 152.81760000000003C-1 152.81760000000003 55.388020833333336 152.81760000000003 55.388020833333336 152.81760000000003C55.388020833333336 152.81760000000003 110.77604166666667 152.81760000000003 110.77604166666667 152.81760000000003C110.77604166666667 152.81760000000003 166.1640625 152.81760000000003 166.1640625 152.81760000000003C166.1640625 152.81760000000003 221.55208333333334 152.81760000000003 221.55208333333334 152.81760000000003C221.55208333333334 152.81760000000003 276.9401041666667 152.81760000000003 276.9401041666667 152.81760000000003C276.9401041666667 152.81760000000003 332.328125 152.81760000000003 332.328125 152.81760000000003C332.328125 152.81760000000003 332.328125 152.81760000000003 332.328125 152.81760000000003 "></path></svg><!-- slick slider js -->
+    <script src="/AdminPanel/Portal/assets/js/slick.min.js"></script>
+    <script src="/AdminPanel/Portal/assets/js/custom-slick.js"></script>
+
+    <!-- customizer js -->
+    @*<script src="/AdminPanel/Portal/assets/js/customizer.js"></script><div class="customizer-links"><button class="rtl-btn" data-bs-original-title="" title="">RTL</button></div>*@
+
+    <!-- ratio js -->
+    <script src="/AdminPanel/Portal/assets/js/ratio.js"></script>
+
+
+    <!-- sidebar effect -->
+    <script src="/AdminPanel/Portal/assets/js/sidebareffect.js"></script>
+    <!-- assets effect -->
+    @*<script src="/AdminPanel/Portal/assets/js/select2-custom.js"></script>*@
+    <!-- Theme js -->
+    <script src="/AdminPanel/Portal/assets/js/script.js"></script>
+
+
+
+
+    <svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1002"></defs><polyline id="SvgjsPolyline1003" points="0,0"></polyline><path id="SvgjsPath1004" d="M0 0 "></path></svg>
+    @RenderSection("scripts", required: false)
+
+    <script>
+        $("#logoutuser").click(function () {
+            window.location.href = "/Node/CustomerLogout";
+        })
+    </script>
+</body><!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 10 Mar 2023 16:17:57 GMT -->
+</html>

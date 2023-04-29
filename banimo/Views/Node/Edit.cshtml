@@ -253,7 +253,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Edit Vendor</h5>
+                    <h5>@Resources.res.editVendor </h5>
                 </div>
                 <style>
                     .itemRow {
@@ -272,7 +272,7 @@
                     <div class="row  parent">
                         <div class="ItemsHome">
                             <div class="itemRow">
-                                <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> Create Image <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
+                                <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> @Resources.res.image <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
                                 <div id="imageHolder" style="display:flex">
 
                                     <input multiple type="file" id="imageFileHolder" name="image" required="required" class="form-control  imageinput" style="display:none">
@@ -316,28 +316,24 @@
         </div>*@
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createTitle </p>*@
-                                    <input value="@Model.title" placeholder="Insert Title" id="title" name="title" class="form-control inputform" />
+                                    <input value="@Model.title" placeholder="@Resources.res.title" id="title" name="title" class="form-control inputform" />
                                 </div>
                                 <div class="itemRow" style="">
                                     @*<p>@Resources.res.createTitle </p>*@
-                                    <input placeholder="fill if you want change password" id="password" name="password" class="form-control inputform" />
+                                    <input placeholder="@Resources.res.fillOnPassChange " id="password" name="password" class="form-control inputform" />
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createTitle </p>*@
-                                    <input value="@Model.percent" placeholder="Vendor Percent" id="percent" type="number" name="percent" class="form-control inputform" />
+                                    <input value="@Model.percent" placeholder="@Resources.res.VendorPercent" id="percent" type="number" name="percent" class="form-control inputform" />
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createTitle </p>*@
-                                    <input value="@Model.deliverPrice" placeholder="Delivery Price" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
+                                    <input value="@Model.deliverPrice" placeholder="@Resources.res.deliverPrice" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
                                 </div>
                                 <div class="itemRow">
-                                    @*<p>@Resources.res.createTitle </p>*@
-                                    <select id="deliverType" name="deliverType" class="form-control">
-                                        <option>vehicle type</option>
-                                        <option value="1">take away</option>
-                                        <option value="2">motor cycle</option>
-                                        <option value="3">van</option>
-                                    </select>
+
+                                    @Html.DropDownListFor( x=>x.deliverType, new SelectList(Model.delivertypeList, "ID", "name"),Resources.res.deliverType, new { @class="form-control", id= "deliverType" })
+                                   
                                 </div>
                                 <script>
                                     $("#deliverType").val(@Model.deliverType)
@@ -345,13 +341,13 @@
 
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createDesc </p>*@
-                                    <textarea placeholder="Insert Desc" style="flex:1; height:100px" id="desc" name="desc" class="form-control ">@Model.desc</textarea>
+                                    <textarea placeholder="@Resources.res.description" style="flex:1; height:100px" id="desc" name="desc" class="form-control ">@Model.desc</textarea>
 
                                 </div>
                                 <div class="itemRow">
 
 
-                                    @Html.DropDownListFor(x => x.catid, new SelectList(Model.cat, "id", "title"), "-- Select Status --", new { id = "listofproduct", @class = "form-control" })
+                                    @Html.DropDownListFor(x => x.catid, new SelectList(Model.cat, "id", "title"), Resources.res.selectitem, new { id = "listofproduct", @class = "form-control" })
                                     @* @Html.DropDownList("catid", new SelectList(Model.cat, "ID", "title"),"-select category-", new { @class = "form-control inputform", id = "catid", style = "" })*@
 
                                 </div>
@@ -375,30 +371,30 @@
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createPhone </p>*@
 
-                                    <input value="@Model.phone1" placeholder="Insert Phone" id="phone1" name="phone1" class="form-control " />
+                                    <input value="@Model.phone1" placeholder="@Resources.res.phone" id="phone1" name="phone1" class="form-control " />
 
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createPhone2 </p>*@
 
-                                    <input value="@Model.phone2" placeholder="Insert phone 2" id="phone2" name="phone2" class="form-control " />
+                                    <input value="@Model.phone2" placeholder="@Resources.res.phone 2" id="phone2" name="phone2" class="form-control " />
 
                                 </div>
 
                                 <div class="itemRow">
                                     @*<p>@Resources.res.fax </p>*@
-                                    <input value="@Model.fax" placeholder="Insert Fax" id="fax" name="fax" class="form-control " />
+                                    <input value="@Model.fax" placeholder="@Resources.res.fax" id="fax" name="fax" class="form-control " />
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.mobile1 </p>*@
 
-                                    <input value="@Model.mobile1" placeholder="Insert Mobile" id="mobile1" name="mobile1" class="form-control " />
+                                    <input value="@Model.mobile1" placeholder="@Resources.res.mobile" id="mobile1" name="mobile1" class="form-control " />
 
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.mobile2 </p>*@
 
-                                    <input value="@Model.mobile2" placeholder="Insert Mobile 2" id="mobile2" name="mobile2" class="form-control " />
+                                    <input value="@Model.mobile2" placeholder="@Resources.res.mobile 2" id="mobile2" name="mobile2" class="form-control " />
 
                                 </div>
                                 <div class="itemRow">
@@ -409,11 +405,11 @@
 
                                 <div class="itemRow">
                                     @*<p>@Resources.res.website </p>*@
-                                    <input value="@Model.website" placeholder="Insert Website" id="website" name="website" class="form-control " />
+                                    <input value="@Model.website" placeholder="@Resources.res.web" id="website" name="website" class="form-control " />
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.website </p>*@
-                                    <input value="@Model.tag" placeholder="Insert tag" id="tag" name="tag" class="form-control " />
+                                    <input value="@Model.tag" placeholder="@Resources.res.hashtags" id="tag" name="tag" class="form-control " />
                                 </div>
                                 @*
         <div class="itemRow">
@@ -440,14 +436,14 @@
         </div>*@
                                 
                                 <div class="itemRow">
-                                    <input value="@Model.linkedin" placeholder="State" id="linkedin" name="linkedin" class="form-control " />
+                                    <input value="@Model.linkedin" placeholder="@Resources.res.state" id="linkedin" name="linkedin" class="form-control " />
                                 </div>
                                 <div class="itemRow">
-                                    <input value="@Model.instagram" placeholder="City" id="instagram" name="instagram" class="form-control " />
+                                    <input value="@Model.instagram" placeholder="@Resources.res.city" id="instagram" name="instagram" class="form-control " />
                                 </div>
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createAddress </p>*@
-                                    <input value="@Model.address" placeholder="Insert Address" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
+                                    <input value="@Model.address" placeholder="@Resources.res.address" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
                                 </div>
                                 <div class="" style="    padding: 10PX;">
                                     <div id="mapid" style=" width:100% ; "></div>
@@ -457,7 +453,7 @@
 
 
                                 <div class="itemRow " style="border:none">
-                                    <div class="creatButt btn btn-success">Verify</div>
+                                    <div class="creatButt btn btn-success">@Resources.res.OK</div>
                                 </div>
                             </form>
                         </div>

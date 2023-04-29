@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-body">
 
-                <div id="Listholder">
+                <div id="Listholder" style="overflow-x:scroll">
                     <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
                         <thead>
                             <tr>
@@ -53,7 +53,7 @@
 
                                 <td>
                                     @{
-                                        string recieveraddress = @item.receiver_city + " - " + @item.receiver_city + " - " + @item.receiver_address;
+                                        string recieveraddress = @item.receiver_state + " - " + @item.receiver_city + " - " + @item.receiver_address;
                                     }
                                     <span>@recieveraddress</span>
                                 </td>

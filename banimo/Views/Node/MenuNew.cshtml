@@ -1,0 +1,706 @@
+﻿@model banimo.AdminPanelBoom.ViewModel.NodeSubMenuVM
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "";
+}
+@section scripts{
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+
+            plugins: [
+                'code advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+
+            toolbar: 'undo redo | formatselect | ' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help| link image | code',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        });
+        //tinymce.activeEditor.execCommand('mceDirectionRTL');
+    </script>
+
+}
+<style>
+
+    .nav-tabs {
+        padding-right: 0px;
+    }
+
+        .nav-tabs li {
+            float: right !important;
+        }
+
+    .classhide {
+        display: none;
+    }
+
+    .classshow {
+        display: inline-block;
+    }
+    .component{
+        margin-bottom:20px
+    }
+</style>
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    if (Model.childe.filtercatsAll != null)
+    {
+        foreach (var item in Model.childe.filtercatsAll)
+        {
+            listItems.Add(new SelectListItem
+            {
+                Text = item.title,
+                Value = "1" + item.ID
+            });
+            if (item.filtersubcat != null)
+            {
+                foreach (var subcat in item.filtersubcat)
+                {
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "---" + subcat.title,
+                        Value = "2" + subcat.ID
+                    });
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listItems.Add(new SelectListItem
+                            {
+                                Text = "------" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+
+
+}
+
+
+<div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p class="modalDelQuestion">آیا از حذف آیتم اطمینان دارید؟</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="remove">تایید</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div style=" ">
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.add </button>
+            <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.edit </button>
+            <button class="nav-link " id="nav-pro-tab" data-bs-toggle="tab" data-bs-target="#nav-pro" type="button" role="tab" aria-controls="nav-pro" aria-selected="false">@Resources.res.remove </button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5></h5>
+                            </div>
+                            <div class="row">
+                                <div class="row addParent">
+                                    <div class=" component col-md-10 col-sm-10 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.parentCategory </label>
+                                        <div style="width:100%">
+                                            @Html.DropDownList("parentname", new SelectList(Model.childe.parents, "ID", "Title"), "select item", new { id = "listofParentAdd", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.category </label>
+                                        <div style="width:100%">
+                                            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatAdd", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.title </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="titleAdd" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label>@Resources.res.urlTitle </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="entitleAdd" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.priority </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="priorityAdd" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+
+
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label>@Resources.res.image </label>
+                                        <div style="width:100%">
+                                            <input id="imageFileHolderAdd" type="file" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+
+
+                                    @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+            <label> انتخاب برند </label>
+            <div style="width:100%">
+                @if (Model.brands != null)
+                {
+                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+
+                }
+            </div>
+        </div>*@
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <p hidden class="imageNameEdit"></p>
+                                        <div style="width:100%">
+                                            <div id="imageHolderAdd" style="        display: flex;
+">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p hidden class="imageNameAdd"></p>
+                                    <div class="col-lg-12 col-md-12" style="margin-top:30px">
+
+                                        <div>
+                                            <p> @Resources.res.description </p>
+                                            <input type="file" style="display:none" id="descriptionUpload0" />
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                                <p id="addDescButt0" class="btn btn-default">@Resources.res.addImageToDesc</p>
+                                                <div id="thumbholderEdior0" style="display:flex; overflow-x:scroll">
+
+                                                </div>
+                                            </div>
+                                            <script>
+                                   $("#addDescButt0").click(function () {
+                                       $("#descriptionUpload0").click();
+                                    })
+                            $("#descriptionUpload0").on('change', function () {
+
+                                        // $("#dvPreview").html("");
+                                        var input = this;
+                                        if (input.files && input.files[0]) {
+
+                                            var formData = new FormData();
+                                            formData.append('blob', input.files[0]);
+                                            formData.append('filename', 'edit');
+
+                                            var MyAppUrlSettings = {
+                                                MyUsefulUrl: '@Url.Action("setImageForDescription", "admin")'
+                                            }
+
+                                            var request = new XMLHttpRequest();
+                                            request.open('POST', MyAppUrlSettings.MyUsefulUrl);
+                                            request.send(formData);
+                                            request.onreadystatechange = function () {
+                                                if (request.readyState == 4 && request.status == 200) {
+                                                    var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + request.responseText + "'><p class='btn btn-success' onclick='copyContent(this)' content=" + request.responseText+">کپی آدرس</p><img onclick='removeimg(this)'  class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
+                                                    $('#thumbholderEdior0').append(html);
+                                                    $("#loading").css("display", "none");
+
+
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            alert("s")
+                                        }
+
+                                    });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+
+                                        <div style="width:100%">
+                                            <textarea id="descAdd" required="required" class="form-control" name="descAdd" style="height:170px"></textarea>
+
+                                            @*<input type="text" id="descAdd" required="required" class="form-control INP">*@
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <div class="component classshow">
+                                            <div id="addCat" class="btn btn-success">@Resources.res.OK</div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="title-header option-title">
+                                <h5></h5>
+                            </div>
+
+                            <div class="row">
+                                <div class="row editParent">
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.category </label>
+                                        <div style="width:100%">
+                                            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.title </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="titleEdit" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label>@Resources.res.urlTitle </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="entitleEdit" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.priority </label>
+                                        <div style="width:100%">
+                                            <input type="text" id="priorityEdit" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> @Resources.res.image </label>
+                                        <div style="width:100%">
+                                            <input id="imageFileHolderEdit" type="file" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+
+                                    @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                            <label> انتخاب برند </label>
+                                            <div style="width:100%">
+                                                @if (Model.brands != null)
+                                                {
+                                                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+
+                                                }
+                                            </div>
+                                        </div>*@
+
+
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <p hidden class="imageNameEdit"></p>
+                                        <div style="width:100%">
+                                            <div id="imageHolderEdit" style="display:flex; ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input type="file" style="display:none" id="descriptionUpload" />
+                                    <div>
+                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                            <p id="addDescButt" class="btn btn-default">@Resources.res.addImage</p>
+                                            <div id="thumbholderEdior" style="display:flex; overflow-x:scroll">
+
+                                            </div>
+                                        </div>
+                                        <script>
+                                    $("#addDescButt").click(function () {
+                                        $("#descriptionUpload").click();
+                                    })
+                                    $("#descriptionUpload").on('change', function () {
+
+                                        // $("#dvPreview").html("");
+                                        var input = this;
+                                        if (input.files && input.files[0]) {
+
+                                            var formData = new FormData();
+                                            formData.append('blob', input.files[0]);
+                                            formData.append('filename', 'edit');
+
+                                            var MyAppUrlSettings = {
+                                                MyUsefulUrl: '@Url.Action("setImageForDescription", "admin")'
+                                            }
+
+                                            var request = new XMLHttpRequest();
+                                            request.open('POST', MyAppUrlSettings.MyUsefulUrl);
+                                            request.send(formData);
+                                            request.onreadystatechange = function () {
+                                                if (request.readyState == 4 && request.status == 200) {
+                                                    var html = "<div style='border:1px solid #ddd; position:relative; padding:3px'><img  style='width:150px; display:inlne-block'    src='" + request.responseText + "'><p class='btn btn-success' onclick='copyContent(this)' content=" + request.responseText+">کپی آدرس</p><img onclick='removeimg(this)'  class='delIcon' style='top:0px; left:0px;right:0px; bottom:0px; width:30px; cursor:pointer ;position:absolute;' src='/images/del.png'></div>";
+                                                    $('#thumbholderEdior').append(html);
+                                                    $("#loading").css("display", "none");
+
+
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            alert("s")
+                                        }
+
+                                    });
+                                        </script>
+                                    </div>
+                                    <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+                                        <label> توضیحات </label>
+                                        <div style="width:100%">
+                                            <textarea cols="8" id="descEdit" required="required" class="form-control INP"></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
+                                        <div class="component ">
+                                            <div id="verifEdit" class="btn btn-success">@Resources.res.OK  </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade " id="nav-pro" role="tabpanel" aria-labelledby="nav-pro-tab">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Details Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="title-header option-title">
+                                <h5></h5>
+                            </div>
+                            <div class="row">
+                                <div class=" component col-md-6 col-sm-6 col-xs-12" style="min-width:250px">
+                                    <label> @Resources.res.category </label>
+                                    <div style="width:100%">
+                                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatDel", @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="component classshow" style="margin-top:35px">
+                                    <div id="removeButt" class="btn btn-success">@Resources.res.remove</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+    <div>
+
+
+        <div class="component classhide">
+            <div id="cancelEdit" class="btn btn-success">لغو</div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<script src="~/Scripts/download.js"></script>
+
+<script>
+
+    $("#imageFileHolderAdd").on('change', function () {
+
+        uploadImage("imageHolderAdd", "imageNameAdd", this)
+    });
+    $("#imageFileHolderEdit").on('change', function () {
+
+        uploadImage("imageHolderEdit", "imageNameEdit", this)
+    });
+    $("#addCat").click(function () {
+        var parentID = $("#listofParentAdd").val();
+        var brandID = "";// $("#listOfBrands").val();
+        var catname = $("#listofcatAdd").val();
+        if (catname == "") {
+            catname = "00";
+        }
+        var name = $("#titleAdd").val();
+        var entitle = $("#entitleAdd").val();
+        var priority = $("#priorityAdd").val();
+        var description = tinymce.get("descAdd").getContent();
+        var image = $(".imageNameAdd").text();
+
+        if (catname != "" && name != "" && image != "" && entitle != "" && priority != "" && description != "") {
+
+
+            $.post(
+                '/Node/setnewcatNew',
+                {
+                    catID: catname,
+                    brandID: '',
+                    title: name,
+                    entitle: entitle,
+                    description: description,
+                    priority: priority,
+                    image: image,
+                    parentID: parentID
+
+                },
+                function (data) {
+                    if (data == "1") {
+                        location.reload();
+
+                    }
+                });
+
+
+        }
+        else {
+            alert("همه موارد را کامل کنید")
+        }
+    })
+    $("#removeButt").click(function () {
+        $("#delmodal").modal('toggle');
+
+    })
+    $("#remove").click(function () {
+
+        var catname = $("#listofcatDel").val();
+        if (catname != "") {
+            $.ajax({
+                url: "/admin/delnewcatNew",
+                dataType: "html",
+                data: {
+                    catid: catname,
+
+                },
+                success: function (data) {
+                    if (data == "1") {
+                        location.reload();
+
+                    }
+                    else {
+                        $("#delmodal").modal('toggle');
+                        alert(data)
+                    }
+                }
+            })
+        }
+    })
+
+
+
+    $("#listofcatEdit").change(function () {
+        $("#imageHolderEdit").html('');
+        var catname = $("#listofcatEdit").val();
+
+        if (catname != "") {
+            $.ajax({
+                url: "/admin/getCatDetail",
+                dataType: "html",
+                data: {
+                    catid: catname,
+
+                },
+                success: function (data) {
+
+                    var obj = JSON.parse(data);
+                    var image = obj[0]["image"];
+                    var title = obj[0]["title"];
+                    var entitle = obj[0]["entitle"];
+                    var priority = obj[0]["priority"];
+                    var description = obj[0]["description"];
+
+                    $("#titleEdit").val(title);
+                    $("#entitleEdit").val(entitle);
+                    $("#priorityEdit").val(priority);
+
+                    tinymce.get("descEdit").setContent(description)
+
+
+                    if (image != null && image != "") {
+                        var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
+                        $("#imageHolderEdit").append(htmldiv);
+
+
+                        var srt = $(".imageNameEdit").text();
+                        $(".imageNameEdit").text(obj[0]["image"] + "," + srt);
+                    }
+
+
+                }
+            })
+        }
+    })
+    var deletImage = function (name) {
+        var srt = $(".imageName").text();
+        srt = srt.replace(name + ",", "");
+        $(".imageName").text(srt);
+        $.ajax({
+            url: "/admin/removeImage",
+            data: {
+                id: name
+            },
+            success: function () {
+                var element = document.getElementById(name);
+                element.style.display = "none";
+            }
+        })
+    }
+    $("#verifEdit").click(function () {
+        var brandID = "";
+        var catname = $("#listofcatEdit").val();
+        var name = $("#titleEdit").val();
+        var enname = $("#entitleEdit").val();
+        var priority = $("#priorityEdit").val();
+        var desc = tinymce.get("descEdit").getContent();
+        var image = $(".imageNameEdit").text();
+        var br = brandID.toString();
+        if (catname != "" && name != "" && image != "" && desc != "") {
+
+
+
+
+
+            $.post(
+                '/admin/editcatNew',
+                {
+                    catID: catname,
+                    title: name,
+                    entitle: enname,
+                    priority: priority,
+                    image: image,
+                    description: desc,
+                    brandID: br
+                },
+                function (data) {
+                    if (data == "1") {
+                        location.reload();
+
+                    }
+                });
+        }
+    })
+
+    $(".ImageDelete").click(function () {
+
+        var name = $(".imageName").text();
+        $.ajax({
+            url: "/admin/deleteImage",
+            data: {
+                id: name
+            },
+            success: function () {
+                var srt = $(".imageName").text();
+                $(".imageName2").text(srt.replace(name + ","), "");
+                $("#imageHolder0").css("display", "none")
+            }
+        })
+
+    });
+</script>
+<script>
+    $(".delIcon").click(function () {
+        var id = $(this).attr('id');
+        var element = $(this).parent();
+        $.ajax({
+            url: "/admin/deleteimageDesc",
+            dataType: "html",
+            data: {
+                title: id
+            },
+            success: function () {
+                element.remove();
+            }
+        })
+        var id = $(this).attr('id');
+
+    });
+    var copyContent = function (contentEl) {
+        var id = $(contentEl).attr('content');
+        navigator.clipboard.writeText(id);
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000
+        }
+        toastr.success('کپی شد')
+
+    };
+
+    var removeimg = function (newel) {
+
+        var id = newel.id;
+
+
+        $.ajax({
+            url: "/admin/deleteimageDesc",
+            dataType: "html",
+            data: {
+                title: id
+            },
+            success: function () {
+                newel.parentNode.parentNode.removeChild(newel.parentNode);
+            }
+        })
+        var id = $(this).attr('id');
+    }
+</script>
+
+
+
+

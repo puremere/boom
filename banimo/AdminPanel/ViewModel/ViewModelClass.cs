@@ -545,10 +545,12 @@ namespace banimo.AdminPanel.ViewModel
 
     public class partnerVM
     {
+        public List<banimo.ViewModel.DelivertypeList> delivertypeList { get; set; }
         public List<string> productName { get; set; }
         public List<PartnerList> partnerList { get; set; }
         public List<FiltersModel> filtersModel { get; set; }
         public List<LocationAll> locationAll { get; set; }
+        public List<banimo.ViewModel.Location> locations { get; set; }
         public string isPartner { get; set; }
     }
 

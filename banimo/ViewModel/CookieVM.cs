@@ -24,6 +24,7 @@ namespace banimo.ViewModel
         public string catID = "0";
         public string catLevel = "";
         public string currentpage = "Index";
+        public string currentController = "Home";
         public string cartmodel = "";
         public string json = "";
         public string discount = "0";

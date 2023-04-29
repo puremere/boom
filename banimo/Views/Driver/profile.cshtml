@@ -1,0 +1,130 @@
+﻿@model banimo.ViewModel.listPageVM
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+}
+
+
+<div class="row mb-4">
+    <div class="col">
+
+        <div class="profile-wraper">
+            <img src="~/images/@Model.image" class="user-img">
+            <h4 class="user-name text-center">
+               @Model.fullname
+            </h4>
+            <div class="d-flex justify-content-center">
+                <div class="tab-box ">
+                    <h4 class="tab-box-title">
+                        Deliveries
+                    </h4>
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        556
+                    </div>
+                </div>
+                <div class="tab-box ">
+                    <h4 class="tab-box-title">
+                        Tips
+                    </h4>
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        10 AED
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card border rounded">
+            <div class="card-header">
+                @Model.fullname
+            </div>
+            <div class="card-body">
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-person-fill-check"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="First Name">
+                </div>
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-person-fill-check"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Last Name">
+                </div>
+
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-phone-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Phone Number">
+                </div>
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-envelope-at-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Email Address">
+                </div>
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-envelope-at-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Vehicle Type">
+                </div>
+
+                <button class="btn text-light theme-bg2 w-100 mt-4">
+                    Save Change
+                </button>
+            </div>
+        </div>
+
+        <div class="card border rounded mt-4">
+            <div class="card-header">
+                Password
+            </div>
+            <div class="card-body">
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Enter Old Password">
+                </div>
+
+
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Enter New Password">
+                </div>
+
+                <div class="input-group login-input mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Enter New Confirmation">
+                </div>
+
+
+                <button class="btn text-light theme-bg2 w-100 mt-4">
+                    Change Password
+                </button>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

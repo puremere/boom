@@ -20,7 +20,7 @@
     {
         listItems.Add(new SelectListItem
         {
-            Text = "Main Page",
+            Text = Resources.res.mainPage,
             Value = "00"
         }) ;
         foreach (var item in Model.filtercatsAll)
@@ -75,7 +75,7 @@
         <div class="modal-content">
             <p class="idToRemove" style="display:none"></p>
             <div class="modal-body">
-                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <p class="modalDelQuestion">@Resources.res.removeConfirm</p>
 
             </div>
             <div class="modal-footer">
@@ -92,7 +92,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Set New Tag</h5>
+                    <h5>@Resources.res.setNewTag </h5>
                 </div>
                 <div style="">
 
@@ -100,27 +100,27 @@
                         <div class="component col-md-3 col-sm-3 col-xs-12">
                             <label> @Resources.res.category </label>
                             <div style="width:100%">
-                                @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+                                @Html.DropDownList("catname", listItems, Resources.res.selectitem, new { id = "listofcat", @class = "form-control" })
                             </div>
                         </div>
                         <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                            <label> Group List Type </label>
+                            <label>@Resources.res.groupListType  </label>
                             <select class="form-control " name="type" id="hashtype">
-                                <option value="1">Vendor</option>
-                                <option value="0">Product</option>
+                                <option value="1">@Resources.res.vendor </option>
+                                <option value="0"> @Resources.res.product </option>
                             </select>
                            
                         </div>
                         <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                            <label> Hashtag title </label>
+                            <label> @Resources.res.hashtagTitle  </label>
                             <input type="text" id="title" required="required" class="form-control ">
                         </div>
                         <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                            <label> Hashtag Priority </label>
+                            <label> @Resources.res.hashtagPriority  </label>
                             <input type="text" id="priority" required="required" class="form-control ">
                         </div>
                         <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                            <label> Hashtag Content </label>
+                            <label>@Resources.res.hashtagContent  </label>
                             <input type="text" id="tag" required="required" class="form-control ">
                         </div>
                     </div>
@@ -131,7 +131,7 @@
 
                     <div style="display:flex">
                         <div class="component classshow">
-                            <div id="addCat" class="btn btn-success">add</div>
+                            <div id="addCat" class="btn btn-success">@Resources.res.add</div>
                         </div>
 
                         <div class="component classhide">
@@ -158,12 +158,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Edit Group Item</h5>
+                    <h5>@Resources.res.editGroupItem </h5>
                 </div>
                 <div class="component col-md-3 col-sm-3 col-xs-12">
                     <label> @Resources.res.category </label>
                     <div style="width:100%">
-                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcatEdit", @class = "form-control" })
+                        @Html.DropDownList("catname", listItems, Resources.res.selectitem, new { id = "listofcatEdit", @class = "form-control" })
                     </div>
                 </div>
 

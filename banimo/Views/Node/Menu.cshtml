@@ -69,7 +69,7 @@
         <div class="modal-content">
 
             <div class="modal-body">
-                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <p class="modalDelQuestion">@Resources.res.removeConfirm</p>
 
             </div>
             <div class="modal-footer">
@@ -86,16 +86,16 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Set New Item</h5>
+                    <h5>@Resources.res.setnewItem </h5>
                 </div>
                 <div style="">
 
                     <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                        <label> set title </label>
+                        <label>@Resources.res.title  </label>
                         <input type="text" id="title" required="required" class="form-control INP">
                     </div>
                     <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
-                        <label> image </label>
+                        <label> @Resources.res.image </label>
                         <input id="imageFileHolder" type="file" required="required" class="form-control INP">
                     </div>
                     <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
@@ -109,7 +109,7 @@
 
                     <div style="display:flex">
                         <div class="component classshow">
-                            <div id="addCat" class="btn btn-success">add</div>
+                            <div id="addCat" class="btn btn-success">@Resources.res.add </div>
                         </div>
 
                         <div class="component classhide">
@@ -136,12 +136,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Edit Menu</h5>
+                    <h5>@Resources.res.editMenu</h5>
                 </div>
                 <div>
                     <label> @Resources.res.category </label>
                     <div style="width:100%">
-                        @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+                        @Html.DropDownList("catname", listItems, @Resources.res.selectitem, new { id = "listofcat", @class = "form-control" })
                     </div>
                 </div>
 

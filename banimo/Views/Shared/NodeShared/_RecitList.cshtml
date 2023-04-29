@@ -265,7 +265,7 @@
 
     if (Model.recietList == null)
     {
-        <p style="text-align:center">موردی وجود ندارد</p>
+        <p style="text-align:center">@Resources.res.itemNotFound</p>
     }
     else
     {
@@ -279,14 +279,14 @@
                                 <tr>
                                   
                                     <th>
-                                       Atf Num
+                                        @Resources.res.atfNum  
                                     </th>
                                    
                                     <th>
-                                        date
+                                        @Resources.res.date
                                     </th>
                                     <th>
-                                      description
+                                        @Resources.res.description
                                     </th>
                                     @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">Vendor ID</th>
                                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Venor Title</th>
@@ -295,7 +295,7 @@
                                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Recommended?</th>
                                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> freeDelivry?</th>*@
 
-                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> @Resources.res.option</th>
                                 </tr>
                             </thead>
 

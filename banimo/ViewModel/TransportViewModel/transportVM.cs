@@ -48,6 +48,8 @@ namespace banimo.ViewModel.TransportViewModel
     {
         
         public string sender_fullname { get; set; }
+         public string sender_phone { get; set; }
+        
         public string sender_state { get; set; }
         public string sender_city { get; set; }
         public string sender_addressID { get; set; }
@@ -58,6 +60,8 @@ namespace banimo.ViewModel.TransportViewModel
         public string sender_lat { get; set; }
         public string sender_lon { get; set; }
         public string receiver_fullname { get; set; }
+        public string receiver_phone { get; set; }
+        
         public string receiver_state { get; set; }
         public string receiver_city { get; set; }
         public string receiver_addressID { get; set; }
@@ -68,9 +72,9 @@ namespace banimo.ViewModel.TransportViewModel
         public string receiver_lat { get; set; }
         public string receiver_lon { get; set; }
         public string order_note { get; set; }
-        public decimal order_price { get; set; }
-        public decimal vehicle_type { get; set; }
-        public decimal payment_status { get; set; }
+        public string order_price { get; set; }
+        public string vehicle_type { get; set; }
+        public string payment_status { get; set; }
         public string partnerUser { get; set; }
     }
 

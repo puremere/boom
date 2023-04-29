@@ -82,9 +82,7 @@ $('.nexts').click(function(){
             // $('#account-info').removeClass('d-none');
 
             //Show Sammary
-            $("#info-sec").addClass('d-none');
-            $("#summary-sec").removeClass('d-none');
-            goReadPoint();
+
         break;
 
     }
@@ -95,14 +93,16 @@ $('.nexts').click(function(){
 
 
 function goReadPoint(){
-    $('html, body').animate({
-        scrollTop: $(".app-area").offset().top
-    }, 200);
+    //$('html, body').animate({
+    //    scrollTop: $(".app-area").offset().top
+    //}, 200);
+    $(".justonepage").hide();
+    
 }
 
 function prepareForm(){
-    document.getElementById("date-input").valueAsDate = new Date()
-    $(".time-input").val( "00:00" );
+    //document.getElementById("date-input").valueAsDate = new Date()
+    //$(".time-input").val( "00:00" );
 
 }
 
@@ -118,7 +118,6 @@ $('.VCards').click(function(){
     $("#v-type").val(value);
     $("#v-type").attr('alt',title);
     refreshForm();
-
 })
 
 

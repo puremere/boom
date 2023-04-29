@@ -13,6 +13,7 @@ namespace banimo.ViewModel
         public string description { get; set; }
         public string price { get; set; }
         public string weight { get; set; }
+        public string image { get; set; }
         public string dimension { get; set; }
     }
 
@@ -28,6 +29,13 @@ namespace banimo.ViewModel
         public string parentID { get; set; }
         public string type { get; set; }
     }
+    
+
+    public class firstDeliver
+    {
+        public List<DelivertypeList> delivertypeList { get; set; }
+        public List<Location> locations { get; set; }
+    }
 
     public class locationVM
     {
@@ -39,5 +47,12 @@ namespace banimo.ViewModel
         public List<DelivertypeList> delivertypeList { get; set; }
         public List<Location> locations { get; set; }
     }
-
+   
+    public class deliverDash
+    {
+        public string count { get; set; }
+        public string total { get; set; }
+        public string staffCount { get; set; }
+        public string vehicleCount { get; set; }
+    }
 }

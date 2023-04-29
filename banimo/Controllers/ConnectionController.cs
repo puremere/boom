@@ -276,8 +276,16 @@ namespace banimo.Controllers
                 {
                     ids = ids + "," + (item.productid);
                     nums = nums + "," + (item.quantity);
-                    ths = ths + "," + (item.tarafH);
-                    addson = addson + "," + (item.addson);
+                    if (!string.IsNullOrEmpty(item.tarafH))
+                    {
+                        ths = ths + "," + (item.tarafH);
+                    }
+                    if (!string.IsNullOrEmpty(item.addson))
+                    {
+                        addson = addson + "," + (item.addson);
+                    }
+                    
+                    
                     
                 }
 
@@ -724,70 +732,81 @@ namespace banimo.Controllers
         }
         public ActionResult verifyByAdmin(string payment, string id, string isPayed, string fromUser)
         {
-
-            //payment = "6";
-            isPayed = isPayed == null ? "" : isPayed;
             string result2 = "";
-            string device = RandomString();
-            string code = MD5Hash(device + "ncase8934f49909");
-
-
-
-            using (WebClient client = new WebClient())
-            {
-
-                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("ID", id);
-                collection2.Add("servername", servername);
-
-
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
-
-                result2 = System.Text.Encoding.UTF8.GetString(response);
-
-            }
-
-            getOrderRefID refModel = JsonConvert.DeserializeObject<getOrderRefID>(result2);
-
             string res = "";
-
-
-            string paymentstatus = payment == "2" ? "2" : "1";
-            paymentstatus = "1";
-            using (WebClient client = new WebClient())
+            try
             {
+                //payment = "6";
+                isPayed = isPayed == null ? "" : isPayed;
 
-                var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
-                collection2.Add("device", device);
-                collection2.Add("code", code);
-                collection2.Add("auth", refModel.auth);
-                collection2.Add("amount", "");
-                collection2.Add("token", refModel.token);
-                collection2.Add("refID", refModel.refID);
-                collection2.Add("paymentStatus", paymentstatus);
-                collection2.Add("payment", payment);
-                collection2.Add("isPayed", isPayed);
-                collection2.Add("market", ConfigurationManager.AppSettings["market"]);
-                collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
 
-                byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
-                //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
-               // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
-                res = System.Text.Encoding.UTF8.GetString(response);
-         }
-            finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(res);
-            if (fromUser != null)
-            {
-                ViewBag.message = "موفق";
 
-                return RedirectToAction("verifyAtHome", "Connection", new { refID = finalmodel.orderNumber, status = 1 });
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                    collection2.Add("device", device);
+                    collection2.Add("code", code);
+                    collection2.Add("ID", id);
+                    collection2.Add("servername", servername);
+
+
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/detOrderRefID.php", collection2);
+
+                    result2 = System.Text.Encoding.UTF8.GetString(response);
+
+                }
+
+                getOrderRefID refModel = JsonConvert.DeserializeObject<getOrderRefID>(result2);
+
+
+                string paymentstatus = payment == "2" ? "2" : "1";
+                paymentstatus = "1";
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                    collection2.Add("device", device);
+                    collection2.Add("code", code);
+                    collection2.Add("auth", refModel.auth);
+                    collection2.Add("amount", "");
+                    collection2.Add("token", refModel.token);
+                    collection2.Add("refID", refModel.refID);
+                    collection2.Add("paymentStatus", paymentstatus);
+                    collection2.Add("payment", payment);
+                    collection2.Add("isPayed", isPayed);
+                    collection2.Add("market", ConfigurationManager.AppSettings["market"]);
+                    collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
+
+                    byte[] response =
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
+                    //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
+                    // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
+
+                    res = System.Text.Encoding.UTF8.GetString(response);
+                }
+                finalCheckVM finalmodel = JsonConvert.DeserializeObject<finalCheckVM>(res);
+                if (fromUser != null)
+                {
+                    ViewBag.message = "موفق";
+
+                    return RedirectToAction("verifyAtHome", "Connection", new { refID = finalmodel.orderNumber, status = 1 });
+                }
+                return Content("200");
             }
-            return Content("200");
+            catch (Exception)
+            {
+                // result2 + " - " + res
+                return Content("");
+            }
+
+            
+            
+            
 
         }
 

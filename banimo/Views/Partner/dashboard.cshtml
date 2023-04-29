@@ -36,7 +36,7 @@
                 <div class="custome-2-bg b-r-4 card-body">
                     <div class="media static-top-widget">
                         <div class="media-body p-0">
-                            <span class="m-0">Total Products</span>
+                            <span class="m-0">@Resources.res.totalProduct</span>
                             <h4 class="mb-0 counter">
                                 @Model.productsNum
                                 <span class="badge badge-light-danger grow">
@@ -57,7 +57,7 @@
                 <div class="custome-3-bg b-r-4 card-body">
                     <div class="media static-top-widget">
                         <div class="media-body p-0">
-                            <span class="m-0">Total Orders</span>
+                            <span class="m-0">@Resources.res.totalOrders</span>
                             <h4 class="mb-0 counter">
                                 @Model.ordersNum
                                 <a href="add-new-product.html" class="badge badge-light-secondary grow" data-bs-original-title="" title="">
@@ -100,7 +100,7 @@
             <div class="card o-hidden card-hover">
                 <div class="card-header border-0 pb-1">
                     <div class="card-header-title p-0">
-                        <h4>Category</h4>
+                        <h4>@Resources.res.category</h4>
                     </div>
                 </div>
                 <div class="card-body p-0" style="display:flex">
@@ -127,7 +127,7 @@
             <div class="card o-hidden card-hover">
                 <div class="card-header card-header-top card-header--2 px-0 pt-0">
                     <div class="card-header-title">
-                        <h4>Best Selling Product</h4>
+                        <h4>@Resources.res.bestSeller </h4>
                     </div>
 
                     @*<div class="best-selling-box d-sm-flex d-none">
@@ -215,11 +215,11 @@
             <div class="card o-hidden card-hover">
                 <div class="card-header card-header-top card-header--2 px-0 pt-0">
                     <div class="card-header-title">
-                        <h4>Recent Orders</h4>
+                        <h4>@Resources.res.newest</h4>
                     </div>
 
                     <div class="best-selling-box d-sm-flex d-none">
-                        <span>Short By:</span>
+                        <span>@Resources.res.sortBy :</span>
                         <div class="dropdown">
                             <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-auto-close="true" data-bs-original-title="" title="">Today</button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
@@ -245,7 +245,7 @@
                                                 <td>
                                                     <div class="best-product-box">
                                                         <div class="product-name">
-                                                            <h5>Order Number</h5>
+                                                            <h5>@Resources.res.orderNumber</h5>
                                                             <h6>#@item.peigiry</h6>
                                                         </div>
                                                     </div>
@@ -253,28 +253,28 @@
 
                                                 <td>
                                                     <div class="product-detail-box">
-                                                        <h6>Date Placed</h6>
+                                                        <h6>@Resources.res.date</h6>
                                                         <h5>@item.timestamp</h5>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="product-detail-box">
-                                                        <h6>Price</h6>
+                                                        <h6>@Resources.res.price</h6>
                                                         <h5>@item.TotalPrice AED</h5>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="product-detail-box">
-                                                        <h6>Order Status</h6>
+                                                        <h6>@Resources.res.status</h6>
                                                         <h5>@item.status</h5>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="product-detail-box">
-                                                        <h6>Payment</h6>
+                                                        <h6>@Resources.res.payment</h6>
                                                         <h5 class="text-danger">Unpaid</h5>
                                                     </div>
                                                 </td>

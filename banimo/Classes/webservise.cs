@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -92,12 +93,33 @@ namespace banimo.Classes
             }
             return response;
         }
+        public string doSendData(string serverAddress, string payload)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(serverAddress);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+              
+                streamWriter.Write(payload);
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                return result;
+            }
+            return "";
+
+        }
 
 
 
-       
 
-        
+
+
 
     }
 }

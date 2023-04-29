@@ -16,6 +16,7 @@ namespace banimo.Classes.requestClassVM
     public class getMainDataModel:mainField
     {
         public string partnerID { get; set; }
+        public string lan { get; set; }
         public string nodeID { get; set; }
 
     }

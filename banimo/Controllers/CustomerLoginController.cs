@@ -21,13 +21,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MvcThrottle;
+using System.Net.Mail;
 
 namespace banimo.Controllers
 {
     [doForAll]
     public class CustomerLoginController : Controller
     {
-      
+
 
         string servername = ConfigurationManager.AppSettings["serverName"];
         string nodeID = ConfigurationManager.AppSettings["nodeID"];
@@ -151,6 +152,13 @@ namespace banimo.Controllers
                 }
 
             }
+            string vcode = "";
+            if (email != null)
+            {
+                Random rnd = new Random();
+                int num = rnd.Next(11111,99999);
+                vcode = num.ToString();
+            }
             string json;
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
@@ -159,9 +167,11 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("email", email);
+                collection.Add("vcode", vcode);
                 collection.Add("user", registertext);
                 collection.Add("password", registerpassword);
                 collection.Add("servername", servername);
@@ -169,18 +179,69 @@ namespace banimo.Controllers
                 //foreach (var myvalucollection in imaglist) {
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doSignUp.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doSignUpCombine.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             signeupViewModel mymodel = JsonConvert.DeserializeObject<signeupViewModel>(result);
 
 
+
             if (mymodel.status == 200)
             {
+                if (email != null)
+                {
+                    string html = @"<html><head><title></title ></head><body>
+
+                                            <div class='row' style='background-color:#0b008b;width: 60%;margin: 0px auto;'>
+                                                <div style = 'width:30%; margin: auto' >
+                                                    <img src='https://marsools.com/webAsset/wolmart/assets/images/logo0.png' style='width:100% ; object-fit:cover'>
+                                                </div>
+        
+                                            </div>
+                                            <div class='row' style='width:57%; margin: 0px auto;padding: 10px;border: 1px solid #ddd;border-radius: 0 0 5px 5px;'>
+        
+                                                <div style = 'width:100%; display:inline-block;text-align: center;'>
+                                                    <h2> Thanks For Registration</h2>
+                                                    <h3>your activation code is : " + vcode + @"  <b> </b></h3>
+                                                </div>
+                                            </div>
+                                            <div>
+                                            </div>
+                                        </body>
+                                   </html>";
+                    using (MailMessage mm = new MailMessage("marsool@fuwatech.com", email))  //support@fuwatech.com
+                    {
+                        mm.Subject = "registration";
+                        mm.Body = html;
+                        //if (model.Attachment.ContentLength > 0)
+                        //{
+                        //    string fileName = Path.GetFileName(model.Attachment.FileName);
+                        //    mm.Attachments.Add(new Attachment(model.Attachment.InputStream, fileName));
+                        //}
+                        mm.IsBodyHtml = true;
+                        using (SmtpClient smtp = new SmtpClient())
+                        {
+                            smtp.Host = "wh1.azaronline.com";// "wh1.azaronline.com";
+                            smtp.EnableSsl = true;
+                            NetworkCredential NetworkCred = new NetworkCredential("marsool@fuwatech.com", "lz32uN6^9"); //lz32uN6^9
+                            smtp.UseDefaultCredentials = true;
+                            smtp.Credentials = NetworkCred;
+                            smtp.Port = 587;
+                            mymethods.NEVER_EAT_POISON_Disable_CertificateValidation();
+                            smtp.Send(mm);
+
+                        }
+                    }
+
+                }
                 cookieModel.id = registertext;
+                if (email != null)
+                {
+                    cookieModel.id = email;
+                }
                 cookieModel.pass = registerpassword;
-                SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
+                SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
                 return RedirectToAction("confirm", "Home");
 
             }
@@ -218,7 +279,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", phone);
@@ -250,7 +311,7 @@ namespace banimo.Controllers
         [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
         public ActionResult CustomerLogInWC(string registerpassword, string registertext, string register, string CaptchaCode)
         {
-            CookieVM cookieModel =JsonConvert.DeserializeObject< CookieVM >( getCookie("token"));
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             if (!ModelState.IsValid)
             {
                 if (ModelState.Values.Last().Errors.Count > 0)
@@ -276,7 +337,7 @@ namespace banimo.Controllers
 
 
             string currentpage = cookieModel.currentpage;
-
+            string currentController = cookieModel.currentController;
 
             string json;
             string device = RandomString();
@@ -287,7 +348,7 @@ namespace banimo.Controllers
             {
 
                 var collection = new NameValueCollection();
-                collection.Add("nodeID",  nodeID);
+                collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", registertext);
@@ -307,7 +368,7 @@ namespace banimo.Controllers
             {
                 cookieModel.id = registertext;
                 cookieModel.pass = registerpassword;
-                SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
+                SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
                 return RedirectToAction("confirm", "Home");
             }
             else if (log.status == "400")
@@ -347,12 +408,26 @@ namespace banimo.Controllers
                         obj[finalLst[0]] = finalLst[1];
                     }
 
-                    return RedirectToAction(lst[0], "Home", obj);
+                    return RedirectToAction(lst[0], currentController, obj);
 
                 }
                 else
                 {
-                    return RedirectToAction(currentpage, "Home");
+
+                    //if (currentpage != "index" && currentpage != "searchResult")
+                    //{
+                    //    currentController = "Home";
+                    //}
+
+                    if(ConfigurationManager.AppSettings["BussView"] == "1")
+                    {
+                        if (currentpage.ToLower() == "index" && currentController.ToLower() == "home")
+                        {
+                            currentController = "main";
+                        }
+                    }
+                    
+                    return RedirectToAction(currentpage, currentController);
 
                 }
 
@@ -374,7 +449,7 @@ namespace banimo.Controllers
 
         public ActionResult CustomerLogIn(string registerpassword, string registertext, string register)
         {
-            CookieVM cookieModel =JsonConvert.DeserializeObject<CookieVM>( getCookie("token"));
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             Session["LoginTime"] = Convert.ToInt32(Session["LoginTime"]) + 1;
             if (!ModelState.IsValid)
             {
@@ -394,7 +469,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", registertext);
@@ -436,7 +511,7 @@ namespace banimo.Controllers
         [Throttle(TimeUnit = TimeUnit.Minute, Count = 5)]
         [Throttle(TimeUnit = TimeUnit.Hour, Count = 20)]
         [Throttle(TimeUnit = TimeUnit.Day, Count = 100)]
-       
+
         public ActionResult checkConfirmCode(string phone, string register)
         {
             if (ModelState.IsValid)
@@ -454,7 +529,7 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                    var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("phone", phone);
@@ -471,12 +546,12 @@ namespace banimo.Controllers
                     byte[] response = client.UploadValues(address, collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
-                
+
                 }
                 userdata log = JsonConvert.DeserializeObject<userdata>(result);
                 if (log.status == "300")
                 {
-                    return RedirectToAction("confirm","Home", new { error = "300" });
+                    return RedirectToAction("confirm", "Home", new { error = "300" });
                 }
                 else if (log.status == "200")
                 {
@@ -489,8 +564,11 @@ namespace banimo.Controllers
                     }
                     else
                     {
+                        banimo.ViewModel.CookieVM jsonModel = JsonConvert.DeserializeObject<banimo.ViewModel.CookieVM>(getCookie("token"));
+                        string lastController = "Home";
                         string lastAction = Request.Cookies["lastAction"] != null ? Request.Cookies["lastAction"].Value as string : "index";
-                        return RedirectToAction(lastAction, "Home");
+                        lastController = jsonModel.currentController;
+                        return RedirectToAction(lastAction, lastController);
 
                     }
 
@@ -504,9 +582,9 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("confirm", "Home", new { error = "400" });
             }
-            
-           
-            
+
+
+
 
 
         }
@@ -524,7 +602,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mobile", phone);
@@ -553,13 +631,13 @@ namespace banimo.Controllers
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
-            
-            
-          
+
+
+
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("phone", phone);
@@ -577,7 +655,7 @@ namespace banimo.Controllers
             var log = JsonConvert.DeserializeObject<userdata>(result);
             cookieModel.id = phone;
             cookieModel.pass = "";
-            SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
             //Session["LogedInUser"] = log;
             // Session["UserLogedIn"] = log;
             //Session["LogedInUser"] = log;
@@ -601,7 +679,7 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -618,7 +696,7 @@ namespace banimo.Controllers
             Session["token"] = log.token;
             if (log.status == "200")
             {
-                return RedirectToAction("index","Home");
+                return RedirectToAction("index", "Home");
             }
             else
             {
@@ -636,13 +714,15 @@ namespace banimo.Controllers
 
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
             cookieModel.cartmodel = "";
-            SetCookie(JsonConvert.SerializeObject(cookieModel),"token");
+
+            string currentController = cookieModel.currentController;
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
             Session["LogedInUser"] = null;
             // Session["UserLogedIn"] = null;
 
 
             Session["token"] = null;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Main");
         }
 
         //public ContentResult SetOrChangeAddress(string address)

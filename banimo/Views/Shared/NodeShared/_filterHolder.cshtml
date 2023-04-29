@@ -6,8 +6,8 @@
 <div class="row" style="margin:30px">
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home0-tab" data-bs-toggle="tab" data-bs-target="#nav-home0" type="button" role="tab" aria-controls="nav-home0" aria-selected="true">New Filter </button>
-            <button class="nav-link " id="nav-profile0-tab" data-bs-toggle="tab" data-bs-target="#nav-profile0" type="button" role="tab" aria-controls="nav-profile0" aria-selected="false">Filter Options</button>
+            <button class="nav-link active" id="nav-home0-tab" data-bs-toggle="tab" data-bs-target="#nav-home0" type="button" role="tab" aria-controls="nav-home0" aria-selected="true">@Resources.res.newFilter  </button>
+            <button class="nav-link " id="nav-profile0-tab" data-bs-toggle="tab" data-bs-target="#nav-profile0" type="button" role="tab" aria-controls="nav-profile0" aria-selected="false">@Resources.res.filterOption </button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -16,11 +16,11 @@
 
                 <div class="form-group " id="newfilterholder" style=" ">
                     <div style="" class="control-label component" for="first-name">
-                        <p class="titlesection">Define Filter Item</p>
+                        <p class="titlesection">@Resources.res.defineFilterItem </p>
                     </div>
                     <div class="row form-holder">
                         <label style="display:inline-block" class="control-label component col-lg-2" for="first-name">
-                            Title :
+                            @Resources.res.title :
                         </label>
 
                         <input style="display:inline-block" class="col-lg-8 form-control" type="text" id="newFilteName" />
@@ -28,7 +28,7 @@
 
 
                     <div class="component form-holder" style="direction: rtl; ">
-                        <button id="addfilterbut" class="btn btn-primary">Verify</button>
+                        <button id="addfilterbut" class="btn btn-primary">@Resources.res.OK</button>
                         <script>
                             $(document).ready(function () {
                                 $("#addfilterbut").click(function () {
@@ -45,7 +45,7 @@
                                             },
                                             success: function (data) {
 
-                                                if (data === "error") {
+                                                if (data === "@Resources.res.error") {
                                                     toastr.options = {
                                                         "debug": false,
                                                         "positionClass": "toast-top-center",
@@ -56,7 +56,7 @@
                                                         "extendedTimeOut": 1000
                                                     }
 
-                                                    toastr.success('Error');
+                                                    toastr.success('@Resources.res.error');
                                                     location.reload();
                                                 }
                                                 if (data === "success") {
@@ -82,11 +82,11 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.success('item is added');
+                                                            toastr.success('@Resources.res.itemAdded');
 
                                                         },
                                                         error: function () {
-                                                            alert("Error")
+                                                            alert("@Resources.res.error")
                                                         }
                                                     });
                                                     //location.reload();
@@ -95,12 +95,12 @@
 
                                             },
                                             error: function () {
-                                                alert("Error")
+                                                alert("@Resources.res.error")
                                             }
                                         });
                                     }
                                     else {
-                                        alert("Enter title")
+                                        alert("@Resources.res.enterTitle")
 
                                     }
 
@@ -112,11 +112,11 @@
                 </div>
                 <div class="form-group " id="delfilterholder" style=" ">
                     <div style="" class="control-label component" for="first-name">
-                        <p class="titlesection">Remove Filter Item</p>
+                        <p class="titlesection">@Resources.res.removeFilterItem </p>
                     </div>
                     <div class="row form-holder">
                         <label class="control-label component" for="first-name">
-                            Select Item :
+                           @Resources.res.selectitem  :
                         </label>
 
                         <div class="component " id="filterfordelholder">
@@ -142,7 +142,7 @@
                             }
                         </div>
                         <div class="component form-holder" style="direction: rtl; ">
-                            <button id="Delfilterbutton" class="btn btn-primary">Verify</button>
+                            <button id="Delfilterbutton" class="btn btn-primary"> @Resources.res.OK</button>
                             <script>
                                 $(document).ready(function () {
                                     $("#Delfilterbutton").click(function () {
@@ -183,23 +183,23 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.success('Item is deleted');
+                                                            toastr.success(' @Resources.res.itemAdded');
 
                                                         },
                                                         error: function () {
-                                                            alert("Error")
+                                                            alert(" @Resources.res.error")
                                                         }
                                                     });
                                                     //location.reload();
 
                                                 },
                                                 error: function () {
-                                                    alert("Error")
+                                                    alert("@Resources.res.error")
                                                 }
                                             });
                                         }
                                         else {
-                                            alert("choose category");
+                                            alert("@Resources.res.chooseCategory");
                                         }
 
                                     })
@@ -212,28 +212,28 @@
                 </div>
                 <div class="form-group " id="editfilterholder" style=" ">
                     <div style="" class="control-label component" for="first-name">
-                        <p class="titlesection">Edit Filter Item</p>
+                        <p class="titlesection">@Resources.res.editFilterItem </p>
                     </div>
 
                     <div class="form-holder">
                         <label class="control-label component" for="first-name">
-                            Select Filter Item :
+                            @Resources.res.selectFilterItem  :
                         </label>
                         <div class="component" id="filterfordelholder">
-                            @Html.DropDownList("selectedFilter", listItems, "-- Select Status --", new { id = "selectedFilterEdit", style = "width:100%", @class = "form-control" })
+                            @Html.DropDownList("selectedFilter", listItems, Resources.res.selectitem, new { id = "selectedFilterEdit", style = "width:100%", @class = "form-control" })
 
                         </div>
                     </div>
                     <div class="form-holder">
                         <label class="control-label component" for="first-name">
-                            New Title  :
+                          @Resources.res.newTitle   :
                         </label>
                         <input class="form-control" type="text" id="newFileNameEdit" />
                     </div>
 
 
                     <div class="component form-holder" style="direction: rtl; ">
-                        <button id="EditFilter" class="btn btn-primary">Verify Edit</button>
+                        <button id="EditFilter" class="btn btn-primary">@Resources.res.edit </button>
                         <script>
                             $(document).ready(function () {
                                 $("#EditFilter").click(function () {
@@ -274,11 +274,11 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.success('ویرایش انجام شد');
+                                                            toastr.success('@Resources.res.editIsDone');
 
                                                         },
                                                         error: function () {
-                                                            alert("Error")
+                                                            alert("@Resources.res.error")
                                                         }
                                                     });
                                                 }
@@ -294,7 +294,7 @@
                                                         "extendedTimeOut": 1000
                                                     }
 
-                                                    toastr.error('Error در ارتباط با سرور');
+                                                    toastr.error('@Resources.res.error');
 
                                                 }
 
@@ -302,12 +302,12 @@
 
                                             },
                                             error: function () {
-                                                alert("Error")
+                                                alert("@Resources.res.error")
                                             }
                                         });
                                     }
                                     else {
-                                        alert("choose category");
+                                        alert("@Resources.res.chooseCategory");
                                     }
 
                                 })
@@ -357,11 +357,11 @@
                                         <div class="holderofformgroup">
                                             <div class="form-group ">
                                                 <div style="" class="control-label component" for="first-name">
-                                                    <p class="titlesection"> Defint New Option  (@myitem.filtername)</p>
+                                                    <p class="titlesection"> @Resources.res.addDetail  (@myitem.filtername)</p>
                                                 </div>
                                                 <div class="row form-holder">
                                                     <label class="control-label component" for="first-name">
-                                                        Title :
+                                                        @Resources.res.title :
                                                     </label>
                                                     <div class="component">
                                                         <input type="text" id=@filterdetailtitle required="required" class="form-control INP">
@@ -373,7 +373,7 @@
                                                 <div class="component form-holder" style="direction:rtl">
 
                                                     @* <button id="DEFcatok" class="btn btn-primary" onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
-                                                    <button id=@createbutt class="btn btn-primary butt">Verify Option Title</button>
+                                                    <button id=@createbutt class="btn btn-primary butt">@Resources.res.verifyOptionTitle </button>
 
                                                 </div>
                                                 <script>
@@ -413,7 +413,7 @@
 
                                                                 //    },
                                                                 //    error: function () {
-                                                                //        alert("Error")
+                                                                //        alert("@Resources.res.error")
                                                                 //    }
                                                                 //});
                                                                 toastr.options = {
@@ -426,7 +426,7 @@
                                                                     "extendedTimeOut": 1000
                                                                 }
 
-                                                                toastr.success('Filter option is added successfully')
+                                                                toastr.success('@Resources.res.filterOptionAdded ')
 
 
                                                                 //  setTimeout(
@@ -447,7 +447,7 @@
                                                                     "extendedTimeOut": 1000
                                                                 }
 
-                                                                toastr.error('Item Not Found ')
+                                                                toastr.error('@Resources.res.itemNotFound  ')
 
                                                             }
                                                             else {
@@ -461,13 +461,13 @@
                                                                     "extendedTimeOut": 1000
                                                                 }
 
-                                                                toastr.error('Error')
+                                                                toastr.error('@Resources.res.error')
                                                             }
 
 
                                                         },
                                                         error: function () {
-                                                            alert("Error")
+                                                            alert("@Resources.res.error")
                                                         }
                                                     });
                                                 })
@@ -479,11 +479,11 @@
                                             </div>
                                             <div class="form-group ">
                                                 <div style="" class="control-label component" for="first-name">
-                                                    <p class="titlesection"> Remove  Option Item (@myitem.filtername)</p>
+                                                    <p class="titlesection"> @Resources.res.removeDetail  (@myitem.filtername)</p>
                                                 </div>
                                                 <div class="form-holder row">
                                                     <label class="control-label component" for="first-name">
-                                                        Select Option To Remove  :
+                                                        @Resources.res.selectOptionToDelete   :
                                                     </label>
                                                     <div class="component">
 
@@ -507,7 +507,7 @@
 
                                                 <div class="component form-holder" style="direction:rtl">
 
-                                                    <button id=@delbutt class="btn btn-primary">Verify Remove</button>
+                                                    <button id=@delbutt class="btn btn-primary"> @Resources.res.remove</button>
                                                 </div>
 
                                             </div>
@@ -541,7 +541,7 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.success(' Item is deleted Successfully')
+                                                            toastr.success(' @Resources.res.itemAdded ')
                                                             $("#" + filterdetaillist + " option:selected").remove()
                                                              var newvluew = $("#selectedCatForEdit").val();
                                                             //$.ajax({
@@ -558,7 +558,7 @@
 
                                                             //    },
                                                             //    error: function () {
-                                                            //        alert("Error")
+                                                            //        alert("@Resources.res.error")
                                                             //    }
                                                             //});
                                                         }
@@ -574,13 +574,13 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.error('Error')
+                                                            toastr.error('@Resources.res.error')
                                                         }
 
 
                                                     },
                                                     error: function () {
-                                                        alert("Error")
+                                                        alert("@Resources.res.error")
                                                     }
                                                 });
                                             })
@@ -591,11 +591,11 @@
 
                                             <div class="form-group ">
                                                 <div style="" class="control-label component" for="first-name">
-                                                    <p class="titlesection"> Edit Option Item (@myitem.filtername)</p>
+                                                    <p class="titlesection"> @Resources.res.editDetail (@myitem.filtername)</p>
                                                 </div>
                                                 <div class="row form-holder">
                                                     <label class="control-label component" for="first-name">
-                                                        Option Title :
+                                                       @Resources.res.optionTitle   :
                                                     </label>
                                                     <div class="component">
 
@@ -616,7 +616,7 @@
                                                 </div>
                                                 <div class="row form-holder">
                                                     <label class="control-label component" for="first-name">
-                                                        New Title :
+                                                        @Resources.res.newTitle   :
                                                     </label>
                                                     <div class="component">
                                                         <input type="text" id=@filterdetailNewtitle required="required" class="form-control INP">
@@ -625,7 +625,7 @@
 
                                                 <div class="component form-holder" style="direction:rtl">
 
-                                                    <button id=@editbutt class="btn btn-primary">Verify Edit</button>
+                                                    <button id=@editbutt class="btn btn-primary">@Resources.res.edit</button>
                                                 </div>
 
                                             </div>
@@ -662,7 +662,7 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.success('Edit Is Done Successfully ')
+                                                            toastr.success('@Resources.res.done')
 
                                                              var newvluew = $("#selectedCatForEdit").val();
                                                             $.ajax({
@@ -679,7 +679,7 @@
 
                                                                 },
                                                                 error: function () {
-                                                                    alert("Error")
+                                                                    alert("@Resources.res.error")
                                                                 }
                                                             });
                                                         }
@@ -695,13 +695,13 @@
                                                                 "extendedTimeOut": 1000
                                                             }
 
-                                                            toastr.error('Error')
+                                                            toastr.error('@Resources.res.error')
                                                         }
 
 
                                                     },
                                                     error: function () {
-                                                        alert("Error")
+                                                        alert("@Resources.res.error")
                                                     }
                                                 });
                                             })
@@ -815,7 +815,7 @@
 
 
                         <div class="component form-holder" style="direction: rtl; ">
-                            <button id="addRangeFilter" class="btn btn-primary">Verify</button>
+                            <button id="addRangeFilter" class="btn btn-primary">@Resources.res.OK</button>
                             <script>
                                 $(document).ready(function () {
                                     $("#addRangeFilter").click(function () {
@@ -839,7 +839,7 @@
                                                 },
                                                 success: function (data) {
 
-                                                    if (data === "error") {
+                                                    if (data === "@Resources.res.error") {
                                                         toastr.options = {
                                                             "debug": false,
                                                             "positionClass": "toast-top-center",
@@ -881,14 +881,14 @@
 
                                                             },
                                                             error: function () {
-                                                                alert("Error")
+                                                                alert("@Resources.res.error")
                                                             }
                                                         });
                                                     }
 
                                                 },
                                                 error: function () {
-                                                    alert("Error")
+                                                    alert("@Resources.res.error")
                                                 }
                                             });
                                         }
@@ -947,7 +947,7 @@
 
 
                         <div class="component form-holder" style="direction: rtl; ">
-                            <button data-toggle="modal" data-target="#rangeModal" id="delRangeFilter" class="btn btn-primary">Verify</button>
+                            <button data-toggle="modal" data-target="#rangeModal" id="delRangeFilter" class="btn btn-primary">@Resources.res.OK</button>
                             <div class="modal fade" id="rangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -958,7 +958,7 @@
 
                                             <div class="button-box">
                                                 <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="">Cancel</button>
-                                                <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="Rangedelete">Verify</button>
+                                                <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="Rangedelete">@Resources.res.OK</button>
                                                 <script>
                                                     $("#Rangedelete").click(function () {
                                                         var rangeFieldSelected = $("#rangeFieldActiveSelected").val();
@@ -972,7 +972,7 @@
                                                                 },
                                                                 success: function (data) {
 
-                                                                    if (data === "error") {
+                                                                    if (data === "@Resources.res.error") {
                                                                         toastr.options = {
                                                                             "debug": false,
                                                                             "positionClass": "toast-top-center",
@@ -1004,7 +1004,7 @@
 
                                                                             },
                                                                             error: function () {
-                                                                                alert("Error")
+                                                                                alert("@Resources.res.error")
                                                                             }
                                                                         });
                                                                     }
@@ -1027,7 +1027,7 @@
 
                                                                 },
                                                                 error: function () {
-                                                                    alert("Error")
+                                                                    alert("@Resources.res.error")
                                                                 }
                                                             });
                                                         }

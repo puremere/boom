@@ -158,4 +158,23 @@ var removeImageFromItem = function (DAT, imageName) {
         }
     })
 };
+var removeImageFromSlide = function (DAT, imageName) {
+    let id = DAT.split('***')[0];
+    let name = DAT.split('***')[1];
+
+    $.ajax({
+        url: "/Partner/deleteimageSlide",
+        data: {
+            id: id,
+            title: name
+        },
+        success: function () {
+            var srt = $("." + imageName).text();
+
+            $("." + imageName).text(srt.replace(name + ",", ""));
+            $("#" + id).parent().parent().remove();
+            $("#edit").click();
+        }
+    })
+};
 

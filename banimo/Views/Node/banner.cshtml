@@ -119,7 +119,7 @@
         <div class="modal-content">
 
             <div class="modal-body">
-                <p>Are You Sure?</p>
+                <p>@Resources.res.sure</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
@@ -133,7 +133,7 @@
         <div class="modal-content">
 
             <div class="modal-body">
-                <p>Are You Sure?</p>
+                <p>@Resources.res.sure</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
@@ -170,7 +170,7 @@
             <div class="card-body">
 
                 <div class="title-header option-title">
-                    <h5>Set New Banner</h5>
+                    <h5>@Resources.res.setNewBanner </h5>
                 </div>
                 <div style="">
                     @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
@@ -182,7 +182,7 @@
                     <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
                         <label> @Resources.res.category </label>
                         <div style="width:100%">
-                            @Html.DropDownList("catname", listItems, "select item", new { id = "listofcat", @class = "form-control" })
+                            @Html.DropDownList("catname", listItems, Resources.res.selectitem, new { id = "listofcat", @class = "form-control" })
                         </div>
                     </div>
                     @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
@@ -192,28 +192,28 @@
             </div>
         </div>*@
                     <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                        <label> title </label>
+                        <label> @Resources.res.title </label>
                         <div style="width:100%">
                             <input id="title" name="title" class="form-control" />
                         </div>
                     </div>
                     <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                        <label> Link </label>
+                        <label> @Resources.res.link </label>
                         <div style="width:100%">
                             <input id="link" name="link" class="form-control" />
                         </div>
                     </div>
                     <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
-                        <label> For : </label>
+                        <label> @Resources.res.forfor : </label>
                         <div style="width:100%">
                             <select class="form-control" name="type" id="type">
-                                <option value="app">App</option>
-                                <option value="web">Web</option>
+                                <option value="app">@Resources.res.app</option>
+                                <option value="web">@Resources.res.web</option>
                             </select>
                         </div>
                     </div>
                     <div class="component col-md-4 col-sm-3 col-xs-12">
-                        <label> image </label>
+                        <label> @Resources.res.image </label>
                         <input id="imageFileHolder" type="file" required="required" class="form-control INP">
                     </div>
                     <div class="component col-md-4 col-sm-3 col-xs-12">
@@ -248,7 +248,7 @@
             <div class="card-body">
 
                 <div class="title-header option-title">
-                    <h5>Manage Banner</h5>
+                    <h5>@Resources.res.manageBanner</h5>
                 </div>
                 <div style="">
                     @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
@@ -281,7 +281,7 @@
                     <div style="margin:25px; display:flex">
 
                         <div class="component " ; style="margin:8px">
-                            <div id="edit" class="btn btn-success">Bring banners</div>
+                            <div id="edit" class="btn btn-success">@Resources.res.getBanner </div>
                         </div>
                     </div>
 

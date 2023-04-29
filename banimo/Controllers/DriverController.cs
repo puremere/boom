@@ -17,6 +17,7 @@ using System.Web.Mvc;
 
 namespace banimo.Controllers
 {
+    [DriverSessionCheck]
     public class DriverController : Controller
     {
         // GET: Driver
@@ -45,8 +46,6 @@ namespace banimo.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult CustomerLogin(string pass, string ischecked, string phone)
         {
-
-
 
             try
             {
@@ -90,20 +89,20 @@ namespace banimo.Controllers
                         Session["LogedInUser2"] = log.token;
                     }
 
-                    HttpContext.Response.Cookies["AT"].Value = log.token;
+                    HttpContext.Response.Cookies["DU"].Value = log.token;
 
                     List<string> lst = log.action.Split('/').ToList();
                     return RedirectToAction(lst[1], lst[0]);
                 }
                 else
                 {
-                    return RedirectToAction("index", "Node", new { error = 2 });
+                    return RedirectToAction("index", "Driver", new { error = 2 });
 
                 }
             }
             catch (Exception e)
             {
-                return Content("2/Node/index");
+                return RedirectToAction("index", "Driver", new { error = 2 });
                 return Content(e.InnerException.ToString());
             }
 
@@ -119,6 +118,154 @@ namespace banimo.Controllers
         public ActionResult Dashbaord()
         {
             return View();
+        }
+        public async Task<ActionResult> home()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["driverUser"] as string;
+            string result = "";
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            DriverListVM staff = new DriverListVM();
+            using (WebClient client = new WebClient())
+            {
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                byte[] response = client.UploadValues(server + "/Deliver/getStaffInfo.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+                staff = JsonConvert.DeserializeObject<DriverListVM>(result);
+            }
+
+
+            
+            listPageVM mdl = new listPageVM();
+            mdl.orderList = null;
+            mdl.username = token;
+            mdl.status = staff.staffList.First().status;
+            mdl.type = staff.staffList.First().type;
+            mdl.fullname = staff.staffList.First().fullname;
+            mdl.image = staff.staffList.First().image;
+            Response.Cookies["driverlogo"].Value = staff.staffList.First().image;
+
+
+            if (mdl.orderList != null)
+            {
+                foreach (var item in mdl.orderList)
+                {
+                    item.transportaion_date = dateTimeConvert.UnixTimeStampToDateTime(double.Parse(item.transportaion_date)).ToLongDateString();
+                }
+            }
+
+
+            return View(mdl);
+           
+        }
+        public async Task<ActionResult> profile()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["driverUser"] as string;
+            string result = "";
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            DriverListVM staff = new DriverListVM();
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+
+                byte[] response = client.UploadValues(server + "/Deliver/getStaffInfo.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+                staff = JsonConvert.DeserializeObject<DriverListVM>(result);
+            }
+
+
+          
+            listPageVM mdl = new listPageVM();
+            mdl.orderList = null;
+            mdl.username = token;
+            mdl.status = staff.staffList.First().status;
+            mdl.type = staff.staffList.First().type;
+            mdl.fullname = staff.staffList.First().fullname;
+            mdl.image = staff.staffList.First().image;
+            Response.Cookies["driverlogo"].Value = staff.staffList.First().image;
+
+
+            if (mdl.orderList != null)
+            {
+                foreach (var item in mdl.orderList)
+                {
+                    item.transportaion_date = dateTimeConvert.UnixTimeStampToDateTime(double.Parse(item.transportaion_date)).ToLongDateString();
+                }
+            }
+
+
+            return View(mdl);
+
+        }
+        public async Task<ActionResult> contactus()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string token = Session["driverUser"] as string;
+            string result = "";
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            DriverListVM staff = new DriverListVM();
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+
+                byte[] response = client.UploadValues(server + "/Deliver/getStaffInfo.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+                staff = JsonConvert.DeserializeObject<DriverListVM>(result);
+            }
+
+
+            gettransportVM model = new gettransportVM();
+
+
+
+            model.servername = servername;
+            model.code = code;
+            model.device = device;
+            model.token = token;
+            string addr = server + "/Deliver/getTrasportationList.php";
+            var payload = JsonConvert.SerializeObject(model);
+            webservise wb = new webservise();
+            string Fresult = await wb.doPostData(addr, payload);
+            orderDeliverList fmodel = JsonConvert.DeserializeObject<orderDeliverList>(Fresult);
+            listPageVM mdl = new listPageVM();
+            mdl.orderList = fmodel.orderList;
+            mdl.username = token;
+            mdl.status = staff.staffList.First().status;
+            mdl.type = staff.staffList.First().type;
+            Response.Cookies["driverlogo"].Value = staff.staffList.First().image;
+
+
+            if (mdl.orderList != null)
+            {
+                foreach (var item in mdl.orderList)
+                {
+                    item.transportaion_date = dateTimeConvert.UnixTimeStampToDateTime(double.Parse(item.transportaion_date)).ToLongDateString();
+                }
+            }
+
+
+            return View(mdl);
         }
         public async Task<ActionResult> List()
         {
@@ -141,8 +288,6 @@ namespace banimo.Controllers
 
                  result = System.Text.Encoding.UTF8.GetString(response);
                  staff = JsonConvert.DeserializeObject<DriverListVM>(result);
-                
-
             }
 
             
@@ -164,10 +309,16 @@ namespace banimo.Controllers
             mdl.username = token;
             mdl.status = staff.staffList.First().status;
             mdl.type = staff.staffList.First().type;
+            Response.Cookies["driverlogo"].Value = staff.staffList.First().image;
 
 
-
-
+            if (mdl.orderList != null)
+            {
+                foreach( var item in mdl.orderList)
+                {
+                    item.transportaion_date = dateTimeConvert.UnixTimeStampToDateTime(double.Parse(item.transportaion_date)).ToLongDateString();
+                }
+            }
 
 
             return View(mdl);

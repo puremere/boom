@@ -1,0 +1,463 @@
+﻿@model banimo.ViewModel.listPageVM
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+}
+
+<div class="modal fade" id="wellcome" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <p>Wellcome To Driver Panel</p>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Ok</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AcceptOrder" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">New Order  ( <span id="theTarget">50</span> )</h5>
+                <p><span>Sender Address:</span><br /><span id="senderAddress"></span></p>
+                <p><span>Receiver Address:</span><br /><span id="receiverAddress"></span></p>
+                <p id="orderID" style="display:none"></p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
+                    <button id="acceptOrder" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<audio style="display:none" id="song" src="~/notifsound.mp3"></audio>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div id="prnt" class="card-body">
+                <div class="title-header option-title">
+                    <h5>Order List</h5>
+                </div>
+                <div id="Listholder" style="overflow-x:scroll">
+                    <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                        <thead>
+                            <tr>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width:210px">senderAddress</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1"> Receiverlocation</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width:210px">ReceiverAddress</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">Receiverlocation</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">status</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1">action</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.orderList != null)
+                            {
+                                foreach (var item in Model.orderList)
+                                {
+
+                                    string cls = "odd";
+                                    if (Model.orderList.IndexOf(item) + 1 % 2 == 0)
+                                    {
+                                        cls = "even";
+                                    }
+
+                                    <tr class="@cls">
+
+
+                                        <td>
+                                            @{
+                                                string senderaddress = @item.sender_state + " - " + @item.sender_city + " - " + @item.sender_address;
+                                            }
+                                            <span>@senderaddress</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <i style="margin:0 6px" lat="@item.sender_lat" lon="@item.sender_lon" id="" class="ri-user-location-fill showMap"></i>
+                                                </li>
+                                            </ul>
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                string recieveraddress = @item.receiver_city + " - " + @item.receiver_city + " - " + @item.receiver_address;
+                                            }
+                                            <span>@recieveraddress</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <i style="margin:0 6px" lat="@item.receiver_lat" lon="@item.receiver_lon" id="" class="ri-user-location-fill showMap"></i>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        @{
+                                            switch (item.transportaion_status)
+                                            {
+                                                case "0":
+                                                    <td class="order-pending">
+                                                        <span>Pending</span>
+                                                    </td>
+                                                    break;
+                                                case "1":
+                                                    <td class="order-success">
+                                                        <span>Accepted</span>
+                                                    </td>
+                                                    break;
+                                                case "2":
+                                                    <td class="order-cancle">
+                                                        <span>Rejected</span>
+                                                    </td>
+                                                    break;
+                                                case "3":
+                                                    <td class="order-success">
+                                                        <span>Preparing</span>
+                                                    </td>
+                                                    break;
+                                                case "4":
+                                                    <td class="order-success">
+                                                        <span>Sending</span>
+                                                    </td>
+                                                    break;
+                                                case "5":
+                                                    <td class="order-success">
+                                                        <span>Delivered</span>
+                                                    </td>
+                                                    break;
+
+                                            }
+                                        }
+
+
+
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+
+                                                        <i id=@item.ID class="ri-delete-bin-line Dbutton"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+                    <script>
+                        var id
+                        $(".checkPartnerbutton").click(function () {
+                            var id = $(this).attr("id");
+                            var phone = $(this).parent().parent().find('#mobileHolder').text().trim();
+
+                            $.ajax({
+                                url: '/Node/checkPartnerStatus',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+
+                                    $("#partnerDataHolder").html(data);
+                                    $("#partnerDataHolder").scroll();
+                                    $(".patnerUsername").val(phone);
+                                    //$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        });
+                        $("#removeU").click(function () {
+                            var id = $(".idToRemove").text();
+
+                            $.ajax({
+                                url: '/Node/DeleteDeliverType',
+                                dataType: 'html',
+                                data: {
+                                    id: id,
+                                },
+                                success: function (data) {
+
+                                    window.location.reload();
+
+                                },
+                                error: function () {
+
+                                }
+                            });
+                        })
+
+                        $(".Dbutton").click(function () {
+
+                            var id = $(this).attr("id");
+                            $(".idToRemove").text(id);
+                            $("#delmodal").modal("toggle");
+
+                        });
+
+
+                    </script>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin="" />
+    <script type="text/javascript">
+        var mymap;
+        var theMarker = {};
+
+        function showLocation(lat, lon) {
+            mymap = L.map('mapid', { attributionControl: false }).setView([lat, lon], 13);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+            }).addTo(mymap);
+            mymap.panTo(new L.LatLng(lat, lon));
+            theMarker = L.marker([lat, lon]).addTo(mymap);
+
+        }
+        $("#mapid").height("250px");
+    </script>
+    <script>
+        $(".showMap").click(function () {
+            var lat = $(this).attr('lat');
+            var lon = $(this).attr('lon');
+            if ($('#mapid').length) {
+                $('#mapid').remove();
+            }
+            var el = "<div> <div id = 'mapid' style = 'margin-top:20px; width:100% ; height:300px'></div></div >"
+            $("#prnt").append(el)
+
+            showLocation(lat, lon);
+            document.getElementById('mapid').scrollIntoView();
+        })
+    </script>
+    <script>
+        $("#acceptOrder").click(function () {
+            var id = $("#orderID").text().trim();
+            $.ajax({
+                url: '/Driver/AcceptOrder',
+                dataType: 'html',
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+
+                    window.location.reload();
+
+                },
+                error: function () {
+
+                }
+            });
+        })
+    </script>
+
+    <script src="~/Scripts/NoSleep.js"></script>
+    <script>
+        var noSleep = new NoSleep();
+        noSleep.enable();
+    </script>
+    <script src="~/Scripts/Scripts/jquery.signalR-2.4.1.min.js"></script>
+
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                // timeout at 60000 milliseconds (60 seconds)
+                var options = { timeout: 3000, enableHighAccuracy: true };
+                navigator.geolocation.getCurrentPosition
+                    (ConnectToSignal, errorHandler, options);
+
+            } else {
+                alert("Sorry, browser does not support geolocation!");
+            }
+        }
+        function errorHandler() {
+           let lat = "0";
+            let lon = "0";
+            // Reference the auto-generated proxy for the hub.
+            var hub = $.connection.chatHub;
+            // Create a function that the hub can call back to display messages.
+
+            hub.client.wellcom = function () {
+                //document.getElementById('#song').play();
+
+                $("#wellcome").modal('toggle');
+
+            };
+            hub.client.newOrder = function (senderaddress, receiveraddress, senderlat, senderlon, receiverlat, receiverlon,id) {
+
+                //alert("dddd");
+                if ($('#AcceptOrder').hasClass('show')) {
+                    console.log("already has")
+                }
+                else {
+                    var myAudio = $("#song")[0];
+                    myAudio.play();
+                    $("#senderAddress").text(senderaddress);
+                    $("#receiverAddress").text(receiveraddress);
+                    $("#orderID").text(id);
+                    $("#AcceptOrder").modal('toggle');
+                    var timer = setInterval(function () {
+
+                        var count = parseInt($('#theTarget').html());
+                        if (count !== 0) {
+                            $('#theTarget').html(count - 1);
+                        } else {
+                            clearInterval(timer);
+                            $("#AcceptOrder").modal('toggle');
+                        }
+                    }, 1000);
+                }
+                
+
+
+            };
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+               hub.server.joinDeliver('@Model.type','@Model.username',  '@Model.status', lat, lon);
+            });
+        }
+        function ConnectToSignal(position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            // Reference the auto-generated proxy for the hub.
+            var hub = $.connection.chatHub;
+            // Create a function that the hub can call back to display messages.
+
+            hub.client.wellcom = function () {
+                //document.getElementById('#song').play();
+
+                $("#wellcome").modal('toggle');
+
+            };
+            hub.client.newOrder = function (senderaddress, receiveraddress, senderlat, senderlon, receiverlat, receiverlon, id) {
+
+                //alert("dddd");
+                if ($('#AcceptOrder').hasClass('show')) {
+                    console.log("already has")
+                }
+                else {
+                    var myAudio = $("#song")[0];
+                    myAudio.play();
+                    $("#senderAddress").text(senderaddress);
+                    $("#receiverAddress").text(receiveraddress);
+                    $("#orderID").text(id);
+                    $("#AcceptOrder").modal('toggle');
+                    var timer = setInterval(function () {
+
+                        var count = parseInt($('#theTarget').html());
+                        if (count !== 0) {
+                            $('#theTarget').html(count - 1);
+                        } else {
+                            clearInterval(timer);
+                            $("#AcceptOrder").modal('toggle');
+                        }
+                    }, 1000);
+                }
+
+
+
+            };
+
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+               
+                hub.server.joinDeliver('@Model.type','@Model.username',  '@Model.status', lat, lon);
+                @*$('#acceptOrder').click(function () {
+                    // Call the Send method on the hub.
+                    hub.server.changeUserStatus('@token');
+                });*@
+            });
+        }
+
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+        getLocation();
+    </script>
+    <script>
+
+                            //document.getElementById("song").loop = true;
+                            //var isPlaying = false;
+
+                            //function togglePlay() {
+                            //    if (isPlaying) {
+                            //        myAudio.pause();
+                            //    } else {
+                            //        myAudio.play();
+                            //    }
+                            //};
+                            //myAudio.onplaying = function () {
+                            //    isPlaying = true;
+                            //};
+                            //myAudio.onpause = function () {
+                            //    isPlaying = false;
+                            //};
+    </script>
+
+
+}
+
+
+

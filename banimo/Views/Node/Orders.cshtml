@@ -55,40 +55,40 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Search Panel</h5>
+                    <h5>@Resources.res.searchPanel</h5>
                 </div>
                 <div class="row">
                     <form>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title col-sm-2 mb-0">Status :</label>
+                            <label class="form-label-title col-sm-12 mb-0">@Resources.res.status  :</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="c" id="SearchCat">
-                                    <option value="">Choose Status</option>
-                                    <option value="0">Pending</option>
-                                    <option value="1">Accepted</option>
-                                    <option value="2">Rejected</option>
-                                    <option value="3">Preparing</option>
-                                    <option value="4">Sending</option>
-                                    <option value="4">Delivered</option>
+                                    <option value="">@Resources.res.chooseStatus </option>
+                                    <option value="0">@Resources.res.pending </option>
+                                    <option value="1">@Resources.res.accepted </option>
+                                    <option value="2">@Resources.res.rejected </option>
+                                    <option value="3">@Resources.res.preparing </option>
+                                    <option value="4">@Resources.res.sending </option>
+                                    <option value="4">@Resources.res.deliverd </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title col-sm-2 mb-0">Title :</label>
+                            <label class="form-label-title col-sm-2 mb-0">@Resources.res.title  :</label>
                             <div class="col-sm-10">
                                 <input type="text" id="seachQuery" name="q" class="form-control col-md-7 col-xs-12">
 
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title col-sm-2 mb-0" style="white-space:nowrap">Time From :</label>
+                            <label class="form-label-title col-sm-2 mb-0" style="white-space:nowrap">@Resources.res.dateFrom :</label>
                             <div class="col-sm-10">
                                 <input type="date" id="TimeFrom" name="tf" value="" class="form-control col-md-7 col-xs-12">
 
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title col-sm-2 mb-0">Time To :</label>
+                            <label class="form-label-title col-sm-2 mb-0">@Resources.res.dateTo  :</label>
                             <div class="col-sm-10">
                                 <input type="date" id="TimeTo" name="tt" value="" class="form-control col-md-7 col-xs-12">
 
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
                             <div id="NewList" class="col-sm-10" style="   margin-top: 20px;">
-                                <button class="btn btn-primary lgnsubmitt">Get Order List</button>
+                                <button class="btn btn-primary lgnsubmitt">@Resources.res.getOrderList </button>
                             </div>
                         </div>
 
@@ -116,21 +116,21 @@
         <div class="card">
             <div id="prnt" class="card-body">
                 <div class="title-header option-title">
-                    <h5>Order List</h5>
+                    <h5>@Resources.res.orderList </h5>
                 </div>
                 <div class="row" style="background-color:white; padding:10px; margin:0px;overflow-x:scroll">
                     <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:10px">
                         <thead>
 
                             <tr>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Col</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Order Number</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Date</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Address</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Name</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Phone</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Status</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">actions</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.col </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.orderNumber </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.date </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.userAddress </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.name </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.phone </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.status </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action </th>
                             </tr>
                         </thead>
 
@@ -161,32 +161,32 @@
                                             {
                                                 case "0":
                                                     <td class="order-pending">
-                                                        <span>Pending</span>
+                                                        <span>@Resources.res.pending</span>
                                                     </td>
                                                     break;
                                                 case "1":
                                                     <td class="order-success">
-                                                        <span>Accepted</span>
+                                                        <span>@Resources.res.accepted</span>
                                                     </td>
                                                     break;
                                                 case "2":
                                                     <td class="order-cancle">
-                                                        <span>Rejected</span>
+                                                        <span>@Resources.res.rejected</span>
                                                     </td>
                                                     break;
                                                 case "3":
                                                     <td class="order-success">
-                                                        <span>Preparing</span>
+                                                        <span>@Resources.res.preparing</span>
                                                     </td>
                                                     break;
                                                 case "4":
                                                     <td class="order-success">
-                                                        <span>Sending</span>
+                                                        <span>@Resources.res.sending</span>
                                                     </td>
                                                     break;
                                                 case "5":
                                                     <td class="order-success">
-                                                        <span>Delivered</span>
+                                                        <span>@Resources.res.deliverd</span>
                                                     </td>
                                                     break;
 
@@ -234,11 +234,11 @@
 
                             <tr>
 
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product image</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product title</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Addson</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product count</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">actions</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productImage </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productTitle </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productAddson </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productCount </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action </th>
                             </tr>
                         </thead>
 

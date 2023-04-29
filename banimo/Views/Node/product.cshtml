@@ -148,7 +148,7 @@
 
             }).addTo(mymap);
             mymap.panTo(new L.LatLng(lat, lon));
-
+            theMarker = L.marker([lat, lon]).addTo(mymap);
 
 
             mymap.on('click', function (e) {
@@ -171,8 +171,6 @@
         }
         function errorHandler(err) {
 
-
-
             mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -183,8 +181,10 @@
                 accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
 
             }).addTo(mymap);
-            mymap.panTo(new L.LatLng('35.7442005749', '51.473131743990'));
-
+            var lat = '35.7442005749';
+            var lon = '51.473131743990';
+            mymap.panTo(new L.LatLng(lat,lon ));
+            theMarker = L.marker([lat, lon]).addTo(mymap);
 
             mymap.on('click', function (e) {
 
@@ -203,6 +203,8 @@
                 $("#lat").val(lat);
                 $("#lng").val(lon);
             });
+            $("#lat").val(lat);
+            $("#lng").val(lon);
 
 
 
@@ -343,8 +345,8 @@
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Vendor Report</button>
-            <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">New Vendor</button>
+            <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.VendorReport </button>
+            <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.newVendor </button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -356,7 +358,7 @@
                         <div class="card-body">
 
                             <div class="title-header option-title">
-                                <h5>Search Panel</h5>
+                                <h5>@Resources.res.searchPanel</h5>
                             </div>
 
                             <div class="row">
@@ -435,7 +437,7 @@
                                         <div class="autocomplete col-md-5 col-sm-3 col-xs-12" style="margin:20px;display:inline-block">
                                             <label> @Resources.res.category </label>
                                             <div style="width:100%">
-                                                @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, "-- Select Status --", new { id = "listofproductfirst", @class = "form-control" })
+                                                @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, @Resources.res.category , new { id = "listofproductfirst", @class = "form-control" })
 
                                             </div>
                                         </div>
@@ -543,7 +545,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="title-header option-title">
-                                <h5>Vendor List</h5>
+                                <h5>@Resources.res.VendorList</h5>
                             </div>
                             <div class="row">
                                 <div class="form-group rowholder" id="listholder" style="display:none">
@@ -565,7 +567,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="title-header option-title">
-                                <h5>Set New Vendor</h5>
+                                <h5>@Resources.res.setNewVendor </h5>
                             </div>
                             <style>
                                 .itemRow {
@@ -579,12 +581,18 @@
                                     .imageCover img {
                                         max-width: 150px
                                     }
+                                .formlable{
+                                    margin-bottom:5px;
+                                    font-size:14px;
+                                    font-weight:600;
+                                    margin-top:20px
+                                }
                             </style>
                             <main id="loginMain" style="padding: 50px 150px">
                                 <div class="row  parent">
                                     <div class="ItemsHome">
                                         <div class="itemRow">
-                                            <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> Create Image <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
+                                            <div class="default " style="cursor:pointer;margin-bottom:15px; text-align:center;border:1px dotted #4d4d4d; padding:5px 10px ;border-radius:5px;"> @Resources.res.image <img class="imageDefault" style="width:30px; margin : 0 20px" src="~/images/addPic.png" /></div>
                                             <div id="imageHolder" style="display:flex">
 
                                                 <input multiple type="file" id="imageFileHolder" name="image" required="required" class="form-control  imageinput" style="display:none">
@@ -622,40 +630,38 @@
             <input placeholder="@Resources.res.link" value="@Model.link" id="link" name="link" class="form-control " />
         </div>*@
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createTitle </p>*@
-                                                <input placeholder="Insert Title" id="title" name="title" class="form-control inputform" />
+                                                <p class="formlable">@Resources.res.title :</p>
+                                                <input placeholder="@Resources.res.title " id="title" name="title" class="form-control inputform" />
                                             </div>
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createTitle </p>*@
-                                                <input placeholder="Vendor Password" id="password" name="password" class="form-control inputform" />
+                                                <p class="formlable">@Resources.res.password :</p>
+                                                <input placeholder="@Resources.res.password" id="password" name="password" class="form-control inputform" />
                                             </div>
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createTitle </p>*@
-                                                <input placeholder="Vendor Percent" id="percent" type="number" name="percent" class="form-control inputform" />
+                                                <p class="formlable">@Resources.res.VendorPercent :</p>
+                                                <input placeholder="@Resources.res.VendorPercent" id="percent" type="number" name="percent" class="form-control inputform" />
                                             </div>
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createTitle </p>*@
-                                                <input placeholder="Delivery Price" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
+                                                <p class="formlable">@Resources.res.deliverPrice :</p>
+                                                <input placeholder="@Resources.res.deliverPrice" id="deliverPrice" type="number" name="deliverPrice" class="form-control inputform" />
                                             </div>
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createTitle </p>*@
-                                                <select name="deliverType" class="form-control">
+                                                <p class="formlable">@Resources.res.deliverType : </p>
+                                                @Html.DropDownList("deliverType", new SelectList(Model.log.delivertypeList, "ID", "name"), @Resources.res.deliverType, new { @class = "form-control" })
 
-                                                    <option value="1">take away</option>
-                                                    <option value="2">motor cycle</option>
-                                                    <option value="3">van</option>
-                                                </select>
+                                                @*<p>@Resources.res.createTitle </p>*@
+
                                             </div>
 
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.createDesc </p>*@
-                                                <input placeholder="Insert Desc" style="flex:1; height:100px" id="desc" name="desc" class="form-control " />
+                                                <p class="formlable">@Resources.res.description : </p>
+                                                <input placeholder="@Resources.res.description" style="flex:1; height:100px" id="desc" name="desc" class="form-control " />
 
                                             </div>
                                             <div class="itemRow">
 
-
-                                                @Html.DropDownList("catid", listItems, "-- Select Status --", new { id = "listofproduct", @class = "form-control" })
+                                                <p class="formlable">@Resources.res.category : </p>
+                                                @Html.DropDownList("catid", listItems, @Resources.res.category , new { id = "listofproduct", @class = "form-control" })
                                                 @*  @Html.DropDownList("catid", new SelectList(Model.SelectedlistProduct, "ID", "title"), Resources.res.chooscat, new { @class = "form-control inputform", id = "cat", style = "" })*@
 
                                             </div>
@@ -676,44 +682,42 @@
 
         </div>*@
 
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.createPhone </p>*@
+                                        <div class="itemRow">
+                                            @*<p>@Resources.res.createPhone </p>*@
+                                            <p class="formlable">@Resources.res.phone 1 :</p>
+                                            <input placeholder=" @Resources.res.phone 1" id="phone1" name="phone1" class="form-control " />
 
-                                                <input placeholder="Insert Phone" id="phone1" name="phone1" class="form-control " />
+                                        </div>
+                                        <div class="itemRow">
+                                           
+                                            <p class="formlable">@Resources.res.phone 2 :</p>
+                                            <input placeholder=" @Resources.res.phone 2" id="phone2" name="phone2" class="form-control " />
 
-                                            </div>
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.createPhone2 </p>*@
+                                        </div>
 
-                                                <input placeholder="Insert phone 2" id="phone2" name="phone2" class="form-control " />
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.fax :</p>
+                                            <input placeholder=" @Resources.res.fax" id="fax" name="fax" class="form-control " />
+                                        </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.mobile 1 :</p>
+                                            <input placeholder=" Mobile" id="@Resources.res.mobile 1" name="mobile1" class="form-control " />
 
-                                            </div>
+                                        </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.mobile 2 :</p>
+                                            <input placeholder=" @Resources.res.mobile 2" id="mobile2" name="mobile2" class="form-control " />
 
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.fax </p>*@
-                                                <input placeholder="Insert Fax" id="fax" name="fax" class="form-control " />
-                                            </div>
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.mobile1 </p>*@
-
-                                                <input placeholder="Insert Mobile" id="mobile1" name="mobile1" class="form-control " />
-
-                                            </div>
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.mobile2 </p>*@
-
-                                                <input placeholder="Insert Mobile 2" id="mobile2" name="mobile2" class="form-control " />
-
-                                            </div>
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.email </p>*@
-                                                <input placeholder="@Resources.res.email" id="email" name="email" class="form-control " />
-                                            </div>
+                                        </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.email :</p>
+                                            <input placeholder=" @Resources.res.email" id="email" name="email" class="form-control " />
+                                        </div>
 
 
                                             <div class="itemRow">
-                                                @*<p>@Resources.res.website </p>*@
-                                                <input placeholder="Insert Website" id="website" name="website" class="form-control " />
+                                                <p class="formlable">@Resources.res.website :</p>
+                                                <input placeholder=" @Resources.res.website" id="website" name="website" class="form-control " />
                                             </div>
                                             @*
         <div class="itemRow">
@@ -739,16 +743,31 @@
 
         </div>*@
 
-                                            <div class="itemRow">
-                                                <input placeholder="State" id="linkedin" name="linkedin" class="form-control " />
-                                            </div>
-                                            <div class="itemRow">
-                                                <input placeholder="City" id="instagram" name="instagram" class="form-control " />
-                                            </div>
-                                            <div class="itemRow">
-                                                @*<p>@Resources.res.createAddress </p>*@
-                                                <input placeholder="Insert Address" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
-                                            </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.state :</p>
+                                            @if (Model.log.locations != null)
+                                            {
+                                                @Html.DropDownList("linkedin", new SelectList(@Model.log.locations.Where(x => x.type == "State"), "Title", "Title"),  @Resources.res.state, new { @class = "form-control" })
+
+                                            }
+
+
+                                        </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.city :</p>
+
+                                            @if (Model.log.locations != null)
+                                            {
+                                                @Html.DropDownList("instagram", new SelectList(@Model.log.locations.Where(x => x.type == "City"), "Title", "Title"),  @Resources.res.city, new { @class = "form-control" })
+
+                                            }
+
+
+                                        </div>
+                                        <div class="itemRow">
+                                            <p class="formlable">@Resources.res.address :</p>
+                                            <input placeholder=" @Resources.res.address" style="flex:1; height:100px" id="address" name="address" class="form-control inputform" />
+                                        </div>
 
                                             <input style="display:none" id="lat" name="lat" />
                                             <input style="display:none" id="lng" name="lng" />
@@ -757,7 +776,7 @@
                                             </div>
 
                                             <div class="itemRow " style="border:none">
-                                                <div class="creatButt btn btn-success">Verify</div>
+                                                <div class="creatButt btn btn-success">@Resources.res.OK</div>
                                             </div>
                                         </form>
                                     </div>

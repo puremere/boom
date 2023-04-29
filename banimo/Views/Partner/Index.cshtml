@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Vendor Login</title>
+    <title> Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -32,6 +32,11 @@
     <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/css/util.css">
     <link rel="stylesheet" type="text/css" href="~/AdminPanel/loginasset/css/main.css">
     <!--===============================================================================================-->
+    @if (Session["lang"] as string == "fa")
+    {
+        <link href="~/Content/font.css" rel="stylesheet" />
+        <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
+    }
 </head>
 <body style="background-color: #666666;">
 
@@ -39,57 +44,58 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <form id="adminSingUp" method="post" action="/partner/CustomerLogin" class="login100-form validate-form">
+                    @Html.AntiForgeryToken()
                     <span class="login100-form-title p-b-43">
-                        Login to continue
+                        @Resources.res.LoginTitle
                     </span>
 
 
                     <div class="wrap-input100 " data-validate="Valid email is required: ex@abc.xyz">
                         <input id="login-urser" class="input100" type="text" name="phone">
                         <span class="focus-input100"></span>
-                        <span class="label-input100">Username</span>
+                        <span class="label-input100">@Resources.res.Username</span>
                     </div>
 
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
                         <input id="login-password" class="input100" type="password" name="pass">
                         <span class="focus-input100"></span>
-                        <span class="label-input100">Password</span>
+                        <span class="label-input100">@Resources.res.password </span>
                     </div>
 
                     <div class="flex-sb-m w-full p-t-3 p-b-32">
                         <div class="contact100-form-checkbox">
                             <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
                             <label class="label-checkbox100" for="ckb1">
-                                Remember me
+                                @Resources.res.rememberMe
                             </label>
                         </div>
 
-                      
+
                     </div>
 
 
                     <div class="container-login100-form-btn">
                         <p class="login100-form-btn" id="lgnsubmitt">
-                            Login
+                            @Resources.res.login
                         </p>
                     </div>
 
                     @*<div class="text-center p-t-46 p-b-20">
-                        <span class="txt2">
-                            or sign up using
-                        </span>
-                    </div>
+            <span class="txt2">
+                or sign up using
+            </span>
+        </div>
 
-                    <div class="login100-form-social flex-c-m">
-                        <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg1 m-r-5">
-                            <i class="fa fa-facebook-f" aria-hidden="true"></i>
-                        </a>
+        <div class="login100-form-social flex-c-m">
+            <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg1 m-r-5">
+                <i class="fa fa-facebook-f" aria-hidden="true"></i>
+            </a>
 
-                        <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg2 m-r-5">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                    </div>*@
+            <a href="~/AdminPanel/loginasset/#" class="login100-form-social-item flex-c-m bg2 m-r-5">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+        </div>*@
                 </form>
 
                 <div class="login100-more" style="background-image: url('/AdminPanel/loginasset/images/bg-01.jpg');">

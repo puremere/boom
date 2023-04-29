@@ -1,6 +1,7 @@
 ﻿using banimo.Classes;
 using banimo.ViewModel;
 using banimo.ViewModel.TransportViewModel;
+using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace banimo.Controllers
 {
     public class DeliverController : Controller
     {
-        string servername = "test";
+        string servername = ConfigurationManager.AppSettings["serverName"];
         string server = ConfigurationManager.AppSettings["server"];
         public static string MD5Hash(string input)
         {
@@ -41,13 +42,136 @@ namespace banimo.Controllers
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
         // GET: Deliver
+
+        public ActionResult dashboard()
+        {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            //string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                //collection.Add("partnerID", partner);
+
+                byte[] response = client.UploadValues(server + "/Deliver/getDashboard.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            deliverDash  model = JsonConvert.DeserializeObject<ViewModel.deliverDash>(result);
+         
+
+            return View(model);
+           
+        }
         public ActionResult Index()
         {
-            return View();
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string json = "";
+            string lan = Session["lang"] as string;
+            //string partner = Session["PartnerUser"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : "1";
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                //collection.Add("partnerID", partner);
+
+                byte[] response = client.UploadValues(server + "/Admin/getBaseInfo.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModel.firstDeliver model = JsonConvert.DeserializeObject<ViewModel.firstDeliver>(result);
+            return View(model);
         }
         public ActionResult Login()
         {
             return View();
+        }
+        public ActionResult CustomerLogin(string pass, string ischecked, string phone)
+        {
+
+            if (phone == "marsool" && pass == "password")
+            {
+                return RedirectToAction("dashboard");
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+
+            //try
+            //{
+            //    string device = RandomString();
+            //    string code = MD5Hash(device + "ncase8934f49909");
+            //    string result = "";
+            //    using (WebClient client = new WebClient())
+            //    {
+
+            //        var collection = new NameValueCollection();
+            //        collection.Add("servername", servername);
+            //        collection.Add("device", device);
+            //        collection.Add("code", code);
+            //        collection.Add("mobile", phone);
+            //        collection.Add("pass", pass);
+
+            //        byte[] response = client.UploadValues(server + "/Node/getuseridNew.php", collection);
+
+            //        result = System.Text.Encoding.UTF8.GetString(response);
+            //    }
+
+            //    userDataNew log = JsonConvert.DeserializeObject<userDataNew>(result);
+            //    if (log.token != null && log.action != null)
+            //    {
+            //        if (log.action.Contains("Core"))
+            //        {
+            //            Session["CoreUser"] = log.token;
+            //        }
+            //        else if (log.action.Contains("partner"))
+            //        {
+            //            Session["PartnerUser"] = log.token;
+            //        }
+            //        else if (log.action.Contains("Driver"))
+            //        {
+            //            Session["driverUser"] = log.token;
+            //            using (WebClient client = new WebClient()) ;
+
+            //        }
+            //        else
+            //        {
+            //            Session["LogedInUser2"] = log.token;
+            //        }
+
+            //        HttpContext.Response.Cookies["AT"].Value = log.token;
+
+            //        List<string> lst = log.action.Split('/').ToList();
+            //        return RedirectToAction(lst[1], lst[0]);
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("index", "Node", new { error = 2 });
+
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return Content("2/Node/index");
+            //    return Content(e.InnerException.ToString());
+            //}
+
+
+
+
         }
         public ActionResult Driver()
         {
@@ -221,7 +345,48 @@ namespace banimo.Controllers
             return Content("200");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public  ActionResult setOrderFromForm(transportVM model)
+        {
+            model.payment_status = "0";
+            model.partnerUser = "";
+            //model.sender_addressID = "0";
+            //model.receiver_addressID = "0";
+            
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            model.servername = servername;
+            model.code = code;
+            model.device = device;
+            model.partnerUser = "";
+            //model.receiver_addressID = "0";
+            model.token = Session["token"] as string;//;someObject.ToString();
+            string addr = server + "/transport/setNewTransportation.php";
+            var payload = JsonConvert.SerializeObject(model);
+            webservise wb = new webservise();
+            string Fresult =  wb.doSendData(addr, payload);
+            banimo.ViewModel.responseVM resultmodel = JsonConvert.DeserializeObject<banimo.ViewModel.responseVM>(Fresult);
+            if (resultmodel.status == 200)
+            {
+                List<string> lst = resultmodel.message.Split(';').ToList();
+                string senderAddress = lst[0];
+                string reieverAddress = lst[1];
+                string slat = lst[2].Split('-')[0];
+                string slon = lst[2].Split('-')[1];
+                string rlat = lst[3].Split('-')[0];
+                string rlon = lst[3].Split('-')[1];
+                string id = lst[5];
+                var myHub = GlobalHost.ConnectionManager.GetHubContext<education2.ChatHub>();
+                myHub.Clients.Group(model.vehicle_type.ToString()).newOrder(senderAddress, reieverAddress, slat, slon, rlat, rlon, id);
+                resultmodel.message = "successfull";
+                Fresult = JsonConvert.SerializeObject(resultmodel);
+            }
 
+
+            return RedirectToAction("Index","Main");
+        }
 
         //deliverytype
         public ActionResult deliverType()
@@ -252,9 +417,24 @@ namespace banimo.Controllers
         }
 
         [HttpPost]
-        public ActionResult setNewDeliver(string name, string description, string price, string dimension, string weight)
+        public ActionResult setNewDeliver(string name, string description, string price, string dimension, string weight, HttpPostedFileBase image)
         {
             string device = RandomString();
+
+            string imagename = "";
+            if(image != null)
+            {
+                imagename = RandomString() + ".png";
+                string pathString = "/images/";
+                if (image.ContentLength != 0)
+                {
+                    string savedFileName = Path.Combine(Server.MapPath(pathString), imagename);
+                    image.SaveAs(savedFileName);
+                }
+                    
+               
+                
+            }
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             using (WebClient client = new WebClient())
@@ -268,6 +448,7 @@ namespace banimo.Controllers
                 collection.Add("price", price);
                 collection.Add("dimension", dimension);
                 collection.Add("weight", weight);
+                collection.Add("image", imagename);
                 collection.Add("servername", servername);
 
 

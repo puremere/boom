@@ -26,6 +26,21 @@
                                 @*<label>Filter :</label>*@
                                 @*<a href="#" class="btn btn-dark btn-link filter-clean">Clean All</a>*@
                             </div>
+                            <div class="widget widget-collapsible">
+                                <h3 class="widget-title"><span>Price</span><span class="toggle-btn"></span></h3>
+                                <div class="widget-body" style="display: block;">
+                                    <ul class="filter-items search-ul">
+                                        <li><a href="#">0.00 AED- 100.00 AED</a></li>
+                                        <li><a href="#">100.00 AED- 200.00 AED</a></li>
+                                        <li><a href="#">200.00 AED- 300.00 AED</a></li>
+                                        <li><a href="#">300.00 AED- 500.00 AED</a></li>
+                                        <li><a href="#">500.00+ AED</a></li>
+                                    </ul>
+                                    <form class="price-range">
+                                        <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
+                                    </form>
+                                </div>
+                            </div>
                             @{
                                 if (Model.filtergroup.filters != null)
                                 {
@@ -82,20 +97,20 @@
                             }
 
                             @*<div class="widget widget-collapsible">
-                            <h3 class="widget-title"><label>Price</label><span class="toggle-btn"></span></h3>
-                            <div class="widget-body">
-                                <ul class="filter-items search-ul">
-                                    <li><a href="#">$0.00 - $100.00</a></li>
-                                    <li><a href="#">$100.00 - $200.00</a></li>
-                                    <li><a href="#">$200.00 - $300.00</a></li>
-                                    <li><a href="#">$300.00 - $500.00</a></li>
-                                    <li><a href="#">$500.00+</a></li>
-                                </ul>
-                                <form class="price-range">
-                                    <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
-                                </form>
-                            </div>
-                        </div>*@
+            <h3 class="widget-title"><label>Price</label><span class="toggle-btn"></span></h3>
+            <div class="widget-body">
+                <ul class="filter-items search-ul">
+                    <li><a href="#">$0.00 - $100.00</a></li>
+                    <li><a href="#">$100.00 - $200.00</a></li>
+                    <li><a href="#">$200.00 - $300.00</a></li>
+                    <li><a href="#">$300.00 - $500.00</a></li>
+                    <li><a href="#">$500.00+</a></li>
+                </ul>
+                <form class="price-range">
+                    <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
+                </form>
+            </div>
+        </div>*@
 
 
                         </div>

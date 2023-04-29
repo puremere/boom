@@ -1,5 +1,15 @@
 ﻿<!DOCTYPE HTML>
-<html lang="en" dir="ltr">
+
+
+@{ 
+    string lang = "ltr";
+    if (Session["lang"] as string == "fa")
+    {
+        lang = "rtl";
+    }
+
+}
+<html lang="en" dir="@lang">
 <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 10 Mar 2023 16:17:08 GMT -->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -56,6 +66,12 @@
     <script src="~/Scripts/toastr.js"></script>
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/style.css">
+    @{
+
+        <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
+        <link href="~/Content/font.css" rel="stylesheet" />
+
+    }
 
 </head>
 
@@ -72,7 +88,7 @@
             <div class="header-wrapper m-0">
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
-                        <a href="index.html" data-bs-original-title="" title="">
+                        <a href="dashboard" data-bs-original-title="" title="">
                             <img class="img-fluid main-logo" src="/AdminPanel/Portal/assets/images/logo/1.png" alt="logo">
                             <img class="img-fluid white-logo" src="/AdminPanel/Portal/assets/images/logo/1-white.png" alt="logo">
                         </a>
@@ -177,7 +193,7 @@
                 <div id="sidebarEffect"><canvas width="375" height="667"></canvas></div>
                 <div>
                     <div class="logo-wrapper logo-wrapper-center">
-                        <a href="index.html" data-bs-original-title="" title="">
+                        <a href="dashboard" data-bs-original-title="" title="">
                             <img class="img-fluid for-white" src="/AdminPanel/Portal/assets/images/logo/logo.png" alt="logo">
                         </a>
                         <div class="back-btn">
@@ -188,7 +204,7 @@
                         </div>
                     </div>
                     <div class="logo-icon-wrapper">
-                        <a href="index.html" data-bs-original-title="" title="">
+                        <a href="dashboard" data-bs-original-title="" title="">
                             <img class="img-fluid main-logo main-white" src="/AdminPanel/Portal/assets/images/logo/short.png" alt="logo">
                             <img class="img-fluid main-logo main-dark" src="/AdminPanel/Portal/assets/images/logo/logo.png" alt="logo">
                         </a>
@@ -210,7 +226,7 @@
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav active" href="/Node/dashboard" data-bs-original-title="" title="">
                                                             <i class="ri-home-line"></i>
-                                                            <span>Dashboard</span>
+                                                            <span>@Resources.res.DashbaordPanel</span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
@@ -218,14 +234,14 @@
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/product" data-bs-original-title="" title="">
                                                             <i class="ri-star-line"></i>
-                                                            <span>Vendor Management</span>
+                                                            <span>@Resources.res.vendorManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/orders" data-bs-original-title="" title="">
                                                             <i class="ri-order-play-fill"></i>
-                                                            <span>Order Management</span>
+                                                            <span>@Resources.res.orderManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
@@ -233,71 +249,99 @@
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/Menu" data-bs-original-title="" title="">
                                                             <i class="ri-menu-2-line"></i>
-                                                            <span>Menu Management</span>
+                                                            <span>@Resources.res.menuManagement </span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/MenuNew" data-bs-original-title="" title="">
+                                                            <i class="ri-menu-2-line"></i>
+                                                            <span>@Resources.res.submenu </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/Slide" data-bs-original-title="" title="">
                                                             <i class="ri-picture-in-picture-2-fill"></i>
-                                                            <span>Slide Management</span>
+                                                            <span>@Resources.res.slideManagement </span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/WebSlide" data-bs-original-title="" title="">
+                                                            <i class="ri-picture-in-picture-2-fill"></i>
+                                                            <span>@Resources.res.shopSlideManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/banner" data-bs-original-title="" title="">
                                                             <i class="ri-picture-in-picture-line"></i>
-                                                            <span>Banner Management</span>
+                                                            <span>@Resources.res.bannerManagement </span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/WebBanner" data-bs-original-title="" title="">
+                                                            <i class="ri-picture-in-picture-line"></i>
+                                                            <span>@Resources.res.shopBannerManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/Comment" data-bs-original-title="" title="">
                                                             <i class="ri-text"></i>
-                                                            <span>Comment Management</span>
+                                                            <span>@Resources.res.commentManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/Group" data-bs-original-title="" title="">
                                                             <i class="ri-group-2-fill"></i>
-                                                            <span>Group List Management</span>
+                                                            <span>@Resources.res.groupListManagement </span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/shopProductGroup" data-bs-original-title="" title="">
+                                                            <i class="ri-group-2-fill"></i>
+                                                            <span>@Resources.res.shopGroupList </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/access" data-bs-original-title="" title="">
                                                             <i class="ri-user-2-fill"></i>
-                                                            <span>HR Management</span>
+                                                            <span>@Resources.res.hrManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/Filter" data-bs-original-title="" title="">
                                                             <i class="ri-user-2-fill"></i>
-                                                            <span>Filter Management</span>
+                                                            <span>@Resources.res.filterManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/location" data-bs-original-title="" title="">
                                                             <i class="ri-user-2-fill"></i>
-                                                            <span>location Management</span>
+                                                            <span>@Resources.res.locationManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
-                                                   
+
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/bank" data-bs-original-title="" title="">
                                                             <i class="ri-file-2-fill"></i>
-                                                            <span>Accounting</span>
+                                                            <span>@Resources.res.accounting </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/factor" data-bs-original-title="" title="">
                                                             <i class="ri-star-line"></i>
-                                                            <span>Factor Management</span>
+                                                            <span>@Resources.res.factors  </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
@@ -334,12 +378,12 @@
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
-                    <p>Are you sure you want to log out?</p>
+                    <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.logout </h5>
+                    <p> @Resources.res.sure ?</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                     <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">No</button>
-                        <button id="logoutuser" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Yes</button>
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                        <button id="logoutuser" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
                     </div>
                 </div>
             </div>

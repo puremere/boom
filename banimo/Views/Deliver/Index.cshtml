@@ -1,4 +1,6 @@
-﻿<html lang="en">
+﻿
+@model banimo.ViewModel.firstDeliver
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +18,21 @@
     <link rel="stylesheet" href="/webAsset/deliver/css/index.css">
 </head>
 <body>
+    <div id="mapmodal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <input id="typeLocation" hidden />
+                    <div id="prnt"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="verifyLocation">Verify</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closemodal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="cover-area">
         <nav class="navbar navbar-expand-lg bg-light main-nav">
             <div class="container-fluid">
@@ -51,12 +68,12 @@
                             </a>
                         </li>
 
-                        <li class="nav-item" style="direction:rtl">
+                        @*<li class="nav-item" style="direction:rtl">
                             <a class="nav-link active" aria-current="page" href="#">
                                 <i class="bi bi-box-arrow-in-right"></i>
                                 Login
                             </a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
@@ -87,803 +104,976 @@
             </div>
         </main>
     </section>
+    <input id="lat" hidden />
+    <input id="lng" hidden />
+    <form action="setOrderFromForm" id="deliverForm" method="post">
+        @Html.AntiForgeryToken();
+        <input id="deliverType" name="vehicle_type" hidden />
+        <input id="formprice" name="order_price" hidden />
+        <input id="receiver_lat" name="receiver_lat" hidden />
+        <input id="receiver_lon" name="receiver_lon" hidden />
+        <input id="sender_lat" name="sender_lat" hidden />
+        <input id="sender_lon" name="sender_lon" hidden />
 
-    <section class="px-3 content-section">
-        <div class="container app-area">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
-                    <h1 class="main-title mb-5" id="read-point">
-                        <i class="bi bi-archive mx-2"></i>
-                        Send Packages in Dubai, Abu Dhabi, Sharjah, Ajman, Al Ain
-                    </h1>
 
-                    <!-- Section 1 start-->
-                    <div class="section d-non " id="locations-section">
-                        <div class="input-field mb-3">
-                            <div class="trailing">
-                                <i class="bi bi-geo-alt-fill"></i>
-                            </div>
-                            <div class="form-floating w-100">
-                                <input type="text" id="pickup-loc" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                <label for="floatingInput">Enter Pickup Location</label>
-                            </div>
-                            <div class="trailing trailing-right">
-                                <i class="bi bi-search"></i>
-                            </div>
-                        </div>
+        <section class="px-3 content-section">
+            <div class="container app-area">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                        <h1 class="main-title mb-5" id="read-point">
+                            <i class="bi user mx-2"></i>
+                            Deliver Information
+                        </h1>
 
-                        <div class="input-field mb-3">
-                            <div class="trailing">
-                                <i class="bi bi-geo-alt-fill"></i>
-                            </div>
-                            <div class="form-floating w-100">
-                                <input type="text" id="dropoff-loc" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                <label for="floatingInput">Enter Pickup Location</label>
-                            </div>
-                            <div class="trailing trailing-right">
-                                <i class="bi bi-search"></i>
-                            </div>
-                        </div>
-
-                        <div class="mt-5 alert alert-light text-muted">
-                            <i class="bi bi-shield-exclamation mx-2"></i>
-                            <small>
-                                By continuing you agree to the Terms &amp; Conditions and Privacy
-                            </small>
-                        </div>
-
-                        <div class="row">
-                            <div class="col text-end">
-                                <button class="btn theme-move nexts mt-3 px-5" id="step1">
-                                    NEXT
-                                    <i class="bi bi-arrow-right mx-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 2 start-->
-                    <div class="section d-none" id="select-package-type">
-                        <h4 class="input-title">
-                            <i class="bi bi-box2 mx-2"></i>
-                            What’s inside your package?
-                        </h4>
-
-                        <div class="input-field mb-3">
-                            <div class="trailing">
-                                <i class="bi bi-view-list"></i>
-                            </div>
-                            <div class="form-floating w-100">
-                                <select class="form-select" id="pack-type">
-                                    <option selected="">Open this select menu</option>
-                                    <option value="Documents">Documents</option>
-                                    <option value="Clothes">Clothes</option>
-                                    <option value="Accessories">Accessories</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <label for="floatingSelect">Select Package Type</label>
-                            </div>
-                            <div class="trailing trailing-right">
-                                <!-- <i class="bi bi-search"></i> -->
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col text-end">
-                                <button class="btn theme-move previous mt-3 px-5" id="step2">
-                                    <i class="bi bi-arrow-left mx-1"></i>
-                                    Previous
-
-                                </button>
-                                <button class="btn theme-move nexts mt-3 px-5" id="step2">
-                                    NEXT
-                                    <i class="bi bi-arrow-right mx-1"></i>
-                                </button>
-                               
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 3 start-->
-                    <div class="section d-none" id="shipping-type">
-                        <h4 class="input-title">
-                            <i class="bi bi-truck mx-2"></i>
-                            Your package will fit in:
-                            <input type="hidden" value="2" alt="Van" id="v-type">
-                        </h4>
-
-                        <div class="row mt-4">
-                            <div class="col mb-2">
-                                <div class="del-card VCards mx-2" id="Bike" aria-label="1">
-                                    <img src=" /webAsset/deliver/imgs/bike.png" class="del-card-icon" width="50px" height="50px">
-                                    <div class="del-card-content">
-                                        <h6>Bike</h6>
-                                        <small>
-                                            Max Weight:<b>45GK</b>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="del-card VCards mx-2 card-active" id="Van" aria-label="2">
-                                    <img src=" /webAsset/deliver/imgs/van.png" class="del-card-icon" width="70px" height="70px">
-                                    <div class="del-card-content">
-                                        <h6>Van</h6>
-                                        <small>
-                                            Max Weight: <b>10GK</b>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-calendar2-check-fill mx-2"></i>
-                            When do you want your package to be delivered?
-                            <input type="hidden" value="1" alt="" id="day-type">
-                        </h4>
-
-                        <div class="row mt-4">
-                            <div class="col mb-2">
-                                <div class="del-card DayCards mx-2" id="Same Day" aria-label="1">
-                                    <div class="del-card-content">
-                                        <h6>Same Day</h6>
-                                        <small>40 AED</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="del-card DayCards mx-2 card-active" id="Next Day" aria-label="2">
-                                    <div class="del-card-content">
-                                        <h6>Next Day</h6>
-                                        <small>30 AED</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-telephone-fill mx-2"></i>
-                            Your Mobile Number*
-                        </h4>
-
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-field mb-3">
-                                    <div class="trailing"> +971 </div>
-                                    <div class="form-floating w-100">
-                                        <input type="number" id="phoneNo" class="form-control shadow-none" placeholder="Enter your phone number">
-                                        <label for="floatingInput">50000001</label>
-                                    </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-chat-left-quote-fill mx-2"></i>
-                            Delivery Note
-                        </h4>
-
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-blockquote-right mx-2"></i>
-                                    </div>
-                                    <textarea class="note" id="d-note" placeholder="Any note..."></textarea>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col text-end">
-                                <button class="btn theme-move previous mt-3 px-5" id="step3">
-                                    <i class="bi bi-arrow-left mx-1"></i>
-                                    Previous
-
-                                </button>
-                                <button class="btn theme-move nexts mt-3 px-5" id="step3">
-                                    NEXT
-                                    <i class="bi bi-arrow-right mx-1"></i>
-                                </button>
-                              
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 4 start-->
-                    <div class="section d-none" id="contact-info">
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-check2-square mx-2"></i>
-                            Few More Details To Confirm Your Booking
-                        </h4>
-
-                        <div class="alert alert-sm alert-warning rounded mb-2 d-flex mt-4">
-                            <div class="mx-3">
-                                <h1 class="d-inline mb-0">
-                                    <i class="bi bi-geo-fill"></i>
+                        <!-- Section 1 start-->
+                        <style>
+                            .infoSection .col-lg-6 {
+                                padding: 10px;
+                            }
+                        </style>
+                        <div class="section d-non " id="locations-section">
+                            <div class="row">
+                                <h1 class="main-title mb-12" id="read-point">
+                                    <i class="bi user mx-2"></i>
+                                    sender Information
                                 </h1>
                             </div>
-                            <div>
-                                Your Pickup Location Is : <br>
-                                <b>Building No 20, Floor 4th, Office 1520</b>
-                            </div>
-                        </div>
+                            <div class="infoSection" style="display:flex; flex-wrap:wrap">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="sender_fullname" type="text" id="pickup-loc" class="form-control shadow-none sender_fullname" placeholder=" Sender Fullname">
+                                                    <label for="floatingInput"> Fullname</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-badge "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input required name="sender_phone" type="text" id="pickup-loc" class="form-control shadow-none sender_phone" placeholder=" 00971">
+                                                    <label for="floatingInput">  Phone Number</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    @Html.DropDownList("sender_state", new SelectList(Model.locations.Where(x => x.type == "State"), "title", "title"), "Choose State", new { @class = "sender_state form-class", style = "padding: 1rem 0.75rem;" })
+                                                    @*<input type="text" id="pickup-loc" class="form-control shadow-none" placeholder=" Sender Address">*@
 
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
                                             </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="pickup-address" class="form-control shadow-none" placeholder="Enter Pickup Address">
-                                                <label for="floatingInput">
-                                                    Enter/ Flat Floor, Building Name
-                                                </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    @Html.DropDownList("sender_city", new SelectList(Model.locations.Where(x => x.type == "City"), "title", "title"), "Choose City", new { @class = "sender_city form-class", style = "padding: 1rem 0.75rem;" })
+                                                    @*<input type="text" id="pickup-loc" class="form-control shadow-none" placeholder=" Sender Address">*@
+
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
                                             </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="sender_address" type="text" id="" class="form-control shadow-none sender_address" placeholder=" Receiver Address">
+                                                    <label for="floatingInput">   Address</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="sender_building" type="text" id="pickup-address" class="form-control shadow-none sender_building" placeholder="Enter Receiver Building Name">
+                                                    <label for="floatingInput">
+                                                        Building Name
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="sender_floor" type="text" id="pickup-address" class="form-control shadow-none sender_floor" placeholder="Enter Receiver Floor Number">
+                                                    <label for="floatingInput">
+                                                        Floor Number
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="sender_number" type="text" id="pickup-address" class="form-control shadow-none sender_number" placeholder="Enter Receiver House Number">
+                                                    <label for="floatingInput">
+                                                        House Number
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div typetosend="sender" class="col showMap">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing ">
+                                                    <i class="bi bi-geo-alt-fill"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input  type="text" id="senderLocation" class="form-control shadow-none" placeholder=" Sender Address">
+                                                    <label for="floatingInput"> Pickup Location</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-question-circle"></i>
-                                            </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="reching" class="form-control shadow-none" placeholder=" Enter/ How To Reach">
-                                                <label for="floatingInput">
-                                                    Enter/ How To Reach?
-                                                </label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
+
+
+
+
+
+
+
+                            <div class="mt-5 alert alert-light text-muted">
+                                <i class="bi bi-shield-exclamation mx-2"></i>
+                                <small>
+                                    By continuing you agree to the Terms &amp; Conditions and Privacy
+                                </small>
+                            </div>
+
+                            <div class="row">
+                                <div class="col text-end">
+                                    <div class="btn theme-move nexts mt-3 px-5" id="step1">
+                                        NEXT
+                                        <i class="bi bi-arrow-right mx-1"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-check2-square mx-2"></i>
-                            Please Select The Date &amp; Time
-                        </h4>
-
-                        <div class="row mt-4">
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-calendar-date"></i>
-                                    </div>
-                                    <div class="form-floating w-100">
-                                        <input type="date" class="form-control shadow-none" id="date-input">
-                                        <label for="floatingInput">Date at</label>
-                                    </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-alarm"></i>
-                                    </div>
-                                    <div class="form-floating w-100">
-                                        <input type="time" id="pickup-time-from" class="form-control shadow-none time-input" value="" min="09:00" max="18:00">
-                                        <label for="floatingInput">Time Between</label>
-                                    </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-alarm"></i>
-                                    </div>
-                                    <div class="form-floating w-100">
-                                        <input type="time" id="pickup-time-to" class="form-control shadow-none time-input" min="09:00" max="18:00">
-                                        <label for="floatingInput">To</label>
-                                    </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-person-lines-fill mx-2"></i>
-                            Contact At The Time Of Pickeup
-                        </h4>
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-person-lines-fill"></i>
-                                            </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="sender-name" class="form-control shadow-none" placeholder="Enter Sender Name">
-                                                <label for="floatingInput">Your name is</label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                +971
-                                            </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="sender-phone" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                                <label for="floatingInput">50000001</label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-sm alert-primary rounded mb-2 d-flex mt-4">
-                            <div class="mx-3">
-                                <h1 class="d-inline mb-0">
-                                    <i class="bi bi-geo-fill"></i>
+                        <!-- Section 2 start-->
+                        <div class="section d-none" id="select-package-type">
+                            <div class="row">
+                                <h1 class="main-title mb-12" id="read-point">
+                                    <i class="bi user mx-2"></i>
+                                    Receiver Information
                                 </h1>
                             </div>
-                            <div>
-                                Dropoff Location Is : <br>
-                                <b>Building No 20, Floor 4th, Office 1520</b>
+                            <div class="infoSection" style="display:flex; flex-wrap:wrap">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_fullname" type="text" id="pickup-loc" class="form-control shadow-none receiver_fullname" placeholder=" Sender Fullname">
+                                                    <label for="floatingInput">  Fullname</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-badge "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_phone" type="text" id="pickup-loc" class="form-control shadow-none receiver_phone" placeholder=" 00971">
+                                                    <label for="floatingInput">  Phone Number</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    @Html.DropDownList("receiver_state", new SelectList(Model.locations.Where(x => x.type == "State"), "title", "title"), "Choose State ", new { @class = "form-class receiver_state", style = "padding: 1rem 0.75rem;" })
+                                                    @*<input type="text" id="pickup-loc" class="form-control shadow-none" placeholder=" Sender Address">*@
+
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    @Html.DropDownList("receiver_city", new SelectList(Model.locations.Where(x => x.type == "City"), "title", "title"), "Choose City", new { @class = "form-class receiver_city", style = "padding: 1rem 0.75rem;" })
+                                                    @*<input type="text" id="pickup-loc" class="form-control shadow-none" placeholder=" Sender Address">*@
+
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi  bi-person-lines-fill "></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_address" type="text" id="" class="form-control shadow-none receiver_address" placeholder=" Receiver Address">
+                                                    <label for="floatingInput">  Address</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_building" type="text" id="pickup-address" class="form-control shadow-none receiver_building" placeholder="Enter Receiver Building Name">
+                                                    <label for="floatingInput">
+                                                        Building Name
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_floor" type="text" id="pickup-address" class="form-control shadow-none receiver_floor" placeholder="Enter Receiver Floor Number">
+                                                    <label for="floatingInput">
+                                                        Floor Number
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing">
+                                                    <i class="bi bi-building"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input name="receiver_number" type="text" id="pickup-address" class="form-control shadow-none receiver_number" placeholder="Enter Receiver House Number">
+                                                    <label for="floatingInput">
+                                                        House Number
+                                                    </label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div typetosend="Receiver" class="col showMap">
+                                            <div class="input-field mb-3">
+                                                <div class="trailing ">
+                                                    <i class="bi bi-geo-alt-fill"></i>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input  type="text" id="ReceiverLocation" class="form-control shadow-none" placeholder=" Sender Address">
+                                                    <label for="floatingInput"> Pickup Location</label>
+                                                </div>
+                                                <div class="trailing trailing-right">
+                                                    <i class="bi bi-search"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col text-end">
+                                    <div class="btn theme-move previous mt-3 px-5" id="step2">
+                                        <i class="bi bi-arrow-left mx-1"></i>
+                                        Previous
+
+                                    </div>
+                                    <div class="btn theme-move nexts mt-3 px-5" id="step2">
+                                        NEXT
+                                        <i class="bi bi-arrow-right mx-1"></i>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-building"></i>
+                        <!-- Section 3 start-->
+                        <div class="section d-none" id="shipping-type">
+                            <h4 class="input-title">
+                                <i class="bi bi-truck mx-2"></i>
+                                Your package will fit in:
+                                <input type="hidden" value="2" alt="Van" id="v-type">
+                            </h4>
+                            <div style="display:flex ; flex-wrap:wrap">
+                                @foreach (var item in Model.delivertypeList)
+                                {
+                                    <div class="col-lg-6 dtype" style="padding:15px">
+                                        <div class="col mb-2">
+                                            <div class="del-card VCards mx-2" id="Bike" aria-label="1">
+                                                <img src="~/images/@item.image" class="del-card-icon" width="50px" height="50px">
+                                                <div class="del-card-content">
+                                                    <h6>@item.name</h6>
+
+                                                </div>
+
                                             </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="r-address" class="form-control shadow-none" placeholder="Enter reciver address">
-                                                <label for="floatingInput">
-                                                    Enter/ Flat Floor, Building Name
-                                                </label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
+                                        </div>
+                                        <p class="dimen" style="display:none">@item.dimension</p>
+                                        <p class="weight" style="display:none">@item.weight</p>
+                                        <p class="price" style="display:none">@item.price</p>
+                                        <p class="ID" style="display:none">@item.ID</p>
+
+                                    </div>
+
+
+
+                                }
+
+                            </div>
+
+
+
+                            @*<h4 class="input-title mt-4">
+                                <i class="bi bi-telephone-fill mx-2"></i>
+                                Your Mobile Number*
+                            </h4>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-field mb-3">
+                                        <div class="trailing"> +971 </div>
+                                        <div class="form-floating w-100">
+                                            <input type="number" id="phoneNo" class="form-control shadow-none" placeholder="Enter your phone number">
+                                            <label for="floatingInput">50000001</label>
+                                        </div>
+                                        <div class="trailing trailing-right">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+
+                            <h4 class="input-title mt-4">
+                                <i class="bi bi-chat-left-quote-fill mx-2"></i>
+                                Delivery Note
+                            </h4>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-field mb-3">
+                                        <div class="trailing">
+                                            <i class="bi bi-blockquote-right mx-2"></i>
+                                        </div>
+                                        <textarea name="order_note" class="note order_note" id="d-note" placeholder="Any note..."></textarea>
+                                        <div class="trailing trailing-right">
+                                            <!-- <i class="bi bi-search"></i> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-question-circle"></i>
-                                            </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="r-reching" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                                <label for="floatingInput">
-                                                    Enter/ How To Reach?
-                                                </label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
+
+                            <div class="row">
+                                <div class="col text-end">
+                                    <div class="btn theme-move previous mt-3 px-5" id="step3">
+                                        <i class="bi bi-arrow-left mx-1"></i>
+                                        Previous
+
                                     </div>
+                                    <div class="btn theme-move nexts mt-3 px-5 " id="finalizeOrder">
+                                        PROCEED TO PAYMENT
+                                        <i class="bi bi-arrow-right mx-1"></i>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
 
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-person-lines-fill mx-2"></i>
-                            Contact At The Time Dropoff
-                        </h4>
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing">
-                                                <i class="bi bi-person-lines-fill"></i>
-                                            </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="r-name" class="form-control shadow-none" placeholder="Enter">
-                                                <label for="floatingInput">Reciver Name</label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-field mb-3">
-                                            <div class="trailing"> +971 </div>
-                                            <div class="form-floating w-100">
-                                                <input type="text" id="r-phone" class="form-control shadow-none" placeholder="Enter reciver phone">
-                                                <label for="floatingInput">50000001</label>
-                                            </div>
-                                            <div class="trailing trailing-right">
-                                                <!-- <i class="bi bi-search"></i> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Section 4 start-->
+                        <div class="section d-none" id="contact-info">
+
+
                         </div>
 
-                        <div class="row">
-                            <div class="col text-end">
-                                <button class="btn theme-move previous mt-3 px-5" id="step4">
-                                    <i class="bi bi-arrow-left mx-1"></i>
-                                    Previous
 
-                                </button>
-                                <button class="btn theme-move nexts mt-3 px-5" id="step4">
-                                    NEXT
-                                    <i class="bi bi-arrow-right mx-1"></i>
-                                </button>
+                        <!-- Section 5 start-->
+                        <div class="section d-none" id="account-info">
 
+
+                            <div class="row">
+                                <div class="col text-center px-4">
+                                    <div class="btn theme-move previous mt-3 px-5" id="step5">
+                                        <i class="fa fa-arrow-left"></i>
+                                        Previous
+
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
 
-
-                    <!-- Section 5 start-->
-                    <div class="section d-none" id="account-info">
-                        <h4 class="input-title mt-4">
-                            <i class="bi bi-person-badge"></i>
-                            Your Information
-                        </h4>
-                        <div class="alert alert-light border">
-                            <small class="helper-text text-muted">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-3 border-start">
+                        <section class="section d-non" id="info-sec">
+                            <h4 class="main-title">
                                 <i class="bi bi-info-circle mx-2"></i>
-                                Please Provide your Details To Contenu The Booking.
-                            </small>
-                        </div>
+                                A few things we want you to know
+                            </h4>
+                            <blockquote class="px-4">
+                                <div class="justonepage">
+                                    <h6 class="sub-title">Package Weight</h6>
+                                    <p id="packageDescc">
+
+                                    </p>
+                                </div>
+                                <div class="justonepage">
+                                    <h6 class="sub-title">Dimension</h6>
+                                    <p id="dimensionDesc">
+
+                                    </p>
+                                </div>
+
+                                <h6 class="sub-title">Illegal Goods</h6>
+                                <p>
+                                    Shipment contents should not contain prohibited items.
+                                </p>
+
+                                <h6 class="sub-title">Packaging</h6>
+                                <p>
+                                    Contents should be safely packed or sealed for transportation.
+                                    <a href="#">Please check the complete guidelines here.</a>
+                                </p>
+                            </blockquote>
+                        </section>
+
+                        <section class="section d-none" id="summary-sec">
 
 
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-chat-square-text mx-2"></i>
-                                    </div>
-                                    <div class="form-floating w-100">
-                                        <input type="text" id="s-name" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                        <label for="floatingInput">
-                                            Your Name Is :
-                                        </label>
-                                    </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
+                            <div class="tiket-container">
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center ">
+                                        <h2 class=" mb-5 ">
+                                            <i class="bi bi-info-circle mx-2"></i>
+                                            Order Summary
+                                        </h2>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing"> +971 </div>
-                                    <div class="form-floating w-100">
-                                        <input type="text" class="form-control shadow-none" placeholder="Enter Pickup Location" id="ur-phone">
-                                        <label for="floatingInput">
-                                            Your Phone Number
-                                        </label>
+
+                                <div class="">
+                                    <h4 class="tiket-title mt-0">
+                                        Pickup Location
+                                    </h4>
+                                    <p class="info-text "></p>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <p class="info-text sender-name"></p>
                                     </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
+                                    <div class="col">
+                                        <p class="info-text sender-phone">
+                                            +9715000000
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row mt-4">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-envelope-fill mx-2"></i>
+                                <div class="row mt-1">
+                                    <div class="col">
+                                        <p class="info-text sender-addr "></p>
                                     </div>
-                                    <div class="form-floating w-100">
-                                        <input type="text" id="email" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                        <label for="floatingInput">
-                                            Your Email Address :
-                                        </label>
+
+                                </div>
+
+                                <div class="divider mt-3 mb-3"></div>
+
+                                <div class="">
+                                    <h4 class="tiket-title mt-0">
+                                        Drop Off Location
+                                    </h4>
+                                    <p class="info-text dropoff-loc"></p>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <p class="info-text receiver-name"></p>
                                     </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
+                                    <div class="col">
+                                        <p class="info-text reciever-phone"></p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row p-3">
-                            <div class="col d-flex justify-content-around">
-                                <div class="form-check">
-                                    <input class="form-check-input acc-type" type="radio" name="acc-type" id="create-account" checked="">
-                                    <label class="form-check-label mx-2" for="create-account">
-                                        Create My Account
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input acc-type" type="radio" name="acc-type" id="guest-account">
-                                    <label class="form-check-label mx-2" for="guest-account">
-                                        Contenu as Guest
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="input-field mb-3">
-                                    <div class="trailing">
-                                        <i class="bi bi-lock-fill mx-2"></i>
+                                <div class="row mt-1">
+                                    <div class="col">
+                                        <p class="info-text reciever-addr"></p>
                                     </div>
-                                    <div class="form-floating w-100">
-                                        <input type="password" id="password" class="form-control shadow-none" placeholder="Enter Pickup Location">
-                                        <label for="floatingInput">
-                                            Set a Password
-                                        </label>
+
+                                </div>
+
+                                <div class="divider mt-3 mb-3"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="tiket-title mt-0">
+                                            Vechicle Type
+                                        </h4>
+                                        <p class="info-text vhtype"></p>
                                     </div>
-                                    <div class="trailing trailing-right">
-                                        <!-- <i class="bi bi-search"></i> -->
+
+                                </div>
+
+
+                                <div class="divider mt-3 mb-3"></div>
+
+
+                                <div class="divider mt-3 mb-3"></div>
+                                @*<div class="row">
+                                    <div class="col d-flex justify-content-between">
+                                        <h5 class="info-title d-inline">
+                                            Distance
+                                        </h5>
+
+                                        <h6 class="info-title d-inline">
+                                            20 km
+                                        </h6>
+                                    </div>
+                                </div>*@
+
+                                <div class="row mt-2">
+                                    <div class="col d-flex justify-content-between">
+                                        <h6 class="info-title d-inline">
+                                            Delivery Charge
+                                        </h6>
+
+                                        <h6 class="info-title d-inline">
+                                            <span id="orderprice"></span> AED
+                                        </h6>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col text-center px-4">
-                                <button class="btn theme-move previous mt-3 px-5" id="step5">
-                                    <i class="fa fa-arrow-left"></i>
-                                    Previous
+                                <div class="row mt-2">
+                                    <div class="col d-flex justify-content-between">
+                                        <h6 class="info-title d-inline">
+                                            VAT(5%)
+                                        </h6>
 
-                                </button>
-                                <button class="btn theme-move nexts mt-3 px-5 py-3 w-100" id="step5">
-                                    PROCEED TO PAYMENT
+                                        <h6 class="info-title d-inline">
+                                            <span id="vatprice"></span> AED
+                                        </h6>
+                                    </div>
+                                </div>
+
+                                <div class="divider-solid mt-3 mb-3"></div>
+                                <div class="row mt-2">
+                                    <div class="col d-flex justify-content-between">
+                                        <h4 class="info-title d-inline">
+                                            To Pay
+                                        </h4>
+
+                                        <h4 class="info-title d-inline">
+                                            <span id="totalprice"></span> AED
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                <button  class="btn theme-move nexts mt-3 px-5 " id="verigyPayment">
+                                    VERIFY  PAYMENT
                                     <i class="bi bi-arrow-right mx-1"></i>
                                 </button>
 
                             </div>
-                        </div>
+                        </section>
                     </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-3 border-start">
-                    <section class="section d-non" id="info-sec">
-                        <h4 class="main-title">
-                            <i class="bi bi-info-circle mx-2"></i>
-                            A few things we want you to know
-                        </h4>
-                        <blockquote class="px-4">
-                            <h6 class="sub-title">Package Weight</h6>
-                            <p>
-                                Weight limit/capacity - maximum 10kg
-                                <br>
-                                AED 2 per Extra kg with weight capped at 20kg
-                            </p>
-                            <h6 class="sub-title">Dimension</h6>
-                            <p>
-                                Maximum size/dimensions of box - 40 X 40 X 40 cm If the limit
-                                is exceeded, additional charges will apply Shipments exceeding
-                                80 x 80 x 80 cms size will be cancelled for pick-up
-                            </p>
-                            <h6 class="sub-title">Illegal Goods</h6>
-                            <p>
-                                Shipment contents should not contain prohibited items.
-                            </p>
-
-                            <h6 class="sub-title">Packaging</h6>
-                            <p>
-                                Contents should be safely packed or sealed for transportation.
-                                <a href="#">Please check the complete guidelines here.</a>
-                            </p>
-                        </blockquote>
-                    </section>
-
-                    <section class="section d-none" id="summary-sec">
-
-
-                        <div class="tiket-container">
-                            <div class="row">
-                                <div class="col d-flex justify-content-center ">
-                                    <h2 class=" mb-5 ">
-                                        <i class="bi bi-info-circle mx-2"></i>
-                                        Order Summary
-                                    </h2>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <h4 class="tiket-title mt-0">
-                                    Pickup Location
-                                </h4>
-                                <p class="info-text pickup-loc"></p>
-                            </div>
-
-                            <div class="row mt-3">
-                                <div class="col">
-                                    <p class="info-text sender-name"></p>
-                                </div>
-                                <div class="col">
-                                    <p class="info-text sender-phone">
-                                        +9715000000
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="row mt-1">
-                                <div class="col">
-                                    <p class="info-text sender-addr "></p>
-                                </div>
-                                <div class="col">
-                                    <p class="info-text reach-by">
-                                        Reach By ....
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="divider mt-3 mb-3"></div>
-
-                            <div class="">
-                                <h4 class="tiket-title mt-0">
-                                    Drop Off Location
-                                </h4>
-                                <p class="info-text dropoff-loc"></p>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col">
-                                    <p class="info-text reciver-name"></p>
-                                </div>
-                                <div class="col">
-                                    <p class="info-text reciver-phone"></p>
-                                </div>
-                            </div>
-
-                            <div class="row mt-1">
-                                <div class="col">
-                                    <p class="info-text reciver-address"></p>
-                                </div>
-                                <div class="col">
-                                    <p class="info-text rec-reaching"></p>
-                                </div>
-                            </div>
-
-                            <div class="divider mt-3 mb-3"></div>
-
-                            <div class="row">
-                                <div class="col">
-                                    <h4 class="tiket-title mt-0">
-                                        Vechicle Type
-                                    </h4>
-                                    <p class="info-text v-type">Van</p>
-                                </div>
-                                <div class="col">
-                                    <h4 class="tiket-title mt-0">
-                                        Booking Type
-                                    </h4>
-                                    <p class="info-text booking-type"></p>
-                                </div>
-                            </div>
-
-
-                            <div class="divider mt-3 mb-3"></div>
-                            <div class="">
-                                <h4 class="tiket-title mt-0">
-                                    Pickup Date and Slot
-                                </h4>
-                                <p class="info-text pickup-full-date">undefined, 00:00 - 00:00</p>
-                            </div>
-
-                            <div class="divider mt-3 mb-3"></div>
-                            <div class="">
-                                <h4 class="tiket-title mt-0">
-                                    Drop-off Date and Slot
-                                </h4>
-                                <p class="info-text dropoff-full-date">
-                                    Auto Detect From Admin
-                                </p>
-                            </div>
-
-                            <div class="divider mt-3 mb-3"></div>
-                            <div class="row">
-                                <div class="col d-flex justify-content-between">
-                                    <h5 class="info-title d-inline">
-                                        Distance
-                                    </h5>
-
-                                    <h6 class="info-title d-inline">
-                                        20 km
-                                    </h6>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <div class="col d-flex justify-content-between">
-                                    <h6 class="info-title d-inline">
-                                        Delivery Charge
-                                    </h6>
-
-                                    <h6 class="info-title d-inline">
-                                        33 AED
-                                    </h6>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <div class="col d-flex justify-content-between">
-                                    <h6 class="info-title d-inline">
-                                        VAT(5%)
-                                    </h6>
-
-                                    <h6 class="info-title d-inline">
-                                        1.56 AED
-                                    </h6>
-                                </div>
-                            </div>
-
-                            <div class="divider-solid mt-3 mb-3"></div>
-                            <div class="row mt-2">
-                                <div class="col d-flex justify-content-between">
-                                    <h4 class="info-title d-inline">
-                                        To Pay
-                                    </h4>
-
-                                    <h4 class="info-title d-inline">
-                                        34.65 AED
-                                    </h4>
-                                </div>
-                            </div>
-
-                        </div>
-                    </section>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </form>
+  
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="/webAsset/deliver/js/index.js"></script>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin="" />
+    <script type="text/javascript">
+        var mymap;
+        var theMarker = {};
+
+
+        function showLocation(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+            }).addTo(mymap);
+            mymap.panTo(new L.LatLng(lat, lon));
+
+
+
+            mymap.on('click', function (e) {
+
+                lat = e.latlng.lat;
+                lon = e.latlng.lng;
+
+                console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+                //Clear existing marker,
+
+                if (theMarker != undefined) {
+                    mymap.removeLayer(theMarker);
+                };
+
+                //Add a marker to show where you clicked.
+                theMarker = L.marker([lat, lon]).addTo(mymap);
+                $("#lat").val(lat);
+                $("#lng").val(lon);
+            });
+        }
+        function errorHandler(err) {
+
+
+
+            mymap = L.map('mapid', { attributionControl: false }).setView([51.505, -0.09], 13);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+            }).addTo(mymap);
+            mymap.panTo(new L.LatLng('35.7442005749', '51.473131743990'));
+
+
+            mymap.on('click', function (e) {
+
+                lat = e.latlng.lat;
+                lon = e.latlng.lng;
+
+                console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+                //Clear existing marker,
+
+                if (theMarker != undefined) {
+                    mymap.removeLayer(theMarker);
+                };
+
+                //Add a marker to show where you clicked.
+                theMarker = L.marker([lat, lon]).addTo(mymap);
+                $("#lat").val(lat);
+                $("#lng").val(lon);
+            });
+
+
+
+            if (err.code == 1) {
+                //alert("Error: Access is denied!");
+            } else if (err.code == 2) {
+                //alert("Error: Position is unavailable!");
+            }
+
+
+
+
+
+        }
+        function getLocation() {
+            if (navigator.geolocation) {
+                // timeout at 60000 milliseconds (60 seconds)
+                var options = { timeout: 3000 };
+                navigator.geolocation.getCurrentPosition
+                    (showLocation, errorHandler, options);
+
+
+            } else {
+                alert("Sorry, browser does not support geolocation!");
+            }
+        }
+        $("#mapid").height("250px");
+
+
+    </script>
+    <script>
+        $(".showMap").click(function () {
+
+            $("#typeLocation").val($(this).attr('typetosend'));
+            $("#mapmodal").modal('toggle');
+            if ($('#mapid').length) {
+                $('#mapid').remove();
+            }
+            var el = "<div> <div id = 'mapid' style = 'margin-top:20px; width:100% ; height:300px'></div></div >"
+            $("#prnt").append(el)
+
+            getLocation();
+            //document.getElementById('mapid').scrollIntoView();
+        })
+        $("#verifyLocation").click(function () {
+
+            var type = $("#typeLocation").val();
+            if (type == "sender") {
+                $("#sender_lat").val($("#lat").val())
+                $("#sender_lon").val($("#lng").val())
+                $("#senderLocation").val($("#lat").val() + ":" + $("#lng").val());
+            }
+            else {
+                $("#receiver_lat").val($("#lat").val())
+                $("#receiver_lon").val($("#lng").val())
+                $("#ReceiverLocation").val($("#lat").val() + ":" + $("#lng").val());
+            }
+            $("#mapmodal").modal('toggle');
+        })
+        $("#closemodal").click(function () {
+            $("#mapmodal").modal('toggle');
+        })
+
+        $("#finalizeOrder").click(function () {
+            if ('@Session["LogedInUser"]' != null) {
+                    $("#info-sec").addClass('d-none');
+                $("#summary-sec").removeClass('d-none');
+
+                $(".sender-name").text($(".sender_fullname").val());
+                $(".sender-phone").text($(".sender_phone").val());
+                $(".sender-addr").text($(".senderAddress").val() + " - " + $(".senderBuilding").val() + " - " + $(".senderFloor").val() + " - "+ $(".senderNumber").val());
+
+                $(".receiver-name").text($(".receiver_fullname").val());
+                $(".reciever-phone").text($(".receiverPhone").val());
+                $(".reciever-addr").text($(".receiver_address").val() + " - " + $(".receiverBuilding").val() + " - " + $(".receiverFloor").val() + " - " + $(".reveiverNumber").val());
+
+
+                    goReadPoint();
+                }
+                else {
+                    window.location.href = "/Home/Login";
+            };
+
+        })
+        //$("#verigyPayment").click(function () {
+        //    var sender_fullname = $(".sender_fullname").text().trim();
+        //    var sender_phone = $(".sender_phone").text().trim();
+        //    var sender_address = $(".sender_address").text().trim();
+        //    var sender_building = $(".sender_building").text().trim();
+        //    var sender_floor = $(".sender_floor").text().trim();
+        //    var sender_number = $(".sender_number").text().trim();
+        //    var sender_lat = $("#sender_lat").val().trim();
+        //    var sender_lng = $("#sender_lon").val().trim();
+
+        //    var receiver_fullname = $(".receiver_fullname").text().trim();
+        //    var receiver_phone = $(".receiver_phone").text().trim();
+        //    var receiver_address = $(".receiver_address").text().trim();
+        //    var receiver_building = $(".receiver_building").text().trim();
+        //    var receiver_floor = $(".receiver_floor").text().trim();
+        //    var receiver_number = $(".receiver_number").text().trim();
+        //    var receiver_lat = $("#receiver_lat").val().trim();
+        //    var receiver_lng = $("#receiver_lon").val().trim();
+
+        //    var order_note = $(".order_note").val();
+        //    var order_price = $("#formprice").val();
+        //    var vehicle_type = $("#vehicle_type").val();
+
+        //    $.post(
+        //        'setOrderFromForm',
+        //        {
+        //            sender_fullname: sender_fullname,
+        //            sender_phone: sender_phone,
+        //            sender_address: sender_address,
+        //            sender_building: sender_building,
+        //            sender_floor: sender_floor,
+        //            sender_number: sender_number,
+        //            sender_lat: sender_lat,
+        //            sender_lng: sender_lng,
+        //            receiver_fullname: receiver_fullname,
+        //            receiver_phone: receiver_phone,
+        //            receiver_address: receiver_address,
+        //            receiver_building: receiver_building,
+        //            receiver_floor: receiver_floor,
+        //            receiver_number: receiver_number,
+        //            receiver_lat: receiver_lat,
+        //            receiver_lng: receiver_lng,
+        //        },
+        //        function (response) {
+        //        alert("success");
+        //        //$("#mypar").html(response.amount);
+        //        }
+        //    );
+
+
+
+        //})
+        $(".dtype").click(function () {
+
+            var dimetion = $(this).find('p.dimen').text();
+            var weight = $(this).find('p.weight').text();
+            var price = $(this).find('p.price').text();
+            var id = $(this).find('p.ID').text();
+            var vat = parseFloat(price) * 0.05;
+
+            var vatprice = parseFloat(price) * 1.05;
+
+            $(".justonepage").show();
+            $("#packageDescc").text(dimetion);
+            $("#dimensionDesc").text(weight);
+            $("#orderprice").text(price);
+            $("#vatprice").text(vat);
+            $("#totalprice").text(vatprice);
+            $("#formprice").val(vatprice);
+            $("#deliverType").val(id);
+            $(".vhtype").text($(this).find('h6').text());
+        })
+        $(".justonepage").hide();
+    </script>
+
     <style>
-        .h-100{
-            height:unset !important;
+        .h-100 {
+            height: unset !important;
         }
     </style>
 </body>

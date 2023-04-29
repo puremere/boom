@@ -14,6 +14,7 @@ namespace banimo.ViewModel
         public string image { get; set; }
         public string catID { get; set; }
         public string brandID { get; set; }
+        public string parentID { get; set; }
         public string title { get; set; }
         [AllowHtml]
         public string description { get; set; }

@@ -5,6 +5,31 @@
 
 }
 
+@section scripts{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#partnerItem').select2();
+        });
+    </script>
+    @if (Session["lang"] as string == "fa")
+    {
+        <link href="~/Content/persian-datepicker.css" rel="stylesheet" />
+        <script src="~/Scripts/persian-date.js"></script>
+        <script src="~/Scripts/persian-datepicker.js"></script>
+        <script>
+            $(".projectDate3").pDatepicker({
+                observer: true,
+                format: 'YYYY/MM/DD',
+                altField: '.PDabserver3',
+                autoClose: true
+            });
+        </script>
+    }
+
+}
+
 <style>
 
     .nav-tabs {
@@ -43,7 +68,7 @@
             <div class="modal-body">
                 <div style="display:flex">
                     <div style="margin-left:20px; width:100%">
-                        <p>پروژه :</p>
+                        <p>@Resources.res.project   :</p>
                         <select id="nodeIDAddParentM" class="form-control">
 
 
@@ -55,8 +80,8 @@
                         </select>
                     </div>
                     <div style="margin-left:20px; width:100%">
-                        <p>طرف حساب</p>
-                        @Html.DropDownList("partnerItemMM", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "partnerItemMM" })
+                        <p>@Resources.res.transactionSide   </p>
+                        @Html.DropDownList("partnerItemMM", new SelectList(Model.TarafList, "ID", "name"), @Resources.res.chooseTransactionSide, new { @class = "form-control", id = "partnerItemMM" })
 
                     </div>
                     @*<div style="margin-left:20px; width:100%">
@@ -65,7 +90,7 @@
 
                         </div>*@
                     <div style="margin-left:20px; width:100%">
-                        <p>انبار</p>
+                        <p> @Resources.res.anbar   </p>
                         @Html.DropDownList("anabrItemM", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "anabrItemM" })
 
                     </div>
@@ -75,17 +100,17 @@
                 <div style="display:flex; margin-top:25px">
 
                     <div style="margin-left:20px; width:100%">
-                        <p> تاریخ :</p>
+                        <p>@Resources.res.date   :</p>
                         <input type="text" class="form-control projectDate3M inputfield" />
                         <input class="PDabserver3M" style="display:none" />
                     </div>
 
                     <div style="margin-left:20px; width:100%">
-                        <p>توضیحات</p>
+                        <p>@Resources.res.description</p>
                         <input id="recieverM" class="form-control" />
                     </div>
                     <div style="margin-left:20px; width:100%">
-                        <p>شماره فاکتور</p>
+                        <p>@Resources.res.factorNum    </p>
                         <input id="factorNumberM" class="form-control" />
                     </div>
 
@@ -97,8 +122,8 @@
 
             </div>
             <div class="modal-footer">
-                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="confirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="confirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
 
             </div>
             <script>
@@ -156,7 +181,7 @@
             <div class="modal-body">
                 <div style="display:flex">
                     <div style="margin-left:20px; width:100%">
-                        <p>پروژه :</p>
+                        <p>@Resources.res.project :</p>
                         <select id="FnodeIDAddParentM" class="form-control">
 
 
@@ -178,7 +203,7 @@
 
                         </div>*@
                     <div style="margin-left:20px; width:100%">
-                        <p>انبار</p>
+                        <p>@Resources.res.anbar</p>
                         @Html.DropDownList("FanabrItemM", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "FanabrItemM" })
 
                     </div>
@@ -188,17 +213,17 @@
                 <div style="display:flex; margin-top:25px">
 
                     <div style="margin-left:20px; width:100%">
-                        <p> تاریخ :</p>
+                        <p> @Resources.res.date :</p>
                         <input type="text" class="form-control FprojectDate3M inputfield" />
                         <input class="FPDabserver3M" style="display:none" />
                     </div>
 
                     <div style="margin-left:20px; width:100%">
-                        <p>توضیحات</p>
+                        <p>@Resources.res.description</p>
                         <input id="FrecieverM" class="form-control" />
                     </div>
                     <div style="margin-left:20px; width:100%">
-                        <p>شماره فاکتور</p>
+                        <p>@Resources.res.factorNum</p>
                         <input id="FfactorNumberM" class="form-control" />
                     </div>
 
@@ -210,8 +235,8 @@
 
             </div>
             <div class="modal-footer">
-                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="FconfirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="FconfirmFactorModal" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
 
             </div>
             <script>
@@ -245,7 +270,7 @@
                             nodeID: nodeID,
                             affID: affID,
                             number: number,
-                            type: "1",
+                            type: "3",
                             amani: amani
                         },
                         success: function (data) {
@@ -271,17 +296,17 @@
                   <h4 class="modal-title">Modal Header</h4>
                 </div>*@
             <div class="modal-body">
-                <p id="modalmessage">در صورت تسویه فاکتور لطفا بانک مورد نظر را انتخاب کنید</p>
+                <p id="modalmessage">@Resources.res.ChooseBank  </p>
                 <div style="display:flex; ">
                     <div style="width:90%">
                         <div class="row" style="display:flex; align-items:center">
                             <div style="width:100% ; margin:10px">
-                                <input id="handMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                                <input id="handMadeCode" class="form-control" placeholder="@Resources.res.setCode" />
                             </div>
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M22" id="M22" class="form-control">
-                                        <option value="0">انتخاب کل</option>
+                                        <option value="0">@Resources.res.selectKoll </option>
                                         @foreach (var item in M2)
                                         {
                                             <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
@@ -293,7 +318,7 @@
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M33" id="M33" class="form-control">
-                                        <option value="0">انتخاب معین</option>
+                                        <option value="0">@Resources.res.selectMoin </option>
                                         @foreach (var item in M3)
                                         {
                                             <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -307,7 +332,7 @@
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M44" id="M44" class="form-control">
-                                        <option value="0">انتخاب تفصیلی</option>
+                                        <option value="0">@Resources.res.selectTafsil </option>
                                         @foreach (var item in M4)
                                         {
                                             <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -319,7 +344,7 @@
                             <div class=" " style="width:100% ; margin:10px">
                                 @{
                                     <select name="M55" id="M55" class="form-control">
-                                        <option value="0">انتخاب تفصیلی 2</option>
+                                        <option value="0">@Resources.res.selectTafsil2 </option>
                                         @foreach (var item in M5)
                                         {
                                             <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -329,7 +354,7 @@
 
                             </div>
                             <div style="width:100% ; margin:10px">
-                                <input id="prc" class="form-control inputnumber" placeholder="قیمت" />
+                                <input id="prc" class="form-control inputnumber" placeholder="@Resources.res.price" />
                             </div>
                         </div>
                     </div>
@@ -350,8 +375,8 @@
                 <div></div>
             </div>
             <div class="modal-footer">
-                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="confirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <button id="cancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="confirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                 <script>
                     var codingstring = "";
                     var pricesstring = "";
@@ -536,7 +561,7 @@
 
 
                                     }
-                                    toastr.success('با موفقیت انجام شد');
+                                    toastr.success('@Resources.res.success ');
 
                                 }
                                 else {
@@ -589,16 +614,16 @@
                   <h4 class="modal-title">Modal Header</h4>
                 </div>*@
             <div class="modal-body">
-                <p id="modalmessage">در صورت تسویه فاکتور لطفا بانک مورد نظر را انتخاب کنید</p>
+                <p id="modalmessage">@Resources.res.ChooseBank </p>
                 <div style="display:flex; align-items:center">
 
                     <div style="width:100% ; margin:10px">
-                        <input id="FhandMadeCode" class="form-control" placeholder="ثبت دستی کد" />
+                        <input id="FhandMadeCode" class="form-control" placeholder="@Resources.res.setCode " />
                     </div>
                     <div class=" " style="width:100% ; margin:10px">
                         @{
                             <select name="FM22" id="FM22" class="form-control">
-                                <option value="0">انتخاب کل</option>
+                                <option value="0">@Resources.res.selectKoll </option>
                                 @foreach (var item in M2)
                                 {
                                     <option parentValue="" value="@item.codeHesab" itemvalue="@item.ID">@item.title - (@item.codeHesab)</option>
@@ -610,7 +635,7 @@
                     <div class=" " style="width:100% ; margin:10px">
                         @{
                             <select name="FM33" id="FM33" class="form-control">
-                                <option value="0">انتخاب معین</option>
+                                <option value="0">@Resources.res.selectMoin </option>
                                 @foreach (var item in M3)
                                 {
                                     <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -622,7 +647,7 @@
                     <div class=" " style="width:100% ; margin:10px">
                         @{
                             <select name="FM44" id="FM44" class="form-control">
-                                <option value="0">انتخاب تفصیلی</option>
+                                <option value="0">@Resources.res.selectTafsil </option>
                                 @foreach (var item in M4)
                                 {
                                     <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -634,7 +659,7 @@
                     <div class=" " style="width:100% ; margin:10px">
                         @{
                             <select name="FM55" id="FM55" class="form-control">
-                                <option value="0">انتخاب تفصیلی 2</option>
+                                <option value="0">@Resources.res.selectTafsil2 انتخاب تفصیلی 2</option>
                                 @foreach (var item in M5)
                                 {
                                     <option parentValue="@item.parentID" itemvalue="@item.ID" value="@item.codeHesab">@item.title - (@item.codeHesab)</option>
@@ -648,8 +673,8 @@
 
             </div>
             <div class="modal-footer">
-                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="FconfirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">تایید</button>
+                <button id="FcancelDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="FconfirmDaem" type="button" class="btn btn-default" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                 <script>
                     var FdoParents = function (el) {
 
@@ -794,7 +819,7 @@
 
 
                                     }
-                                    toastr.success('با موفقیت انجام شد');
+                                    toastr.success('@Resources.res.success');
 
                                 }
                                 else {
@@ -843,20 +868,20 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                ثبت برگشت از خرید
+                @Resources.res.ReturnOrder
             </div>
             <div class="modal-body">
 
                 <input id="BKID" hidden />
                 <div id="" style="display:flex">
-                    <span>تعداد : </span>
+                    <span>@Resources.res.count  : </span>
                     <span><input style="margin:0 15px;" id="BKcount" class="form-control" /></span>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="confirmBK" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="confirmBK" type="button" class="btn btn-default" style="margin: 7px;">@Resources.res.OK</button>
 
                 <script>
 
@@ -886,7 +911,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.error('خطا')
+                                    toastr.error('@Resources.res.error  ')
                                 }
                                 else {
                                     toastr.options = {
@@ -898,7 +923,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.success('با موفقیت انجام شد')
+                                    toastr.success('@Resources.res.success')
 
                                     $("#sayerModal").modal('toggle');
 
@@ -922,20 +947,20 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                ثبت برگشت از خرید
+                @Resources.res.returnPurchase ثبت برگشت از خرید
             </div>
             <div class="modal-body">
 
                 <input id="BKID" hidden />
                 <div id="" style="display:flex">
-                    <span>تعداد : </span>
+                    <span>@Resources.res.count : </span>
                     <span><input style="margin:0 15px;" id="BFcount" class="form-control" /></span>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="confirmBF" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="confirmBF" type="button" class="btn btn-default" style="margin: 7px;">@Resources.res.OK</button>
 
                 <script>
 
@@ -965,7 +990,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.error('خطا')
+                                    toastr.error('@Resources.res.error')
                                 }
                                 else {
                                     toastr.options = {
@@ -977,7 +1002,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.success('با موفقیت انجام شد')
+                                    toastr.success('@Resources.res.success')
 
                                     $("#sayerModal").modal('toggle');
 
@@ -1002,21 +1027,21 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                فرم رسید/حواله
+                @Resources.res.rrForm
             </div>
             <div class="modal-body">
                 <div style="display:flex">
                     <input id="callFrom" hidden />
                     <div style="margin:10px; width:100%">
-                        <p>تعداد</p>
+                        <p>@Resources.res.count</p>
                         <input id="count" class="form-control" />
                     </div>
                     <div style="margin:10px; width:100%">
-                        <p>قیمت</p>
+                        <p>@Resources.res.price</p>
                         <input id="itemPrice" class="form-control inputnumber" />
                     </div>
                     <div style="margin:10px;width:100%" id="autoProduct2">
-                        <p> محصول :</p>
+                        <p> @Resources.res.product  :</p>
                         <input type="text" class="form-control  inputfield" id="addItemToOrderInput2" />
                         <input id="IDholder2" hidden />
 
@@ -1032,8 +1057,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="confirmResid" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="confirmResid" type="button" class="btn btn-default" style="margin: 7px;">@Resources.res.OK</button>
 
                 <script>
                     $("#confirmResid").click(function () {
@@ -1070,7 +1095,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    toastr.error('@Resources.res.turnOverForProduct ')
                                 }
                                 else {
                                     toastr.options = {
@@ -1082,7 +1107,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.success('آیتم مورد نظر اضافه شد')
+                                    toastr.success('@Resources.res.itemAdded ')
 
 
 
@@ -1135,21 +1160,21 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                فرم رسید/حواله
+                @Resources.res.rrForm
             </div>
             <div class="modal-body">
                 <div style="display:flex">
                     <input id="FcallFrom" hidden />
                     <div style="margin:10px; width:100%">
-                        <p>تعداد</p>
+                        <p>@Resources.res.count</p>
                         <input id="Fcount" class="form-control" />
                     </div>
                     <div style="margin:10px; width:100%">
-                        <p>قیمت</p>
+                        <p>@Resources.res.price</p>
                         <input id="FitemPrice" class="form-control" />
                     </div>
                     <div style="margin:10px;width:100%" id="FautoProduct2">
-                        <p> محصول :</p>
+                        <p> @Resources.res.product :</p>
                         <input type="text" class="form-control  inputfield" id="FaddItemToOrderInput2" />
                         <input id="FIDholder2" hidden />
 
@@ -1162,8 +1187,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="FconfirmResid" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel  </button>
+                <button id="FconfirmResid" type="button" class="btn btn-default" style="margin: 7px;">@Resources.res.OK</button>
 
                 <script>
                     $("#FconfirmResid").click(function () {
@@ -1199,7 +1224,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.error('محصول مورد نظر دارای گردش میباشد')
+                                    toastr.error('@Resources.res.turnOverForProduct ')
                                 }
                                 else {
                                     toastr.options = {
@@ -1211,7 +1236,7 @@
                                         "timeOut": 5000,
                                         "extendedTimeOut": 1000
                                     }
-                                    toastr.success('آیتم مورد نظر اضافه شد')
+                                    toastr.success('@Resources.res.itemAdded')
 
 
 
@@ -1263,152 +1288,308 @@
 
 
 
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"> @Resources.res.fForooshList </button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.setNewfForoosh </button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-sm-12">
 
-<div class="row">
-    <div class="col-sm-12">
-
-        <div class="card">
-            <div class="card-body">
-                <div class="title-header option-title">
-                    <h5>Search Panel</h5>
-                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>@Resources.res.searchPanel</h5>
+                        </div>
 
 
-                <div class="row">
-                    <div class="row" style="background-color:white; padding:10px; margin:0px; ">
                         <div class="row">
+                            <div class="row" style="background-color:white; padding:10px; margin:0px; ">
+                                <div class="row">
 
-                            <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
-                                <div class="row" style="">
-
-                                  
-                                    @*<div class="col-lg-3" style="padding:10px; dis">
-                                        <p>Vendor :</p>
-                                        <select id="FtarafID" class="form-control">
-                                            <option value="">همه</option>
-
-                                            @foreach (var item in Model.TarafList)
-                                            {
-                                                <option value="@item.ID">@item.name</option>
-                                            }
-                                        </select>
-                                    </div>*@
-                                    @*<div class="col-lg-3" style="padding:10px;">
-                                            <p>نوع فاکتور :</p>
-                                            <select id="Ftrantype" class="form-control">
-                                                <option value="">همه</option>
-                                                <option value="1">رسید</option>
-                                                <option value="0">حواله</option>
-                                            </select>
-                                        </div>*@
-                                    <div class="col-lg-3" style="padding:10px;" id="">
-                                        <p>Factor Number :</p>
-                                        <input id="Fnumber" type="text" class="form-control  inputfield" />
+                                    <div class="col-lg-12 col-md-8 col-sm-3 col-xs-12">
+                                        <div class="row" style="">
 
 
-                                    </div>
-                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder">
-                                        <p>Date From :</p>
-                                        <input type="date" class="form-control FprojectDate inputfield FPDabserver" />
-                                        <input class="" style="display:none" />
-                                    </div>
-                                    <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
-                                        <p>Date To :</p>
-                                        <input type="date" class="form-control FprojectDate2 inputfield FPD2abserver" />
-                                        <input class="" style="display:none" />
-                                    </div>
+                                            @*<div class="col-lg-3" style="padding:10px; dis">
+                                                    <p>Vendor :</p>
+                                                    <select id="FtarafID" class="form-control">
+                                                        <option value="">همه</option>
 
-                                    <div class="col-lg-3" style="padding:10px;" id="autoProduct">
-                                        <p> Product :</p>
-                                        <input type="text" class="form-control  inputfield" id="FaddItemToOrderInput" />
-                                        <input id="FIDholder" hidden />
-
-
-                                    </div>
-                                    @*<div class="col-lg-3" style="padding:10px;" id="dateHolder2">
-                                            <p>Description :</p>
-                                            <input id="Fdescription" type="text" class="form-control  inputfield" />
-
-
-                                        </div>*@
-                                    @*<div class="col-lg-3" style="padding:10px;">
-                                            <p>وضعیت :</p>
-                                            <select id="FfactorStatus" class="form-control">
-                                                <option value="">همه</option>
-                                                <option value="1">اولیه</option>
-                                                <option value="0">نهایی</option>
-                                            </select>
-                                        </div>*@
+                                                        @foreach (var item in Model.TarafList)
+                                                        {
+                                                            <option value="@item.ID">@item.name</option>
+                                                        }
+                                                    </select>
+                                                </div>*@
+                                            @*<div class="col-lg-3" style="padding:10px;">
+                                                    <p>نوع فاکتور :</p>
+                                                    <select id="Ftrantype" class="form-control">
+                                                        <option value="">همه</option>
+                                                        <option value="1">رسید</option>
+                                                        <option value="0">حواله</option>
+                                                    </select>
+                                                </div>*@
+                                            <div class="col-lg-3" style="padding:10px;" id="">
+                                                <p>@Resources.res.factorNum  :</p>
+                                                <input id="Fnumber" type="text" class="form-control  inputfield" />
 
 
-                                </div>
+                                            </div>
+                                            <div class="col-lg-3" style="padding:10px;" id="dateHolder">
+                                                <p>@Resources.res.dateFrom :</p>
+                                                <input type="date" class="form-control FprojectDate inputfield FPDabserver" />
+                                                <input class="" style="display:none" />
+                                            </div>
+                                            <div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                                <p>@Resources.res.dateTo :</p>
+                                                <input type="date" class="form-control FprojectDate2 inputfield FPD2abserver" />
+                                                <input class="" style="display:none" />
+                                            </div>
 
-                                <div class="row" style="">
+                                            <div class="col-lg-3" style="padding:10px;" id="autoProduct">
+                                                <p> @Resources.res.product :</p>
+                                                <input type="text" class="form-control  inputfield" id="FaddItemToOrderInput" />
+                                                <input id="FIDholder" hidden />
 
-                                    <div style="width:20%;padding:10px;">
-                                        <div style="position:relative; margin:5px" id="">
-                                            <div class="btn btn-success" style="margin-top:20px" id="FverifyCodeingTran">Verify</div>
+
+                                            </div>
+                                            @*<div class="col-lg-3" style="padding:10px;" id="dateHolder2">
+                                                    <p>Description :</p>
+                                                    <input id="Fdescription" type="text" class="form-control  inputfield" />
+
+
+                                                </div>*@
+                                            @*<div class="col-lg-3" style="padding:10px;">
+                                                    <p>وضعیت :</p>
+                                                    <select id="FfactorStatus" class="form-control">
+                                                        <option value="">همه</option>
+                                                        <option value="1">اولیه</option>
+                                                        <option value="0">نهایی</option>
+                                                    </select>
+                                                </div>*@
+
+
                                         </div>
+
+                                        <div class="row" style="">
+
+                                            <div style="width:20%;padding:10px;">
+                                                <div style="position:relative; margin:5px" id="">
+                                                    <div class="btn btn-success" style="margin-top:20px" id="FverifyCodeingTran">@Resources.res.OK</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div>
+
+                                            <script>
+                                                var FgetDraft = function () {
+                                                    $.ajax({
+                                                        url: 'FreturnFactorList',
+                                                        dataType: 'html',
+                                                        data: {
+                                                            number: $("#Fnumber").val(),
+                                                            timeFrom: $(".FPDabserver").val(),
+                                                            timeTTo: $(".FPD2abserver").val(),
+                                                            transactionType: $("#Ftrantype").val(),
+                                                            factorStatus: $("#FfactorStatus").val(),
+                                                            priceFrom: $("#FpriceFrom").val(),
+                                                            priceTo: $("#FpriceTo").val(),
+                                                            countFrom: $("#FcountFrom").val(),
+                                                            countTo: $("#FcountTo").val(),
+                                                            amani: $("#Famani").val(),
+                                                            nodeID: "1", // $("#FnewFactornodeID").val(),
+                                                            tarafID: $("#FtarafID").val(),
+                                                            productID: $("#FIDholder").val(),
+                                                            description: $("#Fdescription").val(),
+                                                            factorType: "3"
+                                                        },
+                                                        success: function (data) {
+
+                                                            $("#FdetailHolder").html(data)
+                                                        }
+                                                    })
+                                                };
+                                                $("#FverifyCodeingTran").click(function () {
+                                                    FgetDraft();
+                                                })
+                                                FgetDraft();
+                                            </script>
+                                        </div>
+
                                     </div>
                                 </div>
-
-
-                                <div>
-
-                                    <script>
-                                        var FgetDraft = function () {
-                                            $.ajax({
-                                                url: 'FreturnFactorList',
-                                                dataType: 'html',
-                                                data: {
-                                                    number: $("#Fnumber").val(),
-                                                    timeFrom: $(".FPDabserver").val(),
-                                                    timeTTo: $(".FPD2abserver").val(),
-                                                    transactionType: $("#Ftrantype").val(),
-                                                    factorStatus: $("#FfactorStatus").val(),
-                                                    priceFrom: $("#FpriceFrom").val(),
-                                                    priceTo: $("#FpriceTo").val(),
-                                                    countFrom: $("#FcountFrom").val(),
-                                                    countTo: $("#FcountTo").val(),
-                                                    amani: $("#Famani").val(),
-                                                    nodeID: "1", // $("#FnewFactornodeID").val(),
-                                                    tarafID: $("#FtarafID").val(),
-                                                    productID: $("#FIDholder").val(),
-                                                    description: $("#Fdescription").val(),
-                                                    factorType: "3"
-                                                },
-                                                success: function (data) {
-
-                                                    $("#FdetailHolder").html(data)
-                                                }
-                                            })
-                                        };
-                                        $("#FverifyCodeingTran").click(function () {
-                                            FgetDraft();
-                                        })
-                                        getDraft();
-                                    </script>
-                                </div>
-                                
                             </div>
+
                         </div>
                     </div>
-                    
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div id="FdetailHolder" class="row">
+        </div>
+
+        <div id="FFactorListSection3">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>@Resources.res.setNewfForoosh</h5>
+                        </div>
+
+                        <div style="display:flex">
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.project :</p>
+                                <select id="nodeIDAddParent" class="form-control">
+
+
+                                    @foreach (var item in Model.NodeList)
+                                    {
+
+                                        <option value="@item.ID">@item.title</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.transactionSide</p>
+                                @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), Resources.res.selectitem, new { @class = "form-control", id = "partnerItem" })
+
+                            </div>
+                            @*<div style="margin-left:20px; width:100%">
+                                    <p>فروشنده</p>
+                                    @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
+
+                                </div>*@
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.anbar</p>
+                                @Html.DropDownList("anabrItem", new SelectList(Model.AnbarList, "ID", "title"), Resources.res.selectitem, new { @class = "form-control", id = "anabrItem" })
+
+                            </div>
+                            <div style="margin-left:20px; width:100%">
+                                <p> @Resources.res.date :</p>
+                                <input id="dateItself" type="text" class="form-control projectDate3 inputfield" />
+                                <input class="PDabserver3" style="display:none" />
+                            </div>
+
+                        </div>
+                        <div style="display:flex; margin-top:25px">
+
+
+
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.description</p>
+                                <input id="reciever" class="form-control" />
+                            </div>
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.factorNum</p>
+                                <input id="factorNumber" class="form-control" />
+                            </div>
+                            <div style="margin-left:20px; width:100%">
+                                <p>@Resources.res.amani</p>
+                                <input type="checkbox" id="FitemAmani" class="specialOffer checkbox_animated check-it11" />
+                            </div>
+
+                            <div style="margin-left:20px; width:100%">
+                                <p></p>
+                                <button id="confirmFactorE" type="button" class="btn btn-success" style="margin: 7px;margin-top:20px">@Resources.res.OK</button>
+                            </div>
+
+                            <input hidden id="newFactorID" />
+
+                        </div>
+
+
+                        <script>
+                            $("#confirmFactorE").click(function () {
+                                //$("#residModal").modal('hide');
+                                var description = $("#reciever").val();
+                                var date = $(".PDabserver3").val();
+                                var dateItself = $(".dateItself").val();
+                                var anabr = $("#anabrItem").val();
+                                var PID = $("#partnerItem").val();
+                                var nodeID = $("#nodeIDAddParent").val();
+                                var affID = "0";// $("#affID").val();
+                                var number = $("#factorNumber").val();
+                                var amani = "0";
+
+
+
+                                if ($("#FitemAmani").is(':checked')) {
+                                    var amani = "1";
+                                }
+
+
+                                $.ajax({
+                                    url: '/Node/setNewFactor',
+                                    dataType: 'html',
+                                    data: {
+                                        description: description,
+                                        date: $(".PDabserver3").val(),
+                                        anabr: anabr,
+                                        PID: PID,
+                                        nodeID: nodeID,
+                                        affID: affID,
+                                        number: number,
+                                        type: "3",
+                                        amani: amani
+                                    },
+                                    success: function (data) {
+                                        $("#newFactorID").val(data);
+
+                                        $.ajax({
+                                            url: '/Core/returnDraftListA',
+                                            dataType: 'html',
+                                            data: {
+                                                parentID: data,
+                                            },
+                                            success: function (data) {
+                                                $("#kharidFactorListSection").html(data);
+                                                $("#callFrom").val("1")
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+
+
+                                    },
+                                    error: function () {
+                                        alert("nashod")
+                                    }
+                                });
+                            })
+
+                        </script>
+                        <div id="kharidFactorListSection">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
+
     </div>
-</div>
-
-
-
-<div id="FdetailHolder" class="row">
-</div>
-
-<div id="FFactorListSection3">
 
 </div>
+
+
+
+
 
 
 
@@ -1659,3 +1840,5 @@
         });
     });
 </script>
+
+

@@ -34,6 +34,7 @@ using Font = iTextSharp.text.Font;
 using iTextSharp.text.html;
 using Rectangle = iTextSharp.text.Rectangle;
 using banimo.AdminPanelBoom.ViewModel;
+using Microsoft.AspNet.SignalR;
 
 namespace banimo.Controllers
 {
@@ -389,6 +390,49 @@ namespace banimo.Controllers
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
+            banimo.ViewModel.responseVM resmodel =  JsonConvert.DeserializeObject<ViewModel.responseVM>(result);
+            if (resmodel.status == 200)
+            {
+                List<string> partnerList = resmodel.message.Trim(':').Split(':').ToList();
+                foreach (var item in partnerList)
+                {
+
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                        collection.Add("servername", servername);
+                        collection.Add("nodeID", finalNodeID);
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("orderID", id); // 465
+                        collection.Add("partnerID", item); // 88663
+
+                        byte[] response = client.UploadValues(server + "/Admin/setNewTransportationPanel.php", collection);
+
+                        result = System.Text.Encoding.UTF8.GetString(response);
+                        banimo.ViewModel.responseVM resultmodel = JsonConvert.DeserializeObject<banimo.ViewModel.responseVM>(result);
+                        if (resultmodel.status == 200)
+                        {
+                            List<string> lst = resultmodel.message.Split(';').ToList();
+                            string senderAddress = lst[0];
+                            string reieverAddress = lst[1];
+                            string slat = lst[2].Split('-')[0];
+                            string slon = lst[2].Split('-')[1];
+                            string rlat = lst[3].Split('-')[0];
+                            string rlon = lst[3].Split('-')[1];
+                            string ptype = lst[6];
+                            string itemid = lst[5];
+                            var myHub = GlobalHost.ConnectionManager.GetHubContext<education2.ChatHub>();
+                            myHub.Clients.Group(ptype).newOrder(senderAddress, reieverAddress, slat, slon, rlat, rlon, itemid);
+
+                        }
+                    }
+
+
+                }
+            }
+            
             return Content("");
         }
         public ActionResult setMainProductFromSail(productCore model)

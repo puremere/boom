@@ -1,7 +1,24 @@
 ﻿@model banimo.ViewModelPost.viewProductViewModel
 @using banimo.Classes;
+@using Newtonsoft.Json;
+
 @{
-    ViewBag.Title = Model.title + " | " + @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    if (Model.meta != "null" && Model.meta != null)
+    {
+        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
+        ViewBag.Title =  metaModel.titletag;
+        ViewBag.Desc = metaModel.desctag;
+        ViewBag.key = metaModel.keyTag;
+
+    }
+    else
+    {
+        ViewBag.Title = Model.title + " | " + @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    }
+}
+
+@{
+    
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
@@ -614,7 +631,7 @@
 
                                                                     }
                                                                 });
-                                                                
+
                                                                 //var url = "/Home/ProductDetail?id=" + ID;
                                                                 //window.location.href = url;
                                                             })
@@ -1180,7 +1197,7 @@
                     <div id="similarProductApp" class="mustbeshown">
                         <div style="padding-bottom:40px">
                             <div class="row" style=" padding: 10px">
-                                <span style="float:right;font-size: 11px;font-weight: 800;"> پیشنهاد مشابه</span>
+                                <span style="float:right;font-size: 11px;font-weight: 800;"> محصولات مشابه</span>
                                 <a class="alink" href="/Home/ProductList?sortID=3" style="cursor:pointer;float:left;font-size: 11px;color: blue;"> لیست کامل</a>
                             </div>
                             <div id="bestholder" class="resCarousel" data-items="3-2-2-2" data-slide="3" data-speed="500">
@@ -1188,12 +1205,18 @@
                                 <div class="resCarousel-inner" style="direction:rtl">
                                     @foreach (var item in Model.similarProduct)
                                     {
+                                        string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                        if (item.meta != "null" && item.meta != null)
+                                        {
+                                            banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                            newurl = "/product/" + metaModel.curl;
+                                        }
                                         string addID = "addtocarto" + item.ID;
                                         string minusID = "minus" + item.ID;
                                         string imagefile = "placeholder.jpg";
                                         if (item.title != null)
                                         {
-                                            imagefile = item.image;
+                                            imagefile = item.image.Split(',').First();
                                         }
                                         string ID = "N" + item.ID.ToString();
                                         string addtocartid = "addtocart" + ID;
@@ -1201,14 +1224,15 @@
 
                                         string src = imagefile;
 
-                                        <div class="item showmedetail" id=@ID style="cursor:pointer; ">
+                                        <div class="item showmedetail" id="@newurl" style="cursor:pointer; ; max-width:34%">
 
                                             <div class="showmedetailx">
                                                 <div style="padding:2px  ">
-
-                                                    <div class="imageholderindex" style="width:100%; ">
-                                                        <img class="imageitself" src="@src" style="width:100%;height:100%; object-fit:fill" />
-                                                    </div>
+                                                    <a href="@newurl">
+                                                        <div class="imageholderindex" style="width:100%; ">
+                                                            <img alt="@item.title" class="imageitself" src="@src" style="max-width:100%;max-height:100%; object-fit:scale-down" />
+                                                        </div>
+                                                    </a>
 
                                                     <div class="titleholder" style=" ">
                                                         @{
@@ -1227,61 +1251,71 @@
                                                     @if (@System.Configuration.ConfigurationManager.AppSettings["bigDetail"] == "1")
                                                     {
                                                         string valueID = "value" + item.ID;
-                                                        <div class="addholder" style="margin:5px">
-                                                            <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; color: #36CDDF;height:20px "></i>
-                                                            <div class="entry value @valueID " style=";height:20px;margin:0; border:0px; padding:0; width:10px"><span>0</span></div>
-                                                            <i id="@addID" class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #36CDDF;height:20px "></i>
+                                                        <div class="addholder" style="margin:5px;display: flex;justify-content: center;align-items:center">
+                                                            <i id="@minusID" class="fa fa-minus-circle value-minus" style=" border: none;  font-size: 22px; color: #36CDDF; margin:10px"></i>
+                                                            <div class="entry value @valueID " style="margin:0; border:0px; padding:0; width:10px; height:unset"><span>0</span></div>
+                                                            <i id="@addID" class="fa fa-plus-circle value-plus" style="border: none;  font-size: 22px; color: #36CDDF;margin:10px "></i>
                                                         </div>
 
                                                     }
-                                                    <div class="priceholder">
-                                                        @{
-                                                            if (item.isAvailable == "0")
+                                                    <div class="priceholder" style="display:flex; align-items:center">
+                                                        <div style="width:30%">
+                                                            @if (item.discount != "0")
                                                             {
-                                                                @*<div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>*@
-                                                                <div class="row">
-                                                                    <div class="row" style="min-height:17px"></div>
-                                                                    <p style="display:inline-block">ناموجود</p>
-                                                                </div>
+                                                                <span style="color: white;font-size:12px;font-weight:300;background-color: red;border-radius: 5px;padding: 2px 5px;">
+                                                                    @item.discount%
+
+                                                                </span>
                                                             }
-                                                            else
-                                                            {
-                                                                if (item.price == "0")
+                                                        </div>
+                                                        <div style="flex:1">
+                                                            @{
+                                                                if (item.isAvailable == "0")
                                                                 {
+                                                                    @*<div class="c-product-box__row c-product-box__row--price"><div class="c-price"><div class="c-price__value c-price__value--plp"></div></div><div class="c-promotion-box__cover c-promotion-box__cover--out-of-stock"><div class="c-promotion-box__cover-text js-product-status">ناموجود</div></div></div>*@
                                                                     <div class="row">
-                                                                        <p style="display:inline-block">تماس بگیرید</p>
+                                                                        <div class="row" style="min-height:17px"></div>
+                                                                        <p style="display:inline-block">ناموجود</p>
                                                                     </div>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <div class="row" style="text-align:left;min-height:17px">
-                                                                        <div class="">
-                                                                            <div class="" style="color:red">
-                                                                                @if (item.price != item.oldPrice)
-                                                                                {
-                                                                                    <del> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice))  </del> <p style="display: inline-block">تومان</p>
+                                                                    if (item.price == "0")
+                                                                    {
+                                                                        <div class="row">
+                                                                            <p style="display:inline-block">تماس بگیرید</p>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="row" style="text-align:left;min-height:17px">
+                                                                            <div class="">
+                                                                                <div class="" style="color:red">
+                                                                                    @if (item.price != item.oldPrice)
+                                                                                    {
+                                                                                        <del> @string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice))  </del> <p style="display: inline-block">تومان</p>
 
-                                                                                }
+                                                                                    }
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
 
-                                                                    <div class="row" style="text-align:left; color:green">
-                                                                        <p style="text-align:left; display:inline-block;font-weight:600; margin-left:5px">@string.Format("{0:n0}", Convert.ToInt32(@item.price))</p><p style="display: inline-block;">تومان</p>
-                                                                    </div>
-                                                                    <div>
-                                                                    </div>
+                                                                        <div class="row" style="text-align:left; color:green">
+                                                                            <p style="text-align:left; display:inline-block;font-weight:600; margin-left:5px">@string.Format("{0:n0}", Convert.ToInt32(@item.price))</p><p style="display: inline-block;">تومان</p>
+                                                                        </div>
+                                                                        <div>
+                                                                        </div>
+                                                                    }
                                                                 }
-                                                            }
 
-                                                        }
+                                                            }
+                                                        </div>
+
 
 
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
 
                                     }
@@ -1626,6 +1660,12 @@
                                 <div class="resCarousel-inner">
                                     @foreach (var item in Model.similarProduct)
                                     {
+                                        string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                        if (item.meta != "null" && item.meta != null)
+                                        {
+                                            banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                            newurl = "/product/" + metaModel.curl;
+                                        }
                                         string addID = "addtocarto" + item.ID;
                                         string minusID = "minus" + item.ID;
                                         string imagefile = "placeholder.jpg";
@@ -1639,11 +1679,11 @@
 
                                         string src = imagefile;
 
-                                        <div class="item showmedetail" id=@ID style="cursor:pointer">
+                                        <div class="item showmedetail" id="@newurl" style="cursor:pointer">
 
                                             <div class="showmedetailFirstDiv showmedetailx">
                                                 <div style="padding:15px">
-                                                    <a href="/Home/ProductDetail?id=@ID" nofollow>
+                                                    <a href="@newurl" >
                                                         <div class="imageholderindex">
                                                             <img class="imageitself" src="@src" />
                                                         </div>
@@ -1747,7 +1787,7 @@
     $(document).ready(function () {
         // setting one image slider vertically middl
         $(".showmedetail").click(function () {
-            window.location.href = "/Home/ProductDetail?id="+ this.id
+            window.location.href = this.id
 
         })
         if (window.outerWidth > 950) {

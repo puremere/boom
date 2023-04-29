@@ -4,10 +4,10 @@
 <table>
     <thead>
         <tr>
-            <td>ردیف</td>
-            <td>عنوان</td>
-            <td>درصد</td>
-            <td>قیمت</td>
+            <td>@Resources.res.col</td>
+            <td>@Resources.res.title</td>
+            <td>@Resources.res.percent</td>
+            <td>@Resources.res.price</td>
             <td></td>
             @*<td>محاسبه در بهای تمام شده</td>*@
         </tr>
@@ -26,7 +26,7 @@
             string Obahachechekd = ojrat.baha == "1" ? "checked" : "";
             <tr>
                 <td>1</td>
-                <td>تخفیف</td>
+                <td> @Resources.res.discount </td>
 
                 <td><input id="FdPercent" class="form-control" value="@discount.percent" /></td>
                 <td><input id="FdPrice" class="form-control" value="@discount.price.Replace("-","")" /></td>
@@ -60,7 +60,7 @@
             </tr>*@
             <tr>
                 <td>2</td>
-                <td>اجرت</td>
+                <td>@Resources.res.wage  </td>
                 <td><input id="FOPercent" class="form-control" value="@ojrat.percent" /></td>
                 <td><input id="FOPrice" class="form-control" value="@ojrat.price" /></td>
                 @if (ojrat.baha == "1")
@@ -77,7 +77,7 @@
             </tr>
             <tr>
                 <td>3</td>
-                <td>حمل و نقل</td>
+                <td>@Resources.res.transportation  </td>
                 <td><input id="FHPercent" class="form-control" value="@haml.percent" /></td>
                 <td><input id="FHPrice" class="form-control" value="@haml.price" /></td>
                 @if (haml.baha == "1")
@@ -92,12 +92,13 @@
                 }
 
             </tr>
+
         }
         else
         {
             <tr>
                 <td>1</td>
-                <td>تخفیف</td>
+                <td>@Resources.res.discount</td>
 
                 <td><input id="FdPercent" class="form-control" value="0" /></td>
                 <td><input id="FdPrice" class="form-control" value="0" /></td>
@@ -112,14 +113,14 @@
             </tr>*@
             <tr>
                 <td>2</td>
-                <td>اجرت</td>
+                <td>@Resources.res.wage</td>
                 <td><input id="FOPercent" class="form-control" value="0" /></td>
                 <td><input id="FOPrice" class="form-control" value="0" /></td>
                 <td><input style="display : none" id="FOcheck" class="form-control" type="checkbox" value="" /></td>
             </tr>
             <tr>
                 <td>3</td>
-                <td>حمل و نقل</td>
+                <td>@Resources.res.transportation</td>
                 <td><input id="FHPercent" class="form-control" value="0" /></td>
                 <td><input id="FHPrice" class="form-control" value="0" /></td>
                 <td><input style="display : none" id="FHcheck" class="form-control" type="checkbox" value="" /></td>

@@ -38,13 +38,13 @@
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
-                <p>Insert Amount?</p>
+                <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.withdraw</h5>
+                <p>@Resources.res.sureInsertAmount ?</p>
                 <input id="withdrawInput" class="form-control" type="number" style="margin-bottom:25px"/>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">No</button>
-                    <button id="withdrawbtn" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">Yes</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button id="withdrawbtn" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
                 </div>
                 <script>
                     $("#withdrawbtn").click(function () {
@@ -74,14 +74,14 @@
 
                     @if (string.IsNullOrEmpty(Model.withdraw))
                     {
-                        <h5>Account Balance : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED</h5>
+                        <h5>@Resources.res.accountBalance  : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED</h5>
                         <div style="position:relative; margin:5px" id="">
                               <div class="btn btn-success" style="margin-top:20px" data-bs-toggle="modal" data-bs-target="#Withdraw" data-bs-original-title="" title="">withdraw money</div>
                         </div>
                     }
                     else
                     {
-                        <h5>Account Balance : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED  <span style="color:green">(Requested Amount : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.withdraw))) AED)</span></h5>
+                        <h5>@Resources.res.accountBalance : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED  <span style="color:green">(Requested Amount : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.withdraw))) AED)</span></h5>
                     }
 
                 </div>
@@ -98,26 +98,26 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Search Panel</h5>
+                    <h5>@Resources.res.searchPanel</h5>
 
                 </div>
                 <div style="display:flex ; flex-wrap:wrap">
 
                     <div style="padding:10px;width:33%">
-                        <p>Transaction Type :</p>
+                        <p>@Resources.res.transactionType :</p>
                         <select id="trantype" class="form-control">
-                            <option value="">All</option>
-                            <option value="1">deposit</option>
-                            <option value="0">Withdraw</option>
+                            <option value="">@Resources.res.all</option>
+                            <option value="1">@Resources.res.deposit </option>
+                            <option value="0">@Resources.res.withdraw </option>
                         </select>
                     </div>
 
                     <div style="padding:10px;width:33%" id="dateHolder">
-                        <p>From Date :</p>
+                        <p>@Resources.res.dateFrom :</p>
                         <input name="datefrom" id="gardeshFrom" type="date" class="PDabserver form-control  " />
                     </div>
                     <div style="padding:10px;width:33%" id="dateHolder2">
-                        <p>From To :</p>
+                        <p>@Resources.res.dateTo :</p>
                         <input name="dateTo" id="gardeshTo" type="date" class="PD2abserver form-control  inputfield" />
                     </div>
 
@@ -144,7 +144,7 @@
 
                     <div style="margin:10px;width:100%;display: flex; align-items:center">
                         <div style="position:relative; margin:5px" id="">
-                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">View</div>
+                            <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardesh">@Resources.res.View</div>
                         </div>
                         @*<div style="position:relative; margin:5px" id="">
                                 <div class="btn btn-success" style="margin-top:20px" id="verifyCodeingTranGardeshPrint">چاپ</div>

@@ -268,7 +268,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="title-header option-title">
-                        <h5>Reciet Detail</h5>
+                        <h5>@Resources.res.recietDetail </h5>
                     </div>
 
                     <div class="row">
@@ -276,7 +276,11 @@
                             <!-- Details Start -->
                             <div class="card">
                                 <div class="card-body">
-
+                                    <style>
+                                        th{
+                                            font-size:11px !important;
+                                        }
+                                    </style>
 
                                     <div id="rookesh" class="panel-body canBePrint">
                                         @if (Model.RecietArticleList != null)
@@ -288,23 +292,23 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>
-                                                                    col
+                                                                   @Resources.res.col 
 
                                                                 </th>
                                                                 <th>
-                                                                    Code
+                                                                    @Resources.res.Code 
                                                                 </th>
                                                                 <th>
-                                                                    Desc
+                                                                    @Resources.res.description 
                                                                 </th>
                                                                 <th>
-                                                                    Detail Price
+                                                                  @Resources.res.detailPrice  
                                                                 </th>
                                                                 <th>
-                                                                    liability
+                                                                    @Resources.res.liability 
                                                                 </th>
                                                                 <th>
-                                                                    Credit
+                                                                    @Resources.res.credit 
                                                                 </th>
 
 
@@ -1029,7 +1033,7 @@
 
 
                                                             <tr>
-                                                                <td colspan="3">Total Price</td>
+                                                                <td colspan="3">@Resources.res.totalPrice </td>
                                                                 <td></td>
                                                                 @{
                                                                     double bedehkar = Model.RecietArticleList.Where(x => x.type == "0").Sum(x => x.price);

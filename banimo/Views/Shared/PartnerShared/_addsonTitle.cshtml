@@ -24,19 +24,19 @@
                         <div class="addpanel" style="display:flex">
                             <input id="addsonItem" style="display:none" />
                             <div class="">
-                                <input id="addsonName" class="form-control" placeholder="Name " />
+                                <input id="addsonName" class="form-control" placeholder="@Resources.res.title " />
                             </div>
 
                             <div class="itemform">
-                                <label>Multiple?</label>
+                                <label>@Resources.res.Multiple?</label>
                                 <input id="addsonMultiple" type="checkbox" />
                             </div>
                             <div class="itemform">
-                                <label>Required?</label>
+                                <label>@Resources.res.Required?</label>
                                 <input id="addsonRequired" type="checkbox" />
                             </div>
                             <div class="">
-                                <button class="btn btn-success" id="setAddsOn">Verify</button>
+                                <button class="btn btn-success" id="setAddsOn">@Resources.res.OK</button>
                             </div>
 
                             <script>
@@ -98,13 +98,13 @@
                                                         <tr>
 
                                                             <th>
-                                                                Title
+                                                                @Resources.res.title
                                                             </th>
                                                             <th>
-                                                                Multiple?
+                                                                @Resources.res.Multiple?
                                                             </th>
                                                             <th>
-                                                                Required?
+                                                                @Resources.res.Required?
                                                             </th>
                                                             <th>
 
@@ -154,7 +154,7 @@
 
                                                                             @{
 
-                                                                                <a class="btn btn-primary addsonDetailButton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> Detail</a>
+                                                                                <a class="btn btn-primary addsonDetailButton" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> @Resources.res.detail</a>
 
                                                                             }
 
@@ -163,7 +163,7 @@
 
                                                                             @{
                                                                                 var ID = @item.ID;
-                                                                                <a class="btn btn-primary editAddson" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Edit</a>
+                                                                                <a class="btn btn-primary editAddson" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.edit</a>
 
                                                                             }
 
@@ -172,7 +172,7 @@
 
                                                                             @{
 
-                                                                                <a class="btn btn-primary addsonRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">Remove</a>
+                                                                                <a class="btn btn-primary addsonRemove" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">@Resources.res.remove</a>
 
                                                                             }
 

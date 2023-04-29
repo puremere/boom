@@ -55,7 +55,7 @@
 
             </div>
             <div class="modal-body">
-                <p> Insert Variation Name</p>
+                <p>@Resources.res.insertVariName </p>
                 <input class="form-control" id="addFiltertxt" />
             </div>
             <div class="modal-footer">
@@ -72,9 +72,9 @@
 
             </div>
             <div class="modal-body">
-                <p> Insert Color Name</p>
+                <p> @Resources.res.colorName </p>
                 <input class="form-control" id="addColortxt" />
-                <p> Pick Your Color</p>
+                <p>@Resources.res.pickColor </p>
                 <input type="color" class="form-control" id="addColorCode" />
             </div>
             <div class="modal-footer">
@@ -88,8 +88,8 @@
 
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Product Report</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">New Prouduct</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.productReport </button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.newProduct </button>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -100,7 +100,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Search Panel</h5>
+                            <h5>@Resources.res.searchPanel</h5>
                         </div>
                         <div class="row">
 
@@ -115,23 +115,23 @@
 
 
                             <div class="mb-4 row align-items-center" style="display:@display">
-                                <label class="form-label-title col-sm-2 mb-0">Category</label>
+                                <label class="form-label-title col-sm-2 mb-0">@Resources.res.category</label>
                                 <div class="col-sm-10">
-                                    @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, "-- Select Status --", new { id = "listofproduct", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.SelectedlistProduct, listItems, Resources.res.selectitem, new { id = "listofproduct", @class = "form-control" })
 
                                 </div>
                             </div>
 
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-2 mb-0">
-                                    Search Query
+                                    @Resources.res.searchQuery 
                                 </label>
                                 <div class="col-sm-10">
-                                    <input id="SearchQuery" name="SearchQuery" class="form-control" type="number" placeholder="Enter Your Number">
+                                    <input id="SearchQuery" name="SearchQuery" class="form-control" type="number" placeholder="@Resources.res.searchQuery">
                                 </div>
                             </div>
                             <div id="Verify" class="row">
-                                <div class="btn btn-primary lgnsubmitt">Get Product List</div>
+                                <div class="btn btn-primary lgnsubmitt">@Resources.res.getProductList </div>
                             </div>
 
 
@@ -157,7 +157,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Create Product Variation</h5>
+                            <h5>@Resources.res.createProductVari</h5>
                         </div>
                         <div>
                             @Html.Partial("/Views/Shared/PartnerShared/_addProductFromSail.cshtml", Model.basecat)

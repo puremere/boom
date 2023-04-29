@@ -206,7 +206,7 @@ a:hover , a:focus{
     padding: 0;
     z-index: 9999;
     position: absolute;
-    left:0
+    right:0
 }
 .nav-sm .container.body .col-md-3.left_col.menu_fixed {
     position: fixed;
@@ -221,7 +221,7 @@ a:hover , a:focus{
 }
 .nav-sm .container.body .right_col {
     padding: 10px 20px;
-    margin-left: 70px;
+    margin-right: 70px;
     z-index: 2
 }
 .nav-sm .navbar.nav_title {
@@ -248,7 +248,7 @@ a:hover , a:focus{
 }
 .nav-sm .main_container .top_nav {
     display: block;
-    margin-left: 70px;
+    margin-right: 70px;
     z-index: 2
 }
 .nav-sm .nav.side-menu li a {
@@ -403,7 +403,7 @@ a:hover , a:focus{
     display: -ms-flexbox;
     display: flex;
     z-index: 1;
-    left:0
+    right:0
 }
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
     height: 100%;
@@ -414,7 +414,7 @@ body .container.body .right_col {
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 0;
-    margin-left: 230px
+    margin-right: 230px
 }
 .nav_title {
     width: 230px;
@@ -568,7 +568,7 @@ body {
 }
 .main_container .top_nav {
     display: block;
-    margin-left: 230px
+    margin-right: 230px
 }
 .no-padding {
     padding: 0 !important
@@ -803,7 +803,7 @@ a:focus {
     position: relative;
     display: block;
     cursor: pointer;
-    margin: 0 15px !important;
+    margin: 0  !important;
 }
 .nav.side-menu>li>a {
     margin-bottom: 6px

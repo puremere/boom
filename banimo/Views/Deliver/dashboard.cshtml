@@ -1,0 +1,100 @@
+﻿
+@model banimo.ViewModel.deliverDash
+
+@{
+    ViewBag.Title = "dashboard";
+    Layout = "~/Views/Shared/_DeliverLayout.cshtml";
+}
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- chart caard section start -->
+            <div class="col-sm-6 col-xxl-3 col-lg-6">
+                <div class="main-tiles border-5 border-0  card-hover card o-hidden">
+                    <div class="custome-1-bg b-r-4 card-body">
+                        <div class="media align-items-center static-top-widget">
+                            <div class="media-body p-0">
+                                <span class="m-0">Total Orders</span>
+                                <h4 class="mb-0 counter">
+                                    @Model.total
+                                    <span class="badge badge-light-primary grow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>8.5%
+                                    </span>
+                                </h4>
+                            </div>
+                            <div class="align-self-center text-center">
+                                <i class="ri-database-2-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xxl-3 col-lg-6">
+                <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                    <div class="custome-2-bg b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="media-body p-0">
+                                <span class="m-0">Total Drivers</span>
+                                <h4 class="mb-0 counter">
+                                    @Model.staffCount
+                                    <span class="badge badge-light-danger grow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                    </span>
+                                </h4>
+                            </div>
+                            <div class="align-self-center text-center">
+                                <i class="ri-shopping-bag-3-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xxl-3 col-lg-6">
+                <div class="main-tiles border-5 card-hover border-0  card o-hidden">
+                    <div class="custome-3-bg b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="media-body p-0">
+                                <span class="m-0">Total Vehicles</span>
+                                <h4 class="mb-0 counter">
+                                    @Model.vehicleCount
+                                    <a href="add-new-product.html" class="badge badge-light-secondary grow" data-bs-original-title="" title="">
+                                        ADD NEW
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div class="align-self-center text-center">
+                                <i class="ri-chat-3-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xxl-3 col-lg-6">
+                <div class="main-tiles border-5 card-hover border-0 card o-hidden">
+                    <div class="custome-4-bg b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="media-body p-0">
+                                <span class="m-0">Total revenue</span>
+                                <h4 class="mb-0 counter">
+                                    @string.Format("{0:n0}",decimal.Parse(@Model.total))  
+                                    <span class="badge badge-light-success grow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>8.5%
+                                    </span>
+                                </h4>
+                            </div>
+
+                            <div class="align-self-center text-center">
+                                <i class="ri-user-add-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

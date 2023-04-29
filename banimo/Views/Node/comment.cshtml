@@ -7,7 +7,7 @@
 
 
 @{
-    ViewBag.Title = "لیست محصولات";
+    ViewBag.Title = Resources.res.CommentPage;
 }
 
 <style>
@@ -29,13 +29,13 @@
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Admin Comment</h5>
-                <p>Respond to </p>
+                <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.adminComment </h5>
+                <p>@Resources.res.respondTo  </p>
                 <textarea id="adminComment" cols="5" style="width:100%; margin:15px 0"></textarea>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="modalAddComment">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="modalAddComment">@Resources.res.OK</button>
                 </div>
             </div>
         </div>
@@ -45,12 +45,12 @@
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Remove Comment</h5>
-                <p>Are you sure you want to remove this item ?</p>
+                <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.removeComment </h5>
+                <p>@Resources.res.removeConfirm</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="modalDelComment">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="modalDelComment">@Resources.res.OK</button>
                 </div>
             </div>
         </div>
@@ -60,8 +60,8 @@
 <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Product Comments</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Vendor Comments</button>
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.productComment </button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.vendorComment </button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -71,23 +71,23 @@
                     <tr>
 
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            User
+                            @Resources.res.user 
                         </th>
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Date
+                            @Resources.res.date  
                         </th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
                                 Title
                             </th>*@
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Comment
+                           @Resources.res.comment 
                         </th>
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Answer
+                            @Resources.res.answer  
                         </th>
 
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Status</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.status</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.option</th>
 
 
 
@@ -137,7 +137,6 @@
                                     {
                                         var ID = "P" + @item.ID;
                                         <input type="checkbox" id=@ID class="checkbox_animated  Pbutton" />
-
                                     }
                                 </td>
 
@@ -187,23 +186,23 @@
                     <tr>
 
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            User
+                           @Resources.res.user 
                         </th>
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Date
+                            @Resources.res.date
                         </th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
                         Title
                     </th>*@
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Comment
-                        </th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
-                            Answer
-                        </th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
+                        @Resources.res.comment
+                    </th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">
+                        @Resources.res.answer
+                    </th>
 
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Status</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.status</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.option</th>
 
 
 

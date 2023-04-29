@@ -514,7 +514,8 @@ namespace education2
                     
                     Groups.Add(Context.ConnectionId, groupname);
                     user.ConnectionId = Context.ConnectionId;
-                    
+                   
+
                 }
                
 

@@ -33,7 +33,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.setNewLoc </h5>
                 <div>
                     <div class="row">
                         @using (Html.BeginForm("setNewLocation", "Node", FormMethod.Post,
@@ -47,7 +47,7 @@ new { id = "addLocation" }))
 
                                     <div class="row fieldholder col-lg-5">
                                         <label>
-                                            title :
+                                            @Resources.res.title :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
@@ -58,23 +58,33 @@ new { id = "addLocation" }))
                                     </div>
                                     <div class="row fieldholder col-lg-5">
                                         <label>
-                                            Parent :
+                                            @Resources.res.selectUpperLocation :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
-                                               @Html.DropDownList("parentID",new SelectList(Model.locations.Where(x=>x.type != "3"), "ID","Title"),"select upper location", new { @class="form-control", id=""})
+                                            @if (Model.locations != null)
+                                            {
+                                                @Html.DropDownList("parentID", new SelectList(Model.locations.Where(x => x.type != "3"), "ID", "Title"), Resources.res.selectUpperLocation, new { @class = "form-control", id = "" })
+
+                                            }
+                                            else
+                                            {
+                                               <select name="parentID" class="form-control">
+                                                  
+                                               </select>
+                                            }
                                         </div>
                                     </div>
                                     <div class="row fieldholder col-lg-5">
                                         <label>
-                                            Type :
+                                            @Resources.res.type :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
                                             <select name="type" class="form-control ">
-                                                <option value="State">State</option>
-                                                <option value="City">City</option>
-                                                <option value="Zone">Zone</option>
+                                                <option value="State">@Resources.res.state </option>
+                                                <option value="City">@Resources.res.city </option>
+                                                <option value="Zone">@Resources.res.zone </option>
                                             </select>
 
                                         </div>
@@ -96,8 +106,8 @@ new { id = "addLocation" }))
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">@Resources.res.OK </button>
 
                     <script>
 
@@ -126,7 +136,7 @@ new { id = "addLocation" }))
                                     "timeOut": 5000,
                                     "extendedTimeOut": 1000
                                 }
-                                toastr.error('Fill All Fields')
+                                toastr.error('@Resources.res.fillAllField')
 
                             }
 
@@ -145,9 +155,9 @@ new { id = "addLocation" }))
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Location List</h5>
+                    <h5>@Resources.res.locationList </h5>
                     <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                        <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary">Add New Location</a>
+                        <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary">@Resources.res.setNewLoc</a>
                     </div>
                 </div>
                 <div id="Listholder">
@@ -155,9 +165,9 @@ new { id = "addLocation" }))
                         <thead>
                             <tr>
 
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">type</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">action</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.title</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.type</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action</th>
 
                             </tr>
                         </thead>

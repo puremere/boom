@@ -76,6 +76,8 @@ namespace banimo.ViewModel
         public List<OrderList> orderList { get; set; }
         public string status { get; set; }
         public string username { get; set; }
+        public string fullname { get; set; }
+        public string image { get; set; }
         public string type { get; set; }
     }
 

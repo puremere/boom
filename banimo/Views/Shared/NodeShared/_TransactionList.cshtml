@@ -19,26 +19,26 @@
                             <tr>
                                
                                 <th>
-                                    Atf Num
+                                    @Resources.res.atfNum
                                 </th>
                                 <th>
-                                    Document Num
+                                   @Resources.res.documentNum
                                 </th>
                                 <th>
-                                    Description
+                                    @Resources.res.description
                                 </th>
                                 <th>
-                                    Date
+                                    @Resources.res.date
                                 </th>
                                 <th>
-                                    Debt
+                                    @Resources.res.debt  
                                 </th>
                                 <th>
-                                    credit
+                                    @Resources.res.credit 
                                 </th>
-                                <th>remaining</th>
-                                <th>remaining Status </th>
-                                <th>Option</th>
+                                <th>@Resources.res.remaining </th>
+                                <th>@Resources.res.remainingStatus  </th>
+                                <th>@Resources.res.option </th>
                                 @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">Vendor ID</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Venor Title</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> Inactive?</th>
@@ -95,11 +95,11 @@
                                     <td>
                                         @if (finalMande > 0)
                                         {
-                                            <p>Debt</p>
+                                            <p>@Resources.res.debt </p>
                                         }
                                         else
                                         {
-                                            <p>Credit</p>
+                                          <p>@Resources.res.credit </p>
                                         }
                                     </td>
                                     <td>
@@ -128,7 +128,7 @@
                             <tr>
                                 
                                 <td colspan="2">
-                                    Total
+                                   @Resources.res.Total 
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -154,11 +154,11 @@
                                 <td>
                                     @if (finalMande > 0)
                                     {
-                                        <p>Debt</p>
+                                    <p>@Resources.res.debt</p>
                                     }
                                     else
                                     {
-                                        <p>Credit</p>
+                                       <p>@Resources.res.credit</p>
                                     }
                                 </td>
 

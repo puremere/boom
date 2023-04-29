@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+}
+
+
+<div class="row mt-4">
+    <div class="col text-center">
+        <div class="main-comp-title">
+            <img src="~/webAsset/deliver/app/Delivery/imgs/logo-brand.png" height="100px">
+            <!-- <h1>Marsool</h1>
+            <span class="text-muted">
+                Driver App
+            </span> -->
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-3">
+    <div class="col">
+        <div class="alert mb-2 py-2 home-alerts alert-warning d-flex  align-items-center ">
+            <div class="mx-3 d-flex flex-column align-items-center">
+                <h1 class="mb-0">
+                    <i class="bi bi-lightbulb"></i>
+                </h1>
+            </div>
+            <div>
+                Stay Close To Your Zone and Wait <br>
+                For The Next Order
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="alert py-2 home-alerts alert-success d-flex  align-items-center ">
+            <div class="mx-3 d-flex flex-column align-items-center">
+                <h1 class="mb-0">
+                    <i class="bi bi-geo-alt-fill"></i>
+                </h1>
+            </div>
+            <div>
+                Your Location is :<br>
+                Business Bay, Bay Squer
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+
+        <div class="mapouter">
+            <div class="gmap_canvas">
+                <iframe width="100%" height="200px" id="gmap_canvas"
+                        src="https://maps.google.com/maps?q=business%20bay,%20bay%20squer&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<button id="startCount"
+        class="btn bg mt-5 w-100 theme-bg text-light"
+        data-bs-toggle="modal"
+        data-bs-target="#newOrderModel">
+    Scan Order
+</button>

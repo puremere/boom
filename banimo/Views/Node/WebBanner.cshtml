@@ -1,0 +1,346 @@
+﻿@model banimo.ViewModel.slideRequst
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "";
+}
+<style>
+    .component {
+        display: inline-block;
+        margin: 10px
+    }
+</style>
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p>@Resources.res.sure</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="doAction" type="button" class="btn btn-primary">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p>@Resources.res.sure?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="doAction2" type="button" class="btn btn-primary">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="home" class="" style="padding-top:20px">
+    <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <p class="modalDelQuestion">Remove Vendor</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>@Resources.res.setNewBanner </h5>
+                </div>
+                <div style="">
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> page </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> @Resources.res.link </label>
+                        <div style="width:100%">
+                            <input id="link" name="link" class="form-control" />
+                        </div>
+                    </div>
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> @Resources.res.title </label>
+                        <div style="width:100%">
+                            <input id="title" name="title" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="component col-md-4 col-sm-3 col-xs-12">
+                        <label> @Resources.res.image </label>
+                        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-4 col-sm-3 col-xs-12">
+                        <div style="width:100%">
+                            <div id="imageHolder" style="display:flex; flex-wrap:wrap">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:25px; display:flex">
+                        <div class="component " ; style="margin:8px">
+                            <div id="veri" class="btn btn-success">@Resources.res.OK  </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <p hidden class="imageName"></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>@Resources.res.manageBanner</h5>
+                </div>
+                <div style="">
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> page </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    <div component col-md-4 col-sm-3 col-xs-12>
+                        <div style="width:100%">
+                            <div id="imageHolderEdit" style="display:flex;flex-wrap:wrap ">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> Location </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("Countryname", listItems2, "select item", new { id = "listofLocation", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    <div style="margin:25px; display:flex ; display:none">
+
+                        <div class="component " ; style="margin:8px">
+                            <div id="edit" class="btn btn-success">@Resources.res.getBanner</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">Image  </a></li>
+            <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">Video</a></li>
+        </ul>
+        <div  class="tab-content">
+
+            <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+                <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                <p class="modalDelQuestion">Remove Vendor?</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="remove2">@Resources.res.OK</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> page </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("pagename2", pageList, "select item", new { id = "listofpage2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> @Resources.res.category </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("catname2", listItems, "select item", new { id = "listofcat2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> Location </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="component">
+                        <label> image </label>
+                        <input id="imageFileHolder2" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component ">
+                        <div id="veri2" class="btn btn-success">@Resources.res.OK  </div>
+                    </div>
+                    <div class="component ">
+                        <div id="edit2" class="btn btn-success">@Resources.res.edit</div>
+                    </div>
+
+                    <p hidden class="imageName2"></p>
+                    <div style="width:100%">
+                        <div id="imageHolder2" style="display:flex; ">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+<script src="~/Scripts/downloadNode.js"></script>
+
+
+
+
+<script>
+
+    $("#imageFileHolder").on('change', function () {
+        //alert("sss");
+        uploadImage("imageHolder", "imageName", this)
+    });
+    $("#doAction").click(function () {
+        var catname = $("#listofcat").val();
+        var Countryname = $("#listofLocation").val()
+        var page = $("#listofpage").val();
+        var link = $("#link").val();
+        var title = $("#title").val();
+
+        if (catname == "") {
+            catname = "00";
+        }
+
+        var image = $(".imageName").text();
+
+        if (catname != "") {
+            $.ajax({
+                url: "/Node/addWebBanner",
+                dataType: "html",
+                data: {
+                    catID: catname,
+                    locationID: Countryname,
+                    image: image,
+                    page: page,
+                    link: link,
+                    title: title
+                },
+                success: function (data) {
+                    //alert(data)
+                    location.reload();
+                }
+            })
+        }
+    })
+    $("#veri").click(function () {
+        $("#exampleModal").modal('toggle');
+
+
+    })
+
+
+    var updateslide = function () {
+        $.ajax({
+            url: "/Node/getWebBanner",
+            dataType: "html",
+            success: function (data) {
+                $("#imageHolderEdit").html(data);
+            }
+        })
+    }
+    updateslide();
+
+
+    $("#edit").click(function () {
+        updateslide();
+    })
+
+
+    //$("#veri").click(function () {
+    //    var catname = $("#listofcat").val();
+    //    var image = $(".imageName").text();
+    //    var page = $("#pageList").val();
+    //    if (catname != "" && image != "") {
+    //        $.ajax({
+    //            url: "/Node/addSlide",
+    //            dataType: "html",
+    //            data: {
+    //                catID: catname,
+    //                locationID: Countryname,
+    //                image: image,
+    //                page:page,
+    //                type: "1"
+
+    //            },
+    //            success: function (data) {
+    //                location.reload();
+    //            }
+    //        })
+    //    }
+    //})
+    $("#cancelEdit").click(function () {
+        $(".classhide").css("display", "none");
+        $(".classshow").css("display", "inline-block");
+        $("#imageHolder").css("display", "none");
+        $("#title").val("");
+    })
+
+</script>
+
+
+
+
+
+
+

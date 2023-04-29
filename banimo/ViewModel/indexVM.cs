@@ -12,6 +12,7 @@ namespace banimo.ViewModel
     }
     public class itemDetailVM : main
     {
+        public List<DelivertypeList> delivertypeList { get; set; }
         public List<Land> lands { get; set; }
         public List<City> cities { get; set; }
         public List<Cat> cat { get; set; }

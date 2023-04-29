@@ -1263,6 +1263,8 @@
 
 <div class="row" style="background-color:white; padding:10px; margin:0px; ">
 
+
+   
     <ul class="nav nav-tabs">
 
 
@@ -1439,10 +1441,10 @@
 
                         </div>
                         @*<div style="margin-left:20px; width:100%">
-            <p>فروشنده</p>
-            @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
+                                <p>فروشنده</p>
+                                @Html.DropDownList("partnerItem", new SelectList(Model.TarafList, "ID", "name"), "انتخاب طرف حساب", new { @class = "form-control", id = "affID" })
 
-        </div>*@
+                            </div>*@
                         <div style="margin-left:20px; width:100%">
                             <p>انبار</p>
                             @Html.DropDownList("anabrItem", new SelectList(Model.AnbarList, "ID", "title"), "انتخاب انبار", new { @class = "form-control", id = "anabrItem" })
@@ -1455,10 +1457,10 @@
                         </div>
 
                     </div>
-                    <div style="display:flex; margin-top:25px" >
+                    <div style="display:flex; margin-top:25px">
 
 
-                       
+
                         <div style="margin-left:20px; width:100%">
                             <p>توضیحات</p>
                             <input id="reciever" class="form-control" />
@@ -1494,7 +1496,7 @@
                             var number = $("#factorNumber").val();
                             var amani = "0";
 
-                            
+
 
                             if ($("#FitemAmani").is(':checked')) {
                                 var amani = "1";
@@ -1513,7 +1515,7 @@
                                     affID: affID,
                                     number: number,
                                     type: "1",
-                                    amani : amani
+                                    amani: amani
                                 },
                                 success: function (data) {
                                     $("#newFactorID").val(data);
@@ -1553,9 +1555,7 @@
         <div id="foroosh" class="tab-pane fade in " style="padding-top:20px">
 
             <ul class="nav nav-tabs">
-
                 <li class="active"><a data-toggle="tab" href="#fFrooshidList" style=" color: #8d8d8d; ">لیست فاکتورهای فروش</a></li>
-              
             </ul>
             <div class="tab-content">
                 <div id="fFrooshidList" class="tab-pane fade in active " style="padding-top:20px">
@@ -1671,7 +1671,7 @@
                                                     tarafID: $("#FtarafID").val(),
                                                     productID: $("#FIDholder").val(),
                                                     description: $("#Fdescription").val(),
-                                                    factorType : "3"
+                                                    factorType: "3"
                                                 },
                                                 success: function (data) {
 
@@ -1694,7 +1694,6 @@
 
                     </div>
                 </div>
-               
             </div>
 
 

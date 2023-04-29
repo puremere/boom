@@ -1,0 +1,512 @@
+﻿@using BotDetect.Web.Mvc;
+@using banimo.Classes;
+@model banimo.AdminPanelBoom.ViewModel.productGroupcsVM
+@{
+    ViewBag.Title = "blog";
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+}
+
+<link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
+
+<script>
+
+     var filterstr = '@Model.filters';
+       var filters = {
+           data: filterstr.split("-"),
+           list: {
+               maxNumberOfElements: 10,
+               match: {
+                   enabled: true
+               }
+           }
+            };
+    var catstr = '@Model.cats';
+        var cats = {
+            data: catstr.split("-"),
+            list: {
+                maxNumberOfElements: 10,
+                match: {
+                    enabled: true
+                }
+            }
+    };
+     var subcatstr = '@Model.subcats';
+        var subcats = {
+            data: subcatstr.split("-"),
+            list: {
+                maxNumberOfElements: 10,
+                match: {
+                    enabled: true
+                }
+            }
+    };
+     var subcat2str = '@Model.subcats2';
+        var subcats2 = {
+            data: subcat2str.split("-"),
+            list: {
+                maxNumberOfElements: 10,
+                match: {
+                    enabled: true
+                }
+            }
+                   };
+
+
+</script>
+
+
+<div id="deldiscountModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <p> @Resources.res.removeConfirm ?</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button id="delDiscount" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                <button id="delDiscount" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    List<SelectListItem> listItemsCat = new List<SelectListItem>();
+    if (Model.filtercatsAll != null)
+    {
+        foreach (var item in Model.filtercatsAll)
+        {
+            listItemsCat.Add(new SelectListItem
+            {
+                Text = item.title,
+                Value = "1" + item.ID
+            });
+            if (item.filtersubcat != null)
+            {
+                foreach (var subcat in item.filtersubcat)
+                {
+                    listItemsCat.Add(new SelectListItem
+                    {
+                        Text = "---" + subcat.title,
+                        Value = "2" + subcat.ID
+                    });
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listItemsCat.Add(new SelectListItem
+                            {
+                                Text = "------" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    List<SelectListItem> listItems = new List<SelectListItem>();
+
+    listItems.Add(new SelectListItem
+    {
+        Text = "هشتگ",
+        Value = "tag"
+    });
+    if (Model.filters != "")
+    {
+        listItems.Add(new SelectListItem
+        {
+            Text = "فیلتر",
+            Value = "filter"
+        });
+    }
+
+    if (Model.cats != "")
+    {
+        listItems.Add(new SelectListItem
+        {
+            Text = "دسته بندی اول",
+            Value = "cat"
+        });
+    }
+    if (Model.subcats != "")
+    {
+        listItems.Add(new SelectListItem
+        {
+            Text = "دسته بندی دوم",
+            Value = "subcat"
+        });
+    }
+    if (Model.subcats2 != "")
+    {
+        listItems.Add(new SelectListItem
+        {
+            Text = "دسته بندی سوم",
+            Value = "subcat2"
+        });
+    } 
+ }
+    <div id="pgModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <p> @Resources.res.addNewGroup</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                    <div>
+                        @using (Html.BeginForm("setNewProductGroup", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "setNewProductGroup" }))
+                        {
+
+                            @Html.AntiForgeryToken()
+                            <input id="type" name="type" type="hidden" />
+                            <input id="catID" name="catID" type="hidden" />
+                            <input id="catTitle" name="catTitle" type="hidden" />
+                            <input id="image" name="image" type="hidden" />
+                            <input id="ID" name="ID" type="hidden" />
+                            <input id="contentID" hidden />
+
+                            <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:25px">
+
+
+                                <style>
+                                    .fieldholder{
+                                        margin-bottom:20px
+                                    }
+                                </style>
+
+                                <div class="tab-content">
+
+                                    <div id="" class="" style="padding-top:20px">
+                                        <div class="row">
+
+                                            <div class="row fieldholder col-lg-6">
+                                                <label style="text-align: right">
+                                                    عنوان :
+                                                </label>
+
+                                                <div>
+                                                    <span style="color:red; display:none">*</span>
+
+                                                    <div id="contentHolder">
+                                                        <input value="" type="text" id="title" name="title" required="required" class="form-control   ">
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row fieldholder col-lg-6">
+                                                <label> دسته بندی</label>
+
+
+                                                <div class=" ">
+                                                    <span style="color:red; display:none">*</span>
+                                                    @Html.DropDownList("listofcat", listItemsCat, "صفحه اصلی", new { id = "listofcat", @class = "form-control" })
+
+                                                </div>
+                                            </div>
+                                            <div class="row fieldholder col-lg-6">
+                                                <label> انتخاب نوع محتوی</label>
+
+
+                                                <div class=" ">
+                                                    <span style="color:red; display:none">*</span>
+                                                    @Html.DropDownList("bannerList", listItems, "select item", new { id = "bannerList", @class = "form-control" })
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row fieldholder col-lg-6">
+                                                <label style="text-align: right">
+                                                    محتوا :
+                                                </label>
+
+                                                <div>
+                                                    <span style="color:red; display:none">*</span>
+
+                                                    <div id="contentHolder">
+                                                        <input value="" type="text" id="catIDOrLink" name="catIDOrLink" required="required" class="form-control   ">
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row fieldholder col-lg-6">
+                                                <label style="text-align: right">
+                                                    اولویت :
+                                                </label>
+
+                                                <div>
+                                                    <span style="color:red; display:none">*</span>
+
+                                                    <div id="contentHolder">
+                                                        <input value="" type="text" id="priority" name="priority" required="required" class="form-control   ">
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                            <div  class="row fieldholder  col-lg-6" style="padding: 0 10px;display: inline-block;">
+
+                                                <label style="text-align: right">
+                                                    عکس:
+
+                                                </label>
+
+                                                <div>
+
+                                                    <input type="file" id="imageUpload" name="imageUpload" required="required" class="form-control  ">
+                                                </div>
+
+
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+                                        <script>
+                                            //change autocomplete source based on selected type
+                                            $("#bannerList").change(function () {
+
+                                                var val = $("#bannerList  option:selected").val();
+
+                                                if (val === "filter") {
+                                                    $("#catIDOrLink").easyAutocomplete(filters);
+                                                }
+                                                else if (val == "cat") {
+                                                    $("#catIDOrLink").easyAutocomplete(cats);
+                                                }
+                                                else if (val == "subcat") {
+                                                    $("#catIDOrLink").easyAutocomplete(subcats);
+                                                }
+                                                else if (val == "subcat2") {
+                                                    $("#catIDOrLink").easyAutocomplete(subcats2);
+                                                }
+
+                                            });
+                                            // verify button</script>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button id="verify" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   
+    <div class="row">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>@Resources.res.shopGroupList</h5>
+                            <div id="addProductGroup" style="padding:7px 40px" id="Verify" class="btn btn-primary lgnsubmitt"> @Resources.res.addNewGroup</div>
+
+                        </div>
+
+                        <div class="row" id="Listholder">
+
+                            <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.image</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.title</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.type</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.content</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.category</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1">@Resources.res.option</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @if (Model.grlist != null)
+                                    {
+                                        foreach (var item in Model.grlist)
+                                        {
+                                            string cls = "odd";
+                                            if (Model.grlist.IndexOf(item) + 1 % 2 == 0)
+                                            {
+                                                cls = "even";
+                                            }
+
+                                            <tr class="@cls">
+                                                <td>
+                                                    <div class="table-image">
+                                                        <img src="@item.image" class="img-fluid" alt="">
+                                                    </div>
+                                                </td>
+
+                                                <td>@item.title</td>
+
+                                                <td>@item.type</td>
+                                                <td>@item.catIDOrLink</td>
+                                                <td>@item.catTitle</td>
+
+
+
+
+
+                                                <td>
+                                                    <ul>
+
+                                                        <li>
+                                                            <a href="javascript:void(0)">
+                                                                <i id=@item.ID class="ri-delete-bin-line Dbutton "></i>
+
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+    <script>
+        var id = "";
+        $(".Dbutton").click(function () {
+
+            $("#deldiscountModal").modal('toggle');
+            id = $(this).attr("id");
+
+
+        })
+        $("#delDiscount").click(function () {
+            $.ajax({
+                url: '/Node/deleteProductGroup',
+                dataType: 'html',
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+                    if (data === "success") {
+
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('آیتم مورد نظر با موفقیت حذف شد');
+                        window.location.reload();
+                    }
+                    else {
+                        $("#deldiscountModal").modal('toggle');
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('شما قادر به حذف این مورد نیستید')
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        });</script>
+
+
+
+    <script>
+        $("#addProductGroup").click(function () {
+            $("#pgModal").modal('toggle');
+        })
+        $("#verify").click(function () {
+
+            var int = 0;
+            $(".REM").each(function () {
+
+                if ($(this).val() === "") {
+                    $(this).siblings("span").css("display", "inline-block");
+                    int = 1;
+                }
+            });
+
+            if (int === 0) {
+
+                $("#type").val($("#bannerList").val());
+                $("#catID").val($("#listofcat").val());
+                $("#catTitle").val($("#listofcat option:selected").text());
+                $("#image").val($("#imageUpload").val());
+                $("form#setNewProductGroup").submit();
+
+            }
+            else {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                };
+                toastr.error('لطفاً تمامی موارد را کامل کنید');
+
+            }
+
+
+        })</script>
+
+
+
+
+

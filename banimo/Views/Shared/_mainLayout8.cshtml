@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <title>@Resources.res.tabheader</title>
+    <title>حسون، انچه شما می پسندید</title>
 
     <meta name="keywords" content="Marketplace ecommerce  " />
     <meta name="description" content="Marsool is powerful marketplace ">
@@ -54,6 +54,7 @@
     <!-- Default CSS -->
     <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/css/demo10.min.css">
     <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
+    <link href="~/Content/font.css" rel="stylesheet" />
 </head>
 
 <body class="home" style="direction:rtl">
@@ -73,7 +74,7 @@
                         <div  class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
 
                             <input style="border-right:1px solid #e5e5e5; border-left:0" type="text" class="form-control searchtxt" name="search" 
-                                   placeholder="@Resources.res.searchplaceholder" required />
+                                   placeholder="جستجو کنید" required />
                             <button class="btn btn-search" style="border-left:1px solid #e5e5e5; border-right:0">
                                 <i class="w-icon-search"></i>
                             </button>
@@ -84,10 +85,10 @@
                         <div class="header-call d-xs-show d-lg-flex align-items-center">
                             <a href="tel:#" class="w-icon-call"></a>
                             <div class="call-info d-lg-show">
+                                <a href="tel:#" class="phone-number font-weight-bolder ls-50 priceItem" >021-22931806</a>
                                 <h4 class="chat font-weight-normal font-size-md text-normal ls-normal text-light mb-0">
-                                    <a href="mailto:#" class="text-capitalize">@Resources.res.livechat</a> 
+                                    <a href="mailto:#" class="text-capitalize"></a>
                                 </h4>
-                                <a href="tel:#" class="phone-number font-weight-bolder ls-50">(971)26660-833</a>
                             </div>
                         </div>
                         <a class="wishlist label-down link d-xs-show" href="/Home/Login">
@@ -98,9 +99,9 @@
                             <div class="cart-overlay"></div>
                             <a href="/Home/checkout" class=" label-down link">
                                 <i class="w-icon-cart">
-                                    <span class="cart-count simpleCart_quantityy">0</span>
+                                    <span class="cart-count simpleCart_quantityy priceItem">0</span>
                                 </i>
-                                <span class="cart-label">Cart</span>
+                                <span class="cart-label">سبد خرید</span>
                             </a>
 
                         </div>
@@ -126,7 +127,7 @@
                 <div class="container">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-xl-5 col-lg-6">
-                            <div class="icon-box icon-box-side text-white">
+                            <div class="icon-box icon-box-side text-white" style="justify-content:right">
                                 <div class="icon-box-icon d-inline-flex">
                                     <i class="w-icon-envelop3"></i>
                                 </div>
@@ -146,7 +147,7 @@
                                 <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
                                        placeholder="@Resources.res.emailPlaceholder" />
                                 <button class="btn btn-dark btn-rounded" type="submit">
-                                  @Resources.res.Subscribe  <i class="w-icon-long-arrow-right"></i>
+                                  @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
                                 </button>
                             </form>
                         </div>
@@ -163,8 +164,8 @@
                                          height="45" />
                                 </a>
                                 <div class="widget-body">
-                                    <p class="widget-about-title">Got Question? Call us 24/7</p>
-                                    <a href="tel:18005707777" class="widget-about-call">(971)26660-833</a>
+                                    <p class="widget-about-title">پشتیبانی 24 ساعته</p>
+                                    <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
                                   
 
                                     <div class="social-icons social-icons-colored">
@@ -179,57 +180,47 @@
                         </div>
                         <div class="col-lg-3 col-sm-6">
                             <div class="widget">
-                                <h3 class="widget-title">Company</h3>
+                                <h3 class="widget-title">شرکت</h3>
                                 <ul class="widget-body">
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="#">Team Member</a></li>
-                                    <li><a href="#">Career</a></li>
-                                    <li><a href="contact-us.html">Contact Us</a></li>
-                                    <li><a href="#">Affilate</a></li>
-                                    <li><a href="#">Order History</a></li>
+                                    <li><a href="about-us.html">درباره ما</a></li>
+                                    <li><a href="#">اعضای حصون</a></li>
+                                    <li><a href="#">همکاری</a></li>
+                                    <li><a href="contact-us.html">تماس با ما</a></li>
+                                    <li><a href="#">مشارکت در فروش</a></li>
+                                    <li><a href="#">سابقه خرید</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6">
                             <div class="widget">
-                                <h4 class="widget-title">My Account</h4>
+                                <h4 class="widget-title">حساب کاربری</h4>
                                 <ul class="widget-body">
-                                    <li><a href="#">Track My Order</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
-                                    <li><a href="login.html">Sign In</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="wishlist.html">My Wishlist</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">پیگیری خرید</a></li>
+                                    <li><a href="cart.html">سبد خرید</a></li>
+                                    <li><a href="login.html">ورود</a></li>
+                                    <li><a href="#">پشتیبانی</a></li>
+                                    <li><a href="wishlist.html">لیست منتخب</a></li>
+                                    <li><a href="#">حریم خصوصی</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6">
                             <div class="widget">
-                                <h4 class="widget-title">Customer Service</h4>
+                                <h4 class="widget-title">خدمات مشتریان</h4>
                                 <ul class="widget-body">
-                                    <li><a href="#">Payment Methods</a></li>
-                                    <li><a href="#">Money-back guarantee!</a></li>
-                                    <li><a href="#">Product Returns</a></li>
-                                    <li><a href="#">Support Center</a></li>
-                                    <li><a href="#">Shipping</a></li>
-                                    <li><a href="#">Term and Conditions</a></li>
+                                    <li><a href="#">روش های پرداخت</a></li>
+                                    <li><a href="#">تضمین بازگشت وجه</a></li>
+                                    <li><a href="#">عودت کالا</a></li>
+                                    <li><a href="#">مرکز پشتیبانی</a></li>
+                                    <li><a href="#">ارسال</a></li>
+                                    <li><a href="#">قوانین </a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
            
-                <div class="footer-bottom">
-                    <div class="footer-left">
-                        <p class="copyright">Copyright © 2023 Truth. All Rights Reserved.</p>
-                    </div>
-                    <div class="footer-right">
-                        <span class="payment-label mr-lg-8">We're using safe payment for</span>
-                        <figure class="payment">
-                            <img src="/webAsset/wolmart/assets/images/payment.png" alt="payment" width="159" height="25" />
-                        </figure>
-                    </div>
-                </div>
+               
             </div>
         </footer>
         <!-- End of Footer -->

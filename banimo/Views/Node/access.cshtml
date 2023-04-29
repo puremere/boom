@@ -31,10 +31,10 @@
         <div class="modal-content">
             <p class="idToRemove" style="display:none"></p>
             <div class="modal-body">
-                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <p class="modalDelQuestion">@Resources.res.removeConfirm </p> 
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeU">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeU">@Resources.res.OK</button>
 
                    
                 </div>
@@ -48,10 +48,10 @@
         <div class="modal-content">
             <p class="idRoleToRemove" style="display:none"></p>
             <div class="modal-body">
-                <p class="modalDelQuestion">Are You Sure Removing This Item ?</p>
+                <p class="modalDelQuestion">@Resources.res.removeConfirm</p>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeRole">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="removeRole">@Resources.res.OK</button>
 
 
                 </div>
@@ -65,7 +65,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                <h5 class="modal-title" id="staticBackdropLabel"> @Resources.res.adNewUser </h5>
                 <div>
                     <div class="row">
                         @using (Html.BeginForm("setNewUser", "Node", FormMethod.Post,
@@ -73,14 +73,14 @@ new { enctype = "multipart/form-data", id = "addUser" }))
                         {
                             <input hidden name="UserListUpdate" value="0"/>
                             <input hidden name="password" value="password" />
-
+                            <input hidden name ="user" value="true"/>
                             <div >
                                 <div class="row">
 
 
                                     <div class="row fieldholder col-lg-5">
                                         <label>
-                                            Phone :
+                                            @Resources.res.phone :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
@@ -91,7 +91,7 @@ new { enctype = "multipart/form-data", id = "addUser" }))
                                     </div>
                                     <div class="row fieldholder col-lg-5">
                                         <label>
-                                            Fullname :
+                                            @Resources.res.name :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
@@ -102,8 +102,8 @@ new { enctype = "multipart/form-data", id = "addUser" }))
 
                                     </div>
                                     <div class="row fieldholder col-lg-5">
-                                        <label >
-                                            Email :
+                                        <label>
+                                            @Resources.res.email :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
@@ -127,8 +127,8 @@ new { enctype = "multipart/form-data", id = "addUser" }))
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="CreateButt">@Resources.res.OK</button>
 
                     <script>
 
@@ -157,7 +157,7 @@ new { enctype = "multipart/form-data", id = "addUser" }))
                                     "timeOut": 5000,
                                     "extendedTimeOut": 1000
                                 }
-                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+                                toastr.error('@Resources.res.fillAllField')
 
                             }
 
@@ -176,7 +176,7 @@ new { enctype = "multipart/form-data", id = "addUser" }))
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Add New Role</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">@Resources.res.addNewRole </h5>
                 <div class="row">
                     <div>
                         @using (Html.BeginForm("setNewRoll", "Node", FormMethod.Post,
@@ -191,7 +191,7 @@ new { enctype = "multipart/form-data", id = "addRoll" }))
 
                                     <div class="row fieldholder col-lg-12">
                                         <label >
-                                            Role Title :
+                                           @Resources.res.roleTitle  :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
@@ -202,15 +202,15 @@ new { enctype = "multipart/form-data", id = "addRoll" }))
 
                                     </div>
                                     <div class="row fieldholder col-lg-12">
-                                        <label >
-                                            Choose Section : 
+                                        <label>
+                                            @Resources.res.chooseSection   :
                                         </label>
                                         <div>
 
                                             <span style="color:red; display:none">*</span>
                                             @if (Model.Sections != null)
                                             {
-                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- choose section --", new { id = "sectionList", name = "sectionList", style = "", @class = "addRoleItem form-control", multiple = "multiple" })
+                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- "+@Resources.res.chooseSection +" --", new { id = "sectionList", name = "sectionList", style = "", @class = "addRoleItem form-control", multiple = "multiple" })
                                             }
                                         </div>
 
@@ -234,8 +234,8 @@ new { enctype = "multipart/form-data", id = "addRoll" }))
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleCreate">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleCreate">@Resources.res.OK</button>
                     <script>
 
 
@@ -265,7 +265,7 @@ new { enctype = "multipart/form-data", id = "addRoll" }))
                                     "timeOut": 5000,
                                     "extendedTimeOut": 1000
                                 }
-                                toastr.error('Fill All Fields')
+                                toastr.error('@Resources.res.fillAllField ')
 
                             }
 
@@ -284,7 +284,7 @@ new { enctype = "multipart/form-data", id = "addRoll" }))
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Section</h5>
+                <h5 class="modal-title" id="staticBackdropLabel"> @Resources.res.addSection </h5>
 
                 <div class="row">
                     <div>
@@ -301,13 +301,13 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
 
                                     <div class="row fieldholder col-lg-10">
                                         <label style="">
-                                           Select New Section :
+                                           @Resources.res.selectNewSection  :
                                         </label>
                                         <div>
                                             <span style="color:red; display:none">*</span>
                                             @if (Model.Sections != null)
                                             {
-                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- Select Section --", new { id = "sectionList", name = "sectionList", style = "", @class = "editRoleItem form-control", multiple = "multiple" })
+                                                @Html.DropDownList("sectionList", new SelectList(Model.Sections, "ID", "actionF"), "-- "+Resources.res.chooseSection + " --", new { id = "sectionList", name = "sectionList", style = "", @class = "editRoleItem form-control", multiple = "multiple" })
                                             }
                                         </div>
 
@@ -331,8 +331,8 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleEdit">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="" id="roleEdit">@Resources.res.OK</button>
                     <script>
 
 
@@ -362,7 +362,7 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                                     "timeOut": 5000,
                                     "extendedTimeOut": 1000
                                 }
-                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+                                toastr.error('@Resources.res.fillAllField')
 
                             }
 
@@ -396,7 +396,7 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
 
                                 <div class="row fieldholder col-lg-6" style="margin:15px 0">
                                     <label style="text-align: right">
-                                        Full name
+                                       @Resources.res.fullName 
                                     </label>
                                     <div>
                                         <span style="color:red; display:none">*</span>
@@ -410,7 +410,7 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
 
                                 <div class="row fieldholder col-lg-6" style="margin:15px 0">
                                     <label style="text-align: right">
-                                        Phone
+                                        @Resources.res.phone :
                                     </label>
                                     <div>
                                         <span style="color:red; display:none">*</span>
@@ -421,7 +421,7 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                                 </div>
                                 <div class="row fieldholder col-lg-6" style="margin:15px 0">
                                     <label style="text-align: right">
-                                        Email :
+                                        @Resources.res.email  :
                                     </label>
                                     <div>
                                         <span style="color:red; display:none">*</span>
@@ -445,8 +445,8 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                 </div>
 
                 <div class="button-box">
-                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">Cancel</button>
-                    <button type="button" class="btn  btn--yes btn-primary" data-bs-dismiss="modal" data-bs-original-title="" title="" id="UserUpdateButt">Verify</button>
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button type="button" class="btn  btn--yes btn-primary" data-bs-dismiss="modal" data-bs-original-title="" title="" id="UserUpdateButt">@Resources.res.OK</button>
 
                     <script>
 
@@ -474,7 +474,7 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                                     "timeOut": 5000,
                                     "extendedTimeOut": 1000
                                 }
-                                toastr.error('لطفاً تمامی موارد را کامل کنید')
+                                toastr.error('@Resources.res.fillAllField')
 
                             }
 
@@ -491,8 +491,8 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
 <div>
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">User List</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Role List</button>
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.userList </button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.RoleList</button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -504,20 +504,20 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                     <div class="card">
                         <div class="card-body">
                             <div class="title-header option-title">
-                                <h5>Search Panel</h5>
+                                <h5>@Resources.res.searchPanel </h5>
                             </div>
                             <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
                                 <div class=" ">
                                     <span style="color:red; display:none">*</span>
-                                    <input class="form-control" style="min-width:250px" type="text" id="searchinput" name="searchinput" placeholder="Search Item" />
+                                    <input class="form-control" style="min-width:250px" type="text" id="searchinput" name="searchinput" placeholder="@Resources.res.search" />
                                 </div>
                             </div>
 
                             <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                                <a id="changeUserList" class="lgnsubmitt btn btn-primary">Search</a>
+                                <a id="changeUserList" class="lgnsubmitt btn btn-primary">@Resources.res.search </a>
                             </div>
                             <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                                <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary">Add New User</a>
+                                <a id="addUserModalIcon" class="lgnsubmitt btn btn-primary"> @Resources.res.adNewUser</a>
                             </div>
                             <script>
                                 $("#changeUserList").click(function () {
@@ -560,17 +560,16 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                     <div class="card">
                         <div class="card-body">
                             <div class="title-header option-title">
-                                <h5>User List</h5>
+                                <h5> @Resources.res.userList</h5>
                             </div>
                             <div id="Listholder">
                                 <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
                                     <thead>
                                         <tr>
-
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Email</th>
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Phone</th>
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Actions</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.title </th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.email </th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.phone </th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action </th>
                                         </tr>
                                     </thead>
 
@@ -753,16 +752,16 @@ new { enctype = "multipart/form-data", id = "editRoll" }))
                         <div class="card">
                             <div class="card-body">
                                 <div class="title-header option-title">
-                                    <h5>Role List</h5>
+                                    <h5>@Resources.res.RoleList </h5>
                                 </div>
                                 <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
-                                    <a id="addRoleModalIcon" class="lgnsubmitt btn btn-primary">Add New Role</a>
-                                </div>
+                                    <a id="addRoleModalIcon" class="lgnsubmitt btn btn-primary">@Resources.res.addNewRole </a>
+                                </div> 
                                 <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
                                     <thead>
                                         <tr>
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Title</th>
-                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Option</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.title </th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.option </th>
                                         </tr>
                                     </thead>
 

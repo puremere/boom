@@ -95,10 +95,20 @@
                                 <a href="tel:#" class="phone-number font-weight-bolder ls-50">(971)26660-833</a>
                             </div>
                         </div>
-                        <a class="wishlist label-down link d-xs-show" href="/Home/Login">
-                            <i style="font-weight:600" class="w-icon-user"></i>
-                            <span class="wishlist-label d-lg-show">Login</span>
-                        </a>
+                        @if (Session["LogedInUser"] == null)
+                        {
+                            <a class="wishlist label-down link d-xs-show" href="/Home/Login">
+                                <i style="font-weight:600" class="w-icon-user"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.login</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="wishlist label-down link d-xs-show" href="/CustomerLogin/LogOff">
+                                <i style="font-weight:600" class="w-icon-logout"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.logout</span>
+                            </a>
+                        }
                         <div class=" cart-dropdown cart-offcanvas mr-0 mr-lg-2" style="position:relative">
                             <div class="cart-overlay"></div>
                             <a href="/Home/checkout" class=" label-down link">
@@ -245,13 +255,23 @@
             <p>Home</p>
         </a>
         @*<a href="/Home/Index" class="sticky-link">
-                <i class="w-icon-category"></i>
-                <p>Shop</p>
-            </a>*@
-        <a href="/Home/myProfile" class="sticky-link">
-            <i class="w-icon-account"></i>
-            <p>Account</p>
-        </a>
+            <i class="w-icon-category"></i>
+            <p>Shop</p>
+        </a>*@
+        @if (Session["logedInUser"] == null)
+        {
+            <a href="/Home/login" class="sticky-link">
+                <i class="w-icon-account"></i>
+                <p>Account</p>
+            </a>
+        }
+        else
+        {
+            <a class="sticky-link" href="/CustomerLogin/LogOff">
+                <i class="w-icon-logout"></i>
+                <p>Log out</p>
+            </a>
+        }
         <div class=" dir-up">
             <a href="/Home/checkout" class="sticky-link">
                 <i class="w-icon-cart"></i>

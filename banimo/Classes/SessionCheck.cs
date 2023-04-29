@@ -126,11 +126,12 @@ namespace banimo.Classes
                             result = System.Text.Encoding.UTF8.GetString(response);
                         }
                         banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                        filterContext.Controller.ViewBag.Msg = model.message;
                         if (model.status != "200")
                         {
                             filterContext.Result = new RedirectToRouteResult(
                             new RouteValueDictionary {
-                                        { "Controller", "Partner" },
+                                        { "Controller", "Admin" },
                                         { "Action", "Index" }
                                            });
                         }
@@ -396,6 +397,114 @@ namespace banimo.Classes
                 }
             }
            
+
+        }
+    }
+    public class DriverSessionCheck : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var descriptor = filterContext.ActionDescriptor;
+            var actionName = descriptor.ActionName;
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+
+            if (actionName != "Index" && actionName != "CustomerLogin" && actionName != "index")
+            {
+                if (session["driverUser"] == null)
+                {
+                    if (filterContext.HttpContext.Request.Cookies["DU"] != null)
+                    {
+                        var request = filterContext.HttpContext.Request.Cookies["DU"].Value;
+                        if (!string.IsNullOrEmpty(request))
+                        {
+
+
+                            string[] lst = { "list" };
+                            if (lst.Contains(actionName))
+                            {
+                                session["driverUser"] = request.ToString();
+                              
+                                string result = "";
+                                using (WebClient client = new WebClient())
+                                {
+                                    string token = session["driverUser"].ToString();
+                                    string action = "Driver/" + actionName;
+
+                                    var collection = new NameValueCollection();
+                                    collection.Add("token", token);
+                                    collection.Add("action", action);
+                                    collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
+                                    string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
+                                    byte[] response = client.UploadValues(url, collection);
+                                    result = System.Text.Encoding.UTF8.GetString(response);
+                                }
+                                banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                                if (model.status != "200")
+                                {
+                                    filterContext.Result = new RedirectToRouteResult(
+                                    new RouteValueDictionary {
+                                        { "Controller", "Driver" },
+                                        { "Action", "Index" }
+                                                   });
+                                }
+
+                            }
+                            //string val = cookie["NameOfTheCookieIWant"].Value;
+                        }
+                        else
+                        {
+                            filterContext.Result = new RedirectToRouteResult(
+                            new RouteValueDictionary {
+                                { "Controller", "Driver" },
+                                { "Action", "Index" }
+                                        });
+                        }
+
+                    }
+                    else
+                    {
+                        filterContext.Result = new RedirectToRouteResult(
+                        new RouteValueDictionary {
+                                { "Controller", "Driver" },
+                                { "Action", "Index" }
+                                    });
+                    }
+                }
+                else
+                {
+
+                    string[] lst = { "list" };
+                    if (lst.Contains(actionName))
+                    {
+                        string result = "";
+                        using (WebClient client = new WebClient())
+                        {
+                            string token = session["driverUser"].ToString();
+                            string action = "Driver/" + actionName;
+
+                            var collection = new NameValueCollection();
+                            collection.Add("token", token);
+                            collection.Add("action", action);
+                            collection.Add("servername", ConfigurationManager.AppSettings["servername"]);
+                            string url = ConfigurationManager.AppSettings["server"] + "/Admin/checkPartnerToken.php";
+                            byte[] response = client.UploadValues(url, collection);
+                            result = System.Text.Encoding.UTF8.GetString(response);
+                        }
+                        banimo.ViewModel.reponsVM model = JsonConvert.DeserializeObject<banimo.ViewModel.reponsVM>(result);
+                        if (model.status != "200")
+                        {
+                            filterContext.Result = new RedirectToRouteResult(
+                            new RouteValueDictionary {
+                                        { "Controller", "Driver" },
+                                        { "Action", "Index" }
+                                           });
+                        }
+
+                    }
+
+                }
+            }
+
 
         }
     }

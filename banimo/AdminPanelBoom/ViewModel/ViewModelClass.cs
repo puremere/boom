@@ -240,6 +240,8 @@ namespace AdminPanelBoom.ViewModel
         public string limit { get; set; }
         public string tag { get; set; }
         public string meta { get; set; }
+        public string catID { get; set; }
+        
     }
     public class earlyRoot
     {

@@ -307,6 +307,12 @@ namespace banimo.Controllers
         }
         public ActionResult Index(string error)
         {
+
+            if(!String.IsNullOrEmpty(ConfigurationManager.AppSettings["market"] as string))
+            {
+                //return RedirectToAction("index", "node");
+            }
+                
             Variables.menu = "";
             ViewBag.error = error;
             if (Session["imageList"] == null)
@@ -3552,7 +3558,7 @@ namespace banimo.Controllers
             }
 
             log.current = page;
-            return PartialView("/Views/Shared/NodeShared/_RecitList.cshtml", log);
+            return PartialView("/Views/Shared/AdminShared/_RecitList.cshtml", log);
         }
         public void setCustomTransaction(string fromSource, string toSource, string price, string desc, string typeto, string typefrom, string sourseID)
         {
@@ -6394,7 +6400,7 @@ namespace banimo.Controllers
                 brands = log.brand,
                 meta = log.data.First().meta,
                 partners = log.partners,
-                catmode = catID,
+                catmode = log.data.First().catID,
                 filtercatsAll = log.filtercatsAll,
                 tag = log.data.First().tag,
                 vahed = log.data.First().vahed,

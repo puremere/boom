@@ -16,36 +16,36 @@
 
     <div class="mb-4 row align-items-center">
         <label class="form-label-title col-sm-2 mb-0">
-            Product Title
+            @Resources.res.productTitle 
         </label>
         <div class="col-sm-10">
-            <input value="@title" id="productname" name="title" class="form-control" type="text" placeholder="Enter Product Title">
+            <input value="@title" id="productname" name="title" class="form-control" type="text" placeholder="@Resources.res.productTitle ">
         </div>
     </div>
 
     <div class="mb-4 row align-items-center" style="display:none">
-        <label class="form-label-title col-sm-2 mb-0">Category</label>
+        <label class="form-label-title col-sm-2 mb-0">@Resources.res.category</label>
         <div class="col-sm-10">
             @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
 
         </div>
     </div>
     <div class="mb-4 row align-items-center">
-        <label class="form-label-title col-sm-2 mb-0">Color</label>
+        <label class="form-label-title col-sm-2 mb-0">@Resources.res.color</label>
         <div class="col-sm-10">
-            <span id="addColorButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">Add New Color</span></span>
+            <span id="addColorButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">@Resources.res.addNewColor </span></span>
             @if (Model.ID != 0)
             {
                 <div class=" ">
-                    @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), "-- Choose Color--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control" })
+                    @Html.DropDownListFor(x => x.selectedColor, new SelectList(Model.colors, "title", "title"), Resources.res.choosColor, new { id = "ColorC", name = "ColorC", style = "", @class = "form-control" })
                 </div>
             }
             else
             {
                 <div class=" ">
-                    @if (Model.color != null)
+                    @if (Model.colors != null)
                     {
-                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), "-- Choose Color--", new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
+                        @Html.DropDownList("ColorC", new SelectList(Model.colors, "title", "title"), Resources.res.choosColor, new { id = "ColorC", name = "ColorC", style = "", @class = "form-control", @multiple })
 
                     }
                 </div>
@@ -53,16 +53,16 @@
         </div>
     </div>
     <div class="mb-4 row align-items-center">
-        <label class="form-label-title col-sm-2 mb-0">Variation   </label>
+        <label class="form-label-title col-sm-2 mb-0">@Resources.res.variation    </label>
         <div class="col-sm-10">
-            <div class="row"><span id="addShakhesButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">Add New Variation</span></span></div>
+            <div class="row"><span id="addShakhesButton" style="margin-bottom: 10px"><span style="width:200px" class="btn btn-primary">@Resources.res.addNewVariation </span></span></div>
             @if (@Model.filterCore != null)
             {
                 if (Model.ID != 0)
                 {
                     <div class=" ">
 
-                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- Choose Variation--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
+                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), Resources.res.chooseVari, new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
                     </div>
                 }
                 else
@@ -70,7 +70,7 @@
                     if (Model.filterCore != null)
                     {
                         <div class=" ">
-                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- Choose Variation --", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), Resources.res.chooseVari, new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
                         </div>
                     }
 
@@ -87,11 +87,11 @@
 
 
     <div style="display:none" class="row fieldholder col-lg-3">
-        <label> brand</label>
+        <label> @Resources.res.brand</label>
         <div class=" ">
             @if (Model.brandCore != null)
             {
-                @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+                @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), Resources.res.selectitem, new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
 
             }
         </div>
@@ -101,7 +101,7 @@
 
     <div style="display:none" class="row fieldholder col-lg-3">
         <label style="text-align: right">
-            Address :
+            @Resources.res.address :
         </label>
         <div>
             <input value="@address" type="text" id="productAddress" name="address" required="required" class="form-control col-md-7 col-xs-12">
@@ -109,7 +109,7 @@
     </div>
     <div style="display:none" class="row fieldholder col-lg-3">
         <label style="text-align: right">
-            code :
+            @Resources.res.Code :
         </label>
         <div>
             <input value="@code" type="text" id="productCode" name="code" required="required" class="form-control col-md-7 col-xs-12">
@@ -117,7 +117,7 @@
     </div>
     <div style="display:none" class="row fieldholder col-lg-3">
         <label style="text-align: right">
-            count :
+            @Resources.res.count :
         </label>
         <div>
             <input value="@initCount" type="text" id="productInitCount" name="initCount" required="required" class="form-control col-md-7 col-xs-12">
@@ -127,7 +127,7 @@
     <div class="row " style="padding:0 25px; display:none">
         <div class="row fieldholder col-lg-3">
             <label for="first-name" style="text-align:right">
-                barcode :
+                @Resources.res.Barcode :
             </label>
             <div>
                 <input value="@barcode" type="text" id="productBarcode" name="barcode" required="required" class="form-control ">
@@ -135,7 +135,7 @@
         </div>
         <div class="row fieldholder col-lg-3">
             <label for="first-name" style="text-align:right">
-                desc :
+                @Resources.res.description :
             </label>
             <div>
                 <input value="@description" type="text" id="productDesc" name="description" required="required" class="form-control ">
@@ -144,7 +144,7 @@
     </div>
 
     <div id="CRprocuctpartner" class="row">
-        <div class="btn btn-primary lgnsubmitt">Create Product</div>
+        <div class="btn btn-primary lgnsubmitt">@Resources.res.createProduct</div>
     </div>
 
 

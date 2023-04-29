@@ -37,6 +37,7 @@ namespace banimo.ViewModePost
         public string curl { get; set; }
         public string desctag { get; set; }
         public string titletag { get; set; }
+        public string keyTag { get; set; }
 
     }
     public class Newest
@@ -136,6 +137,12 @@ namespace banimo.ViewModePost
         public contactSectionVM conmodel { get; set; }
         public List<Brand> brands { get; set; }
         public string iosCookie { get; set; }
+        public string trafImage { get; set; }
+        public string trafTitle { get; set; }
+        public string trafAddress { get; set; }
+        public string trafPrice { get; set; }
+        public string trafTag { get; set; }
+        
         public string trafCode { get; set; }
         public List<Slide> slides { get; set; }
         public List<Cat> cats { get; set; }

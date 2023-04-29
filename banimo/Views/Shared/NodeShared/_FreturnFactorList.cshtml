@@ -9,122 +9,89 @@
         border: 1px solid #eee;
     }
 </style>
-<div class="modal fade" id="FsayerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="FsayerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                فرم ثبت سایر هزینه ها
-            </div>
             <div class="modal-body">
-
                 <input id="FparentID" hidden />
                 <div id="FsayerHolder"></div>
+               
+                <div class="button-box">
+                    <button type="button" class="btn btn--no" data-bs-dismiss="modal" data-bs-original-title="" title="">@Resources.res.cancel</button>
+                    <button id="FconfirmSayer" type="button" class="btn  btn--yes btn-primary" data-bs-original-title="" title="">@Resources.res.OK</button>
+                    <script>
+                        $("#FconfirmSayer").click(function () {
+                            //$("#residModal").modal('hide');
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin:7px;">لغو</button>
-                <button id="FconfirmSayer" type="button" class="btn btn-default" style="margin: 7px;">تایید</button>
-
-                <script>
-                    $("#FconfirmSayer").click(function () {
-                        //$("#residModal").modal('hide');
-
-                        var dPercent = $("#FdPercent").val();
-                        var dPrice = $("#FdPrice").val();
-                        var TPercent = $("#FTPercent").val();
-                        var TPrice = $("#FTPrice").val();
-                        var OPercent = $("#FOPercent").val();
-                        var OPrice = $("#FOPrice").val();
-                        var HPercent = $("#FHPercent").val();
-                        var HPrice = $("#FHPrice").val();
-                        var parentID = $("#FparentID").val();
-                        if ($('#FTcheck').is(":checked")) {
-                            var Tbaha = "1";
-                        }
-                        else {
-                            var Tbaha = "0";
-                        }
-                        if ($('#FOcheck').is(":checked")) {
-                            var Obaha = "1";
-                        }
-                        else {
-                            var Obaha = "0";
-                        }
-                        if ($('#FHcheck').is(":checked")) {
-                            var Hbaha = "1";
-                        }
-                        else {
-                            var Hbaha = "0";
-                        }
-                        if ($('#Fdcheck').is(":checked")) {
-                            var dbaha = "1";
-                        }
-                        else {
-                            var dbaha = "0";
-                        }
+                            var dPercent = $("#FdPercent").val();
+                            var dPrice = $("#FdPrice").val();
+                            var TPercent = $("#FTPercent").val();
+                            var TPrice = $("#FTPrice").val();
+                            var OPercent = $("#FOPercent").val();
+                            var OPrice = $("#FOPrice").val();
+                            var HPercent = $("#FHPercent").val();
+                            var HPrice = $("#FHPrice").val();
+                            var parentID = $("#FparentID").val();
 
 
 
-                        $.ajax({
-                            url: '/Core/setFactorSayer',
-                            dataType: 'html',
-                            data: {
-                                dPercent: dPercent,
-                                dPrice: dPrice,
-                                TPercent: TPercent,
-                                TPrice: TPrice,
-                                OPercent: OPercent,
-                                OPrice: OPrice,
-                                HPercent: HPercent,
-                                HPrice: HPrice,
-                                ID: parentID,
-                                dbaha: dbaha,
-                                Hbaha: Hbaha,
-                                Obaha: Obaha,
-                                Tbaha: Tbaha,
-                                isFroosh: "1"
+                            $.ajax({
+                                url: '/Node/setFactorSayer',
+                                dataType: 'html',
+                                data: {
+                                    dPercent: dPercent,
+                                    dPrice: dPrice,
+                                    TPercent: TPercent,
+                                    TPrice: TPrice,
+                                    OPercent: OPercent,
+                                    OPrice: OPrice,
+                                    HPercent: HPercent,
+                                    HPrice: HPrice,
+                                    ID: parentID,
+                                    isFroosh: "1"
 
 
-                            },
-                            success: function (data) {
-                                if (data == "error") {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
+                                },
+                                success: function (data) {
+                                    if (data == "error") {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error('خطا')
                                     }
-                                    toastr.error('خطا')
-                                }
-                                else {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
+                                    else {
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.success('با موفقیت انجام شد')
+
+                                        $("#FsayerModal").modal('toggle');
+
+                                        //window.location.reload();
                                     }
-                                    toastr.success('با موفقیت انجام شد')
 
-                                    $("#FsayerModal").modal('toggle');
 
-                                    //window.location.reload();
+                                },
+                                error: function () {
+                                    alert("nashod")
                                 }
+                            });
+                        })
 
-
-                            },
-                            error: function () {
-                                alert("nashod")
-                            }
-                        });
-                    })
-
-                </script>
+                    </script>
+                </div>
             </div>
         </div>
     </div>
@@ -159,6 +126,7 @@
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">col</th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Factor Numbere</th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> time</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> final</th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Operation</th>
                                 </tr>
                             </thead>
@@ -183,17 +151,49 @@
                                         <td>@i</td>
                                         <td class="Ffpnumber">@item.number</td>
                                         <td class="Ffptimestamp">@item.timestamp</td>
+                                        <td class="FdaemHolder">
+                                            @if (item.status != "1")
+                                            {
+                                                <input type="checkbox" class="Fdaem checkbox_animated check-it11" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" checked class="Fdaem checkbox_animated check-it11" />
+                                            }
+
+                                        </td>
                                         <td>
                                             <ul>
-                                                <li >
+                                                <li>
                                                     <a href="javascript:void(0)">
                                                         <a href="#">
 
-                                                            <i id=@item.ID class="ri-pencil-line FviewItem"></i>
+                                                            <i id=@item.ID class="ri-file-2-line FviewItem"></i>
                                                         </a>
 
                                                     </a>
                                                 </li>
+                                                @if (item.status != "1")
+                                                {
+                                                    <li >
+                                                        <a href="javascript:void(0)">
+                                                            <i id=@item.ID class="ri-money-cny-box-fill FviewSayer"></i>
+
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0)">
+                                                            <i id=@item.ID class="ri-pencil-line FeditFactorParent"></i>
+
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0)">
+                                                            <i id=@item.ID class="ri-delete-bin-line FdeleteFactorParent"></i>
+
+                                                        </a>
+                                                    </li>
+                                                }
 
 
                                             </ul>
@@ -218,7 +218,7 @@
             </div>
         </div>
     </div>
-    
+
 
 }
 
@@ -301,7 +301,7 @@
         $("#FsayerHolder").html("");
         //$(this).parent().parent().parent().find('tr').css("background-color", "")
         //$(this).parent().parent().css("background-color", "red");
-        var factorParent = $(this).parent().parent().attr('id');
+        var factorParent = $(this).attr('id');
         $("#FparentID").val(factorParent);
         $.ajax({
             url: '/Node/FgetFactorSayer',
@@ -328,7 +328,7 @@
 
         var factorParent = $(this).attr('id');
 
-       
+
         $("#FnewFactorID").val(factorParent);
         $.ajax({
             url: '/Node/FreturnDraftListFactor',
@@ -388,62 +388,62 @@
 
 
 @*@foreach (var item in Model.mainFactor)
-{
-    string image = "";
-    int i = Model.mainFactor.IndexOf(item) + 1;
-    string deleteid = item.ID;
-    <tr nodeID="@item.nodeID" id="@deleteid">
+    {
+        string image = "";
+        int i = Model.mainFactor.IndexOf(item) + 1;
+        string deleteid = item.ID;
+        <tr nodeID="@item.nodeID" id="@deleteid">
 
-        <td>@i</td>
-        <td class="Ffpnumber">@item.number</td>
-        <td anbarID="@item.anbarID" class="Ffpanbar">@item.anbarTitle</td>
-        <td>@item.typeTitle</td>
+            <td>@i</td>
+            <td class="Ffpnumber">@item.number</td>
+            <td anbarID="@item.anbarID" class="Ffpanbar">@item.anbarTitle</td>
+            <td>@item.typeTitle</td>
 
-        <td class="Ffppartner" partnerID=" @item.partnerID">
-            <span>@item.partnerTitle</span>
-        </td>
-
-
+            <td class="Ffppartner" partnerID=" @item.partnerID">
+                <span>@item.partnerTitle</span>
+            </td>
 
 
-        <td class="Ffptimestamp">@item.timestamp</td>
-        <td class="Ffbdesc">@item.deliverName</td>
-        <td class="FdaemHolder">
-            @if (item.status != "1")
-            {
-                <input type="checkbox" class="Fdaem" />
-            }
-            else
-            {
-                <input type="checkbox" checked class="Fdaem" />
-            }
-
-        </td>
-        <td>
-            <div class="btn btn-success FviewItem ">مشاهده اقلام</div>
 
 
-        </td>
-        <td>
-            <div class="btn btn-success FviewSayer ">مشاهده سایر</div>
+            <td class="Ffptimestamp">@item.timestamp</td>
+            <td class="Ffbdesc">@item.deliverName</td>
+            <td class="FdaemHolder">
+                @if (item.status != "1")
+                {
+                    <input type="checkbox" class="Fdaem" />
+                }
+                else
+                {
+                    <input type="checkbox" checked class="Fdaem" />
+                }
+
+            </td>
+            <td>
+                <div class="btn btn-success FviewItem ">مشاهده اقلام</div>
 
 
-        </td>
-        <td>
-            @if (item.status == "1")
-            {
-                <div class="btn btn-danger FdeleteFactorParent">حذف</div>
-
-            }
-        </td>
-        <td>
-            @if (item.status == "1")
-            {
-                <div class="btn btn-danger FeditFactorParent">ویرایش</div>
-
-            }
-        </td>
+            </td>
+            <td>
+                <div class="btn btn-success FviewSayer ">مشاهده سایر</div>
 
 
-    </tr>
-}*@
+            </td>
+            <td>
+                @if (item.status == "1")
+                {
+                    <div class="btn btn-danger FdeleteFactorParent">حذف</div>
+
+                }
+            </td>
+            <td>
+                @if (item.status == "1")
+                {
+                    <div class="btn btn-danger FeditFactorParent">ویرایش</div>
+
+                }
+            </td>
+
+
+        </tr>
+    }*@
