@@ -1,11 +1,11 @@
-﻿@model AdminPanel.ViewModel.RootObjectFilter
+﻿@model banimo.AdminPanel.ViewModel.RootObjectFilter
 
 @using System.Data.Entity
 
 
 @{
     ViewBag.Title = "productdetail";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
 }
 <style>
     .nav-tabs {
@@ -16,6 +16,71 @@
             float: right !important;
         }
 </style>
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    if (Model.filtersModel != null)
+    {
+
+        foreach (var item in Model.filtersModel)
+        {
+
+
+            if (item.filtersubcat != null)
+            {
+                listItems.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "0"
+                });
+                foreach (var subcat in item.filtersubcat)
+                {
+                    if (subcat.filtersubcat2 != null)
+                    {
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "--" + subcat.title,
+                            Value = "0"
+                        });
+                        foreach (var subcat2 in subcat.filtersubcat2)
+                        {
+                            listItems.Add(new SelectListItem
+                            {
+                                Text = "-----" + subcat2.title,
+                                Value = "3" + subcat2.ID
+                            });
+                        }
+
+                    }
+                    else
+                    {
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "--" + subcat.title,
+                            Value = "2" + subcat.ID
+                        });
+
+                    }
+
+
+                }
+            }
+            else
+            {
+                listItems.Add(new SelectListItem
+                {
+                    Text = item.title,
+                    Value = "1" + item.ID
+                });
+
+            }
+
+
+
+        }
+    }
+
+
+}
 @*<ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; "> </a></li>
         <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">لیست زمان مجاز ارسال</a></li>
@@ -31,262 +96,240 @@
         </div>
 
     </div>*@
-<div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:65px">
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; "> ایجاد ویژگی سریع</a></li>
-        <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">مدیریت ویژگی</a></li>
 
-    </ul>
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@Resources.res.filterManagement </button>
+        <button class="nav-link " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">@Resources.res.cloneFilter </button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>@Resources.res.searchPanel</h5>
+                        </div>
+                        <div class="row">
+                            <div class="holderofformgroup">
+                                <div class="form-group " style="display:flex; align-items:center;">
+                                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                        @Resources.res.category
+                                    </label>
 
-    <div class="tab-content">
-        <div id="home" class="tab-pane fade in active" style="padding-top:20px">
-
-            <div class="holderofformgroup">
-                <div class="form-group ">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="col-lg-6">
-                                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                                    اعمال همه ویژگی های دسته  -
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                @{
-                                    List<SelectListItem> listItems = new List<SelectListItem>();
-                                    if (Model.filtersModel != null)
-                                    {
-
-                                        foreach (var item in Model.filtersModel)
-                                        {
+                                    <div class="component " style="margin:0 15px">
+                                        @Html.DropDownList("maincat", listItems, Resources.res.selectitem, new { id = "maincat", style = "width:100%", @class = "form-control" })
+                                    </div>
 
 
-                                            if (item.filtersubcat != null)
-                                            {
-                                                listItems.Add(new SelectListItem
-                                                {
-                                                    Text = item.title,
-                                                    Value = "0"
-                                                });
-                                                foreach (var subcat in item.filtersubcat)
-                                                {
-                                                    if (subcat.filtersubcat2 != null)
-                                                    {
-                                                        listItems.Add(new SelectListItem
-                                                        {
-                                                            Text = "--" + subcat.title,
-                                                            Value = "0"
-                                                        });
-                                                        foreach (var subcat2 in subcat.filtersubcat2)
-                                                        {
-                                                            listItems.Add(new SelectListItem
-                                                            {
-                                                                Text = "-----" + subcat2.title,
-                                                                Value = "3" + subcat2.ID
-                                                            });
+
+
+                                    <div class="component " style="direction:rtl">
+
+                                        @* <button id="DEFcatok" class="btn btn-primary" onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
+                                        <button id="getfeature" class="btn btn-primary">@Resources.res.OK</button>
+                                        <script>
+                                            $("#getfeature").click(function () {
+
+                                                var catID = $("#maincat").val();
+
+                                                if (catID != "" && catID != "0") {
+                                                    $.ajax({
+                                                        url: '/Node/getfeature',
+                                                        dataType: 'html',
+                                                        data: {
+                                                            catID: catID,
+
+                                                        },
+                                                        success: function (data) {
+                                                            $("#featureholder").html(data);
+                                                        },
+                                                        error: function () {
+                                                            alert("@Resources.res.error")
                                                         }
-
-                                                    }
-                                                    else
-                                                    {
-                                                        listItems.Add(new SelectListItem
-                                                        {
-                                                            Text = "--" + subcat.title,
-                                                            Value = "2" + subcat.ID
-                                                        });
-
-                                                    }
-
+                                                    });
 
                                                 }
-                                            }
-                                            else
-                                            {
-                                                listItems.Add(new SelectListItem
-                                                {
-                                                    Text = item.title,
-                                                    Value = "1" + item.ID
+                                                else {
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+
+                                                    toastr.error(' @Resources.res.noAccessToCat')
+                                                }
+
+                                            })
+
+                                        </script>
+
+                                        @*<script>
+                                            $("#createlevel1title").click(function () {
+
+                                                var level1title = $("#level1title").val();
+                                                var catID = $("#maincat").val();
+                                                var mainF = $("#mainF").val();
+
+
+
+                                                if (level1title != "" & catID != "") {
+
+                                                    $.ajax({
+                                                        url: '/Admin/createFeature',
+                                                        dataType: 'html',
+                                                        data: {
+                                                            level1title: level1title,
+                                                            catID: catID,
+                                                            mainF: mainF
+
+                                                        },
+                                                        success: function (data) {
+
+                                                            toastr.options = {
+                                                                "debug": false,
+                                                                "positionClass": "toast-top-center",
+                                                                "onclick": null,
+                                                                "fadeIn": 300,
+                                                                "fadeOut": 1000,
+                                                                "timeOut": 5000,
+                                                                "extendedTimeOut": 1000
+                                                            }
+
+                                                            toastr.success('انجام شد')
+
+                                                        },
+                                                        error: function () {
+                                                            alert("خطا")
+                                                        }
+                                                    });
+
+                                                }
+
+                                            })
+
+                                        </script>*@
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+                            </div>
+                            <br />
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+
+                        <div id="featureholder">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade " id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Details Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group ">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="col-lg-6">
+                                            <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                                @Resources.res.setAllFeatureFor
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-6">
+
+                                            <div class="component ">
+                                                @Html.DropDownList("maindrop", listItems, "-- Select Status --", new { id = "maindrop", style = "width:100%", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="col-lg-6">
+                                            <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                                                @Resources.res.forCat
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="component ">
+                                                @Html.DropDownList("clonedrop", listItems, Resources.res.selectitem, new { id = "clonedrop", style = "width:100% ;height:300px", @class = "form-control", @multiple = "" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="component " style="direction:rtl">
+
+                                    @* <button id="DEFcatok" class="btn btn-primary" onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
+                                    <button id="clonefilter" class="btn btn-primary">@Resources.res.OK</button>
+                                    <script>
+                                        $("#clonefilter").click(function () {
+                                            var cloneVAL = $("#clonedrop").val().toString();
+                                            var mainval = $("#maindrop").val();
+
+                                            if (cloneVAL != "" && mainval != "" && cloneVAL != "0" && mainval != "0") {
+
+                                                $.ajax({
+                                                    url: '/Node/doclonefeature', // doclonefilter
+                                                    dataType: 'html',
+                                                    data: {
+                                                        mainval: mainval,
+                                                        cloneval: cloneVAL
+                                                    },
+                                                    success: function (data) {
+
+                                                        toastr.options = {
+                                                            "debug": false,
+                                                            "positionClass": "toast-top-center",
+                                                            "onclick": null,
+                                                            "fadeIn": 300,
+                                                            "fadeOut": 1000,
+                                                            "timeOut": 5000,
+                                                            "extendedTimeOut": 1000
+                                                        }
+
+                                                        toastr.success(@Resources.res.done)
+
+                                                    },
+                                                    error: function () {
+                                                        alert("@Resources.res.error")
+                                                    }
                                                 });
 
                                             }
-
-
-
-                                        }
-                                    }
-
-
-                                }
-                                <div class="component ">
-                                    @Html.DropDownList("maindrop", listItems, "-- Select Status --", new { id = "maindrop", style = "width:100%", @class = "form-control" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="col-lg-6">
-                                <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                                    جهت  دسته بندی  -
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="component ">
-                                    @Html.DropDownList("clonedrop", listItems, "-- Select Status --", new { id = "clonedrop", style = "width:100% ;height:300px", @class = "form-control", @multiple = "" })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-
-                    <div class="component " style="direction:rtl">
-
-                        @* <button id="DEFcatok" class="btn btn-primary" onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
-                        <button id="clonefilter" class="btn btn-primary">تایید</button>
-                        <script>
-                            $("#clonefilter").click(function () {
-                                var cloneVAL = $("#clonedrop").val().toString();
-                                var mainval = $("#maindrop").val();
-
-                                if (cloneVAL != "" && mainval != "" && cloneVAL != "0" && mainval != "0") {
-                                   
-                                    $.ajax({
-                                        url: '/Admin/doclonefeature', // doclonefilter
-                                        dataType: 'html',
-                                        data: {
-                                            mainval: mainval,
-                                            cloneval: cloneVAL
-                                        },
-                                        success: function (data) {
-
-                                            toastr.options = {
-                                                "debug": false,
-                                                "positionClass": "toast-top-center",
-                                                "onclick": null,
-                                                "fadeIn": 300,
-                                                "fadeOut": 1000,
-                                                "timeOut": 5000,
-                                                "extendedTimeOut": 1000
-                                            }
-
-                                            toastr.success('انجام شد')
-
-                                        },
-                                        error: function () {
-                                            alert("خطا")
-                                        }
-                                    });
-
-                                }
-                                else {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
-                                    }
-
-                                    toastr.error(' دسترسی جهت دسته بندی مورد نظر وجود ندارد ')
-                                }
-
-                            })
-
-                        </script>
-
-
-                    </div>
-
-
-
-                </div>
-
-
-            </div>
-        </div>
-        <div id="menu1" class="tab-pane fade" style="padding-top:20px">
-            <div class="holderofformgroup">
-                <div class="form-group ">
-                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
-                        انتخاب دسته بندی -
-                    </label>
-
-                    <div class="component ">
-                        @Html.DropDownList("maincat", listItems, "-- Select Status --", new { id = "maincat", style = "width:100%", @class = "form-control" })
-                    </div>
-
-
-
-
-                    <div class="component " style="direction:rtl">
-
-                        @* <button id="DEFcatok" class="btn btn-primary" onclick="DEFcatokclicked(DEFcatok)">تایید</button>*@
-                        <button id="getfeature" class="btn btn-primary">تایید</button>
-                        <script>
-                            $("#getfeature").click(function () {
-
-                                var catID = $("#maincat").val();
-
-                                if (catID != "" && catID != "0") {
-                                    $.ajax({
-                                        url: '/Admin/getfeature',
-                                        dataType: 'html',
-                                        data: {
-                                            catID: catID,
-
-                                        },
-                                        success: function (data) {
-                                            $("#featureholder").html(data);
-                                        },
-                                        error: function () {
-                                            alert("خطا")
-                                        }
-                                    });
-
-                                }
-                                else {
-                                    toastr.options = {
-                                        "debug": false,
-                                        "positionClass": "toast-top-center",
-                                        "onclick": null,
-                                        "fadeIn": 300,
-                                        "fadeOut": 1000,
-                                        "timeOut": 5000,
-                                        "extendedTimeOut": 1000
-                                    }
-
-                                    toastr.error(' دسترسی جهت دسته بندی مورد نظر وجود ندارد ')
-                                }
-
-                            })
-
-                        </script>
-
-                        @*<script>
-                                $("#createlevel1title").click(function () {
-
-                                    var level1title = $("#level1title").val();
-                                    var catID = $("#maincat").val();
-                                    var mainF = $("#mainF").val();
-
-
-
-                                    if (level1title != "" & catID != "") {
-
-                                        $.ajax({
-                                            url: '/Admin/createFeature',
-                                            dataType: 'html',
-                                            data: {
-                                                level1title: level1title,
-                                                catID: catID,
-                                                mainF: mainF
-
-                                            },
-                                            success: function (data) {
-
+                                            else {
                                                 toastr.options = {
                                                     "debug": false,
                                                     "positionClass": "toast-top-center",
@@ -297,37 +340,28 @@
                                                     "extendedTimeOut": 1000
                                                 }
 
-                                                toastr.success('انجام شد')
-
-                                            },
-                                            error: function () {
-                                                alert("خطا")
+                                                toastr.error('@Resources.res.noAccessToCat')
                                             }
-                                        });
 
-                                    }
+                                        })
 
-                                })
-
-                            </script>*@
+                                    </script>
 
 
+                                </div>
+
+
+
+                            </div>
+                        </div>
                     </div>
-
-
-
                 </div>
-
-
-            </div>
-            <br />
-            <div id="featureholder">
-
             </div>
         </div>
-
     </div>
 </div>
+
+
 
 
 

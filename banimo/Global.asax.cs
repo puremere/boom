@@ -31,13 +31,13 @@ namespace banimo
         protected void Application_AcquireRequestState(Object sender, EventArgs e)
         {
             HttpContext context = HttpContext.Current;
-            var languageSession = "fa";
+            var languageSession = "en";
             
             if (context != null && context.Session != null)
 
             {
-                context.Session["lang"] = "fa";
-                languageSession = context.Session["lang"] != null ? context.Session["lang"].ToString() : "fa";
+                context.Session["lang"] = "en";
+                languageSession = context.Session["lang"] != null ? context.Session["lang"].ToString() : "en";
             }
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(languageSession);
             Thread.CurrentThread.CurrentCulture = new CultureInfo(languageSession);

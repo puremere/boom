@@ -11,4 +11,9 @@ namespace banimo.apiViewModel
         public string token { get; set; }
         public string status { get; set; }
     }
+
+    public class getMainVM
+    {
+        public string catMode { get; set; }
+    }
 }

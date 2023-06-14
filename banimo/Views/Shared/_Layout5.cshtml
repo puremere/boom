@@ -31,13 +31,28 @@
         <meta charset="utf-8" />
 
         <title>@ViewBag.Title </title>
+        @if (@ViewBag.Desc != null)
+        {
+            <meta name="description" content="@ViewBag.Desc " />
+        }
+        else
+        {
+            <meta name="description" content="" />
+        }
+        @if (@ViewBag.key != null)
+        {
+            <meta name="keywords" content="@ViewBag.key " />
+        }
+        else
+        {
+            <meta name="keywords" content=" " />
+        }
+
+
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta name="csrf-token" content="gpcZ7H8824yAsjCfBZkCggM2FXcCFhJJXVdA4yIJ">
+        <meta name="csrf-token" content="AzxjgLgqKGezzoFiKWC95C4zy7qdM5vuH3sikRyZ">
         <meta http-equiv="refresh" content="172800">
-
-        <meta name="description" content=" @System.Configuration.ConfigurationManager.AppSettings["description"] " />
-        <meta name="keywords" content=" @System.Configuration.ConfigurationManager.AppSettings["keywords"] " />
         <meta http-equiv="content-language" content="fa" />
 
         <!-- Mobile Specific Metas
@@ -77,7 +92,7 @@
 
         @RenderSection("HeadIncludes", required: false)
         <link href="~/Content/toastr.css" rel="stylesheet" />
-        
+
         <!--فایل jquery-->
         <script src="~/Scripts/jquery-2.1.4.min.js"></script>
 

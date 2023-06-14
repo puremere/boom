@@ -1,0 +1,237 @@
+﻿
+@using banimo.Classes;
+@model banimo.ViewModel.productlistclass
+@{
+    //ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_Layout8.cshtml";
+}
+
+<div class="page-content">
+    <div class="container">
+
+
+        <div class="shop-content row  gutter-lg mb-10">
+
+            <aside class="sidebar shop-sidebar sticky-sidebar-wrapper sidebar-fixed">
+
+                <div class="sidebar-overlay"></div>
+                <a class="sidebar-close" href="#"><i class="close-icon"></i></a>
+
+
+                <div class="sidebar-content scrollable">
+
+                    <div class="pin-wrapper" style="">
+                        <div class="sticky-sidebar" style="border-bottom: 0px none rgb(102, 102, 102); width: 280px;">
+                            <div class="filter-actions">
+                                @*<label>Filter :</label>*@
+                                @*<a href="#" class="btn btn-dark btn-link filter-clean">Clean All</a>*@
+                            </div>
+                           
+                            @{
+                                if (Model.filtergroup.filters != null)
+                                {
+                                    foreach (var filter in Model.filtergroup.filters)
+                                    {
+                                        if (filter.filterdetailes != null)
+                                        {
+                                            int index = Model.filtergroup.filters.IndexOf(filter);
+                                            string classnam = "";
+                                            string filterID = "F" + filter.ID;
+                                            if (index == 0)
+                                            {
+                                                classnam = "filteractive";
+                                            }
+                                            <div class="widget widget-collapsible @classnam" id=@filterID>
+                                                <h3 class="widget-title"><label>@filter.filtername</label><span class="toggle-btn"></span></h3>
+                                                <ul class="widget-body filter-items item-check mt-1">
+                                                    @foreach (var detail in filter.filterdetailes)
+                                                    {
+                                                        var typid = detail.ID;
+                                                        var classname = "filtercheckbox " + filter.ID;
+                                                        <li class="@classname" id="@typid">
+                                                            <a href="javascript:void(0)">@detail.detailname</a>
+
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+
+                                        }
+
+
+                                    }
+                                }
+
+                                if (Model.filtergroup.colors != null)
+                                {
+                                    <div class="widget widget-collapsible">
+                                        <h3 class="widget-title"><label>Color</label><span class="toggle-btn"></span></h3>
+                                        <ul class="widget-body filter-items item-check mt-1">
+                                            @foreach (var detail in Model.filtergroup.colors)
+                                            {
+                                                var typid = detail.ID;
+                                                var classname = "colorbox " + typid;
+                                                var colorcode = detail.title;
+                                                <li id="@typid">
+                                                    @detail.imagetitle  <span class="dot" style="display:inline-block ; width:15px; height:15px; background-color:@colorcode; border-radius:100%; border: 1px solid @colorcode; float:left"></span>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </div>
+                                }
+                            }
+
+                            @*<div class="widget widget-collapsible">
+            <h3 class="widget-title"><label>Price</label><span class="toggle-btn"></span></h3>
+            <div class="widget-body">
+                <ul class="filter-items search-ul">
+                    <li><a href="#">$0.00 - $100.00</a></li>
+                    <li><a href="#">$100.00 - $200.00</a></li>
+                    <li><a href="#">$200.00 - $300.00</a></li>
+                    <li><a href="#">$300.00 - $500.00</a></li>
+                    <li><a href="#">$500.00+</a></li>
+                </ul>
+                <form class="price-range">
+                    <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
+                </form>
+            </div>
+        </div>*@
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </aside>
+            <!-- End of Shop Sidebar -->
+            <!-- Start of Shop Main Content -->
+            <div class="main-content" style="width:100%; padding:20px">
+                <nav class="toolbox sticky-toolbox sticky-content fix-top" style="margin-top:20px">
+                    <div class="toolbox-left">
+                        <a href="#" class="btn btn-primary btn-outline btn-rounded left-sidebar-toggle
+                                        btn-icon-left d-block d-lg-none"><i class="w-icon-category"></i><span>@Resources.res.Filter</span></a>
+                        <div class="toolbox-item toolbox-sort select-box text-dark">
+                            <label>مرتب سازی بر اساس  : &nbsp;</label>
+                            <select name="orderby" class="form-control">
+                                <option value="default" selected="selected">@Resources.res.Defaultsorting</option>
+                                <option value="popularity">@Resources.res.Sortbypopularity</option>
+                                <option value="rating">@Resources.res.Sortrating</option>
+                                <option value="date">@Resources.res.Sortlatest</option>
+                                <option value="price-low">@Resources.res.Sortlowhigh</option>
+                                <option value="price-high">@Resources.res.Sorthighlow</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="toolbox-right">
+                        @*<div class="toolbox-item toolbox-show select-box">
+                            <select name="count" class="form-control">
+                                <option value="9">Show 9</option>
+                                <option value="12" selected="selected">Show 12</option>
+                                <option value="24">Show 24</option>
+                                <option value="36">Show 36</option>
+                            </select>
+                        </div>*@
+                        @*<div class="toolbox-item toolbox-layout">
+                    <a href="shop-banner-sidebar.html" class="icon-mode-grid btn-layout active">
+                        <i class="w-icon-grid"></i>
+                    </a>
+                    <a href="shop-list.html" class="icon-mode-list btn-layout">
+                        <i class="w-icon-list"></i>
+                    </a>
+                </div>*@
+                    </div>
+                </nav>
+                <div id="productlist">
+                    @{
+
+                        Html.RenderAction("gogetproductlist", "Home", new { fromList = "1" });
+
+                    }
+                </div>
+               
+
+
+
+            </div>
+            
+
+            <!-- End of Shop Main Content -->
+
+
+
+        </div>
+
+       
+    </div>
+</div>
+
+
+<script>
+   
+    $('.filtercheckbox').click(function () {
+       
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active')
+        }
+        else {
+            $(this).addClass('active')
+        }
+        $("#loading").css("display", "block");
+        var filterid = "";
+        $(".filtercheckbox").each(function () {
+            if ($(this).hasClass('active')) {
+                var id =this.id;
+                filterid = filterid + id + ",";
+            }
+        })
+       
+
+        $.ajax({
+            url: '/Home/changefilterides',
+            data: {
+                ID: filterid,
+
+            },
+            dataType: 'html',
+            success: function () {
+                //فقط برای پروژه مسکن که آپدیت لحظه ای نمی خوایم
+                //if ($(window).width() > 960) {
+
+                //}
+                if ($(window).width() > 960) {
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        aType: 'html',
+                        success: function (data) {
+                            $("#SIBdiv").css("height", "");
+                            $('#productlist').html(data);
+                            window.scrollTo(0, 0);
+                        },
+                        error: function () {
+                            //alert("nashod")
+                        },
+                        complete: function () {
+                            //$('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
+                            //$('#spaceholder').css("height", '');
+                            //$("#loading").fadeOut();
+                        }
+                    });
+                }
+
+
+            },
+            error: function () {
+
+            }
+        });
+
+
+    });
+</script>
+
+@section scripts{
+    <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+
+} 

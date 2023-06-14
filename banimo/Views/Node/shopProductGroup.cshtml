@@ -164,7 +164,7 @@
                     <p> @Resources.res.addNewGroup</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                     <div>
-                        @using (Html.BeginForm("setNewProductGroup", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "setNewProductGroup" }))
+                        @using (Html.BeginForm("setNewProductGroupp", "Node", FormMethod.Post, new { enctype = "multipart/form-data", id = "setNewProductGroup" }))
                         {
 
                             @Html.AntiForgeryToken()
@@ -191,7 +191,7 @@
 
                                             <div class="row fieldholder col-lg-6">
                                                 <label style="text-align: right">
-                                                    عنوان :
+                                                    @Resources.res.title :
                                                 </label>
 
                                                 <div>
@@ -206,7 +206,7 @@
 
                                             </div>
                                             <div class="row fieldholder col-lg-6">
-                                                <label> دسته بندی</label>
+                                                <label> @Resources.res.category</label>
 
 
                                                 <div class=" ">
@@ -216,7 +216,7 @@
                                                 </div>
                                             </div>
                                             <div class="row fieldholder col-lg-6">
-                                                <label> انتخاب نوع محتوی</label>
+                                                <label> @Resources.res.type</label>
 
 
                                                 <div class=" ">
@@ -228,7 +228,7 @@
 
                                             <div class="row fieldholder col-lg-6">
                                                 <label style="text-align: right">
-                                                    محتوا :
+                                                    @Resources.res.content :
                                                 </label>
 
                                                 <div>
@@ -244,7 +244,7 @@
                                             </div>
                                             <div class="row fieldholder col-lg-6">
                                                 <label style="text-align: right">
-                                                    اولویت :
+                                                    @Resources.res.priority :
                                                 </label>
 
                                                 <div>
@@ -261,7 +261,7 @@
                                             <div  class="row fieldholder  col-lg-6" style="padding: 0 10px;display: inline-block;">
 
                                                 <label style="text-align: right">
-                                                    عکس:
+                                                    @Resources.res.image:
 
                                                 </label>
 

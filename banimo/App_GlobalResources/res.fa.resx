@@ -1821,4 +1821,31 @@
   <data name="urlTitle" xml:space="preserve">
     <value>عنوان در یوارال</value>
   </data>
+  <data name="choosParent" xml:space="preserve">
+    <value>انتخاب سرگروه</value>
+  </data>
+  <data name="createItem" xml:space="preserve">
+    <value>افزودن آیتم</value>
+  </data>
+  <data name="featureManagement" xml:space="preserve">
+    <value>مدیریت ویژگی های محصول</value>
+  </data>
+  <data name="ItemHasSubItem" xml:space="preserve">
+    <value>سرگروه مورد نظر دارای زیر گروه بوده و حذف نمی شود</value>
+  </data>
+  <data name="PrentOrChildTitle" xml:space="preserve">
+    <value>عنوان سرگروه یا زیرگروه</value>
+  </data>
+  <data name="SelectParent" xml:space="preserve">
+    <value>انتخاب سرگروه</value>
+  </data>
+  <data name="setAllFeatureFor" xml:space="preserve">
+    <value>ایجاد همه ویژگی های طبقه بندی :</value>
+  </data>
+  <data name="set" xml:space="preserve">
+    <value>مجموعه محصول؟</value>
+  </data>
+  <data name="existItem" xml:space="preserve">
+    <value>آیتم مورد نظر وجود دارد</value>
+  </data>
 </root>

@@ -270,7 +270,7 @@ namespace banimo.Controllers
                 mallID = model.mallID,
                 page = model.page,
                 tag = model.tag,
-
+                servername = servername
 
                 //02122517428@tct2
                 //650038

@@ -21,7 +21,8 @@ namespace banimo.ViewModel
         public string page = "0";
         public string searchq { get; set; }
         public string tag { get; set; }
-
+        public string servername { get; set; }
+        public string nodeID { get; set; }
     }
 
     public class ShoppingCenterFloor

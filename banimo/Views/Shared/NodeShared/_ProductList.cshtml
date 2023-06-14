@@ -109,7 +109,7 @@
                             <thead>
                                 <tr>
 
-                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">@Resources.res.vendorID Vendor ID</th>
+                                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">@Resources.res.image </th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.title </th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> @Resources.res.active ?</th>
                                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 70px;"> @Resources.res.popular ?</th>
@@ -137,7 +137,7 @@
                                                 if (!string.IsNullOrEmpty(item.video))
                                                 {
                                                     List<string> lst = item.video.Trim(',').Split(',').ToList();
-                                                    url = lst.Count() > 1 ? "https://www.marsools.com/images/" + lst[1] : "https://www.marsools.com/images/" + lst[0];
+                                                    url = lst.Count() > 1 ? "/images/" + lst[1] : "/images/" + lst[0];
 
                                                 }
                                                 <img src="@url" class="img-fluid" alt="">

@@ -185,10 +185,10 @@
                                 string catmode = "1" + @item.ID;
                                 string classname = "p" + item.parentID;
                                 <div class="category @classname  categoryitemchild">
-                                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:140px">
                                         <a href="/Home/ProductList?catmode=@catmode" class="category-media">
                                             <img src="/images/@item.image" alt="Category"
-                                                 width="130" height="130">
+                                                >
                                         </a>
 
                                     </div>
@@ -204,7 +204,7 @@
 
                     <style>
                         .category {
-                            width: 15%;
+                            width: 200px;
                             display: inline-block;
                             padding: 0 10px;
                             border-radius: 8px;

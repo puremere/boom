@@ -41,7 +41,7 @@
                     {
                         srtlist = item.image.Trim(',').Split(',').ToList();
                         imagefile = srtlist[0];
-                        if (srtlist.Count == 2)
+                        if (srtlist.Count() == 2)
                         {
                             src2 = srtlist[1];
                         }
@@ -52,7 +52,7 @@
                     string src = imagefile;
                     <div class="product-wrap">
                         <div class="product text-center shadowbox" style="border-radius:8px">
-                            <figure class="product-media" style="margin:auto; max-width:90%">
+                            <figure class="product-media" style="margin:auto; max-width:90%; height:unset">
                                 <a href="/products/@newurl">
                                     <img src="@src" alt="Product"
                                          width="300" height="338" />

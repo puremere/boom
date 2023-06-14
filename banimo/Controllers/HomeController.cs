@@ -1768,10 +1768,14 @@ namespace banimo.Controllers
 
         public ActionResult ProductDetail(string name,string id)
         {
-            if (name.Contains("/"))
+            if(name != null)
             {
-                return RedirectToAction(name.Replace("/", ""), "Home");
+                if (name.Contains("/"))
+                {
+                    return RedirectToAction(name.Replace("/", ""), "Home");
+                }
             }
+            
            
             id = id == null ?  "" : id;
             if (TempData["lastNumber"] != null)
@@ -3285,17 +3289,17 @@ namespace banimo.Controllers
                 //{
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
-                //byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeMarsool.php?", collection);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeMarsool.php?", collection);
+               // byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
-            //TimeListMarketPlace log = JsonConvert.DeserializeObject<TimeListMarketPlace>(result);
-            //TempData["deliverybase"] = log.baseDeliver;
-            //return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
-           return PartialView("/Views/Shared/_timeSection.cshtml", log);
+            //TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
+            TimeListMarketPlace log = JsonConvert.DeserializeObject<TimeListMarketPlace>(result);
+            TempData["deliverybase"] = log.baseDeliver;
+            return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
+            //return PartialView("/Views/Shared/_timeSection.cshtml", log);
         }
 
         //public PartialViewResult checkoutsummery()
@@ -4054,9 +4058,9 @@ namespace banimo.Controllers
             string result = "";
             string device = RandomString();
             string code = MD5Hash(device + "ncase8934f49909");
+
             using (WebClient client = new WebClient())
             {
-
                 var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
@@ -4065,10 +4069,16 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "TermsOfService" + srt;
             aboutVM model = JsonConvert.DeserializeObject<aboutVM>(result);
+            return View(action,model);
 
+        }
 
-            return View(model);
+        public ActionResult AR()
+        {
+            return View();
 
         }
 

@@ -43,6 +43,7 @@ namespace banimo.AdminPanelBoom.ViewModel
         public List<BrandCore> brandCore { get; set; }
         public List<NodeResult> nodeResult { get; set; }
         public string selectedCat { get; set; }
+        public string isSet { get; set; }
         public string selectedbrand { get; set; }
         public string selectedFilter { get; set; }
         public string selectedColor { get; set; }

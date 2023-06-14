@@ -464,8 +464,10 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
-                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                var collection = new NameValueCollection(); 
+                string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername);
+                collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -486,7 +488,6 @@ namespace banimo.Controllers
         }
         public ActionResult setnewcatNew(banimo.ViewModel.newMenuVM model)
         {
-
 
             string fname = model.image.Trim(',').Split(',').ToList().First();
             string finalimage = Path.GetFileName(model.image);
@@ -1665,6 +1666,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("title", detailtitle);
+                collection.Add("nodeID", nodeID);
                 collection.Add("filterID", filterid);
                 collection.Add("servername", servername);
 
@@ -2221,7 +2223,6 @@ namespace banimo.Controllers
 
             using (WebClient client = new WebClient())
             {
-
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
@@ -2231,10 +2232,8 @@ namespace banimo.Controllers
                 collection.Add("lan", "en");
                 collection.Add("servername", servername);
                 collection.Add("image", finalimage.Trim(','));
-
                 byte[] response = client.UploadValues(server + "/Node/setnewcat.php", collection);
-
-                result = System.Text.Encoding.UTF8.GetString(response);
+                result = System.Text.Encoding.UTF8.GetString(response);  
             }
 
 
@@ -5635,14 +5634,17 @@ namespace banimo.Controllers
             string pathString = "~/images";
             string savedFileName = Path.Combine(Server.MapPath(pathString), id);
             System.IO.File.Delete(savedFileName);
-            if (Request.Cookies["adminimages"] != null)
+
+            if (Request.Cookies["token"] != null)
             {
-                ViewModel.CookieVM model = JsonConvert.DeserializeObject<ViewModel.CookieVM>(Request.Cookies["adminimages"].Value);
+                banimo.AdminPanel.ViewModel.CookieVM model = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(getCookie("token"));
+
                 if (model.images != null)
                 {
-                    model.images = model.images.Replace(id + ",", "");
+                    model.images = model.images.Replace(id, "").Replace(",,",",").Trim(',');
                 }
-                Response.Cookies["adminimages"].Value = JsonConvert.SerializeObject(model);
+                SetCookie( JsonConvert.SerializeObject(model),"token");
+                
             }
 
 
@@ -8989,7 +8991,7 @@ namespace banimo.Controllers
             }
             ViewModel.slideVM model = JsonConvert.DeserializeObject<ViewModel.slideVM>(result);
 
-            return PartialView("/Views/Shared/PartnerShared/_partnerSlidePartial.cshtml", model);
+            return PartialView("/Views/Shared/NodeShared/_partnerSlidePartial.cshtml", model);
             //return Content(result.Replace("\\n",""));
         }
         public ActionResult addWebSlide(string catid, string image, string locationID, string type, string page, string link)
@@ -9021,7 +9023,26 @@ namespace banimo.Controllers
 
             return Content(result);
         }
+        public ActionResult removeSlide(string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
 
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", ID);
+
+                byte[] response = client.UploadValues(server + "/Admin/removeSlide.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
+        }
         // web banner
 
         public ActionResult addWebBanner(string catid, string image, string locationID, string type, string page, string link, string title)
@@ -9070,8 +9091,29 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             ViewModel.slideVM model = JsonConvert.DeserializeObject<ViewModel.slideVM>(result);
-            return PartialView("/Views/Shared/PartnerShared/_partnerBannerPartial.cshtml", model);
+            return PartialView("/Views/Shared/NodeShared/_partnerBannerPartial.cshtml", model);
             //return Content(result.Replace("\\n", ""));
+        }
+
+        public ActionResult removeBanner(string ID)
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", ID);
+
+                byte[] response = client.UploadValues(server + "/Admin/removeBanner.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return Content("200");
         }
         public ActionResult WebBanner(string message)
         {
@@ -9105,7 +9147,7 @@ namespace banimo.Controllers
         }
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult setNewProductGroup(string catidOrLink, string title, string catTitle, string catID, string type, string image, string ID, string priority)
+        public ActionResult setNewProductGroupp(string catidOrLink, string title, string catTitle, string catID, string type, string image, string ID, string priority)
         {
 
             string result = "";
@@ -9164,7 +9206,7 @@ namespace banimo.Controllers
                 //return RedirectToAction("productGroup", "Admin");
 
             }
-            return RedirectToAction("productGroup", "Admin");
+            return RedirectToAction("shopProductGroup", "Node");
 
         }
 

@@ -1,0 +1,1015 @@
+﻿@model  banimo.ViewModel.TimeList
+@using Newtonsoft.Json;
+@{
+    //ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_Layout8.cshtml";
+}
+
+
+
+<main class="main checkout">
+    <!-- Start of Breadcrumb -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <ul class="breadcrumb shop-breadcrumb bb-no">
+                <li class="passed"><a href="cart.html">سبد خرید</a></li>
+                <li class="active"><a href="checkout.html">نهایی سازی</a></li>
+                <li><a href="order.html">اتمام سفارش</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- End of Breadcrumb -->
+    <!-- Start of PageContent -->
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 pr-lg-4 mb-4">
+                    <div class="coupon-toggle holderContent">
+                        کد تخفیف <a href="#" class="show-coupon font-weight-bold text-uppercase text-dark">
+                            کد را وارد کنید
+                        </a>
+                    </div>
+                    <div class="coupon-content mb-4">
+                        <p>کد تخفیف خود را در فرم زیر ثبت کنید</p>
+                        <div class="input-wrapper-inline">
+                            <input type="text" name="coupon_code" class="form-control form-control-md mr-1 mb-2" placeholder="کد تخفیف" id="coupon_code">
+                            <button type="submit" class="btn button btn-rounded btn-coupon mb-2" name="apply_coupon" value="ثبت کد تخفیف">ثبت کد تخفیف</button>
+                            <script>
+
+                                $('#discountConfirm').click(function () {
+
+                                    var mot = $("#finalprice").text().replace(",", '')
+                                    mot = mot.replace(',', "");
+                                    var discount = $('#discountfake').val();
+
+
+                                    //alert(discount);
+                                    if (discount == "") {
+
+
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000
+                                        }
+                                        toastr.error("نام تخفیف را وارد نمایید");
+                                    }
+                                    else {
+                                        $.ajax({
+                                            url: '/Home/SetDiscount',
+                                            dataType: 'html',
+                                            data: {
+                                                val: discount,
+                                                price: mot
+                                            },
+                                            success: function (data) {
+
+                                                let obj = jQuery.parseJSON(data);
+
+                                                if (obj.message.length > 0) {
+
+                                                    toastr.options = {
+                                                        "debug": false,
+                                                        "positionClass": "toast-top-center",
+                                                        "onclick": null,
+                                                        "fadeIn": 300,
+                                                        "fadeOut": 1000,
+                                                        "timeOut": 5000,
+                                                        "extendedTimeOut": 1000
+                                                    }
+                                                    toastr.error(obj.message);
+
+                                                    // let price = parseInt($("#finalprice").val())
+
+                                                }
+                                                else {
+                                                    $("#discount").val(discount);
+                                                    var mot = $("#finalprice").text().replace(",", '')
+                                                    mot = mot.replace(',', "");
+                                                    var del = $("#deliveryprice").text().replace(",", '')
+                                                    del = del.replace(',', "");
+                                                    if (parseInt(mot) - parseInt(obj.price) > 0) {
+                                                        toastr.options = {
+                                                            "debug": false,
+                                                            "positionClass": "toast-top-center",
+                                                            "onclick": null,
+                                                            "fadeIn": 300,
+                                                            "fadeOut": 1000,
+                                                            "timeOut": 5000,
+                                                            "extendedTimeOut": 1000
+                                                        }
+                                                        toastr.success("کد تخفیف اعمال شد");
+                                                        if (parseInt(obj.price) > parseInt(mot)) {
+                                                            $("#totalprice").text("0");
+                                                        }
+                                                        else {
+
+                                                            $("#totalprice").text(addCommas(parseInt(mot) - parseInt(obj.price) + parseInt(del)))
+
+                                                        }
+
+                                                        $("#finalDiscount").text(addCommas(obj.price));
+                                                    }
+                                                }
+                                            },
+                                            error: function () {
+
+                                            }
+
+                                        })
+                                    }
+
+                                })
+                            </script>
+                        </div>
+                    </div>
+
+
+
+                    <div class="login-toggle holderContent">
+                        اطلاعات کاربر
+                    </div>
+
+                    <form class="login-content">
+                        <div class="row mb-9">
+
+                            <div>
+                                <h3 class="title billing-title text-uppercase ls-10 pt-1 pb-3 mb-0">
+                                    اطلاعات کاربر
+                                </h3>
+                                <div class="row gutter-sm">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>نام *</label>
+                                            <input type="text" class="form-control form-control-md" name="firstname" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>نام خانوادگی *</label>
+                                            <input type="text" class="form-control form-control-md" name="lastname" required="">
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                             
+
+                                <div class="form-group mt-3">
+                                    <label for="order-notes">نظر کاربر  (غیر اجباریس)</label>
+                                    <textarea class="form-control mb-0" id="order-notes" name="order-notes" cols="30" rows="4" placeholder="ثبت نظر درمورد سفارش، انتقال و غیره"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn button btn-rounded btn-coupon mb-2" name="apply_coupon" value="Apply coupon">ثبت اطلاعات</button>
+                    </form>
+
+
+
+                    <div class="address-toggle holderContent" style="margin-top:20px">
+                       آدرس کاربر
+                    </div>
+
+                    <form class="address-content mb-4" style="margin-top:20px">
+                        <div class="order-summary">
+                            <div class="payment-methods" id="payment_method">
+                                <h4 class="title font-weight-bold ls-25 pb-0 mb-1"><span style="flex:1; text-align:right">آدرس</span>  <span id="addAddress" style=" padding: 15px;background-color: #eee;border-radius: 5px; font-size: 12px;cursor:pointer">ثبت آدرس جدید</span></h4>
+                                <div class="accordion payment-accordion">
+                                    @{
+                                        if (Model.address != null)
+                                        {
+
+                                            foreach (var item in Model.address)
+                                            {
+
+                                                <div class="card">
+                                                    <div id="@item.ID" class="card-header changeAddress">
+                                                        <a href="#cash-on-delivery" class="expand">@item.title</a>
+                                                    </div>
+                                                    <div id="cash-on-delivery" class="card-body collapsed" style="display: none;">
+                                                        <p class="mb-0">
+                                                           @item.state - @item.city - @item.address
+                                                        </p>
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="addAddressHolder" style="  display:none; position:fixed; top:0; left:0;bottom:0; overflow:scroll; width:100%;z-index:9999">
+                            <div style="min-height:100%; width:100%; background-color:rgba(0,0,0,0.5)">
+                                <div class="modal-bodyy">
+                                    <div class="row" style="width:80%; margin:auto; background-color:white">
+                                        <div class="col-lg-12" style="height:50px"></div>
+                                        <div class="col-lg-6">
+                                            <div id="mapHolder" style="display:block;  position:relative;top:0; left:0; margin:auto; width:100%; height:500px;  background-color:white; text-align:center; background-color:white;  /* Negative half of width. */">
+                                                @*<div style="height:8%; width:100%;z-index: 9999999999999;height:40px; margin-bottom:10px">
+                                    <input type="text" id="mapaddress" style="width:100%; height:100% " class="form-control" />
+                                </div>*@
+                                                <div id="Map" style="border-radius:3px; margin-top:10%; width:100%; margin:auto; height:88%; background: #eee; border: 2px solid #aaa;"></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>عنوان آدرس </label>
+                                                <input name="modalTitle" id='modalTitle' type="text" class="form-control form-control-md">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>استان</label>
+                                                <input name="modalState" id='modalState' type="text" class="form-control form-control-md">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>شهر</label>
+                                                <input name="modalCity" id='modalCity' type="text" class="form-control form-control-md">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>آدرس</label>
+                                                <input name="modalAddress" id='modalAddress' type="text" class="form-control form-control-md">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>کد پستی</label>
+                                                <input name="modalpostalCode" id='modalpostalCode' type="text" class="form-control form-control-md">
+                                            </div>
+
+
+                                            <p style="display:none" id="modalID"></p>
+                                            <div class="modal-footer" style="border-top:0; margin-top:20px">
+                                                <button id="cancelAddress" type="button" class="btn btn-secondary" style="font-size:15px; padding:7px 14px">لغو</button>
+                                                <button id="verifyAddress" type="button" class="btn btn-primary " style="font-size:15px; padding:7px 14px">تایید</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </form>
+                    <div class="delivery-toggle holderContent" style="margin-top:20px">
+                        انتقال کالا 
+                    </div>
+                    <div class="delivery-content mb-4" style="margin:20px 0;padding:20px ;display:none">
+                        <div class="order-summary">
+                            <div class="payment-methods" id="payment_method">
+                               
+                                <div class="accordion payment-accordion">
+                                    @foreach (var item in Model.deliverType.paymentType)
+                                    {
+                                        <div class="card">
+                                            <div  idtogo="@item.ID" class="card-header"  id="applyDeliver">
+                                                <a href="#cash-on-delivery" class="collapse">@item.typeTitle</a>
+                                            </div>
+                                            <div id="cash-on-delivery" class="card-body collapsed" style="display: block;">
+                                                <p class="mb-0">
+                                                    @item.typeDesc
+                                                </p>
+                                               
+
+                                            </div>
+                                            <div class="TimeTableHolder" style="padding:30px"></div>
+
+
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="option-toggle holderContent" style="margin-top:20px">
+                        روش پرداخت
+                    </div>
+                    <div class="option-content mb-4" style="margin-top:20px">
+                        <div class="order-summary">
+                            <div class="payment-methods" id="payment_method">
+                                <h4 class="title font-weight-bold ls-25 pb-0 mb-1">روش های پرداخت</h4>
+                                <div class="accordion payment-accordion">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a href="#cash-on-delivery" class="expand">بانک ملت</a>
+                                        </div>
+                                        <div id="cash-on-delivery" class="card-body collapsed" style="display: none;">
+                                            <p class="mb-0">
+                                                انتقال به بانک ملت
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a href="#payment" class="expand">پرداخت در محل</a>
+                                        </div>
+                                        <div id="payment" class="card-body collapsed">
+                                            <p class="mb-0">
+                                                پرداخت در محل در زمان دریافت کالا
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a href="#delivery" class="expand">انتقال با رمز ارز</a>
+                                        </div>
+                                        <div id="delivery" class="card-body collapsed">
+                                            <p class="mb-0">
+                                                در این روش انتقال مبلغ با رمز ارز صورت میگیرد
+                                            </p>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+                <div class="col-lg-5 mb-4">
+                    <div class=" sticky-sidebar-wrapper">
+                        <div class="pin-wrapper" style="height: 898.969px;">
+                            <div class="order-summary-wrapper sticky-sidebar" style="border-bottom: 1px solid rgb(238, 238, 238); width: 505px;">
+                                <h3 class="title text-uppercase ls-10">سفارش شما</h3>
+                                <div class="order-summary">
+                                    <table class="order-table">
+                                        @{
+                                            decimal totalprice = decimal.Parse(Model.finalAmount);
+                                            decimal deliverPrice = 0;
+                                            totalprice = decimal.Parse(Model.finalAmount);
+                                            deliverPrice = decimal.Parse(@Model.priceDeliver);
+                                            decimal amountPrice = decimal.Parse(@Model.finalAmount);
+                                            decimal creditPrice = decimal.Parse(@Model.credit);
+                                        }
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">
+                                                    <b>رسید</b>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr class="cart-subtotal bb-no">
+                                                <td>
+                                                    <b>مجموع</b>
+                                                </td>
+                                                <td>
+                                                    <b><span id="subtotalamount">@amountPrice</span> تومان</b>
+                                                </td>
+                                            </tr>
+                                            <tr class="cart-subtotal bb-no">
+                                                <td>
+                                                    <b>قیمت حمل و نقل</b>
+                                                </td>
+                                                <td>
+                                                    <b><span id="deliveramount">0</span> تومان</b>
+                                                </td>
+                                            </tr>
+                                            <tr class="cart-subtotal bb-no">
+                                                <td>
+                                                    <b>تخفیف</b>
+                                                </td>
+                                                <td>
+                                                    <b><span id="discountamount">0</span> تومان</b>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+
+                                            <tr class="order-total">
+                                                <th>
+                                                    <b>جمع کل</b>
+                                                </th>
+                                                <td>
+                                                    <b><span id="finalamount">@totalprice </span> تومان</b>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+
+
+                                    <div class="form-group place-order pt-6">
+                                        <button id="finalconfirm" type="submit" class="btn btn-dark btn-block btn-rounded">ثبت سفارش</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- End of PageContent -->
+</main>
+<p style="display:none" class="infoD"></p>
+<form id="endOrderForm" name="endOrderForm" action="EndOrder" method="post">
+    <input hidden name="planID" id="planID" value="" />
+    <input hidden name="addID" id="addID" value="0" />
+    <input hidden name="disc" id="lon" value="0" />
+    <input hidden name="lat" id="lat" value="" />
+    <input hidden name="lon" id="lng" value="" />
+    <input hidden id="addressID" name="addressID" />
+    <input hidden id="hourid" name="hourid" value="1" />
+    <input hidden id="Fpayment" name="payment" value="2" />
+</form>
+
+@section scripts{
+    <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+    <style>
+        .holderContent {
+            padding: 25px;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
+            arabicNumbers = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
+            fixNumbers = function (str) {
+                if (typeof str === 'string') {
+                    for (var i = 0; i < 10; i++) {
+                        str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
+                    }
+                }
+                return str;
+            };
+        $(".option-toggle").click(function () {
+            $(".option-content").slideToggle();
+        })
+        $(".address-toggle").click(function () {
+            $(".address-content").slideToggle();
+        })
+
+        $(".delivery-toggle").click(function () {
+            $(".delivery-content").slideToggle();
+        })
+        $("#applyDeliver").click(function () {
+            let id = $(this).attr('idtogo');
+            $.ajax({
+                url: "getTime",
+                dataType: "html",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    $(".TimeTableHolder").html(data)
+                }
+            });
+        })
+
+        $("#applyDeliver").click();
+    </script>
+    @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyDnIMRNDW6W-9c74yyiO_Sp3oeya0hoLwQ"></script>*@
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin="" />
+    <script type="text/javascript">
+                var myMap;
+                var theMarker = {};
+                var greenIcon;
+
+        function showLocation(position) {
+
+            var lat = 35.75453394917301;// position.coords.latitude;
+            var lon = 51.37116999302821; //  position.coords.longitude;
+
+            alert(lat);
+            alert(lon);
+
+            myMap = L.map('Map', { attributionControl: false }).setView([51.5, -0.09], 13);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+            }).addTo(myMap);
+            var marker = L.marker([51.5, -0.09]).addTo(myMap);
+            //myMap.panTo(new L.LatLng(51.5, -0.09));
+
+            if ($("#lat").val() != "") {
+
+                lat = $("#lat").val();
+                lon = $("#lng").val()
+                theMarker = L.marker([lat, lon]).addTo(myMap);
+                myMap.panTo(new L.LatLng(lat, lon));
+            };
+
+
+
+
+
+            myMap.on('click', function (e) {
+
+                $("#checkmap").show();
+                lat = e.latlng.lat;
+                lon = e.latlng.lng;
+
+                console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+                //Clear existing marker,
+
+                if (theMarker != undefined) {
+                    myMap.removeLayer(theMarker);
+                };
+
+                //Add a marker to show where you clicked.
+                theMarker = L.marker([lat, lon]).addTo(myMap);
+                $("#lat").val(lat);
+                $("#lng").val(lon);
+            });
+                theMarker = L.marker([lat, lon]).addTo(myMap);
+                $("#lat").val(lat);
+                $("#lng").val(lon);
+
+
+
+
+
+
+            }
+        function errorHandler(err) {
+
+                if (err.code == 1) {
+                    //alert("Error: Access is denied!");
+                } else if (err.code == 2) {
+                    //alert("Error: Position is unavailable!");
+                }
+
+            var lat = 35.75453394917301;
+            var lon = 51.37116999302821;
+                myMap = L.map('Map', { attributionControl: false }).setView([lat, lon], 13);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoibWVyaW9saSIsImEiOiJja2p6dXhmdngwYmVvMnZwY2lyc2htNGxhIn0.Y9t__Bll6Fw9b9amb_rcHg',
+
+                }).addTo(myMap);
+
+
+                myMap.panTo(new L.LatLng(35.75453394917301, 51.37116999302821));
+
+                //if ($("#lat").val() != "") {
+
+                //    lat = $("#lat").val();
+                //    lon = $("#lng").val()
+                //    theMarker = L.marker([lat, lon]).addTo(myMap);
+                //    myMap.panTo(new L.LatLng(lat, lon));
+                //}
+
+
+
+                myMap.on('click', function (e) {
+                   // $("#checkmap").show();
+                    lat = e.latlng.lat;
+                    lon = e.latlng.lng;
+
+
+
+                    console.log("You clicked the map at LAT: " + lat + " and LONG: " + lon);
+                    //Clear existing marker,
+
+                    if (theMarker != undefined) {
+                        myMap.removeLayer(theMarker);
+                    };
+
+                    //Add a marker to show where you clicked.
+                    theMarker = L.marker([lat, lon]).addTo(myMap);
+
+                    $("#lat").val(lat);
+                    $("#lng").val(lon);
+                });
+
+
+            }
+        function getLocation() {
+                if (navigator.geolocation) {
+                    // timeout at 60000 milliseconds (60 seconds)
+                    var options = { timeout: 60000 };
+                    navigator.geolocation.getCurrentPosition
+                        (showLocation, errorHandler, options);
+                } else {
+                    alert("Sorry, browser does not support geolocation!");
+                }
+        };
+
+        //google.maps.event.addDomListener(window, 'load', function () {
+        //    var places = new google.maps.places.Autocomplete(document.getElementById('mapaddress'));
+        //    google.maps.event.addListener(places, 'place_changed', function () {
+        //        var place = places.getPlace();
+
+
+        //        if (theMarker != undefined) {
+        //            myMap.removeLayer(theMarker);
+        //        };
+        //        myMap.panTo(new L.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
+        //        theMarker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]).addTo(myMap);
+        //        $("#lat").val(place.geometry.location.lat());
+        //        $("#lng").val(place.geometry.location.lng());
+        //    });
+        //});
+        $("#changeAddress").click(function () {
+
+            $(".addressy").css("display","block")
+        })
+        $("#cancelAddress").click(function () {
+            $("#addAddressHolder").css("display", "none");
+            $("body").css("overflow", "scroll")
+        })
+        $("#addAddress").click(function () {
+
+            $("#addAddressHolder").css("display", "block");
+            $("body").css("overflow","hidden")
+            getLocation();
+            //$("#mapshow").hide();
+
+            //$("#maphide").show();
+            //$("#mapshow").hide();
+
+        });
+            $("#maphide span").click(function () {
+                $("#mapHolder").css("display", "none");
+
+                var lat = $("#lat").val();
+                var lon = $("#lng").val();
+                //myMap.panTo(new L.LatLng(lat, lon));
+                //$("#maphide").hide();
+                //$("#mapshow").show();
+                @*if ('@Model.poly' !== '') {
+
+                    $("#loading").fadeIn();
+
+                    $.ajax({
+                        url: "/Home/inInArea",
+                        data: 'html',
+                        data: {
+                            lat: $("#lat").val(),
+                            log: $("#lng").val(),
+                        },
+                        success: function (data) {
+
+                            var deliver = parseInt($("#deliveryprice").text().replace(",", ""));
+                            let price = parseInt($("#totalprice").text().replace(",", ""));
+                            if (data == "1") {
+
+                                let final = price - deliver;
+                                $("#deliveryprice").text("0");
+                                $("#totalprice").text(addCommas(final));
+
+                                toastr.options = {
+                                    "debug": false,
+                                    "positionClass": "toast-top-center",
+                                    "onclick": null,
+                                    "fadeIn": 300,
+                                    "fadeOut": 1000,
+                                    "timeOut": 5000,
+                                    "extendedTimeOut": 1000
+                                }
+                                toastr.success("برای موقعیت شما ارسال رایگان است");
+                                $("#loading").fadeOut();
+                            }
+                            else {
+
+                                if (deliver == 0 && price < parseInt('@Model.baseDeliver')) {
+                                    $("#deliveryprice").text('@Model.priceDeliver');
+                                    $("#totalprice").text(addCommas(price + parseInt('@Model.priceDeliver')));
+
+                                    toastr.options = {
+                                        "debug": false,
+                                        "positionClass": "toast-top-center",
+                                        "onclick": null,
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                    toastr.error("برای موقعیت شما ارسال رایگان نمی باشد");
+                                }
+                                $("#loading").fadeOut();
+                            }
+
+
+                        }
+                    });
+
+                }*@
+
+
+            });
+
+        $("#verifyAddress").click(function () {
+            var lat = $("#lat").val();
+            var lng = $("#lng").val();
+            var address = $("#modalAddress").val();
+            var postalCode = fixNumbers($("#modalpostalCode").val());
+            var title = $("#modalTitle").val();
+            var city = $("#modalCity").val();
+            var state = $("#modalState").val();
+            var ID = $("#modalID").val();
+            var value = "0";
+            if (lat == "0" || lat == "") {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error("موقعیت خود را روی نقشه انتخاب کنید");
+                value = "1";
+            };
+            if (address == "" || postalCode == "" || title == "" || city == "" || state == "") {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error("تمامی موارد را کامل کنید");
+                value = "1";
+            }
+
+            if (value == "0") {
+                $.ajax({
+                    url: "setAddress",
+                    dataType: "html",
+                    data: {
+                        lat: lat,
+                        lng: lng,
+                        address: address,
+                        postalCode: postalCode,
+                        title: title,
+                        city: city,
+                        state: state,
+                        id: ID
+                    },
+                    success: function (data) {
+                        if (data == "200") {
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data)
+                        }
+
+
+                    }
+                });
+            }
+            else {
+                alert(postalCode)
+            }
+
+
+        });
+
+        $(".deliverType").click(function () {
+
+
+            var price = $(this).find(".dprice").text();
+            var basePrice = '@Model.baseDeliver';
+            var finalAmount = '@Model.finalAmount';
+            finalAmount = finalAmount.replace(",", "");
+            basePrice = basePrice.replace(",", "");
+            price = price.replace(",", "");
+
+
+            if (parseFloat(finalAmount) < parseFloat(basePrice)) {
+                $("#deliveryprice").text(addCommas(price));
+                var mot = $("#finalprice").text().replace(",", '')
+                mot = mot.replace(',', "");
+                var discount = $("#finalDiscount").text();
+                discount = discount.replace(',', "");
+                $("#totalprice").text(addCommas(parseInt(mot) + parseInt(price) - parseInt(discount)))
+
+            }
+
+
+
+
+            $(".deliverType").find('i').css("display", "none");
+            $(this).find('i').css("display", "block");
+
+            var id = $(this).attr('id');
+            $("#planID").val(id);
+            $.ajax({
+                url: "getTime",
+                dataType: "html",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    $(".TimeTableHolder").html(data)
+                }
+            });
+
+
+
+        })
+
+        $(".addressy").click(function () {
+
+            var id = $(this).attr('id');
+            $("#addressID").val(id);
+
+
+
+            $(".addressy").find('i').css("display", "none")
+            $(".addressy").css("display", "none");
+            $(this).find('i').css("display", "block");
+            $(this).css("display", "block");
+
+        });
+        $(".removeAddress").click(function (e) {
+            e.stopPropagation();
+            $("#removeModal").modal('toggle');
+            var sid = $(this).parent().parent().attr('id');
+            $("#idToDelete").val(sid);
+
+
+        });
+        $("#removeAddressCancel").click(function () {
+            $("#removeModal").modal('toggle');
+        })
+        $("#removeAddressButt").click(function () {
+
+            var sid = $("#idToDelete").val();
+            $.ajax({
+                url: "removeAddress",
+                dataType: "html",
+                data: {
+                    id: sid
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        });
+        $(".editAddress").click(function (e) {
+            $("#addAddressHolder").show()
+                    e.stopPropagation();
+                    var sid = $(this).parent().parent().attr('id');
+                    var addes = @Html.Raw(Json.Encode(Model.address))
+                        $.each(addes, function (index, item) {
+
+                            var id = item.ID;
+                            if (sid == id) {
+                                $("#addressModal").modal('toggle');
+                                $("#modalTitle").val(item.title);
+                                $("#modalCity").val(item.city);
+                                $("#modalState").val(item.state);
+                                $("#modalAddress").val(item.address);
+                                $("#modalpostalCode").val(fixNumbers(item.postalCode));
+                                $("#modalID").val(item.ID);
+
+                                var lat = item.lat;
+                                var lon = item.lng;
+
+                                $("#lat").val(lat);
+                                $("#lng").val(lon);
+                                if (myMap == undefined) {
+                                    getLocation();
+                                }
+                                else {
+                                    if (theMarker != undefined) {
+                                        myMap.removeLayer(theMarker);
+                                    };
+                                }
+
+
+                                //Add a marker to show where you clicked.
+                                theMarker = L.marker([lat, lon]).addTo(myMap);
+                                myMap.panTo(new L.LatLng(lat, lon));
+                            }
+
+
+                        });
+
+        })
+
+
+        var senddata = function () {
+            var addressID = $("#addressID").val();
+            var counter = 0;
+            var payment = $("#Fpayment").val();
+            var houid = $("#hourid").val();
+            var info = $(".infoD").text();
+            if (info != "") {
+                if (houid != "") {
+                    if (addressID != "") {
+
+                        if (payment != "" ) {
+                            $("form#endOrderForm").submit();
+                        }
+                        else {
+                            toastr.options = {
+                                "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 300,
+                                "fadeOut": 1000,
+                                "timeOut": 3000,
+                                "extendedTimeOut": 1000
+                            }
+                            toastr.error("روش پرداخت را انتخاب کنید");
+                        }
+
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 3000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error("آدرس را انتخاب کنید");
+                    }
+                }
+                else {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 3000,
+                        "extendedTimeOut": 1000
+                    }
+                    toastr.error("زمان انتقال را کامل کنید");
+                }
+            }
+            else {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 3000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.error("روش انتقال را انتخاب کنید");
+            }
+
+            $("#finalconfirm").click(function () {
+                $("#finalconfirm").off('click');
+                senddata();
+
+            })
+
+
+        }
+
+        $("#finalconfirm").click(function () {
+            $("#finalconfirm").off('click');
+            senddata();
+
+        })
+        $(".changeAddress").click(function () {
+            var id = $(this).attr('id');
+            $("#addressID").val(id);
+        })
+
+    </script>
+
+} 

@@ -94,11 +94,13 @@ namespace banimo.ViewModelPost
         public List<CatTreeList> catTreeList { get; set; }
         public List<banimo.ViewModel.Comment> comment { get; set; }
         public string vahed { get; set; }
+        public string setID { get; set; }
         public string tag { get; set; }
         public string cattree { get; set; }
         public string ID { get; set; }
         public List<Slide> slides { get; set; }
         public List<Newest> similarProduct { get; set; }
+        public List<Newest> detailProduct { get; set; }
         public List<OtherColor> otherColors { get; set; }
         public string title { get; set; }
         public string meta { get; set; }

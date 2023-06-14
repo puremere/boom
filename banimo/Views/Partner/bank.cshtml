@@ -74,9 +74,12 @@
 
                     @if (string.IsNullOrEmpty(Model.withdraw))
                     {
-                        <h5>@Resources.res.accountBalance  : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED</h5>
+                        if (@Model.message != null)
+                        {
+                            <h5>@Resources.res.accountBalance  : @string.Format("{0:n0}", Math.Abs(decimal.Parse(@Model.message)))  AED</h5>
+                        }
                         <div style="position:relative; margin:5px" id="">
-                              <div class="btn btn-success" style="margin-top:20px" data-bs-toggle="modal" data-bs-target="#Withdraw" data-bs-original-title="" title="">withdraw money</div>
+                            <div class="btn btn-success" style="margin-top:20px" data-bs-toggle="modal" data-bs-target="#Withdraw" data-bs-original-title="" title="">withdraw money</div>
                         </div>
                     }
                     else

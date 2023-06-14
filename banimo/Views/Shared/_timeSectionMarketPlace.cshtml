@@ -5,17 +5,17 @@
         if (Model.deliver_node != null)
         {
 
-            <table>
+            <table style="direction:rtl">
                 <thead>
                     <tr>
                         <th>
-                            col
+                            ردیف
                         </th>
                         <th>
-                            vendor
+                            فروشنده
                         </th>
                         <th>
-                            deliverPrice
+                            قیمت ارسال
                         </th>
                     </tr>
                 </thead>
@@ -57,12 +57,30 @@
         }
 
         <script>
+            function addCommas(nStr) {
+                nStr += '';
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
             let price = '@Model.deliver_node.Sum(c=>c.price)';
+           
+            
+            price = price.replace(",", "");
             let finalAmount = $("#finalamount").text().trim();
+            finalAmount = finalAmount.replace(",", "");
             let final = parseFloat(price) + parseFloat(finalAmount);
 
-            $("#deliveramount").text(price);
-            $("#finalamount").text(final);
+           
+
+
+            $("#deliveramount").text(addCommas(price));
+            $("#finalamount").text(addCommas(final));
 
             $(".infoD").text("true")
       

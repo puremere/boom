@@ -291,7 +291,7 @@
                                                     if (item != "")
                                                     {
                                                         <div class="imageCover">
-                                                            <img src="https://www.marsools.com/images/@item" />
+                                                            <img src="/images/@item" />
                                                             <img id="@item" class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /> <i class="fa fa-remove" style="font-size: 12px;position: absolute;bottom: 5px;left: 0px;color: white;"></i>
                                                         </div>
                                                     }
@@ -341,7 +341,8 @@
 
                                 <div class="itemRow">
                                     @*<p>@Resources.res.createDesc </p>*@
-                                    <textarea placeholder="@Resources.res.description" style="flex:1; height:100px" id="desc" name="desc" class="form-control ">@Model.desc</textarea>
+                                    @* <textarea placeholder="@Resources.res.description" style="flex:1; height:100px" id="desc" name="desc" class="form-control ">@Model.desc</textarea>*@
+                                    <input placeholder="@Resources.res.description" style="flex:1; height:100px" id="desc" name="desc" class="form-control "  value="@Model.desc"/>
 
                                 </div>
                                 <div class="itemRow">

@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Payment Verificatin";
+    Layout = "~/Views/Shared/_Layout8.cshtml";
+}
+
+
+<style>
+    .p {
+        width: 70%;
+        margin: auto;
+        align-content: center;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+    .childofp {
+        margin: 3%;
+    }
+
+        .childofp p {
+            text-align: right
+        }
+</style>
+
+
+
+@{
+    if (@ViewBag.message == "موفق")
+    {
+        <div class="container" style="text-align:center; direction:rtl; padding:50px 50px;background-color: white;margin-top: 20px;margin-bottom:20px; border: 1px #ddd solid;border-radius: 10px;">
+
+            <div class="row" style="display:flex">
+                <img style="width:150px; float:left; margin:auto" src="~/images/successPayment.png" />
+            </div>
+
+            <h4 style="text-align:center; float:right;color:#4d4d4d;padding: 30px;width:100%; ">
+                سفارش شما با موفقیت ثبت شد
+            </h4>
+            <h4 style="text-align:center;font-size:18px;">شماره سفارش:   <span style="font-size:25px"></span>@ViewBag.message3 </h4>
+            <div class="btn btn-default" style="margin:25px"><a href="/">بازگشت به صفحه اصلی</a> </div>
+
+
+
+
+
+        </div>
+
+    }
+    else
+    {
+<div class="container" style="text-align:center; direction:rtl; padding:50px 50px;background-color: white;margin-top: 20px;border: 1px #ddd solid;border-radius: 10px;">
+
+    <div class="row" style="display:flex">
+
+        <img src="~/images/paymentError.png" style="width:150px; float:left; margin:auto" />
+    </div>
+
+    <h4 style="text-align:center; float:right;color:#4d4d4d;padding: 30px;width:100%; ">
+        خطا ! پرداخت با خطا مواجه شد
+    </h4>
+
+    <div class="btn btn-default" style="margin:25px"><a href="/Home/index">بازگشت به صفحه اصلی</a> </div>
+
+
+    @{
+        if (Request.Browser.IsMobileDevice)
+        {
+            string srt = "wearkala//" + "mellatgate-" + @ViewBag.message + "-" + @ViewBag.message3;
+
+            <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="@srt">بازگشت به اپلیکیشن</a></div>
+
+        }
+
+    }
+
+
+
+
+
+</div>
+
+    }
+}
+
+
+
+
+

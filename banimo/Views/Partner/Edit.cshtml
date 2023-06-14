@@ -746,10 +746,10 @@
                                                             $('#filterModal').modal('toggle');
                                                         })
                                                         $("#FilterConfirm").click(function () {
-                                                            //alert("dd");
                                                             $('#filterModal').modal('toggle');
 
                                                         })
+                                                       
                                                     </script>
                                                 </div>
                                             }
@@ -762,20 +762,21 @@
                                 @Resources.res.showaddson
                             </button>
 
-                            <button style="margin:5px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#featureModal">
+                            <button id="showFeatureModal" style="margin:5px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#featureModal">
                                 @Resources.res.showFeature
                             </button>
+                            <script>
+                                $("#showFeatureModal").click(function () {
+                                     
+                                    $('#featureModal').modal('toggle');
+                                })
+                            </script>
 
                             <!-- Modal -->
                             <div class="modal fade" id="featureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
+                                       
                                         <div class="modal-body" id="featureholderforproduct">
 
                                             @{
@@ -787,7 +788,7 @@
                                                         if (myitem.value == "Master")
                                                         {
                                                             <div class="row" style="box-shadow:none; font-size:18px; padding:10px ">
-                                                                <label class="control-label col-md-4 col-sm-4 col-xs-12" style="text-align: right">
+                                                                <label class="control-label col-md-12 col-sm-12 col-xs-12" style="text-align: right">
                                                                     @myitem.title :
                                                                 </label>
                                                                 <div class=" col-md-8 col-sm-8 col-xs-12 featureInput">
@@ -818,7 +819,7 @@
                                                     <p id="featuretobe" style="display:none"></p>
                                                     <p id="rangetobe" style="display:none"></p>
                                                     <div class="form-group ">
-                                                        <a id="featureConfirm" class="btn btn-primary">تایید</a>
+                                                        <a id="featureConfirm" class="btn btn-primary">@Resources.res.OK</a>
 
                                                         <script>
                                                             $("#featureConfirm").click(function () {
@@ -888,7 +889,7 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
 
                         <input value="@Model.canonical" type="hidden" id="canonical" name="canonical" required="required" class="form-control col-md-7 col-xs-12">
 
-                        <input value="@Model.title" type="hidden" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
+                        <input value="@Model.title.Replace(" ","_").Replace(".","")" type="hidden" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
 
 
                         <div class="mb-4 row align-items-center">
@@ -994,7 +995,7 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
 
 
 
-                        <div class="mb-4 row align-items-center" style="display:none">
+                        <div class="mb-4 row align-items-center" style="">
                             <label class="form-label-title col-sm-2 mb-0">
                                 @Resources.res.name
                             </label>
@@ -1096,7 +1097,16 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
                                 @Resources.res.hashtags
                             </label>
                             <div class="col-sm-10">
-                                <input data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
+                                @if (Model.tag != "")
+                                {
+                                    <input value="@Model.tag" data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
+
+                                }
+                                else
+                                {
+                                    <input data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
+
+                                }
 
 
                             </div>
@@ -1207,7 +1217,7 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
                                             "timeOut": 5000,
                                             "extendedTimeOut": 1000
                                         }
-                                        toastr.error('تمامی موارد را کامل کنید')
+                                        toastr.error('fill all fields')
                                     }
 
 

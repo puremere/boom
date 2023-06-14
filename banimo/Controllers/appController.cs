@@ -1,13 +1,17 @@
 ﻿using banimo.apiViewModel;
 using banimo.Classes;
+using BankMellatLibrary;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +30,7 @@ namespace banimo.Controllers
 
         public static string appserver = ConfigurationManager.AppSettings["appserver"];
         public static string appserver2 = ConfigurationManager.AppSettings["server"];
+        
         string nodeID = ConfigurationManager.AppSettings["nodeID"];
         public string RandomString()
         {
@@ -70,7 +75,31 @@ namespace banimo.Controllers
             JObject jObject = JObject.Parse(result); return jObject;
         }
 
-       [System.Web.Http.HttpPost]
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> getMain([FromBody] getMainVM model)
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("servername", servername);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("nodeID", nodeID);
+                collection.Add("catMode", model.catMode);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Main/GetMain.php?", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+           
+            JObject jObject = JObject.Parse(result); return jObject;
+        }
+
+        [System.Web.Http.HttpPost]
         public async Task<JObject> getMainData()
         {
             string servername = ConfigurationManager.AppSettings["serverName"];
@@ -84,7 +113,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
-                string addr = appserver + "/getMainData.php";
+                string addr = appserver + "/getMainDataDemoMarsool.php";
                 byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -204,6 +233,115 @@ namespace banimo.Controllers
             }
            JObject jObject = JObject.Parse(result); return jObject ;
         }
+
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> buyRequestNew([FromBody] buyRequest model)
+        {
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            string result = "";
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection();
+                collection.Add("fullname", model.fullname);
+                collection.Add("mobile", model.mobile);
+                collection.Add("email", model.email);
+                collection.Add("state", model.state);
+                collection.Add("city", model.city);
+                collection.Add("address", model.address);
+                collection.Add("addressID", model.addressID);
+                collection.Add("latitude", model.latitude);
+                collection.Add("longitude", model.longitude);
+                collection.Add("hourID", model.hourID);
+                collection.Add("planID", model.planID);
+                collection.Add("comment", model.comment);
+                collection.Add("phone", model.phone);
+                collection.Add("payment", model.payment);
+                collection.Add("ids", model.ids);
+                collection.Add("nums", model.nums);
+                collection.Add("tarafHesabs", model.tarafHesabs);
+                collection.Add("payment", model.payment);
+                collection.Add("discount", model.discount);
+                collection.Add("postalCode", model.postalCode);
+                collection.Add("token", model.token);
+                collection.Add("auth", model.auth);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
+
+                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Home/buyRequestMarsool.php", collection);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+            buyResponse responseModel = new buyResponse();
+            
+            if (log2.status == 200)
+            {
+                responseModel.status = 200;
+                string finalUrl = "";
+                if (model.payment == "1")
+                {
+
+                }
+                else if (model.payment == "2")
+                {
+                    // باید این یوار ال برگرده
+                    finalUrl = "Connection/verifyByAdmin?payment=2&id=" + log2.peigiry + "&fromUser=1";
+
+                }
+                else if (model.payment == "3")
+                {
+                    string txtDescription = "افزودن به سبد خرید";
+                    Random rnd = new Random();
+
+                    long orderID = log2.orderID == null ? rnd.Next(111000000, 111999999) : long.Parse(log2.orderID);
+                    string message = "";
+
+
+                    long amount = log2.amount * 10;
+                    string additionalData = txtDescription;
+
+
+                    string localDate = DateTime.Now.ToString("yyyyMMdd");
+                    string localTime = DateTime.Now.ToString("HHmmss");
+
+                    string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyMellat";
+                    long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
+                    string userName = ConfigurationManager.AppSettings["userName"];
+                    string userPassword = ConfigurationManager.AppSettings["userPassword"];
+                    string payerId = "0";
+
+
+                    BankMellatImplement bankMellatImplement = new BankMellatImplement(callBackUrl, terminalId, userName, userPassword);
+
+                    string resultRequest = bankMellatImplement.bpPayRequest(orderID, amount, additionalData);
+                    string[] StatusSendRequest = resultRequest.Split(',');
+
+
+                    if (int.Parse(StatusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                    {
+                        finalUrl = "/Connection/RedirectVPOS?id=" + StatusSendRequest[1];
+                    }
+                    else
+                    {
+                        finalUrl = "";
+                    }
+
+                }
+
+                responseModel.url = finalUrl;
+
+
+            }
+
+            string jsonmodel = JsonConvert.SerializeObject(responseModel);
+
+            JObject jObject = JObject.Parse(jsonmodel); return jObject;
+        }
+
 
 
         [System.Web.Http.HttpPost]
@@ -1226,7 +1364,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getproductdetailForCookie.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getproductdetailForCookieMarsool.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
@@ -1592,7 +1730,7 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewProduct.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver + "/viewProductNewVersion.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;
@@ -1899,6 +2037,44 @@ namespace banimo.Controllers
             }
             JObject jObject = JObject.Parse(result);
             return jObject;
+        }
+
+
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage getModel(string name)
+        {
+            //Create HTTP Response.
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+
+            //Set the File Path.
+            string filePath = HttpContext.Current.Server.MapPath("~/ARmodels/") + name;
+
+            //Check whether File exists.
+            if (!File.Exists(filePath))
+            {
+                //Throw 404 (Not Found) exception if File not found.
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.ReasonPhrase = string.Format("File not found: {0} .", name);
+                throw new HttpResponseException(response);
+            }
+
+            //Read the File into a Byte Array.
+            byte[] bytes = File.ReadAllBytes(filePath);
+
+            //Set the Response Content.
+            response.Content = new ByteArrayContent(bytes);
+
+            //Set the Response Content Length.
+            response.Content.Headers.ContentLength = bytes.LongLength;
+
+            //Set the Content Disposition Header Value and FileName.
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = name;
+
+            //Set the File Content Type.
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(name));
+            return response;
+
         }
 
     }

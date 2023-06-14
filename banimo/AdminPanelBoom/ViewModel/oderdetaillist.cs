@@ -11,8 +11,9 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
         public string price { get; set; }
-       
-        
+        public string setID { get; set; }
+
+
         public string oldPrice { get; set; }
         public string parentID { get; set; }
 

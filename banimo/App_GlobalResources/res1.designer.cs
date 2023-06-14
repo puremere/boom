@@ -889,6 +889,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose Parent.
+        /// </summary>
+        internal static string choosParent {
+            get {
+                return ResourceManager.GetString("choosParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to city.
         /// </summary>
         internal static string city {
@@ -1128,6 +1137,15 @@ namespace Resources {
         internal static string createdBy {
             get {
                 return ResourceManager.GetString("createdBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Item.
+        /// </summary>
+        internal static string createItem {
+            get {
+                return ResourceManager.GetString("createItem", resourceCulture);
             }
         }
         
@@ -1735,6 +1753,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item exist.
+        /// </summary>
+        internal static string existItem {
+            get {
+                return ResourceManager.GetString("existItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit .
         /// </summary>
         internal static string exitAccount {
@@ -1821,6 +1848,15 @@ namespace Resources {
         internal static string feature {
             get {
                 return ResourceManager.GetString("feature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feature Management.
+        /// </summary>
+        internal static string featureManagement {
+            get {
+                return ResourceManager.GetString("featureManagement", resourceCulture);
             }
         }
         
@@ -2442,6 +2478,15 @@ namespace Resources {
         internal static string itemAdded {
             get {
                 return ResourceManager.GetString("itemAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SubItem Exist.
+        /// </summary>
+        internal static string ItemHasSubItem {
+            get {
+                return ResourceManager.GetString("ItemHasSubItem", resourceCulture);
             }
         }
         
@@ -3427,6 +3472,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prent Or Child Title.
+        /// </summary>
+        internal static string PrentOrChildTitle {
+            get {
+                return ResourceManager.GetString("PrentOrChildTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparing.
         /// </summary>
         internal static string preparing {
@@ -4192,6 +4246,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parent.
+        /// </summary>
+        internal static string SelectParent {
+            get {
+                return ResourceManager.GetString("SelectParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Level 3.
         /// </summary>
         internal static string selectTafsil {
@@ -4260,6 +4323,24 @@ namespace Resources {
         internal static string sentCode {
             get {
                 return ResourceManager.GetString("sentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Set.
+        /// </summary>
+        internal static string set {
+            get {
+                return ResourceManager.GetString("set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set All Features Of Category :.
+        /// </summary>
+        internal static string setAllFeatureFor {
+            get {
+                return ResourceManager.GetString("setAllFeatureFor", resourceCulture);
             }
         }
         

@@ -114,427 +114,505 @@
         <link href="~/Content/toastr.css" rel="stylesheet" />
 
     </head>
-        <body>
+    <body>
+        <div style="z-index:99999999999; text-align:center; padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;height:100%;width:100%">
 
-            <div id="loading" style="display:none">
-                <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
-                    <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
-                    <img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" alt="لودینگ" />
-                </div>
+
+            <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
+            @*<img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" alt="لودینگ" />*@
+            <p>سایت در حال بروزرسانی می باشد</p>
+
+
+
+        </div>
+        <div id="loading" style="display:none">
+            <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
+                <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
+                <img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" alt="لودینگ" />
             </div>
-            <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">با ما در ارتباط باشید</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input class="form-control" placeholder="ایمیل شما" style="margin-bottom:10px;text-align:right" />
-                            <input class="form-control" placeholder="شماره تلفن شما" style="margin-bottom:10px;text-align:right" />
-                            <textarea id="emailContent" placeholder="پیام شما" class="form-control" style="text-align:right"></textarea>
-                            @*
+        </div>
+        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">با ما در ارتباط باشید</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" placeholder="ایمیل شما" style="margin-bottom:10px;text-align:right" />
+                        <input class="form-control" placeholder="شماره تلفن شما" style="margin-bottom:10px;text-align:right" />
+                        <textarea id="emailContent" placeholder="پیام شما" class="form-control" style="text-align:right"></textarea>
+                        @*
 
                         <textarea class="form-control" placeholder="your message" />*@
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
-                            <button type="button" class="btn btn-primary" id="sendMessage">ارسال پیام</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                        <button type="button" class="btn btn-primary" id="sendMessage">ارسال پیام</button>
                     </div>
                 </div>
             </div>
-            <nav class="social">
-                <ul style="width:100%">
-                    <li style="direction:rtl;  ">
-                        <i class="fal fa-link nulli"></i>
-                        <a href="whatsapp://send?phone=989233748"> <i class="fab fa-whatsapp"></i></a>
-                        <a href="https://https://www.instagram.com/omirom.co/"> <i class="fab fa-instagram"></i></a>
-                        <p style="display:inline-block" data-toggle="modal" data-target="#messageModal"> <i class="fa fa-envelope"></i></p>
-                    </li>
-                </ul>
-            </nav>
+        </div>
+        <nav class="social">
+            <ul style="width:100%">
+                <li style="direction:rtl;  ">
+                    <i class="fal fa-link nulli"></i>
+                    <a href="whatsapp://send?phone=989233748"> <i class="fab fa-whatsapp"></i></a>
+                    <a href="https://https://www.instagram.com/omirom.co/"> <i class="fab fa-instagram"></i></a>
+                    <p style="display:inline-block" data-toggle="modal" data-target="#messageModal"> <i class="fa fa-envelope"></i></p>
+                </li>
+            </ul>
+        </nav>
 
-            @{
-                banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
-            }
-            <!-- header-bot -->
-            <div class="header-bot" style="">
-                <div class="" style="direction:rtl; width:100%">
-                    <div>
-                        <div class="" style="width: 100%;display:flex;align-content:center; padding:5px 0 5px 5px;">
-                            <div id="barsformenu" class="col-sm-6 col-xs-6" style=" padding: 0px;padding-top: 0px;">
-                                <i class="fa fa-bars toolbarText"></i>
-                                <p class="toolbarText" style="display:inline-block;margin-right: 5px;">@System.Configuration.ConfigurationManager.AppSettings["siteName"]</p>
-                            </div>
-                            <div class="col-sm-6 col-xs-6" style="padding: 0;">
-
-                                <a href="/Home/checkout">
-                                    <p class="cartnumber simpleCart_quantityy" id="simpleCart_quantityy" style="border-radius: 50%;background-color:white;color:black;display: flex;position: absolute;left: 15px;padding: 0px 5px;align-items: center;justify-content: center;"></p>
-                                    <i class="fa fa-shopping-cart toolbarText" style="min-width: 35px;display:inline-block;float: left;"></i>@*<img  src="/images/cart.png">*@
-                                </a>
-                                @if (userApp != null)
-                                {
-                                    <a href="/Home/myprofile?type=1">
-                                        <i class="userButt fa fa-user toolbarText" style=" min-width: 27px;display:inline-block;float: left;"></i>
-                                    </a>
-
-                                }
-                                <i class="searchButt fa fa-search toolbarText" style=" min-width:35px;display:inline-block;float: left;"></i>
-                                @*<img class="searchButt toolbarText" src="/images/search.png" style="">*@
-                            </div>
-                            <script>
-                                $("#barsformenu").click(function () {
-
-                                    $("#barmenu").css("display", "block")
-                                    $("#barmenu").animate({
-                                        'margin-right': '0px'
-                                    }, function () {
-                                        $("#barmenu").css("background-color", "rgba(0, 0, 0, 0.2)")
-                                    });
-
-                                    $("body").css("overflow", "hidden");
-                                })
-                            </script>
+        @{
+            banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+        }
+        <!-- header-bot -->
+        <div class="header-bot" style="">
+            <div class="" style="direction:rtl; width:100%">
+                <div>
+                    <div class="" style="width: 100%;display:flex;align-content:center; padding:5px 0 5px 5px;">
+                        <div id="barsformenu" class="col-sm-6 col-xs-6" style=" padding: 0px;padding-top: 0px;">
+                            <i class="fa fa-bars toolbarText"></i>
+                            <p class="toolbarText" style="display:inline-block;margin-right: 5px;">@System.Configuration.ConfigurationManager.AppSettings["siteName"]</p>
                         </div>
+                        <div class="col-sm-6 col-xs-6" style="padding: 0;">
 
-                    </div>
-
-                    <style>
-
-                        #searchinput {
-                            border: none;
-                        }
-
-                            #searchinput:focus, #searchinput:focus {
-                                outline: none;
-                            }
-
-                        #barmanuholder a div span {
-                            font-size: 11px;
-                            font-weight: 400;
-                            color: black
-                        }
-
-                        #barmanuholder div span {
-                            font-size: 11px;
-                            font-weight: 400;
-                            color: black
-                        }
-                    </style>
-                    <div id="barmenu" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 999999999;background-color:rgba(0, 0, 0, 0);right: 0;">
-                        <div id="barmanuholder" style="position:relative; overflow-y:scroll; width:65% ; background-color:white; float:right; height:100%; ">
-                            @{
-
-
-                                if (userApp != null)
-                                {
-                                    string name = userApp.fullname != "" ? userApp.fullname : userApp.phone;
-
-                                    <div class="menuAppHeader toolbarText" style="direction: rtl;padding: 15px;">
-                                        <a href="/Home/myprofile?type=1">
-                                            <i class="fal fa-user " style=" margin-left:10px; vertical-align:middle; color:white"></i> <span class="" style="color:white">@name</span>
-                                        </a>
-                                    </div>
-                                    <div class="menuAppHeader" style="direction: rtl;padding: 5px 15px 20px 5px;background-color: #E1A52B">
-
-                                        <a href="/CustomerLogin/LogOff">
-                                            <i class="fal fa-sign-out " style="color:white; margin-left:10px; vertical-align:middle"></i> <span style="color:white" class="">خروج</span>
-                                        </a>
-                                    </div>
-
-                                }
-                                else
-                                {
-                                    <a href="/Home/LoginPage">
-                                        <div class="menuAppHeader" style="direction: rtl;padding: 15px;color: white;">
-
-                                            <i class="fal fa-sign-in" style="color:white; margin-left:10px; vertical-align:middle"></i> <span style="color:white">عضویت و ورود</span>
-                                        </div>
-                                    </a>
-                                }
-                            }
-                            <a href="/Home/Index">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right; direction:ltr">
-                                    <span>خانه</span> <i class="fal fa-home" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
-                                </div>
-                            </a>
                             <a href="/Home/checkout">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
-                                    <span>سبد خرید</span> <i class="fal fa-shopping-cart" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
-                                </div>
+                                <p class="cartnumber simpleCart_quantityy" id="simpleCart_quantityy" style="border-radius: 50%;background-color:white;color:black;display: flex;position: absolute;left: 15px;padding: 0px 5px;align-items: center;justify-content: center;"></p>
+                                <i class="fa fa-shopping-cart toolbarText" style="min-width: 35px;display:inline-block;float: left;"></i>@*<img  src="/images/cart.png">*@
                             </a>
-                            <div class="searchButt" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
-                                <span>جستجو</span> <i class="fal fa-search" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
-                            </div>
-                            <div style="width:100%; border:1px solid #ddd"></div>
-                            <div style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
-                                <a href="/Home/mag">
-                                    <span>مقالات</span> <i class="fal fa-file" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
+                            @if (userApp != null)
+                            {
+                                <a href="/Home/myprofile?type=1">
+                                    <i class="userButt fa fa-user toolbarText" style=" min-width: 27px;display:inline-block;float: left;"></i>
                                 </a>
 
-                            </div>
-                            <div style="width:100%; border:1px solid #ddd"></div>
-                            <a href="/Home/ProductList?sortID=3">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span>پیشنهاد های ویژه @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span>
-                                </div>
-                            </a>
-                            <a href="/Home/ProductList?sortID=2">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span>پرفروش ترین های @System.Configuration.ConfigurationManager.AppSettings["siteName"]</span>
-                                </div>
-                            </a>
-                            <a href="/Home/ProductList?sortID=7">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span>بیشترین تخفیف ها @System.Configuration.ConfigurationManager.AppSettings["siteName"]</span>
-                                </div>
-                            </a>
-                            <a href="/Home/ProductList?sortID=1">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span>جدید ترین های @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span>
-                                </div>
-                            </a>
-                            <div style="width:100%; border:1px solid #ddd"></div>
-                            <a href="@Url.Action("aboutus", "Home")">
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span> درباره ما</span>
-                                </div>
-                            </a>
-                            <div id="contactUsButt">
+                            }
+                            <i class="searchButt fa fa-search toolbarText" style=" min-width:35px;display:inline-block;float: left;"></i>
+                            @*<img class="searchButt toolbarText" src="/images/search.png" style="">*@
+                        </div>
+                        <script>
+                            $("#barsformenu").click(function () {
 
+                                $("#barmenu").css("display", "block")
+                                $("#barmenu").animate({
+                                    'margin-right': '0px'
+                                }, function () {
+                                    $("#barmenu").css("background-color", "rgba(0, 0, 0, 0.2)")
+                                });
 
-                                <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
-                                    <span>تماس با ما</span>
-                                </div>
-                            </div>
-
-                            <div style="width:100%;    text-align: center; position:absolute ; bottom:5px">
-                                <a href="http://www.supect.com"><img src="~/images/supect.png" style=" width:75px; margin:0 auto;" alt="supect.com" /></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="searchdiv" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 99999;background-color:white;right: 0;">
-                        <div class="SearchReturnButt">
-                            <i class="fal fa-long-arrow-right" style="color: white;font-size: 20px;vertical-align: middle;"></i>
-                            <span style=" margin-right: 15px;font-size:15px">جستجو</span>
-                        </div>
-                        <form id="searchpanel" action="~/Home/ProductList">
-                            <div style="text-align:center; margin:20px 0;font-size: 11px;"><p>لطفا عبارت مورد نظر خود را برای جستجو وارد کنید</p></div>
-                            <div class="inputHolder"><i class="fal fa-search" style="margin-left:10px; font-weight:600 "></i><input name="newquery" style="text-align:right; direction:rtl" id="searchinput" type="text" placeholder="جستجو ..." /></div>
-                            <div type="submit" id="searchActButt" style="position:absolute; bottom:0px ; padding:15px; background-color:green; text-align:center; width:100%"> <p style="color:white"> <span>جستجو در @System.Configuration.ConfigurationManager.AppSettings["siteName"] @System.Configuration.ConfigurationManager.AppSettings["siteName2"]</span></p></div>
-                        </form>
-                    </div>
-                    <div id="contactUsDiv" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 99999;background-color:white;right: 0;">
-                        <div class="contactUsReturnButt" style="direction: rtl;padding: 15px;background-color: #E1A52B;color: white;">
-                            <i class="fal fa-long-arrow-right" style="color: white;font-size: 20px;vertical-align: middle;"></i>
-                            <span style=" margin-right: 15px;font-size:15px">تماس با ما</span>
-
-                        </div>
-
-                        <div id="searchpanel" action="~/Home/ProductList" style="display:flex;padding:30px;width: 60%;margin: auto;">
-                            <img style="width: 100%;margin:auto;object-fit: scale-down;height: 100%;max-width: 100px;" src="~/images/@logo" alt="لوگو" />
-                        </div>
-                        <div id="searchpanel" action="~/Home/ProductList" style="display:flex">
-                            <div class="contactItem"><i class="fa fa-envelope" style="margin-left: 10px"></i><span style="font-size:4vw"> Info&#64;<span>@System.Configuration.ConfigurationManager.AppSettings["serverName"]</span>.com</span> </div>
-                        </div>
-                        <div data-toggle="modal" data-target="#mymodal" class="ContactPhoneHolder" id="searchpanel" action="~/Home/ProductList" style="display:flex">
-                            <div class="contactItem"><i class="fa fa-headphones" style="margin-left: 10px"></i><span style="font-size:4vw">تماس با @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span> </div>
-                        </div>
-                        <div id="searchpanel" action="~/Home/ProductList" style="display:flex">
-                            <div class="contactItem"><i class="fa fa-bug" style="margin-left: 10px; "></i><span style="font-size:4vw">گزارشات مشکلات اپلیکیشن</span> </div>
-                        </div>
-                        <div class="modal" id="mymodal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body" style="text-align:center; padding:30px 15px">
-                                        <p id="contactPhone" style="font-size:16px;color:black">@phone </p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                $("body").css("overflow", "hidden");
+                            })
+                        </script>
                     </div>
 
                 </div>
-            </div>
-            <!-- //header-bot -->
-            <!-- banner -->
 
-            <script>
-                var width = screen.width;
-                var number = "-" + width + "px";
-                $("#barmenu").css("margin-right", number);
-                $("#searchdiv").css("margin-right", number);
-                $("#contactUsDiv").css("margin-right", number);
+                <style>
 
+                    #searchinput {
+                        border: none;
+                    }
 
-                $("#searchActButt").click(function () {
-                    var search = $("#searchinput").val();
-                    if (search.length < 3) {
-                        toastr.options = {
-                            "debug": false,
-                            "positionClass": "toast-top-full-width",
-                            "onclick": null,
-                            "fadeIn": 300,
-                            "fadeOut": 1000,
-                            "timeOut": 150000,
-                            "extendedTimeOut": 10000,
-
-
-
+                        #searchinput:focus, #searchinput:focus {
+                            outline: none;
                         }
-                        toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
+
+                    #barmanuholder a div span {
+                        font-size: 11px;
+                        font-weight: 400;
+                        color: black
                     }
-                    else {
 
-                        window.location.href = "/Home/ProductList?newquery=" + search
+                    #barmanuholder div span {
+                        font-size: 11px;
+                        font-weight: 400;
+                        color: black
                     }
-                })
-                $("#barmenu").click(function () {
-
-                    $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
-                    $("#barmenu").animate({
-                        'margin-right': number
-                    }, function () {
-                        $("#barmenu").css("display", "none");
-                        $("#body").css("overflow", "scroll");
-
-                    });
-
-                    $("body").css("overflow", "scroll");
-                })
-                $("#barmenu #barmanuholder").click(function (e) {
-                    e.stopPropagation();
-                });
-                $(".searchButt").click(function () {
-
-                    $("#searchdiv").css("display", "block");
-                    $("#searchdiv").animate({
-                        'margin-right': '0px'
-                    });
-                    $("body").css("overflow", "hidden");
-
-                })
-                $(".SearchReturnButt").click(function () {
-
-                    $("#searchdiv").animate({
-                        'margin-right': number
-                    }, function () {
-                        $("#searchdiv").css("display", "none");
-                        $("body").css("overflow", "scroll");
-                    });
+                </style>
+                <div id="barmenu" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 999999999;background-color:rgba(0, 0, 0, 0);right: 0;">
+                    <div id="barmanuholder" style="position:relative; overflow-y:scroll; width:65% ; background-color:white; float:right; height:100%; ">
+                        @{
 
 
-                })
+                            if (userApp != null)
+                            {
+                                string name = userApp.fullname != "" ? userApp.fullname : userApp.phone;
 
-                $("#contactUsButt").click(function () {
-                    $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
-                    $("#barmenu").animate({
-                        'margin-right': number
-                    }, function () {
-                        $("#barmenu").css("display", "block");
-                        $("#contactUsDiv").css("display", "block");
-                        $("#contactUsDiv").animate({
-                            'margin-right': '0px'
-                        }, function () {
+                                <div class="menuAppHeader toolbarText" style="direction: rtl;padding: 15px;">
+                                    <a href="/Home/myprofile?type=1">
+                                        <i class="fal fa-user " style=" margin-left:10px; vertical-align:middle; color:white"></i> <span class="" style="color:white">@name</span>
+                                    </a>
+                                </div>
+                                <div class="menuAppHeader" style="direction: rtl;padding: 5px 15px 20px 5px;background-color: #E1A52B">
 
-                            $("body").css("overflow", "hidden");
-                        });
-                    });
+                                    <a href="/CustomerLogin/LogOff">
+                                        <i class="fal fa-sign-out " style="color:white; margin-left:10px; vertical-align:middle"></i> <span style="color:white" class="">خروج</span>
+                                    </a>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <a href="/Home/LoginPage">
+                                    <div class="menuAppHeader" style="direction: rtl;padding: 15px;color: white;">
+
+                                        <i class="fal fa-sign-in" style="color:white; margin-left:10px; vertical-align:middle"></i> <span style="color:white">عضویت و ورود</span>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        <a href="/Home/Index">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right; direction:ltr">
+                                <span>خانه</span> <i class="fal fa-home" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
+                            </div>
+                        </a>
+                        <a href="/Home/checkout">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
+                                <span>سبد خرید</span> <i class="fal fa-shopping-cart" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
+                            </div>
+                        </a>
+                        <div class="searchButt" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
+                            <span>جستجو</span> <i class="fal fa-search" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
+                        </div>
+                        <div style="width:100%; border:1px solid #ddd"></div>
+                        <div style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right;direction:ltr">
+                            <a href="/Home/mag">
+                                <span>مقالات</span> <i class="fal fa-file" style="font-weight:500;color:black; margin-left:10px; vertical-align:middle"></i>
+                            </a>
+
+                        </div>
+                        <div style="width:100%; border:1px solid #ddd"></div>
+                        <a href="/Home/ProductList?sortID=3">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span>پیشنهاد های ویژه @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span>
+                            </div>
+                        </a>
+                        <a href="/Home/ProductList?sortID=2">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span>پرفروش ترین های @System.Configuration.ConfigurationManager.AppSettings["siteName"]</span>
+                            </div>
+                        </a>
+                        <a href="/Home/ProductList?sortID=7">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span>بیشترین تخفیف ها @System.Configuration.ConfigurationManager.AppSettings["siteName"]</span>
+                            </div>
+                        </a>
+                        <a href="/Home/ProductList?sortID=1">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span>جدید ترین های @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span>
+                            </div>
+                        </a>
+                        <div style="width:100%; border:1px solid #ddd"></div>
+                        <a href="@Url.Action("aboutus", "Home")">
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span> درباره ما</span>
+                            </div>
+                        </a>
+                        <div id="contactUsButt">
 
 
-                })
-                $(".contactUsReturnButt").click(function () {
+                            <div class="" style="width:100%; margin:10px 0; padding:6px 10px ; text-align:right">
+                                <span>تماس با ما</span>
+                            </div>
+                        </div>
 
-                    $("#contactUsDiv").animate({
-                        'margin-right': number
-                    }, function () {
-                        $("#contactUsDiv").css("display", "scroll")
-                    });
-                })
-
-            </script>
-            <div class="row" style=" margin-right:0px" id="manuholder">
-                <div class="">
-                    <nav id="main-nav" class="col-lg-12 col-md-12 col-sm-12" style="font-size:13px; color:#f6f5f5; background-color:#656565; padding-right:0px; border-bottom:2px solid black">
-
-                        <!-- Sample menu definition -->
-
-                    </nav>
+                        <div style="width:100%;    text-align: center; position:absolute ; bottom:5px">
+                            <a href="http://www.supect.com"><img src="~/images/supect.png" style=" width:75px; margin:0 auto;" alt="supect.com" /></a>
+                        </div>
+                    </div>
                 </div>
+                <div id="searchdiv" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 99999;background-color:white;right: 0;">
+                    <div class="SearchReturnButt">
+                        <i class="fal fa-long-arrow-right" style="color: white;font-size: 20px;vertical-align: middle;"></i>
+                        <span style=" margin-right: 15px;font-size:15px">جستجو</span>
+                    </div>
+                    <form id="searchpanel" action="~/Home/ProductList">
+                        <div style="text-align:center; margin:20px 0;font-size: 11px;"><p>لطفا عبارت مورد نظر خود را برای جستجو وارد کنید</p></div>
+                        <div class="inputHolder"><i class="fal fa-search" style="margin-left:10px; font-weight:600 "></i><input name="newquery" style="text-align:right; direction:rtl" id="searchinput" type="text" placeholder="جستجو ..." /></div>
+                        <div type="submit" id="searchActButt" style="position:absolute; bottom:0px ; padding:15px; background-color:green; text-align:center; width:100%"> <p style="color:white"> <span>جستجو در @System.Configuration.ConfigurationManager.AppSettings["siteName"] @System.Configuration.ConfigurationManager.AppSettings["siteName2"]</span></p></div>
+                    </form>
+                </div>
+                <div id="contactUsDiv" style="display:none; height: 100%; width : 100% ;display:none; position: fixed;top: 0;z-index: 99999;background-color:white;right: 0;">
+                    <div class="contactUsReturnButt" style="direction: rtl;padding: 15px;background-color: #E1A52B;color: white;">
+                        <i class="fal fa-long-arrow-right" style="color: white;font-size: 20px;vertical-align: middle;"></i>
+                        <span style=" margin-right: 15px;font-size:15px">تماس با ما</span>
+
+                    </div>
+
+                    <div id="searchpanel" action="~/Home/ProductList" style="display:flex;padding:30px;width: 60%;margin: auto;">
+                        <img style="width: 100%;margin:auto;object-fit: scale-down;height: 100%;max-width: 100px;" src="~/images/@logo" alt="لوگو" />
+                    </div>
+                    <div id="searchpanel" action="~/Home/ProductList" style="display:flex">
+                        <div class="contactItem"><i class="fa fa-envelope" style="margin-left: 10px"></i><span style="font-size:4vw"> Info&#64;<span>@System.Configuration.ConfigurationManager.AppSettings["serverName"]</span>.com</span> </div>
+                    </div>
+                    <div data-toggle="modal" data-target="#mymodal" class="ContactPhoneHolder" id="searchpanel" action="~/Home/ProductList" style="display:flex">
+                        <div class="contactItem"><i class="fa fa-headphones" style="margin-left: 10px"></i><span style="font-size:4vw">تماس با @System.Configuration.ConfigurationManager.AppSettings["siteName"] </span> </div>
+                    </div>
+                    <div id="searchpanel" action="~/Home/ProductList" style="display:flex">
+                        <div class="contactItem"><i class="fa fa-bug" style="margin-left: 10px; "></i><span style="font-size:4vw">گزارشات مشکلات اپلیکیشن</span> </div>
+                    </div>
+                    <div class="modal" id="mymodal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align:center; padding:30px 15px">
+                                    <p id="contactPhone" style="font-size:16px;color:black">@phone </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            @RenderBody()
+        </div>
+        <!-- //header-bot -->
+        <!-- banner -->
 
-            <!-- footer -->
-            <!-- //login -->
+        <script>
+            var width = screen.width;
+            var number = "-" + width + "px";
+            $("#barmenu").css("margin-right", number);
+            $("#searchdiv").css("margin-right", number);
+            $("#contactUsDiv").css("margin-right", number);
 
 
-            <script>
+            $("#searchActButt").click(function () {
+                var search = $("#searchinput").val();
+                if (search.length < 3) {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-full-width",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 150000,
+                        "extendedTimeOut": 10000,
 
-                function addCommas(nStr) {
-                    nStr += '';
-                    var x = nStr.split('.');
-                    var x1 = x[0];
-                    var x2 = x.length > 1 ? '.' + x[1] : '';
-                    var rgx = /(\d+)(\d{3})/;
-                    while (rgx.test(x1)) {
-                        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+
+
                     }
-                    return x1 + x2;
+                    toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
                 }
-                $(".ContactPhoneHolder").click(function () {
+                else {
 
-                    //$("#mymodal").modal('toggle');
+                    window.location.href = "/Home/ProductList?newquery=" + search
+                }
+            })
+            $("#barmenu").click(function () {
 
-                })
+                $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
+                $("#barmenu").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#barmenu").css("display", "none");
+                    $("#body").css("overflow", "scroll");
+
+                });
+
+                $("body").css("overflow", "scroll");
+            })
+            $("#barmenu #barmanuholder").click(function (e) {
+                e.stopPropagation();
+            });
+            $(".searchButt").click(function () {
+
+                $("#searchdiv").css("display", "block");
+                $("#searchdiv").animate({
+                    'margin-right': '0px'
+                });
+                $("body").css("overflow", "hidden");
+
+            })
+            $(".SearchReturnButt").click(function () {
+
+                $("#searchdiv").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#searchdiv").css("display", "none");
+                    $("body").css("overflow", "scroll");
+                });
+
+
+            })
+
+            $("#contactUsButt").click(function () {
+                $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
+                $("#barmenu").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#barmenu").css("display", "block");
+                    $("#contactUsDiv").css("display", "block");
+                    $("#contactUsDiv").animate({
+                        'margin-right': '0px'
+                    }, function () {
+
+                        $("body").css("overflow", "hidden");
+                    });
+                });
+
+
+            })
+            $(".contactUsReturnButt").click(function () {
+
+                $("#contactUsDiv").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#contactUsDiv").css("display", "scroll")
+                });
+            })
+
+        </script>
+        <div class="row" style=" margin-right:0px" id="manuholder">
+            <div class="">
+                <nav id="main-nav" class="col-lg-12 col-md-12 col-sm-12" style="font-size:13px; color:#f6f5f5; background-color:#656565; padding-right:0px; border-bottom:2px solid black">
+
+                    <!-- Sample menu definition -->
+
+                </nav>
+            </div>
+        </div>
+        @RenderBody()
+
+        <!-- footer -->
+        <!-- //login -->
+
+
+        <script>
+
+            function addCommas(nStr) {
+                nStr += '';
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
+            $(".ContactPhoneHolder").click(function () {
+
+                //$("#mymodal").modal('toggle');
+
+            })
+            //$.ajax({
+            //    url: '/Home/gogetfinalprice/',
+
+
+            //    success: function (data) {
+            //        var array = data.split(',');
+            //        if (array[3] === "0") {
+            //            $(".discountSection").css("display", "none");
+            //        }
+            //        $("#basepriceholder").text(addCommas(array[1]))
+            //        $("#spanfortotal").text(addCommas(array[0]))
+            //        $("#spanfortotal2").text(addCommas(array[0]))
+            //        $(".simpleCart_quantityy").text(array[2])
+            //        $("#simpleCart_quantityy").text(array[2])
+            //        $(".discountfinal").text(addCommas(array[3]))
+            //        $(".discountpercent").text(array[4])
+            //        $.ajax({
+            //            url: '/Home/getmenue/',
+            //            dataType: 'html',
+
+            //            success: function (data) {
+
+            //                $('#main-nav').html(data);
+            //                $.ajax({
+            //                    url: '/Home/checkoutsummery',
+            //                    dataType: 'html',
+            //                    success: function (data) {
+
+            //                        $('#summerydetailholder').html(data);
+
+            //                        $("#loading").fadeOut();
+
+            //                    },
+            //                    error: function () {
+
+            //                    }
+            //                });
+
+            //            },
+            //            error: function () {
+            //                alert("error")
+            //            }
+            //        });
+            //    },
+            //    error: function () {
+
+            //    }
+            //});
+
+
+
+            //$('.showmedetail').click(function () {
+            //    var ID = this.id;
+            //    var url = "/Home/ProductDetail?id=" + ID;
+            //    window.location.href = url;
+            //})
+
+
+            $('.tracotdda').click(function () {
+                var ID = this.id;
+
+                //var pricetotal = document.getElementById("spanfortotal").textContent;
+                var tobeadded = $('.item_price', $(this).parent('div:first')).text();
+                //var counttotal = document.getElementById("simpleCart_quantityy").textContent;
+                //var final = parseInt(pricetotal, 10) + parseInt(tobeadded, 10);
+                //var finalcount = parseInt(counttotal, 10) + 1;
+                //$('#spanfortotal').text(final);
+                //$('#simpleCart_quantityy').text(finalcount)
+
+
                 //$.ajax({
-                //    url: '/Home/gogetfinalprice/',
+                //    url: '/Home/addtocart',
+                //    dataType: 'html',
+                //    data: {
+                //        id: ID,
+                //        price: tobeadded
 
-
+                //    },
                 //    success: function (data) {
-                //        var array = data.split(',');
-                //        if (array[3] === "0") {
-                //            $(".discountSection").css("display", "none");
-                //        }
-                //        $("#basepriceholder").text(addCommas(array[1]))
-                //        $("#spanfortotal").text(addCommas(array[0]))
-                //        $("#spanfortotal2").text(addCommas(array[0]))
-                //        $(".simpleCart_quantityy").text(array[2])
-                //        $("#simpleCart_quantityy").text(array[2])
-                //        $(".discountfinal").text(addCommas(array[3]))
-                //        $(".discountpercent").text(array[4])
                 //        $.ajax({
-                //            url: '/Home/getmenue/',
-                //            dataType: 'html',
+                //            url: '/Home/gogetfinalprice',
+
 
                 //            success: function (data) {
-
-                //                $('#main-nav').html(data);
-                //                $.ajax({
-                //                    url: '/Home/checkoutsummery',
-                //                    dataType: 'html',
-                //                    success: function (data) {
-
-                //                        $('#summerydetailholder').html(data);
-
-                //                        $("#loading").fadeOut();
-
-                //                    },
-                //                    error: function () {
-
-                //                    }
-                //                });
+                //                var array = data.split(',');
+                //                $("#basepriceholder").text(addCommas(array[1]))
+                //                $("#spanfortotal").text(addCommas(array[0]))
+                //                $("#spanfortotal2").text(addCommas(array[0]))
+                //                $(".simpleCart_quantityy").text(array[2])
 
                 //            },
                 //            error: function () {
-                //                alert("error")
+
                 //            }
                 //        });
+
+
+                //        toastr.options = {
+                //            "debug": false,
+                //            "positionClass": "toast-top-center",
+                //            "onclick": null,
+                //            "fadeIn": 300,
+                //            "fadeOut": 1000,
+                //            "timeOut": 5000,
+                //            "extendedTimeOut": 1000,
+
+
+                //        }
+                //        toastr.success('محصول مورد نظر به سبد اضافه شد')
+
+
+
                 //    },
                 //    error: function () {
 
@@ -542,249 +620,180 @@
                 //});
 
 
-
-                //$('.showmedetail').click(function () {
-                //    var ID = this.id;
-                //    var url = "/Home/ProductDetail?id=" + ID;
-                //    window.location.href = url;
-                //})
+            })
 
 
-                $('.tracotdda').click(function () {
-                    var ID = this.id;
-
-                    //var pricetotal = document.getElementById("spanfortotal").textContent;
-                    var tobeadded = $('.item_price', $(this).parent('div:first')).text();
-                    //var counttotal = document.getElementById("simpleCart_quantityy").textContent;
-                    //var final = parseInt(pricetotal, 10) + parseInt(tobeadded, 10);
-                    //var finalcount = parseInt(counttotal, 10) + 1;
-                    //$('#spanfortotal').text(final);
-                    //$('#simpleCart_quantityy').text(finalcount)
-
-
-                    //$.ajax({
-                    //    url: '/Home/addtocart',
-                    //    dataType: 'html',
-                    //    data: {
-                    //        id: ID,
-                    //        price: tobeadded
-
-                    //    },
-                    //    success: function (data) {
-                    //        $.ajax({
-                    //            url: '/Home/gogetfinalprice',
-
-
-                    //            success: function (data) {
-                    //                var array = data.split(',');
-                    //                $("#basepriceholder").text(addCommas(array[1]))
-                    //                $("#spanfortotal").text(addCommas(array[0]))
-                    //                $("#spanfortotal2").text(addCommas(array[0]))
-                    //                $(".simpleCart_quantityy").text(array[2])
-
-                    //            },
-                    //            error: function () {
-
-                    //            }
-                    //        });
-
-
-                    //        toastr.options = {
-                    //            "debug": false,
-                    //            "positionClass": "toast-top-center",
-                    //            "onclick": null,
-                    //            "fadeIn": 300,
-                    //            "fadeOut": 1000,
-                    //            "timeOut": 5000,
-                    //            "extendedTimeOut": 1000,
-
-
-                    //        }
-                    //        toastr.success('محصول مورد نظر به سبد اضافه شد')
-
-
-
-                    //    },
-                    //    error: function () {
-
-                    //    }
-                    //});
-
-
-                })
-
-
-            </script>
-            @*<script type="text/javascript" src="https://cdn.map.ir/web-sdk/1.4.2/js/jquery-3.2.1.min.js"></script>
+        </script>
+        @*<script type="text/javascript" src="https://cdn.map.ir/web-sdk/1.4.2/js/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="https://cdn.map.ir/web-sdk/1.4.2/js/mapp.env.js"></script>
         <script type="text/javascript" src="https://cdn.map.ir/web-sdk/1.4.2/js/mapp.min.js"></script>*@
-            <div style="display:none" id="summerydetailholder"></div>
-            <script>
-                var getquntity = function () {
-                    $.ajax({
-                        url: '/Home/getquntitiy',
-                        dataType: 'html',
-                        success: function (data) {
-                            var total = 0;
-                            var srtcookie = data;
+        <div style="display:none" id="summerydetailholder"></div>
+        <script>
+            var getquntity = function () {
+                $.ajax({
+                    url: '/Home/getquntitiy',
+                    dataType: 'html',
+                    success: function (data) {
+                        var total = 0;
+                        var srtcookie = data;
 
-                            if (srtcookie.length > 0) {
-                                srtcookie = srtcookie.replace(/&quot;/g, '"');
-                                JSON.parse(srtcookie).forEach(function (item) {
-                                    let valueID = "value" + item.productid;
-                                    $("." + valueID).text(item.quantity);
-                                    total += parseInt(item.quantity);
-                                });
-                                $(".simpleCart_quantityy").text(total)
+                        if (srtcookie.length > 0) {
+                            srtcookie = srtcookie.replace(/&quot;/g, '"');
+                            JSON.parse(srtcookie).forEach(function (item) {
+                                let valueID = "value" + item.productid;
+                                $("." + valueID).text(item.quantity);
+                                total += parseInt(item.quantity);
+                            });
+                            $(".simpleCart_quantityy").text(total)
 
-                            } else {
-                                $(".simpleCart_quantityy").text("0")
-                            };
-                        }
-
-                    })
-                };
-                getquntity();
-
-
-
-
-
-            </script>
-            @RenderSection("scripts", required: false)
-
-            <script>
-                $("#sendMessage").click(function () {
-                    toastr.options = {
-                        "debug": false,
-                        "positionClass": "toast-top-full-width",
-                        "onclick": null,
-                        "fadeIn": 300,
-                        "fadeOut": 1000,
-                        "timeOut": 3000,
-                        "extendedTimeOut": 1000,
-
-
-
+                        } else {
+                            $(".simpleCart_quantityy").text("0")
+                        };
                     }
-                    toastr.success('پیام شما با موفقیت ثبت شد');
-                    $("#messageModal").css("display", "none");
-                    $(".modal-backdrop ").css("display", "none");
+
                 })
-            </script>
-            <style>
-                a {
-                    text-decoration: none;
+            };
+            getquntity();
+
+
+
+
+
+        </script>
+        @RenderSection("scripts", required: false)
+
+        <script>
+            $("#sendMessage").click(function () {
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-full-width",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 3000,
+                    "extendedTimeOut": 1000,
+
+
+
+                }
+                toastr.success('پیام شما با موفقیت ثبت شد');
+                $("#messageModal").css("display", "none");
+                $(".modal-backdrop ").css("display", "none");
+            })
+        </script>
+        <style>
+            a {
+                text-decoration: none;
+            }
+
+            .me {
+                width: 400px;
+                margin: 90px auto;
+            }
+
+                .me p,
+                .me h1 {
+                    text-transform: uppercase;
+                    letter-spacing: 3px;
+                    text-align: center;
                 }
 
-                .me {
-                    width: 400px;
-                    margin: 90px auto;
+                .me p {
+                    font-weight: 200;
                 }
 
-                    .me p,
-                    .me h1 {
-                        text-transform: uppercase;
-                        letter-spacing: 3px;
-                        text-align: center;
-                    }
-
-                    .me p {
-                        font-weight: 200;
-                    }
-
-                    .me span {
-                        font-weight: bold;
-                    }
-
-                .social {
-                    position: fixed;
-                    bottom: 50px;
-                    left: 0;
-                    z-index: 999999;
-                    width: 50px
+                .me span {
+                    font-weight: bold;
                 }
 
-                    .social ul {
-                        padding: 0px;
-                        -webkit-transform: translate(-270px, 0);
-                        -moz-transform: translate(-270px, 0);
-                        -ms-transform: translate(-270px, 0);
-                        -o-transform: translate(-270px, 0);
-                        transform: translate(-270px, 0);
+            .social {
+                position: fixed;
+                bottom: 50px;
+                left: 0;
+                z-index: 999999;
+                width: 50px
+            }
+
+                .social ul {
+                    padding: 0px;
+                    -webkit-transform: translate(-270px, 0);
+                    -moz-transform: translate(-270px, 0);
+                    -ms-transform: translate(-270px, 0);
+                    -o-transform: translate(-270px, 0);
+                    transform: translate(-270px, 0);
+                }
+
+                    .social ul li {
+                        display: block;
+                        margin: 10px 20px;
+                        background: rgba(0, 0, 0, 0.36) !important;
+                        width: 300px;
+                        text-align: right;
+                        padding: 10px;
+                        -webkit-border-radius: 0 30px 30px 0;
+                        -moz-border-radius: 0 30px 30px 0;
+                        border-radius: 0 30px 30px 0;
+                        -webkit-transition: all 1s;
+                        -moz-transition: all 1s;
+                        -ms-transition: all 1s;
+                        -o-transition: all 1s;
+                        transition: all 1s;
                     }
 
-                        .social ul li {
-                            display: block;
-                            margin: 10px 20px;
-                            background: rgba(0, 0, 0, 0.36) !important;
-                            width: 300px;
-                            text-align: right;
-                            padding: 10px;
-                            -webkit-border-radius: 0 30px 30px 0;
-                            -moz-border-radius: 0 30px 30px 0;
-                            border-radius: 0 30px 30px 0;
-                            -webkit-transition: all 1s;
-                            -moz-transition: all 1s;
-                            -ms-transition: all 1s;
-                            -o-transition: all 1s;
-                            transition: all 1s;
+                        .social ul li:hover {
+                            -webkit-transform: translate(170px, 0);
+                            -moz-transform: translate(170px, 0);
+                            -ms-transform: translate(170px, 0);
+                            -o-transform: translate(170px, 0);
+                            transform: translate(170px, 0);
+                            background: rgba(255, 255, 255, 0.4);
                         }
 
-                            .social ul li:hover {
-                                -webkit-transform: translate(170px, 0);
-                                -moz-transform: translate(170px, 0);
-                                -ms-transform: translate(170px, 0);
-                                -o-transform: translate(170px, 0);
-                                transform: translate(170px, 0);
-                                background: rgba(255, 255, 255, 0.4);
-                            }
 
-
-                                .social ul li:hover a {
-                                    color: #000;
-                                }
-
-                                .social ul li:hover i {
-                                    color: #fff;
-                                    background: black;
-                                    -webkit-transform: rotate(360deg);
-                                    -moz-transform: rotate(360deg);
-                                    -ms-transform: rotate(360deg);
-                                    -o-transform: rotate(360deg);
-                                    transform: rotate(360deg);
-                                    -webkit-transition: all 1s;
-                                    -moz-transition: all 1s;
-                                    -ms-transition: all 1s;
-                                    -o-transition: all 1s;
-                                    transition: all 1s;
-                                }
-
-                            .social ul li i {
-                                margin-left: 10px;
+                            .social ul li:hover a {
                                 color: #000;
-                                background: #fff;
-                                padding: 10px;
-                                -webkit-border-radius: 50%;
-                                -moz-border-radius: 50%;
-                                border-radius: 50%;
-                                width: 40px;
-                                height: 40px;
-                                font-size: 20px;
-                                background: #ffffff;
-                                -webkit-transform: rotate(0deg);
-                                -moz-transform: rotate(0deg);
-                                -ms-transform: rotate(0deg);
-                                -o-transform: rotate(0deg);
-                                transform: rotate(0deg);
                             }
 
-                .nulli {
-                    background: #1c9426 !important;
-                    color: white !important
-                }
-            </style>
-        </body>
+                            .social ul li:hover i {
+                                color: #fff;
+                                background: black;
+                                -webkit-transform: rotate(360deg);
+                                -moz-transform: rotate(360deg);
+                                -ms-transform: rotate(360deg);
+                                -o-transform: rotate(360deg);
+                                transform: rotate(360deg);
+                                -webkit-transition: all 1s;
+                                -moz-transition: all 1s;
+                                -ms-transition: all 1s;
+                                -o-transition: all 1s;
+                                transition: all 1s;
+                            }
+
+                        .social ul li i {
+                            margin-left: 10px;
+                            color: #000;
+                            background: #fff;
+                            padding: 10px;
+                            -webkit-border-radius: 50%;
+                            -moz-border-radius: 50%;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            font-size: 20px;
+                            background: #ffffff;
+                            -webkit-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -ms-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+
+            .nulli {
+                background: #1c9426 !important;
+                color: white !important
+            }
+        </style>
+    </body>
     }
     else
     {
@@ -927,6 +936,17 @@
                     }
             </style>
             <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-chevron-up"></i></button>
+            
+            <div style="z-index:9999999999; text-align:center; padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;height:100%;width:100%">
+
+
+                <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
+                @*<img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" alt="لودینگ" />*@
+                <p>سایت در حال بروزرسانی می باشد</p>
+
+
+
+            </div>
             <div id="loading" style="">
                 <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
 

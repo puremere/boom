@@ -44,6 +44,13 @@ namespace banimo.apiViewModel
         public string token { get; set; }
         public string status { get; set; }
     }
+    public class buyResponse
+    {
+        public int status { get; set; }
+        public string  url { get; set; }
+        public string message { get; set; }
+
+    }
     public class buyRequest
     {
         public string token { get; set; }
@@ -58,11 +65,13 @@ namespace banimo.apiViewModel
         public string latitude { get; set; }
         public string longitude { get; set; }
         public string hourID { get; set; }
+        public string planID { get; set; }
         public string comment { get; set; }
         public string phone { get; set; }
         public string payment { get; set; }
         public string ids { get; set; }
         public string nums { get; set; }
+        public string tarafHesabs { get; set; }
         public string discount { get; set; }
         public string postalCode { get; set; }
         public string auth { get; set; }

@@ -1735,9 +1735,6 @@ namespace banimo.Controllers
         }
 
 
-
-
-
         public async Task<ActionResult> ReqestForPaymentKeepa(ViewModelPost.ReqestForPaymentViewModel model)
         {
            

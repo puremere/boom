@@ -23,8 +23,8 @@
 }
 
 
-h1, h2, h3, h4, h5, h6, div, p, li, span, div, a,  option, text, button, input, label {
-    font-family: IRANSans !important;
+h1, h2, h3, h4, h5, h6, div, p, li, div, a, option, text, button, input, label, textarea {
+    font-family: IRANSansfaNum !important;
 }
 .priceItem {
     font-family: IRANSansfaNum !important;

@@ -154,54 +154,58 @@
                                             w-image
                                             w-image table border-0">
                                 <tbody>
-                                    @foreach (var item in @Model.bestseller)
+                                    @if (@Model.bestseller != null)
                                     {
-                                        string url =  item.image.Split(',').ToList().First();
-                                        <tr>
-                                            <td>
-                                                <div class="best-product-box">
-                                                    <div class="product-image">
-                                                        <img src="@url" class="img-fluid" alt="Product">
+                                        foreach (var item in @Model.bestseller)
+                                        {
+                                            string url = item.image.Split(',').ToList().First();
+                                            <tr>
+                                                <td>
+                                                    <div class="best-product-box">
+                                                        <div class="product-image">
+                                                            <img src="@url" class="img-fluid" alt="Product">
+                                                        </div>
+                                                        <div class="product-name">
+                                                            <h5>@item.title </h5>
+                                                            <h6>26-08-2022</h6>
+                                                        </div>
                                                     </div>
-                                                    <div class="product-name">
-                                                        <h5>@item.title </h5>
-                                                        <h6>26-08-2022</h6>
+                                                </td>
+
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>@Resources.res.price</h6>
+                                                        <h5>@item.price</h5>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.price</h6>
-                                                    <h5>@item.price</h5>
-                                                </div>
-                                            </td>
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>@Resources.res.orders</h6>
+                                                        <h5>@item.count</h5>
+                                                    </div>
+                                                </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.orders</h6>
-                                                    <h5>@item.count</h5>
-                                                </div>
-                                            </td>
+                                                <td>
+                                                    <div class="product-detail-box">
+                                                        <h6>@Resources.res.stock</h6>
+                                                        <h5>@item.ramaining</h5>
+                                                    </div>
+                                                </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.stock</h6>
-                                                    <h5>@item.ramaining</h5>
-                                                </div>
-                                            </td>
-
-                                            @*<td>
-                                                <div class="product-detail-box">
-                                                    <h6>Amount</h6>
-                                                    <h5>$1,798</h5>
-                                                </div>
-                                            </td>*@
-                                        </tr>
+                                                @*<td>
+                        <div class="product-detail-box">
+                            <h6>Amount</h6>
+                            <h5>$1,798</h5>
+                        </div>
+                    </td>*@
+                                            </tr>
+                                        }
                                     }
 
 
-                                  
+
+
                                 </tbody>
                             </table>
                         </div>

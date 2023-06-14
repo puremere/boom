@@ -163,7 +163,7 @@ var removeImageFromSlide = function (DAT, imageName) {
     let name = DAT.split('***')[1];
 
     $.ajax({
-        url: "/Partner/deleteimageSlide",
+        url: "/Node/deleteimageSlide",
         data: {
             id: id,
             title: name

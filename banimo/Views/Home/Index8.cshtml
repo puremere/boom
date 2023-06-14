@@ -30,7 +30,7 @@
                     {
                         int i = Model.slides.IndexOf(item) + 1;
                         string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
-                        <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" height:200px; background-image: url(/images/@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
+                        <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" height:400px;  background-image: url(/images/@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
                             <div class="container">
 
                                 <div class="banner-content y-50 d-inline-block">
@@ -94,7 +94,7 @@
                         }
                     }
                 }">
-                <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2">
+                <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" style="margin-right:35%">
                     @foreach (var item in Model.catsParents)
                     {
                         <div id="@item.ID" class="categoryParent final swiper-slide category category-ellipse">

@@ -182,12 +182,13 @@ namespace banimo.Controllers
                 byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doSignUpCombine.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
+                //return Content(result);
             }
             signeupViewModel mymodel = JsonConvert.DeserializeObject<signeupViewModel>(result);
 
 
 
-            if (mymodel.status == 200)
+            if (mymodel.status != 200)
             {
                 if (email != null)
                 {
@@ -210,7 +211,7 @@ namespace banimo.Controllers
                                             </div>
                                         </body>
                                    </html>";
-                    using (MailMessage mm = new MailMessage("marsool@fuwatech.com", email))  //support@fuwatech.com
+                    using (MailMessage mm = new MailMessage("support@marsools.com", email))  //support@fuwatech.com
                     {
                         mm.Subject = "registration";
                         mm.Body = html;
@@ -222,12 +223,12 @@ namespace banimo.Controllers
                         mm.IsBodyHtml = true;
                         using (SmtpClient smtp = new SmtpClient())
                         {
-                            smtp.Host = "wh1.azaronline.com";// "wh1.azaronline.com";
-                            smtp.EnableSsl = true;
-                            NetworkCredential NetworkCred = new NetworkCredential("marsool@fuwatech.com", "lz32uN6^9"); //lz32uN6^9
+                            smtp.Host = "smtp.office365.com";// "wh1.azaronline.com";// "wh1.azaronline.com";
+                            //smtp.EnableSsl = true;
+                            NetworkCredential NetworkCred = new NetworkCredential("support@marsools.com", "M@rsools2023"); //lz32uN6^9
                             smtp.UseDefaultCredentials = true;
                             smtp.Credentials = NetworkCred;
-                            smtp.Port = 587;
+                            smtp.Port =  587;
                             mymethods.NEVER_EAT_POISON_Disable_CertificateValidation();
                             smtp.Send(mm);
 

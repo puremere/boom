@@ -1,8 +1,23 @@
 ﻿@model banimo.ViewModelPost.viewProductViewModel
 @using banimo.Classes;
+@using Newtonsoft.Json;
 @{
     //ViewBag.Title = "لیست محصولات";
     Layout = "~/Views/Shared/_Layout5.cshtml";
+}
+@{
+    if (Model.meta != "null" && Model.meta != null)
+    {
+        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
+        ViewBag.Title = metaModel.titletag;
+        ViewBag.Desc = metaModel.desctag;
+        ViewBag.key = metaModel.keyTag;
+
+    }
+    else
+    {
+        ViewBag.Title = Model.title + " | " + @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    }
 }
 
 
@@ -87,7 +102,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-6" style="padding:0 10px">
-                                <div  class="product-gallery-image in-stock d-flex justify-content-center align-items-center position-relative card-blue">
+                                <div class="product-gallery-image in-stock d-flex justify-content-center align-items-center position-relative card-blue">
 
                                     @if (Model.price != Model.oldPrice)
                                     {
@@ -234,101 +249,101 @@
 
                                     <div class="proposal-product xmr-3">
                                         @*<span class="share-button">
-                                            <i class="icon xml-2">
-                                                
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128">
+                                                <i class="icon xml-2">
 
-                                                    <path fill="currentColor"
-                                                          d="M96 85.76c-4.040 0.018-7.712 1.576-10.464 4.116l0.011-0.010-38.027-22.133c0.279-1.112 0.453-2.396 0.48-3.715l0-0.018c-0.027-1.338-0.201-2.621-0.505-3.853l0.025 0.12 37.6-21.92c2.838 2.632 6.652 4.248 10.843 4.248 8.816 0 15.963-7.147 15.963-15.963s-7.147-15.963-15.963-15.963c-8.816 0-15.963 7.147-15.963 15.963 0 0.012 0 0.025 0 0.037v-0.002c0.027 1.338 0.201 2.621 0.505 3.853l-0.025-0.12-37.6 21.92c-2.853-2.676-6.702-4.32-10.935-4.32-8.837 0-16 7.163-16 16s7.163 16 16 16c4.233 0 8.082-1.644 10.944-4.328l-0.009 0.008 37.973 22.187c-0.264 1.039-0.419 2.233-0.427 3.462v0.005c0 8.601 6.972 15.573 15.573 15.573s15.573-6.972 15.573-15.573c0-8.601-6.972-15.573-15.573-15.573v0zM96 21.333c2.945 0 5.333 2.388 5.333 5.333s-2.388 5.333-5.333 5.333c-2.945 0-5.333-2.388-5.333-5.333v0c0-2.945 2.388-5.333 5.333-5.333v0zM32 69.333c-2.945 0-5.333-2.388-5.333-5.333s2.388-5.333 5.333-5.333c2.946 0 5.333 2.388 5.333 5.333v0c0 2.945-2.388 5.333-5.333 5.333v0zM96 106.773c-2.945 0-5.333-2.388-5.333-5.333s2.388-5.333 5.333-5.333c2.945 0 5.333 2.388 5.333 5.333v0c0 2.945-2.388 5.333-5.333 5.333v0z"></path>
-                                                </svg>
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128">
 
-                                            </i>
-                                        </span>
+                                                        <path fill="currentColor"
+                                                              d="M96 85.76c-4.040 0.018-7.712 1.576-10.464 4.116l0.011-0.010-38.027-22.133c0.279-1.112 0.453-2.396 0.48-3.715l0-0.018c-0.027-1.338-0.201-2.621-0.505-3.853l0.025 0.12 37.6-21.92c2.838 2.632 6.652 4.248 10.843 4.248 8.816 0 15.963-7.147 15.963-15.963s-7.147-15.963-15.963-15.963c-8.816 0-15.963 7.147-15.963 15.963 0 0.012 0 0.025 0 0.037v-0.002c0.027 1.338 0.201 2.621 0.505 3.853l-0.025-0.12-37.6 21.92c-2.853-2.676-6.702-4.32-10.935-4.32-8.837 0-16 7.163-16 16s7.163 16 16 16c4.233 0 8.082-1.644 10.944-4.328l-0.009 0.008 37.973 22.187c-0.264 1.039-0.419 2.233-0.427 3.462v0.005c0 8.601 6.972 15.573 15.573 15.573s15.573-6.972 15.573-15.573c0-8.601-6.972-15.573-15.573-15.573v0zM96 21.333c2.945 0 5.333 2.388 5.333 5.333s-2.388 5.333-5.333 5.333c-2.945 0-5.333-2.388-5.333-5.333v0c0-2.945 2.388-5.333 5.333-5.333v0zM32 69.333c-2.945 0-5.333-2.388-5.333-5.333s2.388-5.333 5.333-5.333c2.946 0 5.333 2.388 5.333 5.333v0c0 2.945-2.388 5.333-5.333 5.333v0zM96 106.773c-2.945 0-5.333-2.388-5.333-5.333s2.388-5.333 5.333-5.333c2.945 0 5.333 2.388 5.333 5.333v0c0 2.945-2.388 5.333-5.333 5.333v0z"></path>
+                                                    </svg>
 
-                                        <button form="submit-compare-form" type="submit"
-                                                class="comparison border-0">
-                                            <i class="icon d-inline-block d-lg-none">
-                                             
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                     height="24" viewBox="0 0 128 128">
+                                                </i>
+                                            </span>
 
-                                                    <path fill="currentColor"
-                                                          d="M64 10.667l-29.333 48h58.667zM64 31.147l10.293 16.853h-20.64zM93.333 69.333c-13.255 0-24 10.745-24 24s10.745 24 24 24c13.255 0 24-10.745 24-24v0c0-0.010 0-0.021 0-0.032 0-13.237-10.731-23.968-23.968-23.968-0.011 0-0.022 0-0.034 0h0.002zM93.333 106.667c-7.364 0-13.333-5.969-13.333-13.333s5.969-13.333 13.333-13.333c7.364 0 13.333 5.969 13.333 13.333v0c0 7.364-5.969 13.333-13.333 13.333v0zM16 114.667h42.667v-42.667h-42.667zM26.667 82.667h21.333v21.333h-21.333z"></path>
-                                                </svg>
+                                            <button form="submit-compare-form" type="submit"
+                                                    class="comparison border-0">
+                                                <i class="icon d-inline-block d-lg-none">
 
-                                            </i>
-                                        </button>*@
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                         height="24" viewBox="0 0 128 128">
+
+                                                        <path fill="currentColor"
+                                                              d="M64 10.667l-29.333 48h58.667zM64 31.147l10.293 16.853h-20.64zM93.333 69.333c-13.255 0-24 10.745-24 24s10.745 24 24 24c13.255 0 24-10.745 24-24v0c0-0.010 0-0.021 0-0.032 0-13.237-10.731-23.968-23.968-23.968-0.011 0-0.022 0-0.034 0h0.002zM93.333 106.667c-7.364 0-13.333-5.969-13.333-13.333s5.969-13.333 13.333-13.333c7.364 0 13.333 5.969 13.333 13.333v0c0 7.364-5.969 13.333-13.333 13.333v0zM16 114.667h42.667v-42.667h-42.667zM26.667 82.667h21.333v21.333h-21.333z"></path>
+                                                    </svg>
+
+                                                </i>
+                                            </button>*@
                                     </div>
                                 </div>
                                 @{
 
                                     string prID = "addtocarto" + @Model.ID;
-                                    
-                                }
-                            <div class="button-buy-responsive position-fixed d-flex d-lg-none xpy-2 xpx-5 xmb-6 justify-content-between align-items-center">
-                                @if (Model.isAvailable == "1")
-                                {
-                                    <div class="text-price-responsive">
-                                        <del class="total-price"></del>
-                                        <span class="total-price priceItem">@string.Format("{0:n0}", double.Parse(Model.price)) </span>
-                                    </div>
-                                    <div class="button-content button-buy-productt" id="@prID">
-                                        <i class="icon ">
-                                            <svg id="ic_cart" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                 height="24" viewBox="0 0 24 24">
-                                                <rect id="Rectangle" width="24" height="24" fill="none"></rect>
-                                                <path id="Path_573" data-name="Path 573"
-                                                      d="M18,6H16A4,4,0,0,0,8,6H6A2.006,2.006,0,0,0,4,8V20a2.006,2.006,0,0,0,2,2H18a2.006,2.006,0,0,0,2-2V8A2.006,2.006,0,0,0,18,6ZM12,4a2.006,2.006,0,0,1,2,2H10A2.006,2.006,0,0,1,12,4Zm6,16H6V8H8v2a1,1,0,0,0,2,0V8h4v2a1,1,0,0,0,2,0V8h2Z"></path>
-                                            </svg>
 
-                                        </i>
-                                        <span class="text">خرید</span>
-                                    </div>
                                 }
-                                else
-                                {
-                                    <div class="text-price-responsive">
-                                        <del class="total-price"></del>
-                                        <span class="total-price priceItem">ناموجود </span>
-                                    </div>
-                                    <div class="button-content " id="@prID">
-                                        <i class="icon ">
-                                            <svg id="ic_cart" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                 height="24" viewBox="0 0 24 24">
-                                                <rect id="Rectangle" width="24" height="24" fill="none"></rect>
-                                                <path id="Path_573" data-name="Path 573"
-                                                      d="M18,6H16A4,4,0,0,0,8,6H6A2.006,2.006,0,0,0,4,8V20a2.006,2.006,0,0,0,2,2H18a2.006,2.006,0,0,0,2-2V8A2.006,2.006,0,0,0,18,6ZM12,4a2.006,2.006,0,0,1,2,2H10A2.006,2.006,0,0,1,12,4Zm6,16H6V8H8v2a1,1,0,0,0,2,0V8h4v2a1,1,0,0,0,2,0V8h2Z"></path>
-                                            </svg>
+                                <div class="button-buy-responsive position-fixed d-flex d-lg-none xpy-2 xpx-5 xmb-6 justify-content-between align-items-center">
+                                    @if (Model.isAvailable == "1")
+                                    {
+                                        <div class="text-price-responsive">
+                                            <del class="total-price"></del>
+                                            <span class="total-price priceItem">@string.Format("{0:n0}", double.Parse(Model.price)) </span>
+                                        </div>
+                                        <div class="button-content button-buy-productt" id="@prID">
+                                            <i class="icon ">
+                                                <svg id="ic_cart" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                     height="24" viewBox="0 0 24 24">
+                                                    <rect id="Rectangle" width="24" height="24" fill="none"></rect>
+                                                    <path id="Path_573" data-name="Path 573"
+                                                          d="M18,6H16A4,4,0,0,0,8,6H6A2.006,2.006,0,0,0,4,8V20a2.006,2.006,0,0,0,2,2H18a2.006,2.006,0,0,0,2-2V8A2.006,2.006,0,0,0,18,6ZM12,4a2.006,2.006,0,0,1,2,2H10A2.006,2.006,0,0,1,12,4Zm6,16H6V8H8v2a1,1,0,0,0,2,0V8h4v2a1,1,0,0,0,2,0V8h2Z"></path>
+                                                </svg>
 
-                                        </i>
-                                        <span class="text">خبرم کن</span>
-                                    </div>
-                                }
+                                            </i>
+                                            <span class="text">خرید</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-price-responsive">
+                                            <del class="total-price"></del>
+                                            <span class="total-price priceItem">ناموجود </span>
+                                        </div>
+                                        <div class="button-content " id="@prID">
+                                            <i class="icon ">
+                                                <svg id="ic_cart" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                     height="24" viewBox="0 0 24 24">
+                                                    <rect id="Rectangle" width="24" height="24" fill="none"></rect>
+                                                    <path id="Path_573" data-name="Path 573"
+                                                          d="M18,6H16A4,4,0,0,0,8,6H6A2.006,2.006,0,0,0,4,8V20a2.006,2.006,0,0,0,2,2H18a2.006,2.006,0,0,0,2-2V8A2.006,2.006,0,0,0,18,6ZM12,4a2.006,2.006,0,0,1,2,2H10A2.006,2.006,0,0,1,12,4Zm6,16H6V8H8v2a1,1,0,0,0,2,0V8h4v2a1,1,0,0,0,2,0V8h2Z"></path>
+                                                </svg>
 
-                            </div>
+                                            </i>
+                                            <span class="text">خبرم کن</span>
+                                        </div>
+                                    }
+
+                                </div>
 
                                 <div class="info-product xmt-0 xmt-lg-6 xpy-3 xpx-2 xmb-6 xmb-lg-10">
                                     <ul class="d-flex text-center list-unstyled mb-0 justify-content-between overflow-x-auto" style="overflow:auto; padding:20px">
                                         @foreach (var item in Model.filter)
                                         {
-                                        <li class="mx-2">
-                                            <i class="icon ">
-                                                <!-- Generated by IcoMoon.io -->
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128">
+                                            <li class="mx-2">
+                                                <i class="icon ">
+                                                    <!-- Generated by IcoMoon.io -->
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128">
 
-                                                    <path fill="currentColor" d="M58.667 58.667h-37.333v-37.333h37.333v37.333zM32 32v0 16h16v-16h-16z"></path>
-                                                    <path fill="currentColor" d="M58.667 106.667h-37.333v-37.333h37.333v37.333zM32 80v0 16h16v-16h-16z"></path>
-                                                    <path fill="currentColor" d="M106.667 58.667h-37.333v-37.333h37.333v37.333zM80 32v0 16h16v-16h-16z"></path>
-                                                    <path fill="currentColor" d="M106.667 106.661h-37.333v-37.333h37.333v37.333zM80 79.995v0 16h16v-16h-16z"></path>
-                                                </svg>
+                                                        <path fill="currentColor" d="M58.667 58.667h-37.333v-37.333h37.333v37.333zM32 32v0 16h16v-16h-16z"></path>
+                                                        <path fill="currentColor" d="M58.667 106.667h-37.333v-37.333h37.333v37.333zM32 80v0 16h16v-16h-16z"></path>
+                                                        <path fill="currentColor" d="M106.667 58.667h-37.333v-37.333h37.333v37.333zM80 32v0 16h16v-16h-16z"></path>
+                                                        <path fill="currentColor" d="M106.667 106.661h-37.333v-37.333h37.333v37.333zM80 79.995v0 16h16v-16h-16z"></path>
+                                                    </svg>
 
-                                            </i>
-                                            <span class="text-nowrap">
+                                                </i>
+                                                <span class="text-nowrap">
 
-                                                <span class="unit">@item.detailname </span>
+                                                    <span class="unit">@item.detailname </span>
 
-                                            </span>
-                                        </li>
+                                                </span>
+                                            </li>
                                         }
 
 
@@ -400,17 +415,17 @@
                                     <ul class="list-unstyled">
 
                                         @*<li class="position-relative xp-4 border-top">
-                    <i class="icon ">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
-                             height="24" viewBox="0 0 128 128">
+                                                <i class="icon ">
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                         height="24" viewBox="0 0 128 128">
 
-                            <path fill="currentColor"
-                                  d="M64 5.333l-48 21.333v32c0 29.6 20.48 57.28 48 64 27.52-6.72 48-34.4 48-64v-32zM101.333 58.667c0 0.078 0.001 0.172 0.001 0.264 0 24.211-15.403 44.823-36.945 52.573l-0.389 0.122c-21.931-7.872-37.334-28.485-37.334-52.696 0-0.093 0-0.186 0.001-0.279v0.014-25.067l37.333-16.587 37.333 16.587zM39.52 61.813l-7.52 7.52 21.333 21.333 42.667-42.667-7.52-7.573-35.147 35.147z"></path>
-                        </svg>
+                                                        <path fill="currentColor"
+                                                              d="M64 5.333l-48 21.333v32c0 29.6 20.48 57.28 48 64 27.52-6.72 48-34.4 48-64v-32zM101.333 58.667c0 0.078 0.001 0.172 0.001 0.264 0 24.211-15.403 44.823-36.945 52.573l-0.389 0.122c-21.931-7.872-37.334-28.485-37.334-52.696 0-0.093 0-0.186 0.001-0.279v0.014-25.067l37.333-16.587 37.333 16.587zM39.52 61.813l-7.52 7.52 21.333 21.333 42.667-42.667-7.52-7.573-35.147 35.147z"></path>
+                                                    </svg>
 
-                    </i>
-                    <span class="register-product warranty-text">گارانتی ۱۸ ماهه شرکتی</span>
-                </li>*@
+                                                </i>
+                                                <span class="register-product warranty-text">گارانتی ۱۸ ماهه شرکتی</span>
+                                            </li>*@
                                         <li class="position-relative xp-4 border-top">
                                             <i class="icon ">
                                                 <!-- Generated by IcoMoon.io -->
@@ -430,33 +445,33 @@
                                 <div class="seller-information-responsive d-block d-lg-none">
                                     @*<ul class="list-unstyled">
 
-                                        <li class="position-relative xp-4">
-                                            <i class="icon ">
-                                           
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                     height="24" viewBox="0 0 128 128">
+                                            <li class="position-relative xp-4">
+                                                <i class="icon ">
 
-                                                    <path fill="currentColor"
-                                                          d="M64 5.333l-48 21.333v32c0 29.6 20.48 57.28 48 64 27.52-6.72 48-34.4 48-64v-32zM101.333 58.667c0 0.078 0.001 0.172 0.001 0.264 0 24.211-15.403 44.823-36.945 52.573l-0.389 0.122c-21.931-7.872-37.334-28.485-37.334-52.696 0-0.093 0-0.186 0.001-0.279v0.014-25.067l37.333-16.587 37.333 16.587zM39.52 61.813l-7.52 7.52 21.333 21.333 42.667-42.667-7.52-7.573-35.147 35.147z"></path>
-                                                </svg>
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                         height="24" viewBox="0 0 128 128">
 
-                                            </i>
-                                            <span class="register-product warranty-text">گارانتی ۱۸ ماهه شرکتی</span>
-                                        </li>
-                                        <li class="position-relative xp-4">
-                                            <i class="icon ">
-                                              
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                     height="24" viewBox="0 0 128 128">
+                                                        <path fill="currentColor"
+                                                              d="M64 5.333l-48 21.333v32c0 29.6 20.48 57.28 48 64 27.52-6.72 48-34.4 48-64v-32zM101.333 58.667c0 0.078 0.001 0.172 0.001 0.264 0 24.211-15.403 44.823-36.945 52.573l-0.389 0.122c-21.931-7.872-37.334-28.485-37.334-52.696 0-0.093 0-0.186 0.001-0.279v0.014-25.067l37.333-16.587 37.333 16.587zM39.52 61.813l-7.52 7.52 21.333 21.333 42.667-42.667-7.52-7.573-35.147 35.147z"></path>
+                                                    </svg>
 
-                                                    <path fill="currentColor"
-                                                          d="M96 10.667h-42.667l-32 32v64c0.018 5.884 4.783 10.648 10.665 10.667h64.002c5.884-0.018 10.648-4.783 10.667-10.665v-85.335c-0.018-5.884-4.783-10.649-10.665-10.667h-0.002zM96 21.333v85.333h-64v-59.573l25.76-25.76zM37.333 90.667h10.667v10.667h-10.667zM80 90.667h10.667v10.667h-10.667zM37.333 58.667h10.667v21.333h-10.667zM58.667 80h10.667v21.333h-10.667zM58.667 58.667h10.667v10.667h-10.667zM80 58.667h10.667v21.333h-10.667z"></path>
-                                                </svg>
+                                                </i>
+                                                <span class="register-product warranty-text">گارانتی ۱۸ ماهه شرکتی</span>
+                                            </li>
+                                            <li class="position-relative xp-4">
+                                                <i class="icon ">
 
-                                            </i>
-                                            <span class="register-product"> تضمین ثبت در شبکه رجیستری بدون هزینه اضافی (رجیستر شده)</span>
-                                        </li>
-                                    </ul>*@
+                                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                         height="24" viewBox="0 0 128 128">
+
+                                                        <path fill="currentColor"
+                                                              d="M96 10.667h-42.667l-32 32v64c0.018 5.884 4.783 10.648 10.665 10.667h64.002c5.884-0.018 10.648-4.783 10.667-10.665v-85.335c-0.018-5.884-4.783-10.649-10.665-10.667h-0.002zM96 21.333v85.333h-64v-59.573l25.76-25.76zM37.333 90.667h10.667v10.667h-10.667zM80 90.667h10.667v10.667h-10.667zM37.333 58.667h10.667v21.333h-10.667zM58.667 80h10.667v21.333h-10.667zM58.667 58.667h10.667v10.667h-10.667zM80 58.667h10.667v21.333h-10.667z"></path>
+                                                    </svg>
+
+                                                </i>
+                                                <span class="register-product"> تضمین ثبت در شبکه رجیستری بدون هزینه اضافی (رجیستر شده)</span>
+                                            </li>
+                                        </ul>*@
                                 </div>
                                 <div class="my-2">
                                 </div>
@@ -702,7 +717,7 @@
                             </ul>
                         </div>
                     </nav>
-                 
+
                 </div>
             </div>
             <div class="phone-wrapper xmt-12 xmt-lg-16">
@@ -773,22 +788,22 @@
                                                         </div>
                                                         <div class="color-range">
                                                             @*@{
-                                                    List<string> srt = item.image.Split(',').ToList();
-                                                    foreach(var IMGITEM in srt)
-                                                    {
-                                                        <img src="@IMGITEM" style="width:70px"/>
-                                                    }
-                                                }*@
+                                                                    List<string> srt = item.image.Split(',').ToList();
+                                                                    foreach(var IMGITEM in srt)
+                                                                    {
+                                                                        <img src="@IMGITEM" style="width:70px"/>
+                                                                    }
+                                                                }*@
                                                             @*<span title="سفید" class="range" style=" background: #FFFFFF; "></span>*@
                                                         </div>
                                                     </div>
                                                 </a>
                                             </div>
                                         </div>
-                                     }
-                                      
-                                      
-                                      
+                                    }
+
+
+
                                 </div>
                                 <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                             </div>
@@ -810,7 +825,7 @@
                                 <h2 class="text">نقد و بررسی اجمالی</h2>
                             </div>
                             @Html.Raw(@Model.desc)
-                           
+
                         </div>
 
 
@@ -938,7 +953,7 @@
                                     </div>
                                 </div>
                             </div>
-                           
+
                             <div class="comments-content">
                                 <ul class="list-unstyled comments-container">
                                     <li class="my-comment xmb-8 xmb-lg-10">
@@ -1219,17 +1234,17 @@
                             </div>
                             <div class="pagination-holder"></div>
                         </div>
-                    
+
                     </div>
                 </div>
-              
+
             </div>
         </div>
 
 
 
 
-        </div>
+    </div>
 
 
 
@@ -1254,10 +1269,10 @@
     <script src="/versionAsset/omirom/js/addComment.js?v=001"></script><!--اضافه کردن کامنت در صفحه سینگل پیچ-->
     <script src="/versionAsset/omirom/js/comments.js?v=001"></script><!--نمایش کامنت ها در صفحه سینگل پیچ-->
     <script src="/versionAsset/omirom/js/buyPage.js?v=002"></script>
- 
+
     <script>
 
-        
+
         $('.button-buy-productt').click(function () {
             var ID = $(this).attr('id');
 

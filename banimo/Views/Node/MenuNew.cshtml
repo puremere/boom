@@ -100,12 +100,12 @@
         <div class="modal-content">
 
             <div class="modal-body">
-                <p class="modalDelQuestion">آیا از حذف آیتم اطمینان دارید؟</p>
+                <p class="modalDelQuestion">@Resources.res.removeConfirm</p>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="remove">تایید</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
             </div>
         </div>
     </div>
@@ -282,6 +282,7 @@
 
                             <div class="row">
                                 <div class="row editParent">
+                                   
                                     <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                                         <label> @Resources.res.category </label>
                                         <div style="width:100%">
@@ -315,15 +316,15 @@
                                     </div>
 
                                     @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-                                            <label> انتخاب برند </label>
-                                            <div style="width:100%">
-                                                @if (Model.brands != null)
-                                                {
-                                                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
+            <label> انتخاب برند </label>
+            <div style="width:100%">
+                @if (Model.brands != null)
+                {
+                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrandsEdit", @class = "form-control", multiple = "multiple" })
 
-                                                }
-                                            </div>
-                                        </div>*@
+                }
+            </div>
+        </div>*@
 
 
                                     <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
@@ -382,7 +383,7 @@
                                         </script>
                                     </div>
                                     <div class=" component col-md-12 col-sm-12 col-xs-12" style="min-width:250px">
-                                        <label> توضیحات </label>
+                                        <label> @Resources.res.description </label>
                                         <div style="width:100%">
                                             <textarea cols="8" id="descEdit" required="required" class="form-control INP"></textarea>
 
@@ -506,7 +507,7 @@
 
         }
         else {
-            alert("همه موارد را کامل کنید")
+            alert("@Resources.res.fillAllField")
         }
     })
     $("#removeButt").click(function () {
@@ -678,7 +679,7 @@
             "timeOut": 5000,
             "extendedTimeOut": 1000
         }
-        toastr.success('کپی شد')
+        toastr.success('Copied')
 
     };
 

@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using banimo.Classes;
 using System.IO;
 using System.Text;
+using System.Configuration;
 //using banimo.ServiceReference1;
 
 
@@ -28,13 +29,15 @@ namespace banimo.Controllers
         }
         public ActionResult Error404()
         {
-
-            return View();
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "Error404" + srt;
+            return View(action);
         }
         public ActionResult Error500()
         {
-
-            return View();
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "Error500" + srt;
+            return View(action);
         }
         public ActionResult Error403()
         {

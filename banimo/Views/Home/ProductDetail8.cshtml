@@ -9,6 +9,36 @@
 
 <link href="~/webAsset/wolmart/assets/css/style.min.css?v=1" rel="stylesheet" />
 
+<style>
+    .nomargin {
+        margin: 0
+    }
+
+    .anotherOption {
+        margin: 20px;
+    }
+
+        .anotherOption p {
+            padding: 10px 15px;
+            border: 1px solid;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 8px;
+        }
+
+    .anotherActive {
+        background-color: #34970b;
+        color: white;
+    }
+    .main-content {
+        max-width: 80%
+    }
+    @@media  (max-width: 600px) {
+        .main-content {
+            max-width: 95%
+        }
+    }
+</style>
 
 
 <!-- Start of Main -->
@@ -26,7 +56,7 @@
     <div class="page-content">
         <div class="container">
             <div class="row gutter-lg" style="justify-content:center">
-                <div class="main-content" style="max-width:80%">
+                <div class="main-content" style="">
 
 
 
@@ -115,99 +145,141 @@
                             <div class="product-details" data-sticky-options="{'minWidth': 767}">
                                 <h1 class="product-title">@Model.title</h1>
                                 @*<div class="product-bm-wrapper">
-                        <figure class="brand">
-                            <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
-                                 width="85" height="48" />
-                        </figure>
-                        <div class="product-meta">
-                            <div class="product-categories">
-                                Category:
-                                <span class="product-category"><a href="#">Electronics</a></span>
-                            </div>
-                            <div class="product-sku">
-                                SKU: <span>MS46891342</span>
-                            </div>
-                        </div>
-                    </div>*@
+            <figure class="brand">
+                <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
+                     width="85" height="48" />
+            </figure>
+            <div class="product-meta">
+                <div class="product-categories">
+                    Category:
+                    <span class="product-category"><a href="#">Electronics</a></span>
+                </div>
+                <div class="product-sku">
+                    SKU: <span>MS46891342</span>
+                </div>
+            </div>
+        </div>*@
 
 
                                 <hr class="product-divider">
 
-                                <div class="product-price">@Model.partnerList.First().price تومان</div>
+                                <div class="product-price">@string.Format("{0:n0}", decimal.Parse(Model.partnerList.First().price)) <span style="font-size:12px">تومان</span></div>
 
                                 @*<div class="ratings-container">
-                        <div class="ratings-full">
-                            <span class="ratings" style="width: 80%;"></span>
-                            <span class="tooltiptext tooltip-top"></span>
-                        </div>
-                        <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
-                    </div>*@
+            <div class="ratings-full">
+                <span class="ratings" style="width: 80%;"></span>
+                <span class="tooltiptext tooltip-top"></span>
+            </div>
+            <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
+        </div>*@
 
                                 @*<div class="product-short-desc">
-                        <ul class="list-type-check list-style-none">
-                            <li style="display:flex"> <p>Item Color : </p>  <p style="margin:0 10px; width:100px; height:20px; background-color: @Model.color"></p></li>
-                            <li>Item Feature : @Model.SelectedFilter</li>
+            <ul class="list-type-check list-style-none">
+                <li style="display:flex"> <p>Item Color : </p>  <p style="margin:0 10px; width:100px; height:20px; background-color: @Model.color"></p></li>
+                <li>Item Feature : @Model.SelectedFilter</li>
 
-                        </ul>
-                    </div>*@
+            </ul>
+        </div>*@
 
                                 <hr class="product-divider">
 
                                 @if (Model.otherColors != null)
                                 {
-                                    List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.GroupBy(x => x.colorCode).Select(x => x.First()).ToList();
+                                    <style>
+                                        .activeColor {
+                                            border: 1px solid #34970b;
+                                            border-radius: 8px
+                                        }
+                                    </style>
+                                    List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.ToList();
 
-                                    <div class="product-form product-variation-form product-image-swatch">
-                                        <label>Color:</label>
-                                        <div class="d-flex align-items-center ">
-                                            @if (lst != null)
-                                            {
-                                                int i = 1;
-                                                int count = Convert.ToInt32(lst.Count);
-                                                foreach (var it in lst)
-                                                {
-                                                    var myID = "o" + @it.ID;
-                                                    <div onclick="otherColorClicked('@myID')" class=" otherColor">
-                                                        <img src="@it.imageTitle"
-                                                             alt="Product Swatch" width="24" height="24" />
-                                                    </div>
-                                                }
-                                            }
+                                    <div class="">
+
+                                        <section class="related-product-section">
+
+                                            <div class="swiper-container swiper-theme" data-swiper-options="{
+                                    'spaceBetween': 20,
+                                    'slidesPerView': 4,
+                                    'breakpoints': {
+                                        '576': {
+                                            'slidesPerView': 3
+                                        },
+                                        '768': {
+                                            'slidesPerView': 3
+                                        },
+                                        '992': {
+                                            'slidesPerView': 4
+                                        }
+                                    }
+                                }">
+                                                <div class="swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
 
 
-                                        </div>
+                                                    @foreach (var it in lst)
+                                                    {
+                                                        var myID = "o" + @it.ID;
+                                                        string classname = "";
+
+                                                        <div class="swiper-slide product">
+
+
+                                                            @if (it.colorCode == Model.color)
+                                                            {
+                                                                classname = "activeColor";
+                                                            }
+
+                                                            <div class="swiper-slide product">
+                                                                <div style="min-width:100px; padding:5px" onclick="otherColorClicked('@myID')" class=" otherColor @classname">
+                                                                    <img style="width:100px" src="@it.imageTitle"
+                                                                         alt="Product Swatch" />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </section>
+
+
+
                                     </div>
 
                                 }
 
 
-
+                                <hr class="product-divider">
                                 @{
                                     if (Model.otherProductFilter != null)
                                     {
 
                                         if (Model.otherProductFilter.Count > 0)
                                         {
-                                            <div class="product-form product-variation-form product-size-swatch">
-                                                <p class="nomargin">Another Options:</p>
-                                                <div class="flex-wrap d-flex align-items-center anotherOption">
-                                                    @foreach (var item in Model.otherProductFilter.Where(x => x.ID != Model.ID))
-                                                    {
-                                                        var myID = "o" + item.ID;
-                                                        <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin"><span value="@item.ID">@item.selectedFilter</span></p>
 
+                                            <div class="product-form product-variation-form product-size-swatch">
+
+                                                <p class="nomargin">سایزبندی:</p>
+                                                <div class="flex-wrap d-flex align-items-center anotherOption">
+                                                    @foreach (var item in Model.otherProductFilter)
+                                                    {
+                                                        string classFilter = "";
+                                                        if (item.selectedFilter == Model.SelectedFilter)
+                                                        {
+                                                            classFilter = "anotherActive";
+                                                        }
+
+
+                                                        var myID = "o" + item.ID;
+                                                        <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span></p>
 
                                                     }
-
                                                 </div>
-
                                             </div>
-
-
                                         }
 
                                     }
                                 }
+                                <hr class="product-divider">
 
                                 @if (Model.addsonList != null)
                                 {
@@ -243,12 +315,20 @@
 
 
                                     }
+                                    <hr class="product-divider">
                                 }
 
 
 
                                 <div class="fix-bottom product-sticky-content sticky-content">
                                     <div class="product-form container">
+                                        <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
+                                            <i class="w-icon-cart"></i>
+                                            @{
+                                                string calssname = "valueAll" + @Model.ID;
+                                            }
+                                            <span>افزودن به سبد خرید (<i class="@calssname">0</i>)</span>
+                                        </button>
                                         <div class="product-qty-form">
                                             <div class="input-group">
                                                 <input id="fquantity" class="quantity form-control" type="number" min="1"
@@ -257,36 +337,30 @@
                                                 <button class="quantity-minus w-icon-minus"></button>
                                             </div>
                                         </div>
-                                        <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
-                                            <i class="w-icon-cart"></i>
-                                            @{
-                                                string calssname = "valueAll" + @Model.ID;
-                                            }
-                                            <span>افزودن به سبد خرید (<i class="@calssname">0</i>)</span>
-                                        </button>
+
                                     </div>
                                 </div>
 
                                 @*<div class="social-links-wrapper">
-                        <div class="social-links">
-                            <div class="social-icons social-no-color border-thin">
-                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
-                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
-                                <a href="#"
-                                   class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                <a href="#"
-                                   class="social-icon social-youtube fab fa-linkedin-in"></a>
-                            </div>
-                        </div>
-                        <span class="divider d-xs-show"></span>
-                        <div class="product-link-wrapper d-flex">
-                            <a href="#"
-                               class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
-                            <a href="#"
-                               class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
-                        </div>
-                    </div>*@
+            <div class="social-links">
+                <div class="social-icons social-no-color border-thin">
+                    <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                    <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                    <a href="#"
+                       class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                    <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                    <a href="#"
+                       class="social-icon social-youtube fab fa-linkedin-in"></a>
+                </div>
+            </div>
+            <span class="divider d-xs-show"></span>
+            <div class="product-link-wrapper d-flex">
+                <a href="#"
+                   class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                <a href="#"
+                   class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+            </div>
+        </div>*@
                             </div>
                         </div>
 
@@ -303,359 +377,362 @@
                     <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item" style="margin:0 10px">
-                                <a href="#product-tab-description" class="nav-link active">@Resources.res.description</a>
+                                <a style="font-size:15px" href="#product-tab-description" class="nav-link active">@Resources.res.description</a>
                             </li>
-                            @*<li class="nav-item">
-                    <a href="#product-tab-specification" class="nav-link">Specification</a>
-                </li>*@
+                            <li class="nav-item" style="margin:0 10px">
+                                    <a style="font-size:15px" href="#product-tab-specification" class="nav-link">ویژگی های محصول</a>
+                                </li>
                             @*   <li class="nav-item">
-                    <a href="#product-tab-vendor" class="nav-link">Vendor Info</a>
-                </li>*@
-                            <li class="nav-item"  style="margin:0 10px">
-                                <a href="#product-tab-reviews" class="nav-link">نظرات کاربران</a>
+                                    <a href="#product-tab-vendor" class="nav-link">Vendor Info</a>
+                                </li>*@
+                            <li class="nav-item" style="margin:0 10px">
+                                <a style="font-size:15px" href="#product-tab-reviews" class="nav-link">نظرات کاربران</a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="product-tab-description">
                                 @Html.Raw(Model.desc)
                             </div>
-                            @*<div class="tab-pane" id="product-tab-specification">
-                    <ul class="list-none">
-                        <li>
-                            <label>Model</label>
-                            <p>Skysuite 320</p>
-                        </li>
-                        <li>
-                            <label>Color</label>
-                            <p>Black</p>
-                        </li>
-                        <li>
-                            <label>Size</label>
-                            <p>Large, Small</p>
-                        </li>
-                        <li>
-                            <label>Guarantee Time</label>
-                            <p>3 Months</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane" id="product-tab-vendor">
-                    <div class="row mb-3">
-                        <div class="col-md-6 mb-4">
-                            <figure class="vendor-banner br-sm">
-                                <img src="/webAsset/wolmart/assets/images/products/vendor-banner.jpg"
-                                     alt="Vendor Banner" width="610" height="295"
-                                     style="background-color: #353B55;" />
-                            </figure>
-                        </div>
-                        <div class="col-md-6 pl-2 pl-md-6 mb-4">
-                            <div class="vendor-user">
-                                <figure class="vendor-logo mr-4">
-                                    <a href="#">
-                                        <img src="/webAsset/wolmart/assets/images/products/vendor-logo.jpg"
-                                             alt="Vendor Logo" width="80" height="80" />
-                                    </a>
-                                </figure>
-                                <div>
-                                    <div class="vendor-name"><a href="#">Jone Doe</a></div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width: 90%;"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="#" class="rating-reviews">(32 Reviews)</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="vendor-info list-style-none">
-                                <li class="store-name">
-                                    <label>Store Name:</label>
-                                    <span class="detail">OAIO Store</span>
-                                </li>
-                                <li class="store-address">
-                                    <label>Address:</label>
-                                    <span class="detail">
-                                        Steven Street, El Carjon, CA 92020, United
-                                        States (US)
-                                    </span>
-                                </li>
-                                <li class="store-phone">
-                                    <label>Phone:</label>
-                                    <a href="#tel:">1234567890</a>
-                                </li>
-                            </ul>
-                            <a href="vendor-dokan-store.html"
-                               class="btn btn-dark btn-link btn-underline btn-icon-right">
-                                Visit
-                                Store<i class="w-icon-long-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <p class="mb-5">
-                        <strong class="text-dark">L</strong>orem ipsum dolor sit amet,
-                        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua.
-                        Venenatis tellus in metus vulputate eu scelerisque felis. Vel pretium
-                        lectus quam id leo in vitae turpis massa. Nunc id cursus metus aliquam.
-                        Libero id faucibus nisl tincidunt eget. Aliquam id diam maecenas ultricies
-                        mi eget mauris. Volutpat ac tincidunt vitae semper quis lectus. Vestibulum
-                        mattis ullamcorper velit sed. A arcu cursus vitae congue mauris.
-                    </p>
-                    <p class="mb-2">
-                        <strong class="text-dark">A</strong> arcu cursus vitae congue
-                        mauris. Sagittis id consectetur purus
-                        ut. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla.
-                        Diam in
-                        arcu cursus euismod quis. Eget sit amet tellus cras adipiscing enim eu. In
-                        fermentum et sollicitudin ac orci phasellus. A condimentum vitae sapien
-                        pellentesque
-                        habitant morbi tristique senectus et. In dictum non consectetur a erat. Nunc
-                        scelerisque viverra mauris in aliquam sem fringilla.
-                    </p>
-                </div>*@
-
-
-
-
-                        <div class="tab-pane" id="product-tab-reviews">
-                            @{
-                                decimal CommentC = Model.comment != null ?  Model.comment.Count() : 0;
-                                decimal sum = Model.comment != null ? Model.comment.Sum(x => x.rate) : 0;
-                                decimal mear = Model.comment != null ? sum / CommentC : 0;
-                                string percent = Model.comment != null ?  (mear * 20) + "%" : "0%";
-
-                                string percent100 = Model.comment != null ?((int)((Model.comment.Where(x => x.rate == 5).Count() / CommentC) * 100)).ToString() : "0";
-                                string percent80 = Model.comment != null?((int)((Model.comment.Where(x => x.rate == 4).Count() / CommentC) * 100)).ToString() : "0";
-                                string percent60 = Model.comment != null?((int)((Model.comment.Where(x => x.rate == 3).Count() / CommentC) * 100)).ToString() : "0";
-                                string percent40 = Model.comment != null?((int)((Model.comment.Where(x => x.rate == 2).Count() / CommentC) * 100)).ToString() : "0";
-                                string percent20 = Model.comment != null?((int)((Model.comment.Where(x => x.rate == 1).Count() / CommentC) * 100)).ToString() : "0";
-                            }
-                            <div class="row mb-4">
-                                <div class="col-xl-4 col-lg-5 mb-4">
-                                    <div class="ratings-wrapper">
-                                        <div class="avg-rating-container">
-                                            <h4 class="avg-mark font-weight-bolder ls-50">@mear</h4>
-                                            <div class="avg-rating">
-                                                <p class="text-dark mb-1">Average Rating</p>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-
-                                                        <span class="ratings" style="width: @percent;"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                    <a href="#" class="rating-reviews">(@CommentC Reviews)</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ratings-value d-flex align-items-center text-dark ls-25">
-                                            <span class="text-dark font-weight-bold"> @percent</span>Recommended<span class="count"></span>
-                                        </div>
-                                        <div class="ratings-list">
-                                            <div class="ratings-container">
-                                                <div class="ratings-full">
-                                                    <span class="ratings" style="width: 100%;"></span>
-                                                    <span class="tooltiptext tooltip-top"></span>
-                                                </div>
-                                                <div class="progress-bar progress-bar-sm ">
-                                                    <span></span>
-                                                </div>
-                                                <div class="progress-value">
-                                                    <mark>@percent100%</mark>
-                                                </div>
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings-full">
-                                                    <span class="ratings" style="width: 80%;"></span>
-                                                    <span class="tooltiptext tooltip-top"></span>
-                                                </div>
-                                                <div class="progress-bar progress-bar-sm ">
-                                                    <span></span>
-                                                </div>
-                                                <div class="progress-value">
-                                                    <mark>@percent80%</mark>
-                                                </div>
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings-full">
-                                                    <span class="ratings" style="width: 60%;"></span>
-                                                    <span class="tooltiptext tooltip-top"></span>
-                                                </div>
-                                                <div class="progress-bar progress-bar-sm ">
-                                                    <span></span>
-                                                </div>
-                                                <div class="progress-value">
-                                                    <mark>@percent60%</mark>
-                                                </div>
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings-full">
-                                                    <span class="ratings" style="width: 40%;"></span>
-                                                    <span class="tooltiptext tooltip-top"></span>
-                                                </div>
-                                                <div class="progress-bar progress-bar-sm ">
-                                                    <span></span>
-                                                </div>
-                                                <div class="progress-value">
-                                                    <mark>@percent40%</mark>
-                                                </div>
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings-full">
-                                                    <span class="ratings" style="width: 20%;"></span>
-                                                    <span class="tooltiptext tooltip-top"></span>
-                                                </div>
-                                                <div class="progress-bar progress-bar-sm ">
-                                                    <span></span>
-                                                </div>
-                                                <div class="progress-value">
-                                                    <mark>@percent20%</mark>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-8 col-lg-7 mb-4">
-                                    <div class="review-form-wrapper">
-                                        <h3 class="title tab-pane-title font-weight-bold mb-1">
-                                            Submit Your Review
-                                        </h3>
-                                        <p class="mb-3">
-                                            Your email address will not be published. Required fields are marked *
-                                        </p>
-                                        <form action="/Home/AddComment" id="Addcomment" method="POST" class="review-form">
-                                            <input hidden name="id" value="@Model.ID" />
-                                            @{
-                                                banimo.ViewModePost.metaData metaModelM = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
-                                                string entitle = metaModelM.curl;
-                                            }
-                                            <input hidden name="title" value="@entitle" />
-                                            <div class="rating-form">
-                                                <label for="rating">Your Rating Of This Product :</label>
-                                                <span class="rating-stars">
-                                                    <a class="star-1" href="javascript:void(0)">1</a>
-                                                    <a class="star-2" href="javascript:void(0)">2</a>
-                                                    <a class="star-3" href="javascript:void(0)">3</a>
-                                                    <a class="star-4" href="javascript:void(0)">4</a>
-                                                    <a class="star-5" href="javascript:void(0)">5</a>
-                                                </span>
-                                                <select name="rating" id="rating" required=""
-                                                        style="display: none;">
-                                                    <option value="">Rate…</option>
-                                                    <option value="5">Perfect</option>
-                                                    <option value="4">Good</option>
-                                                    <option value="3">Average</option>
-                                                    <option value="2">Not that bad</option>
-                                                    <option value="1">Very poor</option>
-                                                </select>
-                                            </div>
-                                            <textarea cols="30" rows="6"
-                                                      placeholder="Write Your Review Here..." class="form-control"
-                                                      id="review" name="desc"></textarea>
-
-                                            @if (@Session["token"] != null)
-                                            {
-                                                <div id="submitComment" class="btn btn-dark">
-                                                    Submit Review
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <a href="/Home/login" class="btn btn-dark">
-                                                    Submit Review
-                                                </a>
-                                            }
-
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-
-                                <ul class="comments list-style-none">
-                                    @if (Model.comment != null)
-                                    {
-                                        foreach (var item in Model.comment)
+                            <div class="tab-pane" id="product-tab-specification">
+                                <ul class="list-none">
+                                    @{
+                                        if (Model.feature != null)
                                         {
-                                            <li class="comment">
-                                                <div class="comment-body">
-                                                    <figure class="comment-avatar">
-                                                        <img src="/webAsset/wolmart/assets/images/agents/2-100x100.png"
-                                                             alt="Commenter Avatar" width="90" height="90">
-                                                    </figure>
-                                                    <div class="comment-content">
-                                                        <h4 class="comment-author">
-                                                            <a href="#">@item.name</a>
-                                                            <span class="comment-date">
-                                                                @item.time
-                                                            </span>
-                                                        </h4>
-                                                        <div class="ratings-container comment-rating">
-                                                            <div class="ratings-full">
-                                                                @{
-                                                                    int wi = (int)item.rate * 20;
-                                                                    string wis = wi + "%";
-                                                                }
-                                                                <span class="ratings"
-                                                                      style="width: @wis;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                        </div>
-                                                        <p>
-                                                            @item.comment
-                                                        </p>
-                                                        @if (!string.IsNullOrEmpty(item.Answer))
-                                                        {
-                                                            <div style="margin-left:100px">
-                                                                <h4 class="comment-author">
-                                                                    <a href="#">Owner Answer</a>
-                                                                    <span class="comment-date">
-                                                                        @item.rtime
-                                                                    </span>
-                                                                </h4>
-                                                                <p>
-                                                                    @item.Answer
-                                                                </p>
-                                                            </div>
-
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            foreach (var item in Model.feature)
+                                            {
+                                                <li>
+                                                    <label>@item.title</label>
+                                                    <p>@item.value</p>
+                                                </li>
+                                            }
                                         }
+
+
+
                                     }
 
                                 </ul>
+
+                                </div>
+                            @*<div class="tab-pane" id="product-tab-vendor">
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <figure class="vendor-banner br-sm">
+                        <img src="/webAsset/wolmart/assets/images/products/vendor-banner.jpg"
+                             alt="Vendor Banner" width="610" height="295"
+                             style="background-color: #353B55;" />
+                    </figure>
+                </div>
+                <div class="col-md-6 pl-2 pl-md-6 mb-4">
+                    <div class="vendor-user">
+                        <figure class="vendor-logo mr-4">
+                            <a href="#">
+                                <img src="/webAsset/wolmart/assets/images/products/vendor-logo.jpg"
+                                     alt="Vendor Logo" width="80" height="80" />
+                            </a>
+                        </figure>
+                        <div>
+                            <div class="vendor-name"><a href="#">Jone Doe</a></div>
+                            <div class="ratings-container">
+                                <div class="ratings-full">
+                                    <span class="ratings" style="width: 90%;"></span>
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                                <a href="#" class="rating-reviews">(32 Reviews)</a>
                             </div>
                         </div>
+                    </div>
+                    <ul class="vendor-info list-style-none">
+                        <li class="store-name">
+                            <label>Store Name:</label>
+                            <span class="detail">OAIO Store</span>
+                        </li>
+                        <li class="store-address">
+                            <label>Address:</label>
+                            <span class="detail">
+                                Steven Street, El Carjon, CA 92020, United
+                                States (US)
+                            </span>
+                        </li>
+                        <li class="store-phone">
+                            <label>Phone:</label>
+                            <a href="#tel:">1234567890</a>
+                        </li>
+                    </ul>
+                    <a href="vendor-dokan-store.html"
+                       class="btn btn-dark btn-link btn-underline btn-icon-right">
+                        Visit
+                        Store<i class="w-icon-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <p class="mb-5">
+                <strong class="text-dark">L</strong>orem ipsum dolor sit amet,
+                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.
+                Venenatis tellus in metus vulputate eu scelerisque felis. Vel pretium
+                lectus quam id leo in vitae turpis massa. Nunc id cursus metus aliquam.
+                Libero id faucibus nisl tincidunt eget. Aliquam id diam maecenas ultricies
+                mi eget mauris. Volutpat ac tincidunt vitae semper quis lectus. Vestibulum
+                mattis ullamcorper velit sed. A arcu cursus vitae congue mauris.
+            </p>
+            <p class="mb-2">
+                <strong class="text-dark">A</strong> arcu cursus vitae congue
+                mauris. Sagittis id consectetur purus
+                ut. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla.
+                Diam in
+                arcu cursus euismod quis. Eget sit amet tellus cras adipiscing enim eu. In
+                fermentum et sollicitudin ac orci phasellus. A condimentum vitae sapien
+                pellentesque
+                habitant morbi tristique senectus et. In dictum non consectetur a erat. Nunc
+                scelerisque viverra mauris in aliquam sem fringilla.
+            </p>
+        </div>*@
+
+
+
+
+                            <div class="tab-pane" id="product-tab-reviews">
+                                @{
+                                    decimal CommentC = Model.comment != null ? Model.comment.Count() : 0;
+                                    decimal sum = Model.comment != null ? Model.comment.Sum(x => x.rate) : 0;
+                                    decimal mear = Model.comment != null ? sum / CommentC : 0;
+                                    string percent = Model.comment != null ? (mear * 20) + "%" : "0%";
+
+                                    string percent100 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 5).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent80 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 4).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent60 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 3).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent40 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 2).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent20 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 1).Count() / CommentC) * 100)).ToString() : "0";
+                                }
+                                <div class="row mb-4">
+                                    <div class="col-xl-4 col-lg-5 mb-4">
+                                        <div class="ratings-wrapper">
+                                            <div class="avg-rating-container">
+                                                <div class="avg-rating">
+                                                    <p class="text-dark mb-1">امتیاز میانگین</p>
+                                                    <div class="ratings-container">
+                                                        <div class="ratings-full" style="    font-family: wolmart !important">
+
+                                                            <span class="ratings" style="width: @percent;"></span>
+                                                            <span class="tooltiptext tooltip-top"></span>
+                                                        </div>
+                                                        <a href="#" class="rating-reviews">(@CommentC نظر)</a>
+                                                    </div>
+                                                </div>
+                                                <h4 class="avg-mark font-weight-bolder ls-50">@mear</h4>
+
+                                            </div>
+                                            <div class="ratings-value d-flex align-items-center text-dark ls-25">
+                                                <span class="text-dark font-weight-bold"> </span>توصیه شده<span class="count">@percent</span>
+                                            </div>
+                                            <div class="ratings-list">
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 100%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent100%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 80%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent80%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 60%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent60%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 40%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent40%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 20%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent20%</mark>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-8 col-lg-7 mb-4">
+                                        <div class="review-form-wrapper">
+                                            <h3 class="title tab-pane-title font-weight-bold mb-1">
+                                                نظر خود را ثبت کنید
+                                            </h3>
+                                            <p class="mb-3">
+                                                برای ثبت نظر ابتدا ارد شوید
+                                            </p>
+                                            <form action="/Home/AddComment" id="Addcomment" method="POST" class="review-form">
+                                                <input hidden name="id" value="@Model.ID" />
+                                                @{
+                                                    banimo.ViewModePost.metaData metaModelM = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
+                                                    string entitle = metaModelM.curl;
+                                                }
+                                                <input hidden name="title" value="@entitle" />
+                                                <div class="rating-form">
+                                                    <label for="rating">امتیاز شما به محصول :</label>
+                                                    <span class="rating-stars">
+                                                        <a class="star-1" href="javascript:void(0)">1</a>
+                                                        <a class="star-2" href="javascript:void(0)">2</a>
+                                                        <a class="star-3" href="javascript:void(0)">3</a>
+                                                        <a class="star-4" href="javascript:void(0)">4</a>
+                                                        <a class="star-5" href="javascript:void(0)">5</a>
+                                                    </span>
+                                                    <select name="rating" id="rating" required=""
+                                                            style="display: none;">
+                                                        <option value="">امتیاز…</option>
+                                                        <option value="5">عالی</option>
+                                                        <option value="4">خوب</option>
+                                                        <option value="3">متوسط</option>
+                                                        <option value="2">ضعیف</option>
+                                                        <option value="1">بسیار ضعیف</option>
+                                                    </select>
+                                                </div>
+                                                <textarea cols="30" rows="6"
+                                                          placeholder="نظر خود را بنویسید" class="form-control"
+                                                          id="review" name="desc"></textarea>
+
+                                                @if (@Session["token"] != null)
+                                                {
+                                                    <div id="submitComment" class="btn btn-dark">
+                                                        ثبت نظر
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Home/login" class="btn btn-dark">
+                                                        ثبت نظر
+                                                    </a>
+                                                }
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <ul class="comments list-style-none">
+                                        @if (Model.comment != null)
+                                        {
+                                            foreach (var item in Model.comment)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <figure class="comment-avatar">
+                                                            <img src="/webAsset/wolmart/assets/images/agents/2-100x100.png"
+                                                                 alt="Commenter Avatar" width="90" height="90">
+                                                        </figure>
+                                                        <div class="comment-content">
+                                                            <h4 class="comment-author">
+                                                                <a href="#">@item.name</a>
+                                                                <span class="comment-date">
+                                                                    @item.time
+                                                                </span>
+                                                            </h4>
+                                                            <div class="ratings-container comment-rating">
+                                                                <div class="ratings-full">
+                                                                    @{
+                                                                        int wi = (int)item.rate * 20;
+                                                                        string wis = wi + "%";
+                                                                    }
+                                                                    <span class="ratings"
+                                                                          style="width: @wis;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                            </div>
+                                                            <p>
+                                                                @item.comment
+                                                            </p>
+                                                            @if (!string.IsNullOrEmpty(item.Answer))
+                                                            {
+                                                                <div style="margin-left:100px">
+                                                                    <h4 class="comment-author">
+                                                                        <a href="#">Owner Answer</a>
+                                                                        <span class="comment-date">
+                                                                            @item.rtime
+                                                                        </span>
+                                                                    </h4>
+                                                                    <p>
+                                                                        @item.Answer
+                                                                    </p>
+                                                                </div>
+
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     @if (Model.similarProduct != null)
                     {
                         <section class="related-product-section">
                             <div class="title-link-wrapper mb-4">
-                                <h4 class="title">Related Products</h4>
-                                <a href="#" class="btn btn-dark btn-link btn-slide-right btn-icon-right">
-                                    More
-                                    Products<i class="w-icon-long-arrow-right"></i>
+                                <h4 style="flex:1" class="title">محصولات مشابه</h4>
+                                <a href="#" style="flex:unset" class="btn btn-dark btn-link btn-slide-right btn-icon-right">
+                                    بیشتر<i class="w-icon-long-arrow-left"></i>
                                 </a>
+
+
                             </div>
                             <div class="swiper-container swiper-theme" data-swiper-options="{
                                     'spaceBetween': 20,
                                     'slidesPerView': 4,
                                     'breakpoints': {
                                         '576': {
-                                            'slidesPerView': 4
+                                            'slidesPerView': 2
                                         },
                                         '768': {
-                                            'slidesPerView': 4
+                                            'slidesPerView': 2
                                         },
                                         '992': {
                                             'slidesPerView': 4
                                         }
                                     }
                                 }">
-                                <div class="swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
+                                <div class="swiper-wrapper row cols-lg-12 cols-md-12 cols-sm-12 cols-12">
 
                                     @foreach (var item in Model.similarProduct)
                                     {
@@ -698,8 +775,7 @@
 
                                                 <div class="product-action">
                                                     <a href="/products/@newurl" class="btn-product btn-quickview" title="Quick View">
-                                                        Quick
-                                                        View
+                                                       نمایش
                                                     </a>
                                                 </div>
                                             </figure>
@@ -730,7 +806,7 @@
 
 
 @section scripts{
-    <script>
+    @*<script>
         $(".otherfilter").click(function () {
             var REP = "o" + $(this).attr('value');
             $.ajax({
@@ -754,7 +830,7 @@
 
         })
 
-    </script>
+    </script>*@
 
 
     <script>
@@ -814,7 +890,7 @@
                 var quantity = $("#fquantity").val();
                 var RealID = "addtocarto";
                 var tobeid = RealID.concat(ID);
-                
+
                 $.ajax({
                     url: '/Home/addtocart',
                     data: {
@@ -837,7 +913,7 @@
                             "timeOut": 5000,
                             "extendedTimeOut": 1000,
                         }
-                        toastr.success('successfully added ')
+                        toastr.success('با موفقیت افزوده شد ')
                         //window.location.href = "@Url.Action("checkout", "Home")";
                     },
 
@@ -905,24 +981,9 @@
     </script>
 
 
-    <style>
-        .nomargin {
-            margin: 0
-        }
-
-        .anotherOption {
-            margin-left: 20px;
-        }
-
-            .anotherOption p {
-                padding: 0 10px;
-                border: 1px dotted blue;
-                cursor: pointer
-            }
-    </style>
     <script>
         $(".rating-stars a").click(function () {
-           
+
             var $star = $(this);
             $star.addClass('active').siblings().removeClass('active');
             $star.parent().addClass('selected');

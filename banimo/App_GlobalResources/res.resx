@@ -1878,4 +1878,31 @@
   <data name="urlTitle" xml:space="preserve">
     <value>URL Title</value>
   </data>
+  <data name="choosParent" xml:space="preserve">
+    <value>Choose Parent</value>
+  </data>
+  <data name="createItem" xml:space="preserve">
+    <value>Create Item</value>
+  </data>
+  <data name="featureManagement" xml:space="preserve">
+    <value>Feature Management</value>
+  </data>
+  <data name="ItemHasSubItem" xml:space="preserve">
+    <value>SubItem Exist</value>
+  </data>
+  <data name="PrentOrChildTitle" xml:space="preserve">
+    <value>Prent Or Child Title</value>
+  </data>
+  <data name="SelectParent" xml:space="preserve">
+    <value>Parent</value>
+  </data>
+  <data name="setAllFeatureFor" xml:space="preserve">
+    <value>Set All Features Of Category :</value>
+  </data>
+  <data name="set" xml:space="preserve">
+    <value>Is Set</value>
+  </data>
+  <data name="existItem" xml:space="preserve">
+    <value>Item exist</value>
+  </data>
 </root>

@@ -304,9 +304,9 @@ namespace banimo.Classes
             {
                 if (session["PartnerUser"] == null)
                 {
-                    if (filterContext.HttpContext.Request.Cookies["AT"] != null)
+                    if (filterContext.HttpContext.Request.Cookies["PC"] != null)
                     {
-                        var request = filterContext.HttpContext.Request.Cookies["AT"].Value;
+                        var request = filterContext.HttpContext.Request.Cookies["PC"].Value;
                         if (!string.IsNullOrEmpty(request))
                         {
 
@@ -357,7 +357,7 @@ namespace banimo.Classes
                     {
                         filterContext.Result = new RedirectToRouteResult(
                         new RouteValueDictionary {
-                                { "Controller", "Admin" },
+                                { "Controller", "Partner" },
                                 { "Action", "Index" }
                                     });
                     }
@@ -387,7 +387,7 @@ namespace banimo.Classes
                         {
                             filterContext.Result = new RedirectToRouteResult(
                             new RouteValueDictionary {
-                                        { "Controller", "admin" },
+                                        { "Controller", "Partner" },
                                         { "Action", "Index" }
                                            });
                         }

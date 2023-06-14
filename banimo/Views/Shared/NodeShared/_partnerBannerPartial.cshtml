@@ -1,0 +1,86 @@
+﻿@model banimo.ViewModel.slideVM
+
+
+
+
+<table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+    <thead>
+        <tr>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productImage</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> @Resources.res.forfor </th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> @Resources.res.title </th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.link</th>
+            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.option</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.slideList != null)
+        {
+            foreach (var item in Model.slideList)
+            {
+                string cls = "odd";
+                if (Model.slideList.IndexOf(item) + 1 % 2 == 0)
+                {
+                    cls = "even";
+                }
+
+                <tr class="@cls">
+                    <td>
+                        <div class="table-image">
+                            <img src="/images/@item.title" class="img-fluid" alt="">
+                        </div>
+                    </td>
+                    <td>@item.type</td>
+                    <td>@item.onv</td>
+
+                    <td>@item.link</td>
+
+
+
+                    <td>
+                        <ul>
+                            @*<li>
+                                <a href="javascript:void(0)">
+                                    <i class="ri-pencil-line  editSBItem"></i>
+
+                                </a>
+                            </li>*@
+                            <li>
+                                @{
+                                    string itemid = item.ID;
+                                    string image = item.title;
+                                    string dat = itemid + "***" + image; //  " +  +  + `","imageName"
+                                }
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                    <i  idtoremove=@item.ID class="ri-delete-bin-line removeBannerNode" id=""></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        }
+
+
+
+
+    </tbody>
+</table>
+
+<script>
+    $(".removeBannerNode").click(function () {
+        var id = $(this).attr('idtoremove');
+        $.ajax({
+            url: "/Node/removeBanner",
+            data: {
+                ID: id
+            },
+            success: function (data) {
+                window.location.reload();
+            }
+
+        })
+        
+    })
+</script>
