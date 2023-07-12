@@ -270,9 +270,10 @@ namespace banimo.Controllers
                 collection.Add("auth", model.auth);
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername);
+                collection.Add("nodeID", nodeID);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Home/buyRequestMarsool.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Home/buyRequestMarsoolT.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
@@ -284,11 +285,100 @@ namespace banimo.Controllers
                 string finalUrl = "";
                 if (model.payment == "1")
                 {
+                    using (WebClient client = new WebClient())
+                    {
+                        var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("token", model.token);
+                        collection.Add("mbrand", servername);
+                        //foreach (var myvalucollection in imaglist) {
+                        //    collection.Add("imaglist[]", myvalucollection);
+                        //}
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getCredit.php", collection);
 
+                        result = System.Text.Encoding.UTF8.GetString(response);
+                    }
+                    banimo.ViewModel.getCredit creditmodel = JsonConvert.DeserializeObject<banimo.ViewModel.getCredit>(result);
+                    if (creditmodel.credit >= log2.amount)
+                    {
+                        finalUrl = "Connection/verifyByAdmin?payment=1&id=" + log2.peigiry + "&fromUser=1";
+                    }
+                    else
+                    {
+
+                        string varizdesc = " واریز بابت تصویه سفارش شماره " + log2.ID;
+                        int famount = log2.amount - creditmodel.credit;
+
+                        // تغییر پرداخت مابقی سفارش از کیف پول زرین پال به ملت در اینجا ست
+
+                        //string referenceID = "";
+                        //string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID,"0", referenceID);
+                        //addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
+                        //TempData["addFromOrder"] = "1";
+                        //return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
+
+                        // کدها ملت
+                        Random rnd = new Random();
+                        long referenceID = rnd.Next(222000000, 222999999);
+                        // اینجا تراکنش مرتبط با افزایش کیف پول انجام میشه
+                        webservise wb = new webservise();
+                        string add2result = wb.addTransaction(model.token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
+                        ViewModel.addTransactionVM Rmodel = JsonConvert.DeserializeObject<ViewModel.addTransactionVM>(add2result);
+                        
+                        
+                        
+                        
+                        //return RedirectToAction("ReqestForMellat", new { price = famount, orderNumberWeb = referenceID });
+
+                        // اینجا باید پرداخت تفاق بیوفتد 
+                        // باید پرداخت های متاوت درست کنیم که اول بانک ملت انجام میشد
+                        string txtDescription = "افزودن به سبد خرید";
+                        long orderID = referenceID;// rnd.Next(111000000, 111999999) model.orderNumberWeb == null ?  : long.Parse(model.orderNumberWeb);
+                        string message = "";
+                        long amount = famount * 10;
+                        string additionalData = txtDescription;
+
+
+                        string localDate = DateTime.Now.ToString("yyyyMMdd");
+                        string localTime = DateTime.Now.ToString("HHmmss");
+
+                        string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyMellat";
+                        long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
+                        string userName = ConfigurationManager.AppSettings["userName"];
+                        string userPassword = ConfigurationManager.AppSettings["userPassword"];
+                        string payerId = "0";
+
+
+                        //banimo.bankMellat.PaymentGatewayImplService WebService = new bankMellat.PaymentGatewayImplService();
+                        //string callBackRefID = WebService.bpPayRequest(terminalId, userName, userPassword, orderId, amount, localDate, localTime,
+                        //                 additionalData, callBackUrl, "0");
+
+                        BankMellatImplement bankMellatImplement = new BankMellatImplement(callBackUrl, terminalId, userName, userPassword);
+
+                        string resultRequest = bankMellatImplement.bpPayRequest(orderID, amount, additionalData);
+                        string[] StatusSendRequest = resultRequest.Split(',');
+
+
+                        if (int.Parse(StatusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                        {
+                            finalUrl = "/Connection/RedirectVPOS?id=" + StatusSendRequest[1];
+                        }
+                        else
+                        {
+                            finalUrl = "";
+                            responseModel.status = 500;
+
+                        }
+
+
+                    }
                 }
                 else if (model.payment == "2")
                 {
                     // باید این یوار ال برگرده
+
                     finalUrl = "Connection/verifyByAdmin?payment=2&id=" + log2.peigiry + "&fromUser=1";
 
                 }

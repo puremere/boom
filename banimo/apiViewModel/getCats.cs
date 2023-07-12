@@ -227,7 +227,8 @@ namespace banimo.apiViewModel
     }
     public class getDataProfile
     {
-        public string mobile{get; set;} public string token{get; set;}
+        public string mobile{get; set;} 
+        public string token{get; set;}
     }
     public class getDataWishList
     {

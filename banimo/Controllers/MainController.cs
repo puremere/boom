@@ -147,6 +147,7 @@ namespace banimo.Controllers
             string srt = getCookie("tokenMain");
             banimo.AdminPanel.ViewModel.CookieVM cookieVM = JsonConvert.DeserializeObject<banimo.AdminPanel.ViewModel.CookieVM>(srt);
             cookieVM.tag = "";
+            string lan = Session["lang"] as string;
             using (WebClient client = new WebClient())
             {
 
@@ -155,6 +156,7 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catMode", catMode);
+                collection.Add("lan", lan);
 
                 byte[] response =
                 client.UploadValues(server + "/Main/GetMain.php?", collection);

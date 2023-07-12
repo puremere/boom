@@ -65,8 +65,8 @@
             }
             <div class="mainParent" style="">
                 <a onclick="newProductDetail('@newurl')">
-                    <div class="imageholderindex">
-                        <img srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
+                    <div class="imageholderindex" style="display:flex">
+                        <img onerror="this.onerror=null; this.src='/images/placeholder.jpg'" srt2="@src2" srt1="@src" alt="@item.title" class="imageitself" src="@src" />
                     </div>
 
                     <div class="titleholder">

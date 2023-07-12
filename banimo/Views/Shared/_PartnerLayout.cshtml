@@ -23,7 +23,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <title>Marsool - Dashboard</title>
+    <title>  @Resources.res.dashboard</title>
 
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
@@ -233,7 +233,7 @@
                                                     <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav active" href="/Partner/dashboard" data-bs-original-title="" title="">
                                                             <i class="ri-home-line"></i>
-                                                            <span>@Resources.res.dashboard</span>
+                                                            <span>@Resources.res.DashbaordPanel</span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
@@ -384,9 +384,14 @@
     <svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1002"></defs><polyline id="SvgjsPolyline1003" points="0,0"></polyline><path id="SvgjsPath1004" d="M0 0 "></path></svg>
     @RenderSection("scripts", required: false)
     <script>
-        $("#logoutuser").click(function () {
-            window.location.href = "/Partner/CustomerLogout";
+        $(document).ready(function () {
+            $("#logoutuser").click(function () {
+                window.location.href = "/Partner/CustomerLogout";
+            })
+           
         })
+
+       
     </script>
 </body><!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 10 Mar 2023 16:17:57 GMT -->
 </html>

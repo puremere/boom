@@ -12,6 +12,9 @@
         ViewBag.Title = metaModel.titletag;
         ViewBag.Desc = metaModel.desctag;
         ViewBag.key = metaModel.keyTag;
+        ViewBag.urlTitle = metaModel.curl;
+        
+        
 
     }
     else
@@ -764,10 +767,16 @@
                                         string index = (Model.similarProduct.IndexOf(item) + 1).ToString();
                                         string count = Model.similarProduct.Count() + "";
                                         prID = "o" + item.ID;
+                                        string purl = "/Home/ProductDetail/o" + item.ID;
+                                        if (item.meta != "null" && item.meta != null)
+                                        {
+                                            banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                            purl = "/product/" + metaModel.curl;
+                                        }
                                         <div class="swiper-slide swiper-slide-active" key="6137" role="group"
                                              aria-label="@index / @count" style="width: 306px; margin-left: 24px;">
                                             <div class="product-card product-card-blue">
-                                                <a href="/Home/productDetail?ID=@prID"
+                                                <a href="@purl"
                                                    dideo-checked="true">
                                                     <div class="product-box xpy-10 xp-4 xp-lg-6 xpt-md-12 xpb-md-12 d-flex justify-content-center align-items-center flex-column position-relative">
                                                         <div class="product-price">

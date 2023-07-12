@@ -230,126 +230,128 @@ namespace banimo.Controllers
         {
             //return Content("");
             string srtting = "";
+
+            Response.Cookies["lastAction"].Value = "index";
+            string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
+            this.ViewBag.cookie = cartModelString;
+            CookieVM cookieModel;
+            srtting += "1";
+            //if (Session["fist"] !=  null) {
+            //    Session["fist"] = "true";
+
+
+            //}
+            //else
+            //{
+            //    cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            //    if (partnerID != null)
+            //    {
+            //        cookieModel.partnerID = partnerID;
+            //    }
+
+            //}
+
+
+            cookieModel = new CookieVM();
+            //SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+
+            string dev = RandomString();
+            string cod = MD5Hash(dev + "ncase8934f49909");
+
+            mainField contactusmodel = new mainField()
+            {
+                code = cod,
+                device = dev,
+                nodeID = nodeID,
+                servername = servername
+            };
+            string contactpayload = JsonConvert.SerializeObject(contactusmodel);
+            srtting += " - " + contactpayload;
+            string resu = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/contactUsDataDemo.php", contactpayload);
+            srtting += " - " + resu;
+            SetCookie(resu, "contactUs");
+            contactSectionVM conmodel = JsonConvert.DeserializeObject<contactSectionVM>(resu);
+            TempData["phone"] = conmodel.phone;
+            TempData["analyticID"] = conmodel.analytic;
+
+
+
+
+
+
+
+
+            string urlid = "0";
+            string device = "";
+            string code = "";
+            string result = "";
+            string serverAddress = "";
+
+            Classes.requestClassVM.getMainDataModel payloadModel = new Classes.requestClassVM.getMainDataModel()
+            {
+                code = code,
+                lan = Session["lang"] as string,
+                device = device,
+                partnerID = partnerID,
+                servername = servername
+            };
+            var payload = JsonConvert.SerializeObject(payloadModel);
+
+            srtting += " - " + payload;
+            //0101/319534
+            //    7156010055050514
+
+
+            device = RandomString();
+            code = MD5Hash(device + "ncase8934f49909");
+            productinfoviewdetail model = new productinfoviewdetail();
+            serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoMarsool.php";
+            //serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest2.php";
+            payloadModel.device = device;
+            payloadModel.code = code;
+            payloadModel.nodeID = nodeID;
+            payload = JsonConvert.SerializeObject(payloadModel);
+            result = await wb.doPostData(serverAddress, payload);
+            srtting += " - " + result;
+            getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
+            log2.conmodel = conmodel;
+            log2.iosCookie = cookieModel.iosCookie;
+            cookieModel.currentpage = "index";
+            cookieModel.currentController = "Home";
+            cookieModel.partnerID = urlid.ToString();
+            TempData["logo"] = cookieModel.partnerID == "0" ? "logo.png" : "logo" + cookieModel.partnerID + ".png";
+
+
+
+            //TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
+            SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
+
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "index" + srt;
+
+            //return RedirectToAction( "Index",boom.Controllers.HomeController);
+            //if (Variables.menu.Count() == 0)y
+
+            //{
+
+
+            //}
+
+            if (log2.catsdata != null)
+            {
+                Variables.menu = JsonConvert.SerializeObject(log2.catsdata);
+                menu = Variables.menu;
+            }
+
+            this.ViewData["MenuViewModel"] = string.IsNullOrEmpty(Variables.menu) ? setVariable() : Variables.menu;
+            Response.Cookies["partnerID"].Value = partnerID != null ? partnerID : "";
+            Response.Cookies["tarafID"].Value = string.IsNullOrEmpty(log2.trafCode) ? "" : log2.trafCode;
+            return View(action, log2);
             try
             {
-                Response.Cookies["lastAction"].Value = "index";
-                string cartModelString = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";// getCookie("cartModel");
-                this.ViewBag.cookie = cartModelString;
-                CookieVM cookieModel;
-                srtting += "1";
-                 //if (Session["fist"] !=  null) {
-                 //    Session["fist"] = "true";
-
-
-                 //}
-                 //else
-                 //{
-                 //    cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
-                 //    if (partnerID != null)
-                 //    {
-                 //        cookieModel.partnerID = partnerID;
-                 //    }
-
-                 //}
-
-
-                 cookieModel = new CookieVM();
-                //SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
-
-                string dev = RandomString();
-                string cod = MD5Hash(dev + "ncase8934f49909");
-
-                mainField contactusmodel = new mainField()
-                {
-                    code = cod,
-                    device = dev,
-                    nodeID = nodeID,
-                    servername = servername
-                };
-                string contactpayload = JsonConvert.SerializeObject(contactusmodel);
-                srtting += " - "+ contactpayload;
-                string resu = await wb.doPostData(ConfigurationManager.AppSettings["server"] + "/contactUsDataDemo.php", contactpayload);
-                srtting += " - " + resu;
-                SetCookie(resu, "contactUs");
-                contactSectionVM conmodel = JsonConvert.DeserializeObject<contactSectionVM>(resu);
-                TempData["phone"] = conmodel.phone;
-                TempData["analyticID"] = conmodel.analytic;
-
-
-
-
-
-
-
-
-                string urlid = "0";
-                string device = "";
-                string code = "";
-                string result = "";
-                string serverAddress = "";
-
-                Classes.requestClassVM.getMainDataModel payloadModel = new Classes.requestClassVM.getMainDataModel()
-                {
-                    code = code,
-                    lan = Session["lang"] as string,
-                    device = device,
-                    partnerID = partnerID,
-                    servername = servername
-                };
-                var payload = JsonConvert.SerializeObject(payloadModel);
-
-                srtting += " - " + payload;
-                //0101/319534
-                //    7156010055050514
-
-
-                device = RandomString();
-                code = MD5Hash(device + "ncase8934f49909");
-                productinfoviewdetail model = new productinfoviewdetail();
-                serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoMarsool.php";
-                //serverAddress = ConfigurationManager.AppSettings["server"] + "/getMainDataDemoTest2.php";
-                payloadModel.device = device;
-                payloadModel.code = code;
-                payloadModel.nodeID = nodeID;
-                payload = JsonConvert.SerializeObject(payloadModel);
-                result = await wb.doPostData(serverAddress, payload);
-                srtting += " - " + result;
-                getMaindataViewModel log2 = JsonConvert.DeserializeObject<getMaindataViewModel>(result);
-                log2.conmodel = conmodel;
-                log2.iosCookie = cookieModel.iosCookie;
-                cookieModel.currentpage = "index";
-                cookieModel.currentController = "Home";
-                cookieModel.partnerID = urlid.ToString();
-                TempData["logo"] = cookieModel.partnerID == "0" ? "logo.png" : "logo" + cookieModel.partnerID + ".png";
-
-
-
-                //TempData["cookieToSave"] =JsonConvert.SerializeObject(cookieModel);
-                SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
-
-                string srt = ConfigurationManager.AppSettings["design"] as string;
-                string action = "index" + srt;
-
-                //return RedirectToAction( "Index",boom.Controllers.HomeController);
-                //if (Variables.menu.Count() == 0)y
-
-                //{
-
-
-                //}
-
-                if (log2.catsdata != null)
-                {
-                    Variables.menu = JsonConvert.SerializeObject(log2.catsdata);
-                    menu = Variables.menu;
-                }
-
-                this.ViewData["MenuViewModel"] = string.IsNullOrEmpty(Variables.menu) ? setVariable() : Variables.menu;
-                Response.Cookies["partnerID"].Value = partnerID != null ? partnerID : "";
-                Response.Cookies["tarafID"].Value = string.IsNullOrEmpty(log2.trafCode) ? "" : log2.trafCode;
-                return View(action, log2);
+                
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Content(srtting);
             }
@@ -1424,8 +1426,8 @@ namespace banimo.Controllers
         [HomeSessionCheck]
         public ActionResult myProfile(string type)
         {
-           
-            
+
+            type = type == null ? type = "1" : type;
             ViewBag.type = type.ToString();
 
             string token = Session["token"].ToString();
@@ -1909,7 +1911,6 @@ namespace banimo.Controllers
                 if (!string.IsNullOrEmpty(price) )
                 {
                     newitem.tarafH = price ;
-
                 }
                 newitem.addson = addson;
                 data2.Add(newitem);
@@ -3271,6 +3272,7 @@ namespace banimo.Controllers
             }
 
             ids = ids.Trim(',');
+            string final = "/getTimeTest.php";
             using (WebClient client = new WebClient())
             {
 
@@ -3285,21 +3287,36 @@ namespace banimo.Controllers
 
                 collection.Add("mbrand", servername);
 
-                //foreach (var myvalucollection in imaglist)
-                //{
-                //    collection.Add("imaglist[]", myvalucollection);
-                //}
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeMarsool.php?", collection);
+                  
+               
+               if (ConfigurationManager.AppSettings["serverName"] != null)
+                {
+                    if (ConfigurationManager.AppSettings["serverName"] == "1")
+                    {
+                        final = "getTimeMarsool.php";
+                    }
+                }  
+
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/"+ final, collection);
                // byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/getTimeTest.php?", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            //TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
-            TimeListMarketPlace log = JsonConvert.DeserializeObject<TimeListMarketPlace>(result);
-            TempData["deliverybase"] = log.baseDeliver;
-            return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
-            //return PartialView("/Views/Shared/_timeSection.cshtml", log);
+            if (final == "/getTimeTest.php")
+            {
+                TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
+                return PartialView("/Views/Shared/_timeSection.cshtml", log);
+            }
+            else
+            {
+                TimeListMarketPlace log = JsonConvert.DeserializeObject<TimeListMarketPlace>(result);
+                TempData["deliverybase"] = log.baseDeliver;
+                return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
+            }
+            //
+            
+            //
         }
 
         //public PartialViewResult checkoutsummery()

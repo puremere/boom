@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Inventory For.
+        /// </summary>
+        internal static string addInventoryText {
+            get {
+                return ResourceManager.GetString("addInventoryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add level1.
         /// </summary>
         internal static string addLevel1 {
@@ -2460,6 +2469,15 @@ namespace Resources {
         internal static string instagram {
             get {
                 return ResourceManager.GetString("instagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By doing this action you add new reciete factor to inventory.
+        /// </summary>
+        internal static string inventoryDesc {
+            get {
+                return ResourceManager.GetString("inventoryDesc", resourceCulture);
             }
         }
         
@@ -5061,6 +5079,15 @@ namespace Resources {
         internal static string userPhoneNumber {
             get {
                 return ResourceManager.GetString("userPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $.
+        /// </summary>
+        internal static string vahed {
+            get {
+                return ResourceManager.GetString("vahed", resourceCulture);
             }
         }
         

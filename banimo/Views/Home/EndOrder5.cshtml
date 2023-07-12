@@ -468,17 +468,19 @@
             var ID = $("#modalID").val();
             var value = "0";
             if (lat == "0" || lat == "") {
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.error("موقعیت خود را انتخاب کنید");
-                value = "1";
+                lat = "0";
+                lng = "0";
+                //toastr.options = {
+                //    "debug": false,
+                //    "positionClass": "toast-top-center",
+                //    "onclick": null,
+                //    "fadeIn": 300,
+                //    "fadeOut": 1000,
+                //    "timeOut": 5000,
+                //    "extendedTimeOut": 1000
+                //}
+                //toastr.error("موقعیت خود را انتخاب کنید");
+                //value = "1";
             };
             if (address == "" || postalCode == "" || title == "" || city == "" || state == "") {
                 toastr.options = {
@@ -848,7 +850,7 @@
                             }
                         }
                     }
-                    <div id="addAddressHolder" style="display:none; position:fixed; top:0; left:0;bottom:0; overflow:scroll; width:100%;z-index:9999">
+                    <div id="addAddressHolder" style="display:none; position:fixed; top:0; left:0;bottom:0; overflow:scroll; width:100%;z-index:99999999">
                         <div style="min-height:100%; width:100%; background-color:rgba(0,0,0,0.5)">
                             <div class="modal-bodyy">
                                 <div class="row" style="width:100%">

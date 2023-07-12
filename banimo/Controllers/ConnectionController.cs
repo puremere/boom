@@ -256,8 +256,6 @@ namespace banimo.Controllers
         public ActionResult ReqestForPaymentInplaceAndWallet(ViewModelPost.ReqestForPaymentViewModel model)
         {
 
-            
-
             string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
             if (srt != "")
             {
@@ -396,15 +394,16 @@ namespace banimo.Controllers
                             string varizdesc = " واریز بابت تصویه سفارش شماره " + log2.ID;
                             int famount = log2.amount - creditmodel.credit;
 
-                            // تغییر پرداخت مابقی سفارش از کیف پول زرین پال به ملت در اینجا ست
 
+                            // تغییر پرداخت مابقی سفارش از کیف پول زرین پال به ملت در اینجا ست
                             //string referenceID = "";
                             //string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID,"0", referenceID);
                             //addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
                             //TempData["addFromOrder"] = "1";
                             //return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
-
                             // کدها ملت
+
+
                             Random rnd = new Random();
                             long referenceID = rnd.Next(222000000, 222999999);
                             string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
@@ -583,6 +582,7 @@ namespace banimo.Controllers
                                 collection2.Add("code", code);
                                 collection2.Add("auth", Request.QueryString["Authority"]);
                                 collection2.Add("mbrand", servername);
+                                collection2.Add("newTran", "1");
 
                                 byte[] response =
                                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
@@ -1416,24 +1416,24 @@ namespace banimo.Controllers
                                     string device = RandomString();
                                     string code = MD5Hash(device + "ncase8934f49909");
                                     string result;
-                                    using (WebClient client = new WebClient())
-                                    {
+                                    //using (WebClient client = new WebClient())
+                                    //{
 
-                                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
-                                        collection2.Add("device", device);
-                                        collection2.Add("code", code);
-                                        collection2.Add("auth", saleOrderId.ToString());
-                                        collection2.Add("servername", servername);
+                                    //    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                                    //    collection2.Add("device", device);
+                                    //    collection2.Add("code", code);
+                                    //    collection2.Add("auth", saleOrderId.ToString());
+                                    //    collection2.Add("servername", servername);
 
 
-                                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
+                                    //    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
 
-                                        result = System.Text.Encoding.UTF8.GetString(response);
-                                    }
+                                    //    result = System.Text.Encoding.UTF8.GetString(response);
+                                    //}
 
-                                    ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
+                                    //ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
 
-                                    int Amount = Convert.ToInt32(log2.mytransaction.First().price);
+                                    //int Amount = Convert.ToInt32(log2.mytransaction.First().price);
 
 
                                     int Status = 100;// zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
@@ -1462,8 +1462,8 @@ namespace banimo.Controllers
 
                                         walletUpdate modelwallet = JsonConvert.DeserializeObject<walletUpdate>(result2);
 
-                                        string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
-                                        string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
+                                        //string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
+                                        //string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
 
 
 
@@ -2491,15 +2491,24 @@ namespace banimo.Controllers
                 //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
                 //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
                 Response.Cookies["Modelcart"].Value = "";
+                ViewBag.message = TempData["message"] as string;
+                ViewBag.message3 = "200";
+                ViewBag.message2 = TempData["message2"] as string;
+              
 
-                var saleorder = TempData["message2"] as string;
+            }
+            else
+            {
+                ViewBag.message = TempData["message"] as string;
+                ViewBag.message2 ="";
+                ViewBag.message3 = "500";
 
             }
 
-            ViewBag.message = TempData["message"] as string;
-            ViewBag.message2 = TempData["message3"] as string;
-            ViewBag.message3 = TempData["message2"] as string;
-            return View();
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "verifyAtBase" + srt;
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View(action);
         }
         public ActionResult verifyAtHome(string refID, int status)
         {
@@ -2509,11 +2518,19 @@ namespace banimo.Controllers
                 //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
                 //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
                 Response.Cookies["Modelcart"].Value = "";
+                ViewBag.message2 = "200";
+                ViewBag.message3 = "CHR-" + refID;
+            }
+            else
+            {
+                ViewBag.message2 = "error";
+                ViewBag.message2 = "-1";
+                ViewBag.message3 = "CHR";
             }
 
 
 
-            ViewBag.message2 = refID;
+            
             ViewBag.message3 = "CHR-" + refID;
 
             string srt = ConfigurationManager.AppSettings["design"] as string;

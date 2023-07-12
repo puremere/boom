@@ -71,10 +71,10 @@ namespace banimo.ViewModel
         public List<LastOrdre> lastOrdres { get; set; }
         public List<Dacats> dacats { get; set; }
         public List<Bestseller> bestseller { get; set; }
-        public int productsNum { get; set; }
-        public int nodeNumRows { get; set; }
-        public int userNumRows { get; set; }
-        public int ordersNum { get; set; }
+        public string productsNum { get; set; }
+        public string nodeNumRows { get; set; }
+        public string userNumRows { get; set; }
+        public string ordersNum { get; set; }
     }
     
     public class articlesComment

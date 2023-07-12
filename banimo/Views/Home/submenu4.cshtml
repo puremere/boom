@@ -386,7 +386,7 @@
 <div style="position:relative;  ">
     <div style="display:flex; align-items:center; direction:rtl; text-align:right;box-shadow: 2px 2px 5px -1px rgb(148 149 153);  margin: 10px;border: 1px solid #ddd;border-radius: 5px;">
         <div style="width:25%;text-align:center">
-            <img style=" border-radius:7px;       max-height: 180px;  max-width: 100%; object-fit: contain" src="~/images/@Model.img" />
+            <img  onerror="this.onerror=null; this.src='/images/placeholder.jpg'" style=" border-radius:7px; margin:25px 0;      max-height: 180px;  max-width: 100%; object-fit: contain" src="~/images/@Model.img" />
         </div>
         <div style="width:75%; padding:50px;position:relative">
             <p class="matn" style="max-height:150px; font-size:12px ; line-height:2.5; overflow:hidden; text-align:justify; ">
@@ -478,7 +478,7 @@
                         <a href="@url">
                             <div class="itemHolder" style="width:100%;">
                                 <div style="margin:auto;  width:100%">
-                                    <img class="submenuImage" src="@imagaddress" style=" " />
+                                    <img  onerror="this.onerror=null; this.src='/images/placeholder.jpg'" class="submenuImage" src="@imagaddress" style=" " />
                                 </div>
                                 <p style="" class="subcatTitle">@newitem.title</p>
 

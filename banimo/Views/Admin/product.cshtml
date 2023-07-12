@@ -288,7 +288,7 @@
 
                             </div>
                         </div>
-                        <div style="display:flex; margin-top:25px;margin-left:15px">
+                        <div style="display:flex; margin-top:50px;margin-left:15px">
                             <div id="Verify" class="btn btn-primary lgnsubmitt">تایید</div>
                             <button id="getExcel" class="btn btn-primary lgnsubmitt">دریافت فایل اکسل</button>
                         </div>
@@ -374,7 +374,7 @@
                     </form>
                     @using (Html.BeginForm("UploadExcelV2", "Admin", FormMethod.Post, new { id = "UploadExcelForm", enctype = "multipart/form-data" }))
                     {
-                        <div id="upload" class="btn btn-primary lgnsubmitt" style="margin-top:25px"> بارگزاری فایل  اکسل (ادیت)</div>
+                        <div id="upload" class="btn btn-primary lgnsubmitt" style="margin-top:50px"> بارگزاری فایل  اکسل (ادیت)</div>
                         <input id="myfile" type="file" name="myfile" style="display: none;" />
                         <script>
                             $('#upload').on('click', function () {

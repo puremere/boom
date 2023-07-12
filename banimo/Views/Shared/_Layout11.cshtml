@@ -1,0 +1,740 @@
+﻿
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+
+    <title>نشانک، انچه شما می پسندید</title>
+
+    <meta name="keywords" content="Marketplace ecommerce  " />
+    <meta name="description" content="Neschanak is powerful marketplace ">
+    <meta name="author" content="">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- WebFont.js -->
+
+    <script>
+        WebFontConfig = {
+            google: { families: ['Poppins:400,500,600,700,800'] }
+        };
+        (function (d) {
+            var wf = d.createElement('script'), s = d.scripts[0];
+            wf.src = '/webAsset/wolmart/assets/js/webfont.js';
+            wf.async = true;
+            s.parentNode.insertBefore(wf, s);
+        })(document);
+    </script>
+    <script src="/webAsset/wolmart/assets/vendor/jquery/jquery.min.js"></script>
+    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+          crossorigin="anonymous">
+    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+          crossorigin="anonymous">
+    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+          crossorigin="anonymous">
+    <link rel="preload" href="/webAsset/wolmart/assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/fontawesome-free/css/all.min.css">
+
+    <!-- Plugins CSS -->
+    <!-- <link rel="stylesheet" href="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/magnific-popup/magnific-popup.min.css">
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/css/demo1.min.css">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
+    <link href="~/Content/font.css" rel="stylesheet" />
+
+</head>
+
+<body class="home" style="direction:rtl">
+    <div class="page-wrapper">
+        <h1 class="d-none">Marsool</h1>
+        <header class="header header-border">
+
+            <!-- End of Header Top -->
+
+            <div class="forweb header-middle">
+                <div class="container">
+                    <div class="header-left mr-md-4">
+
+                        <a href="." class="logo ml-lg-0">
+                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" />
+                        </a>
+                        <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
+
+                            <input style="border-right:1px solid #5b2871; border-left:0" type="text" class="form-control searchtxt" name="search"
+                                   placeholder="جستجو کنید" required />
+                            <button class="btn btn-search" style="border-left:1px solid #5b2871; border-right:0">
+                                <i class="w-icon-search"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="header-right ml-4">
+                        <div class="header-call d-xs-show d-lg-flex align-items-center">
+                            <a href="tel:#" class="w-icon-call"></a>
+                            <div class="call-info d-lg-show">
+                                <h4 class="chat font-weight-normal font-size-md text-normal ls-normal text-light mb-0">
+                                    <a href="mailto:#" class="text-capitalize"></a>
+                                </h4>
+                                <a href="tel:#" class="phone-number font-weight-bolder ls-50 priceItem">021-22931806</a>
+                            </div>
+                        </div>
+                        @if (Session["LogedInUser"] == null)
+                        {
+                            <a class="wishlist label-down link d-xs-show" href="/Home/Login">
+                                <i style="font-weight:600" class="w-icon-user"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.login</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="wishlist label-down link d-xs-show" href="/CustomerLogin/LogOff">
+                                <i style="font-weight:600" class="w-icon-logout"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.logout</span>
+                            </a>
+                        }
+
+                        <div class=" cart-dropdown cart-offcanvas mr-0 mr-lg-2" style="position:relative">
+                            <div class="cart-overlay"></div>
+                            <a href="/Home/checkout" class=" label-down link">
+                                <i class="w-icon-cart">
+                                    <span class="cart-count simpleCart_quantityy priceItem">0</span>
+                                </i>
+                                <span class="cart-label">سبد خرید</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+        <!-- End of Header -->
+        <!-- Start of Main-->
+        @RenderBody()
+
+
+        <!-- End of Main -->
+        <!-- Start of Footer -->
+    <footer class="footer appear-animate" data-animation-options="{
+            'name': 'fadeIn'
+        }">
+        <div class="footer-newsletter bg-primary">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-xl-5 col-lg-6">
+                        <div class="icon-box icon-box-side text-white" style="justify-content:right">
+                            <div class="icon-box-icon d-inline-flex">
+                                <i class="w-icon-envelop3"></i>
+                            </div>
+                            <div class="icon-box-content">
+                                <h4 class="icon-box-title text-white text-uppercase font-weight-bold">
+                                    @Resources.res.SubscribeNewsletter
+                                </h4>
+                                <p class="text-white">
+                                    @Resources.res.newsletterDesc
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-6 col-md-9 mt-4 mt-lg-0 ">
+                        <form action="#" method="get"
+                              class="input-wrapper input-wrapper-inline input-wrapper-rounded">
+                            <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
+                                   placeholder="@Resources.res.emailPlaceholder" />
+                            <button class="btn btn-dark btn-rounded" type="submit">
+                                @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-top">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="widget widget-about">
+                                <a href="demo10.html" class="logo-footer">
+                                    <img src="/webAsset/wolmart/assets/images/demos/demo10/footer-logo.png" alt="logo-footer" width="144"
+                                         height="45" />
+                                </a>
+                                <div class="widget-body">
+                                    <p class="widget-about-title">پشتیبانی 24 ساعته</p>
+                                    <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
+
+
+                                    <div class="social-icons social-icons-colored">
+                                        <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                        <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                        <a href="#" class="social-icon social-instagram w-icon-instagram"></a>
+                                        <a href="#" class="social-icon social-youtube w-icon-youtube"></a>
+                                        <a href="#" class="social-icon social-pinterest w-icon-pinterest"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget">
+                                <h3 class="widget-title">شرکت</h3>
+                                <ul class="widget-body">
+                                    <li><a href="about-us.html">درباره ما</a></li>
+                                    <li><a href="#">اعضای حصون</a></li>
+                                    <li><a href="#">همکاری</a></li>
+                                    <li><a href="contact-us.html">تماس با ما</a></li>
+                                    <li><a href="#">مشارکت در فروش</a></li>
+                                    <li><a href="#">سابقه خرید</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget">
+                                <h4 class="widget-title">حساب کاربری</h4>
+                                <ul class="widget-body">
+                                    <li><a href="#">پیگیری خرید</a></li>
+                                    <li><a href="cart.html">سبد خرید</a></li>
+                                    <li><a href="login.html">ورود</a></li>
+                                    <li><a href="#">پشتیبانی</a></li>
+                                    <li><a href="wishlist.html">لیست منتخب</a></li>
+                                    <li><a href="#">حریم خصوصی</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget">
+                                <h4 class="widget-title">خدمات مشتریان</h4>
+                                <ul class="widget-body">
+                                    <li><a href="#">روش های پرداخت</a></li>
+                                    <li><a href="#">تضمین بازگشت وجه</a></li>
+                                    <li><a href="#">عودت کالا</a></li>
+                                    <li><a href="#">مرکز پشتیبانی</a></li>
+                                    <li><a href="#">ارسال</a></li>
+                                    <li><a href="#">قوانین </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Page-wrapper-->
+    <!-- Start of Sticky Footer -->
+    <div class="sticky-footer sticky-content fix-bottom">
+        <a href="/" class="sticky-link active">
+            <i class="w-icon-home"></i>
+            <p>Home</p>
+        </a>
+        @*<a href="/Home/Index" class="sticky-link">
+                <i class="w-icon-category"></i>
+                <p>Shop</p>
+            </a>*@
+        <a href="/Home/myProfile" class="sticky-link">
+            <i class="w-icon-account"></i>
+            <p>Account</p>
+        </a>
+        <div class=" dir-up">
+            <a href="/Home/checkout" class="sticky-link">
+                <i class="w-icon-cart"></i>
+                <p>Cart</p>
+            </a>
+            <div class="dropdown-box">
+                <div class="products">
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product-default.html">
+                                    Beige knitted elas<br>tic
+                                    runner shoes
+                                </a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">$25.68</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="product-default.html">
+                                <img src="/webAsset/wolmart/assets/images/cart/product-1.jpg" alt="product" height="84" width="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product-default.html">
+                                    Blue utility pina<br>fore
+                                    denim dress
+                                </a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">$32.99</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="product-default.html">
+                                <img src="/webAsset/wolmart/assets/images/cart/product-2.jpg" alt="product" width="84" height="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-total">
+                    <label>Subtotal:</label>
+                    <span class="price">$58.67</span>
+                </div>
+
+                <div class="cart-action">
+                    <a href="cart.html" class="btn btn-dark btn-outline btn-rounded">View Cart</a>
+                    <a href="checkout.html" class="btn btn-primary  btn-rounded">Checkout</a>
+                </div>
+            </div>
+            <!-- End of Dropdown Box -->
+        </div>
+
+        <div class="header-search hs-toggle dir-up">
+            <a href="#" class="search-toggle sticky-link">
+                <i class="w-icon-search"></i>
+                <p>Search</p>
+            </a>
+            <form action="#" class="input-wrapper">
+                <input type="text" class="form-control" name="search" autocomplete="off" placeholder="Search"
+                       required />
+                <button class="btn btn-search" type="submit">
+                    <i class="w-icon-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- End of Sticky Footer -->
+    <!-- Start of Scroll Top -->
+    <a id="scroll-top" class="scroll-top" href="#top" title="Top" role="button">
+        <i class="w-icon-angle-up"></i> <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+            <circle id="progress-indicator" fill="transparent" stroke="#000000" stroke-miterlimit="10" cx="35" cy="35"
+                    r="34" style="stroke-dasharray: 16.4198, 400;"></circle>
+        </svg>
+    </a>
+    <!-- End of Scroll Top -->
+    <!-- Start of Mobile Menu -->
+    
+
+    <!-- End of Mobile Menu -->
+    <!-- Start of Newsletter popup -->
+    <div class="newsletter-popup mfp-hide">
+        <div class="newsletter-content">
+            <h4 class="text-uppercase font-weight-normal ls-25">Get Up to<span class="text-primary">25% Off</span></h4>
+            <h2 class="ls-25">Sign up to Marsool</h2>
+            <p class="text-light ls-10">
+                Subscribe to the Marsool market newsletter to
+                receive updates on special offers.
+            </p>
+            <form action="#" method="get" class="input-wrapper input-wrapper-inline input-wrapper-round">
+                <input type="email" class="form-control email font-size-md" name="email" id="email2"
+                       placeholder="Your email address" required="">
+                <button class="btn btn-dark" type="submit">SUBMIT</button>
+            </form>
+            <div class="form-checkbox d-flex align-items-center">
+                <input type="checkbox" class="custom-checkbox" id="hide-newsletter-popup" name="hide-newsletter-popup"
+                       required="">
+                <label for="hide-newsletter-popup" class="font-size-sm text-light">Don't show this popup again.</label>
+            </div>
+        </div>
+    </div>
+    <!-- End of Newsletter popup -->
+    <!-- Start of Quick View -->
+    <div class="product product-single product-popup">
+        <div class="row gutter-lg">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="product-gallery product-gallery-sticky">
+                    <div class="swiper-container product-single-swiper swiper-theme nav-inner">
+                        <div class="swiper-wrapper row cols-1 gutter-no">
+                            <div class="swiper-slide">
+                                <figure class="product-image">
+                                    <img src="/webAsset/wolmart/assets/images/products/popup/1-440x494.jpg"
+                                         data-zoom-image="/webAsset/wolmart/assets/images/products/popup/1-800x900.jpg"
+                                         alt="Water Boil Black Utensil" width="800" height="900">
+                                </figure>
+                            </div>
+                            <div class="swiper-slide">
+                                <figure class="product-image">
+                                    <img src="/webAsset/wolmart/assets/images/products/popup/2-440x494.jpg"
+                                         data-zoom-image="/webAsset/wolmart/assets/images/products/popup/2-800x900.jpg"
+                                         alt="Water Boil Black Utensil" width="800" height="900">
+                                </figure>
+                            </div>
+                            <div class="swiper-slide">
+                                <figure class="product-image">
+                                    <img src="/webAsset/wolmart/assets/images/products/popup/3-440x494.jpg"
+                                         data-zoom-image="/webAsset/wolmart/assets/images/products/popup/3-800x900.jpg"
+                                         alt="Water Boil Black Utensil" width="800" height="900">
+                                </figure>
+                            </div>
+                            <div class="swiper-slide">
+                                <figure class="product-image">
+                                    <img src="/webAsset/wolmart/assets/images/products/popup/4-440x494.jpg"
+                                         data-zoom-image="/webAsset/wolmart/assets/images/products/popup/4-800x900.jpg"
+                                         alt="Water Boil Black Utensil" width="800" height="900">
+                                </figure>
+                            </div>
+                        </div>
+                        <button class="swiper-button-next"></button>
+                        <button class="swiper-button-prev"></button>
+                    </div>
+                    <div class="product-thumbs-wrap swiper-container" data-swiper-options="{
+                        'navigation': {
+                            'nextEl': '.swiper-button-next',
+                            'prevEl': '.swiper-button-prev'
+                        }
+                    }">
+                        <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
+                            <div class="product-thumb swiper-slide">
+                                <img src="/webAsset/wolmart/assets/images/products/popup/1-103x116.jpg" alt="Product Thumb" width="103"
+                                     height="116">
+                            </div>
+                            <div class="product-thumb swiper-slide">
+                                <img src="/webAsset/wolmart/assets/images/products/popup/2-103x116.jpg" alt="Product Thumb" width="103"
+                                     height="116">
+                            </div>
+                            <div class="product-thumb swiper-slide">
+                                <img src="/webAsset/wolmart/assets/images/products/popup/3-103x116.jpg" alt="Product Thumb" width="103"
+                                     height="116">
+                            </div>
+                            <div class="product-thumb swiper-slide">
+                                <img src="/webAsset/wolmart/assets/images/products/popup/4-103x116.jpg" alt="Product Thumb" width="103"
+                                     height="116">
+                            </div>
+                        </div>
+                        <button class="swiper-button-next"></button>
+                        <button class="swiper-button-prev"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 overflow-hidden p-relative">
+                <div class="product-details scrollable pl-0">
+                    <h2 class="product-title">Electronics Black Wrist Watch</h2>
+                    <div class="product-bm-wrapper">
+                        <figure class="brand">
+                            <img src="/webAsset/wolmart/assets/images/products/brand/brand-1.jpg" alt="Brand" width="102" height="48" />
+                        </figure>
+                        <div class="product-meta">
+                            <div class="product-categories">
+                                Category:
+                                <span class="product-category"><a href="#">Electronics</a></span>
+                            </div>
+                            <div class="product-sku">
+                                SKU: <span>MS46891340</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="product-divider">
+
+                    <div class="product-price">$40.00</div>
+
+                    <div class="ratings-container">
+                        <div class="ratings-full">
+                            <span class="ratings" style="width: 80%;"></span>
+                            <span class="tooltiptext tooltip-top"></span>
+                        </div>
+                        <a href="#" class="rating-reviews">(3 Reviews)</a>
+                    </div>
+
+                    <div class="product-short-desc">
+                        <ul class="list-type-check list-style-none">
+                            <li>Ultrices eros in cursus turpis massa cursus mattis.</li>
+                            <li>Volutpat ac tincidunt vitae semper quis lectus.</li>
+                            <li>Aliquam id diam maecenas ultricies mi eget mauris.</li>
+                        </ul>
+                    </div>
+
+                    <hr class="product-divider">
+
+                    <div class="product-form product-variation-form product-color-swatch">
+                        <label>Color:</label>
+                        <div class="d-flex align-items-center product-variations">
+                            <a href="#" class="color" style="background-color: #ffcc01"></a>
+                            <a href="#" class="color" style="background-color: #ca6d00;"></a>
+                            <a href="#" class="color" style="background-color: #1c93cb;"></a>
+                            <a href="#" class="color" style="background-color: #ccc;"></a>
+                            <a href="#" class="color" style="background-color: #333;"></a>
+                        </div>
+                    </div>
+                    <div class="product-form product-variation-form product-size-swatch">
+                        <label class="mb-1">Size:</label>
+                        <div class="flex-wrap d-flex align-items-center product-variations">
+                            <a href="#" class="size">Small</a>
+                            <a href="#" class="size">Medium</a>
+                            <a href="#" class="size">Large</a>
+                            <a href="#" class="size">Extra Large</a>
+                        </div>
+                        <a href="#" class="product-variation-clean">Clean All</a>
+                    </div>
+
+                    <div class="product-variation-price">
+                        <span></span>
+                    </div>
+
+                    <div class="product-form">
+                        <div class="product-qty-form">
+                            <div class="input-group">
+                                <input class="quantity form-control" type="number" min="1" max="10000000">
+                                <button class="quantity-plus w-icon-plus"></button>
+                                <button class="quantity-minus w-icon-minus"></button>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-cart">
+                            <i class="w-icon-cart"></i>
+                            <span>Add to Cart</span>
+                        </button>
+                    </div>
+
+                    <div class="social-links-wrapper">
+                        <div class="social-links">
+                            <div class="social-icons social-no-color border-thin">
+                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                <a href="#" class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                                <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                                <a href="#" class="social-icon social-youtube fab fa-linkedin-in"></a>
+                            </div>
+                        </div>
+                        <span class="divider d-xs-show"></span>
+                        <div class="product-link-wrapper d-flex">
+                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                            <a href="#"
+                               class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Quick view -->
+    <!-- Plugin JS File -->
+
+    <script src="/webAsset/wolmart/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/zoom/jquery.zoom.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/skrollr/skrollr.min.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var getquntity = function () {
+
+
+
+            $.ajax({
+                url: '/Home/getquntitiy',
+                dataType: 'html',
+                success: function (data) {
+                    var total = 0;
+                    var srtcookie = data;
+
+                    if (srtcookie.length > 0) {
+                        srtcookie = srtcookie.replace(/&quot;/g, '"');
+                        JSON.parse(srtcookie).forEach(function (item) {
+
+                            let valueID = "value" + item.productid;
+                            let valueAllID = "valueAll" + item.productid;
+
+                            let count = 0;
+                            JSON.parse(srtcookie).forEach(function (newitem) {
+                                if (newitem.productid == item.productid) {
+                                    count += newitem.quantity;
+                                }
+                            });
+
+                            $("." + valueAllID).text(count);
+                            total += parseInt(item.quantity);
+
+                            let addson = item.productid + "*" + item.addson;
+
+                            $("." + valueID).each(function () {
+                                var insrt = $(this).attr('addson');
+                                if (insrt == addson) {
+
+                                    $(this).text(item.quantity)
+                                    $(this).val(item.quantity)
+                                }
+                            })
+
+
+
+
+                            //$("." + valueID).text(count);
+                            //$("." + valueID).val(count);
+
+                            //if (item.quantity == "0") {
+                            //    $("." + valueID).parent().parent().find('.addButton').show();
+                            //    $("." + valueID).parent().parent().find('.addholder').hide();
+                            //}
+                            //else {
+                            //    $("." + valueID).parent().parent().find('.addButton').hide();
+                            //    $("." + valueID).parent().parent().find('.addholder').show();
+                            //}
+
+
+                        });
+                        $(".simpleCart_quantityy").text(total)
+
+                    } else {
+                        $(".simpleCart_quantityy").text("0")
+                    };
+                }
+
+            })
+        };
+        getquntity();
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <!-- Main JS -->
+    <script src="/webAsset/wolmart/assets/js/main.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            min-height: 90vh
+        }
+    </style>
+    <script>
+        var minusfromcart = function (el, ID, addson) {
+            var tarafH = el;
+            var RealID = "delet";
+            var tobeid = RealID.concat(ID);
+            $.ajax({
+                url: '/Home/minusfromcart',
+                dataType: 'html',
+                data: {
+                    id: tobeid,
+                    price: tarafH,
+                    addson: addson
+
+                },
+                success: function (data) {
+
+                    //getquntity();
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000,
+                    }
+                    toastr.success('با موفقیت انجام شد');
+                    getquntity();
+                },
+                error: function () {
+                    alert("خطا")
+                }
+
+
+            });
+        }
+        var addtocart = function (el, ID, addson) {
+            var tarafH = el;
+            var quantity = $("#fquantity").val();
+            var RealID = "addtocarto";
+            var tobeid = RealID.concat(ID);
+            $.ajax({
+                url: '/Home/addtocart',
+                data: {
+                    id: tobeid,
+                    price: tarafH,
+                    quantity: quantity,
+                    addson: addson
+
+                },
+                success: function (data) {
+
+
+                    // getquntity();
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 10000,
+                        "extendedTimeOut": 1000,
+                    }
+                    toastr.success('با موفقیت انجام شد');
+
+                    getquntity();
+                },
+
+                error: function () {
+
+                }
+            });
+        }
+
+        var removeAllFromCart = function (el, ID, addson) {
+            var tarafH = el;
+            var tobeid = "del" + ID;
+
+            $.ajax({
+                url: '/Home/deletefromcart',
+                dataType: 'html',
+                data: {
+                    id: tobeid,
+                    price: tarafH,
+                    addson: addson
+                },
+                success: function (data) {
+                    window.location.reload()
+
+
+                },
+                error: function () {
+
+                }
+
+
+            });
+        }
+
+    </script>
+</body>
+
+</html>

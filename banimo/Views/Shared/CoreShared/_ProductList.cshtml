@@ -82,7 +82,7 @@
         </div>
     </div>
     <div id="residModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg" >
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
@@ -182,7 +182,7 @@
             </div>
         </div>
     </div>
-  
+
     <div id="editModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
             <!-- Modal content-->
@@ -202,123 +202,105 @@
 
 
 
-        <div class="row">
-            <div style="overflow-x:auto;padding:10px">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
-    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
-                        <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> لیست محصولات </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="morris-area-chart">
-                            <div style="overflow:auto">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                ID
-                                                @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
-                                            </th>
-                                            <th>
-                                                عنوان
-                                            </th>
-                                            <th>
-                                                رنگ
-                                            </th>
-                                            <th>
-                                                شاخص
-                                            </th>
-                                            <th>
-                                                تعداد
-                                            </th>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                        @*@Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                    </th>
+                    <th>
+                        عنوان
+                    </th>
+                    <th>
+                        رنگ
+                    </th>
+                    <th>
+                        شاخص
+                    </th>
+                    <th>
+                        تعداد
+                    </th>
 
-                                            <th>
-                                                تعداد اولیه
-                                            </th>
+                    <th>
+                        تعداد اولیه
+                    </th>
 
-                                            <th>
-                                            </th>
-                                            <th>
-                                            </th>
-                                            <th>
-                                            </th>
-                                            <th>
-                                            </th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
 
 
 
-                                    <tbody>
-                                        @foreach (var item in Model.products)
-                                        {
-                                            string color = item.color;
-                                            <tr id="@item.ID">
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ID)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.title)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.color)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.selectedFilter)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.count)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.initCount)
-                                                </td>
+            <tbody>
+                @foreach (var item in Model.products)
+                {
+                    string color = item.color;
+                    <tr id="@item.ID">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.color)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.selectedFilter)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.count)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.initCount)
+                        </td>
 
-                                                <td>
-                                                    <a dataToEdit=@item.ID class="btn btn-primary editItem" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
+                        <td>
+                            <a dataToEdit=@item.ID class="btn btn-primary editItem" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">ویرایش</a>
 
 
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        <a dataToDel="@item.ID" class="btn btn-primary deleteButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
+                        </td>
+                        <td>
+                            @{
+                                <a dataToDel="@item.ID" class="btn btn-primary deleteButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;">حذف</a>
 
-                                                    }
+                            }
 
-                                                </td>
-                                                <td>
-                                                    @{
+                        </td>
+                        <td>
+                            @{
 
-                                                        <a dataToResid=@item.ID class="btn btn-primary residButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال تامین کننده</a>
+                                <a dataToResid=@item.ID class="btn btn-primary residButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال تامین کننده</a>
 
-                                                    }
-                                                </td>
+                            }
+                        </td>
 
-                                                <td>
-                                                    @{
+                        <td>
+                            @{
 
-                                                        <a dataToHavale=@item.ID class="btn btn-primary havaleButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال انبار</a>
+                                <a dataToHavale=@item.ID class="btn btn-primary havaleButt" style="  margin:5px ; cursor: pointer;  padding: 5px; color: #fff; border-radius: 5px;"> انتقال انبار</a>
 
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">تخصیص</button>
-                                                </td>
+                            }
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info addtoserver" data-toggle="modal" data-target="#serverModal" id="@item.ID">تخصیص</button>
+                        </td>
 
-                                            </tr>
-                                        }
+                    </tr>
+                }
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </tbody>
+        </table>
 
 
 
@@ -333,7 +315,7 @@
 
                 var id = $(this).attr('id');
                 $("#takhsisID").val(id);
-               
+
 
             })
             $(".specialOffer").click(function () {
@@ -527,9 +509,9 @@
             }
             <script>
                 $(".pagingnumberforall").click(function () {
-                   
+
                     var num = this.textContent;
-                  
+
                     var cat = $("#selectedCat").val();
                     var filter = $("#selectedFilter").val();
                     var brand = $("#selectedBrand").val();

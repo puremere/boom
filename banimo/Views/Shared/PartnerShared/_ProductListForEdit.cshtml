@@ -10,6 +10,21 @@
 <link href="~/Content/easy-autocomplete.min.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.easy-autocomplete.min.js"></script>
 <script>
+    $('input.inputnumber').keyup(function (event) {
+        
+        if (event.which >= 37 && event.which <= 40) return;
+        $(this).val(function (index, value) {
+            return value
+                // Keep only digits and decimal points:
+                .replace(/[^\d.]/g, "")
+                // Remove duplicated decimal point, if one exists:
+                .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
+                // Keep only two digits past the decimal point:
+                .replace(/\.(\d{2})\d+/, '.$1')
+                // Add thousands separators:
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        });
+    });
     $(".addform").on('keyup', function (e) {
 
         var value = $("#addItemToOrderInput").val();
@@ -160,7 +175,7 @@
                                     <i id="refreshList" style="font-size:22px ; padding:5px" class="fa fa-refresh"></i>
                                 </div>
 
-                                <div id="addItemToOrderButton" style="display:inline-block" class="btn  btn-success">تایید</div>
+                                <div id="addItemToOrderButton" style="display:inline-block" class="btn  btn-success">@Resources.res.OK</div>
                             </div>
                         </div>
                     </div>
@@ -270,8 +285,8 @@
                         <input id="ProductSelectedID" style="display:none" />
 
                         <div style="margin:5px;">
-                            <p id="modalmessage">@Resources.res.price </p>
-                            <input id="addprice" class="form-control" value="1" />
+                            <p id="modalmessage ">@Resources.res.price (@Resources.res.vahed) </p>
+                            <input id="addprice" class="form-control inputnumber" value="2" />
                         </div>
                         <div style="margin:5px;">
                             <p id="modalmessage">@Resources.res.count</p>
@@ -286,9 +301,13 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
+                    <button id="closeAddItemModalButton" type="button" class="btn btn-danger" data-dismiss="modal" style="margin:7px;">@Resources.res.cancel</button>
                     <button id="confirmAddItemCount" type="button" class="btn btn-success" data-dismiss="modal" style="margin: 7px;">@Resources.res.OK</button>
                     <script>
+                       
+                        $("#closeAddItemModalButton").click(function () {
+                            $("#addItemCountModal").modal('toggle');
+                        })
                         $("#confirmAddItemCount").click(function () {
                             $("#myModal").modal('hide');
                             var amani = "";
@@ -299,6 +318,8 @@
                                 amani = "0";
                             }
                             var price = $("#addprice").val();
+                          
+                            price = price.replace(",", "")
                             var count = $("#addcount").val();
                             var ID = $("#ProductSelectedID").val();
 
@@ -357,7 +378,7 @@
                         <input id="ProductSelectedID0" style="display:none" />
 
                         <div style="margin:5px;">
-                            <p id="modalmessage">@Resources.res.purchasePrice</p>
+                            <p id="modalmessage">  @Resources.res.purchasePrice</p>
                             <input id="returnprice" class="form-control" value="1" />
                         </div>
                         <div style="margin:5px;">
@@ -573,10 +594,10 @@
 
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.count</th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Price Befor Discount</th>*@
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;"> @Resources.res.price</th>
                         @*<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Discount(percent)</th>*@
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.active?</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.available?</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.active</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.available</th>
                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.image</th>
 
                         @if (Model.data.First().setID == "1")
@@ -675,7 +696,7 @@
                         <td>
                             <div>
 
-                                <p class="quickEditInput  ">@item.price</p>
+                                <p class="quickEditInput  ">@string.Format("{0:n0}", decimal.Parse(@item.price))</p>
                                 <input style="display:none" value="@item.price" class="quickEditInput  quickFinalPrice" />
                             </div>
 
@@ -1058,9 +1079,10 @@
                 var id = $(this).parent().attr('id');
                 $("#ProductSelectedID").val(id);
                 var text = $(this).parent().parent().find(".titemHOlder").text().trim();
-                var lableText = "  Add Inventory For " + text;
+                var lableText = " @Resources.res.addInventoryText " + text;
                 $("#addCountLable").text(lableText)
-
+                $("#addCountLable").append("<br />" );
+                $("#addCountLable").append("@Resources.res.inventoryDesc")
                 $("#addItemCountModal").modal('toggle');
 
             })

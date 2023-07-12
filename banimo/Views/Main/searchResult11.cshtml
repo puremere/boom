@@ -1,0 +1,136 @@
+﻿
+@model banimo.ViewModel.BzListVM
+@{
+    Layout = "~/Views/Shared/_mainLayout11.cshtml";
+}
+
+    <main class="main">
+        <!-- Start of Breadcrumb -->
+        <nav class="breadcrumb-nav">
+            <div class="container">
+                <ul class="breadcrumb mb-6">
+                    <li><a href="/">@Resources.res.home</a></li>
+                    <li>@Resources.res.VendorList</li>
+                </ul>
+            </div>
+        </nav>
+        <!-- End of Breadcrumb -->
+        <!-- Start of Pgae Contetn -->
+        <div class="page-content mb-10 pb-2">
+            <div class="container">
+                <!-- Start of Vendor Toolbox -->
+                <div class="toolbox vendor-toolbox pb-0">
+                    <div class="toolbox-left mb-4 mb-md-0">
+                        <a href="#" class="btn btn-primary btn-outline btn-rounded btn-icon-left vendor-search-toggle "><i class="w-icon-category"></i>@Resources.res.Filter</a>
+                        <label class="d-block"> @Resources.res.TotalStoreShowing<span></span></label>
+                    </div>
+                    @*<div class="toolbox-right">  /*#62b3ec*/ #5b2871
+                                <div class="toolbox-item toolbox-sort select-box mb-0">
+                                    <label class="font-weight-normal">Sort by:</label>
+                                    <select name="orderby" class="form-control">
+                                        <option value="default" selected="selected">Default</option>
+                                        <option value="recent">Most Recent</option>
+                                        <option value="popular">Most Popular</option>
+                                    </select>
+                                </div>
+                                <div class="toolbox-item toolbox-layout mb-0 d-flex">
+                                    <a href="vendor-dokan-store-grid.html" class="icon-mode-grid btn-layout">
+                                        <i class="w-icon-grid"></i>
+                                    </a>
+                                    <a href="vendor-dokan-store-list.html" class="icon-mode-list btn-layout active">
+                                        <i class="w-icon-list"></i>
+                                    </a>
+                                </div>
+                            </div>*@
+                </div>
+                <!-- End of Vendor Toolbox -->
+                <!-- Start of Vendor Search Wrapper -->
+                <div class="vendor-search-wrapper">
+                    <div class="vendor-search-form">
+                        <input type="text" class="form-control mr-4 bg-white" name="vendor" id="vendor"
+                               placeholder="@Resources.res.SearchVendors" />
+                        <button class="btn btn-primary btn-rounded searchbtn" type="submit">@Resources.res.Apply</button>
+                    </div>
+                    <!-- End of Vendor Search Form -->
+                </div>
+                <!-- End of Vendor Search Wrapper -->
+
+                @{
+                    if (Model.bzlist != null)
+                    {
+                        foreach (var item in Model.bzlist)
+                        {
+                            <div class="store store-list mt-4">
+                                <div class="store-header">
+                                    <a href="/home/index?partnerID=@item.url">
+                                        <figure class="store-banner">
+                                            <img src="@item.img" alt="Vendor"
+                                                 width="400" height="188" style="background-color: #40475E" />
+                                        </figure>
+                                    </a>
+                                    @*<label class="featured-label">Featured</label>*@
+                                </div>
+                                <!-- End of Store Header -->
+                                <div class="store-content">
+                                    <figure class="seller-brand">
+                                        <img src="@item.logo" alt="Brand" width="80" height="80" />
+                                    </figure>
+                                    <div class="seller-date">
+                                        <h4 class="store-title">
+                                            <a href="/home/index?partnerID=@item.url">@item.title</a>
+                                        </h4>
+                                        <div class="ratings-container">
+                                            <div class="ratings-full">
+                                                <span class="ratings" style="width: 100%;"></span>
+                                                <span class="tooltiptext tooltip-top"></span>
+                                            </div>
+                                        </div>
+                                        <div class="store-address">
+                                            @item.address
+                                        </div>
+                                        <a href="/home/index?partnerID=@item.url" class="btn btn-dark btn-link btn-underline btn-icon-right btn-visit">
+                                            Visit Store<i class="w-icon-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- End of Store Content -->
+                            </div>
+                            <!-- End of Store List -->
+                        }
+                    }
+                }
+
+
+
+
+
+            </div>
+        </div>
+        @section scripts{
+            <script>
+                $(".searchbtn").click(function () {
+                    var title = $("#vendor").val()
+
+                    $.ajax({
+                        url: '/Main/setValues',
+                        dataType: 'html',
+                        data: {
+                            query: title
+                        },
+                        success: function (data) {
+                            window.location.href = "/Main/searchResult";
+                        },
+                        error: function () {
+                            alert("error")
+                        }
+
+
+                    });
+
+                })
+            </script>
+        }
+
+        <!-- End of Page Content -->
+    </main>  <!-- End of Main -->
+

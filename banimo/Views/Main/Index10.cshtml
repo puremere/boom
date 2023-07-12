@@ -1,7 +1,7 @@
 ﻿@model banimo.ViewModel.MainViewModel.mainIndex
 
 @{
-    Layout = "~/Views/Shared/_mainLayout8.cshtml";
+    Layout = "~/Views/Shared/_mainLayout10.cshtml";
 }
 <style>
     .vendor-widget-banner {
@@ -54,6 +54,8 @@
     .searchHolder {
         display: flex;
         justify-content: center;
+        width:90%;
+        margin:auto;
     }
 
     .searchsection {
@@ -140,76 +142,72 @@
     }
 </style>
 <main class="main">
-    @if (Model.cat.Count() > 1)
+
+    @if (!Request.Browser.IsMobileDevice)
     {
+        if (Model.cat.Count() > 1)
+        {
 
 
-        <section class="  btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color: #f8f8f8; position: relative; overflow: hidden;">
-            <div class="container">
-                @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
-                <div class="row">
+            <section class="  btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color: #f8f8f8; position: relative; overflow: hidden;">
+                <div class="container">
 
-                    <div class="col-lg-12 col">
-                        <div class="btn-group" style="justify-content:center">
+                    <div class="row">
 
-                            <div class="btn-wrap show-code-action">
-                                <a href="/Main/Index" class="btn btn-secondary btn-outline btn-rounded" style="background-color:#34970b; color:white">بازار </a>
+                        <div class="col-lg-12 col">
+                            <div class="btn-group" style="justify-content:center">
+
+                                <div class="btn-wrap show-code-action">
+                                    <a href="/" class="btn btn-secondary btn-outline btn-rounded" style="background-color:#5b2871; color:white">Marketplace</a>
+                                </div>
+                                <div class="btn-wrap show-code-action">
+                                    <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded">Food </a>
+                                </div>
+                                <div class="btn-wrap show-code-action">
+                                    @if (Session["LogedInUser"] != null)
+                                    {
+                                        <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">Delivery Services </a>
+
+                                    }
+                                    else
+                                    {
+                                        <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">Delivery Services </a>
+
+                                    }
+                                </div>
                             </div>
-                            <div class="btn-wrap show-code-action">
-                                <a href="/Home/Index" id="59-1" class=" btn btn-secondary btn-outline btn-rounded">فروشگاه </a>
-                            </div>
-                            @*<div class="btn-wrap show-code-action">
-                                @if (Session["LogedInUser"] != null)
-                                {
-                                <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                                }
-                                else
-                                {
-                                    <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                                }
-                            </div>*@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    }
-    else
-    {
-        <section class="btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color:#f8f8f8; position: relative; overflow: hidden;">
-            <div class="container">
-                @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
-                <div class="row">
+            </section>
+        }
+        else
+        {
+            <section class="btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color:#f8f8f8; position: relative; overflow: hidden;">
+                <div class="container">
+                    @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
+                    <div class="row">
 
-                    <div class="col-lg-12 col">
-                        <div class="btn-group" style="justify-content:center">
+                        <div class="col-lg-12 col">
+                            <div class="btn-group" style="justify-content:center">
 
-                            <div class="btn-wrap show-code-action">
-                                <a href="/" class="btn btn-secondary btn-outline btn-rounded">بازار </a>
+                                <div class="btn-wrap show-code-action">
+                                    <a href="/" class="btn btn-secondary btn-outline btn-rounded">Marketplace</a>
+                                </div>
+                                <div class="btn-wrap show-code-action">
+                                    <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded" style="background-color:#5b2871; color:white">Food </a>
+                                </div>
+                                <div class="btn-wrap show-code-action">
+                                    <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">Delivery Services </a>
+                                </div>
                             </div>
-                            <div class="btn-wrap show-code-action">
-                                <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded"  style="background-color:#5b2871; color:white">فشن </a>
-                            </div>
-                            @*<div class="btn-wrap show-code-action">
-                    @if (Session["LogedInUser"] != null)
-                    {
-                    <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                    }
-                    else
-                    {
-                        <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                    }
-                </div>*@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        }
     }
+
 
 
     @if (Request.Browser.IsMobileDevice && Model.cat.Count() == 1)
@@ -299,13 +297,13 @@
                         'disableOnInteraction': false
                     }
                 }">
-            <div class="swiper-wrapper row gutter-no cols-1" >
+            <div class="swiper-wrapper row gutter-no cols-1">
                 @foreach (var item in slideLIst)
                 {
                     int i = Model.sld.IndexOf(item) + 1;
                     string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
-                    <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="height:400px; background-image: url(@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
-                        <div class="container; ">
+                    <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" background-image: url(@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
+                        <div class="container">
 
                             <div class="banner-content y-50 d-inline-block">
                                 <div class="slide-animate" data-animation-options="{
@@ -365,7 +363,7 @@
                         }
                     }
                 }">
-            <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" style="margin-right:35%">
+            <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2">
                 @if (Model.cat.Count() > 1)
                 {
                     foreach (var item in Model.cat)
@@ -491,7 +489,7 @@
                             {
                                 string classname = "p" + @item.First().cat;
                                 <div id="@item.First().cat-1" class="btn-wrap show-code-action final  @classname categoryitemchild">
-                                    <a href="#" class="btn btn-primary btn-outline">@Resources.res.seeMore</a>
+                                    <a href="#" class="btn btn-primary btn-outline">See All</a>
                                 </div>
 
                             }
@@ -510,7 +508,7 @@
                                 string classname = "p" + @item.url;
                                 string pID = item.url.ToString();
                                 <div id="" class="btn-wrap show-code-action    categoryitemchild  @classname">
-                                    <a href="/Home/index?partnerID=@pID" class="btn btn-primary btn-outline">@Resources.res.seeMore</a>
+                                    <a href="/Home/index?partnerID=@pID" class="btn btn-primary btn-outline">See More</a>
                                 </div>
 
                             }
@@ -538,11 +536,14 @@
             <div class="swiper-wrapper row cols-lg-3 cols-sm-2 cols-1">
                 @if (Model.banners.Count() > 0)
                 {
-
-
-                    string url = Model.banners.SingleOrDefault(x => x.title == "1") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "1").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "1") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "1").image;
-
+                    string url = "";
+                    string image = "";
+                    int count = Model.banners.Where(x => x.title == "1").ToList().Count();
+                    if (count > 0)
+                    {
+                        url = Model.banners.Where(x => x.title == "1").First().catIDOrLink;
+                        image = Model.banners.Where(x => x.title == "1").First().image;
+                    }
                     <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed category-banner">
                         <figure class="br-sm">
                             <img src="@image" alt="Category Banner" width="400"
@@ -554,8 +555,14 @@
                 }
                 @if (Model.banners.Count() > 1)
                 {
-                    string url = Model.banners.SingleOrDefault(x => x.title == "2") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "2").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "2") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "2").image;
+                    string url = "";
+                    string image = "";
+                    int count = Model.banners.Where(x => x.title == "2").ToList().Count();
+                    if (count > 0)
+                    {
+                        url = Model.banners.Where(x => x.title == "2").First().catIDOrLink;
+                        image = Model.banners.Where(x => x.title == "2").First().image;
+                    }
 
                     <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed category-banner">
                         <figure class="br-sm">
@@ -568,9 +575,14 @@
                 }
                 @if (Model.banners != null)
                 {
-                    string url = Model.banners.SingleOrDefault(x => x.title == "3") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "3").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "3") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "3").image;
-
+                    string url = "";
+                    string image = "";
+                    int count = Model.banners.Where(x => x.title == "3").ToList().Count();
+                    if (count > 0)
+                    {
+                        url = Model.banners.Where(x => x.title == "3").First().catIDOrLink;
+                        image = Model.banners.Where(x => x.title == "3").First().image;
+                    }
                     <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed category-banner">
                         <figure class="br-sm">
                             <img src="@image" alt="Category Banner" width="400"
@@ -591,14 +603,16 @@
 
         @if (Model.rec != null)
         {
-            <div class="title-link-wrapper mb-4 appear-animate">
-                <h2 class="title title-link title-vendor pt-2 pb-2"> @Resources.res.RecommendedItems</h2>
+            if (Model.rec.Count() > 0)
+            {
+                <div class="title-link-wrapper mb-4 appear-animate">
+                    <h2 class="title title-link title-vendor pt-2 pb-2"> @Resources.res.RecommendedItems</h2>
 
 
-            </div>
-            <div class="swiper">
-                <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
-                     data-swiper-options="{
+                </div>
+                <div class="swiper">
+                    <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
+                         data-swiper-options="{
                         'spaceBetween': 20,
                         'slidesPerView': 1.3,
                         'breakpoints': {
@@ -613,41 +627,43 @@
                             }
                         }
                     }">
-                    <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
-                        @foreach (var spec in Model.rec)
-                        {
-                            <div class="swiper-slide vendor-widget">
-                                <div class="vendor-widget-banner">
-                                    <figure class="vendor-banner">
-                                        <a href="/home/index?partnerID=@spec.url">
-                                            <img src="@spec.img" alt="Vendor Banner"
-                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
-                                        </a>
-                                    </figure>
-                                    <div class="vendor-details">
-                                        <figure class="vendor-logo">
+                        <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
+                            @foreach (var spec in Model.rec)
+                            {
+                                <div class="swiper-slide vendor-widget">
+                                    <div class="vendor-widget-banner">
+                                        <figure class="vendor-banner">
                                             <a href="/home/index?partnerID=@spec.url">
-                                                <img src="@spec.logo"
-                                                     alt="Vendor Logo" width="90" height="90" />
+                                                <img src="@spec.img" alt="Vendor Banner"
+                                                     width="1200" height="390" style="background-color: #ECE7DF;" />
                                             </a>
                                         </figure>
-                                        <div class="vendor-personal">
-                                            <h4 class="vendor-name">
-                                                <a href="/home/index?partnerID=@spec.url">@spec.title</a>
-                                            </h4>
-                                            @*<span class="vendor-product-count">27 Products</span>*@
+                                        <div class="vendor-details">
+                                            <figure class="vendor-logo">
+                                                <a href="/home/index?partnerID=@spec.url">
+                                                    <img src="@spec.logo"
+                                                         alt="Vendor Logo" width="90" height="90" />
+                                                </a>
+                                            </figure>
+                                            <div class="vendor-personal">
+                                                <h4 class="vendor-name">
+                                                    <a href="/home/index?partnerID=@spec.url">@spec.title</a>
+                                                </h4>
+                                                @*<span class="vendor-product-count">27 Products</span>*@
+                                            </div>
                                         </div>
                                     </div>
+                                    <!-- End of Vendor Widget Banner -->
                                 </div>
-                                <!-- End of Vendor Widget Banner -->
-                            </div>
-                        }
+                            }
 
 
+                        </div>
+                        <div class="swiper-pagination"></div>
                     </div>
-                    <div class="swiper-pagination"></div>
                 </div>
-            </div>
+            }
+
         }
 
 
@@ -711,15 +727,13 @@
                 }
                 @if (Model.banners != null)
                 {
-
-
                     string url = Model.banners.SingleOrDefault(x => x.title == "5") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "5").catIDOrLink;
                     string image = Model.banners.SingleOrDefault(x => x.title == "5") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "5").image;
 
                     <div urltogo="@url" class="slideitem col-md-6 mb-4">
                         <div class="banner banner-fixed br-sm">
                             <figure>
-                                <img src="@image" alt="Category Banner" width="610"
+                                <img src="@Model.banners[4].image" alt="Category Banner" width="610"
                                      height="150" style="background-color: #F3F3F1;" />
                             </figure>
 
@@ -756,33 +770,32 @@
                             }
                         }
                     }">
-                    <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
+                    <div class=" swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
                         @foreach (var spec in Model.spc)
                         {
-                            string url =  @spec.logo;
-                            <div class="swiper-slide vendor-widget">
-                                <figure class="brandHolder">
+                            string url = @spec.logo;
+                            <div class="swiper-slide vendor-widget itemToCheck">
+                                <figure class="brandHolder" style="">
                                     <a class="" href="/home/index?partnerID=@spec.url">
-                                        <img src="@url" alt="Vendor Banner"
-                                             width="1200" height="390" style="background-color: #ECE7DF;" />
+                                        <img src="@url" alt="Vendor Banner " style="width:100%; height:100%; background-color: #ECE7DF;object-fit:cover" />
                                     </a>
                                 </figure>
                             </div>
-                            <style>
 
-                                .brandHolder {
-                                    -webkit-box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
-                                    box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
-                                    padding: 5px;
-                                    border-radius: 10px
-                                }
-
-                                    .brandHolder img {
-                                        border-radius: 5px
-                                    }
-                            </style>
                         }
+                        <style>
 
+                            .brandHolder {
+                                -webkit-box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
+                                box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
+                                padding: 5px;
+                                border-radius: 10px
+                            }
+
+                                .brandHolder img {
+                                    border-radius: 5px
+                                }
+                        </style>
 
                     </div>
                     <div class="swiper-pagination"></div>
@@ -882,19 +895,20 @@
                     <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
                         @foreach (var spec in Model.rand)
                         {
+                            string img = @spec.img;
                             <div class="swiper-slide vendor-widget">
                                 <div class="vendor-widget-banner">
                                     <figure class="vendor-banner">
-                                        <a href="/home/index?partnerID=@spec.url">
-                                            <img src="@spec.img" alt="Vendor Banner"
-                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
+                                        <a href="/home/index?partnerID=@spec.url" class="mainImage">
+                                            <img src="@img" alt="Vendor Banner "
+                                                 style="background-color: #ECE7DF;" />
                                         </a>
                                     </figure>
                                     <div class="vendor-details">
                                         <figure class="vendor-logo">
                                             <a href="/home/index?partnerID=@spec.url">
                                                 <img src="@spec.logo"
-                                                     alt="Vendor Logo" width="90" height="90" />
+                                                     alt="Vendor Logo" width="90" height="90" class="nodeImage" />
                                             </a>
                                         </figure>
                                         <div class="vendor-personal">
@@ -1096,16 +1110,16 @@
                                     <div class="swiper-slide vendor-widget">
                                         <div class="vendor-widget-banner">
                                             <figure class="vendor-banner">
-                                                <a href="/home/index?partnerID=@spec.url">
+                                                <a href="/home/index?partnerID=@spec.url" class="mainImage">
                                                     <img src="@spec.img" alt="Vendor Banner"
-                                                         width="1200" height="390" style="background-color: #ECE7DF;" />
+                                                         style="background-color: #ECE7DF;" />
                                                 </a>
                                             </figure>
                                             <div class="vendor-details">
                                                 <figure class="vendor-logo">
                                                     <a href="/home/index?partnerID=@spec.url">
-                                                        <img src="@spec.logo"
-                                                             alt="Vendor Logo" width="90" height="90" />
+                                                        <img class="nodeImage" src="@spec.logo"
+                                                             alt="Vendor Logo" />
                                                     </a>
                                                 </figure>
                                                 <div class="vendor-personal">
@@ -1306,6 +1320,36 @@
                 window.location.href = url;
             }
         })
+       
 
+        $(".nodeImage").each(function () {
+           
+            $(this).height($(this).width());
+        })
+      
+        $(document).ready(function () {
+            $(".category img").each(function () {
+            })
+            let widthwhole = $(window).width();
+            let height = 0;
+            if (widthwhole < 600) {
+                height = widthwhole / 6;
+            }
+            else {
+                height = widthwhole / 13;
+            }
+           
+            $(".itemToCheck").each(function () {
+               
+                $(this).find('figure').height(height);
+            })
+        })
+       
+       
+        $(".mainImage").each(function () {
+            var width = $(this).width();
+            var hight = parseInt(width) * 0.7
+            $(this).find('img').height(hight);
+        })
     </script>
 }

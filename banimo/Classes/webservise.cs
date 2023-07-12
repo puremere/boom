@@ -44,7 +44,7 @@ namespace banimo.Classes
         {
            
             
-
+            string  nodeID = ConfigurationManager.AppSettings["nodeID"];
             string result = "";
             using (WebClient client = new WebClient())
             {
@@ -60,6 +60,9 @@ namespace banimo.Classes
                 collection.Add("status", status);
                 collection.Add("referenceID", referenceID);
                 collection.Add("mbrand", servername);
+                collection.Add("nodeID", nodeID);
+                collection.Add("newTran", "1");
+                
                 byte[] response =
                 client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/addTransaction.php", collection);
 
@@ -84,7 +87,8 @@ namespace banimo.Classes
                 {
                     client.DefaultRequestHeaders.Add("Authorization", "brear 5cccd276-3072-4d0f-9d2d-b60f5548f9d5");
                 }
-               
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 result = await client.PostAsync(u, c);
                 if (result.IsSuccessStatusCode)
                 {

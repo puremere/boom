@@ -547,6 +547,8 @@ namespace banimo.Controllers
         }
         public ActionResult SetNewFactorFromSail(string amani, string count, string price, string ID)
         {
+
+            price = price.Replace(",", "");
             amani = "1";
             string result = "";
             string device = RandomString(10);

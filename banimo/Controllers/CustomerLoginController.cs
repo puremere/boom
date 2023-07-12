@@ -145,7 +145,7 @@ namespace banimo.Controllers
                     {
                         if (item.Errors.First().ErrorMessage == "Incorrect CAPTCHA Code!")
                         {
-                            return RedirectToAction("Register", "Home", new { message = "1" });
+                            //return RedirectToAction("Register", "Home", new { message = "1" });
                         }
                     }
 
@@ -188,54 +188,54 @@ namespace banimo.Controllers
 
 
 
-            if (mymodel.status != 200)
+            if (mymodel.status == 200)
             {
-                if (email != null)
-                {
-                    string html = @"<html><head><title></title ></head><body>
+                //if (email != null)
+                //{
+                //    string html = @"<html><head><title></title ></head><body>
 
-                                            <div class='row' style='background-color:#0b008b;width: 60%;margin: 0px auto;'>
-                                                <div style = 'width:30%; margin: auto' >
-                                                    <img src='https://marsools.com/webAsset/wolmart/assets/images/logo0.png' style='width:100% ; object-fit:cover'>
-                                                </div>
+                //                            <div class='row' style='background-color:#0b008b;width: 60%;margin: 0px auto;'>
+                //                                <div style = 'width:30%; margin: auto' >
+                //                                    <img src='https://marsools.com/webAsset/wolmart/assets/images/logo0.png' style='width:100% ; object-fit:cover'>
+                //                                </div>
         
-                                            </div>
-                                            <div class='row' style='width:57%; margin: 0px auto;padding: 10px;border: 1px solid #ddd;border-radius: 0 0 5px 5px;'>
+                //                            </div>
+                //                            <div class='row' style='width:57%; margin: 0px auto;padding: 10px;border: 1px solid #ddd;border-radius: 0 0 5px 5px;'>
         
-                                                <div style = 'width:100%; display:inline-block;text-align: center;'>
-                                                    <h2> Thanks For Registration</h2>
-                                                    <h3>your activation code is : " + vcode + @"  <b> </b></h3>
-                                                </div>
-                                            </div>
-                                            <div>
-                                            </div>
-                                        </body>
-                                   </html>";
-                    using (MailMessage mm = new MailMessage("support@marsools.com", email))  //support@fuwatech.com
-                    {
-                        mm.Subject = "registration";
-                        mm.Body = html;
-                        //if (model.Attachment.ContentLength > 0)
-                        //{
-                        //    string fileName = Path.GetFileName(model.Attachment.FileName);
-                        //    mm.Attachments.Add(new Attachment(model.Attachment.InputStream, fileName));
-                        //}
-                        mm.IsBodyHtml = true;
-                        using (SmtpClient smtp = new SmtpClient())
-                        {
-                            smtp.Host = "smtp.office365.com";// "wh1.azaronline.com";// "wh1.azaronline.com";
-                            //smtp.EnableSsl = true;
-                            NetworkCredential NetworkCred = new NetworkCredential("support@marsools.com", "M@rsools2023"); //lz32uN6^9
-                            smtp.UseDefaultCredentials = true;
-                            smtp.Credentials = NetworkCred;
-                            smtp.Port =  587;
-                            mymethods.NEVER_EAT_POISON_Disable_CertificateValidation();
-                            smtp.Send(mm);
+                //                                <div style = 'width:100%; display:inline-block;text-align: center;'>
+                //                                    <h2> Thanks For Registration</h2>
+                //                                    <h3>your activation code is : " + vcode + @"  <b> </b></h3>
+                //                                </div>
+                //                            </div>
+                //                            <div>
+                //                            </div>
+                //                        </body>
+                //                   </html>";
+                //    using (MailMessage mm = new MailMessage("support@marsools.com", email))  //support@fuwatech.com
+                //    {
+                //        mm.Subject = "registration";
+                //        mm.Body = html;
+                //        //if (model.Attachment.ContentLength > 0)
+                //        //{
+                //        //    string fileName = Path.GetFileName(model.Attachment.FileName);
+                //        //    mm.Attachments.Add(new Attachment(model.Attachment.InputStream, fileName));
+                //        //}
+                //        mm.IsBodyHtml = true;
+                //        using (SmtpClient smtp = new SmtpClient())
+                //        {
+                //            smtp.Host = "smtp.office365.com";// "wh1.azaronline.com";// "wh1.azaronline.com";
+                //            //smtp.EnableSsl = true;
+                //            NetworkCredential NetworkCred = new NetworkCredential("support@marsools.com", "M@rsools2023"); //lz32uN6^9
+                //            smtp.UseDefaultCredentials = true;
+                //            smtp.Credentials = NetworkCred;
+                //            smtp.Port =  587;
+                //            mymethods.NEVER_EAT_POISON_Disable_CertificateValidation();
+                //            smtp.Send(mm);
 
-                        }
-                    }
+                //        }
+                //    }
 
-                }
+                //}
                 cookieModel.id = registertext;
                 if (email != null)
                 {
@@ -243,7 +243,7 @@ namespace banimo.Controllers
                 }
                 cookieModel.pass = registerpassword;
                 SetCookie(JsonConvert.SerializeObject(cookieModel), "token");
-                return RedirectToAction("confirm", "Home");
+                return RedirectToAction("Confirm", "Home");
 
             }
             else if (mymodel.status == 300)
@@ -448,6 +448,43 @@ namespace banimo.Controllers
             return returnUrl;
         }
 
+
+        public ActionResult removeAccount()
+        {
+
+            if (Session["token"] != null)
+            {
+                string token = Session["token"] as string;
+                if (!string.IsNullOrEmpty(token))
+                {
+                    string json;
+                    string device = RandomString();
+                    string code = MD5Hash(device + "ncase8934f49909");
+                    string result = "";
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection = new NameValueCollection(); 
+                        collection.Add("nodeID", nodeID);
+                        collection.Add("device", device);
+                        collection.Add("code", code);
+                        collection.Add("token", token);
+                        collection.Add("servername", servername);
+                        byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/removeAccount.php", collection);
+
+                        result = System.Text.Encoding.UTF8.GetString(response);
+                       
+                    }
+                    responseVM log = JsonConvert.DeserializeObject<responseVM>(result);
+                    if (log.status == 200)
+                    {
+                        return RedirectToAction("LogOff", "CustomerLogin");
+                    }
+                }
+            }
+            return Content("");
+            
+        }
         public ActionResult CustomerLogIn(string registerpassword, string registertext, string register)
         {
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));

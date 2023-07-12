@@ -1905,4 +1905,13 @@
   <data name="existItem" xml:space="preserve">
     <value>Item exist</value>
   </data>
+  <data name="addInventoryText" xml:space="preserve">
+    <value>Add Inventory For</value>
+  </data>
+  <data name="inventoryDesc" xml:space="preserve">
+    <value>By doing this action you add new reciete factor to inventory</value>
+  </data>
+  <data name="vahed" xml:space="preserve">
+    <value>$</value>
+  </data>
 </root>

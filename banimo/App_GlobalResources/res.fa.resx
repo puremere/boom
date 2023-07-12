@@ -1848,4 +1848,13 @@
   <data name="existItem" xml:space="preserve">
     <value>آیتم مورد نظر وجود دارد</value>
   </data>
+  <data name="addInventoryText" xml:space="preserve">
+    <value>افزودن موجودی کالا </value>
+  </data>
+  <data name="inventoryDesc" xml:space="preserve">
+    <value>با انجام این عمل شما یک فاکتور جدید از محصول به انبار اضافه میکنید</value>
+  </data>
+  <data name="vahed" xml:space="preserve">
+    <value>ریال</value>
+  </data>
 </root>
