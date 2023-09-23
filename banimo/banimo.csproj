@@ -881,7 +881,11 @@
     <Content Include="AdminPanel\Scripts\bootstrap.min.js" />
     <Content Include="AdminPanel\Scripts\date.js" />
     <Content Include="AdminPanel\Scripts\fastclick.js" />
+    <Content Include="Content\ankerStyle.css" />
+    <Content Include="Content\select.css" />
     <Content Include="images\adminbg.png" />
+    <Content Include="images\kala.png" />
+    <Content Include="images\margek.png" />
     <Content Include="images\marker-green.png" />
     <Content Include="images\marker-shadow.png" />
     <Content Include="images\trash.png" />
@@ -4497,6 +4501,7 @@
     <Content Include="Scripts\Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\Scripts\rtc-demo.js.orig" />
     <Content Include="Scripts\Scripts\socket.io.js.map" />
+    <Content Include="Scripts\select.json" />
     <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
     <None Include="Service References\ServiceReference1\configuration.svcinfo" />
     <None Include="Service References\ServiceReference1\Reference.svcmap">
@@ -5139,6 +5144,12 @@
     <Content Include="Views\Home\TermsOfService11.cshtml" />
     <Content Include="Views\Home\TermsOfService10.cshtml" />
     <Content Include="Views\Home\checkout9.cshtml" />
+    <Content Include="Views\Home\EndOrder9.cshtml" />
+    <Content Include="Views\Home\loginPage9.cshtml" />
+    <Content Include="Views\Home\confirm9.cshtml" />
+    <Content Include="Views\Home\myProfile9.cshtml" />
+    <Content Include="Views\Shared\_gogetOrderDetail9.cshtml" />
+    <Content Include="Views\Node\tag.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

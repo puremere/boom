@@ -23,6 +23,9 @@ namespace banimo.ViewModelPost
         public int ID { get; set; }
         public string title { get; set; }
         public string imagetitle { get; set; }
+        public string selectedFilter { get; set; }
+
+        
     }
     public class filter
     {
@@ -50,7 +53,10 @@ namespace banimo.ViewModelPost
 
 
     }
-
+    public class SelectedFilter
+    {
+        public string title { get; set; }
+    }
     public class ProductListFilterViewModel
     {
         public List<Type> types { get; set; }
@@ -58,5 +64,6 @@ namespace banimo.ViewModelPost
         public List<Color> colors { get; set; }
         public List<filter> filters { get; set; }
         public List<range> ranges { get; set; }
+        public List<SelectedFilter> selectedFilters { get; set; }
     }
 }

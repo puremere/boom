@@ -7902,7 +7902,8 @@ body .product-popup {
         display: block;
         width: 100%;
         height: auto;
-        transition: opacity 0.4s
+        transition: opacity 0.4s;
+        aspect-ratio: 1;
     }
 
         .product-media img:last-child {

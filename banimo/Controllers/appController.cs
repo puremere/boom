@@ -273,7 +273,7 @@ namespace banimo.Controllers
                 collection.Add("mbrand", servername);
                 collection.Add("nodeID", nodeID);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Home/buyRequestMarsoolT.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(appserver2 + "/Home/buyRequestMarsool.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
@@ -303,7 +303,7 @@ namespace banimo.Controllers
                     banimo.ViewModel.getCredit creditmodel = JsonConvert.DeserializeObject<banimo.ViewModel.getCredit>(result);
                     if (creditmodel.credit >= log2.amount)
                     {
-                        finalUrl = "Connection/verifyByAdmin?payment=1&id=" + log2.peigiry + "&fromUser=1";
+                        finalUrl = "/Connection/verifyByAdmin?payment=1&id=" + log2.peigiry + "&fromUser=1";
                     }
                     else
                     {
@@ -379,7 +379,7 @@ namespace banimo.Controllers
                 {
                     // باید این یوار ال برگرده
 
-                    finalUrl = "Connection/verifyByAdmin?payment=2&id=" + log2.peigiry + "&fromUser=1";
+                    finalUrl = "/Connection/verifyByAdmin?payment=2&id=" + log2.peigiry + "&fromUser=1";
 
                 }
                 else if (model.payment == "3")
@@ -1136,7 +1136,7 @@ namespace banimo.Controllers
         public async Task<JObject> getDataProductList0([FromBody] getDataProductList0 model)
         {
 
-            string url = model.isNew == "true"? appserver + "/getDataProductList.php": appserver + "/getDataProductList0.php";
+            string url = model.isNew == "true"? appserver2 + "/getDataProductList.php": appserver + "/getDataProductList0.php";
             
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";
@@ -1168,6 +1168,7 @@ namespace banimo.Controllers
 
                 collection.Add("device", device);
                 collection.Add("code", code);
+                collection.Add("servername", servername);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
                 byte[] response = await client.UploadValuesTaskAsync(url, collection);

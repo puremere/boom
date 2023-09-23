@@ -6,7 +6,7 @@
     if (Model.meta != "null" && Model.meta != null)
     {
         banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
-        ViewBag.Title =  metaModel.titletag;
+        ViewBag.Title = metaModel.titletag;
         ViewBag.Desc = metaModel.desctag;
         ViewBag.key = metaModel.keyTag;
 
@@ -18,7 +18,7 @@
 }
 
 @{
-    
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
@@ -61,84 +61,87 @@
 
     }
 
+    <link href="~/Content/flexslider2.css" rel="stylesheet" />
+    <link href="~/Content/lightgallery.min.css" rel="stylesheet" />
+    <style>
+
+        .c-product__summary {
+            max-width: 450px;
+        }
+
+        .c-product__summary {
+            flex: 1;
+        }
+
+        .c-product__stock-status {
+            line-height: normal;
+            border-radius: 5px;
+            border: 1px solid #e4e4e4;
+            background: #f5f5f5;
+        }
+
+        .c-product-stock__title {
+            display: flex;
+            color: #969696;
+            font-size: 18px;
+            font-weight: 700;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+            .c-product-stock__title::before {
+                content: "";
+                margin: .7rem;
+                flex: 1;
+                height: 1px;
+                background: #969696;
+            }
+
+            .c-product-stock__title::after, .c-product-stock__title::before {
+                content: "";
+                margin: .7rem;
+                flex: 1;
+                height: 1px;
+                background: #969696;
+            }
+
+        element {
+        }
+
+        .c-product-stock__body {
+            color: #4a4a4a;
+            font-size: .9rem;
+        }
+
+        .c-product-stock__body, .m-b-lg {
+            margin: 2rem;
+        }
+
+        .c-product-stock__action, .c-product-stock__title, .p-v-md {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .c-product-stock__action {
+            width: 80%;
+            border-width: 0;
+            background: #7a7a7a;
+            color: #fff;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+            margin-bottom: 25px;
+        }
+    </style>
+
+    <link href="~/Content/detailStyle.css" rel="stylesheet" />
+    <link href="~/Content/ankerStyle.css" rel="stylesheet" />
 }
-<link href="~/Content/flexslider2.css" rel="stylesheet" />
-<link href="~/Content/detailStyle.css" rel="stylesheet" />
-<link href="~/Content/lightgallery.min.css" rel="stylesheet" />
-<style>
 
-    .c-product__summary {
-        max-width: 450px;
-    }
-
-    .c-product__summary {
-        flex: 1;
-    }
-
-    .c-product__stock-status {
-        line-height: normal;
-        border-radius: 5px;
-        border: 1px solid #e4e4e4;
-        background: #f5f5f5;
-    }
-
-    .c-product-stock__title {
-        display: flex;
-        color: #969696;
-        font-size: 18px;
-        font-weight: 700;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-
-        .c-product-stock__title::before {
-            content: "";
-            margin: .7rem;
-            flex: 1;
-            height: 1px;
-            background: #969696;
-        }
-
-        .c-product-stock__title::after, .c-product-stock__title::before {
-            content: "";
-            margin: .7rem;
-            flex: 1;
-            height: 1px;
-            background: #969696;
-        }
-
-    element {
-    }
-
-    .c-product-stock__body {
-        color: #4a4a4a;
-        font-size: .9rem;
-    }
-
-    .c-product-stock__body, .m-b-lg {
-        margin: 2rem;
-    }
-
-    .c-product-stock__action, .c-product-stock__title, .p-v-md {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        margin-bottom: 20px;
-    }
-
-    .c-product-stock__action {
-        width: 80%;
-        border-width: 0;
-        background: #7a7a7a;
-        color: #fff;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 1.1rem;
-        cursor: pointer;
-        display: block;
-        margin: auto;
-        margin-bottom: 25px;
-    }
-</style>
 <div id="idholder" style="display:none">@Model.ID</div>
 
 
@@ -1198,7 +1201,7 @@
                         <div style="padding-bottom:40px">
                             <div class="row" style=" padding: 10px">
                                 <span style="float:right;font-size: 11px;font-weight: 800;"> محصولات مشابه</span>
-                                <a class="alink" href="/Home/ProductList?sortID=3" style="cursor:pointer;float:left;font-size: 11px;color: blue;"> لیست کامل</a>
+                                <a class="alink" href="#" style="cursor:pointer;float:left;font-size: 11px;color: blue;"> لیست کامل</a>
                             </div>
                             <div id="bestholder" class="resCarousel" data-items="3-2-2-2" data-slide="3" data-speed="500">
 
@@ -1462,14 +1465,14 @@
                         </style>
                         <section class="c-content-expert__summary">
                             <div class="c-mask js-mask is-masked">
-                                <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
+                                <div class="desciptionSectin c-mask__text " style=" height: unset; text-align:right; direction:rtl">
                                     @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
                                     {
-                                        <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
+                                        <div style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</div>
                                     }
                                     else
                                     {
-                                        <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
+                                        <div style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</div>
                                     }
                                 </div>
                                 <a id="toggledesc" style="display: none; cursor:pointer; text-align:center; float:left;margin:10px 0; padding:10px;color:blue"><span>ادامه مطلب</span></a>
@@ -1653,7 +1656,7 @@
                 <div class="maxwidth">
                     <div style="background-color: #f6f5f5; padding: 2% 0px">
                         <div class="SECTIONHOLDER">
-                            <div class="o-headline"><span>@Html.ActionLink("پیشنهادهای مشابه", "ProductList", new { sortID = 3 }, new { style = " color: #808080;" }) </span></div>
+                            <div class="o-headline"><span>پیشنهادهای مشابه </span></div>
 
                             <div id="bestholder" class="resCarousel" data-items="3-5-5-5" data-slide="1" data-speed="500">
 
@@ -1683,7 +1686,7 @@
 
                                             <div class="showmedetailFirstDiv showmedetailx">
                                                 <div style="padding:15px">
-                                                    <a href="@newurl" >
+                                                    <a href="@newurl">
                                                         <div class="imageholderindex">
                                                             <img class="imageitself" src="@src" />
                                                         </div>

@@ -15549,9 +15549,14 @@ aside .sp-sidebar-banner span {
     }
 }
 
-
+.productcatInfoSection{
+    width:20%;
+}
 
 @media(max-width:600px) {
+    .productcatInfoSection {
+        width: 40%;
+    }
     .intro-slide {
         min-height: 20rem
     }

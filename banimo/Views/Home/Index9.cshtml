@@ -30,7 +30,7 @@
                     {
                         int i = Model.slides.IndexOf(item) + 1;
                         string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
-                        <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style=" height:400px;  background-image: url(/images/@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
+                        <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="height:600px; background-image: url(https://wearkala.heson.ir/images/@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
                             <div class="container">
 
                                 <div class="banner-content y-50 d-inline-block">
@@ -298,6 +298,7 @@
                             string addID = "addtocarto" + item.ID;
                             string minusID = "minus" + item.ID;
                             string imagefile = "placeholder.jpg";
+                            string trf = item.tarafID == null ? "0" : item.tarafID;
                             List<string> srtlist = new List<string>();
                             string src2 = "";
                             if (item.title != null)
@@ -320,7 +321,7 @@
                                         <a href="/products/@newurl">
                                             <img src="@src" alt="Product"
                                                  width="300" height="338" />
-                                            <img src="@src2" alt="Product"
+                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
                                                  width="300" height="338" />
                                         </a>
 
@@ -352,8 +353,8 @@
                                                 }
                                                 <input addson="@ads" class=" form-control @clsname" type="number" min="1" max="100000" value="0">
 
-                                                <button class="quantity-plus w-icon-plus" onclick="addtocart('@partnerID','@item.ID','')"></button>
-                                                <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@partnerID','@item.ID','')"></button>
+                                                <button class="quantity-plus w-icon-plus" onclick="addtocart('@trf','@item.ID','')"></button>
+                                                <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@trf','@item.ID','')"></button>
                                             </div>
                                         </div>
                                     </div>
@@ -403,7 +404,7 @@
                                         <a href="/products/@newurl">
                                             <img src="@src" alt="Product"
                                                  width="300" height="338" />
-                                            <img src="@src2" alt="Product"
+                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
                                                  width="300" height="338" />
                                         </a>
                                         @if (item.price != item.oldPrice)
@@ -435,41 +436,42 @@
             <div class="tab-pane pt-4" id="tab1-3">
                 <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
                     @if (Model.bestseller != null)
-                    {
-                        foreach (var item in Model.bestseller)
                         {
-                            string newurl = "/Home/ProductDetail?id=" + item.ID;
-                            if (item.meta != null)
+                            foreach (var item in Model.bestseller)
                             {
-                                banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
-                                newurl = metaModel.curl;
-                            }
-                            string addID = "addtocarto" + item.ID;
-                            string minusID = "minus" + item.ID;
-                            string imagefile = "placeholder.jpg";
-                            List<string> srtlist = new List<string>();
-                            string src2 = "";
-                            if (item.title != null)
-                            {
-                                srtlist = item.image.Trim(',').Split(',').ToList();
-                                imagefile = srtlist[0];
-                                if (srtlist.Count == 2)
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
                                 {
-                                    src2 = srtlist[1];
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
                                 }
-                            }
-                            string ID = "N" + item.ID.ToString();
-                            string addtocartid = "addtocart" + ID;
-                            string price = item.price;
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
 
-                            string src = imagefile;
+                                string src = imagefile;
+                               
                             <div class="product-wrap">
                                 <div class="product text-center shadowbox" style="padding:10px; border-radius:8px ">
                                     <figure class="product-media" style="margin:auto; max-width:90%">
                                         <a href="/products/@newurl">
                                             <img src="@src" alt="Product"
                                                  width="300" height="338" />
-                                            <img src="@src2" alt="Product"
+                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
                                                  width="300" height="338" />
                                         </a>
                                         @*<div class="product-action-vertical">
@@ -502,7 +504,7 @@
                                                 <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
                                             </div>*@
                                         <div class="product-price">
-                                            <ins class="new-price">@string.Format("{0:n0}", Int32.Parse(@item.price))  تومان</ins>
+                                            <ins class="new-price ">@string.Format("{0:n0}", Int32.Parse(@item.price))  تومان</ins>
                                             @if (item.price != item.oldPrice)
                                             {
                                         <del class="old-price">@string.Format("{0:n0}", Int32.Parse(@item.oldPrice)) تومان</del>

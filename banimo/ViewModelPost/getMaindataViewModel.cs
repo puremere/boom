@@ -30,6 +30,7 @@ namespace banimo.ViewModePost
     {
         
         public int parentID { get; set; }
+        public List<Cattag> cattags { get; set; }
     }
 
     public class metaData
@@ -51,6 +52,7 @@ namespace banimo.ViewModePost
         public string oldPrice { get; set; }
         public string isActive { get; set; }
         public string isAvailable { get; set; }
+        public string tarafID { get; set; }
     }
 
     public class Bestseller
@@ -131,6 +133,11 @@ namespace banimo.ViewModePost
         public object image { get; set; }
         public string meta { get; set; }
     }
+    public class Cattag
+    {
+        public string title { get; set; }
+        public string image { get; set; }
+    }
     public class getMaindataViewModel
     {
 
@@ -146,7 +153,7 @@ namespace banimo.ViewModePost
         public string trafCode { get; set; }
         public List<Slide> slides { get; set; }
         public List<Cat> cats { get; set; }
-       
+        
         public List <Banner>  banners { get; set; }
         public List<Newest> newest { get; set; }
         public List<Newest> bestseller { get; set; }

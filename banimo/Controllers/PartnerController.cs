@@ -315,7 +315,7 @@ namespace banimo.Controllers
 
 
         }
-
+       
         public ActionResult orders(string tf, string tt, string q, string c )
         {
 
@@ -366,7 +366,7 @@ namespace banimo.Controllers
             return View(model);
         }
 
-       public ActionResult changeOrderPartnerStatus(string id)
+        public ActionResult changeOrderPartnerStatus(string id)
         {
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -844,6 +844,7 @@ namespace banimo.Controllers
 
                 domain = ConfigurationManager.AppSettings["domain"] + "/",
                 brands = log.brand,
+                tags = log.tag,
                 meta = log.data.First().meta,
                 partners = log.partners,
                 catmode = catID,
@@ -1218,7 +1219,7 @@ namespace banimo.Controllers
                         collection.Add("vahed", vahed);
                         collection.Add("limit", limit);
 
-                        collection.Add("tag", detail.tagupdate);
+                        collection.Add("tag", string.Join(",", detail.tagupdate));
                         collection.Add("selectedFilter", detail.Selectedfilters);
                         collection.Add("SelectedAnbar", detail.SelectedAnbars);
 
@@ -1415,6 +1416,8 @@ namespace banimo.Controllers
                 string result = "";
                 string nodeID = ConfigurationManager.AppSettings["nodeID"];
                 string token = Session["PartnerUser"] as string;
+                string tagstring = detail.tagupdate != null ? string.Join(",", detail.tagupdate) : "";
+
                 using (WebClient client = new WebClient())
                 {
 
@@ -1442,7 +1445,7 @@ namespace banimo.Controllers
                     collection.Add("count", count);
                     collection.Add("vahed", vahed);
                     collection.Add("limit", detail.limit);
-                    collection.Add("tag", detail.tagupdate);
+                    collection.Add("tag", tagstring);
                     collection.Add("imaglist", imglst);
                     collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
                     collection.Add("isAvalible", detail.isAvalible);

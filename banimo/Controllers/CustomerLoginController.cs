@@ -760,7 +760,7 @@ namespace banimo.Controllers
 
 
             Session["token"] = null;
-            return RedirectToAction("Index", "Main");
+            return RedirectToAction("Index", "Home");
         }
 
         //public ContentResult SetOrChangeAddress(string address)

@@ -2186,6 +2186,7 @@ window.Wolmart = {};
         });
 
         Wolmart.$body.on('click', '.filter-items a', function (e) {
+            alert("dd");
             var $ul = $(this).closest('.filter-items');
             if (!$ul.hasClass('search-ul') && !$ul.parent().hasClass('select-menu')) {
                 $(this).parent().toggleClass('active');

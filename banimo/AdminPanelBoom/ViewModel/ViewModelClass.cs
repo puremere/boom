@@ -176,7 +176,7 @@ namespace AdminPanelBoom.ViewModel
         public string domain { get; set; }
         public List<Partner> partners { get; set; }
         public List<Brand> brands { get; set; }
-
+        public List<Tag> tags { get; set; }
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public string tag { get; set; }
         public string meta { get; set; }
@@ -517,9 +517,16 @@ namespace AdminPanelBoom.ViewModel
         public string ID { get; set; }
         public string title { get; set; }
     }
+    public class Tag
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+    }
+    
     public class EditViewModel
     {
         public List<Brand> brand { get; set; }
+        public List<Tag> tag { get; set; }
         public List<Partner> partners { get; set; }
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public List<Productfilterlist> productfilterlist { get; set; }

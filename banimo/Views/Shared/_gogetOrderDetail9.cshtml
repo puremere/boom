@@ -1,0 +1,72 @@
+﻿@model  banimo.ViewModelPost.ListOfProductOrder
+
+
+    <div class="">
+        @*<p id="print"> پرینت</p>*@
+        <script>
+                    $("#print").click(function () {
+
+                        var obj = @Html.Raw(@Json.Encode(Model.myProducts));
+                        $("input[name=data]").val(JSON.stringify(obj));
+                        $("input[name=id]").val('@Model.myProducts.First().id');
+                        $("#getPDF").submit();
+                        $("#loading").fadeIn();
+                        setInterval(function () { $("#loading").fadeOut(); }, 3000);
+
+
+
+                    });
+        </script>
+        <table class="  shop-table account-orders-table mb-6">
+            <thead>
+                <tr>
+
+                    <th class="order-actions"> </th>
+                    <th class="order-id">ردیف </th>
+                    <th class="order-date">نام کالا </th>
+
+                    <th class="order-total">قیمت </th>
+                    <th class="order-status"> تعداد </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.myProducts != null)
+                {
+                    foreach (var item in Model.myProducts)
+                    {
+                        string image = item.image;
+                        int i = Model.myProducts.IndexOf(item) + 1;
+
+                <tr id="@item.id" class="itemdetail" style="cursor:pointer ">
+                    <td><img src=@image style="max-width:100px" /> </td>
+                    <td>@i</td>
+                    <td>@item.title</td>
+                    <td>@string.Format("{0:n0}", decimal.Parse(@item.price)) تومان </td>
+                    <td>@item.nums</td>
+                   
+
+
+                </tr>
+                    }
+                }
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(".itemdetail").click(function () {
+            var id = this.id;
+            var url = "/Home/ProductDetail?id=N" + id;
+            window.open(url)
+            //window.location.href = url
+        })
+    </script>
+
+
+

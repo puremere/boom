@@ -13,7 +13,95 @@
 
 
 
+
+
 @{
+
+    <div style="margin-top:30px">
+        @if (Model.tagList != null)
+        {
+            foreach (var item in Model.tagList)
+            {
+                string tagToGo = @item.parent + "," + item.title;
+                <div id="@item.ID" class="category   categoryParent  subTag"  tagTo="@tagToGo">
+                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                        <img onerror='this.src="/images/placeholder.jpg"' style="aspect-ratio: 1; max-width:150px" src="/images/@item.image" alt="Category">
+                    </div>
+                    <a href="" class="category-media " >
+                        <p>@item.title</p>
+                    </a>
+
+                </div>
+                
+
+            }
+
+            <script>
+                $(".subTag").click(function () {
+                   
+                    var tagstring = $(this).attr("tagTo");
+                    $.ajax({
+                        url: '/Home/changetag',
+                        data: {
+                            tag: tagstring,
+
+                        },
+                        dataType: 'html',
+                        success: function () {
+                            $.ajax({
+                                url: '/Home/gogetproductlist',
+                                aType: 'html',
+                                success: function (data) {
+
+                                    $('#productlist').html(data);
+                                    window.scrollTo(0, 50);
+                                },
+                                error: function () {
+
+                                },
+
+                            });
+                        }
+                    });
+                })
+            </script>
+        }
+        <style>
+            .category {
+                width: 15%;
+                display: inline-block;
+                padding: 0 10px;
+                border-radius: 8px;
+                vertical-align: top
+            }
+
+                .category p {
+                    padding: 20px;
+                    text-align: center;
+                    font-weight: 600;
+                    font-size: 16px;
+                }
+
+                .category img {
+                    border-radius: 10px
+                }
+
+            @@media (max-width : 600px) {
+                .category {
+                    width: 33%;
+                }
+
+                    .category p {
+                        padding: 8px 0;
+                        text-align: center;
+                        font-weight: 600;
+                        font-size: 12px;
+                        width: 100%;
+                    }
+            }
+        </style>
+    </div>
+
     if (Model.products != null)
     {
         if (Model.products.Count == 0)
@@ -24,7 +112,7 @@
         }
         else
         {
-            <div class="product-wrapper row cols-md-5 cols-sm-2 cols-3 boxshadow" >
+            <div class="product-wrapper row cols-md-5 cols-sm-2 cols-3 boxshadow">
                 @foreach (var item in Model.products)
                 {
                     string newurl = "/Home/ProductDetail?id=" + item.ID;
@@ -71,10 +159,10 @@
                                 <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
 
                                 <div class="product-price">
-                                    <ins class="new-price">@item.price AED</ins>
+                                    <ins class="new-price">@string.Format("{0:n0}", @item.price)  تومان </ins>
                                     @if (item.price != item.oldPrice)
                                     {
-                                        <del class="old-price">@item.oldPrice AED</del>
+                                        <del class="old-price">@string.Format("{0:n0}", @item.oldPrice) تومان </del>
                                     }
 
                                 </div>
@@ -348,93 +436,99 @@
         $(this).attr('src', url);
     });
 </script>
-<script>
-    $('.value-plus').on('click', function () {
+@*<script>
+        $('.value-plus').on('click', function () {
 
-        event.stopPropagation();
-        $("#loading").fadeIn()
-        let newVal = $(this).parent().children(".value").text();
-        if (newVal == "") {
-            newVal = "0";
-        }
-        let finalVal = parseInt(newVal) + 1;
-        // $(this).parent().children(".value").text(finalVal);
-        var ID = $(this).attr('id');
-        let myid = "value" + ID.replace("addtocarto", "");
-
-        $("." + myid).text(finalVal);
-        $(this).parent().parent().find('.addButton').hide();
-        $(this).parent().parent().find('.addholder').show();
-
-        $.ajax({
-            url: '/Home/addtocart',
-            dataType: 'html',
-            data: {
-                id: ID
-
-            },
-            success: function (data) {
-                var value = "value" + ID;
-
-                var count = parseInt($(".simpleCart_quantityy").text());
-                count += 1;
-                $(".simpleCart_quantityy").text(count);
-                $("#loading").fadeOut();
-
-
-
-            },
-            error: function () {
-                alert("error")
+            event.stopPropagation();
+            $("#loading").fadeIn()
+            let newVal = $(this).parent().children(".value").text();
+            if (newVal == "") {
+                newVal = "0";
             }
+            let finalVal = parseInt(newVal) + 1;
+            // $(this).parent().children(".value").text(finalVal);
+            var ID = $(this).attr('id');
+            let myid = "value" + ID.replace("addtocarto", "");
 
-
-        });
-    });
-
-
-    $('.value-minus').on('click', function () {
-        event.stopPropagation();
-        $("#loading").fadeIn()
-        var ID = $(this).attr('id');
-        let myid = "value" + ID.replace('minus', '');
-
-        let newVal = $(this).parent().children(".value").text();
-        let finalVal = "";
-        if (newVal != "0") {
-
-            finalVal = parseInt(newVal) - 1;
             $("." + myid).text(finalVal);
-        }
-
-        if (finalVal == "0") {
-            $(this).parent().parent().find('.addButton').show();
-            $(this).parent().parent().find('.addholder').hide();
-        }
-        else {
             $(this).parent().parent().find('.addButton').hide();
             $(this).parent().parent().find('.addholder').show();
-        }
 
-        $.ajax({
-            url: '/Home/minusfromcart',
-            dataType: 'html',
-            data: {
-                id: ID
-            },
-            success: function (data) {
+            $.ajax({
+                url: '/Home/addtocart',
+                dataType: 'html',
+                data: {
+                    id: ID
 
-                var count = parseInt($(".simpleCart_quantityy").text());
-                count -= 1;
-                $(".simpleCart_quantityy").text(count);
-                $("#loading").fadeOut();
+                },
+                success: function (data) {
+                    var value = "value" + ID;
+
+                    var count = parseInt($(".simpleCart_quantityy").text());
+                    count += 1;
+                    $(".simpleCart_quantityy").text(count);
+                    $("#loading").fadeOut();
 
 
 
-            },
-            error: function () {
-                alert("error")
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
+        });
+
+
+        $('.value-minus').on('click', function () {
+            event.stopPropagation();
+            $("#loading").fadeIn()
+            var ID = $(this).attr('id');
+            let myid = "value" + ID.replace('minus', '');
+
+            let newVal = $(this).parent().children(".value").text();
+            let finalVal = "";
+            if (newVal != "0") {
+
+                finalVal = parseInt(newVal) - 1;
+                $("." + myid).text(finalVal);
             }
+
+            if (finalVal == "0") {
+                $(this).parent().parent().find('.addButton').show();
+                $(this).parent().parent().find('.addholder').hide();
+            }
+            else {
+                $(this).parent().parent().find('.addButton').hide();
+                $(this).parent().parent().find('.addholder').show();
+            }
+
+            $.ajax({
+                url: '/Home/minusfromcart',
+                dataType: 'html',
+                data: {
+                    id: ID
+                },
+                success: function (data) {
+
+                    var count = parseInt($(".simpleCart_quantityy").text());
+                    count -= 1;
+                    $(".simpleCart_quantityy").text(count);
+                    $("#loading").fadeOut();
+
+
+
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
+
+
+
 
 
         });
@@ -442,13 +536,7 @@
 
 
 
-
-    });
-
-
-
-
-</script>
+    </script>*@
 <script>
     getquntity();
 </script>

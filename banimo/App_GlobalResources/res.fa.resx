@@ -1857,4 +1857,31 @@
   <data name="vahed" xml:space="preserve">
     <value>ریال</value>
   </data>
+  <data name="productmanagment" xml:space="preserve">
+    <value>مدیریت محصولات</value>
+  </data>
+  <data name="accountDetail" xml:space="preserve">
+    <value>اطلاعات کاربر</value>
+  </data>
+  <data name="addresses" xml:space="preserve">
+    <value>آدرس ها</value>
+  </data>
+  <data name="dashboard" xml:space="preserve">
+    <value>داشبورد</value>
+  </data>
+  <data name="myaccount" xml:space="preserve">
+    <value>اکانت کاربری</value>
+  </data>
+  <data name="order" xml:space="preserve">
+    <value>سفارش</value>
+  </data>
+  <data name="removeAcount" xml:space="preserve">
+    <value>حذف اکانت</value>
+  </data>
+  <data name="wishList" xml:space="preserve">
+    <value>علاقه مندی ها</value>
+  </data>
+  <data name="tagManagement" xml:space="preserve">
+    <value>مدیریت برچسب</value>
+  </data>
 </root>

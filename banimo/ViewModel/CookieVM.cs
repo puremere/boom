@@ -17,6 +17,7 @@ namespace banimo.ViewModel
         public string tag = "";
         public string Available = "";
         public string colorIds = "";
+        public string seletedFilters = "";
         public string min = "";
         public string max = "";
         public string query = "";

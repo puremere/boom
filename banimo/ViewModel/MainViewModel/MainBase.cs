@@ -92,9 +92,9 @@ namespace banimo.ViewModel.MainViewModel
         public int ID { get; set; }
         public string img { get; set; }
         public string logo { get; set; }
-        public object title { get; set; }
-        public object cat { get; set; }
-        public object state { get; set; }
+        public string title { get; set; }
+        public string cat { get; set; }
+        public string state { get; set; }
         public string city { get; set; }
         public int disc { get; set; }
         public int eshop { get; set; }
@@ -131,6 +131,26 @@ namespace banimo.ViewModel.MainViewModel
         public string tag { get; set; }
         public List<Tagsitem> tagsitems { get; set; }
     }
+
+    public class Proitempr
+    {
+        public int ID { get; set; }
+        public string title { get; set; }
+        public string price { get; set; }
+        public string image { get; set; }
+        public string oldPrice { get; set; }
+        public string isActive { get; set; }
+        public string isAvailable { get; set; }
+        public string discount { get; set; }
+        public string meta { get; set; }
+    }
+
+    public class ProPR
+    {
+        public string protitle { get; set; }
+        public string proimage { get; set; }
+        public List<Proitempr> proitemprs { get; set; }
+    }
     public class mainIndex
     {
         public object lands { get; set; }
@@ -149,6 +169,7 @@ namespace banimo.ViewModel.MainViewModel
         public List<banimo.ViewModePost.Newest> bestseller { get; set; }
         public List<Tag> tags { get; set; }
         public List<TagsPRItem> tagsPR { get; set; }
+        public List<ProPR> proPR { get; set; }
     }
 
     public class Sld

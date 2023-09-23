@@ -45,6 +45,14 @@ namespace banimo
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
 
+            //if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
+            //{
+            //    string url = Request.ServerVariables["HTTP_HOST"];
+            //    Response.Redirect("https://" + url
+            //  + HttpContext.Current.Request.RawUrl);
+            //}
+
+
             //if (Request.Url.Host.StartsWith("www") && !Request.Url.IsLoopback)
             //{
             //    UriBuilder builder = new UriBuilder(Request.Url);
@@ -136,16 +144,7 @@ namespace banimo
         //    }
         //}
 
-        //protected void Application_BeginRequest(Object sender, EventArgs e)
-        //{
-        //    if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
-        //    {
-        //        string url = Request.ServerVariables["HTTP_HOST"];
-        //        Response.Redirect("https://" + url
-        //      + HttpContext.Current.Request.RawUrl);
-        //    }
-        //}
-
+       
 
         //protected void Application_Error(object sender, EventArgs e)
         //{

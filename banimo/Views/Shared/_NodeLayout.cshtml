@@ -57,8 +57,7 @@
     <!-- Slick Slider Css -->
     <link rel="stylesheet" href="/AdminPanel/Portal/assets/css/vendors/slick.css">
 
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/select2.min.css">
+
 
     <!-- latest js -->
     <link href="~/Content/toastr.css" rel="stylesheet" />
@@ -72,6 +71,10 @@
         <link href="~/Content/font.css" rel="stylesheet" />
 
     }
+
+    <!-- Select2 css -->
+
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/select2.min.css">
 
 </head>
 
@@ -172,7 +175,7 @@
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
-                              
+
                                 <li>
                                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="javascript:void(0)" data-bs-original-title="" title="">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -257,6 +260,13 @@
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Node/MenuNew" data-bs-original-title="" title="">
                                                             <i class="ri-menu-2-line"></i>
                                                             <span>@Resources.res.submenu </span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Node/tag" data-bs-original-title="" title="">
+                                                            <i class="ri-menu-2-line"></i>
+                                                            <span>@Resources.res.tagManagement </span>
                                                             <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
                                                         </a>
                                                     </li>
@@ -441,7 +451,9 @@
     <!-- sidebar effect -->
     <script src="/AdminPanel/Portal/assets/js/sidebareffect.js"></script>
     <!-- assets effect -->
-    @*<script src="/AdminPanel/Portal/assets/js/select2-custom.js"></script>*@
+    <script src="~/AdminPanel/Portal/assets/js/select2.min.js"></script>
+
+    <script src="/AdminPanel/Portal/assets/js/select2-custom.js"></script>
     <!-- Theme js -->
     <script src="/AdminPanel/Portal/assets/js/script.js"></script>
 

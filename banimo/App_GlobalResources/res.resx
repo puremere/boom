@@ -1914,4 +1914,25 @@
   <data name="vahed" xml:space="preserve">
     <value>$</value>
   </data>
+  <data name="accountDetail" xml:space="preserve">
+    <value>Account details</value>
+  </data>
+  <data name="addresses" xml:space="preserve">
+    <value>Addresses</value>
+  </data>
+  <data name="myaccount" xml:space="preserve">
+    <value>My Account</value>
+  </data>
+  <data name="order" xml:space="preserve">
+    <value>order</value>
+  </data>
+  <data name="removeAcount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="wishList" xml:space="preserve">
+    <value>Wishlist</value>
+  </data>
+  <data name="tagManagement" xml:space="preserve">
+    <value>Tag Management</value>
+  </data>
 </root>

@@ -30,15 +30,19 @@
         background-color: #34970b;
         color: white;
     }
+
     .main-content {
         max-width: 80%
     }
-    @@media  (max-width: 600px) {
+
+    @@media (max-width: 600px) {
         .main-content {
             max-width: 95%
         }
     }
 </style>
+
+
 
 
 <!-- Start of Main -->
@@ -73,29 +77,64 @@
                                         }">
                                     <div class="swiper-wrapper row cols-1 gutter-no">
                                         @{
-                                            if (Model.slides != null)
+                                            if (Model.otherColors != null)
                                             {
-
-                                                foreach (var item in Model.slides)
+                                                foreach (var item in Model.otherColors)
                                                 {
-                                                    string imagefile = "placeholder.jpg";
-                                                    if (item.title != null)
+                                                    if (item.otherColorFilter != null)
                                                     {
-                                                        imagefile = item.image;
-                                                    }
-                                                    string src = imagefile;
-                                                    <div class="swiper-slide">
-                                                        <figure class="product-image">
-                                                            <img src="@src"
-                                                                 data-zoom-image="@src"
-                                                                 alt="" width="800" height="900">
-                                                        </figure>
-                                                    </div>
 
+                                                        string displayclass = "displayitem";
+                                                        if (Model.otherColors.IndexOf(item) != 0)
+                                                        {
+                                                            displayclass = "hideItem";
+                                                        }
+                                                        List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                        foreach (var slideItem in lst)
+                                                        {
+                                                            string slideItemID = "S" + item.ID.ToString();
+                                                            <div itemToShow="@slideItemID" class="swiper-slide  allbegone @displayclass">
+                                                                <figure class="product-image ">
+                                                                    <img src="@slideItem"
+                                                                         data-zoom-image="@slideItem"
+                                                                         alt="" width="800" height="900">
+                                                                </figure>
+                                                            </div>
+                                                        }
+                                                    }
 
                                                 }
-
                                             }
+                                            else
+                                            {
+                                                if (Model.slides != null)
+                                                {
+
+                                                    foreach (var item in Model.slides)
+                                                    {
+                                                        string imagefile = "placeholder.jpg";
+                                                        if (item.title != null)
+                                                        {
+                                                            imagefile = item.image;
+                                                        }
+                                                        string src = imagefile;
+                                                        <div class="swiper-slide">
+                                                            <figure class="product-image">
+                                                                <img src="@src"
+                                                                     data-zoom-image="@src"
+                                                                     alt="" width="800" height="900">
+                                                            </figure>
+                                                        </div>
+
+
+                                                    }
+
+                                                }
+                                            }
+
+
+
+
                                         }
 
 
@@ -112,26 +151,56 @@
                                         }">
                                     <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
                                         @{
-                                            if (Model.slides != null)
+
+                                            if (Model.otherColors != null)
                                             {
-
-                                                foreach (var item in Model.slides)
+                                                foreach (var item in Model.otherColors)
                                                 {
-                                                    string imagefile = "placeholder.jpg";
-                                                    if (item.title != null)
+                                                    if (item.otherColorFilter != null)
                                                     {
-                                                        imagefile = item.image;
-                                                    }
-                                                    string src = imagefile;
-                                                    <div class="product-thumb swiper-slide">
-                                                        <img src="@src"
-                                                             alt="Product Thumb" width="800" height="900">
-                                                    </div>
 
+                                                        string displayclass = "displayitem";
+                                                        if (Model.otherColors.IndexOf(item) != 0)
+                                                        {
+                                                            displayclass = "hideItem";
+                                                        }
+                                                        List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                        foreach (var slideItem in lst)
+                                                        {
+                                                            string slideItemID = "S" + item.ID.ToString();
+                                                            <div itemToShow="@slideItemID" class="product-thumb swiper-slide  allbegone ">
+                                                                <img src="@slideItem"
+                                                                     alt="Product Thumb" width="800" height="900">
+                                                            </div>
+                                                        }
+                                                    }
 
                                                 }
-
                                             }
+                                            else
+                                            {
+                                                if (Model.slides != null)
+                                                {
+
+                                                    foreach (var item in Model.slides)
+                                                    {
+                                                        string imagefile = "placeholder.jpg";
+                                                        if (item.title != null)
+                                                        {
+                                                            imagefile = item.image;
+                                                        }
+                                                        string src = imagefile;
+                                                        <div class="product-thumb swiper-slide">
+                                                            <img src="@src"
+                                                                 alt="Product Thumb" width="800" height="900">
+                                                        </div>
+
+
+                                                    }
+
+                                                }
+                                            }
+
                                         }
 
 
@@ -145,41 +214,62 @@
                             <div class="product-details" data-sticky-options="{'minWidth': 767}">
                                 <h1 class="product-title">@Model.title</h1>
                                 @*<div class="product-bm-wrapper">
-            <figure class="brand">
-                <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
-                     width="85" height="48" />
-            </figure>
-            <div class="product-meta">
-                <div class="product-categories">
-                    Category:
-                    <span class="product-category"><a href="#">Electronics</a></span>
-                </div>
-                <div class="product-sku">
-                    SKU: <span>MS46891342</span>
-                </div>
-            </div>
-        </div>*@
+                                        <figure class="brand">
+                                            <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
+                                                 width="85" height="48" />
+                                        </figure>
+                                        <div class="product-meta">
+                                            <div class="product-categories">
+                                                Category:
+                                                <span class="product-category"><a href="#">Electronics</a></span>
+                                            </div>
+                                            <div class="product-sku">
+                                                SKU: <span>MS46891342</span>
+                                            </div>
+                                        </div>
+                                    </div>*@
 
 
                                 <hr class="product-divider">
+                                @{ 
+                                    decimal itemprice = 0;
+                                    string finalID = Model.ID;
+                                    if (Model.otherColors != null)
+                                    {
+                                        if (Model.otherColors.Count() > 0)
+                                        {
+                                            if (Model.otherColors.First().otherColorFilter != null)
+                                            {
+                                                itemprice = decimal.Parse(Model.otherColors.First().otherColorFilter.First().productprice);
+                                                finalID = Model.otherColors.First().otherColorFilter.First().ID;
+                                            }
+                                        }
 
-                                <div class="product-price">@string.Format("{0:n0}", decimal.Parse(Model.partnerList.First().price)) <span style="font-size:12px">تومان</span></div>
+                                    }
+                                    else
+                                    {
+                                        itemprice = decimal.Parse(Model.partnerList.First().price);
+                                    }
+                                }
+
+                                <input id="totalIDHolder" value="@finalID" hidden/>
+                                <div class="product-price"><span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size:12px">تومان</span></div>
 
                                 @*<div class="ratings-container">
-            <div class="ratings-full">
-                <span class="ratings" style="width: 80%;"></span>
-                <span class="tooltiptext tooltip-top"></span>
-            </div>
-            <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
-        </div>*@
+                                        <div class="ratings-full">
+                                            <span class="ratings" style="width: 80%;"></span>
+                                            <span class="tooltiptext tooltip-top"></span>
+                                        </div>
+                                        <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
+                                    </div>*@
 
                                 @*<div class="product-short-desc">
-            <ul class="list-type-check list-style-none">
-                <li style="display:flex"> <p>Item Color : </p>  <p style="margin:0 10px; width:100px; height:20px; background-color: @Model.color"></p></li>
-                <li>Item Feature : @Model.SelectedFilter</li>
+                                        <ul class="list-type-check list-style-none">
+                                            <li style="display:flex"> <p>Item Color : </p>  <p style="margin:0 10px; width:100px; height:20px; background-color: @Model.color"></p></li>
+                                            <li>Item Feature : @Model.SelectedFilter</li>
 
-            </ul>
-        </div>*@
+                                        </ul>
+                                    </div>*@
 
                                 <hr class="product-divider">
 
@@ -187,8 +277,10 @@
                                 {
                                     <style>
                                         .activeColor {
-                                            border: 1px solid #34970b;
-                                            border-radius: 8px
+                                            border: 3px solid #34970b !important;
+                                            border-radius: 8px !important;
+                                            
+                                            
                                         }
                                     </style>
                                     List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.ToList();
@@ -219,18 +311,22 @@
                                                     {
                                                         var myID = "o" + @it.ID;
                                                         string classname = "";
-
+                                                        string imgsrc = it.imageTitle.Split(',').First();
+                                                        string idToGo = "S" + it.ID;
+                                                        var colorprice = it.otherColorFilter.First().productprice;
+                                                        var colorID = it.otherColorFilter.First().ID;
                                                         <div class="swiper-slide product">
 
 
-                                                            @if (it.colorCode == Model.color)
+                                                            @if (lst.IndexOf(it) == 0)
                                                             {
                                                                 classname = "activeColor";
                                                             }
 
-                                                            <div class="swiper-slide product">
-                                                                <div style="min-width:100px; padding:5px" onclick="otherColorClicked('@myID')" class=" otherColor @classname">
-                                                                    <img style="width:100px" src="@it.imageTitle"
+
+                                                            <div idplaceholder ="@colorID" priceplaceholder="@colorprice" id="@idToGo" class="swiper-slide product @classname otherNewColor">
+                                                                <div style="min-width:100px; padding:10px" class=" otherColor ">
+                                                                    <img style="width:100px" src="@imgsrc"
                                                                          alt="Product Swatch" />
                                                                 </div>
                                                             </div>
@@ -249,35 +345,76 @@
 
 
                                 <hr class="product-divider">
-                                @{
-                                    if (Model.otherProductFilter != null)
-                                    {
 
-                                        if (Model.otherProductFilter.Count > 0)
+                                @{
+
+                                    if (Model.otherColors != null)
+                                    {
+                                        foreach (var colorfilter in Model.otherColors)
+                                        {
+                                            string displayclass = "displayitem";
+                                            string slideItemID = "S" + colorfilter.ID.ToString();
+                                            if (Model.otherColors.IndexOf(colorfilter) != 0)
+                                            {
+                                                displayclass = "hideItem";
+                                            }
+                                            if (colorfilter.otherColorFilter != null)
+                                            {
+                                                <div itemToShow="@slideItemID" class="allbegone product-form product-variation-form product-size-swatch @displayclass">
+
+                                                    <p class="nomargin">سایزبندی:</p>
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption ">
+                                                        @foreach (var ocolorfilter in colorfilter.otherColorFilter)
+                                                        {
+                                                            var price = ocolorfilter.productprice;
+                                                            var myID =  ocolorfilter.ID;
+                                                            string classFilter = "";
+
+                                                            if (colorfilter.otherColorFilter.IndexOf(ocolorfilter) == 0)
+                                                            {
+                                                                classFilter = "activeColor";
+                                                            }
+                                                            <p idplaceholder ="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter</span></p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Model.otherProductFilter != null)
                                         {
 
-                                            <div class="product-form product-variation-form product-size-swatch">
+                                            if (Model.otherProductFilter.Count > 0)
+                                            {
 
-                                                <p class="nomargin">سایزبندی:</p>
-                                                <div class="flex-wrap d-flex align-items-center anotherOption">
-                                                    @foreach (var item in Model.otherProductFilter)
-                                                    {
-                                                        string classFilter = "";
-                                                        if (item.selectedFilter == Model.SelectedFilter)
+                                                <div class="product-form product-variation-form product-size-swatch">
+
+                                                    <p class="nomargin">سایزبندی:</p>
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption">
+                                                        @foreach (var item in Model.otherProductFilter)
                                                         {
-                                                            classFilter = "anotherActive";
+                                                            string classFilter = "";
+                                                            if (item.selectedFilter == Model.SelectedFilter)
+                                                            {
+                                                                classFilter = "anotherActive";
+                                                            }
+
+
+                                                            var myID = "o" + item.ID;
+                                                            <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span></p>
+
                                                         }
-
-
-                                                        var myID = "o" + item.ID;
-                                                        <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span></p>
-
-                                                    }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        }
+                                            }
 
+                                        }
                                     }
+
                                 }
                                 <hr class="product-divider">
 
@@ -319,9 +456,10 @@
                                 }
 
 
-
+                               
                                 <div class="fix-bottom product-sticky-content sticky-content">
                                     <div class="product-form container">
+                                        
                                         <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
                                             <i class="w-icon-cart"></i>
                                             @{
@@ -342,25 +480,25 @@
                                 </div>
 
                                 @*<div class="social-links-wrapper">
-            <div class="social-links">
-                <div class="social-icons social-no-color border-thin">
-                    <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
-                    <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
-                    <a href="#"
-                       class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                    <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                    <a href="#"
-                       class="social-icon social-youtube fab fa-linkedin-in"></a>
-                </div>
-            </div>
-            <span class="divider d-xs-show"></span>
-            <div class="product-link-wrapper d-flex">
-                <a href="#"
-                   class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
-                <a href="#"
-                   class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
-            </div>
-        </div>*@
+                                        <div class="social-links">
+                                            <div class="social-icons social-no-color border-thin">
+                                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                                <a href="#"
+                                                   class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                                                <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                                                <a href="#"
+                                                   class="social-icon social-youtube fab fa-linkedin-in"></a>
+                                            </div>
+                                        </div>
+                                        <span class="divider d-xs-show"></span>
+                                        <div class="product-link-wrapper d-flex">
+                                            <a href="#"
+                                               class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                                            <a href="#"
+                                               class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
 
@@ -380,8 +518,8 @@
                                 <a style="font-size:15px" href="#product-tab-description" class="nav-link active">@Resources.res.description</a>
                             </li>
                             <li class="nav-item" style="margin:0 10px">
-                                    <a style="font-size:15px" href="#product-tab-specification" class="nav-link">ویژگی های محصول</a>
-                                </li>
+                                <a style="font-size:15px" href="#product-tab-specification" class="nav-link">ویژگی های محصول</a>
+                            </li>
                             @*   <li class="nav-item">
                                     <a href="#product-tab-vendor" class="nav-link">Vendor Info</a>
                                 </li>*@
@@ -413,81 +551,81 @@
 
                                 </ul>
 
-                                </div>
-                            @*<div class="tab-pane" id="product-tab-vendor">
-            <div class="row mb-3">
-                <div class="col-md-6 mb-4">
-                    <figure class="vendor-banner br-sm">
-                        <img src="/webAsset/wolmart/assets/images/products/vendor-banner.jpg"
-                             alt="Vendor Banner" width="610" height="295"
-                             style="background-color: #353B55;" />
-                    </figure>
-                </div>
-                <div class="col-md-6 pl-2 pl-md-6 mb-4">
-                    <div class="vendor-user">
-                        <figure class="vendor-logo mr-4">
-                            <a href="#">
-                                <img src="/webAsset/wolmart/assets/images/products/vendor-logo.jpg"
-                                     alt="Vendor Logo" width="80" height="80" />
-                            </a>
-                        </figure>
-                        <div>
-                            <div class="vendor-name"><a href="#">Jone Doe</a></div>
-                            <div class="ratings-container">
-                                <div class="ratings-full">
-                                    <span class="ratings" style="width: 90%;"></span>
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <a href="#" class="rating-reviews">(32 Reviews)</a>
                             </div>
-                        </div>
-                    </div>
-                    <ul class="vendor-info list-style-none">
-                        <li class="store-name">
-                            <label>Store Name:</label>
-                            <span class="detail">OAIO Store</span>
-                        </li>
-                        <li class="store-address">
-                            <label>Address:</label>
-                            <span class="detail">
-                                Steven Street, El Carjon, CA 92020, United
-                                States (US)
-                            </span>
-                        </li>
-                        <li class="store-phone">
-                            <label>Phone:</label>
-                            <a href="#tel:">1234567890</a>
-                        </li>
-                    </ul>
-                    <a href="vendor-dokan-store.html"
-                       class="btn btn-dark btn-link btn-underline btn-icon-right">
-                        Visit
-                        Store<i class="w-icon-long-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            <p class="mb-5">
-                <strong class="text-dark">L</strong>orem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.
-                Venenatis tellus in metus vulputate eu scelerisque felis. Vel pretium
-                lectus quam id leo in vitae turpis massa. Nunc id cursus metus aliquam.
-                Libero id faucibus nisl tincidunt eget. Aliquam id diam maecenas ultricies
-                mi eget mauris. Volutpat ac tincidunt vitae semper quis lectus. Vestibulum
-                mattis ullamcorper velit sed. A arcu cursus vitae congue mauris.
-            </p>
-            <p class="mb-2">
-                <strong class="text-dark">A</strong> arcu cursus vitae congue
-                mauris. Sagittis id consectetur purus
-                ut. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla.
-                Diam in
-                arcu cursus euismod quis. Eget sit amet tellus cras adipiscing enim eu. In
-                fermentum et sollicitudin ac orci phasellus. A condimentum vitae sapien
-                pellentesque
-                habitant morbi tristique senectus et. In dictum non consectetur a erat. Nunc
-                scelerisque viverra mauris in aliquam sem fringilla.
-            </p>
-        </div>*@
+                            @*<div class="tab-pane" id="product-tab-vendor">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6 mb-4">
+                                            <figure class="vendor-banner br-sm">
+                                                <img src="/webAsset/wolmart/assets/images/products/vendor-banner.jpg"
+                                                     alt="Vendor Banner" width="610" height="295"
+                                                     style="background-color: #353B55;" />
+                                            </figure>
+                                        </div>
+                                        <div class="col-md-6 pl-2 pl-md-6 mb-4">
+                                            <div class="vendor-user">
+                                                <figure class="vendor-logo mr-4">
+                                                    <a href="#">
+                                                        <img src="/webAsset/wolmart/assets/images/products/vendor-logo.jpg"
+                                                             alt="Vendor Logo" width="80" height="80" />
+                                                    </a>
+                                                </figure>
+                                                <div>
+                                                    <div class="vendor-name"><a href="#">Jone Doe</a></div>
+                                                    <div class="ratings-container">
+                                                        <div class="ratings-full">
+                                                            <span class="ratings" style="width: 90%;"></span>
+                                                            <span class="tooltiptext tooltip-top"></span>
+                                                        </div>
+                                                        <a href="#" class="rating-reviews">(32 Reviews)</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <ul class="vendor-info list-style-none">
+                                                <li class="store-name">
+                                                    <label>Store Name:</label>
+                                                    <span class="detail">OAIO Store</span>
+                                                </li>
+                                                <li class="store-address">
+                                                    <label>Address:</label>
+                                                    <span class="detail">
+                                                        Steven Street, El Carjon, CA 92020, United
+                                                        States (US)
+                                                    </span>
+                                                </li>
+                                                <li class="store-phone">
+                                                    <label>Phone:</label>
+                                                    <a href="#tel:">1234567890</a>
+                                                </li>
+                                            </ul>
+                                            <a href="vendor-dokan-store.html"
+                                               class="btn btn-dark btn-link btn-underline btn-icon-right">
+                                                Visit
+                                                Store<i class="w-icon-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <p class="mb-5">
+                                        <strong class="text-dark">L</strong>orem ipsum dolor sit amet,
+                                        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                                        dolore magna aliqua.
+                                        Venenatis tellus in metus vulputate eu scelerisque felis. Vel pretium
+                                        lectus quam id leo in vitae turpis massa. Nunc id cursus metus aliquam.
+                                        Libero id faucibus nisl tincidunt eget. Aliquam id diam maecenas ultricies
+                                        mi eget mauris. Volutpat ac tincidunt vitae semper quis lectus. Vestibulum
+                                        mattis ullamcorper velit sed. A arcu cursus vitae congue mauris.
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong class="text-dark">A</strong> arcu cursus vitae congue
+                                        mauris. Sagittis id consectetur purus
+                                        ut. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla.
+                                        Diam in
+                                        arcu cursus euismod quis. Eget sit amet tellus cras adipiscing enim eu. In
+                                        fermentum et sollicitudin ac orci phasellus. A condimentum vitae sapien
+                                        pellentesque
+                                        habitant morbi tristique senectus et. In dictum non consectetur a erat. Nunc
+                                        scelerisque viverra mauris in aliquam sem fringilla.
+                                    </p>
+                                </div>*@
 
 
 
@@ -775,7 +913,7 @@
 
                                                 <div class="product-action">
                                                     <a href="/products/@newurl" class="btn-product btn-quickview" title="Quick View">
-                                                       نمایش
+                                                        نمایش
                                                     </a>
                                                 </div>
                                             </figure>
@@ -806,35 +944,45 @@
 
 
 @section scripts{
-    @*<script>
-        $(".otherfilter").click(function () {
-            var REP = "o" + $(this).attr('value');
-            $.ajax({
-                url: "/Home/changeLastNumber",
-                data: {
-                    value: REP
-                },
-                success: function (data) {
-                    $.ajax({
-                        url: "/Home/ProductDetailPartial",
-                        success: function (data) {
-                            $("#pvDataHolder").html(data)
+    <script>
+        $(".otherfilterNew").click(function () {
+            var price = $(this).attr('priceplaceholder');
+            var id = $(this).attr('idplaceholder');
 
-                        }
-                    });
+          
+            $("#priceholdersection").text(price);
+            $("#totalIDHolder").val(id);
 
-                    //window.location.href = "/" + $("#titleHolder").text()
-
-                }
-            });
-
+            $(".otherfilterNew").removeClass("activeColor")
+            $(this).addClass("activeColor");
         })
+    </script>
 
-    </script>*@
+   
 
 
     <script>
+        $(".otherNewColor").click(function () {
 
+            var price = $(this).attr('priceplaceholder');
+            var itemid = $(this).attr('idplaceholder');
+
+
+            $("#priceholdersection").text(price);
+            $("#totalIDHolder").val(itemid);
+
+            var id = $(this).attr('id');
+            $(".allbegone").removeClass("displayitem");
+            $(".allbegone").addClass("hideItem");
+
+            $(".allbegone[itemToShow='" + id+"']").removeClass("hideItem");
+            $(".allbegone[itemToShow='" + id+"']").addClass("displayitem");
+
+
+            $(".otherNewColor").removeClass("activeColor")
+            $(this).addClass("activeColor");
+
+        })
         var otherColorClicked = function (id) {
 
 
@@ -886,7 +1034,7 @@
 
 
                 var tarafH = el;
-                var ID = '@Model.ID';
+                var ID = $("#totalIDHolder").val();  //'@Model.ID';
                 var quantity = $("#fquantity").val();
                 var RealID = "addtocarto";
                 var tobeid = RealID.concat(ID);
@@ -994,4 +1142,15 @@
             $("#Addcomment").submit();
         })
     </script>
+    <style>
+        .displayitem {
+            display: unset !important
+        }
+
+        .hideItem {
+            display: none !important
+        }
+    </style>
+
 }
+

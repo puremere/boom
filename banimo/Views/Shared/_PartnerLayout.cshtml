@@ -26,7 +26,7 @@
     <title>  @Resources.res.dashboard</title>
 
     <!-- Google font-->
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+    @* <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">*@
 
     <!-- Linear Icon css -->
     <link rel="stylesheet" href="/AdminPanel/Portal/assets/css/linearicon.css">
@@ -71,6 +71,10 @@
         <link href="~/Content/font.css" rel="stylesheet" />
 
     }
+
+    <!-- Select2 css -->
+
+    <link rel="stylesheet" type="text/css" href="/AdminPanel/Portal/assets/css/select2.min.css">
 </head>
 
 <body>
@@ -282,6 +286,13 @@
                                                         </a>
                                                     </li>
                                                     <li class="sidebar-list">
+                                                        <a class="sidebar-link sidebar-title link-nav" href="/Partner/orders" data-bs-original-title="" title="">
+                                                            <i class="ri-picture-in-picture-fill"></i>
+                                                            <span>@Resources.res.orders</span>
+                                                            <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="sidebar-list">
                                                         <a class="sidebar-link sidebar-title link-nav" href="/Partner/Bank" data-bs-original-title="" title="">
                                                             <i class="ri-money-cny-box-fill"></i>
                                                             <span>@Resources.res.accounting </span>
@@ -377,7 +388,10 @@
 
     <!-- Theme js -->
     <script src="/AdminPanel/Portal/assets/js/script.js"></script>
+    <!-- assets effect -->
+    <script src="~/AdminPanel/Portal/assets/js/select2.min.js"></script>
 
+    <script src="/AdminPanel/Portal/assets/js/select2-custom.js"></script>
 
 
 
@@ -388,10 +402,10 @@
             $("#logoutuser").click(function () {
                 window.location.href = "/Partner/CustomerLogout";
             })
-           
+
         })
 
-       
+
     </script>
 </body><!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 10 Mar 2023 16:17:57 GMT -->
 </html>

@@ -10,33 +10,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 
-    <title>حسون، انچه شما می پسندید</title>
+    <title>ورکالا، انچه شما می پسندید</title>
 
     <meta name="keywords" content="Marketplace ecommerce  " />
     <meta name="description" content="Marsool is powerful marketplace ">
     <meta name="author" content="">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
     <!-- WebFont.js -->
-
-    <script>
-        WebFontConfig = {
-            google: { families: ['Poppins:400,500,600,700,800'] }
-        };
-        (function (d) {
-            var wf = d.createElement('script'), s = d.scripts[0];
-            wf.src = '/webAsset/wolmart/assets/js/webfont.js';
-            wf.async = true;
-            s.parentNode.insertBefore(wf, s);
-        })(document);
-    </script>
+    @*<script>
+            WebFontConfig = {
+                google: { families: ['Poppins:400,500,600,700,800'] }
+            };
+            (function (d) {
+                var wf = d.createElement('script'), s = d.scripts[0];
+                wf.src = '/webAsset/wolmart/assets/js/webfont.js';
+                wf.async = true;
+                s.parentNode.insertBefore(wf, s);
+            })(document);
+        </script>*@
     <script src="/webAsset/wolmart/assets/vendor/jquery/jquery.min.js"></script>
     <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
           crossorigin="anonymous">
@@ -65,6 +76,26 @@
 </head>
 
 <body class="home" style="direction:rtl">
+    <style>
+        #loading {
+            align-content: center;
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+            opacity: 1;
+            margin: 0 auto;
+        }
+    </style>
+    <div id="loading" style="display:none">
+        <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
+            <img style="max-width:80px; display:block; margin:auto" src="~/images/logo.png" />
+            <img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" />
+        </div>
+    </div>
     <div class="page-wrapper">
         <h1 class="d-none">Marsool</h1>
         <header class="header header-border">
@@ -76,7 +107,7 @@
                     <div class="header-left mr-md-4">
 
                         <a href="." class="logo ml-lg-0">
-                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" />
+                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" style="max-width:100px"/>
                         </a>
                         <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
 
@@ -100,16 +131,16 @@
                         </div>
                         @if (Session["LogedInUser"] == null)
                         {
-                            <a class="wishlist label-down link d-xs-show" href="/Home/Login">
+                            <a class="wishlist label-down link d-xs-show" href="/Home/LoginPage">
                                 <i style="font-weight:600" class="w-icon-user"></i>
                                 <span class="wishlist-label d-lg-show">@Resources.res.login</span>
                             </a>
                         }
                         else
                         {
-                            <a class="wishlist label-down link d-xs-show" href="/CustomerLogin/LogOff">
-                                <i style="font-weight:600" class="w-icon-logout"></i>
-                                <span class="wishlist-label d-lg-show">@Resources.res.logout</span>
+                            <a class="wishlist label-down link " href="/Home/Myprofile">
+                                <i style="font-weight:600" class="w-icon-user"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.profile</span>
                             </a>
                         }
 
@@ -135,110 +166,110 @@
 
         <!-- End of Main -->
         <!-- Start of Footer -->
-    <footer class="footer appear-animate" data-animation-options="{
+        <footer class="footer appear-animate" data-animation-options="{
             'name': 'fadeIn'
         }">
-        <div class="footer-newsletter bg-primary">
-            <div class="container">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-xl-5 col-lg-6">
-                        <div class="icon-box icon-box-side text-white" style="justify-content:right">
-                            <div class="icon-box-icon d-inline-flex">
-                                <i class="w-icon-envelop3"></i>
-                            </div>
-                            <div class="icon-box-content">
-                                <h4 class="icon-box-title text-white text-uppercase font-weight-bold">
-                                    @Resources.res.SubscribeNewsletter
-                                </h4>
-                                <p class="text-white">
-                                    @Resources.res.newsletterDesc
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-7 col-lg-6 col-md-9 mt-4 mt-lg-0 ">
-                        <form action="#" method="get"
-                              class="input-wrapper input-wrapper-inline input-wrapper-rounded">
-                            <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
-                                   placeholder="@Resources.res.emailPlaceholder" />
-                            <button class="btn btn-dark btn-rounded" type="submit">
-                                @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="footer-top">
-                <div class="footer-top">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="widget widget-about">
-                                <a href="demo10.html" class="logo-footer">
-                                    <img src="/webAsset/wolmart/assets/images/demos/demo10/footer-logo.png" alt="logo-footer" width="144"
-                                         height="45" />
-                                </a>
-                                <div class="widget-body">
-                                    <p class="widget-about-title">پشتیبانی 24 ساعته</p>
-                                    <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
-
-
-                                    <div class="social-icons social-icons-colored">
-                                        <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
-                                        <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
-                                        <a href="#" class="social-icon social-instagram w-icon-instagram"></a>
-                                        <a href="#" class="social-icon social-youtube w-icon-youtube"></a>
-                                        <a href="#" class="social-icon social-pinterest w-icon-pinterest"></a>
-                                    </div>
+            <div class="footer-newsletter bg-primary">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-xl-5 col-lg-6">
+                            <div class="icon-box icon-box-side text-white" style="justify-content:right">
+                                <div class="icon-box-icon d-inline-flex">
+                                    <i class="w-icon-envelop3"></i>
+                                </div>
+                                <div class="icon-box-content">
+                                    <h4 class="icon-box-title text-white text-uppercase font-weight-bold">
+                                        @Resources.res.SubscribeNewsletter
+                                    </h4>
+                                    <p class="text-white">
+                                        @Resources.res.newsletterDesc
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="widget">
-                                <h3 class="widget-title">شرکت</h3>
-                                <ul class="widget-body">
-                                    <li><a href="about-us.html">درباره ما</a></li>
-                                    <li><a href="#">اعضای حصون</a></li>
-                                    <li><a href="#">همکاری</a></li>
-                                    <li><a href="contact-us.html">تماس با ما</a></li>
-                                    <li><a href="#">مشارکت در فروش</a></li>
-                                    <li><a href="#">سابقه خرید</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="widget">
-                                <h4 class="widget-title">حساب کاربری</h4>
-                                <ul class="widget-body">
-                                    <li><a href="#">پیگیری خرید</a></li>
-                                    <li><a href="cart.html">سبد خرید</a></li>
-                                    <li><a href="login.html">ورود</a></li>
-                                    <li><a href="#">پشتیبانی</a></li>
-                                    <li><a href="wishlist.html">لیست منتخب</a></li>
-                                    <li><a href="#">حریم خصوصی</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="widget">
-                                <h4 class="widget-title">خدمات مشتریان</h4>
-                                <ul class="widget-body">
-                                    <li><a href="#">روش های پرداخت</a></li>
-                                    <li><a href="#">تضمین بازگشت وجه</a></li>
-                                    <li><a href="#">عودت کالا</a></li>
-                                    <li><a href="#">مرکز پشتیبانی</a></li>
-                                    <li><a href="#">ارسال</a></li>
-                                    <li><a href="#">قوانین </a></li>
-                                </ul>
-                            </div>
+                        <div class="col-xl-7 col-lg-6 col-md-9 mt-4 mt-lg-0 ">
+                            <form action="#" method="get"
+                                  class="input-wrapper input-wrapper-inline input-wrapper-rounded">
+                                <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
+                                       placeholder="@Resources.res.emailPlaceholder" />
+                                <button class="btn btn-dark btn-rounded" type="submit">
+                                    @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="container">
+                <div class="footer-top">
+                    <div class="footer-top">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="widget widget-about">
+                                    <a href="demo10.html" class="logo-footer">
+                                        <img src="/webAsset/wolmart/assets/images/demos/demo10/footer-logo.png" alt="logo-footer" width="144"
+                                             height="45" />
+                                    </a>
+                                    <div class="widget-body">
+                                        <p class="widget-about-title">پشتیبانی 24 ساعته</p>
+                                        <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
 
-        </div>
-    </footer>
+
+                                        <div class="social-icons social-icons-colored">
+                                            <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                            <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                            <a href="#" class="social-icon social-instagram w-icon-instagram"></a>
+                                            <a href="#" class="social-icon social-youtube w-icon-youtube"></a>
+                                            <a href="#" class="social-icon social-pinterest w-icon-pinterest"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h3 class="widget-title">شرکت</h3>
+                                    <ul class="widget-body">
+                                        <li><a href="about-us.html">درباره ما</a></li>
+                                        <li><a href="#">اعضای حصون</a></li>
+                                        <li><a href="#">همکاری</a></li>
+                                        <li><a href="contact-us.html">تماس با ما</a></li>
+                                        <li><a href="#">مشارکت در فروش</a></li>
+                                        <li><a href="#">سابقه خرید</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h4 class="widget-title">حساب کاربری</h4>
+                                    <ul class="widget-body">
+                                        <li><a href="#">پیگیری خرید</a></li>
+                                        <li><a href="#">سبد خرید</a></li>
+                                        <li><a href="#">ورود</a></li>
+                                        <li><a href="#">پشتیبانی</a></li>
+                                        <li><a href="#">لیست منتخب</a></li>
+                                        <li><a href="#">حریم خصوصی</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h4 class="widget-title">خدمات مشتریان</h4>
+                                    <ul class="widget-body">
+                                        <li><a href="#">روش های پرداخت</a></li>
+                                        <li><a href="#">تضمین بازگشت وجه</a></li>
+                                        <li><a href="#">عودت کالا</a></li>
+                                        <li><a href="#">مرکز پشتیبانی</a></li>
+                                        <li><a href="#">ارسال</a></li>
+                                        <li><a href="#">قوانین </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </footer>
         <!-- End of Footer -->
     </div>
     <!-- End of Page-wrapper-->
@@ -347,8 +378,6 @@
     </a>
     <!-- End of Scroll Top -->
     <!-- Start of Mobile Menu -->
-    
-
     <!-- End of Mobile Menu -->
     <!-- Start of Newsletter popup -->
     <div class="newsletter-popup mfp-hide">
@@ -579,6 +608,7 @@
                             });
 
                             $("." + valueAllID).text(count);
+                            $("." + valueAllID).val(count);
                             total += parseInt(item.quantity);
 
                             let addson = item.productid + "*" + item.addson;
@@ -634,80 +664,116 @@
         .page-wrapper {
             min-height: 90vh
         }
-        
     </style>
     <script>
-        var minusfromcart = function (el, ID, addson) {
-            var tarafH = el;
-            var RealID = "delet";
-            var tobeid = RealID.concat(ID);
-            $.ajax({
-                url: '/Home/minusfromcart',
-                dataType: 'html',
-                data: {
-                    id: tobeid,
-                    price: tarafH,
-                    addson: addson
-
-                },
-                success: function (data) {
-
-                    //getquntity();
-                    toastr.options = {
-                        "debug": false,
-                        "positionClass": "toast-top-center",
-                        "onclick": null,
-                        "fadeIn": 300,
-                        "fadeOut": 1000,
-                        "timeOut": 5000,
-                        "extendedTimeOut": 1000,
-                    }
-                    toastr.success('با موفقیت انجام شد');
-                    getquntity();
-                },
-                error: function () {
-                    alert("خطا")
-                }
 
 
-            });
+
+        var initial;
+
+        function invocation(el, ID, quntity, addson, refresh) {
+
+            initial = window.setTimeout(
+                function () {
+
+                    updateCart(el, ID, quntity, addson, refresh);
+                }, 1000);
         }
-        var addtocart = function (el, ID, addson) {
+
+
+
+        var invocUpdate = function (el, ID, quntity, addson, refresh) {
+            clearTimeout(initial);
+            invocation(el, ID, quntity, addson, refresh);
+        }
+
+
+
+        var updateCart = function (el, ID, quntity, addson, refresh) {
+
             var tarafH = el;
-            var quantity = $("#fquantity").val();
             var RealID = "addtocarto";
             var tobeid = RealID.concat(ID);
             $.ajax({
-                url: '/Home/addtocart',
+                url: '/Home/updatecart',
                 data: {
                     id: tobeid,
                     price: tarafH,
-                    quantity: quantity,
+                    quantity: quntity,
                     addson: addson
 
                 },
                 success: function (data) {
 
 
-                    // getquntity();
-                    toastr.options = {
-                        "debug": false,
-                        "positionClass": "toast-top-center",
-                        "onclick": null,
-                        "fadeIn": 300,
-                        "fadeOut": 1000,
-                        "timeOut": 10000,
-                        "extendedTimeOut": 1000,
+                    if (refresh == "1") {
+                        window.location.reload();
                     }
-                    toastr.success('با موفقیت انجام شد');
+                    else {
+                        // getquntity();
+                        //toastr.options = {
+                        //    "debug": false,
+                        //    "positionClass": "toast-top-center",
+                        //    "onclick": null,
+                        //    "fadeIn": 300,
+                        //    "fadeOut": 1000,
+                        //    "timeOut": 10000,
+                        //    "extendedTimeOut": 1000,
+                        //}
+                        //toastr.success('با موفقیت انجام شد');
 
-                    getquntity();
+                        getquntity();
+                    }
+
+
                 },
 
                 error: function () {
 
                 }
             });
+        }
+        var enterUpdate = function (el, ID, addson, refresh) {
+
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            var newCount = parseInt(CurrentItem);
+            invocUpdate(el, ID, newCount, addson, refresh);
+
+
+        };
+        var addtocart = function (el, ID, addson, refresh) {
+
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            var newCount = parseInt(CurrentItem) + 1;
+            $("." + className).val(newCount);
+
+            //if (refresh == "1") {
+
+            //    var ele = $("." + className).parent().parent();
+            //    var prc = ele.find(".basePrice").text();
+            //    alert(prc);
+            //    ele.find(".priceelement").text("22");
+            //}
+            invocUpdate(el, ID, newCount, addson, refresh);
+
+
+        }
+        var minusfromcart = function (el, ID, addson, refresh) {
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            if (parseInt(CurrentItem) > 0) {
+                var newCount = parseInt(CurrentItem) - 1;
+                $("." + className).val(newCount);
+                invocUpdate(el, ID, newCount, addson, refresh);
+            }
         }
 
         var removeAllFromCart = function (el, ID, addson) {
@@ -737,7 +803,7 @@
 
     </script>
 
-   
+
 </body>
 
 </html>

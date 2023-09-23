@@ -15,3 +15,15 @@ input{
         margin-right: unset !important;
         margin-left: 3.3rem !important;
     }
+
+.tab-vertical .nav-link{
+    text-align:right !important;
+}
+
+.shop-table{
+    text-align:center !important;
+}
+.tableOfOrders{
+    max-height:400px !important;
+    overflow-y: scroll !important
+}

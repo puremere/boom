@@ -417,7 +417,7 @@
             </div>
 
         </div>
-       
+
         <!-- Details End -->
 
     </div>
@@ -437,14 +437,14 @@
                     <div class="col-lg-8">
                         <div style="display:inline-block; display:flex">
                             <button id="showFilterModal" style="margin:5px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
-                                @Resources.res.showFilter 
+                                @Resources.res.showFilter
                             </button>
 
                             <!-- Modal -->
                             <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                       
+
                                         <p id="allfilterid" style="display:none"></p>
                                         <div class="modal-body" id="filterholderforproduct">
 
@@ -454,7 +454,7 @@
                                             @{
 
                                                 <div style=" border-bottom:1px solid #ddd; padding:0px ; margin:0px;margin-bottom:10px; padding-bottom:10px">
-                                                   
+
                                                     @if (Model.filters != null && Model.filters.Count() > 0)
                                                     {
                                                         foreach (var myitem in Model.filters)
@@ -631,111 +631,111 @@
 
 
                                                 @*if (Model.range != null)
-                                                {
+                                                    {
 
-                                                    <div class="row" id="rangHolder" style="border-bottom:1px solid #ddd; padding:0px ; margin:0px;margin-bottom:10px;padding-bottom:10px ">
-                                                        <p style="margin:5px">فیلتر های بازه ای:</p>
-                                                        @foreach (var range in Model.range)
-                                                        {
+                                                        <div class="row" id="rangHolder" style="border-bottom:1px solid #ddd; padding:0px ; margin:0px;margin-bottom:10px;padding-bottom:10px ">
+                                                            <p style="margin:5px">فیلتر های بازه ای:</p>
+                                                            @foreach (var range in Model.range)
+                                                            {
 
-                                                            string id = "R" + range.ID;
-                                                            <label class="control-label col-lg-3 col-md-2 col-sm-2 col-xs-12" style="text-align: right">
-                                                                @range.title :
-                                                            </label>
-                                                            <input id=@id value=@range.value class="rangeInput form-control col-md-2 col-sm-2 col-xs-12" />
+                                                                string id = "R" + range.ID;
+                                                                <label class="control-label col-lg-3 col-md-2 col-sm-2 col-xs-12" style="text-align: right">
+                                                                    @range.title :
+                                                                </label>
+                                                                <input id=@id value=@range.value class="rangeInput form-control col-md-2 col-sm-2 col-xs-12" />
 
-                                                        }
-                                                    </div>
+                                                            }
+                                                        </div>
 
-                                                }
-
-                                                <div style="background-color : @Model.color" id="colorholder" class="form-group ">
-                                                    <label class="control-label col-md-2 col-sm-2 col-xs-12">
-                                                        رنگ :
-                                                    </label>
-                                                    @{
-                                                        if (Model.color != "")
-                                                        {
-
-
-                                                            <div class="col-md-8 col-sm-8 col-xs-12">
-                                                                @{
-                                                                    <select id=productcolor name=productcolor onchange="Getcolorlist(this)" style="width:100%" class="" multiple>
-                                                                        @if (Model.Colores != null)
-                                                                        {
-                                                                            foreach (var color in Model.Colores)
-                                                                            {
-                                                                                if (color.Value == Model.color)
-                                                                                {
-                                                                                    <option value=@color.Value selected> @color.Text    </option>
-
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <option value=@color.Value> @color.Text    </option>
-
-                                                                                }
-                                                                            }
-
-                                                                        }
-
-                                                                    </select>
-                                                                }
-                                                            </div>
-
-
-                                                            <script>
-
-                                                                function Getcolorlist(productcolor) {
-                                                                    var selectedValue = productcolor.value;
-                                                                    $("#colorholder").css("background-color", selectedValue);
-
-                                                                }
-                                                                $(document).ready(function () {
-                                                                    $("#productcolor option").each(function () {
-                                                                        if ($(this).val() != '') {
-                                                                            $(this).css('background-color', $(this).val());
-                                                                        }
-                                                                    });
-                                                                });
-
-
-                                                            </script>
-
-
-
-                                                        }
-                                                        else if (Model.Colores != null)
-                                                        {
-                                                            <div class="col-md-8 col-sm-8 col-xs-12">
-
-                                                                @Html.DropDownListFor(m => m.color, Model.Colores, "--", new { id = "productcolor", name = "productcolor", onchange = "Getcolorlist(this)", style = "width:100%", @class = "DRPd" })
-                                                            </div>
-
-
-                                                            <script>
-
-                                                                //function Getcolorlist(productcolor) {
-                                                                //    var selectedValue = productcolor.value;
-                                                                //    $("#colorholder").css("background-color", selectedValue);
-
-                                                                //}
-                                                                $(document).ready(function () {
-                                                                    $("#productcolor option").each(function () {
-                                                                        if ($(this).val() != '') {
-                                                                            $(this).css('background-color', $(this).val());
-                                                                        }
-                                                                    });
-                                                                });
-
-
-
-                                                            </script>
-                                                        }
                                                     }
 
+                                                    <div style="background-color : @Model.color" id="colorholder" class="form-group ">
+                                                        <label class="control-label col-md-2 col-sm-2 col-xs-12">
+                                                            رنگ :
+                                                        </label>
+                                                        @{
+                                                            if (Model.color != "")
+                                                            {
 
-                                                </div>*@
+
+                                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                                    @{
+                                                                        <select id=productcolor name=productcolor onchange="Getcolorlist(this)" style="width:100%" class="" multiple>
+                                                                            @if (Model.Colores != null)
+                                                                            {
+                                                                                foreach (var color in Model.Colores)
+                                                                                {
+                                                                                    if (color.Value == Model.color)
+                                                                                    {
+                                                                                        <option value=@color.Value selected> @color.Text    </option>
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <option value=@color.Value> @color.Text    </option>
+
+                                                                                    }
+                                                                                }
+
+                                                                            }
+
+                                                                        </select>
+                                                                    }
+                                                                </div>
+
+
+                                                                <script>
+
+                                                                    function Getcolorlist(productcolor) {
+                                                                        var selectedValue = productcolor.value;
+                                                                        $("#colorholder").css("background-color", selectedValue);
+
+                                                                    }
+                                                                    $(document).ready(function () {
+                                                                        $("#productcolor option").each(function () {
+                                                                            if ($(this).val() != '') {
+                                                                                $(this).css('background-color', $(this).val());
+                                                                            }
+                                                                        });
+                                                                    });
+
+
+                                                                </script>
+
+
+
+                                                            }
+                                                            else if (Model.Colores != null)
+                                                            {
+                                                                <div class="col-md-8 col-sm-8 col-xs-12">
+
+                                                                    @Html.DropDownListFor(m => m.color, Model.Colores, "--", new { id = "productcolor", name = "productcolor", onchange = "Getcolorlist(this)", style = "width:100%", @class = "DRPd" })
+                                                                </div>
+
+
+                                                                <script>
+
+                                                                    //function Getcolorlist(productcolor) {
+                                                                    //    var selectedValue = productcolor.value;
+                                                                    //    $("#colorholder").css("background-color", selectedValue);
+
+                                                                    //}
+                                                                    $(document).ready(function () {
+                                                                        $("#productcolor option").each(function () {
+                                                                            if ($(this).val() != '') {
+                                                                                $(this).css('background-color', $(this).val());
+                                                                            }
+                                                                        });
+                                                                    });
+
+
+
+                                                                </script>
+                                                            }
+                                                        }
+
+
+                                                    </div>*@
 
 
 
@@ -749,7 +749,7 @@
                                                             $('#filterModal').modal('toggle');
 
                                                         })
-                                                       
+
                                                     </script>
                                                 </div>
                                             }
@@ -767,7 +767,7 @@
                             </button>
                             <script>
                                 $("#showFeatureModal").click(function () {
-                                     
+
                                     $('#featureModal').modal('toggle');
                                 })
                             </script>
@@ -776,7 +776,7 @@
                             <div class="modal fade" id="featureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                       
+
                                         <div class="modal-body" id="featureholderforproduct">
 
                                             @{
@@ -1097,16 +1097,21 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
                                 @Resources.res.hashtags
                             </label>
                             <div class="col-sm-10">
-                                @if (Model.tag != "")
-                                {
-                                    <input value="@Model.tag" data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
+                                <select id="tagupdate" class="editMenuTag js-example-basic-single" multiple name="tagupdate">
+                                    @foreach (var item in Model.tags)
+                                    {
+                                        if (Model.tag.Contains(item.title))
+                                        {
+                                            <option value="@item.title" selected>@item.title</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.title">@item.title</option>
+                                        }
 
-                                }
-                                else
-                                {
-                                    <input data-role="tagsinput" id="tagupdate" name="tagupdate" required="required" class="form-control REM2" style="min-height: 150px ">
+                                    }
 
-                                }
+                                </select>
 
 
                             </div>

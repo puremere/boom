@@ -29,6 +29,7 @@
         //tinymce.activeEditor.execCommand('mceDirectionRTL');
     </script>
 
+   
 }
 <style>
 
@@ -47,8 +48,9 @@
     .classshow {
         display: inline-block;
     }
-    .component{
-        margin-bottom:20px
+
+    .component {
+        margin-bottom: 20px
     }
 </style>
 <link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
@@ -173,17 +175,31 @@
                                         </div>
                                     </div>
 
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> انتخاب برچسب </label>
+                                        <div style="width:100%">
+                                            @if (Model.childe != null)
+                                            {
 
+                                                if (Model.childe.tags != null)
+                                                {
+                                                    @Html.DropDownList("tagname", new SelectList(Model.childe.tags, "ID", "title"), "select item", new { id = "listOfBrands", @class = "js-example-basic-single  addMenuTag", multiple = "multiple" , })
+
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
                                     @*<div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
-            <label> انتخاب برند </label>
-            <div style="width:100%">
-                @if (Model.brands != null)
-                {
-                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
+                                            <label> انتخاب برند </label>
+                                            <div style="width:100%">
+                                                @if (Model.brands != null)
+                                                {
+                                                    @Html.DropDownList("brandname", new SelectList(Model.brands, "ID", "title"), "select item", new { id = "listOfBrands", @class = "form-control", multiple = "multiple" })
 
-                }
-            </div>
-        </div>*@
+                                                }
+                                            </div>
+                                        </div>*@
                                     <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                                         <p hidden class="imageNameEdit"></p>
                                         <div style="width:100%">
@@ -282,7 +298,7 @@
 
                             <div class="row">
                                 <div class="row editParent">
-                                   
+
                                     <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
                                         <label> @Resources.res.category </label>
                                         <div style="width:100%">
@@ -305,6 +321,28 @@
                                         <label> @Resources.res.priority </label>
                                         <div style="width:100%">
                                             <input type="text" id="priorityEdit" required="required" class="form-control INP">
+                                        </div>
+                                    </div>
+                                    <div class=" component col-md-5 col-sm-5 col-xs-12" style="min-width:250px">
+                                        <label> انتخاب برچسب </label>
+                                        <div style="width:100%">
+                                            @if (Model.childe != null)
+                                            {
+
+                                                if (Model.childe.tags != null)
+                                                {
+                                                    <select id="edittags" class="editMenuTag js-example-basic-single" multiple name="tags">
+                                                        @foreach(var item in Model.childe.tags)
+                                                        {
+                                                            <option value="@item.ID" >@item.title</option>
+                                                        }
+
+                                                    </select>
+                                                    @*@Html.DropDownList("tagNameEdit", new SelectList(Model.childe.tags, "ID", "title"), "select item", new { id = "ListOFEditTag", @class = " editMenuTag", multiple = "multiple", })*@
+
+                                                }
+
+                                            }
                                         </div>
                                     </div>
 
@@ -476,6 +514,7 @@
             catname = "00";
         }
         var name = $("#titleAdd").val();
+        var tags = $("#tagname").val();
         var entitle = $("#entitleAdd").val();
         var priority = $("#priorityAdd").val();
         var description = tinymce.get("descAdd").getContent();
@@ -494,7 +533,8 @@
                     description: description,
                     priority: priority,
                     image: image,
-                    parentID: parentID
+                    parentID: parentID,
+                    tags: tags
 
                 },
                 function (data) {
@@ -547,7 +587,7 @@
 
         if (catname != "") {
             $.ajax({
-                url: "/admin/getCatDetail",
+                url: "/node/getCatDetail",
                 dataType: "html",
                 data: {
                     catid: catname,
@@ -556,12 +596,15 @@
                 success: function (data) {
 
                     var obj = JSON.parse(data);
-                    var image = obj[0]["image"];
-                    var title = obj[0]["title"];
-                    var entitle = obj[0]["entitle"];
-                    var priority = obj[0]["priority"];
-                    var description = obj[0]["description"];
-
+                    var image = obj['data'][0]["image"];
+                    var title = obj['data'][0]["title"];
+                    var entitle = obj['data'][0]["entitle"];
+                    var priority = obj['data'][0]["priority"];
+                    var description = obj['data'][0]["description"];
+                    var tags = obj['tags'];
+                    $("#edittags option").each(function () {
+                        $("#edittags").select2().val(tags).trigger("change");
+                    })
                     $("#titleEdit").val(title);
                     $("#entitleEdit").val(entitle);
                     $("#priorityEdit").val(priority);
@@ -575,7 +618,7 @@
 
 
                         var srt = $(".imageNameEdit").text();
-                        $(".imageNameEdit").text(obj[0]["image"] + "," + srt);
+                        $(".imageNameEdit").text(obj['data'][0]["image"] + "," + srt);
                     }
 
 
@@ -601,6 +644,7 @@
     $("#verifEdit").click(function () {
         var brandID = "";
         var catname = $("#listofcatEdit").val();
+        var tag = $("#edittags").val();
         var name = $("#titleEdit").val();
         var enname = $("#entitleEdit").val();
         var priority = $("#priorityEdit").val();
@@ -609,12 +653,12 @@
         var br = brandID.toString();
         if (catname != "" && name != "" && image != "" && desc != "") {
 
-
+          
 
 
 
             $.post(
-                '/admin/editcatNew',
+                '/node/editcatNew',
                 {
                     catID: catname,
                     title: name,
@@ -622,7 +666,8 @@
                     priority: priority,
                     image: image,
                     description: desc,
-                    brandID: br
+                    brandID: br,
+                    tags: tag
                 },
                 function (data) {
                     if (data == "1") {
@@ -630,7 +675,7 @@
 
                     }
                 });
-        }
+        };
     })
 
     $(".ImageDelete").click(function () {

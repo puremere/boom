@@ -70,10 +70,15 @@ namespace banimo.AdminPanel.ViewModel
         public string level { get; set; }
         public int setID { get; set; }
     }
-
+    public class Tag
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+    }
     public class catAll
     {
         public List<FiltercatsAll> filtercatsAll { get; set; }
+        public List<Tag> tag { get; set; }
     }
 
     public class LocationAll

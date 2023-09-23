@@ -24,13 +24,21 @@ namespace banimo.ViewModelPost
         public string isAvailable { get; set; }
         
     }
-
+    public class OtherColorFilter
+    {
+        public string ID { get; set; }
+        public string selectedFilter { get; set; }
+        public string productprice { get; set; }
+        public string oldprice { get; set; }
+        public string discount { get; set; }
+    }
     public class OtherColor
     {
         public int ID { get; set; }
         public string colorTitle { get; set; }
         public string colorCode { get; set; }
         public string imageTitle { get; set; }
+        public List<OtherColorFilter> otherColorFilter { get; set; }
     }
     public class Filter
     {

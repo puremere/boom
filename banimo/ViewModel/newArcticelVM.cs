@@ -7,6 +7,14 @@ using System.Web.Mvc;
 namespace banimo.ViewModel
 {
 
+
+    public class addTagVM
+    {
+        public string title { get; set; }
+        public string ID { get; set; }
+        public string image { get; set; }
+        public string[] tag { get; set; }
+    }
     public class newMenuVM
     {
 
@@ -20,6 +28,7 @@ namespace banimo.ViewModel
         public string description { get; set; }
         public string entitle { get; set; }
         public string priority { get; set; }
+        public string[] tags { get; set; }
     }
     public class newArcticelVM
     {

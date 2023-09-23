@@ -1,0 +1,49 @@
+﻿
+.desciptionSectin img {
+    object-fit: contain;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.desciptionSectin p {
+    font-size: 18px;
+    margin: 10px;
+    color: #02124c
+}
+
+.desciptionSectin h1 {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.desciptionSectin h2 {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.desciptionSectin h3 {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.desciptionSectin h4 {
+    font-size: 24px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.desciptionSectin h5 {
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.desciptionSectin h6 {
+    line-height: 2.1;
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

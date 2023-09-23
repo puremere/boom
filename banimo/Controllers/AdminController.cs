@@ -6724,7 +6724,7 @@ namespace banimo.Controllers
                         collection.Add("vahed", vahed);
                         collection.Add("limit", limit);
 
-                        collection.Add("tag", detail.tagupdate);
+                        collection.Add("tag", string.Join(",", detail.tagupdate));
                         collection.Add("selectedFilter", detail.Selectedfilters);
                         collection.Add("SelectedAnbar", detail.SelectedAnbars);
 
@@ -6945,7 +6945,7 @@ namespace banimo.Controllers
                     collection.Add("count", count);
                     collection.Add("vahed", vahed);
                     collection.Add("limit", detail.limit);
-                    collection.Add("tag", detail.tagupdate);
+                    collection.Add("tag", string.Join(",", detail.tagupdate));
                     collection.Add("imaglist", imglst);
                     collection.Add("isOffer", detail.isOffer);// محصولات پرفروش
                     collection.Add("isAvalible", detail.isAvalible);

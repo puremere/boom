@@ -30,7 +30,12 @@ namespace banimo.AdminPanelBoom.ViewModel
         public string level { get; set; }
         public int setID { get; set; }
     }
-
+    public class Tag
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string image { get; set; }
+    }
     public class Brand
     {
         public string ID { get; set; }
@@ -49,6 +54,7 @@ namespace banimo.AdminPanelBoom.ViewModel
     {
         public List<FiltercatsAll> filtercatsAll { get; set; }
         public List<Brand> brands { get; set; }
+        public List<Tag> tags { get; set; }
         public List<Parent> parents { get; set; }
     }
 

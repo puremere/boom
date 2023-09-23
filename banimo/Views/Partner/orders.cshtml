@@ -45,6 +45,24 @@
             float: right !important;
         }
 </style>
+
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <p>@Resources.res.removeConfirm </p>
+               
+            </div>
+            <div class="modal-footer">
+                <button id="cancelRemove" type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="setRemove" type="button" class="btn btn-primary" >@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <!-- Details Start -->
@@ -52,40 +70,40 @@
         <div class="card">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Search Panel</h5>
+                    <h5>@Resources.res.searchPanel  </h5>
                 </div>
                 <div class="row">
                     <form>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title  mb-0">Status :</label>
+                            <label class="form-label-title  mb-0">@Resources.res.status  :</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="c" id="SearchCat">
-                                    <option value="">Choose Status</option>
-                                    <option value="0">Pending</option>
-                                    <option value="1">Accepted</option>
-                                    <option value="2">Rejected</option>
-                                    <option value="3">Preparing</option>
-                                    <option value="4">Sending</option>
-                                    <option value="4">Delivered</option>
+                                    <option value="">@Resources.res.chooseStatus </option>
+                                    <option value="0">@Resources.res.pending </option>
+                                    <option value="1">@Resources.res.accepted </option>
+                                    <option value="2">@Resources.res.rejected </option>
+                                    <option value="3">@Resources.res.preparing </option>
+                                    <option value="4">@Resources.res.sending </option>
+                                    <option value="4">@Resources.res.deliverd </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title  mb-0">Title :</label>
+                            <label class="form-label-title  mb-0">@Resources.res.title :</label>
                             <div class="col-sm-10">
                                 <input type="text" id="seachQuery" name="q" class="form-control col-md-7 col-xs-12">
 
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title  mb-0" style="white-space:nowrap">Time From :</label>
+                            <label class="form-label-title  mb-0" style="white-space:nowrap">@Resources.res.dateFrom :</label>
                             <div class="col-sm-10">
                                 <input type="date" id="TimeFrom" name="tf" value="" class="form-control col-md-7 col-xs-12">
 
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
-                            <label class="form-label-title  mb-0">Time To :</label>
+                            <label class="form-label-title  mb-0">@Resources.res.dateTo :</label>
                             <div class="col-sm-10">
                                 <input type="date" id="TimeTo" name="tt" value="" class="form-control col-md-7 col-xs-12">
 
@@ -93,7 +111,7 @@
                         </div>
                         <div class="col-lg-6 mb-4 row align-items-center" style="display:inline-block">
                             <div id="NewList" class="col-sm-10" style="   margin-top: 20px;">
-                                <button class="btn btn-primary lgnsubmitt">Get Order List</button>
+                                <button class="btn btn-primary lgnsubmitt"> @Resources.res.getOrderList </button>
                             </div>
                         </div>
 
@@ -113,21 +131,27 @@
         <div class="card">
             <div id="prnt" class="card-body">
                 <div class="title-header option-title">
-                    <h5>Order List</h5>
+                    <h5>@Resources.res.orderList</h5>
                 </div>
                 <div  class="row" style="background-color:white; padding:10px; margin:0px;overflow-x:scroll">
                     <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:10px">
                         <thead>
 
                             <tr>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Col</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Order Number</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Date</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Address</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Name</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">User Phone</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Status</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">actions</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.col</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.orderNumber</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.date</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.state</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.city</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.userAddress</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.postalCode</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.Username  </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.userPhoneNumber  </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.paymentStat  </th>
+
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.status </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action </th>
                             </tr>
                         </thead>
 
@@ -142,103 +166,141 @@
                                     string cls = (lst.IndexOf(prod) + 1) % 2 == 0 ? "even" : "odd";
 
 
-                                    <tr class="@cls">
-                                        <td>
-                                            @i
-                                        </td>
+                            <tr class="@cls">
+                                <td>
+                                    @i
+                                </td>
 
 
-                                        <td>@prod.orderID</td>
-                                        <td>@prod.Rdate</td>
-                                        <td>@prod.address</td>
-                                        <td>@prod.fullname</td>
-                                        <td>@prod.phoneRC</td>
+                                <td>@prod.orderID</td>
+                                <td>@prod.Rdate</td>
+                                <td>@string.Format("{0:n0}",@prod.Price)</td>
+                                <td>@prod.state</td>
+                                <td>@prod.city</td>
+                                <td>@prod.address</td>
+                                <td>@prod.postalCode</td>
+                                <td>@prod.fullname</td>
+                                <td>@prod.phoneRC</td>
+                                <td>
+                                    @if (prod.payment == "1")
+                                    {
+                                        <span>پرداخت شده</span>
+                                    }
+                                    else if (prod.payment == "2")
+                                    {
+                                        <span>پرداخت در محل</span>
+                                    }
+                                </td>
 
-                                        @{
-                                            switch (prod.status)
-                                            {
-                                                case "0":
-                                                    <td class="order-pending">
-                                                        <span>Pending</span>
-                                                    </td>
-                                                    break;
-                                                case "1":
-                                                    <td class="order-success">
-                                                        <span>Accepted</span>
-                                                    </td>
-                                                    break;
-                                                case "2":
-                                                    <td class="order-cancle">
-                                                        <span>Rejected</span>
-                                                    </td>
-                                                    break;
-                                                case "3":
-                                                    <td class="order-success">
-                                                        <span>Preparing</span>
-                                                    </td>
-                                                    break;
-                                                case "4":
-                                                    <td class="order-success">
-                                                        <span>Sending</span>
-                                                    </td>
-                                                    break;
-                                                case "5":
-                                                    <td class="order-success">
-                                                        <span>Delivered</span>
-                                                    </td>
-                                                    break;
+                                @{
+                                    switch (prod.status)
+                                    {
+                                        case "0":
+                                            <td class="order-pending">
+                                                <span>@Resources.res.pending </span>
+                                            </td>
+                                            break;
+                                        case "1":
+                                            <td class="order-success">
+                                                <span>@Resources.res.accepted</span>
+                                            </td>
+                                            break;
+                                        case "2":
+                                            <td class="order-cancle">
+                                                <span>@Resources.res.rejected</span>
+                                            </td>
+                                            break;
+                                        case "3":
+                                            <td class="order-success">
+                                                <span>@Resources.res.preparing</span>
+                                            </td>
+                                            break;
+                                        case "4":
+                                            <td class="order-success">
+                                                <span>@Resources.res.sending</span>
+                                            </td>
+                                            break;
+                                        case "5":
+                                            <td class="order-success">
+                                                <span>@Resources.res.deliverd</span>
+                                            </td>
+                                            break;
 
-                                            }
+                                    }
+                                }
+
+
+
+
+
+
+                                <td>
+                                    <ul class="">
+                                        @if (@prod.status == "0")
+                                        {
+                                            <li>
+                                                <a href="javascript:void(0)" style="margin:0 6px">
+                                                    <i id="@prod.orderID" class="iconSelf ri-checkbox-circle-line verifyOrder iconSelf"><span class="iconDesc"> تایید سفارش</span></i>
+
+                                                </a>
+                                            </li>
                                         }
 
 
+                                        <li>
+                                            <a style="margin:0 6px" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
 
 
+                                                <i idtoView=@prod.orderID class="iconSelf ri-eye-fill viewDetail iconSelf" id=""><span class="iconDesc">مشاهده جزئیات</span></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <i style="margin:0 6px" lat="@prod.latitude" lon="@prod.longitude" id="@prod.orderID" class="iconSelf ri-user-location-fill showMap"><span class="iconDesc"> موقعیت کاربر</span></i>
+                                        </li>
 
-
-                                        <td>
-                                            <ul>
-                                                @if (@prod.status == "0")
-                                                {
-                                                    <li>
-                                                        <a href="javascript:void(0)" style="margin:0 6px">
-                                                            <i id="@prod.orderID" class="ri-checkbox-circle-line verifyOrder"></i>
-
-                                                        </a>
-                                                    </li>
-                                                }
-
-
-                                                <li>
-                                                    <a style="margin:0 6px" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-
-
-                                                        <i idtoView=@prod.orderID class="ri-eye-fill viewDetail" id=""></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <i style="margin:0 6px" lat="@prod.latitude" lon="@prod.longitude" id="@prod.orderID" class="ri-user-location-fill showMap"></i>
-                                                </li>
-
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                    </ul>
+                                </td>
+                            </tr>
                                 }
 
                             }
 
                         </tbody>
                     </table>
+                    <style>
+                        .iconSelf{
+                            position:relative;
+                        }
+                        .iconDesc {
+                            background-color: green;
+                            border: 1px dashed #ddd;
+                            padding: 5px;
+                            position: absolute;
+                            top: -50px;
+                            left: 0;
+                            display: none;
+                            width: 200px;
+                            color:white !important;
+                        }
+                    </style>
+                    <script>
+                        $(".iconSelf").hover(function () {
+                            $(this).find(".iconDesc").css("display","block")
+                        }, function () {
+                                $(this).find(".iconDesc").css("display", "none")
+                        })
+                    </script>
                 </div>
                 <div>
                     <table class="detailTable table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px; display:none">
                         <thead>
                             <tr>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product image</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product title</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product Addson</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">Product count</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">actions</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productImage </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productTitle </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productAddson </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productCount </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action</th>
                             </tr>
                         </thead>
 
@@ -262,6 +324,7 @@
 
                                         <td>@prod.title</td>
                                         <td>@prod.addson</td>
+                                        <td>@string.Format("{0:n0}", @prod.Price) </td>
 
                                         <td>@prod.quantity</td>
 
@@ -276,7 +339,7 @@
                                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
 
 
-                                                        <i idtoremove=@prod.itemID class="ri-delete-bin-line removeProduct" id=""></i>
+                                                        <i idtoremove=@prod.itemID class="ri-delete-bin-line removeOrder" id="@prod.ProductId"></i>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -302,11 +365,82 @@
 
 
 <script>
+    $(".removeOrder").click(function () {
+        $("#removeModal").modal('toggle');
+        idselected = $(this).attr('id');
+    })
+    $(".setRemove").click(function () {
+        $("#removeModal").modal('toggle');
+        var id = $("#selectedIDForDelete").text();
+        var orderID = id.split('-')[1];
+        $.ajax({
+            url: "/admin/deletFromOrder",
+            dataType: "html",
+            data: {
+                id: id,
+            },
+            success: function (data) {
+                if (data == 200) {
+
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 5000,
+                        "extendedTimeOut": 1000
+                    }
+
+                    toastr.success('با موقیت ثبت شد');
+
+                    $.ajax({
+                        url: '/Admin/goGetOrderDetail',
+                        dataType: 'html',
+                        data: {
+                            id: orderID,
+                        },
+
+                        success: function (data) {
+
+                            $(".detailHolder").html(data);
+
+                        }
+
+
+
+                    });
+                }
+            }
+
+        })
+    })
+
+    $("#setRemove").click(function () {
+        $("#removeModal").modal('toggle');
+        $.ajax({
+            url: '/Partner/removeOrder',
+            dataType: 'html',
+            data: {
+                id: idselected,
+            },
+
+            success: function (data) {
+
+                window.location.reload();
+            }
+
+
+
+        });
+    });
     $(".viewDetail").click(function () {
         var id = $(this).attr('idtoView');
         $(".detailTable").show();
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $(".detailTable").offset().top
+        }, 1000);
         $(".trbody").hide();
-
         $("." + id).show();
 
     })
@@ -336,14 +470,17 @@
 
 <script>
     $(".showMap").click(function () {
-        var lat = $(this).attr('lat');
-        var lon = $(this).attr('lon');
+        var lat = $(this).attr('lat').replace("/", ".");
+        var lon = $(this).attr('lon').replace("/", ".");
+
+       
+
         if ($('#mapid').length) {
             $('#mapid').remove();
         }
         var el = "<div> <div id = 'mapid' style = 'margin-top:20px; width:100% ; height:300px'></div></div >"
         $("#prnt").append(el)
-       
+
         showLocation(lat, lon);
         document.getElementById('mapid').scrollIntoView();
     })

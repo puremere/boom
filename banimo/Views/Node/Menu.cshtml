@@ -94,9 +94,25 @@
                         <label>@Resources.res.title  </label>
                         <input type="text" id="title" required="required" class="form-control INP">
                     </div>
+
                     <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
                         <label> @Resources.res.image </label>
                         <input id="imageFileHolder" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
+                        <label> انتخاب برچسب </label>
+                        <div style="width:100%">
+                            @if (Model.tag != null)
+                            {
+
+                                if (Model.tag != null)
+                                {
+                                    @Html.DropDownList("tagname", new SelectList(Model.tag, "ID", "title"), "select item", new { id = "listOfTags", @class = "js-example-basic-single  addMenuTag", multiple = "multiple", })
+
+                                }
+
+                            }
+                        </div>
                     </div>
                     <div class="component col-md-3 col-sm-3 col-xs-12" style="display:inline-block">
                         <div style="width:100%">
@@ -121,7 +137,7 @@
                     </div>
 
                     <p hidden class="imageName"></p>
-                    
+
                 </div>
             </div>
         </div>
@@ -178,7 +194,7 @@
             }
             var name = $("#title").val();
             var image = $(".imageName").text();
-
+            var tag = $("#listOfTags").val();
             if (catname != "" && name != "" && image != "") {
                 $.ajax({
                     url: "/node/setnewcat",
@@ -186,7 +202,8 @@
                     data: {
                         catID: catname,
                         title: name,
-                        image: image
+                        image: image,
+                        tags: tag
                     },
                     success: function (data) {
                         if (data == "1") {

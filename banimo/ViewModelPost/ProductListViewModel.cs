@@ -38,9 +38,16 @@ namespace banimo.ViewModelPost
         public string currentPage { get; set; }
         public string pageNumber { get; set; }
         public string trafCode { get; set; }
-        
-    }
+        public List<TagList> tagList { get; set; }
 
+    }
+    public class TagList
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string parent { get; set; }
+        public string image { get; set; }
+    }
     public class WishList
     {
         public string ID { get; set; }

@@ -62,7 +62,7 @@ namespace AdminPanelBoom.ViewModel
         public string count { get; set; }
         public string vahed { get; set; }
         public string limit { get; set; }
-        public string tagupdate { get; set; }
+        public string[] tagupdate { get; set; }
 
         public string ID { get; set; }
         public string title { get; set; }

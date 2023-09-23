@@ -1,0 +1,421 @@
+﻿@model banimo.ViewModel.TagVM
+@{
+    Layout = "~/Views/Shared/_NodeLayout.cshtml";
+    ViewBag.Title = "مدیریت مطالب";
+}
+<style>
+    .component {
+        display: inline-block;
+        margin: 10px
+    }
+</style>
+<link href="~/Content/css-circular-prog-bar.css" rel="stylesheet" />
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p>@Resources.res.sure ? </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="doAction" type="button" class="btn btn-primary">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p>@Resources.res.sure ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="doremoveTag" type="button" class="btn btn-primary">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="home" class="" style="padding-top:20px">
+    <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <p class="modalDelQuestion">Remove Vendor</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="remove">@Resources.res.OK</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>@Resources.res.setNewTag  </h5>
+                </div>
+                <div style="">
+                    <input id="itemID" hidden />
+                    @if (Model.tagList != null)
+                    {
+                        <div class=" component col-md-3 col-sm-3 col-xs-12" style="">
+                            <label> انتخاب تگ های مرتبط </label>
+                            <div style="width:100%">
+                                @if (Model.tagList != null)
+                                {
+
+                                    if (Model.tagList != null)
+                                    {
+                                        <select id="tagParent" class="editMenuTag js-example-basic-single" multiple name="tags">
+                                            @foreach (var item in Model.tagList)
+                                            {
+                                                <option value="@item.ID">@item.title</option>
+                                            }
+
+                                        </select>
+
+                                    }
+
+                                }
+                            </div>
+                        </div>
+
+                    }
+
+
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="">
+                        <label> @Resources.res.title </label>
+                        <div style="width:100%">
+                            <input id="title" name="title" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="component col-md-3 col-sm-3 col-xs-12">
+                        <label> @Resources.res.image </label>
+                        <input id="imageFileHolder" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component col-md-3 col-sm-3 col-xs-12">
+                        <div style="width:100%">
+                            <div id="imageHolder" style="display:flex; flex-wrap:wrap">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:25px; display:flex">
+                        <div class="component " ; style="margin:8px">
+                            <div id="veri" class="btn btn-success">@Resources.res.OK  </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <p hidden class="imageName"></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Details Start -->
+        <div class="card">
+            <div class="card-body">
+
+                <div class="title-header option-title">
+                    <h5>@Resources.res.tagManagement </h5>
+                </div>
+                <div style="">
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> page </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("pagename", pageList, "select item", new { id = "listofpage", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    <div component col-md-4 col-sm-3 col-xs-12>
+                        <div style="width:100%">
+                            <div id="imageHolderEdit" style="display:flex;flex-wrap:wrap ">
+
+                                <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productImage</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.title</th>
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.option</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @if (Model.tagList != null)
+                                        {
+                                            foreach (var item in Model.tagList)
+                                            {
+                                                string cls = "odd";
+                                                if (Model.tagList.IndexOf(item) + 1 % 2 == 0)
+                                                {
+                                                    cls = "even";
+                                                }
+
+                                                <tr class="@cls">
+                                                    <td>
+                                                        <div class="table-image">
+                                                            <img src="/images/@item.image" class="img-fluid" alt="">
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td>@item.title</td>
+
+
+
+                                                    <td>
+                                                        <ul>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+                                                                    <i editID="@item.ID" class="ri-pencil-line  editSBItem"></i>
+
+                                                                </a>
+                                                            </li>
+                                                            <li>
+
+                                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                                                    <i idtoremove=@item.ID class="ri-delete-bin-line removeTag" id=""></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        }
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                            <label> Location </label>
+                            <div style="width:100%">
+                                @Html.DropDownList("Countryname", listItems2, "select item", new { id = "listofLocation", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div style="background-color:white; padding:10px; margin:0px; margin-top:65px">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home" style=" color: #8d8d8d; ">Image  </a></li>
+            <li><a data-toggle="tab" href="#menu1" style=" color: #8d8d8d; ">Video</a></li>
+        </ul>
+        <div  class="tab-content">
+
+            <div id="menu1" class="tab-pane fade" style="padding-top:20px">
+                <div class="modal fade" id="delmodal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                <p class="modalDelQuestion">Remove Vendor?</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="remove2">@Resources.res.OK</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin:50px; padding:50px; border:1px solid #fff;    box-shadow: 2px 2px 5px -1px rgb(148 149 153); border-radius: 5px; background-color:white; margin-top:100px">
+                    <div class=" component col-md-4 col-sm-3 col-xs-12" style="">
+                        <label> page </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("pagename2", pageList, "select item", new { id = "listofpage2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> @Resources.res.category </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("catname2", listItems, "select item", new { id = "listofcat2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class=" component col-md-3 col-sm-3 col-xs-12" style="min-width:250px">
+                        <label> Location </label>
+                        <div style="width:100%">
+                            @Html.DropDownList("Countryname2", listItems2, "select item", new { id = "listofLocation2", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="component">
+                        <label> image </label>
+                        <input id="imageFileHolder2" type="file" required="required" class="form-control INP">
+                    </div>
+                    <div class="component ">
+                        <div id="veri2" class="btn btn-success">@Resources.res.OK  </div>
+                    </div>
+                    <div class="component ">
+                        <div id="edit2" class="btn btn-success">@Resources.res.edit</div>
+                    </div>
+
+                    <p hidden class="imageName2"></p>
+                    <div style="width:100%">
+                        <div id="imageHolder2" style="display:flex; ">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+<script src="~/Scripts/downloadNode.js"></script>
+
+
+
+
+<script>
+
+    $("#imageFileHolder").on('change', function () {
+        uploadImage("imageHolder", "imageName", this)
+    });
+    $("#doAction").click(function () {
+
+        var title = $("#title").val();
+        var tag = $("#tagParent").val();
+        var ID = $("#itemID").val();
+
+        var image = $(".imageName").text();
+
+       
+        $.post(
+            '/node/addTag',
+            {
+                title: title,
+                image: image,
+                tag: tag,
+                ID: ID
+            },
+            function (data) {
+                location.reload();
+            });
+
+    })
+    $("#veri").click(function () {
+        $("#exampleModal").modal('toggle');
+
+
+    })
+
+    var idtoremove;
+    $(".removeTag").click(function () {
+        var id = $(this).attr('idtoremove');
+        idtoremove = id;
+
+        $("#exampleModal2").modal('toggle');
+    })
+    $("#doremoveTag").click(function () {
+
+        $.ajax({
+            url: "/Node/removeNewTag",
+            dataType: "html",
+            data: {
+                ID: idtoremove,
+
+            },
+            success: function (data) {
+                //alert(data)
+                location.reload();
+            }
+        })
+    })
+    $(".editSBItem").click(function () {
+        var id = $(this).attr('editID')
+        $("#itemID").val(id);
+        $.ajax({
+            url: "/node/getTag",
+            dataType: "html",
+            data: {
+                ID: id,
+
+            },
+            success: function (data) {
+
+                var obj = JSON.parse(data);
+                var image = obj['data'][0]["image"];
+                var title = obj['data'][0]["title"];
+                var tag = obj['data'][0]["parent"];
+                var tags = tag.split(',')
+                $("#tagParent").select2().val(tags).trigger("change");
+                $("#title").val(title);
+
+
+
+
+                if (image != null && image != "") {
+                    var htmldiv = `<div id=` + image + ` class="imageCover" style="postion:relative !important; width:150px"><div><div  style="position:relative"><img src="/images/` + image + `" style="width:150px"" src="#" /> <img  onclick= deletImage("` + image + `")   " class="removeImage" src="/images/trash.png" style="position:absolute; bottom:0;top:0;left:0;right:0;margin:auto" /><div></div></div> `;
+                    $("#imageHolder").append(htmldiv);
+                    $(".imageName").text(image);
+                }
+
+
+            }
+        })
+    })
+
+
+
+    $("#cancelEdit").click(function () {
+        $(".classhide").css("display", "none");
+        $(".classshow").css("display", "inline-block");
+        $("#imageHolder").css("display", "none");
+        $("#title").val("");
+    })
+
+</script>
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 ﻿@charset "UTF-8";
 
 :root {
-    --mainColor: #5b2871; /*#34970b;*/
+    --mainColor: #34970b; /*#34970b; 5b2871*/
 }
 .swiper {
     position: relative
@@ -7906,7 +7906,7 @@ body .product-popup {
         width: 100%;
         height: auto;
         transition: opacity 0.4s;
-        aspect-ratio: 1;
+        aspect-ratio: 0.8;
     }
 
         .product-media img:last-child {

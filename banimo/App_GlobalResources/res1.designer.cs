@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account details.
+        /// </summary>
+        internal static string accountDetail {
+            get {
+                return ResourceManager.GetString("accountDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accounting.
         /// </summary>
         internal static string accounting {
@@ -291,6 +300,15 @@ namespace Resources {
         internal static string addressDetail {
             get {
                 return ResourceManager.GetString("addressDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Addresses.
+        /// </summary>
+        internal static string addresses {
+            get {
+                return ResourceManager.GetString("addresses", resourceCulture);
             }
         }
         
@@ -2896,6 +2914,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My Account.
+        /// </summary>
+        internal static string myaccount {
+            get {
+                return ResourceManager.GetString("myaccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My orders.
         /// </summary>
         internal static string myOrders {
@@ -3153,6 +3180,15 @@ namespace Resources {
         internal static string optionTitle {
             get {
                 return ResourceManager.GetString("optionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to order.
+        /// </summary>
+        internal static string order {
+            get {
+                return ResourceManager.GetString("order", resourceCulture);
             }
         }
         
@@ -3900,6 +3936,15 @@ namespace Resources {
         internal static string remove {
             get {
                 return ResourceManager.GetString("remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Account.
+        /// </summary>
+        internal static string removeAcount {
+            get {
+                return ResourceManager.GetString("removeAcount", resourceCulture);
             }
         }
         
@@ -4786,6 +4831,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tag Management.
+        /// </summary>
+        internal static string tagManagement {
+            get {
+                return ResourceManager.GetString("tagManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to agreement.
         /// </summary>
         internal static string tavafoghi {
@@ -5313,6 +5367,15 @@ namespace Resources {
         internal static string wishItem {
             get {
                 return ResourceManager.GetString("wishItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wishlist.
+        /// </summary>
+        internal static string wishList {
+            get {
+                return ResourceManager.GetString("wishList", resourceCulture);
             }
         }
         

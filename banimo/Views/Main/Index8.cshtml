@@ -143,38 +143,42 @@
     @if (Model.cat.Count() > 1)
     {
 
+        <div class="bg-white" style="padding:10px  75px">
+            <div class="banner-wrapper appear-animate row cols-md-2 mb-6 fadeIn appear-animation-visible" style="animation-duration: 1.2s;">
+                <div class="banner banner-fixed overlay-dark br-sm mt-4">
+                    <figure>
+                        <img src="~/images/margek.png" alt="Banner" width="680" height="180" style="background-color: #E5E6E8; border-radius:10px; border-radius:10px;border: 3px solid green;">
+                    </figure>
+                    <div class="banner-content y-50" style="margin-right:50px">
+                        <h2 class="banner-title text-dark font-weight-bolder ls-normal">
+                            بازار
+                            تامین کنندگان
+                        </h2>
+                        <p class="text-dark">تامین کنندگان اصلی را پیدا کنید</p>
+                        <a href="/Main/Index" class="btn btn-sm btn-outline btn-dark btn-rounded slide-animate">
+                            ورود به بازار
+                        </a>
+                    </div>
+                </div>
+                <div class="banner banner-fixed overlay-light br-sm mt-4">
+                    <figure>
+                        <img src="~/images/kala.png" alt="Banner" width="680" height="180" style="background-color: #565960; border-radius:10px;">
+                    </figure>
+                    <div class="banner-content y-50" style="margin-right:50px">
+                        <h2 class="banner-title text-white font-weight-bold ls-normal mb-0">
+                            فروشگاه
+                            کالا
+                        </h2>
 
-        <section class="  btn-section btn-parallax-section parallax" data-parallax-options="{'speed': 10, 'parallaxHeight': '200%', 'offset': -102}" data-image-src="/webAsset/wolmart/assets/images/buttons/banner.jpg" style="background-color: #f8f8f8; position: relative; overflow: hidden;">
-            <div class="container">
-                @*<h2 class="title title-line text-white mb-2">On Dark Background</h2>*@
-                <div class="row">
-
-                    <div class="col-lg-12 col">
-                        <div class="btn-group" style="justify-content:center">
-
-                            <div class="btn-wrap show-code-action">
-                                <a href="/Main/Index" class="btn btn-secondary btn-outline btn-rounded" style="background-color:#34970b; color:white">بازار </a>
-                            </div>
-                            <div class="btn-wrap show-code-action">
-                                <a href="/Home/Index" id="59-1" class=" btn btn-secondary btn-outline btn-rounded">فروشگاه </a>
-                            </div>
-                            @*<div class="btn-wrap show-code-action">
-                                @if (Session["LogedInUser"] != null)
-                                {
-                                <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                                }
-                                else
-                                {
-                                    <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                                }
-                            </div>*@
-                        </div>
+                        <p style="color:white; padding:10px 0">کالای خود را از میان صدها کالا پیدا کنید</p>
+                        <a href="/Home/Index" class="btn btn-sm btn-white btn-outline btn-rounded slide-animate">
+                            ورود به فروشگاه
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+
     }
     else
     {
@@ -190,20 +194,9 @@
                                 <a href="/" class="btn btn-secondary btn-outline btn-rounded">بازار </a>
                             </div>
                             <div class="btn-wrap show-code-action">
-                                <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded"  style="background-color:#5b2871; color:white">فشن </a>
+                                <a href="/Main/Index?catMode=59" id="59-1" class=" btn btn-secondary btn-outline btn-rounded" style="background-color:#5b2871; color:white">فشن </a>
                             </div>
-                            @*<div class="btn-wrap show-code-action">
-                    @if (Session["LogedInUser"] != null)
-                    {
-                    <a href="/Deliver/index" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
 
-                    }
-                    else
-                    {
-                        <a href="/Home/login" class="btn btn-secondary btn-outline btn-rounded">سرویس انتقال کالا </a>
-
-                    }
-                </div>*@
                         </div>
                     </div>
                 </div>
@@ -246,7 +239,9 @@
 
 
                             <div itemtogo="@item.tag" class="hashtagitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="background-size: contain; background-color: #F7F8FA;height:inherit !important; min-height:unset !important  ">
-                                <div style="padding:5px; display:flex; justify-content:center" class="">
+                                <div style="        padding: 5px;
+        display: flex;
+        justify-content: center" class="">
                                     <span class="tagitem" style="white-space:nowrap;  text-align:center;border-radius:5px; font-size:12px;">@item.title</span>
                                 </div>
                             </div>
@@ -270,7 +265,9 @@
     <section class="intro-wrapper" style="padding:15px">
         @{
             double cou = 1;
-            List<banimo.ViewModel.MainViewModel.Sld> slideLIst = new List<banimo.ViewModel.MainViewModel.Sld>();
+            List<banimo.ViewModel.MainViewModel.Sld>
+                slideLIst = new List<banimo.ViewModel.MainViewModel.Sld>
+                    ();
 
             if (Request.Browser.IsMobileDevice)
             {
@@ -299,13 +296,13 @@
                         'disableOnInteraction': false
                     }
                 }">
-            <div class="swiper-wrapper row gutter-no cols-1" >
+            <div class="swiper-wrapper row gutter-no cols-1">
                 @foreach (var item in slideLIst)
                 {
                     int i = Model.sld.IndexOf(item) + 1;
                     string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
-                    <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="height:400px; background-image: url(@item.image);    background-size: contain; background-color: #F7F8FA; border-radui; ">
-                        <div class="container; ">
+                    <div urltogo="@url" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="background-size:contain; background-image: url(@item.image);height:500px;  border-radui;">
+                        <div class="; ">
 
                             <div class="banner-content y-50 d-inline-block">
                                 <div class="slide-animate" data-animation-options="{
@@ -340,188 +337,107 @@
     </section>
     <!-- End of Intro Wrapper  -->
 
+
     <div class="container" style="">
 
+        @if (Model.cat.Count() > 1)
+        {
+            foreach (var item in Model.cat)
+            {
+
+                <div class="title-link-wrapper mb-4 appear-animate">
+                    <h2 class="title title-link title-vendor pt-2 pb-2"> @item.title</h2>
 
 
-
-        @*<h2 class="title mb-5 appear-animate"> Categories </h2>*@
-        <div class="swiper-container swiper-theme shadow-swiper category-wrapper appear-animate"
-             data-swiper-options="{
-                    'spaceBetween': 15,
-                    'slidesPerView': 2.6,
-                    'breakpoints': {
-                        '576': {
-                            'slidesPerView': 3
-                        },
-                        '768': {
-                            'slidesPerView': 4
-                        },
-                        '992': {
-                            'slidesPerView': 5
-                        },
-                        '1200': {
-                            'slidesPerView': 7
+                </div>
+                <div class="swiper">
+                    <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
+                         data-swiper-options="{
+                        'spaceBetween': 20,
+                        'slidesPerView': 1.3,
+                        'breakpoints': {
+                            '576': {
+                                'slidesPerView': 2
+                            },
+                            '768': {
+                                'slidesPerView': 3
+                            },
+                            '992': {
+                                'slidesPerView': 5
+                            }
                         }
-                    }
-                }">
-            <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" style="margin-right:35%">
-                @if (Model.cat.Count() > 1)
-                {
-                    foreach (var item in Model.cat)
-                    {
-                        <div idtogo="@item.ID" id="@item.ID-@item.catLevel" class="categoryParent  swiper-slide category category-ellipse">
-                            <figure class="category-media">
-                                <a href="javascript:void(0)">
-                                    <img src="@item.img" alt="Categroy" width="190"
-                                         height="190" style="background-color: #5C92C0;" />
-                                </a>
-                            </figure>
-                            <div class="category-content">
-                                <h4 class="category-name">
-                                    <a href="#">@item.title</a>
-                                </h4>
+                    }">
+                        <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
+                            <div class="swiper-slide vendor-widget">
+                                <div class="vendor-widget-banner">
+                                    <figure class="vendor-banner">
+                                        <a href="#">
+                                            <img id="@item.ID" src="@item.img" alt="Vendor Banner"
+                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
+                                        </a>
+                                    </figure>
+
+                                </div>
+                                <!-- End of Vendor Widget Banner -->
                             </div>
+                            @{
+
+                                foreach (var spec in Model.nodeItems)
+                                {
+                                    if (spec.cat.ToString() == item.ID.ToString())
+                                    {
+                                        <div id="@spec.cat" class="swiper-slide vendor-widget">
+                                            <div class="vendor-widget-banner">
+                                                <figure class="vendor-banner">
+                                                    <a href="/home/index?partnerID=@spec.url">
+                                                        <img src="@spec.logo" alt="Vendor Banner"
+                                                             width="1200" height="390" style="background-color: #ECE7DF;" />
+                                                    </a>
+                                                </figure>
+                                                <div class="vendor-details">
+                                                    <figure class="vendor-logo">
+                                                        <a href="/home/index?partnerID=@spec.url">
+                                                            <img src="@spec.img"
+                                                                 alt="Vendor Logo" width="90" height="90" />
+                                                        </a>
+                                                    </figure>
+                                                    <div class="vendor-personal">
+
+                                                        <h4 class="vendor-name">
+
+                                                            <a href="/home/index?partnerID=@spec.url">@spec.title</a>
+                                                        </h4>
+
+                                                        @*<span class="vendor-product-count">27 Products</span>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End of Vendor Widget Banner -->
+                                        </div>
+                                    }
+
+                                }
+
+                            }
+
+
+
                         </div>
-                    }
-                }
-                else
-                {
-                    foreach (var item in Model.nodeItems)
-                    {
-                        <div idtogo="@item.ID" idtoshow="@item.url" class="nodeParent  swiper-slide category category-ellipse">
-                            <figure class="category-media">
-                                <a href="javascript:void(0)">
-                                    <img src="@item.img" alt="Categroy" width="190"
-                                         height="190" style="background-color: #5C92C0;" />
-                                </a>
-                            </figure>
-                            <div class="category-content">
-                                <h4 class="category-name">
-                                    <a href="#">@item.title</a>
-                                </h4>
-                            </div>
-                        </div>
-                    }
-                }
-
-
-
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-        <!-- End Of Shadow Swiper -->
-
-        <section class="childcategory  category-section top-category bg-grey pt-10 pb-10 appear-animate" style="margin-top:20px ; display :none; padding-top:30px !important">
-
-            <h2 class="title mb-5 appear-animate" style="direction:rtl;padding-right:30px "> <span id="closeChild" style="cursor:pointer;color:darkviolet">X</span> </h2>
-            <div class="container pb-2" style="display:flex; flex-wrap:wrap; justify-content:center" id="childcategoryHolder">
-
-                @if (Model.cat.Count() > 1)
-                {
-                    if (Model.nodeItems != null)
-                    {
-                        foreach (var item in Model.nodeItems)
-                        {
-
-                            string catmode = "1" + @item.ID;
-                            string classname = "p" + @item.cat;
-                            <div class="category @classname  categoryitemchild">
-                                <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
-                                    <a href="/home/index?partnerID=@item.url" class="category-media">
-                                        <img src="@item.img" alt="Category"
-                                             width="130" height="130">
-                                    </a>
-
-                                </div>
-
-                                <p style="font-size:12px">@item.title</p>
-                            </div>
-
-                        }
-                    }
-
-                }
-
-
-                <style>
-                    .category {
-                        width: 15%;
-                        display: inline-block;
-                        padding: 0 10px;
-                        border-radius: 8px;
-                        vertical-align: top
-                    }
-
-                        .category p {
-                            padding: 20px;
-                            text-align: center;
-                            font-weight: 600;
-                            font-size: 16px;
-                        }
-
-                        .category img {
-                            border-radius: 10px
-                        }
-
-                    @@media (max-width : 600px) {
-                        .category {
-                            width: 33%;
-                        }
-
-                            .category p {
-                                padding: 8px 0;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 12px;
-                                width: 100%;
-                            }
-                    }
-                </style>
-            </div>
-
-
-            <div>
-                @if (Model.cat.Count() > 1)
-                {
-                    <div style="display:flex; justify-content:center">
-                        @if (Model.nodeItems != null)
-                        {
-                            foreach (var item in Model.nodeItems.GroupBy(x => x.cat).ToList())
-                            {
-                                string classname = "p" + @item.First().cat;
-                                <div id="@item.First().cat-1" class="btn-wrap show-code-action final  @classname categoryitemchild">
-                                    <a href="#" class="btn btn-primary btn-outline">@Resources.res.seeMore</a>
-                                </div>
-
-                            }
-                        }
-
+                        <div class="swiper-pagination"></div>
                     </div>
+                </div>
 
-                }
-                else
-                {
-                    <div style="display:flex; justify-content:center; ">
-                        @if (Model.nodeItems != null)
-                        {
-                            foreach (var item in Model.nodeItems.ToList())
-                            {
-                                string classname = "p" + @item.url;
-                                string pID = item.url.ToString();
-                                <div id="" class="btn-wrap show-code-action    categoryitemchild  @classname">
-                                    <a href="/Home/index?partnerID=@pID" class="btn btn-primary btn-outline">@Resources.res.seeMore</a>
-                                </div>
+            }
+        }
 
-                            }
-                        }
 
-                    </div>
 
-                }
 
-            </div>
-        </section>
+
+
+
+
+
         <div class="swiper-container swiper-theme category-banner-3cols pt-2 pb-2 mb-10 appear-animate"
              data-swiper-options="{
                     'spaceBetween': 20,
@@ -588,107 +504,140 @@
             <div class="swiper-pagination"></div>
         </div>
         <!-- End of Category Banner 3Cols -->
-
-        @if (Model.rec != null)
+        @if (Model.tagsPR != null)
         {
-            <div class="title-link-wrapper mb-4 appear-animate">
-                <h2 class="title title-link title-vendor pt-2 pb-2"> @Resources.res.RecommendedItems</h2>
-
-
-            </div>
-            <div class="swiper">
-                <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
-                     data-swiper-options="{
-                        'spaceBetween': 20,
-                        'slidesPerView': 1.3,
-                        'breakpoints': {
-                            '576': {
-                                'slidesPerView': 2
-                            },
-                            '768': {
-                                'slidesPerView': 3
-                            },
-                            '992': {
-                                'slidesPerView': 4
-                            }
-                        }
-                    }">
-                    <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
-                        @foreach (var spec in Model.rec)
-                        {
-                            <div class="swiper-slide vendor-widget">
-                                <div class="vendor-widget-banner">
-                                    <figure class="vendor-banner">
-                                        <a href="/home/index?partnerID=@spec.url">
-                                            <img src="@spec.img" alt="Vendor Banner"
-                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
-                                        </a>
-                                    </figure>
-                                    <div class="vendor-details">
-                                        <figure class="vendor-logo">
-                                            <a href="/home/index?partnerID=@spec.url">
-                                                <img src="@spec.logo"
-                                                     alt="Vendor Logo" width="90" height="90" />
-                                            </a>
-                                        </figure>
-                                        <div class="vendor-personal">
-                                            <h4 class="vendor-name">
-                                                <a href="/home/index?partnerID=@spec.url">@spec.title</a>
-                                            </h4>
-                                            @*<span class="vendor-product-count">27 Products</span>*@
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End of Vendor Widget Banner -->
-                            </div>
-                        }
-
-
+            if (Model.tagsPR.Count() > 0)
+            {
+                var tag = Model.tagsPR[0];
+                <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible" style="animation-duration: 1.2s;">
+                    <div class="title-link-wrapper pb-1 mb-4">
+                        <h2 class="title ls-normal mb-0">@tag.tagtitle</h2>
+                        <p style="flex:1"></p>
+                        <div tag="@tag.tag" class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                            @Resources.res.moreProduct
+                        </div>
                     </div>
-                    <div class="swiper-pagination"></div>
+                    <div class="row">
+                        @*<div class="col-lg-3 col-sm-4 mb-4">
+                                <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
+                                                background-color: #ebeced;">
+
+                                </div>
+                            </div>*@
+                        <!-- End of Banner -->
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
+                                'spaceBetween': 20,
+                                'slidesPerView': 2,
+                                'breakpoints': {
+                                    '992': {
+                                        'slidesPerView': 3
+                                    },
+                                    '1200': {
+                                        'slidesPerView': 5
+                                    }
+                                }
+                            }">
+                                <div class="swiper-wrapper " id="swiper-wrapper-2fea7c27dd16ef22" aria-live="polite" style="padding:10px; transform: translate3d(0px, 0px, 0px);">
+
+                                    @if (tag.tagsitemprs != null)
+                                    {
+                                        foreach (var item in tag.tagsitemprs)
+                                        {
+                                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                            if (item.meta != null)
+                                            {
+                                                banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                                    (@item.meta);
+                                                newurl = metaModel.curl;
+                                            }
+                                            string addID = "addtocarto" + item.ID;
+                                            string minusID = "minus" + item.ID;
+                                            string imagefile = "placeholder.jpg";
+                                            List<string>
+                                                srtlist = new List<string>
+                                                    ();
+                                            string src2 = "";
+                                            if (item.title != null)
+                                            {
+                                                srtlist = item.image.Trim(',').Split(',').ToList();
+                                                imagefile = srtlist[0];
+                                                if (srtlist.Count == 2)
+                                                {
+                                                    src2 = srtlist[1];
+                                                }
+                                            }
+                                            string ID = "N" + item.ID.ToString();
+                                            string addtocartid = "addtocart" + ID;
+                                            string price = item.price;
+
+                                            string src = imagefile;
+
+
+                                            <div class="swiper-slide product-col swiper-slide-active shadowbox" role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                                                <div class="product-wrap product text-center" style="width:100%">
+                                                    <figure class="product-media" style="width:100%">
+                                                        <a href="/products/@newurl">
+                                                            <img src="@src" alt="Product"
+                                                                 width="300" height="338" />
+                                                            <img src="@src2" alt="Product"
+                                                                 width="300" height="338" />
+                                                        </a>
+                                                        @*<div class="product-action-vertical">
+                                                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                                                   title="Add to cart"></a>
+                                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                                                   title="Add to wishlist"></a>
+                                                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                                                   title="Quickview"></a>
+                                                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                                                   title="Add to Compare"></a>
+                                                            </div>*@
+
+
+                                                        @if (item.price != item.oldPrice)
+                                                        {
+                                                            <div class="product-label-group">
+                                                                <label class="product-label label-discount">@item.discount% Off</label>
+                                                            </div>
+                                                        }
+
+                                                    </figure>
+                                                    <div class="product-details">
+                                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+                                                        @*<div class="ratings-container">
+                                                                <div class="ratings-full">
+                                                                    <span class="ratings" style="width: 60%;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                                                            </div>*@
+                                                        <div class="product-price">
+                                                            <ins class="new-price">@item.price AED</ins>
+                                                            @if (item.price != item.oldPrice)
+                                                            {
+                                                                <del class="old-price">@item.oldPrice AED</del>
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </div>
+                                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" style="display: none;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span></div>
+                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
         }
 
-
-
-        <!-- End of Swiper Container -->
-        @*<div class="row category-banner-2cols cols-md-2 appear-animate">
-            <div class="col-md-6 mb-4">
-                <div class="banner banner-fixed br-sm">
-                    <figure>
-                        <img src="/webAsset/wolmart/assets/images/demos/demo10/banner/1-1.jpg" alt="Category Banner" width="610"
-                             height="150" style="background-color: #263032;" />
-                    </figure>
-                    <div class="banner-content y-50">
-                        <h5 class="banner-subtitle text-white text-uppercase font-weight-bold">
-                            New Collection
-                        </h5>
-                        <h3 class="banner-title text-white text-capitalize ls-25">Trendy Watches</h3>
-                        <div class="banner-price-info text-white">
-                            Starting at <strong class="text-secondary">$199.00</strong>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="banner banner-fixed br-sm">
-                    <figure>
-                        <img src="/webAsset/wolmart/assets/images/demos/demo10/banner/1-2.jpg" alt="Category Banner" width="610"
-                             height="150" style="background-color: #F3F3F1;" />
-                    </figure>
-                    <div class="banner-content x-50 w-100 y-50 pl-3 pr-3 text-center">
-                        <h5 class="banner-subtitle text-capitalize font-weight-bold">Coming Soon</h5>
-                        <h3 class="banner-title text-capitalize ls-25">Black Friday</h3>
-                        <div class="banner-price-info text-uppercase font-weight-bold">
-                            Discount <strong class="text-primary">50% Off</strong>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>*@
 
         @if (Model.cat.Count() > 1)
         {
@@ -732,204 +681,11 @@
         }
 
 
-        @if (Model.spc != null)
-        {
-
-            <div class="title-link-wrapper mb-4 appear-animate" style="display:block">
-                <h4 style="margin:0" class=" title-vendor pt-2 pb-2">@Resources.res.PopularBrands</h4>
-                <p style="margin:0">@Resources.res.favoritTitle</p>
-            </div>
-            <div class="swiper">
-                <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
-                     data-swiper-options="{
-                        'spaceBetween': 20,
-                        'slidesPerView': 4.3,
-                        'breakpoints': {
-                            '576': {
-                                'slidesPerView': 2
-                            },
-                            '768': {
-                                'slidesPerView': 3
-                            },
-                            '992': {
-                                'slidesPerView': 9
-                            }
-                        }
-                    }">
-                    <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
-                        @foreach (var spec in Model.spc)
-                        {
-                            string url =  @spec.logo;
-                            <div class="swiper-slide vendor-widget">
-                                <figure class="brandHolder">
-                                    <a class="" href="/home/index?partnerID=@spec.url">
-                                        <img src="@url" alt="Vendor Banner"
-                                             width="1200" height="390" style="background-color: #ECE7DF;" />
-                                    </a>
-                                </figure>
-                            </div>
-                            <style>
-
-                                .brandHolder {
-                                    -webkit-box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
-                                    box-shadow: 5px 5px 11px -5px rgba(0,0,0,0.79);
-                                    padding: 5px;
-                                    border-radius: 10px
-                                }
-
-                                    .brandHolder img {
-                                        border-radius: 5px
-                                    }
-                            </style>
-                        }
-
-
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-
-        }
-        <!-- End of Category Banner 2Cols -->
-        <!-- End of Products 1 -->
-
-        @if (Model.cat.Count() > 1)
-        {
-            <div class="row grid grid-float mb-10 appear-animate">
-                @if (Model.banners != null)
-                {
-                    string url = Model.banners.SingleOrDefault(x => x.title == "6") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "6").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "6") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "6").image;
-
-
-                    <div urltogo="@url" class="slideitem grid-item col-md-6 height-x2">
-                        <div class="banner banner-fixed banner-lg br-sm">
-                            <figure>
-                                <img src="@image" alt="Banner" width="610"
-                                     height="420" style="background-color: #828994" />
-                            </figure>
-
-                        </div>
-                    </div>
-                }
-
-                <!-- End of Grid Item -->
-
-                @if (Model.banners != null)
-                {
-                    string url = Model.banners.SingleOrDefault(x => x.title == "7") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "7").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "7") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "7").image;
-
-                    <div urltogo="@url" class="slideitem grid-item col-sm-6 height-x1">
-                        <div class="banner banner-fixed banner-md br-sm">
-                            <figure>
-                                <img src="@image" alt="Banner" width="610"
-                                     height="200" style="        background-color: #d8dee9" />
-                            </figure>
-
-                        </div>
-                    </div>
-                }
-
-                <!-- End of Grid Item -->
-
-                @if (Model.banners != null)
-                {
-                    string url = Model.banners.SingleOrDefault(x => x.title == "8") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "8").catIDOrLink;
-                    string image = Model.banners.SingleOrDefault(x => x.title == "8") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "8").image;
-
-                    <div urltogo="@url" class="slideitem grid-item col-sm-6 height-x1">
-                        <div class="banner banner-fixed banner-md br-sm">
-                            <figure>
-                                <img src="@image" alt="Banner" width="610"
-                                     height="200" style="background-color: #424347" />
-                            </figure>
-
-                        </div>
-                    </div>
-                }
-
-                <!-- End of Grid Itme -->
-            </div>
-        }
-
-
-        <!-- End of Grid Float -->
-
-        @if (Model.rand != null)
-        {
-            <div class="title-link-wrapper mb-4 appear-animate">
-                <h2 class="title title-link title-vendor pt-2 pb-2">@Resources.res.GreatValueDeals</h2>
-
-            </div>
-            <div class="swiper">
-                <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
-                     data-swiper-options="{
-                        'spaceBetween': 20,
-                        'slidesPerView': 1.3,
-                        'breakpoints': {
-                            '576': {
-                                'slidesPerView': 2
-                            },
-                            '768': {
-                                'slidesPerView': 3
-                            },
-                            '992': {
-                                'slidesPerView': 4
-                            }
-                        }
-                    }">
-                    <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
-                        @foreach (var spec in Model.rand)
-                        {
-                            <div class="swiper-slide vendor-widget">
-                                <div class="vendor-widget-banner">
-                                    <figure class="vendor-banner">
-                                        <a href="/home/index?partnerID=@spec.url">
-                                            <img src="@spec.img" alt="Vendor Banner"
-                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
-                                        </a>
-                                    </figure>
-                                    <div class="vendor-details">
-                                        <figure class="vendor-logo">
-                                            <a href="/home/index?partnerID=@spec.url">
-                                                <img src="@spec.logo"
-                                                     alt="Vendor Logo" width="90" height="90" />
-                                            </a>
-                                        </figure>
-                                        <div class="vendor-personal">
-                                            <h4 class="vendor-name">
-                                                <a href="vendor-dokan-store.html">@spec.title</a>
-                                            </h4>
-                                            @*<span class="vendor-product-count">27 Products</span>*@
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End of Vendor Widget Banner -->
-                            </div>
-                        }
-
-
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-        }
-        <!-- End of Products 2 -->
-
-
-
-        @if (Model.bestseller != null)
-        {
-
-
-        }
-
-
         @if (Model.tagsPR != null)
         {
-            foreach (var tag in Model.tagsPR)
+            if (Model.tagsPR.Count() > 1)
             {
+                var tag = Model.tagsPR[1];
                 <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible" style="animation-duration: 1.2s;">
                     <div class="title-link-wrapper pb-1 mb-4">
                         <h2 class="title ls-normal mb-0">@tag.tagtitle</h2>
@@ -940,11 +696,11 @@
                     </div>
                     <div class="row">
                         @*<div class="col-lg-3 col-sm-4 mb-4">
-                            <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
-                                background-color: #ebeced;">
+                                <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
+                                                background-color: #ebeced;">
 
-                            </div>
-                        </div>*@
+                                </div>
+                            </div>*@
                         <!-- End of Banner -->
                         <div class="col-lg-12 col-sm-12">
                             <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
@@ -968,13 +724,16 @@
                                             string newurl = "/Home/ProductDetail?id=" + item.ID;
                                             if (item.meta != null)
                                             {
-                                                banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                                banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                                    (@item.meta);
                                                 newurl = metaModel.curl;
                                             }
                                             string addID = "addtocarto" + item.ID;
                                             string minusID = "minus" + item.ID;
                                             string imagefile = "placeholder.jpg";
-                                            List<string> srtlist = new List<string>();
+                                            List<string>
+                                                srtlist = new List<string>
+                                                    ();
                                             string src2 = "";
                                             if (item.title != null)
                                             {
@@ -1002,15 +761,15 @@
                                                                  width="300" height="338" />
                                                         </a>
                                                         @*<div class="product-action-vertical">
-                                                            <a href="#" class="btn-product-icon btn-cart w-icon-cart"
-                                                               title="Add to cart"></a>
-                                                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
-                                                               title="Add to wishlist"></a>
-                                                            <a href="#" class="btn-product-icon btn-quickview w-icon-search"
-                                                               title="Quickview"></a>
-                                                            <a href="#" class="btn-product-icon btn-compare w-icon-compare"
-                                                               title="Add to Compare"></a>
-                                                        </div>*@
+                                                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                                                   title="Add to cart"></a>
+                                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                                                   title="Add to wishlist"></a>
+                                                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                                                   title="Quickview"></a>
+                                                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                                                   title="Add to Compare"></a>
+                                                            </div>*@
 
 
                                                         @if (item.price != item.oldPrice)
@@ -1024,12 +783,392 @@
                                                     <div class="product-details">
                                                         <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
                                                         @*<div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 60%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
+                                                                <div class="ratings-full">
+                                                                    <span class="ratings" style="width: 60%;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                                                            </div>*@
+                                                        <div class="product-price">
+                                                            <ins class="new-price">@item.price AED</ins>
+                                                            @if (item.price != item.oldPrice)
+                                                            {
+                                                                <del class="old-price">@item.oldPrice AED</del>
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </div>
+                                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" style="display: none;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span></div>
+                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+
+
+
+
+
+
+
+        @if (Model.proPR != null)
+        {
+            foreach (var tag in Model.proPR)
+            {
+                if (tag.proitemprs.Count() == 0)
+                {
+                    continue;
+                }
+
+                string imgURL = tag.proimage.Split(',').Last();
+
+    <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible shadowbox" style="animation-duration: 1.2s;  background-color:#f8f8f8; border-radius:15px">
+
+        <div class="title-link-wrapper pb-1 mb-4" style="padding:5px 15px;border-radius: 15px 15px 0 0;background-color: green;color: white;">
+                <h2 style="color:white" class="title ls-normal mb-0">@tag.protitle</h2>
+                <p style="flex:1"></p>
+                <div class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                    @Resources.res.moreProduct
+                </div>
+            </div>
+
+        @*<div class="title-link-wrapper pb-1 mb-4">
+            <h2 class="title ls-normal mb-0">@tag.protitle</h2>
+            <p style="flex:1"></p>
+            <div class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                @Resources.res.moreProduct
+            </div>
+        </div>
+        <div style="display:flex ; align-items:center">
+            <div class="col-lg-3 productcatInfoSection" style="display:inline-block; padding:25px">
+
+                <img style="width:200px; border-radius:50%" src="https://demo.heson.ir/images/@imgURL " />
+            </div>
+            <div class="col-lg-9" style="display:inline-block">
+
+
+            </div>
+
+        </div>*@
+        
+        <div class="row">
+            
+            @*<div class="col-lg-3 col-sm-4 mb-4">
+            <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
+                            background-color: #ebeced;">
+
+            </div>
+        </div>*@
+            <!-- End of Banner -->
+            <div class="col-lg-12 col-sm-12">
+                <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
+                                'spaceBetween': 20,
+                                'slidesPerView': 2,
+                                'breakpoints': {
+                                    '992': {
+                                        'slidesPerView': 3
+                                    },
+                                    '1200': {
+                                        'slidesPerView': 5
+                                    }
+                                }
+                            }">
+                    <div class="swiper-wrapper " id="swiper-wrapper-2fea7c27dd16ef22" aria-live="polite" style="padding:10px; transform: translate3d(0px, 0px, 0px);">
+                        <div class="swiper-slide product-col swiper-slide-active " role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                            <div class="product-wrap product text-center" style="width:100%; margin:0">
+                                <figure class="product-media" style="width:80%; margin:auto; padding-top:50px">
+                                    <a href="/products/">
+                                        <img style="border-radius:50%"  src="https://demo.heson.ir/images/@imgURL" alt="Product"
+                                             />
+                                       
+                                    </a>
+
+                                </figure>
+                               
+                            </div>
+                        </div>
+                        @if (tag.proitemprs != null)
+                        {
+                            foreach (var item in tag.proitemprs)
+                            {
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                        (@item.meta);
+                                    newurl = metaModel.curl;
+                                }
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string>
+                                    srtlist = new List<string>
+                                        ();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
+
+                                string src = imagefile;
+
+
+                                <div class="swiper-slide product-col swiper-slide-active shadowbox" role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                                    <div class="product-wrap product text-center" style="width:100%">
+                                        <figure class="product-media" style="width:100%">
+                                            <a href="/products/@newurl">
+                                                <img src="@src" alt="Product"
+                                                     width="300" height="338" />
+                                                <img src="@src2" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+                                            @*<div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                   title="Add to cart"></a>
+                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                   title="Add to wishlist"></a>
+                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                   title="Quickview"></a>
+                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                   title="Add to Compare"></a>
+                            </div>*@
+
+
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
+
+                                        </figure>
+                                        <div class="product-details">
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+                                            @*<div class="ratings-container">
+                                <div class="ratings-full">
+                                    <span class="ratings" style="width: 60%;"></span>
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                            </div>*@
+                                            <div class="product-price">
+                                                <ins class="new-price">@item.price AED</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@item.oldPrice AED</del>
+                                                }
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+
+                    </div>
+                    <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" style="display: none;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span></div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+            }
+        }
+
+        @if (Model.cat.Count() > 1)
+        {
+            <div class="row grid grid-float mb-10 appear-animate">
+                @if (Model.banners != null)
+                {
+                    string url = Model.banners.SingleOrDefault(x => x.title == "6") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "6").catIDOrLink;
+                    string image = Model.banners.SingleOrDefault(x => x.title == "6") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "6").image;
+
+
+                    <div urltogo="@url" class="slideitem grid-item col-md-6 height-x2">
+                        <div class="banner banner-fixed banner-lg br-sm">
+                            <figure>
+                                <img src="@image" alt="Banner" width="610"
+                                     height="420" style="background-color: #828994" />
+                            </figure>
+
+                        </div>
+                    </div>
+                }
+
+                <!-- End of Grid Item -->
+                @if (Model.banners != null)
+                {
+                    string url = Model.banners.SingleOrDefault(x => x.title == "7") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "7").catIDOrLink;
+                    string image = Model.banners.SingleOrDefault(x => x.title == "7") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "7").image;
+
+                    <div urltogo="@url" class="slideitem grid-item col-sm-6 height-x1">
+                        <div class="banner banner-fixed banner-md br-sm">
+                            <figure>
+                                <img src="@image" alt="Banner" width="610"
+                                     height="200" style="        background-color: #d8dee9" />
+                            </figure>
+
+                        </div>
+                    </div>
+                }
+
+                <!-- End of Grid Item -->
+                @if (Model.banners != null)
+                {
+                    string url = Model.banners.SingleOrDefault(x => x.title == "8") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "8").catIDOrLink;
+                    string image = Model.banners.SingleOrDefault(x => x.title == "8") == null ? "" : Model.banners.SingleOrDefault(x => x.title == "8").image;
+
+                    <div urltogo="@url" class="slideitem grid-item col-sm-6 height-x1">
+                        <div class="banner banner-fixed banner-md br-sm">
+                            <figure>
+                                <img src="@image" alt="Banner" width="610"
+                                     height="200" style="background-color: #424347" />
+                            </figure>
+
+                        </div>
+                    </div>
+                }
+
+                <!-- End of Grid Itme -->
+            </div>
+        }
+
+
+        @if (Model.tagsPR != null)
+        {
+            foreach (var tag in Model.tagsPR)
+            {
+                if (Model.tagsPR.IndexOf(tag) == 0 || Model.tagsPR.IndexOf(tag) == 1)
+                {
+                    continue;
+                }
+
+                <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible" style="animation-duration: 1.2s;">
+                    <div class="title-link-wrapper pb-1 mb-4">
+                        <h2 class="title ls-normal mb-0">@tag.tagtitle</h2>
+                        <p style="flex:1"></p>
+                        <div tag="@tag.tag" class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                            @Resources.res.moreProduct
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-lg-3 col-sm-4 mb-4">
+                                <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
+                                                background-color: #ebeced;">
+
+                                </div>
+                            </div>*@
+                        <!-- End of Banner -->
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
+                                'spaceBetween': 20,
+                                'slidesPerView': 2,
+                                'breakpoints': {
+                                    '992': {
+                                        'slidesPerView': 3
+                                    },
+                                    '1200': {
+                                        'slidesPerView': 5
+                                    }
+                                }
+                            }">
+                                <div class="swiper-wrapper " id="swiper-wrapper-2fea7c27dd16ef22" aria-live="polite" style="padding:10px; transform: translate3d(0px, 0px, 0px);">
+
+                                    @if (tag.tagsitemprs != null)
+                                    {
+                                        foreach (var item in tag.tagsitemprs)
+                                        {
+                                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                            if (item.meta != null)
+                                            {
+                                                banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                                    (@item.meta);
+                                                newurl = metaModel.curl;
+                                            }
+                                            string addID = "addtocarto" + item.ID;
+                                            string minusID = "minus" + item.ID;
+                                            string imagefile = "placeholder.jpg";
+                                            List<string>
+                                                srtlist = new List<string>
+                                                    ();
+                                            string src2 = "";
+                                            if (item.title != null)
+                                            {
+                                                srtlist = item.image.Trim(',').Split(',').ToList();
+                                                imagefile = srtlist[0];
+                                                if (srtlist.Count == 2)
+                                                {
+                                                    src2 = srtlist[1];
+                                                }
+                                            }
+                                            string ID = "N" + item.ID.ToString();
+                                            string addtocartid = "addtocart" + ID;
+                                            string price = item.price;
+
+                                            string src = imagefile;
+
+
+                                            <div class="swiper-slide product-col swiper-slide-active shadowbox" role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                                                <div class="product-wrap product text-center" style="width:100%">
+                                                    <figure class="product-media" style="width:100%">
+                                                        <a href="/products/@newurl">
+                                                            <img src="@src" alt="Product"
+                                                                 width="300" height="338" />
+                                                            <img src="@src2" alt="Product"
+                                                                 width="300" height="338" />
+                                                        </a>
+                                                        @*<div class="product-action-vertical">
+                                                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                                                   title="Add to cart"></a>
+                                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                                                   title="Add to wishlist"></a>
+                                                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                                                   title="Quickview"></a>
+                                                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                                                   title="Add to Compare"></a>
+                                                            </div>*@
+
+
+                                                        @if (item.price != item.oldPrice)
+                                                        {
+                                                            <div class="product-label-group">
+                                                                <label class="product-label label-discount">@item.discount% Off</label>
                                                             </div>
-                                                            <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
-                                                        </div>*@
+                                                        }
+
+                                                    </figure>
+                                                    <div class="product-details">
+                                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+                                                        @*<div class="ratings-container">
+                                                                <div class="ratings-full">
+                                                                    <span class="ratings" style="width: 60%;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                                                            </div>*@
                                                         <div class="product-price">
                                                             <ins class="new-price">@item.price AED</ins>
                                                             @if (item.price != item.oldPrice)

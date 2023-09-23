@@ -51,7 +51,7 @@ new { @class = "c-form-account", enctype = "multipart/form-data", id = "register
                                     <p id="fogetconfirm" class="btn btn-primary">ورود</p>
                                     <script>
                                         $("#fogetconfirm").click(function () {
-
+                                           
                                             function isNotNull(str) {
                                                 var pattern = /^[A-Za-z0-9]{1,20}$/;
                                                 return pattern.test(str);
@@ -62,7 +62,7 @@ new { @class = "c-form-account", enctype = "multipart/form-data", id = "register
                                             };
 
                                             var val = $("#forgettext").val();
-
+                                           
                                             if (!isNotNull(val) || !isValidPhonenumber(val)) {
                                                 alert("");
                                                 $("#remember-error").css("display", "block");
@@ -73,7 +73,7 @@ new { @class = "c-form-account", enctype = "multipart/form-data", id = "register
                                             }
                                             else {
 
-
+                                               
                                                 $("#loading").fadeIn();
                                                 $.ajax({
                                                     url: '/CustomerLogin/forgetPass',

@@ -11564,14 +11564,14 @@ body .product-popup {
         position: absolute;
         border: 1px solid;
         border-radius: 2px;
-        width: 18px;
-        height: 18px;
+        width: 28px;
+        height: 28px;
         top: 50%;
         -webkit-transform: translateY(-50%);
         transform: translateY(-50%);
         left: 2px;
         color: #999;
-        font-size: 1rem;
+        font-size: 1.7rem;
         font-weight: 900;
         font-family: "Font Awesome 5 Free";
         text-align: center;
@@ -11590,8 +11590,8 @@ body .product-popup {
 .filter-items.item-check .active > a::before {
   content: "";
   background-color: #34970b;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   color: #fff;
   border-radius: 3px;
   left: 1px;

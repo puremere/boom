@@ -560,7 +560,8 @@
                                                 <div class="c-profile-wishlist__list-item-thumb">
                                                     <a href="@link" class="c-profile-wishlist__list-item-img">
                                                         <img alt="@item.title" src="@src" style="max-width:150px">
-                                                    </a><button id="@id" class="c-profile-wishlist__list-item-remove js-remove-favorite-btn" data-product-id="680108"></button>
+                                                    </a>
+                                                    <button id="@id" class="c-profile-wishlist__list-item-remove js-remove-favorite-btn" data-product-id="680108"></button>
                                                 </div>
                                             </div>
 
@@ -1000,7 +1001,9 @@
                                                 <div class="c-table-orders__row">
                                                     <div class="c-table-orders__cell c-table-orders__cell--hash">
                                                         @index
-                                                    </div><div class="c-table-orders__cell c-table-orders__cell--id">@item.orderNumber</div><div class="c-table-orders__cell c-table-orders__cell--date">@item.date</div><div class="c-table-orders__cell c-table-orders__cell--receive-at">
+                                                    </div><div class="c-table-orders__cell c-table-orders__cell--id">@item.orderNumber</div>
+                                                    <div class="c-table-orders__cell c-table-orders__cell--date">@item.date</div>
+                                                    <div class="c-table-orders__cell c-table-orders__cell--receive-at">
                                                         @item.date
                                                     </div>
                                                     <div class="c-table-orders__cell c-table-orders__cell--price">

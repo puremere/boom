@@ -3,7 +3,7 @@
 @model banimo.ViewModel.productlistclass
 @{
     //ViewBag.Title = "لیست محصولات";
-    Layout = "~/Views/Shared/_Layout8.cshtml";
+    Layout = "~/Views/Shared/_Layout9.cshtml";
 }
 
 <div class="page-content">
@@ -26,7 +26,7 @@
                                 @*<label>Filter :</label>*@
                                 @*<a href="#" class="btn btn-dark btn-link filter-clean">Clean All</a>*@
                             </div>
-                           
+
                             @{
                                 if (Model.filtergroup.filters != null)
                                 {
@@ -65,38 +65,81 @@
                                 if (Model.filtergroup.colors != null)
                                 {
                                     <div class="widget widget-collapsible">
-                                        <h3 class="widget-title"><label>Color</label><span class="toggle-btn"></span></h3>
+                                        <h3 class="widget-title"><label>رنگ</label><span class="toggle-btn"></span></h3>
                                         <ul class="widget-body filter-items item-check mt-1">
-                                            @foreach (var detail in Model.filtergroup.colors)
-                                            {
-                                                var typid = detail.ID;
-                                                var classname = "colorbox " + typid;
-                                                var colorcode = detail.title;
-                                                <li id="@typid">
-                                                    @detail.imagetitle  <span class="dot" style="display:inline-block ; width:15px; height:15px; background-color:@colorcode; border-radius:100%; border: 1px solid @colorcode; float:left"></span>
-                                                </li>
+                                            @{
+
+
+
+
+                                                var q = Model.filtergroup.colors.GroupBy(d => d.imagetitle);
+                                                foreach (var ITEMDETAIL in q)
+                                                {
+                                                    var typid = ITEMDETAIL.First().ID;
+                                                    var classname = "colorbox " + typid;
+                                                    var colorcode = ITEMDETAIL.First().title;
+                                                    <li id="@typid" class="colorcheckbox">
+
+                                                        <a style="padding-right:35px">
+                                                            @ITEMDETAIL.First().imagetitle <span class="dot" style="display:inline-block ; width:15px; height:15px; background-color:@colorcode; border-radius:100%; border: 1px solid @colorcode; float:left"></span>
+                                                        </a>
+
+                                                    </li>
+
+
+                                                }
                                             }
+
 
                                         </ul>
                                     </div>
+
+                                    <div class="widget widget-collapsible">
+                                        <h3 class="widget-title"><label>اندازه</label><span class="toggle-btn"></span></h3>
+                                        <ul class="widget-body filter-items item-check mt-1">
+                                            @{
+
+
+
+
+
+                                                foreach (var ITEMDETAIL in Model.filtergroup.selectedFilters)
+                                                {
+
+                                                    <li class="sfcheckbox" id="@ITEMDETAIL.title">
+
+                                                        <a style="padding-right:35px">
+                                                            @ITEMDETAIL.title
+                                                        </a>
+
+                                                    </li>
+
+
+                                                }
+                                            }
+
+
+                                        </ul>
+                                    </div>
+
                                 }
                             }
 
                             @*<div class="widget widget-collapsible">
-            <h3 class="widget-title"><label>Price</label><span class="toggle-btn"></span></h3>
-            <div class="widget-body">
-                <ul class="filter-items search-ul">
-                    <li><a href="#">$0.00 - $100.00</a></li>
-                    <li><a href="#">$100.00 - $200.00</a></li>
-                    <li><a href="#">$200.00 - $300.00</a></li>
-                    <li><a href="#">$300.00 - $500.00</a></li>
-                    <li><a href="#">$500.00+</a></li>
-                </ul>
-                <form class="price-range">
-                    <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
-                </form>
-            </div>
-        </div>*@
+                                    <h3 class="widget-title"><label>Price</label><span class="toggle-btn"></span></h3>
+                                    <div class="widget-body">
+                                        <ul class="filter-items search-ul">
+                                            <li><a href="#">$0.00 - $100.00</a></li>
+                                            <li><a href="#">$100.00 - $200.00</a></li>
+                                            <li><a href="#">$200.00 - $300.00</a></li>
+                                            <li><a href="#">$300.00 - $500.00</a></li>
+                                            <li><a href="#">$500.00+</a></li>
+                                        </ul>
+                                        <form class="price-range">
+                                            <input type="number" name="min_price" class="min_price text-center" placeholder="$min"><span class="delimiter">-</span><input type="number" name="max_price" class="max_price text-center" placeholder="$max"><a href="#" class="btn btn-primary btn-rounded">Go</a>
+                                        </form>
+                                    </div>
+                                </div>*@
 
 
                         </div>
@@ -108,41 +151,41 @@
             <!-- End of Shop Sidebar -->
             <!-- Start of Shop Main Content -->
             <div class="main-content" style="width:100%; padding:20px">
-                <nav class="toolbox sticky-toolbox sticky-content fix-top" style="margin-top:20px">
+                @*<nav class="toolbox sticky-toolbox sticky-content fix-top" style="margin-top:20px">
                     <div class="toolbox-left">
                         <a href="#" class="btn btn-primary btn-outline btn-rounded left-sidebar-toggle
                                         btn-icon-left d-block d-lg-none"><i class="w-icon-category"></i><span>@Resources.res.Filter</span></a>
-                        <div class="toolbox-item toolbox-sort select-box text-dark">
-                            <label>مرتب سازی بر اساس  : &nbsp;</label>
-                            <select name="orderby" class="form-control">
-                                <option value="default" selected="selected">@Resources.res.Defaultsorting</option>
-                                <option value="popularity">@Resources.res.Sortbypopularity</option>
-                                <option value="rating">@Resources.res.Sortrating</option>
-                                <option value="date">@Resources.res.Sortlatest</option>
-                                <option value="price-low">@Resources.res.Sortlowhigh</option>
-                                <option value="price-high">@Resources.res.Sorthighlow</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="toolbox-right">
-                        @*<div class="toolbox-item toolbox-show select-box">
-                            <select name="count" class="form-control">
-                                <option value="9">Show 9</option>
-                                <option value="12" selected="selected">Show 12</option>
-                                <option value="24">Show 24</option>
-                                <option value="36">Show 36</option>
-                            </select>
-                        </div>*@
-                        @*<div class="toolbox-item toolbox-layout">
-                    <a href="shop-banner-sidebar.html" class="icon-mode-grid btn-layout active">
-                        <i class="w-icon-grid"></i>
-                    </a>
-                    <a href="shop-list.html" class="icon-mode-list btn-layout">
-                        <i class="w-icon-list"></i>
-                    </a>
-                </div>*@
-                    </div>
-                </nav>
+                                        <div class="toolbox-item toolbox-sort select-box text-dark">
+                                            <label>مرتب سازی بر اساس  : &nbsp;</label>
+                                            <select name="orderby" class="form-control">
+                                                <option value="default" selected="selected">@Resources.res.Defaultsorting</option>
+                                                <option value="popularity">@Resources.res.Sortbypopularity</option>
+                                                <option value="rating">@Resources.res.Sortrating</option>
+                                                <option value="date">@Resources.res.Sortlatest</option>
+                                                <option value="price-low">@Resources.res.Sortlowhigh</option>
+                                                <option value="price-high">@Resources.res.Sorthighlow</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="toolbox-right">
+                                        <div class="toolbox-item toolbox-show select-box">
+                                            <select name="count" class="form-control">
+                                                <option value="9">Show 9</option>
+                                                <option value="12" selected="selected">Show 12</option>
+                                                <option value="24">Show 24</option>
+                                                <option value="36">Show 36</option>
+                                            </select>
+                                        </div>
+                                        <div class="toolbox-item toolbox-layout">
+                                            <a href="shop-banner-sidebar.html" class="icon-mode-grid btn-layout active">
+                                                <i class="w-icon-grid"></i>
+                                            </a>
+                                            <a href="shop-list.html" class="icon-mode-list btn-layout">
+                                                <i class="w-icon-list"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </nav>*@
                 <div id="productlist">
                     @{
 
@@ -150,12 +193,12 @@
 
                     }
                 </div>
-               
+
 
 
 
             </div>
-            
+
 
             <!-- End of Shop Main Content -->
 
@@ -163,15 +206,15 @@
 
         </div>
 
-       
+
     </div>
 </div>
 
 
 <script>
-   
+
     $('.filtercheckbox').click(function () {
-       
+
         if ($(this).hasClass('active')) {
             $(this).removeClass('active')
         }
@@ -182,11 +225,11 @@
         var filterid = "";
         $(".filtercheckbox").each(function () {
             if ($(this).hasClass('active')) {
-                var id =this.id;
+                var id = this.id;
                 filterid = filterid + id + ",";
             }
         })
-       
+
 
         $.ajax({
             url: '/Home/changefilterides',
@@ -233,5 +276,71 @@
 
 @section scripts{
     <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+    <script>
+        $(".filter-items a").click(function () {
+
+            var $ul = $(this).closest('.filter-items');
+            if (!$ul.hasClass('search-ul') && !$ul.parent().hasClass('select-menu')) {
+                $(this).parent().toggleClass('active');
+
+            }
+
+            var colorides = "";
+            var sfides = "";
+
+            $(".colorcheckbox").each(function () {
+
+                var id = $(this).prop("id");
+                if ($(this).hasClass("active")) {
+
+                    colorides = colorides + id + ",";
+
+                }
+            })
+            $(".sfcheckbox").each(function () {
+
+                var id = $(this).prop("id");
+                if ($(this).hasClass("active")) {
+
+                    sfides = sfides + id + ",";
+
+                }
+            })
+            $.ajax({
+                url: '/Home/changecolorides',
+                data: {
+                    ID: colorides,
+
+                },
+                dataType: 'html',
+                success: function () {
+                    $.ajax({
+                        url: '/Home/changeSelectedFilter',
+                        data: {
+                            ID: sfides,
+
+                        },
+                        dataType: 'html',
+                        success: function () {
+                            $.ajax({
+                                url: '/Home/gogetproductlist',
+                                aType: 'html',
+                                success: function (data) {
+
+                                    $('#productlist').html(data);
+                                    window.scrollTo(0, 50);
+                                },
+                                error: function () {
+
+                                },
+
+                            });
+                        }
+                    });
+                }
+            });
+
+        })
+    </script>
 
 } 

@@ -5,7 +5,20 @@ using System.Web;
 
 namespace banimo.ViewModel
 {
-    
+
+    public class TagVM
+    {
+        public List<TagList> tagList { get; set; }
+    }
+
+    public class TagList
+    {
+        public string ID { get; set; }
+        public string title { get; set; }
+        public string parent { get; set; }
+        public string image { get; set; }
+    }
+
     public class slideVM
     {
         public List<SlideList> slideList { get; set; }
