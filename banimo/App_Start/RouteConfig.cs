@@ -48,7 +48,7 @@ namespace banimo
             routes.MapRoute(
                name: "Default",
                url: "{controller}/{action}/{id}",
-               defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+               defaults: new { controller = "Home", action = "index", id = UrlParameter.Optional },
                constraints: new { controller = "Home|Admin|Connection|CustomerLogin|Error|app|base|Core|Partner|Main|Node|Deliver|Transport|Driver" }
 
            );

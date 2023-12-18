@@ -174,6 +174,9 @@
     <Reference Include="RichTextEditor, Version=8.2.0.0, Culture=neutral, PublicKeyToken=3858aa6802b1223a, processorArchitecture=MSIL">
       <HintPath>..\packages\RichTextEditor.8.2.0.9\lib\RichTextEditor.dll</HintPath>
     </Reference>
+    <Reference Include="Stripe.net, Version=37.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.37.35.0\lib\net45\Stripe.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -184,6 +187,9 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.28.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.28.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -882,22 +888,43 @@
     <Content Include="AdminPanel\Scripts\date.js" />
     <Content Include="AdminPanel\Scripts\fastclick.js" />
     <Content Include="Content\ankerStyle.css" />
+    <Content Include="Content\heson.css" />
+    <Content Include="Content\jcider.css" />
     <Content Include="Content\select.css" />
+    <Content Include="Content\slider\example.css" />
+    <Content Include="Content\slider\jquery.mkslider.css" />
     <Content Include="images\adminbg.png" />
+    <Content Include="images\heson.png" />
+    <Content Include="images\k1-min.jpg" />
+    <Content Include="images\k2-min.jpg" />
+    <Content Include="images\k3-min.jpg" />
     <Content Include="images\kala.png" />
+    <Content Include="images\m1-min.jpg" />
+    <Content Include="images\m2-min.jpg" />
+    <Content Include="images\m3-min.jpg" />
     <Content Include="images\margek.png" />
     <Content Include="images\marker-green.png" />
     <Content Include="images\marker-shadow.png" />
+    <Content Include="images\nLoading.gif" />
+    <Content Include="images\panelimages\placeHolder.png" />
+    <Content Include="images\placeHolder.png" />
     <Content Include="images\trash.png" />
+    <Content Include="images\w1-min.jpg" />
+    <Content Include="images\w2-min.jpg" />
+    <Content Include="images\w3-min.jpg" />
     <Content Include="notifsound.mp3" />
     <Content Include="Scripts\createItemNode.js" />
     <Content Include="Scripts\downloadNode.js" />
     <Content Include="Scripts\downloadPartner.js" />
     <Content Include="Scripts\downloadIMGPartner.js" />
+    <Content Include="Scripts\jcider.min.js" />
     <Content Include="Scripts\NoSleep.js" />
+    <Content Include="Scripts\owl.carousel.min.js" />
     <Content Include="Scripts\Scripts\deliver\app.js" />
     <Content Include="Scripts\Scripts\deliver\connectionManager.js" />
     <Content Include="Scripts\Scripts\deliver\viewModel.js" />
+    <Content Include="Scripts\slider\jquery.mkslider.js" />
+    <Content Include="Scripts\swipe.js" />
     <Content Include="webAsset\deliver\app\Delivery\css\driver\index.css" />
     <Content Include="webAsset\deliver\app\Delivery\css\index.css" />
     <Content Include="webAsset\deliver\app\Delivery\imgs\bg-app.png" />
@@ -4158,7 +4185,7 @@
     <Content Include="AdminPanel\Views\Shared\_UserProfile.cshtml" />
     <Content Include="AdminPanel\Views\Web.config" />
     <Content Include="AdminPanel\Views\_ViewStart.cshtml" />
-    <Content Include="ARmodels\item.usdz" />
+    <Content Include="ARmodels\8882.usdz" />
     <Content Include="ARmodels\item.gltf" />
     <None Include="bundleconfig.json" />
     <Content Include="Extra\leaflet\leaflet-src.esm.js.map" />
@@ -4713,7 +4740,7 @@
     <Content Include="Views\Shared\_Menu1.cshtml" />
     <Content Include="Views\Home\loginPage.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
-    <Content Include="Views\Home\Index2.cshtml" />
+    <Content Include="Views\Home\Index2-1.cshtml" />
     <Content Include="Views\Shared\_index2ListITem.cshtml" />
     <Content Include="Views\Shared\_Menu2.cshtml" />
     <Content Include="Views\Home\ProductList2.cshtml" />
@@ -4725,7 +4752,6 @@
     <Content Include="Views\Shared\_Menu3.cshtml" />
     <Content Include="Views\Shared\_Layout3.cshtml" />
     <Content Include="Views\Shared\_contactSection3.cshtml" />
-    <Content Include="Views\Home\_contactSection2.cshtml" />
     <Content Include="Views\Home\Index3.cshtml" />
     <Content Include="Views\Home\ProductList3.cshtml" />
     <Content Include="Views\Shared\_ProductListForBUTFULImage3.cshtml" />
@@ -5150,6 +5176,23 @@
     <Content Include="Views\Home\myProfile9.cshtml" />
     <Content Include="Views\Shared\_gogetOrderDetail9.cshtml" />
     <Content Include="Views\Node\tag.cshtml" />
+    <Content Include="Views\Connection\verifyAtBase9.cshtml" />
+    <Content Include="Views\Home\Index2.cshtml" />
+    <Content Include="Views\Partner\Discount.cshtml" />
+    <Content Include="Views\Connection\RedirectStripe.cshtml" />
+    <Content Include="Views\Shared\_Layout12.cshtml" />
+    <Content Include="Views\Shared\_ProductListForBUTFULImage12.cshtml" />
+    <Content Include="Views\Home\ProductList12.cshtml" />
+    <Content Include="Views\Home\ProductDetail12.cshtml" />
+    <Content Include="Views\Home\myProfile12.cshtml" />
+    <Content Include="Views\Home\loginPage12.cshtml" />
+    <Content Include="Views\Home\Index12.cshtml" />
+    <Content Include="Views\Home\EndOrder12.cshtml" />
+    <Content Include="Views\Home\forgetpass12.cshtml" />
+    <Content Include="Views\Home\ContactUs12.cshtml" />
+    <Content Include="Views\Home\confirm12.cshtml" />
+    <Content Include="Views\Home\checkout12.cshtml" />
+    <Content Include="Views\Home\login12.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

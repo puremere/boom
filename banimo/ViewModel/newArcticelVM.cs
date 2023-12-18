@@ -14,6 +14,7 @@ namespace banimo.ViewModel
         public string ID { get; set; }
         public string image { get; set; }
         public string[] tag { get; set; }
+        public string[] cat { get; set; }
     }
     public class newMenuVM
     {

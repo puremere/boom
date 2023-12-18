@@ -1,5 +1,9 @@
 ﻿@charset "UTF-8";
 
+
+:root {
+    --colorprimary: #009d01;
+}
 .swiper {
     position: relative
 }
@@ -958,7 +962,7 @@ table {
 }
 
 .bg-primary {
-    background-color: #bc3f3f !important
+    background-color: #009d01 !important
 }
 
 .bg-secondary {
@@ -1341,8 +1345,8 @@ blockquote {
     }
 
     .cols-md-5 > * {
-        max-width: 20%;
-        flex: 0 0 20%
+        max-width: 25%;
+        flex: 0 0 25%
     }
 
     .cols-md-6 > * {
@@ -9897,7 +9901,7 @@ body .product-popup {
 }
 
     .nav-tabs .nav-item .nav-link.active, .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-item:hover .nav-link {
-        color: #bc3f3f
+        color: var(--colorprimary)
     }
 
 .nav-link {
@@ -10029,7 +10033,7 @@ body .product-popup {
 }
 
 .tab-nav-outline .nav-item .nav-link.active, .tab-nav-outline .nav-item.show .nav-link, .tab-nav-outline .nav-item:hover .nav-link {
-    border: 2px solid #bc3f3f;
+    border: 2px solid var(--colorprimary);
     border-radius: 0.3rem
 }
 
@@ -12319,7 +12323,7 @@ aside .sp-sidebar-banner span {
         flex: 1;
         min-width: 40px;
         padding: 0.9rem;
-        border: 2px solid #bc3f3f;
+        border: 2px solid var(--colorprimary);
         border-right: 0;
         font-size: 1.2rem;
         letter-spacing: 0;
@@ -12336,7 +12340,7 @@ aside .sp-sidebar-banner span {
         min-width: 5.1rem;
         color: #333;
         border-left: 0;
-        border-color: #bc3f3f;
+        border-color: var(--colorprimary);
         font-size: 1.5rem;
         font-weight: normal;
         letter-spacing: -0.025em;
@@ -12822,7 +12826,7 @@ aside .sp-sidebar-banner span {
     font-size: 1.1rem;
     font-weight: 400;
     line-height: 1.8rem;
-    background: #bc3f3f;
+    background: var(--colorprimary);
     color: #fff;
     text-align: center
 }

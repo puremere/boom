@@ -1286,7 +1286,7 @@ namespace banimo.Controllers
             }
 
         }
-        public ActionResult addNewTimeOfDeliver(string DayOfWeek, string TimeFrom, string TimeTo, string planID)
+        public ActionResult addNewTimeOfDeliver (string capacity, string DayOfWeek, string TimeFrom, string TimeTo, string planID)
         {
 
             string device = RandomString(10);
@@ -1296,13 +1296,15 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                var collection = new NameValueCollection(); 
+                string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
                 collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("DayOfWeek", DayOfWeek);
                 collection.Add("TimeFrom", TimeFrom);
                 collection.Add("TimeTo", TimeTo);
+                collection.Add("capacity", capacity);
                 collection.Add("planID", planID);
                 byte[] response =
                 client.UploadValues(server + "/Admin/addNewDeliveryTime.php?", collection);
@@ -7486,9 +7488,7 @@ namespace banimo.Controllers
             string imagename = "";
             for (int i = 0; i < Request.Files.Count; i++)
             {
-
                 HttpPostedFileBase hpf = Request.Files[i];
-
                 if (hpf.ContentLength == 0)
                     continue;
                 if (!image.Contains(hpf.FileName))
@@ -7514,12 +7514,8 @@ namespace banimo.Controllers
                 collection.Add("header", newHeader);
                 collection.Add("description", newDes);
                 collection.Add("title", title);
-                
                 collection.Add("ID", ID);
-
-
                 collection.Add("catmode", catmode);
-
                 byte[] response = client.UploadValues(server + "/Admin/setSlideDetail.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);

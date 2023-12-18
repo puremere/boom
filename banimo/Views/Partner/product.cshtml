@@ -106,10 +106,18 @@
 
                             @{
                                 string display = "";
-                                if (Model.log.nodeList.Count() > 1)
+                                if (Model.log != null)
                                 {
-                                    display = "none";
+                                    if (Model.log.nodeList != null)
+                                    {
+                                        if (Model.log.nodeList.Count() > 1)
+                                        {
+                                            display = "none";
+                                        }
+                                    }
+
                                 }
+
                             }
 
 

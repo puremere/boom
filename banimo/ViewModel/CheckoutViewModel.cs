@@ -8,6 +8,7 @@ namespace banimo.ViewModel
     public class CheckoutViewModel : BaseViewModel
     {
         public decimal price { get; set; }
+        public string selectedFilter { get; set; }
         public decimal count { get; set; }
         public decimal limit { get; set; }
         public decimal baseprice { get; set; }

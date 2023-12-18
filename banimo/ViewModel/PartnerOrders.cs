@@ -12,6 +12,12 @@ namespace banimo.ViewModel
     }
     public class PartnerOrder
     {
+        
+            
+        public string selectedFilter { get; set; }
+        public string color { get; set; }
+        public string disprice { get; set; }
+        public string discount { get; set; }
         public string ProductId { get; set; }
         public string itemID { get; set; }
         public string payment { get; set; }

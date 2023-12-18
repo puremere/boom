@@ -11,35 +11,35 @@
 
 @section scripts{
     <script>
-         $('.value-plus').on('click', function () {
-            
-        $("#loading").fadeIn()
-       var ID = $(this).attr('id');
+        $('.value-plus').on('click', function () {
 
-        $.ajax({
-            url: '/Home/addtocart',
-            dataType: 'html',
-            data: {
-                id: ID
+            $("#loading").fadeIn()
+            var ID = $(this).attr('id');
 
-            },
-            success: function (data) {
-                var count = parseInt($(".simpleCart_quantityy").text());
-                count += 1;
-                $(".simpleCart_quantityy").text(count);
-                $("#loading").fadeOut()
+            $.ajax({
+                url: '/Home/addtocart',
+                dataType: 'html',
+                data: {
+                    id: ID
 
-
-            },
-            error: function () {
-                alert("error")
-            }
+                },
+                success: function (data) {
+                    var count = parseInt($(".simpleCart_quantityy").text());
+                    count += 1;
+                    $(".simpleCart_quantityy").text(count);
+                    $("#loading").fadeOut()
 
 
+                },
+                error: function () {
+                    alert("error")
+                }
+
+
+            });
         });
-    });
     </script>
-    }
+}
 <div class="wrapper">
     <!-- header start -->
 
@@ -57,56 +57,60 @@
                 string desc3 = "";
                 string desc4 = "";
 
-                foreach (var item in Model.slides)
+                if (Model.slides != null)
                 {
-                    int index = Model.slides.IndexOf(item);
-                    string title = "";
-                    string desc = "";
-
-                    switch(index)
+                    foreach (var item in Model.slides)
                     {
-                        case 0:
-                            title = title0;
-                            desc = desc0;
-                            break;
-                        case 1:
-                            title = title1;
-                            desc = desc1;
-                            break;
-                        case 2:
-                            title = title2;
-                            desc = desc2;
-                            break;
-                        case 3:
-                            title = title3;
-                            desc = desc3;
-                            break;
-                        case 4:
-                            title = title4;
-                            desc = desc4;
-                            break;
+                        int index = Model.slides.IndexOf(item);
+                        string title = "";
+                        string desc = "";
 
-                    }
-                    <div class="single-slider slider-1 gray-bg">
-                        <div class="container">
-                            <div class="row" style="direction:rtl">
-                                <div class="col-md-6" style="text-align:right">
-                                    <div class="slider-content slider-animated-1">
-                                        <h2 class="animated">@title</h2>
-                                        <p class="">@desc</p>
-                                      
+                        switch (index)
+                        {
+                            case 0:
+                                title = title0;
+                                desc = desc0;
+                                break;
+                            case 1:
+                                title = title1;
+                                desc = desc1;
+                                break;
+                            case 2:
+                                title = title2;
+                                desc = desc2;
+                                break;
+                            case 3:
+                                title = title3;
+                                desc = desc3;
+                                break;
+                            case 4:
+                                title = title4;
+                                desc = desc4;
+                                break;
+
+                        }
+                        <div class="single-slider slider-1 gray-bg">
+                            <div class="container">
+                                <div class="row" style="direction:rtl">
+                                    <div class="col-md-6" style="text-align:right">
+                                        <div class="slider-content slider-animated-1">
+                                            <h2 class="animated">@title</h2>
+                                            <p class="">@desc</p>
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="slider-single-img slider-animated-1">
-                                        <img class="animated" src="~/images/panelimages/@item.image" alt="slider images">
+                                    <div class="col-md-6">
+                                        <div class="slider-single-img slider-animated-1">
+                                            <img class="animated" src="~/images/panelimages/@item.image" alt="slider images">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-                }
+
+            }
 
 
         </div>
@@ -231,7 +235,7 @@
 
                             }
                         }
-                        
+
 
 
                     </div>
@@ -239,9 +243,9 @@
                 <div class="tab-pane" id="home2" role="tabpanel">
                     <div class="row">
                         @if (Model.newest != null)
-                {
-                    foreach (var item in Model.newest)
-                    {
+                        {
+                            foreach (var item in Model.newest)
+                            {
                                 <div class="col-md-6 col-lg-4 col-xl-3">
                                     <div class="product-wrapper mb-45">
                                         <div class="product-img">
@@ -289,9 +293,9 @@
                 <div class="tab-pane" id="home3" role="tabpanel">
                     <div class="row">
                         @if (Model.bestseller != null)
-                {
-                    foreach (var item in Model.bestseller)
-                    {
+                        {
+                            foreach (var item in Model.bestseller)
+                            {
                                 <div class="col-md-6 col-lg-4 col-xl-3">
                                     <div class="product-wrapper mb-45">
                                         <div class="product-img">
@@ -379,82 +383,7 @@
 
 
 
-    @if (Model.gourpList != null)
-                {
-                    foreach (var group in Model.gourpList)
-                    {
-                        string id = group.type + "-" + group.catIDOrLink;
-
-                        if (group.value != null)
-                        {
-
-
-                <div class="product-area pb-125 product-padding">
-                    <div class="" style="padding:30px">
-                        <div class="section-title-2 text-center mb-55">
-                            <h3 class="mb-12">@group.title</h3>
-
-                        </div>
-                        <div class="collection-product-active owl-carousel owl-loaded owl-drag">
-                            @foreach (var item in group.value)
-                {
-                    string addID = "addtocarto" + item.ID;
-                    string minusID = "minus" + item.ID;
-                    string imagefile = "placeholder.jpg";
-                    if (item.title != null)
-                    {
-                        imagefile = item.image;
-                    }
-                    string ID = "N" + item.ID.ToString();
-                    string addtocartid = "addtocart" + ID;
-                    string price = item.price;
-
-                    string src = imagefile;
-                                <div class="product-wrapper mb-45">
-                                    <div class="product-img">
-                                        <a href="#">
-                                            <img src="@src" alt="">
-                                        </a>
-                                        <div class="product-action">
-                                            <div class="product-action-style">
-                                                <a id="@addID" class="action-plus value-plus" title="Quick View">
-                                                    <i class="ti-plus"></i>
-                                                </a>
-
-                                                <a class="action-heart" title="Wishlist" style="pointer-events: none">
-                                                    <i class="ti-heart"></i>
-                                                </a>
-                                                <a  href="/home/checkout" class="action-cart " title="افزودن به سبد خرید" >
-                                                    <i class="ti-shopping-cart"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-content text-center">
-                                        <h4><a href="product-details.html">@item.title</a></h4>
-
-                                        <div class="product-price">
-                                            @if (item.price != item.oldPrice)
-                {
-                                                <del>   </del>
-                                                <span  class="old faNum">@string.Format("{0:n0}", Convert.ToInt32(@item.oldPrice))  </span>
-                                            }
-
-                                            <span  class="faNum">@string.Format("{0:n0}", Convert.ToInt32(@item.price))  <span>تومان</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-                </div>
-
-
-            }
-
-        }
-    }
+  
 
 
     @*<div class="blog-area pt-125 pb-85 blog-padding hm-blog">
@@ -657,7 +586,7 @@
         </footer>*@
     <!-- modal -->
 
-    
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span class="ion-android-close" aria-hidden="true"></span>

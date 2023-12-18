@@ -286,16 +286,29 @@
 
                         <div style="margin:5px;">
                             <p id="modalmessage ">@Resources.res.price (@Resources.res.vahed) </p>
-                            <input id="addprice" class="form-control inputnumber" value="2" />
+                            <input id="addprice" class="form-control inputnumber" value="0" />
                         </div>
                         <div style="margin:5px;">
-                            <p id="modalmessage">@Resources.res.count</p>
-                            <input id="addcount" class="form-control" value="1" />
+                            <p id="modalmessage ">@Resources.res.discount (درصد)  </p>
+                            <input id="adddiscount" class="form-control inputnumber" value="0" />
                         </div>
+
+                        
                         @*<div style="margin:5px;">
-                                <p id="modalmessage">امانی</p>
-                                <input id="addamani" type="checkbox" class="form-control" />
-                            </div>*@
+            <p id="modalmessage">امانی</p>
+            <input id="addamani" type="checkbox" class="form-control" />
+        </div>*@
+                    </div>
+
+                    <div style="display:flex">
+                        <div style="margin:5px;">
+                            <p id="modalmessage">@Resources.res.count</p>
+                            <input id="addcount" class="form-control" value="1"س />
+                        </div>
+                        <div style="margin:5px;">
+                            <p id="modalmessage ">اعمال برای همه آیتم ها  </p>
+                            <input style="width:100%" id="addall" class=" " type="checkbox" />
+                        </div>
                     </div>
 
 
@@ -317,11 +330,16 @@
                             else {
                                 amani = "0";
                             }
+                            var addall = "0";
+                            if ($('#addall').is(':checked')) {
+                                addall = "1";
+                            }
                             var price = $("#addprice").val();
-                          
+                            var discount = $("#adddiscount").val();
                             price = price.replace(",", "")
                             var count = $("#addcount").val();
                             var ID = $("#ProductSelectedID").val();
+                           
 
                             $.ajax({
                                 url: '/Partner/SetNewFactorFromSail',
@@ -331,6 +349,8 @@
                                     price: price,
                                     count: count,
                                     ID: ID,
+                                    discount: discount,
+                                    addall: addall
 
 
                                 },

@@ -240,46 +240,53 @@
                         <div class="table-responsive">
                             <table class="best-selling-table table border-0">
                                 <tbody>
-                                    @foreach (var item in Model.lastOrdres)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <div class="best-product-box">
-                                                    <div class="product-name">
-                                                        <h5>@Resources.res.orderNumber </h5>
-                                                        <h6>#@item.peigiry</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                    @{
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.date</h6>
-                                                    <h5>@item.timestamp</h5>
-                                                </div>
-                                            </td>
+                                        if (Model.lastOrdres != null)
+                                        {
+                                            foreach (var item in Model.lastOrdres)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="best-product-box">
+                                                            <div class="product-name">
+                                                                <h5>@Resources.res.orderNumber </h5>
+                                                                <h6>#@item.peigiry</h6>
+                                                            </div>
+                                                        </div>
+                                                    </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.price</h6>
-                                                    <h5>@item.TotalPrice AED</h5>
-                                                </div>
-                                            </td>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>@Resources.res.date</h6>
+                                                            <h5>@item.timestamp</h5>
+                                                        </div>
+                                                    </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.status</h6>
-                                                    <h5>@item.status</h5>
-                                                </div>
-                                            </td>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>@Resources.res.price</h6>
+                                                            <h5>@item.TotalPrice AED</h5>
+                                                        </div>
+                                                    </td>
 
-                                            <td>
-                                                <div class="product-detail-box">
-                                                    <h6>@Resources.res.payment</h6>
-                                                    <h5 class="text-danger">Unpaid</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>@Resources.res.status</h6>
+                                                            <h5>@item.status</h5>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>@Resources.res.payment</h6>
+                                                            <h5 class="text-danger">Unpaid</h5>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        }
                                     }
 
 

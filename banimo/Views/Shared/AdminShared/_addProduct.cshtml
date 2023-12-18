@@ -98,18 +98,22 @@
             <div class="row fieldholder col-lg-3">
                 <label> شاخص</label>
 
-                @if (Model.ID != 0)
+                @if (Model.filterCore != null)
                 {
-                    <div class=" ">
-                        @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
-                    </div>
-                }
-                else
-                {<div class=" ">
-                        @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
-                    </div>
+                    if (Model.ID != 0)
+                    {
+                        <div class=" ">
+                            @Html.DropDownListFor(x => x.selectedFilter, new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control" })
+                        </div>
+                    }
+                    else
+                    {<div class=" ">
+                            @Html.DropDownList("filterC", new SelectList(Model.filterCore, "title", "title"), "-- انتخاب شاخص--", new { id = "filterC", name = "filterC", style = "", @class = "form-control", @multiple })
+                        </div>
 
+                    }
                 }
+
 
 
             </div>

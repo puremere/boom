@@ -374,29 +374,22 @@ namespace banimo.Controllers
         {
             string contactInfo = getCookie("contactUs");
             string result = "";
-            if (contactInfo == "")
-            {
-                string device = RandomString();
-                string code = MD5Hash(device + "ncase8934f49909");
-                
-                string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
-                using (WebClient client = new WebClient())
-                {
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
 
-                    var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
-                    collection.Add("device", device);
-                    collection.Add("code", code);
-                    collection.Add("servername", servername);
-                    byte[] response = client.UploadValues(serverAddress, collection);
-
-                    result = System.Text.Encoding.UTF8.GetString(response);
-                }
-                SetCookie(result, "contactUs");
-            }
-            else
+            string serverAddress = ConfigurationManager.AppSettings["server"] + "/contactUsData.php";
+            using (WebClient client = new WebClient())
             {
-                result = contactInfo;
+
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername);
+                byte[] response = client.UploadValues(serverAddress, collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
             }
+            SetCookie(result, "contactUs");
 
             contactSectionVM info = JsonConvert.DeserializeObject<contactSectionVM>(result);
 
@@ -2880,7 +2873,7 @@ namespace banimo.Controllers
                 }
 
                 earlyRoot log = JsonConvert.DeserializeObject<earlyRoot>(result);
-               if (log != null)
+                if (log != null)
                 {
                     foreach (var productItem in log.data)
                     {
@@ -2916,7 +2909,7 @@ namespace banimo.Controllers
 
                         CheckoutViewModel j = new CheckoutViewModel();
 
-
+                        j.selectedFilter = productItem.selectedFilter;
                         if (productItem.PriceNow == null)
                         {
                             productItem.PriceNow = "0";
@@ -3158,7 +3151,9 @@ namespace banimo.Controllers
                     productItem.addsonsrt = productItem.addsonsrt == null ? "" : productItem.addsonsrt;
 
 
-                    int quantity = data.SingleOrDefault(x => x.productid == prid && x.tarafH == parID && x.addson == productItem.addsonsrt).quantity;
+                    var quantitytq = data.SingleOrDefault(x => x.productid == prid && x.tarafH == parID && x.addson == productItem.addsonsrt);
+                    var quantityq =  data.SingleOrDefault(x => x.productid == prid );
+                    int quantity = quantitytq == null ? quantityq.quantity : quantitytq.quantity;
                     if (int.Parse(productItem.limit) < quantity || int.Parse(productItem.count) < quantity)
                     {
                         return RedirectToAction("checkout");
@@ -3387,7 +3382,7 @@ namespace banimo.Controllers
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
-            if (final == "/getTimeTest.php")
+            if (final == "/getTimeTest.php") // depends on project we chooze different senario
             {
                 TimeList log = JsonConvert.DeserializeObject<TimeList>(result);
                 return PartialView("/Views/Shared/_timeSection.cshtml", log);
@@ -3396,7 +3391,9 @@ namespace banimo.Controllers
             {
                 TimeListMarketPlace log = JsonConvert.DeserializeObject<TimeListMarketPlace>(result);
                 TempData["deliverybase"] = log.baseDeliver;
-                return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
+                //return PartialView("/Views/Shared/_timeSectionMarketPlace.cshtml", log);
+                return PartialView("/Views/Shared/_timeSection.cshtml", log);
+
             }
             //
             

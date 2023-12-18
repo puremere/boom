@@ -28,6 +28,7 @@
                             <tr>
                                 <th class="product-name"><span>محصول</span></th>
                                 <th>عنوان</th>
+                                <th>سایز</th>
                                 @*<th class="product-price"><span>AddsOn</span></th>*@
                                 <th class="product-price"><span>قیمت</span></th>
                                 <th class="product-quantity"><span>تعداد</span></th>
@@ -132,6 +133,7 @@
                                             @item.productname
                                         </a>
                                     </td>
+                                    <td class="product-name center">@item.selectedFilter</td>
                                     @*<td class="center">
                                             @if (item.addson != null)
                                             {

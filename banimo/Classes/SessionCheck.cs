@@ -23,9 +23,9 @@ namespace banimo.Classes
             HttpSessionStateBase session = filterContext.HttpContext.Session;
             
             var descriptor = filterContext.ActionDescriptor;
-            var actionName = descriptor.ActionName;
+            var actionName = descriptor.ActionName.ToString().ToLower();
 
-            if (actionName != "Index" && actionName != "CustomerLogin" && actionName != "createUserReport")
+            if (actionName != "index" && actionName != "customerlogin" && actionName != "createuserreport")
             {
                
                 string val = session["LogedInUser2"] == null ? "" : session["LogedInUser2"] as string;
@@ -156,7 +156,7 @@ namespace banimo.Classes
                 session["lang"] = "en";
             }
 
-            if (actionName != "Index" && actionName != "CustomerLogin")
+            if ((actionName != "Index" || actionName != "index" )&& actionName != "CustomerLogin")
             {
                 session = filterContext.HttpContext.Session;
                 string val = session["LogedInUser2"] == null ? "" : session["LogedInUser2"] as string;
@@ -227,11 +227,11 @@ namespace banimo.Classes
                     }
                     else
                     {
-                        filterContext.Result = new RedirectToRouteResult(
-                        new RouteValueDictionary {
-                                { "Controller", "Node" },
-                                { "Action", "Index" }
-                                    });
+                        //filterContext.Result = new RedirectToRouteResult(
+                        //new RouteValueDictionary {
+                        //        { "Controller", "Node" },
+                        //        { "Action", "Index" }
+                        //            });
                     }
 
 
@@ -545,7 +545,7 @@ namespace banimo.Classes
                             {
                                 filterContext.Result = new RedirectToRouteResult(
                                 new RouteValueDictionary {
-                                        { "Controller", "admin" },
+                                        { "Controller", "core" },
                                         { "Action", "Index" }
                                                });
                             }
@@ -557,7 +557,7 @@ namespace banimo.Classes
                     {
                         filterContext.Result = new RedirectToRouteResult(
                         new RouteValueDictionary {
-                                { "Controller", "Admin" },
+                                { "Controller", "core" },
                                 { "Action", "Index" }
                                     });
                     }
@@ -565,11 +565,15 @@ namespace banimo.Classes
                 }
                 else
                 {
-                    filterContext.Result = new RedirectToRouteResult(
+                    if (actionName != "index")
+                    {
+                        filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary {
-                                { "Controller", "Admin" },
+                                { "Controller", "core" },
                                 { "Action", "Index" }
                                 });
+                    }
+                    
                 }
             }
             else
@@ -597,7 +601,7 @@ namespace banimo.Classes
                     {
                         filterContext.Result = new RedirectToRouteResult(
                         new RouteValueDictionary {
-                                        { "Controller", "admin" },
+                                        { "Controller", "core" },
                                         { "Action", "Index" }
                                        });
                     }

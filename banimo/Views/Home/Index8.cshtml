@@ -90,9 +90,6 @@
                             </div>
                         </div>
 
-
-
-
                     }
                 }
 
@@ -347,9 +344,9 @@
                                 <div class="product text-center shadowbox" style="padding:2px">
                                     <figure class="product-media">
                                         <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
+                                            <img srcTogo="@src" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
-                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
+                                            <img srcTogo="@src2" onError="this.onerror=null;" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
                                         </a>
 
@@ -372,7 +369,7 @@
                                             }
 
                                         </div>
-                                        <div style="padding:4%">
+                                        @*<div style="padding:4%">
                                             <div class="input-group">
                                                 @{
                                                     string clsname = "value" + @item.ID;
@@ -384,7 +381,7 @@
                                                 <button class="quantity-plus w-icon-plus" onclick="addtocart('@trf','@item.ID','')"></button>
                                                 <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@trf','@item.ID','')"></button>
                                             </div>
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -430,9 +427,9 @@
                                 <div class="product text-center">
                                     <figure class="product-media">
                                         <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
+                                            <img srcTogo="@src" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
-                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
+                                            <img srcTogo="@src2" onError="this.onerror=null;" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
                                         </a>
                                         @if (item.price != item.oldPrice)
@@ -497,21 +494,21 @@
                                 <div class="product text-center shadowbox" style="padding:10px; border-radius:8px ">
                                     <figure class="product-media" style="margin:auto; max-width:90%">
                                         <a href="/products/@newurl">
-                                            <img src="@src" alt="Product"
+                                            <img srcTogo="@src" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
-                                            <img onError="this.onerror=null;this.src='@src';" src="@src2" alt="Product"
+                                            <img srcTogo="@src2" onError="this.onerror=null" src="~/images/placeHolder.png" alt="Product"
                                                  width="300" height="338" />
                                         </a>
                                         @*<div class="product-action-vertical">
-                                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
-                                                   title="Add to cart"></a>
-                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
-                                                   title="Add to wishlist"></a>
-                                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
-                                                   title="Quickview"></a>
-                                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
-                                                   title="Add to Compare"></a>
-                                            </div>*@
+            <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+               title="Add to cart"></a>
+            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+               title="Add to wishlist"></a>
+            <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+               title="Quickview"></a>
+            <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+               title="Add to Compare"></a>
+        </div>*@
 
 
                                         @if (item.price != item.oldPrice)

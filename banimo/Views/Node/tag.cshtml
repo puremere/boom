@@ -97,7 +97,31 @@
                         </div>
 
                     }
+                    @if (Model.catList != null)
+                    {
+                        <div class=" component col-md-3 col-sm-3 col-xs-12" style="">
+                            <label> انتخاب دسته بندی مجاز </label>
+                            <div style="width:100%">
+                                @if (Model.catList != null)
+                                {
 
+                                    if (Model.catList != null)
+                                    {
+                                        <select id="catParent" class="editMenuTag js-example-basic-single" multiple name="cats">
+                                            @foreach (var item in Model.catList)
+                                            {
+                                                <option value="@item.ID">@item.title</option>
+                                            }
+
+                                        </select>
+
+                                    }
+
+                                }
+                            </div>
+                        </div>
+
+                    }
 
                     <div class=" component col-md-3 col-sm-3 col-xs-12" style="">
                         <label> @Resources.res.title </label>
@@ -135,7 +159,7 @@
 </div>
 
 
-<div class="row">
+<div class="row" >
     <div class="col-sm-12">
         <!-- Details Start -->
         <div class="card">
@@ -144,7 +168,7 @@
                 <div class="title-header option-title">
                     <h5>@Resources.res.tagManagement </h5>
                 </div>
-                <div style="">
+                <div  style="">
                     @*<div class=" component col-md-4 col-sm-3 col-xs-12" style="">
                             <label> page </label>
                             <div style="width:100%">
@@ -152,8 +176,8 @@
                             </div>
                         </div>*@
 
-                    <div component col-md-4 col-sm-3 col-xs-12>
-                        <div style="width:100%">
+                    <div component col-md-4 col-sm-3 col-xs-12 >
+                        <div style="width:100%;max-height:400px; overflow-y:scroll" >
                             <div id="imageHolderEdit" style="display:flex;flex-wrap:wrap ">
 
                                 <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:70px">
@@ -168,7 +192,7 @@
                                     <tbody>
                                         @if (Model.tagList != null)
                                         {
-                                            foreach (var item in Model.tagList)
+                                            foreach (var item in Model.tagList.OrderByDescending(x=>x.ID))
                                             {
                                                 string cls = "odd";
                                                 if (Model.tagList.IndexOf(item) + 1 % 2 == 0)
@@ -322,17 +346,19 @@
 
         var title = $("#title").val();
         var tag = $("#tagParent").val();
+        var cat = $("#catParent").val();
         var ID = $("#itemID").val();
 
         var image = $(".imageName").text();
 
-       
+
         $.post(
             '/node/addTag',
             {
                 title: title,
                 image: image,
                 tag: tag,
+                cat: cat,
                 ID: ID
             },
             function (data) {
@@ -383,9 +409,12 @@
                 var obj = JSON.parse(data);
                 var image = obj['data'][0]["image"];
                 var title = obj['data'][0]["title"];
+                var cat = obj['data'][0]["permitedCat"];
+                var cats = cat.split(',')
                 var tag = obj['data'][0]["parent"];
                 var tags = tag.split(',')
                 $("#tagParent").select2().val(tags).trigger("change");
+                $("#catParent").select2().val(cats).trigger("change");
                 $("#title").val(title);
 
 

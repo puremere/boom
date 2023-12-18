@@ -139,6 +139,8 @@ namespace banimo.apiViewModel
     public class confirmUser
     {
         public  string mobile { get; set; }
+        public string mssID { get; set; }
+        public string password { get; set; }
         public string isRegister { get; set; }
         
     }
@@ -157,7 +159,7 @@ namespace banimo.apiViewModel
     }
     public class doSignUp
     {
-        public string password{get; set;} public string phone{get; set;} public string moaref{get; set;}
+        public string mssID { get; set; } public string password{get; set;} public string phone{get; set;} public string moaref{get; set;}
     }
     public class doWalletFinalCheck
     {
@@ -220,10 +222,22 @@ namespace banimo.apiViewModel
     }
     public class getDataProductList0
     {
+        public string tag { get; set; }
         public string isNew { get; set; }
         public string wonder { get; set; }
-        public string page{get; set;} public string colorIds{get; set;} public string filterIds{get; set;} public string min
-           {get; set;} public string max{get; set;} public string hashtag{get; set;} public string sortID{get; set;} public string priorityID{get; set;} public string specificItem{get; set;} public string query{get; set;} public string catID{get; set;} public string catLevel{get; set;} public string isAvalible{get; set;}
+        public string page{get; set;}
+        public string colorIds{get; set;}
+        public string filterIds{get; set;}
+        public string min {get; set;} 
+        public string max{get; set;}
+        public string hashtag{get; set;}
+        public string sortID{get; set;}
+        public string priorityID{get; set;}
+        public string specificItem{get; set;}
+        public string query{get; set;} 
+        public string catID{get; set;} 
+        public string catLevel{get; set;} 
+        public string isAvalible{get; set;}
     }
     public class getDataProfile
     {

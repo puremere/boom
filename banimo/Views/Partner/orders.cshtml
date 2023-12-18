@@ -46,6 +46,24 @@
         }
 </style>
 
+<div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <p id="changeStatusHeader"> </p>
+
+            </div>
+            <div class="modal-footer">
+                <button id="cancelRemove" type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
+                <button id="changeStatusButton" type="button" class="btn btn-primary">@Resources.res.OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -54,11 +72,11 @@
             </div>
             <div class="modal-body">
                 <p>@Resources.res.removeConfirm </p>
-               
+
             </div>
             <div class="modal-footer">
                 <button id="cancelRemove" type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.res.cancel</button>
-                <button id="setRemove" type="button" class="btn btn-primary" >@Resources.res.OK</button>
+                <button id="setRemove" type="button" class="btn btn-primary">@Resources.res.OK</button>
             </div>
         </div>
     </div>
@@ -133,7 +151,7 @@
                 <div class="title-header option-title">
                     <h5>@Resources.res.orderList</h5>
                 </div>
-                <div  class="row" style="background-color:white; padding:10px; margin:0px;overflow-x:scroll">
+                <div class="row" style="background-color:white; padding:10px; margin:0px;overflow-x:scroll">
                     <table class="table all-package theme-table table-product dataTable no-footer" id="table_id" style="margin-top:10px">
                         <thead>
 
@@ -142,6 +160,8 @@
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.orderNumber</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.date</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.discount </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.discount </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.state</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.city</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.userAddress</th>
@@ -152,6 +172,7 @@
 
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.status </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.action </th>
+
                             </tr>
                         </thead>
 
@@ -174,7 +195,9 @@
 
                                 <td>@prod.orderID</td>
                                 <td>@prod.Rdate</td>
-                                <td>@string.Format("{0:n0}",@prod.Price)</td>
+                                <td>@string.Format("{0:n0}", @prod.Price)</td>
+                                <td>@prod.discount</td>
+                                <td>@prod.disprice</td>
                                 <td>@prod.state</td>
                                 <td>@prod.city</td>
                                 <td>@prod.address</td>
@@ -245,6 +268,24 @@
                                                 </a>
                                             </li>
                                         }
+                                        else if (@prod.status == "1")
+                                        {
+                                            <li>
+                                                <a href="javascript:void(0)" style="margin:0 6px">
+                                                    <i id="@prod.orderID" class="iconSelf ri-red-packet-fill verifyPrepare iconSelf"><span class="iconDesc"> آماده سازی</span></i>
+
+                                                </a>
+                                            </li>
+                                        }
+                                        else if (@prod.status == "3")
+                                        {
+                                            <li>
+                                                <a href="javascript:void(0)" style="margin:0 6px">
+                                                    <i id="@prod.orderID" class="iconSelf ri-truck-line verifyDeliver iconSelf"><span class="iconDesc"> ارسال سفارش</span></i>
+
+                                                </a>
+                                            </li>
+                                        }
 
 
                                         <li>
@@ -268,9 +309,10 @@
                         </tbody>
                     </table>
                     <style>
-                        .iconSelf{
-                            position:relative;
+                        .iconSelf {
+                            position: relative;
                         }
+
                         .iconDesc {
                             background-color: green;
                             border: 1px dashed #ddd;
@@ -280,14 +322,14 @@
                             left: 0;
                             display: none;
                             width: 200px;
-                            color:white !important;
+                            color: white !important;
                         }
                     </style>
                     <script>
                         $(".iconSelf").hover(function () {
-                            $(this).find(".iconDesc").css("display","block")
+                            $(this).find(".iconDesc").css("display", "block")
                         }, function () {
-                                $(this).find(".iconDesc").css("display", "none")
+                            $(this).find(".iconDesc").css("display", "none")
                         })
                     </script>
                 </div>
@@ -297,6 +339,8 @@
                             <tr>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productImage </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productTitle </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.Filter </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.color </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productAddson </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.price </th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 170px;">@Resources.res.productCount </th>
@@ -314,37 +358,39 @@
                                     string cls = (Model.partnerOrders.IndexOf(prod) + 1) % 2 == 0 ? "even" : "odd";
 
 
-                                    <tr class="trbody @cls @prod.orderID">
+                            <tr class="trbody @cls @prod.orderID">
 
-                                        <td>
-                                            <div class="table-image">
-                                                <img src="@prod.image" class="img-fluid" alt="">
-                                            </div>
-                                        </td>
+                                <td>
+                                    <div class="table-image">
+                                        <img src="@prod.image" class="img-fluid" alt="">
+                                    </div>
+                                </td>
 
-                                        <td>@prod.title</td>
-                                        <td>@prod.addson</td>
-                                        <td>@string.Format("{0:n0}", @prod.Price) </td>
+                                <td>@prod.title</td>
+                                <td>@prod.selectedFilter</td>
+                                <td><span style="width:70px; height:70px; background-color:@prod.color"></span></td>
+                                <td>@prod.addson</td>
+                                <td>@string.Format("{0:n0}", @prod.Price) </td>
 
-                                        <td>@prod.quantity</td>
-
-
-
-                                        <td>
-                                            <ul>
+                                <td>@prod.quantity</td>
 
 
 
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                <td>
+                                    <ul>
 
 
-                                                        <i idtoremove=@prod.itemID class="ri-delete-bin-line removeOrder" id="@prod.ProductId"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+
+                                        <li>
+                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+
+
+                                                <i idtoremove=@prod.itemID class="ri-delete-bin-line removeOrder" id="@prod.ProductId"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
                                 }
 
                             }
@@ -355,7 +401,7 @@
 
                 </div>
 
-                
+
             </div>
 
         </div>
@@ -446,14 +492,41 @@
     })
     $(".order").addClass("activve");
 
-
+    let statusNumber;
+    let orderid;
     $(".verifyOrder").click(function () {
         var id = $(this).attr('id');
+        $("#changeStatusHeader").text("آیا سفارش را تایید میکنید");
+        $("#changeStatusModal").modal('toggle');
+
+        statusNumber = "1";
+        orderid = id;
+    });
+    $(".verifyDeliver").click(function () {
+        var id = $(this).attr('id');
+        $("#changeStatusHeader").text("آیا ارسال سفارش را تایید میکنید");
+        $("#changeStatusModal").modal('toggle');
+        statusNumber = "4";
+        orderid = id;
+    })
+    $(".verifyPrepare").click(function () {
+        var id = $(this).attr('id');
+        $("#changeStatusHeader").text("آیا آماده سازی سفارش را تایید میکنید");
+        $("#changeStatusModal").modal('toggle');
+        statusNumber = "3";
+        orderid = id;
+    })
+    $("#changeStatusButton").click(function () {
+        let id = orderid;
+        let status = statusNumber;
+        //$("#loading").show();
+        //alert(id);
         $.ajax({
             url: '/Partner/changeOrderPartnerStatus',
             dataType: 'html',
             data: {
-                id: id
+                id: id,
+                status: status
 
             },
             success: function (data) {
@@ -465,7 +538,8 @@
 
 
         });
-    })
+    } )
+   
 </script>
 
 <script>
@@ -473,7 +547,7 @@
         var lat = $(this).attr('lat').replace("/", ".");
         var lon = $(this).attr('lon').replace("/", ".");
 
-       
+
 
         if ($('#mapid').length) {
             $('#mapid').remove();

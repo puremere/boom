@@ -9,11 +9,17 @@ namespace banimo.ViewModel
     public class TagVM
     {
         public List<TagList> tagList { get; set; }
+        public List<CatList> catList { get; set; }
     }
-
-    public class TagList
+    public class CatList
     {
         public string ID { get; set; }
+        public string title { get; set; }
+
+    }
+    public class TagList
+    {
+        public int ID { get; set; }
         public string title { get; set; }
         public string parent { get; set; }
         public string image { get; set; }

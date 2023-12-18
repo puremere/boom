@@ -44,6 +44,7 @@ namespace banimo.ViewModel
     public class Datum
     {
         public string ID { get; set; }
+        public string selectedFilter { get; set; }
         public string count { get; set; }
         public string vahed { get; set; }
         public string meta { get; set; }

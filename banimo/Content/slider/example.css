@@ -1,0 +1,109 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+div.slide {
+	height: 100vh;
+	text-align: center;
+	line-height: 540px;
+	font-weight: bold;
+	font-size: 450px;
+	color: rgba(0,0,0,0.75);
+}
+
+div.slide.s1 {
+	background-color: #a3cc5c;
+}
+
+div.slide.s2 {
+	background-color: #cca75c;
+}
+
+div.slide.s3 {
+	background-color: #cc5c5c;
+}
+
+div.slide.s4 {
+	background-color: #b95ccc;
+}
+
+div.slide.s5 {
+	background-color: #5ccccc;
+}
+
+#additional-menu {
+	
+	padding-right: 10px;
+	
+	position:absolute;
+	top:20%;
+	left:100px;
+	z-index:9999
+}
+.tagPr{
+	padding:15px;
+	direction:rtl;
+}
+.menuItem {
+	text-align: center;
+	margin: 10px 0px 10px 10px;
+	float: left;
+	font-size: 100%;
+	font-weight: bold;
+	cursor: pointer;
+	color: #8d8d8d;
+	padding: 15px;
+}
+.tagHolder{
+	display:none;
+	
+}
+.showParent{
+	display:block;
+}
+.tagItem{
+	border:1px solid #ddd;
+	padding:5px; 
+	display:inline-block;
+	margin:5px;
+	font-size:14px;
+	color:black;
+	cursor:pointer
+}
+.itembold{
+	font-weight:600;
+	color:black
+}
+#additional-menu > div {
+	text-align: center;
+	margin: 10px 0px 10px 10px;
+	float: left;
+	font-size: 140%;
+	font-weight: bold;
+	cursor: pointer;
+	color: #8d8d8d;
+	padding: 15px
+}
+
+#additional-menu > div.mkslider-external-navigator-item-current {
+	color: #000;
+	font-weight:600
+}
+
+@media(max-width: 600px){
+	#additional-menu > div {
+		text-align: center;
+		margin: 10px 0px 10px 10px;
+		float: left;
+		font-size: 80%;
+		font-weight: bold;
+		cursor: pointer;
+		color: #8d8d8d;
+		padding: 15px
+	}
+	#additional-menu{
+		top:10%;
+		left:50px
+	}
+}

@@ -169,12 +169,14 @@ namespace banimo.Controllers
                 using (WebClient client = new WebClient())
                 {
 
-                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    var collection = new NameValueCollection();
+                    string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("servername", servername);
                     collection.Add("token", token);
-                    collection.Add("nodeID", node);
+                    collection.Add("nodeID", finalNodeID);
                     collection.Add("partnerCat", PartnerCat);
                     collection.Add("partner", partner);
 
@@ -198,7 +200,8 @@ namespace banimo.Controllers
                 {
 
                     var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
-                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    collection.Add("servername", servername); 
+                    collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     
                     collection.Add("code", code);
@@ -366,7 +369,7 @@ namespace banimo.Controllers
             return View(model);
         }
 
-        public ActionResult changeOrderPartnerStatus(string id)
+        public ActionResult changeOrderPartnerStatus(string id,string status)
         {
             string token = Session["LogedInUser2"] as string;
             string device = RandomString(10);
@@ -385,6 +388,8 @@ namespace banimo.Controllers
                 collection.Add("code", code);
                 collection.Add("orderID", id);
                 collection.Add("partnerID", partner);
+                collection.Add("status", status);
+                
 
                 byte[] response = client.UploadValues(server + "/Admin/changePartnerOrderStatus.php", collection);
 
@@ -468,7 +473,7 @@ namespace banimo.Controllers
                
                 collection.Add("ID", finalID);
 
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewProductMainFromSail.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setNewProductMainFromSailTest.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
             responsVM modeldd = JsonConvert.DeserializeObject<responsVM>(result);
@@ -545,7 +550,10 @@ namespace banimo.Controllers
             responsVM modeldd = JsonConvert.DeserializeObject<responsVM>(result);
             return Content(modeldd.status.ToString());
         }
-        public ActionResult SetNewFactorFromSail(string amani, string count, string price, string ID)
+
+
+
+        public ActionResult SetNewFactorFromSail(string amani, string count, string price, string ID, string addall, string discount)
         {
 
             price = price.Replace(",", "");
@@ -567,14 +575,17 @@ namespace banimo.Controllers
                 collection.Add("nodeID", nodeID);
                 collection.Add("price", price);
                 collection.Add("token", token);
-                collection.Add("factorType", "1");
+                collection.Add("addall", addall);
+                collection.Add("discount", discount);
+                
+                collection.Add("factorType", "1"); // ینی تامین کالا توسط تامین کننده
                 collection.Add("amani", amani);
                 collection.Add("lang", "en");
                 collection.Add("market", ConfigurationManager.AppSettings["market"]); // "");
                 collection.Add("deliver", "از طرف فروشنده");
 
                 //byte[] response = client.UploadValues(server + "/Admin/getcatslistforfilter.php", collection);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setFactorFromSail.php", collection);
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Admin/setFactorFromSailTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
 
@@ -664,6 +675,108 @@ namespace banimo.Controllers
 
 
         }
+
+
+
+        public ActionResult Discount()
+        {
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/getDiscountList.php", collection);
+
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+                banimo.ViewModel.AdminDiscountVM model = JsonConvert.DeserializeObject<ViewModel.AdminDiscountVM>(result);
+                return View(model);
+            }
+
+        }
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
+        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user, string oneTime, string firstTime, string darsad, string infinit)
+        {
+
+            if (title == "")
+            {
+                title = RandomString(6);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                // TODO: Captcha validation failed, show error message
+                return RedirectToAction("Discount", "Admin");
+            }
+            else
+            {
+
+                string device = RandomString(10);
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result = "";
+                string token = Session["LogedInUser2"] as string;
+                using (WebClient client = new WebClient())
+                {
+
+                    var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                    collection.Add("device", device);
+                    collection.Add("code", code);
+                    collection.Add("title", title);
+                    collection.Add("price", price);
+                    collection.Add("minPrice", minPrice.ToString());
+                    collection.Add("mobile", user);
+                    collection.Add("token", token);
+                    collection.Add("ontime", oneTime);
+                    collection.Add("firstTime", firstTime);
+                    collection.Add("darsad", darsad);
+                    collection.Add("infinit", infinit);
+
+                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+
+                    byte[] response = client.UploadValues(server + "/Admin/setNewDiscount.php", collection);
+
+                    result = System.Text.Encoding.UTF8.GetString(response);
+                }
+
+                // Reset the captcha if your app's workflow continues with the same view
+                MvcCaptcha.ResetCaptcha("ExampleCaptcha");
+                return RedirectToAction("Discount", "Admin");
+
+            }
+
+
+        }
+        public string deleteDiscount(string id)
+        {
+
+
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("ID", id);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/deleteDiscount.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            return result;
+        }
+
 
 
         public ActionResult bringFilterForProductSet(string catid)

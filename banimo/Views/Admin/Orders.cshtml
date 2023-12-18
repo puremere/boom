@@ -445,6 +445,14 @@
                     <div class="component ">
                         <input type="text" id="timeto" class="form-control" />
                     </div>
+
+                    <label style="font:bold; margin-left:20px" class="control-label component" for="first-name">
+                       ظرفیت
+                    </label>
+                    <div class="component ">
+                        <input type="text" id="capacity" class="form-control" />
+                    </div>
+
                     <div class="component " style="direction: rtl; ">
                         <button id="addTimeOfDeliver" class="btn btn-success">تایید</button>
                         <script>
@@ -455,6 +463,7 @@
                                     var planID = $("#planID").val();
                                     var TimeFrom = $("#timefrom").val();
                                     var TimeTo = $("#timeto").val();
+                                    var capacity = $("#capacity").val();
                                     $.ajax({
                                         url: '/Admin/addNewTimeOfDeliver',
                                         dataType: 'html',
@@ -462,7 +471,8 @@
                                             DayOfWeek: DayOfWeek,
                                             TimeFrom: TimeFrom,
                                             TimeTo: TimeTo,
-                                            planID: planID
+                                            planID: planID,
+                                            capacity: capacity
                                         },
                                         success: function (data) {
                                             if (data === "success") {

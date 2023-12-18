@@ -242,7 +242,11 @@
                             <div class="autocomplete col-md-4 col-sm-3 col-xs-12">
                                 <label>برند :</label>
                                 <div class=" " style="width:100%">
-                                    @Html.DropDownList("selectedBrand", new SelectList(Model.brandCore, "ID", "title"), "-- برند  --", new { id = "selectedBrand", name = "selectedBrand", @class = "form-control" })
+                                    @if (Model.brandCore != null)
+                                    {
+                                        @Html.DropDownList("selectedBrand", new SelectList(Model.brandCore, "ID", "title"), "-- برند  --", new { id = "selectedBrand", name = "selectedBrand", @class = "form-control" })
+
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -551,7 +555,11 @@
                         <div class="row fieldholder col-lg-3">
                             <label> برند</label>
                             <div class=" ">
-                                @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+                                @if (Model.brandCore != null)
+                                {
+                                    @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+
+                                }
                             </div>
 
 

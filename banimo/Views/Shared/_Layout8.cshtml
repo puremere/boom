@@ -37,14 +37,7 @@
             })(document);
         </script>*@
     <script src="/webAsset/wolmart/assets/vendor/jquery/jquery.min.js"></script>
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
-
+    
     <!-- Vendor CSS -->
     <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/fontawesome-free/css/all.min.css">
 
@@ -78,10 +71,11 @@
             margin: 0 auto;
         }
     </style>
-    <div id="loading" style="display:none">
-        <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
-            <img style="max-width:80px; display:block; margin:auto" src="~/images/logo.png" />
-            <img src="~/images/adminloading.gif" style="display:block; margin:auto; margin-top:15px" />
+    <div id="loading" style="display:block">
+        <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;height:100vh;width:100%; z-index:999; display:flex">
+            <img style="max-width:150px; display:block; margin:auto" src="~/images/nLoading.gif" alt="لودینگ" />
+            @*<img style="max-width:80px; display:block; margin:auto" src="~/images/placeHolder.png" alt="لوگو" />*@
+
         </div>
     </div>
     <div class="page-wrapper">
@@ -99,9 +93,9 @@
                         </a>
                         <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
 
-                            <input style="border-right:1px solid #5b2871; border-left:0" type="text" class="form-control searchtxt" name="search"
+                            <input style="border:1px solid #009d01; border-left:0" type="text" class="form-control searchtxt" name="search"
                                    placeholder="جستجو کنید" required />
-                            <button class="btn btn-search" style="border-left:1px solid #5b2871; border-right:0">
+                            <button class="btn btn-search" style="border:1px solid #009d01; border-right:0">
                                 <i class="w-icon-search"></i>
                             </button>
 
@@ -194,8 +188,8 @@
                         <div class="row">
                             <div class="col-lg-4 col-sm-6">
                                 <div class="widget widget-about">
-                                    <a href="demo10.html" class="logo-footer">
-                                        <img src="/webAsset/wolmart/assets/images/demos/demo10/footer-logo.png" alt="logo-footer" width="144"
+                                    <a href="/" class="logo-footer">
+                                        <img style="max-width:50px" src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" width="144"
                                              height="45" />
                                     </a>
                                     <div class="widget-body">
@@ -560,7 +554,7 @@
     <!-- End of Quick view -->
     <!-- Plugin JS File -->
 
-    <script src="/webAsset/wolmart/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
+    @*<script src="/webAsset/wolmart/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>*@
     <script src="/webAsset/wolmart/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="/webAsset/wolmart/assets/vendor/zoom/jquery.zoom.js"></script>
     <script src="/webAsset/wolmart/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
@@ -787,6 +781,27 @@
 
 
             });
+        }
+
+        $(document).ajaxStop(function () {
+
+            $("#loading").css("display", "none");
+        })
+
+        var param = true;
+        window.onscroll = function (e) {
+            var ScrollTop = $(document).scrollTop();
+
+            if (ScrollTop > 350) {
+                if (param == true) {
+                    $('img').each(function () {
+                        var src = $(this).attr('srcToGo');
+                        $(this).attr('src', src)
+                    })
+                }
+                param = false;
+            }
+
         }
 
     </script>

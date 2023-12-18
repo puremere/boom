@@ -112,7 +112,9 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername);
+                collection.Add("servername", servername);
+                collection.Add("nodeID", nodeID);
                 string addr = appserver + "/getMainDataDemoMarsool.php";
                 byte[] response = await client.UploadValuesTaskAsync(addr, "POST", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
@@ -327,8 +329,8 @@ namespace banimo.Controllers
                         string add2result = wb.addTransaction(model.token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
                         ViewModel.addTransactionVM Rmodel = JsonConvert.DeserializeObject<ViewModel.addTransactionVM>(add2result);
                         
-                        
-                        
+
+
                         
                         //return RedirectToAction("ReqestForMellat", new { price = famount, orderNumberWeb = referenceID });
 
@@ -387,7 +389,7 @@ namespace banimo.Controllers
                     string txtDescription = "افزودن به سبد خرید";
                     Random rnd = new Random();
 
-                    long orderID = log2.orderID == null ? rnd.Next(111000000, 111999999) : long.Parse(log2.orderID);
+                    long orderID = log2.peigiry == null ? rnd.Next(111000000, 111999999) : long.Parse(log2.peigiry);
                     string message = "";
 
 
@@ -648,6 +650,7 @@ namespace banimo.Controllers
                 collection.Add("mobile", model.mobile);
                 collection.Add("isRegister", model.isRegister);
                 collection.Add("device", device);
+                collection.Add("mssID", model.mssID);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
 
@@ -808,7 +811,7 @@ namespace banimo.Controllers
                 collection.Add("password", model.password);
                 collection.Add("phone", model.phone);
                 collection.Add("moaref", model.moaref);
-
+                collection.Add("mssID", model.mssID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
@@ -946,7 +949,7 @@ namespace banimo.Controllers
                 var collection = new NameValueCollection();
                 collection.Add("user", model.user);
                 collection.Add("activeCode", model.activeCode);
-
+                
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
@@ -1136,7 +1139,7 @@ namespace banimo.Controllers
         public async Task<JObject> getDataProductList0([FromBody] getDataProductList0 model)
         {
 
-            string url = model.isNew == "true"? appserver2 + "/getDataProductList.php": appserver + "/getDataProductList0.php";
+            string url = model.isNew == "true"? appserver2 + "/getDataProductListt.php" : appserver + "/getDataProductList0.php";
             
             string servername = ConfigurationManager.AppSettings["serverName"];
             string result = "";

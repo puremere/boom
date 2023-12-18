@@ -22,26 +22,8 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
-    <!-- WebFont.js -->
-    <script>
-        WebFontConfig = {
-            google: { families: ['Poppins:400,500,600,700,800'] }
-        };
-        (function (d) {
-            var wf = d.createElement('script'), s = d.scripts[0];
-            wf.src = '/webAsset/wolmart/assets/js/webfont.js';
-            wf.async = true;
-            s.parentNode.insertBefore(wf, s);
-        })(document);
-    </script>
 
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" href="/webAsset/wolmart/assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+
 
     <!-- Vendor CSS -->
     <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/fontawesome-free/css/all.min.css">
@@ -58,10 +40,17 @@
 </head>
 
 <body class="home" style="direction:rtl">
+    <div id="loading" style="display:block">
+        <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;height:100vh;width:100%; z-index:999; display:flex">
+            <img style="max-width:150px; display:block; margin:auto" src="~/images/nLoading.gif" alt="لودینگ" />
+            @*<img style="max-width:80px; display:block; margin:auto" src="~/images/placeHolder.png" alt="لوگو" />*@
+
+        </div>
+    </div>
     <div class="page-wrapper">
         <h1 class="d-none">Marsool</h1>
         <header class="header header-border">
-           
+
             <!-- End of Header Top -->
 
             <div class="forweb header-middle">
@@ -69,13 +58,13 @@
                     <div class="header-left mr-md-4">
 
                         <a href="/" class="logo ml-lg-0">
-                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo"  />
+                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" />
                         </a>
-                        <div  class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
+                        <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
 
-                            <input style="border-right:1px solid #e5e5e5; border-left:0" type="text" class="form-control searchtxt" name="search" 
+                            <input style="border:1px solid #009d01; border-left:0" type="text" class="form-control searchtxt" name="search"
                                    placeholder="جستجو کنید" required />
-                            <button class="btn btn-search" style="border-left:1px solid #e5e5e5; border-right:0">
+                            <button class="btn btn-search" style="border:1px solid #009d01; border-right:0">
                                 <i class="w-icon-search"></i>
                             </button>
 
@@ -85,7 +74,7 @@
                         <div class="header-call d-xs-show d-lg-flex align-items-center">
                             <a href="tel:#" class="w-icon-call"></a>
                             <div class="call-info d-lg-show">
-                                <a href="tel:#" class="phone-number font-weight-bolder ls-50 priceItem" >021-22931806</a>
+                                <a href="tel:#" class="phone-number font-weight-bolder ls-50 priceItem">021-22931806</a>
                                 <h4 class="chat font-weight-normal font-size-md text-normal ls-normal text-light mb-0">
                                     <a href="mailto:#" class="text-capitalize"></a>
                                 </h4>
@@ -147,7 +136,7 @@
                                 <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
                                        placeholder="@Resources.res.emailPlaceholder" />
                                 <button class="btn btn-dark btn-rounded" type="submit">
-                                  @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
+                                    @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
                                 </button>
                             </form>
                         </div>
@@ -159,14 +148,14 @@
                     <div class="row">
                         <div class="col-lg-4 col-sm-6">
                             <div class="widget widget-about">
-                                <a href="demo10.html" class="logo-footer">
-                                    <img src="/webAsset/wolmart/assets/images/demos/demo10/footer-logo.png" alt="logo-footer" width="144"
+                                <a href="/" class="logo-footer">
+                                    <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo-footer" width="144"
                                          height="45" />
                                 </a>
                                 <div class="widget-body">
                                     <p class="widget-about-title">پشتیبانی 24 ساعته</p>
                                     <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
-                                  
+
 
                                     <div class="social-icons social-icons-colored">
                                         <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
@@ -219,8 +208,8 @@
                         </div>
                     </div>
                 </div>
-           
-               
+
+
             </div>
         </footer>
         <!-- End of Footer -->
@@ -233,9 +222,9 @@
             <p>Home</p>
         </a>
         @*<a href="/Home/index" class="sticky-link">
-            <i class="w-icon-category"></i>
-            <p>Shop</p>
-        </a>*@
+                <i class="w-icon-category"></i>
+                <p>Shop</p>
+            </a>*@
         <a href="/Home/login" class="sticky-link">
             <i class="w-icon-account"></i>
             <p>Account</p>
@@ -325,7 +314,6 @@
     <!-- Start of Scroll Top -->
     <a id="scroll-top" class="scroll-top" href="#top" title="Top" role="button"> <i class="w-icon-angle-up"></i> <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70"> <circle id="progress-indicator" fill="transparent" stroke="#000000" stroke-miterlimit="10" cx="35" cy="35" r="34" style="stroke-dasharray: 16.4198, 400;"></circle> </svg> </a>
     <!-- End of Scroll Top -->
-    
     <!-- Start of Newsletter popup -->
     <div class="newsletter-popup mfp-hide">
         <div class="newsletter-content">
@@ -588,11 +576,12 @@
     </script>
     @RenderSection("scripts", required: false)
     <style>
-        body{
-            min-height:100vh;
+        body {
+            min-height: 100vh;
         }
-        .page-wrapper{
-            min-height:90vh
+
+        .page-wrapper {
+            min-height: 90vh
         }
     </style>
 
@@ -617,5 +606,39 @@
 
             });
         })
+    </script>
+
+    <script>
+
+        $(document).ajaxStop(function () {
+
+            $("#loading").css("display", "none");
+        })
+
+        var param = true;
+        window.onscroll = function (e) {
+            var ScrollTop = $(document).scrollTop();
+
+            if (ScrollTop > 150) {
+                if (param == true) {
+                    $('img').each(function () {
+                        var src = $(this).attr('srcToGo');
+                        $(this).attr('src', src)
+                    })
+                }
+                param = false;
+            }
+
+        }
+
+
+                    //$(document).ready(function () {
+                    //    setTimeout(function () {
+
+                    //    }, 5000);
+
+                    //})
+
+
     </script>
 </body>

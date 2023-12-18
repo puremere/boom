@@ -233,7 +233,7 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("mobile", phone);
                     collection.Add("pass", pass);
-
+                    
                     byte[] response = client.UploadValues(server + "/Node/getuseridNew.php", collection);
 
                     result = System.Text.Encoding.UTF8.GetString(response);
@@ -2221,7 +2221,7 @@ namespace banimo.Controllers
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             string lan = Session["lang"] as string;
-            string tagstring = string.Join(",", tags);
+            string tagstring = tags != null ? string.Join(",", tags) : "" ;
             using (WebClient client = new WebClient())
             {
                 var collection = new NameValueCollection();
@@ -5757,10 +5757,14 @@ namespace banimo.Controllers
         }
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [CaptchaValidationActionFilter("CaptchaCode", "RegistrationCaptcha", "Incorrect CAPTCHA Code!")]
-        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user)
+       
+        public ActionResult setNewDiscount(string title, string price, string CaptchaCode, int minPrice, string user, string oneTime, string firstTime, string darsad, string infinit)
         {
 
+            oneTime = oneTime == null ? "0" : "1";
+            firstTime = firstTime == null ? "0" : "1";
+            darsad = darsad == null ? "0" : "1";
+            infinit = infinit == null ? "0" : "1";
             if (title == "")
             {
                 title = RandomString(6);
@@ -5769,7 +5773,7 @@ namespace banimo.Controllers
             if (!ModelState.IsValid)
             {
                 // TODO: Captcha validation failed, show error message
-                return RedirectToAction("Discount", "Admin");
+                return RedirectToAction("Discount", "node");
             }
             else
             {
@@ -5786,6 +5790,10 @@ namespace banimo.Controllers
                     collection.Add("code", code);
                     collection.Add("title", title);
                     collection.Add("price", price);
+                    collection.Add("oneTime", oneTime);
+                    collection.Add("firstTime", firstTime);
+                    collection.Add("darsad", darsad);
+                    collection.Add("infinit", infinit);
                     collection.Add("minPrice", minPrice.ToString());
                     collection.Add("mobile", user);
                     collection.Add("token", token);
@@ -5797,9 +5805,8 @@ namespace banimo.Controllers
                     result = System.Text.Encoding.UTF8.GetString(response);
                 }
 
-                // Reset the captcha if your app's workflow continues with the same view
-                MvcCaptcha.ResetCaptcha("ExampleCaptcha");
-                return RedirectToAction("Discount", "Admin");
+              
+                return RedirectToAction("Discount", "node");
 
             }
 
@@ -9099,9 +9106,14 @@ namespace banimo.Controllers
             string code = MD5Hash(device + "ncase8934f49909");
             string result = "";
             string tagstring = "";
+            string catstring = "";
             if (model.tag != null)
             {
                 tagstring = string.Join(",", model.tag);
+            }
+            if (model.cat != null)
+            {
+                catstring = string.Join(",", model.cat);
             }
             using (WebClient client = new WebClient())
             {
@@ -9112,6 +9124,7 @@ namespace banimo.Controllers
                 collection.Add("title", model.title);
                 collection.Add("ID", model.ID);
                 collection.Add("parent", tagstring);
+                collection.Add("catParent", catstring);
                 collection.Add("image", model.image.Trim(','));
                 collection.Add("servername", servername);
                 byte[] response = client.UploadValues(server + "/Admin/addTag.php", collection);
@@ -9319,6 +9332,81 @@ namespace banimo.Controllers
         }
 
 
+
+
+        public ActionResult setNewAccount(string typeID, string parentID, string codeTitle, string codeHesab)
+
+        {
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("title", codeTitle);
+                collection.Add("type", typeID);
+                collection.Add("codeHesab", codeHesab);
+                collection.Add("parent", parentID);
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+
+
+                byte[] response = client.UploadValues(server + "/Admin/createNewCoding.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return RedirectToAction("bank");
+        }
+
+        public ActionResult addCodingTransaction(string M2, string M3, string M4, string M12, string M13, string M14, string dateFrom, string price, string description, string abserver)
+        {
+
+            price = price.Replace(",", "");
+            string fromID = M4;
+            if (M4 == "0")
+                fromID = M3;
+            if (M3 == "0")
+                fromID = M2;
+
+
+            string ToID = M14;
+            if (M14 == "0")
+                ToID = M13;
+            if (M13 == "0")
+                ToID = M12;
+
+            //double datetime = dateTimeConvert.ConvertDateTimeToTimestamp( dateFrom.ToGeorgianDateTime());
+            string device = RandomString(10);
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result = "";
+            string token = Session["LogedInUser2"] as string;
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("token", token);
+                collection.Add("time", abserver);
+                collection.Add("price", price);
+                collection.Add("description", description);
+                collection.Add("fromID", fromID);
+                collection.Add("ToID", ToID);
+
+                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                byte[] response = client.UploadValues(server + "/Admin/setCodingTransaction.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            return Content(result);
+        }
 
 
 

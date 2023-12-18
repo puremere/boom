@@ -32,13 +32,13 @@
                     <div class="coupon-content mb-4">
                         <p>کد تخفیف خود را در فرم زیر ثبت کنید</p>
                         <div class="input-wrapper-inline">
-                            <input type="text" name="coupon_code" class="form-control form-control-md mr-1 mb-2" placeholder="کد تخفیف" id="coupon_code">
-                            <button type="submit" class="btn button btn-rounded btn-coupon mb-2" name="apply_coupon" value="ثبت کد تخفیف">ثبت کد تخفیف</button>
+                            <input id="discountfake" type="text" name="coupon_code" class="form-control form-control-md mr-1 mb-2" placeholder="کد تخفیف" id="coupon_code">
+                            <button id="discountConfirm" type="submit" class="btn button btn-rounded btn-coupon mb-2" name="apply_coupon" value="ثبت کد تخفیف">ثبت کد تخفیف</button>
                             <script>
 
                                 $('#discountConfirm').click(function () {
 
-                                    var mot = $("#finalprice").text().replace(",", '')
+                                    var mot = $("#finalamount").text().replace(",", '')
                                     mot = mot.replace(',', "");
                                     var discount = $('#discountfake').val();
 
@@ -83,12 +83,12 @@
                                                     }
                                                     toastr.error(obj.message);
 
-                                                    // let price = parseInt($("#finalprice").val())
+                                                    // let price = parseInt($("#finalamount").val())
 
                                                 }
                                                 else {
                                                     $("#discount").val(discount);
-                                                    var mot = $("#finalprice").text().replace(",", '')
+                                                    var mot = $("#finalamount").text().replace(",", '')
                                                     mot = mot.replace(',', "");
                                                     var del = $("#deliveryprice").text().replace(",", '')
                                                     del = del.replace(',', "");
@@ -104,11 +104,11 @@
                                                         }
                                                         toastr.success("کد تخفیف اعمال شد");
                                                         if (parseInt(obj.price) > parseInt(mot)) {
-                                                            $("#totalprice").text("0");
+                                                            $("#finalamount").text("0");
                                                         }
                                                         else {
 
-                                                            $("#totalprice").text(addCommas(parseInt(mot) - parseInt(obj.price) + parseInt(del)))
+                                                            $("#finalamount").text(addCommas(parseInt(mot) - parseInt(obj.price) + parseInt(del)))
 
                                                         }
 
@@ -312,7 +312,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="card">
+                                    @*<div class="card">
                                         <div class="card-header">
                                             <a href="#payment" class="expand">پرداخت در محل</a>
                                         </div>
@@ -331,7 +331,7 @@
                                                 در این روش انتقال مبلغ با رمز ارز صورت میگیرد
                                             </p>
                                         </div>
-                                    </div>
+                                    </div>*@
                                    
                                 </div>
                             </div>
@@ -383,7 +383,7 @@
                                                     <b>قیمت حمل و نقل</b>
                                                 </td>
                                                 <td>
-                                                    <b><span id="deliveramount">0</span> تومان</b>
+                                                    <b><span id="deliveryprice">0</span> تومان</b>
                                                 </td>
                                             </tr>
                                             <tr class="cart-subtotal bb-no">
@@ -391,7 +391,7 @@
                                                     <b>تخفیف</b>
                                                 </td>
                                                 <td>
-                                                    <b><span id="discountamount">0</span> تومان</b>
+                                                    <b><span id="finalDiscount">0</span> تومان</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -434,7 +434,7 @@
     <input hidden name="lon" id="lng" value="" />
     <input hidden id="addressID" name="addressID" />
     <input hidden id="hourid" name="hourid" value="1" />
-    <input hidden id="Fpayment" name="payment" value="2" />
+    <input hidden id="Fpayment" name="payment" value="3" />
 </form>
 
 @section scripts{
@@ -813,7 +813,7 @@
 
             if (parseFloat(finalAmount) < parseFloat(basePrice)) {
                 $("#deliveryprice").text(addCommas(price));
-                var mot = $("#finalprice").text().replace(",", '')
+                var mot = $("#finalamount").text().replace(",", '')
                 mot = mot.replace(',', "");
                 var discount = $("#finalDiscount").text();
                 discount = discount.replace(',', "");

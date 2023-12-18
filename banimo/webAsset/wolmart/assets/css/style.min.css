@@ -9664,12 +9664,13 @@ body .product-popup {
 .product:hover .product-action-horizontal {
   bottom: 1.5rem;
 }
-.product .product-price {
-  display: block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
+    .product .product-price {
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 5px 0px 15px 0;
+    }
 
 .product-media {
     position: relative;
@@ -14958,7 +14959,7 @@ body .product-popup {
           flex: 1;
   min-width: 40px;
   padding: 0.9rem;
-  border: 2px solid #34970b;
+  border: 2px solid ;
   border-right: 0;
   font-size: 1.2rem;
   letter-spacing: 0;
@@ -14985,7 +14986,7 @@ body .product-popup {
   min-width: 5.1rem;
   color: #333;
   border-left: 0;
-  border-color: #34970b;
+  /*border-color: #34970b;*/
   font-size: 1.5rem;
   font-weight: normal;
   letter-spacing: -0.025em;

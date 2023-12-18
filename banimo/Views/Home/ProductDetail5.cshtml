@@ -13,8 +13,8 @@
         ViewBag.Desc = metaModel.desctag;
         ViewBag.key = metaModel.keyTag;
         ViewBag.urlTitle = metaModel.curl;
-        
-        
+
+
 
     }
     else
@@ -399,9 +399,10 @@
                                         foreach (var item in Model.otherColors)
                                         {
                                             string itemurl = "o" + item.ID;
-                                            <li data-product-color="سفید" data-variation="12772"
-                                                class="range range-box-color nav-item xmt-2 xmt-lg-0 ">
-                                                <a href="/Home/productDetail?ID=@itemurl" style="display:flex; align-content:center">
+
+                                            <li id=@itemurl data-product-color="سفید" data-variation="12772"
+                                                class=" otherColor range range-box-color nav-item xmt-2 xmt-lg-0 ">
+                                                <a href="javascript:void(0)" style="display:flex; align-content:center">
                                                     <span class="color color-سفید" style=" background: @item.colorCode; "></span>
                                                     @item.colorTitle
                                                 </a>
@@ -414,6 +415,8 @@
 
 
                                 </ul>
+
+
                                 <div class="seller-information xmb-10 d-none d-lg-block">
                                     <ul class="list-unstyled">
 
@@ -1324,5 +1327,22 @@
 
 
 
+    </script>
+    <script>
+        $('.otherColor').click(function () {
+            var ID = this.id;
+            $.ajax({
+                url: "/Home/changeLastNumber",
+                data: {
+                    value: ID
+                },
+                success: function (data) {
+
+                    window.location.reload();
+
+                }
+            });
+
+        })
     </script>
 }

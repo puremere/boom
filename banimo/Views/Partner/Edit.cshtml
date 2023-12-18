@@ -889,7 +889,7 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
 
                         <input value="@Model.canonical" type="hidden" id="canonical" name="canonical" required="required" class="form-control col-md-7 col-xs-12">
 
-                        <input value="@Model.title.Replace(" ","_").Replace(".","")" type="hidden" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">
+                        @*<input value="@Model.title.Replace(" ","_").Replace(".","")" type="hidden" id="enName" name="enName" required="required" class="form-control col-md-7 col-xs-12">*@
 
 
                         <div class="mb-4 row align-items-center">
@@ -1011,6 +1011,24 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
                                 }
                             </div>
                         </div>
+                        <div class="mb-4 row align-items-center" style="">
+                            <label class="form-label-title col-sm-2 mb-0">
+                                @Resources.res.urlTitle
+                            </label>
+                            <div class="col-sm-10">
+                                @if (Model.meta != "")
+                                {
+                                    banimo.ViewModePost.metaData metaModelM = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
+                                    string entitle = metaModelM.curl;
+                                    @Html.TextBox("enName", entitle, new { @class = "form-control col-md-7 col-xs-12", id = "enName"  })
+                                }
+                                else
+                                {
+                                    <input type="text" id="enName" name="enName" class="form-control col-md-7 col-xs-12">
+
+                                }
+                            </div>
+                        </div>
                         <div class="mb-4 row align-items-center" style="display:none">
                             <label class="form-label-title col-sm-2 mb-0">
                                 @Resources.res.price
@@ -1098,18 +1116,22 @@ new { enctype = "multipart/form-data", id = "signupformforedit" }))
                             </label>
                             <div class="col-sm-10">
                                 <select id="tagupdate" class="editMenuTag js-example-basic-single" multiple name="tagupdate">
-                                    @foreach (var item in Model.tags)
+                                    @if (Model.tags != null)
                                     {
-                                        if (Model.tag.Contains(item.title))
+                                        foreach (var item in Model.tags)
                                         {
-                                            <option value="@item.title" selected>@item.title</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.title">@item.title</option>
-                                        }
+                                            if (Model.tag.Contains(item.title))
+                                            {
+                                                <option value="@item.title" selected>@item.title</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.title">@item.title</option>
+                                            }
 
+                                        }
                                     }
+
 
                                 </select>
 

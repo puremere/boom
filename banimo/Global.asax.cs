@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Stripe;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
@@ -26,6 +28,7 @@ namespace banimo
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
             MvcHandler.DisableMvcResponseHeader = true;
+            StripeConfiguration.ApiKey = ConfigurationManager.AppSettings["stripeSecretKey"];
 
         }
         protected void Application_AcquireRequestState(Object sender, EventArgs e)

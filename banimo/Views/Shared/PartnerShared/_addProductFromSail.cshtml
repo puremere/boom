@@ -26,7 +26,11 @@
     <div class="mb-4 row align-items-center" style="display:none">
         <label class="form-label-title col-sm-2 mb-0">@Resources.res.category</label>
         <div class="col-sm-10">
-            @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
+            @if (Model.catCore != null)
+            {
+                @Html.DropDownListFor(x => x.selectedCat, new SelectList(Model.catCore, "ID", "title"), new { id = "addMPCat", name = "addMPCat", style = "", @class = "form-control" })
+
+            }
 
         </div>
     </div>

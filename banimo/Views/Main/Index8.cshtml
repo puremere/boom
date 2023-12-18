@@ -382,38 +382,42 @@
                             </div>
                             @{
 
-                                foreach (var spec in Model.nodeItems)
+                                if (Model.nodeItems != null)
                                 {
-                                    if (spec.cat.ToString() == item.ID.ToString())
+                                    foreach (var spec in Model.nodeItems)
                                     {
-                                        <div id="@spec.cat" class="swiper-slide vendor-widget">
-                                            <div class="vendor-widget-banner">
-                                                <figure class="vendor-banner">
-                                                    <a href="/home/index?partnerID=@spec.url">
-                                                        <img src="@spec.logo" alt="Vendor Banner"
-                                                             width="1200" height="390" style="background-color: #ECE7DF;" />
-                                                    </a>
-                                                </figure>
-                                                <div class="vendor-details">
-                                                    <figure class="vendor-logo">
+                                        if (spec.cat.ToString() == item.ID.ToString())
+                                        {
+                                            <div id="@spec.cat" class="swiper-slide vendor-widget">
+                                                <div class="vendor-widget-banner">
+                                                    <figure class="vendor-banner">
                                                         <a href="/home/index?partnerID=@spec.url">
-                                                            <img src="@spec.img"
-                                                                 alt="Vendor Logo" width="90" height="90" />
+                                                            <img srcToGo="@spec.logo" src="~/images/placeHolder.png" alt="Vendor Banner"
+                                                                 width="1200" height="390" style="background-color: #ECE7DF;" />
                                                         </a>
                                                     </figure>
-                                                    <div class="vendor-personal">
+                                                    <div class="vendor-details">
+                                                        <figure class="vendor-logo">
+                                                            <a href="/home/index?partnerID=@spec.url">
+                                                                <img srcToGo="@spec.img" src="~/images/placeHolder.png"
+                                                                     alt="Vendor Logo" width="90" height="90" />
+                                                            </a>
+                                                        </figure>
+                                                        <div class="vendor-personal">
 
-                                                        <h4 class="vendor-name">
+                                                            <h4 class="vendor-name">
 
-                                                            <a href="/home/index?partnerID=@spec.url">@spec.title</a>
-                                                        </h4>
+                                                                <a href="/home/index?partnerID=@spec.url">@spec.title</a>
+                                                            </h4>
 
-                                                        @*<span class="vendor-product-count">27 Products</span>*@
+                                                        
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <!-- End of Vendor Widget Banner -->
                                             </div>
-                                            <!-- End of Vendor Widget Banner -->
-                                        </div>
+                                        }
+
                                     }
 
                                 }
@@ -580,7 +584,7 @@
                                                         <a href="/products/@newurl">
                                                             <img src="@src" alt="Product"
                                                                  width="300" height="338" />
-                                                            <img src="@src2" alt="Product"
+                                                            <img src="@src" alt="Product"
                                                                  width="300" height="338" />
                                                         </a>
                                                         @*<div class="product-action-vertical">
@@ -757,7 +761,7 @@
                                                         <a href="/products/@newurl">
                                                             <img src="@src" alt="Product"
                                                                  width="300" height="338" />
-                                                            <img src="@src2" alt="Product"
+                                                            <img src="@src" alt="Product"
                                                                  width="300" height="338" />
                                                         </a>
                                                         @*<div class="product-action-vertical">
@@ -833,46 +837,24 @@
 
                 string imgURL = tag.proimage.Split(',').Last();
 
-    <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible shadowbox" style="animation-duration: 1.2s;  background-color:#f8f8f8; border-radius:15px">
+                <div class="product-wrapper-1 appear-animate mb-5 fadeIn appear-animation-visible shadowbox" style="animation-duration: 1.2s;  background-color:#f8f8f8; border-radius:15px">
 
-        <div class="title-link-wrapper pb-1 mb-4" style="padding:5px 15px;border-radius: 15px 15px 0 0;background-color: green;color: white;">
-                <h2 style="color:white" class="title ls-normal mb-0">@tag.protitle</h2>
-                <p style="flex:1"></p>
-                <div class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
-                    @Resources.res.moreProduct
-                </div>
-            </div>
-
-        @*<div class="title-link-wrapper pb-1 mb-4">
-            <h2 class="title ls-normal mb-0">@tag.protitle</h2>
-            <p style="flex:1"></p>
-            <div class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
-                @Resources.res.moreProduct
-            </div>
-        </div>
-        <div style="display:flex ; align-items:center">
-            <div class="col-lg-3 productcatInfoSection" style="display:inline-block; padding:25px">
-
-                <img style="width:200px; border-radius:50%" src="https://demo.heson.ir/images/@imgURL " />
-            </div>
-            <div class="col-lg-9" style="display:inline-block">
+                    <div class="title-link-wrapper pb-1 mb-4" style="padding:5px 15px;border-radius: 15px 15px 0 0;background-color: green;color: white;">
+                        <h2 style="color:white" class="title ls-normal mb-0">@tag.protitle</h2>
+                        <p style="flex:1"></p>
+                        <div class="moreProduct font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                            @Resources.res.moreProduct
+                        </div>
+                    </div>
 
 
-            </div>
 
-        </div>*@
-        
-        <div class="row">
-            
-            @*<div class="col-lg-3 col-sm-4 mb-4">
-            <div class="banner h-100 br-sm" style="background-image: url(/webAsset/wolmart/assets/images/demos/demo1/banners/2.jpg);
-                            background-color: #ebeced;">
+                    <div class="row">
 
-            </div>
-        </div>*@
-            <!-- End of Banner -->
-            <div class="col-lg-12 col-sm-12">
-                <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
+
+                        <!-- End of Banner -->
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="swiper-container swiper-theme swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" data-swiper-options="{
                                 'spaceBetween': 20,
                                 'slidesPerView': 2,
                                 'breakpoints': {
@@ -884,117 +866,101 @@
                                     }
                                 }
                             }">
-                    <div class="swiper-wrapper " id="swiper-wrapper-2fea7c27dd16ef22" aria-live="polite" style="padding:10px; transform: translate3d(0px, 0px, 0px);">
-                        <div class="swiper-slide product-col swiper-slide-active " role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
-                            <div class="product-wrap product text-center" style="width:100%; margin:0">
-                                <figure class="product-media" style="width:80%; margin:auto; padding-top:50px">
-                                    <a href="/products/">
-                                        <img style="border-radius:50%"  src="https://demo.heson.ir/images/@imgURL" alt="Product"
-                                             />
-                                       
-                                    </a>
+                                <div class="swiper-wrapper " id="swiper-wrapper-2fea7c27dd16ef22" aria-live="polite" style="padding:10px; transform: translate3d(0px, 0px, 0px);">
+                                    <div class="swiper-slide product-col swiper-slide-active " role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                                        <div class="product-wrap product text-center" style="width:100%; margin:0">
+                                            <figure class="product-media" style="width:80%; margin:auto; padding-top:50px">
+                                                <a href="/products/">
+                                                    <img srcToGo="/images/@imgURL" style="border-radius:50%" src="~/images/placeHolder.png" alt="Product" />
 
-                                </figure>
-                               
-                            </div>
-                        </div>
-                        @if (tag.proitemprs != null)
-                        {
-                            foreach (var item in tag.proitemprs)
-                            {
-                                string newurl = "/Home/ProductDetail?id=" + item.ID;
-                                if (item.meta != null)
-                                {
-                                    banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
-                                        (@item.meta);
-                                    newurl = metaModel.curl;
-                                }
-                                string addID = "addtocarto" + item.ID;
-                                string minusID = "minus" + item.ID;
-                                string imagefile = "placeholder.jpg";
-                                List<string>
-                                    srtlist = new List<string>
-                                        ();
-                                string src2 = "";
-                                if (item.title != null)
-                                {
-                                    srtlist = item.image.Trim(',').Split(',').ToList();
-                                    imagefile = srtlist[0];
-                                    if (srtlist.Count == 2)
-                                    {
-                                        src2 = srtlist[1];
-                                    }
-                                }
-                                string ID = "N" + item.ID.ToString();
-                                string addtocartid = "addtocart" + ID;
-                                string price = item.price;
+                                                </a>
 
-                                string src = imagefile;
+                                            </figure>
 
-
-                                <div class="swiper-slide product-col swiper-slide-active shadowbox" role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
-                                    <div class="product-wrap product text-center" style="width:100%">
-                                        <figure class="product-media" style="width:100%">
-                                            <a href="/products/@newurl">
-                                                <img src="@src" alt="Product"
-                                                     width="300" height="338" />
-                                                <img src="@src2" alt="Product"
-                                                     width="300" height="338" />
-                                            </a>
-                                            @*<div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-cart w-icon-cart"
-                                   title="Add to cart"></a>
-                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
-                                   title="Add to wishlist"></a>
-                                <a href="#" class="btn-product-icon btn-quickview w-icon-search"
-                                   title="Quickview"></a>
-                                <a href="#" class="btn-product-icon btn-compare w-icon-compare"
-                                   title="Add to Compare"></a>
-                            </div>*@
-
-
-                                            @if (item.price != item.oldPrice)
-                                            {
-                                                <div class="product-label-group">
-                                                    <label class="product-label label-discount">@item.discount% Off</label>
-                                                </div>
-                                            }
-
-                                        </figure>
-                                        <div class="product-details">
-                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
-                                            @*<div class="ratings-container">
-                                <div class="ratings-full">
-                                    <span class="ratings" style="width: 60%;"></span>
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
-                            </div>*@
-                                            <div class="product-price">
-                                                <ins class="new-price">@item.price AED</ins>
-                                                @if (item.price != item.oldPrice)
-                                                {
-                                                    <del class="old-price">@item.oldPrice AED</del>
-                                                }
-
-
-                                            </div>
                                         </div>
                                     </div>
+                                    @if (tag.proitemprs != null)
+                                    {
+                                        foreach (var item in tag.proitemprs)
+                                        {
+                                            string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                            if (item.meta != null)
+                                            {
+                                                banimo.ViewModePost.metaData metaModel = Newtonsoft.Json.JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                                    (@item.meta);
+                                                newurl = metaModel.curl;
+                                            }
+                                            string addID = "addtocarto" + item.ID;
+                                            string minusID = "minus" + item.ID;
+                                            string imagefile = "placeholder.jpg";
+                                            List<string>
+                                                srtlist = new List<string>
+                                                    ();
+                                            string src2 = "";
+                                            if (item.title != null)
+                                            {
+                                                srtlist = item.image.Trim(',').Split(',').ToList();
+                                                imagefile = srtlist[0];
+                                                if (srtlist.Count == 2)
+                                                {
+                                                    src2 = srtlist[1];
+                                                }
+                                            }
+                                            string ID = "N" + item.ID.ToString();
+                                            string addtocartid = "addtocart" + ID;
+                                            string price = item.price;
+
+                                            string src = imagefile;
+
+
+                                            <div class="swiper-slide product-col swiper-slide-active shadowbox" role="group" aria-label="1 / 4" style="width: 216.25px; margin: 5px;">
+                                                <div class="product-wrap product text-center" style="width:100%">
+                                                    <figure class="product-media" style="width:100%">
+                                                        <a href="/products/@newurl">
+                                                            <img srcToGo="@src" src="~/images/placeHolder.png" alt="Product"
+                                                                 width="300" height="338" />
+                                                            <img srcToGo="@src2" src="~/images/placeHolder.png" alt="Product"
+                                                                 width="300" height="338" />
+                                                        </a>
+
+
+
+                                                        @if (item.price != item.oldPrice)
+                                                        {
+                                                            <div class="product-label-group">
+                                                                <label class="product-label label-discount">@item.discount% Off</label>
+                                                            </div>
+                                                        }
+
+                                                    </figure>
+                                                    <div class="product-details">
+                                                        <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                                        <div class="product-price">
+                                                            <ins class="new-price">@item.price AED</ins>
+                                                            @if (item.price != item.oldPrice)
+                                                            {
+                                                                <del class="old-price">@item.oldPrice AED</del>
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
                                 </div>
-                            }
-                        }
-
-
+                                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" style="display: none;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span></div>
+                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" style="display: none;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span></div>
-                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+
+
                 </div>
-            </div>
-        </div>
-
-
-    </div>
             }
         }
 
@@ -1137,7 +1103,7 @@
                                                         <a href="/products/@newurl">
                                                             <img src="@src" alt="Product"
                                                                  width="300" height="338" />
-                                                            <img src="@src2" alt="Product"
+                                                            <img src="@src" alt="Product"
                                                                  width="300" height="338" />
                                                         </a>
                                                         @*<div class="product-action-vertical">

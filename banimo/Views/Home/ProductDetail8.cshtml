@@ -40,6 +40,15 @@
             max-width: 95%
         }
     }
+
+    .similarSwiper {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        -webkit-box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        -moz-box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        margin: 20px 0px 5px 20px
+    }
 </style>
 
 
@@ -89,18 +98,22 @@
                                                         {
                                                             displayclass = "hideItem";
                                                         }
-                                                        List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
-                                                        foreach (var slideItem in lst)
+                                                        if (item.imageTitle != null)
                                                         {
-                                                            string slideItemID = "S" + item.ID.ToString();
-                                                            <div itemToShow="@slideItemID" class="swiper-slide  allbegone @displayclass">
-                                                                <figure class="product-image ">
-                                                                    <img src="@slideItem"
-                                                                         data-zoom-image="@slideItem"
-                                                                         alt="" width="800" height="900">
-                                                                </figure>
-                                                            </div>
+                                                            List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                            foreach (var slideItem in lst)
+                                                            {
+                                                                string slideItemID = "S" + item.ID.ToString();
+                                                                <div itemToShow="@slideItemID" class="swiper-slide  allbegone @displayclass">
+                                                                    <figure class="product-image ">
+                                                                        <img src="@slideItem"
+                                                                             data-zoom-image="@slideItem"
+                                                                             alt="" width="800" height="900">
+                                                                    </figure>
+                                                                </div>
+                                                            }
                                                         }
+
                                                     }
 
                                                 }
@@ -164,15 +177,19 @@
                                                         {
                                                             displayclass = "hideItem";
                                                         }
-                                                        List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
-                                                        foreach (var slideItem in lst)
+                                                        if (item.imageTitle != null)
                                                         {
-                                                            string slideItemID = "S" + item.ID.ToString();
-                                                            <div itemToShow="@slideItemID" class="product-thumb swiper-slide  allbegone ">
-                                                                <img src="@slideItem"
-                                                                     alt="Product Thumb" width="800" height="900">
-                                                            </div>
+                                                            List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                            foreach (var slideItem in lst)
+                                                            {
+                                                                string slideItemID = "S" + item.ID.ToString();
+                                                                <div itemToShow="@slideItemID" class="product-thumb swiper-slide  allbegone ">
+                                                                    <img src="@slideItem"
+                                                                         alt="Product Thumb" width="800" height="900">
+                                                                </div>
+                                                            }
                                                         }
+
                                                     }
 
                                                 }
@@ -213,25 +230,10 @@
                         <div class="col-md-6 mb-6 mb-md-8">
                             <div class="product-details" data-sticky-options="{'minWidth': 767}">
                                 <h1 class="product-title">@Model.title</h1>
-                                @*<div class="product-bm-wrapper">
-                                        <figure class="brand">
-                                            <img src="/webAsset/wolmart/assets/images/products/brand/brand-6.jpg" alt="Brand"
-                                                 width="85" height="48" />
-                                        </figure>
-                                        <div class="product-meta">
-                                            <div class="product-categories">
-                                                Category:
-                                                <span class="product-category"><a href="#">Electronics</a></span>
-                                            </div>
-                                            <div class="product-sku">
-                                                SKU: <span>MS46891342</span>
-                                            </div>
-                                        </div>
-                                    </div>*@
 
 
                                 <hr class="product-divider">
-                                @{ 
+                                @{
                                     decimal itemprice = 0;
                                     string finalID = Model.ID;
                                     if (Model.otherColors != null)
@@ -252,8 +254,14 @@
                                     }
                                 }
 
-                                <input id="totalIDHolder" value="@finalID" hidden/>
-                                <div class="product-price"><span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size:12px">تومان</span></div>
+                                <input id="totalIDHolder" value="@finalID" hidden />
+                                <div class="product-price">
+                                    <span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size: 12px">تومان</span> <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
+                                        <i class="w-icon-cart"></i>
+
+                                        <span style="padding:5px" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">افزودن به سبد خرید</span>
+                                    </button>
+                                </div>
 
                                 @*<div class="ratings-container">
                                         <div class="ratings-full">
@@ -275,12 +283,11 @@
 
                                 @if (Model.otherColors != null)
                                 {
+                                    <p class="nomargin">رنگبندی:</p>
                                     <style>
                                         .activeColor {
-                                            border: 3px solid #34970b !important;
+                                            border: 5px solid #34970b !important;
                                             border-radius: 8px !important;
-                                            
-                                            
                                         }
                                     </style>
                                     List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.ToList();
@@ -304,34 +311,38 @@
                                         }
                                     }
                                 }">
-                                                <div class="swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
+                                                <div class="anotherOption swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
 
 
                                                     @foreach (var it in lst)
                                                     {
-                                                        var myID = "o" + @it.ID;
-                                                        string classname = "";
-                                                        string imgsrc = it.imageTitle.Split(',').First();
-                                                        string idToGo = "S" + it.ID;
-                                                        var colorprice = it.otherColorFilter.First().productprice;
-                                                        var colorID = it.otherColorFilter.First().ID;
-                                                        <div class="swiper-slide product">
+                                                        if (it.imageTitle != null)
+                                                        {
+                                                            var myID = "o" + @it.ID;
+                                                            string classname = "";
+                                                            string imgsrc = it.imageTitle.Split(',').First();
+                                                            string idToGo = "S" + it.ID;
+                                                            var colorprice = it.otherColorFilter.First().productprice;
+                                                            var colorID = it.otherColorFilter.First().ID;
+                                                            <div class="swiper-slide product">
 
 
-                                                            @if (lst.IndexOf(it) == 0)
-                                                            {
-                                                                classname = "activeColor";
-                                                            }
+                                                                @if (lst.IndexOf(it) == 0)
+                                                                {
+                                                                    classname = "activeColor";
+                                                                }
 
 
-                                                            <div idplaceholder ="@colorID" priceplaceholder="@colorprice" id="@idToGo" class="swiper-slide product @classname otherNewColor">
-                                                                <div style="min-width:100px; padding:10px" class=" otherColor ">
-                                                                    <img style="width:100px" src="@imgsrc"
-                                                                         alt="Product Swatch" />
+                                                                <div idplaceholder="@colorID" priceplaceholder="@colorprice" id="@idToGo" class="swiper-slide product @classname otherNewColor">
+                                                                    <div style="" class=" otherColor ">
+                                                                        <img style="width:100px; border-radius:5px" src="@imgsrc"
+                                                                             alt="Product Swatch" />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </div>
+                                                            </div>
+                                                        }
+
                                                     }
                                                 </div>
                                             </div>
@@ -367,14 +378,14 @@
                                                         @foreach (var ocolorfilter in colorfilter.otherColorFilter)
                                                         {
                                                             var price = ocolorfilter.productprice;
-                                                            var myID =  ocolorfilter.ID;
+                                                            var myID = ocolorfilter.ID;
                                                             string classFilter = "";
 
                                                             if (colorfilter.otherColorFilter.IndexOf(ocolorfilter) == 0)
                                                             {
                                                                 classFilter = "activeColor";
                                                             }
-                                                            <p idplaceholder ="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter</span></p>
+                                                            <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter</span></p>
 
                                                         }
                                                     </div>
@@ -403,9 +414,9 @@
                                                                 classFilter = "anotherActive";
                                                             }
 
-
+                                                            var classn = "value" + item.ID;
                                                             var myID = "o" + item.ID;
-                                                            <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span></p>
+                                                            <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span><span class="@classn"></span></p>
 
                                                         }
                                                     </div>
@@ -434,12 +445,12 @@
                                                         {
                                                             if (item.isMultiple == "on")
                                                             {
-                                                                <li id="@detail.ID" class="addsondtl"><a href="javascript:void(0)">@detail.title <span>@detail.price AED</span></a></li>
+                                                                <li id="@detail.ID" class="addsondtl"><a href="javascript:void(0)">@detail.title <span>@detail.price تومان</span></a></li>
 
                                                             }
                                                             else
                                                             {
-                                                                <li id="@detail.ID" class="addsondtl adddsonSingle"><a href="javascript:void(0)">@detail.title <span>@detail.price AED</span></a></li>
+                                                                <li id="@detail.ID" class="addsondtl adddsonSingle"><a href="javascript:void(0)">@detail.title <span>@detail.price تومان</span></a></li>
 
                                                             }
                                                         }
@@ -456,24 +467,27 @@
                                 }
 
 
-                               
+
                                 <div class="fix-bottom product-sticky-content sticky-content">
                                     <div class="product-form container">
-                                        
-                                        <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
-                                            <i class="w-icon-cart"></i>
-                                            @{
-                                                string calssname = "valueAll" + @Model.ID;
-                                            }
-                                            <span>افزودن به سبد خرید (<i class="@calssname">0</i>)</span>
-                                        </button>
+                                        @{
+                                            string calssname = "valueAll" + @Model.ID;
+                                            string calssname2 = "value" + @Model.ID;
+
+                                        }
+
                                         <div class="product-qty-form">
-                                            <div class="input-group">
-                                                <input id="fquantity" class="quantity form-control" type="number" min="1"
-                                                       max="10000000">
-                                                <button class="quantity-plus w-icon-plus"></button>
-                                                <button class="quantity-minus w-icon-minus"></button>
-                                            </div>
+                                            @*<div class="input-group">
+
+                                                    <input value="0" id="fquantity" class=" form-control @calssname  @calssname2" type="number">
+                                                    <button class="quantity-plus w-icon-plus" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')"></button>
+                                                    <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')"></button>
+                                                </div>*@
+                                            @*<button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
+                                                    <i class="w-icon-cart"></i>
+
+                                                    <span onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">افزودن به سبد خرید</span>
+                                                </button>*@
                                         </div>
 
                                     </div>
@@ -846,7 +860,7 @@
                     </div>
                     @if (Model.similarProduct != null)
                     {
-                        <section class="related-product-section">
+                        <section class="related-product-section" style="margin-top:35px">
                             <div class="title-link-wrapper mb-4">
                                 <h4 style="flex:1" class="title">محصولات مشابه</h4>
                                 <a href="#" style="flex:unset" class="btn btn-dark btn-link btn-slide-right btn-icon-right">
@@ -904,10 +918,10 @@
                                             }
                                         }
                                         string src = imagefile;
-                                        <div class="swiper-slide product">
-                                            <figure class="product-media">
+                                        <div class="swiper-slide product similarSwiper">
+                                            <figure class="product-media" style="width:100%;">
                                                 <a href="/products/@newurl">
-                                                    <img style="max-height:250px" src="@src" alt="Product"
+                                                    <img style="aspect-ratio:0.9;border-radius: 8px 8px 0 0;" src="@src" alt="Product"
                                                          width="300" height="338" />
                                                 </a>
 
@@ -917,11 +931,11 @@
                                                     </a>
                                                 </div>
                                             </figure>
-                                            <div class="product-details">
+                                            <div class="product-details" style="margin:15px">
                                                 <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
 
                                                 <div class="product-pa-wrapper">
-                                                    <div class="product-price">@item.price AED</div>
+                                                    <div class="product-price">@string.Format("{0:n0}", Int32.Parse(@item.price)) تومان</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -945,12 +959,15 @@
 
 @section scripts{
     <script>
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
         $(".otherfilterNew").click(function () {
             var price = $(this).attr('priceplaceholder');
             var id = $(this).attr('idplaceholder');
 
-          
-            $("#priceholdersection").text(price);
+
+            $("#priceholdersection").text(numberWithCommas(parseInt(price)));
             $("#totalIDHolder").val(id);
 
             $(".otherfilterNew").removeClass("activeColor")
@@ -958,7 +975,7 @@
         })
     </script>
 
-   
+
 
 
     <script>
@@ -968,7 +985,7 @@
             var itemid = $(this).attr('idplaceholder');
 
 
-            $("#priceholdersection").text(price);
+            $("#priceholdersection").text(numberWithCommas(price));
             $("#totalIDHolder").val(itemid);
 
             var id = $(this).attr('id');

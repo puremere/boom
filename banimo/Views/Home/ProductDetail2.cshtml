@@ -580,9 +580,21 @@
 
                                         $("#SFlist").on('change', function () {
 
-                                            var REP = "o" + $(this).val();
-                                            var url = "/Home/ProductDetail?id=" + REP;
-                                            window.location.href = url
+                                            var ID = this.id;
+                                            $.ajax({
+                                                url: "/Home/changeLastNumber",
+                                                data: {
+                                                    value: ID
+                                                },
+                                                success: function (data) {
+
+                                                    window.location.reload();
+
+                                                }
+                                            });
+                                            //var REP = "o" + $(this).val();
+                                            //var url = "/Home/ProductDetail?id=" + REP;
+                                            //window.location.href = url
                                         })
                                     </script>
                                 </div>
@@ -666,8 +678,18 @@
                                                         <script>
                                                             $('.otherColor').click(function () {
                                                                 var ID = this.id;
-                                                                var url = "/Home/ProductDetail?id=" + ID;
-                                                                window.location.href = url;
+                                                                $.ajax({
+                                                                    url: "/Home/changeLastNumber",
+                                                                    data: {
+                                                                        value: ID
+                                                                    },
+                                                                    success: function (data) {
+
+                                                                        window.location.reload();
+
+                                                                    }
+                                                                });
+                                                                
                                                             })
                                                         </script>
                                                     }
@@ -955,11 +977,22 @@
 
                                     <script>
                                         $('.showmeOtherdetail').click(function () {
-
-
                                             var ID = this.id;
-                                            var url = "/Home/ProductDetail?id=" + ID;
-                                            window.location.href = url;
+                                            $.ajax({
+                                                url: "/Home/changeLastNumber",
+                                                data: {
+                                                    value: ID
+                                                },
+                                                success: function (data) {
+
+                                                    window.location.reload();
+
+                                                }
+                                            });
+
+                                            //var ID = this.id;
+                                            //var url = "/Home/ProductDetail?id=" + ID;
+                                            //window.location.href = url;
                                         })
                                     </script>
 

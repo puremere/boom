@@ -1132,6 +1132,59 @@ namespace banimo.Controllers
             return View();
         }
 
+
+        public ActionResult requestForStripe (ViewModelPost.ReqestWalletViewModel model)
+        {
+            //string txtDescription = "افزودن به سبد خرید";
+            //Random rnd = new Random();
+
+            //long orderID = model.orderNumberWeb == null ? rnd.Next(111000000, 111999999) : long.Parse(model.orderNumberWeb);
+            //string message = "";
+
+
+            //long amount = model.price * 10;
+            //string additionalData = txtDescription;
+
+
+            //string localDate = DateTime.Now.ToString("yyyyMMdd");
+            //string localTime = DateTime.Now.ToString("HHmmss");
+            var stripePublishKey = ConfigurationManager.AppSettings["stripePublishableKey"];
+            ViewBag.StripePublishKey = stripePublishKey;
+            return View("RedirectStripe");
+        }
+        [HttpPost]
+        public ActionResult Charge( string amount)
+        {
+            var options = new Stripe.Checkout.SessionCreateOptions()
+            {
+                LineItems = new List<Stripe.Checkout.SessionLineItemOptions> {
+                    new Stripe.Checkout.SessionLineItemOptions
+                    {
+
+                        PriceData = new Stripe.SessionLineItemPriceDataOptions(){
+                            UnitAmount = Int32.Parse(amount),
+                             Currency = "USD",
+                             ProductData =  new Stripe.SessionLineItemPriceDataProductDataOptions(){
+                               Name = "T-shirt"
+                             }
+                        },
+                        Quantity = 1
+                    },
+                },
+                Mode = "payment",
+                SuccessUrl = "https://www.miguel.com/connection/cancelStripe",
+                CancelUrl = "https://www.miguel.com/connection/verifyStripe",
+
+            };
+            var service = new Stripe.Checkout.SessionService();
+            Stripe.Checkout.Session session = service.Create(options);
+
+
+            //Response.Headers.Add("Location", session.)
+
+            return new HttpStatusCodeResult(303);
+        }
+
         public ActionResult ReqestForMellat(ViewModelPost.ReqestWalletViewModel model)
         {
 
@@ -1185,7 +1238,7 @@ namespace banimo.Controllers
 
 
         }
-        public ActionResult ReqestForPaymentMellat(ViewModelPost.ReqestForPaymentViewModel model)
+        public ActionResult ReqestForPaymentMellatOld(ViewModelPost.ReqestForPaymentViewModel model)
         {
 
             CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
@@ -1265,7 +1318,7 @@ namespace banimo.Controllers
                 //    collection.Add("imaglist[]", myvalucollection);
                 //}
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestTest2.php", collection);//buyRequestMarsool
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
@@ -1323,7 +1376,151 @@ namespace banimo.Controllers
 
 
         }
+        public ActionResult ReqestForPaymentMellat(ViewModelPost.ReqestForPaymentViewModel model)
+        {
+            string srt = Request.Cookies["Modelcart"] != null ? Request.Cookies["Modelcart"].Value : "";
+            List<ProductDetailCookie> data = JsonConvert.DeserializeObject<List<ProductDetailCookie>>(srt);
+            CookieVM cookieModel = JsonConvert.DeserializeObject<CookieVM>(getCookie("token"));
+            model.hourid = model.hourid.Replace("final", "");
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            List<string> finalmodel = new List<string>();
 
+            string ids = "";
+            string nums = "";
+            string ths = "";
+            string addson = "";
+            foreach (var item in data)
+            {
+                ids = ids + "," + (item.productid);
+                nums = nums + "," + (item.quantity);
+                if (!string.IsNullOrEmpty(item.tarafH))
+                {
+                    ths = ths + "," + (item.tarafH);
+                }
+                if (!string.IsNullOrEmpty(item.addson))
+                {
+                    addson = addson + "," + (item.addson);
+                }
+
+
+
+            }
+
+            userdata user = Session["LogedInUser"] as userdata;
+
+
+
+            string email = "";
+            if (user.email != null)
+            {
+                email = user.email;
+            }
+            string token = user.token;
+
+
+
+            string userid = user.ID;
+            string state = "";
+
+            string discount = model.newdiscount;
+            string postalCode = "";
+            string result = "";
+            string auth = "";
+            auth = RandomString();
+           
+
+            using (WebClient client = new WebClient())
+            {
+
+                var collection = new NameValueCollection(); collection.Add("nodeID", nodeID);
+                collection.Add("device", device);
+                collection.Add("code", code);
+                collection.Add("fullname", model.fullname);
+                collection.Add("mobile", model.phonenumber);
+                collection.Add("email", email);
+                collection.Add("state", state);
+                collection.Add("city", model.city);
+                collection.Add("address", model.address);
+                collection.Add("addressID", model.addressID);
+                collection.Add("ids", ids);
+                collection.Add("tarafHesabs", ths);
+                collection.Add("nums", nums);
+                collection.Add("token", token);
+                collection.Add("discount", discount);
+                collection.Add("postalCode", postalCode);
+                collection.Add("hourID", model.hourid);
+                collection.Add("planID", model.planID);
+                collection.Add("comment", "");
+                collection.Add("payment", model.payment);
+                collection.Add("auth", auth);
+                collection.Add("latitude", model.lat);
+                collection.Add("longitude", model.lon);
+                collection.Add("addsOn", addson.Trim(','));
+                collection.Add("mbrand", servername);
+
+                //foreach (var myvalucollection in imaglist) {
+                //    collection.Add("imaglist[]", myvalucollection);
+                //}
+                byte[] response =
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/buyRequestMarsool.php", collection);
+
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+
+            banimo.ViewModelPost.buyRequest log2 = JsonConvert.DeserializeObject<banimo.ViewModelPost.buyRequest>(result);
+
+            if (log2.status == 200)
+            {
+                string txtDescription = "شماره پیگیری:" + log2.peigiry;
+                string timestamp = log2.orderID;
+                string message = "";
+
+                long orderId = Convert.ToInt64(log2.peigiry);
+
+                long amount = log2.amount * 10;
+                string additionalData = txtDescription;
+
+
+                string localDate = DateTime.Now.ToString("yyyyMMdd");
+                string localTime = DateTime.Now.ToString("HHmmss");
+
+                string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyMellat";
+                long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
+                string userName = ConfigurationManager.AppSettings["userName"];
+                string userPassword = ConfigurationManager.AppSettings["userPassword"];
+                string payerId = "0";
+
+
+                //banimo.bankMellat.PaymentGatewayImplService WebService = new bankMellat.PaymentGatewayImplService();
+                //string callBackRefID = WebService.bpPayRequest(terminalId, userName, userPassword, orderId, amount, localDate, localTime,
+                //                 additionalData, callBackUrl, "0");
+
+                BankMellatImplement bankMellatImplement = new BankMellatImplement(callBackUrl, terminalId, userName, userPassword);
+
+                string resultRequest = bankMellatImplement.bpPayRequest(orderId, amount, additionalData);
+                string[] StatusSendRequest = resultRequest.Split(',');
+
+
+                if (int.Parse(StatusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                {
+
+                    return RedirectToAction("RedirectVPOS", "Connection", new { id = StatusSendRequest[1] });
+                }
+
+                TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(StatusSendRequest[0].Replace("_", " ")));
+                //string srt = TempData["Message"].ToString();
+                return RedirectToAction("verifyAtBase", "Connection");
+
+
+
+
+            }
+            //string json = "";
+            return Content("");
+
+
+        }
         [HttpPost]
         public ActionResult VerifyMellat()
         {
@@ -1504,7 +1701,7 @@ namespace banimo.Controllers
 
 
                                             byte[] response =
-                                            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersion.php", collection2);
+                                            client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
 
                                             result2 = System.Text.Encoding.UTF8.GetString(response);
                                         }
@@ -2500,7 +2697,7 @@ namespace banimo.Controllers
             else
             {
                 ViewBag.message = TempData["message"] as string;
-                ViewBag.message2 ="";
+                ViewBag.message2 = TempData["message2"] as string;
                 ViewBag.message3 = "500";
 
             }
