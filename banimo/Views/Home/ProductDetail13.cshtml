@@ -1,0 +1,1949 @@
+﻿@model banimo.ViewModelPost.viewProductViewModel
+@using banimo.Classes;
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = Model.title + " | " + @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    Layout = "~/Views/Shared/_Layout13.cshtml";
+}
+@section HeadIncludes{
+    <meta name="product_name" content="@Model.title">
+    <meta name="product_price" content="@Model.price">
+    <meta name="product_id" content="@Model.ID">
+    <meta name="product_old_price" content="@Model.oldPrice">
+
+
+    @if (Model.isAvailable == "1")
+    {
+        <meta name="availability" content="instockor">
+    }
+    else
+    {
+        <meta name="availability" content="outofstock ">
+    }
+    @if (Model.imgGallery != null)
+    {
+        if (Model.imgGallery.Count() > 0)
+        {
+            <meta property="og:image" content="@Model.imgGallery.First().src">
+        }
+
+    }
+
+    @if (Model.filter.Count() > 0)
+    {
+        foreach (var item in Model.filter.ToList())
+        {
+            if (item.filtername == "گارانتی")
+            {
+                <meta name="guarantee" content="@item.detailname">
+
+            }
+
+        }
+
+
+    }
+    <link href="~/Content/css/bootstrap5.css" rel="stylesheet" />
+}
+
+<link href="~/Content/flexslider2.css" rel="stylesheet" />
+<link href="~/Content/detailStyle.css" rel="stylesheet" />
+<link href="~/Content/lightgallery.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.flexslider2.js"></script>
+<style>
+    .flex-control-thumbs {
+    }
+
+        .flex-control-thumbs li {
+            width: 50px;
+            height: 50px
+        }
+
+        .flex-control-thumbs img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover
+        }
+</style>
+
+<style>
+
+
+    .c-product__summary {
+        max-width: 450px;
+    }
+
+    .c-product__summary {
+        flex: 1;
+    }
+
+    .c-product__stock-status {
+        line-height: normal;
+        border-radius: 5px;
+        border: 1px solid #e4e4e4;
+        background: #f5f5f5;
+    }
+
+    .c-product-stock__title {
+        display: flex;
+        color: #969696;
+        font-size: 18px;
+        font-weight: 700;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+        .c-product-stock__title::before {
+            content: "";
+            margin: .7rem;
+            flex: 1;
+            height: 1px;
+            background: #969696;
+        }
+
+        .c-product-stock__title::after, .c-product-stock__title::before {
+            content: "";
+            margin: .7rem;
+            flex: 1;
+            height: 1px;
+            background: #969696;
+        }
+
+    element {
+    }
+
+    .c-product-stock__body {
+        color: #4a4a4a;
+        font-size: .9rem;
+    }
+
+    .c-product-stock__body, .m-b-lg {
+        margin: 2rem;
+    }
+
+    .c-product-stock__action, .c-product-stock__title, .p-v-md {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .c-product-stock__action {
+        width: 80%;
+        border-width: 0;
+        background: #7a7a7a;
+        color: #fff;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: block;
+        margin: auto;
+        margin-bottom: 25px;
+    }
+</style>
+<style>
+    .resp-tabs-list li.selected {
+        color: #fff;
+        background-color: #FF4500;
+        border-radius: 10px;
+    }
+
+    .header1 {
+        display: flex;
+        padding: 20px;
+        background-color: #eee;
+        align-items: center;
+        justify-content: center;
+        direction: rtl;
+    }
+
+    .header2 {
+        display: flex;
+        direction: rtl;
+        margin: 10px 50px;
+        border-radius: 5px;
+        padding: 15px;
+        border-top: 1px solid #ddd
+    }
+
+    .headeer2Icon {
+        margin: 0 10px !important;
+        color: #FF4500 !important;
+        font-weight: 600 !important;
+    }
+
+    .header2 a, p {
+        display: flex
+    }
+
+    .detailTitle {
+        padding: 15px;
+        direction: rtl
+    }
+
+    .dataholder {
+        padding-bottom: 10px;
+        direction: rtl;
+        float: left;
+        visibility: visible;
+    }
+
+    .pricedetail {
+        border-radius: 10px;
+        padding: 0 20px;
+        margin-top: 30px
+    }
+
+    .priceParent {
+        margin: 0px;
+        height: 100%;
+        float: right
+    }
+
+    .discountParentt {
+        display: inline-block;
+        width: 100%;
+        direction: ltr;
+        min-height: 25px
+    }
+
+    .oldPrice {
+        float: left;
+        display: inline-block;
+        margin-bottom: 5px;
+        font-size: 18px;
+        direction: rtl;
+    }
+
+    .discountSectence {
+        float: right;
+        display: inline-block;
+        color: white;
+        padding: 15px;
+        border-radius: 35px;
+        background-color: #ef3b3b;
+    }
+
+    .discountParentt {
+        display: flex;
+        align-items: center;
+    }
+
+    .oldPrice {
+        flex: 1
+    }
+
+    .priceParent {
+        width: 100%
+    }
+
+    .addtocart {
+        border: unset;
+        background-color: orange;
+        margin: 15px 0;
+        background-image: linear-gradient(to right, #FF4500 50%, #d53c0b 50%);
+        width: 100%;
+        padding: 0;
+        border-radius: 15px
+    }
+
+    .featureTitle {
+        text-align: right;
+        float: right;
+        margin: 20px;
+    }
+
+    .featureBox {
+        background: #f5f5f5;
+        border: solid 1px #e6e6e6;
+        border-radius: 8px;
+        overflow: hidden;
+        min-width: 280px;
+        margin-top: 10px
+    }
+
+    .bottomDivTitleParent {
+        display: flex;
+        direction: rtl;
+        align-items: center;
+        margin: 30px 0
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .mybtn {
+            width: 100%;
+        }
+
+
+
+        .c-comments__summary-note {
+            flex: none !important;
+            max-width: 100% !important;
+        }
+
+        .bottomDiv {
+            margin-top: 15px
+        }
+
+        .discountParentt {
+            display: flex;
+            align-items: center;
+        }
+
+        .oldPrice {
+            flex: 1
+        }
+
+        .pricedetail div {
+            padding: 0
+        }
+
+        .priceParent {
+            width: 100%
+        }
+
+        .pricedetail {
+            padding: 0;
+        }
+
+        .dataholder {
+            margin-top: 40px;
+            padding: 0 !important;
+            border: none
+        }
+
+        .detailTitle {
+            padding: 15px;
+            direction: rtl;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .header1 {
+            padding: 15px 5px;
+        }
+
+        .header2Title {
+            clear: both;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 100px
+        }
+    }
+</style>
+
+
+
+@{
+    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@Model.meta);
+    string newurl = metaModel.curl;
+}
+<div class="header2" style="">
+    @{
+        string entitle = "";
+        if (Model.catTreeList != null)
+        {
+            <a href="/@entitle"> <i class="fa fa-home "></i>  </a>
+            if (Model.catTreeList.Count > 0)
+            {
+                entitle = @Model.catTreeList[0].entitle;
+                <a href="/@entitle"> <span style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[0].title</span>  </a>
+            }
+            if (Model.catTreeList.Count > 1)
+            {
+                entitle += "/" + @Model.catTreeList[1].entitle;
+                <a href="/@entitle"> <span style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[1].title</span>    </a>
+            }
+            if (Model.catTreeList.Count > 2)
+            {
+                entitle += "/" + @Model.catTreeList[2].entitle;
+                <a href="/@entitle">   <span class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[2].title</span> </a>
+            }
+            <p style="color: #FF4500 ">
+                <span style="" class="fal fa-chevron-left headeer2Icon"></span>
+                <span class="header2Title">@Model.title</span>
+            </p>
+
+        }
+    }
+</div>
+
+<div id="idholder" style="display:none">@Model.ID</div>
+<div id="titleHolder" style="display:none">@newurl</div>
+
+
+
+
+<div id="pvDataHolder">
+
+
+
+
+
+    @{
+        string typeID = "";
+        banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+        if (userApp != null)
+        {
+            typeID = userApp.userTypeID;
+        }
+
+        double metaPrice = double.Parse(Model.price);
+        double oldPrice = double.Parse(Model.oldPrice);
+        if (typeID == "2")
+        {
+            banimo.AdminPanelBoom.ViewModel.metaVM metaMdl = JsonConvert.DeserializeObject<banimo.AdminPanelBoom.ViewModel.metaVM>(Model.meta);
+            metaPrice = metaMdl.price;
+            oldPrice = 0;
+        }
+    }
+    <div class=" contentholder card" style="background-color: #fff; margin: 20px 50px; ">
+
+
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="direction:rtl; margin-bottom:15px">
+                    <div class="modal-header" style="margin-bottom: 20px;">
+                        <button style="float:left; font-size:40px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="float:right;margin-bottom: 15px;margin-right: 10px;" class="modal-title" id="exampleModalLabel">اشتراک گذاری از طریق ایمیل</h5>
+                        <input id="Femail" style="padding:25px;" placeholder="ایمیل مورد نظر خورد را وارد کنید" type="text" class="form-control">
+                        <i class="fa fa-envelope-open" style="position: absolute;left: 25px;bottom: 42px;font-size: 25px;"></i>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+                        <button type="button" class="btn btn-success" id="shareByEmail">تایید</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#shareByEmail").click(function () {
+                    function isValidEmailAddress(emailAddress) {
+                        var pattern = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                        return pattern.test(emailAddress);
+                    };
+                    var email = $("#Femail").val();
+                    if (isValidEmailAddress(email)) {
+
+
+
+                        $.ajax({
+                            url: '/Home/sendEmail',
+                            dataType: 'html',
+                            data: {
+                                productImage: '@Model.imgGallery.First().src',
+                                siteName: '@System.Configuration.ConfigurationManager.AppSettings["siteName"]',
+                                productName: '@Model.title',
+                                productLink : '@Model.ID',
+                                emailto: email,
+                                url : '@System.Configuration.ConfigurationManager.AppSettings["serverName"]'
+                            },
+                            success: function (data) {
+                                $("#myModal").modal('toggle')
+                            },
+                            error: function (request, status, error) {
+
+                            }
+                        });
+
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('ایمیل با موفقیت برای دوست شما ارسال شد')
+
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('ایمیل صحیح وارد کنید')
+                    }
+
+                })
+            </script>
+        </div>
+        <script>
+            var wishonid = "wishon" + "@Model.ID";
+            var wishoffid = "wishoff" + "@Model.ID";
+            var shareid = "share" + "@Model.ID";
+            var compareid = "compare" + "@Model.ID";
+
+            if ("@Model.isWishList" === "isnot") {
+
+                $("#" + wishonid).css("display", "none")
+            }
+            else {
+                $("#" + wishoffid).css("display", "none")
+            }
+            $("#" + compareid).click(function () {
+                var id = '@Model.ID';
+                var cat = '@Model.cattree'
+                var url = '@Url.Action("compare", "home", new { id = "__id__", cat = "__cat__" })';
+                var URL2 = url.replace("__id__", id);
+                URL2 = URL2.replace("__cat__", cat);
+
+                window.location.href = URL2;
+            })
+            $("#" + shareid).click(function () {
+
+                $("#myModal").modal('toggle');
+            })
+            $("#" + wishonid).click(function () {
+                $(this).css("display", "none");
+                $("#" + wishoffid).css("display", "block");
+                var id = $(this).attr("id");
+
+                $.ajax({
+                    url: '/Home/addToWishList',
+                    dataType: 'html',
+                    data: {
+                        ProductID: wishonid,
+                        isWishList: "1"
+
+                    },
+                    success: function (data) {
+
+                    },
+                    error: function (request, status, error) {
+
+                    }
+                });
+
+            })
+            $("#" + wishoffid).click(function () {
+                if ('@Session["token"]' === "") {
+
+                    var url = '@Url.Action("Login", "Home")';
+                    window.location.replace(url);
+                }
+                else {
+                    $(this).css("display", "none");
+                    $("#" + wishonid).css("display", "block");
+                    var id = $(this).attr("id");
+
+                    $.ajax({
+                        url: '/Home/addToWishList',
+                        dataType: 'html',
+                        data: {
+                            ProductID: wishonid,
+                            isWishList: "0"
+
+                        },
+                        success: function (data) {
+
+                        },
+                        error: function (request, status, error) {
+
+                        }
+                    });
+                }
+
+            })
+        </script>
+
+        <div class="row">
+
+            <div class="row" style="direction:rtl">
+
+
+
+                <div class="col-md-12 col-sm-12 col-lg-4" style=" border-left:1px solid #ddd">
+                    
+                    @{
+
+                        if (Model.otherColors != null)
+                        {
+                            <div id="slidholder" class=" slidemultiple" style=" margin:30px; visibility: visible; animation-delay: 0.5s; animation-name: slideInUp; background-color:#fff;">
+
+                                <div class="flexslider" style="margin-bottom:0px">
+
+                                    <ul id="ulSlide" class="slides">
+                                        @{
+
+                                            foreach (var item in Model.otherColors)
+                                            {
+                                                if (item.imageTitle != null)
+                                                {
+                                                    List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                    foreach (var slideItem in lst)
+                                                    {
+
+                                                        <li data-thumb="@slideItem">
+                                                            <div class="thumb-image imageitself" style=" margin: auto;">
+                                                                <img style="border-radius:15px; max-height:400px; max-width:400px; object-fit:cover " src="@slideItem" data-imagezoom="true" class="img-responsive ">
+                                                            </div>
+                                                        </li>
+
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    </ul>
+                                    <script>
+
+                                        // Can also be used with $(document).ready() 66192763
+                                        $('#flexslider').removeData("flexslider");
+                                        $('.flexslider').flexslider({
+                                            animation: "slide",
+                                            controlNav: "thumbnails",
+                                            direction: "horizontal",
+                                            reverse: false,
+                                            directionNav: false,
+
+                                        });
+
+                                    </script>
+                                </div>
+                                <div class="gradientback" style="display:none">
+                                </div>
+                            </div>
+
+                        }
+
+                        else
+                        {
+
+                            if (Model.slides != null)
+                            {
+
+
+
+
+
+                            }
+
+                        }
+
+                    }
+
+                </div>
+                <div class="col-md-12 col-lg-8 col-sm-12">
+                    <div class="row" style="border-bottom:1px solid #ddd">
+                        <div style="flex:1; margin:5px 0 ; display:flex; margin:30px">
+                            @{
+                                var wishonid = "wishon" + @Model.ID;
+                                var wishoffid = "wishoff" + @Model.ID;
+                                var shareid = "share" + @Model.ID;
+                                var compareid = "compare" + @Model.ID;
+                            }
+                            @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                            {
+
+                                <h3 style="" class="numEn detailTitle">@Model.title</h3>
+                            }
+                            else
+                            {
+                                <h3 style="font-weight:bold" class="detailTitle priceItem">@Model.title</h3>
+                            }
+
+                            <div style="flex:1; display:flex; align-items:center; justify-content:left">
+                                @*<i id="@wishonid" class="detailfal fal fa-heart wish_on" style="position:absolute; margin:0 20px;  cursor:pointer; font-size: 25px; z-index: 999; color:red"></i>*@
+                                <i id="@wishoffid" class="detailfal fal fa-heart" style="  margin:0 20px;cursor:pointer;font-size: 25px; z-index: 999;  "></i>
+
+                                <i id="@shareid" class="detailfal fal fa-share-alt" style="margin:0 20px;cursor:pointer;font-size: 25px; z-index: 999; "></i>
+
+                                <i id="@compareid" class="detailfal fal fa-clone" style="margin:0 20px;cursor:pointer;font-size: 25px; z-index: 999;  ">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="featureBox">
+                            <p class="featureTitle " style="">ویژگی های اصلی</p>
+                            @if (Model.filter.Count() > 0)
+                            {
+                                <div style="margin-top:15px; width:100%;border-bottom:1px solid #4d4d4d">
+                                    @foreach (var item in Model.filter.Select(x => x.filtername).Distinct())
+                                    {
+
+                                        <div style="text-align:right; direction:rtl; display: inline-block; margin-right:15px;line-height:2.5; width:100%;border-top:1px solid #4d4d4d">
+                                            <i class="fal fa-check" style="font-size:8px; background-color:#d3e3f2; padding:20px; font-size:22px"> </i>
+
+                                            <span style="margin-right:30px; font-weight:500">@item :</span>
+
+                                            @foreach (var newitem in Model.filter)
+                                            {
+                                                if (newitem.filtername == item)
+                                                {
+
+                                                    <span style="">@newitem.detailname</span>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>
+
+
+                            }
+                        </div>
+                    </div>
+                    <div id="dataholder" class="  dataholder  col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            @if (Model.partnerList != null)
+                            {
+                                foreach (var item in Model.partnerList)
+                                {
+                                    <div class="row pricedetail" style="  ">
+                                        <div class="row ">
+                                            <div class="discountParentt" style="direction:rtl">
+                                                @if (metaPrice != oldPrice)
+                                                {
+                                                    double difference = oldPrice - metaPrice;
+                                                    if (Model.wonderDiscount != "0")
+                                                    {
+                                                        Model.discount = Model.wonderDiscount;
+                                                    }
+                                                    <p class="oldPrice" style="">
+                                                        <del>@string.Format("{0:n0}", oldPrice / 10)   <span>تومان</span></del>
+                                                    </p>
+
+                                                    <p class=" discountSectence " style="">
+                                                        همین امروز
+                                                        <i>@string.Format("{0:n0}", difference / 10)</i> تومان  تخفیف بگیرید
+                                                    </p>
+
+                                                }
+
+                                            </div>
+                                            <div style=" min-height:65px; text-align:right; padding:0">
+                                                @{
+                                                    @*<div class="col-lg-6" style="margin:0px;height: 100%;">
+                                                            @item.Title
+                                                        </div>*@
+                                                    <div class="col-lg-12" style="margin:0px;height: 100%;">
+                                                        <div style="display:inline-block;height: 100%;">
+                                                            @{
+                                                                decimal itemprice = 0;
+                                                                string finalID = Model.ID;
+                                                                if (Model.otherColors != null)
+                                                                {
+                                                                    if (Model.otherColors.Count() > 0)
+                                                                    {
+                                                                        if (Model.otherColors.First().otherColorFilter != null)
+                                                                        {
+                                                                            itemprice = decimal.Parse(Model.otherColors.First().otherColorFilter.First().productprice);
+                                                                            finalID = Model.otherColors.First().otherColorFilter.First().ID;
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    itemprice = decimal.Parse(Model.partnerList.First().price);
+                                                                }
+                                                            }
+                                                            <input id="totalIDHolder" value="@finalID" hidden />
+                                                            <h4 class="item_price priceItem" style="display: inline-block;  color: red; font-size: 26px" id="priceholdersection">@string.Format("{0:n0}", itemprice)   </h4>
+
+                                                        </div>
+                                                        <div style="display:inline-block">
+                                                            <p style="font-size:18px;color: red;">تومان </p>
+                                                        </div>
+                                                    </div>
+
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="row pricedetail" style="  ">
+                                    <div class="row ">
+                                        <div style=" min-height:65px; text-align:center">
+                                            @{
+                                                if (Model.isAvailable == "0")
+                                                {
+                                                    <div class="c-product__summary js-product-summary">
+                                                        <div class="c-product__stock-status c-product__stock-status--out-of-stock">
+                                                            <div class="c-product-stock__title">
+                                                                ناموجود
+                                                            </div>
+                                                            <div class="c-product-stock__body">
+                                                                متاسفانه این کالا در حال حاضر موجود نیست. می‌توانید از طریق لیست پایین صفحه، از محصولات مشابه این کالا دیدن نمایید
+                                                            </div>
+                                                            <button id="khabaramkon" class="  c-product-stock__action c-product-stock__action--notify js-add-to-notify-button">
+                                                                موجود شد به من اطلاع بده
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (metaPrice > 0)
+                                                    {
+
+                                                        <div class="priceParent" style="">
+                                                            <div class="discountParentt" style="">
+                                                                @if (metaPrice != oldPrice)
+                                                                {
+                                                                    double difference = oldPrice - metaPrice;
+                                                                    if (Model.wonderDiscount != "0")
+                                                                    {
+                                                                        Model.discount = Model.wonderDiscount;
+                                                                    }
+                                                                    <p class="oldPrice " style="">
+                                                                        <del class="priceItem">@string.Format("{0:n0}", oldPrice / 10)   <span>تومان</span></del>
+                                                                    </p>
+
+                                                                    <p class=" discountSectence " style="">
+                                                                        همین امروز
+                                                                        <i class="priceItem">@string.Format("{0:n0}", difference / 10)</i> تومان  تخفیف بگیرید
+                                                                    </p>
+
+                                                                }
+
+                                                            </div>
+
+                                                            <div style="display:inline-block;width:100%; direction:ltr; text-align:left">
+                                                                <p style="display: inline-block;font-size:18px;color: red;">تومان </p>
+                                                                <h4 class="item_price priceItem" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice / 10)   </h4>
+                                                            </div>
+
+                                                        </div>
+
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <div class="col-lg-6" style="margin:0px;height: 100%;">
+                                                            <div style="display:inline-block;height: 100%;">
+                                                                <h4 class="item_price pirceItem" style="display: inline-block;  color: red; font-size: 26px">@string.Format("{0:n0}", metaPrice / 10)   </h4>
+
+                                                            </div>
+                                                            <div style="display:inline-block">
+                                                                <p style="font-size:18px;color: red;">تومان </p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @if (Model.isAvailable != "0")
+                                        {
+                                            <div class="mybtn addtocart" style="">
+                                                <div style="border-radius: 50px 0 0 50px; background-color: #d53c0b; width: 30%; padding: 10px; display: inline-block">
+                                                    <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i>
+                                                    <img style="display:inline-block; width:40px " src="/images/cart.png">
+                                                </div>
+                                                <p style="text-align:center; display:inline-block; font-size:15px; width:65%; color:white" class=" ">افزودن به سبد خرید</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="">
+
+                            <div style="width:100%; padding:10px 0 10px 0 ; border-bottom: 1px solid #eee; ">
+
+                                <div style="">
+
+
+
+                                    @if (Model.BrandInfo != null)
+                                    {
+                                        if (Model.BrandInfo.Count() > 0)
+                                        {
+                                            <div>
+                                                <a style="cursor:pointer" href="/@Model.BrandInfo.First().title"><img src="~/images/brands/@Model.BrandInfo.First().image" style="width:100px" /></a>
+
+                                            </div>
+                                        }
+
+                                    }
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12 " style="margin:10px; padding:10px">
+                            @{
+                                if (Model.otherColors != null)
+                                {
+                                    <h4 class="nomargin">رنگبندی:</h4>
+                                    <div style="display:flex; width:100%; border-bottom: solid 1px #eee;padding:20px ">
+
+                                        @{
+                                            if (Model.otherColors != null)
+                                            {
+
+                                                <style>
+                                                    .activeColor {
+                                                        border: 5px solid #34970b !important;
+                                                        border-radius: 8px !important;
+                                                    }
+                                                </style>
+                                                List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.ToList();
+
+                                                foreach (var it in lst)
+                                                {
+                                                    if (it.imageTitle != null)
+                                                    {
+                                                        var myID = "o" + @it.ID;
+                                                        string classname = "";
+                                                        string imgsrc = it.imageTitle.Split(',').First();
+                                                        string idToGo = "" + it.ID;
+                                                        var colorprice = it.otherColorFilter.First().productprice;
+                                                        var colorID = it.otherColorFilter.First().ID;
+                                                        <div class="swiper-slide product">
+
+
+                                                            @if (lst.IndexOf(it) == 0)
+                                                            {
+                                                                classname = "activeColor";
+                                                            }
+
+
+                                                            <div idplaceholder="@colorID" priceplaceholder="@colorprice" id="@idToGo" class="swiper-slide product @classname otherNewColor">
+                                                                <div style="" class=" otherColor ">
+                                                                    <img style="margin:10px; aspect-ratio:1; width:100px; border-radius:5px" src="@imgsrc"
+                                                                         alt="Product Swatch" />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    }
+
+                                                }
+
+                                            }
+                                        }
+
+                                    </div>
+                                }
+
+
+                            }
+                        </div>
+
+                        <div class="col-lg-12 " style="margin:10px; padding:10px">
+
+                            <h4 style="width:100%">
+                                انتخاب سایز:
+                            </h4>
+
+
+
+                            <div style="width:100%; padding:20px 0 40px 0 ; border-bottom: 1px solid #eee; padding:20px">
+
+
+                                @{
+
+                                    if (Model.otherColors != null)
+                                    {
+                                        foreach (var colorfilter in Model.otherColors)
+                                        {
+                                            string displayclass = "displayitem";
+                                            string slideItemID = "S" + colorfilter.ID.ToString();
+                                            if (Model.otherColors.IndexOf(colorfilter) != 0)
+                                            {
+                                                displayclass = "hideItem";
+                                            }
+                                            if (colorfilter.otherColorFilter != null)
+                                            {
+                                                <div itemToShow="@slideItemID" class="allbegone product-form product-variation-form product-size-swatch @displayclass">
+
+
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption ">
+                                                        @foreach (var ocolorfilter in colorfilter.otherColorFilter)
+                                                        {
+                                                            var price = ocolorfilter.productprice;
+                                                            var myID = ocolorfilter.ID;
+                                                            string classFilter = "";
+                                                            var classn = "value" + myID;
+                                                            if (colorfilter.otherColorFilter.IndexOf(ocolorfilter) == 0)
+                                                            {
+                                                                classFilter = "activeColor";
+                                                            }
+                                                            <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter">
+                                                                <span style="font-size:18px; padding:10px; margin:10px" value="@ocolorfilter.ID">@ocolorfilter.selectedFilter <input value="0"  class="@classn" style="display:none" />
+                                                            </p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Model.otherProductFilter != null)
+                                        {
+
+                                            if (Model.otherProductFilter.Count > 0)
+                                            {
+
+                                                <div class="product-form product-variation-form product-size-swatch">
+
+                                                    <ا5 class="nomargin">سایزبندی:</ا5>
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption">
+                                                        @foreach (var item in Model.otherProductFilter)
+                                                        {
+                                                            string classFilter = "";
+                                                            if (item.selectedFilter == Model.SelectedFilter)
+                                                            {
+                                                                classFilter = "anotherActive";
+                                                            }
+
+                                                            var classn = "value" + item.ID;
+                                                            var myID = "o" + item.ID;
+                                                            <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter">
+                                                                <span value="@item.ID">@item.selectedFilter</span>
+                                                                <span class="@classn"></span>
+                                                            </p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        }
+                                    }
+
+
+
+
+
+                                }
+                            </div>
+
+
+
+
+
+
+                            @{
+                                if (!String.IsNullOrEmpty(Model.tag))
+                                {
+                                    <div style="width:100%; border-bottom: solid 1px #eee; padding:20px 0px; margin:0px 0px">
+                                        <div style="display: inline-block;  position: relative; margin-left:20px">
+                                            <h5 style="font-weight: 600;"> هشتگ ها:</h5>
+                                        </div>
+                                        @{
+                                            List<string> list2 = Model.tag.Split(',').ToList();
+                                            foreach (var tag in list2)
+                                            {
+                                                <div style="cursor:pointer; padding:5px; margin:5px ; border-radius:5px; background-color:#64c4ef; color:white; display:inline-block" class="tag">
+                                                    <a href="/Home/productlist?tag=@tag&value=@tag" style="padding:5px; color:white; text-decoration:none">@tag</a>
+                                                </div>
+
+                                            }
+                                        }
+                                    </div>
+                                }
+                            }
+
+
+                            <div class="row"  onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">
+                                <div class="mybtn " style="">
+                                    <div style="border-radius: 50px 15px 15px 50px; width: 30%; padding: 10px; display: inline-block">
+                                       
+                                        <img style="display:inline-block; width:40px " src="/images/cart.png">
+                                    </div>
+                                    <p style="text-align:center; display:inline-block; font-size:15px; width:65%; color:white" class=" ">افزودن به سبد خرید</p>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+    <script>
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        $(".otherfilterNew").click(function () {
+            var price = $(this).attr('priceplaceholder');
+            var id = $(this).attr('idplaceholder');
+
+
+            $("#priceholdersection").text(numberWithCommas(parseInt(price)));
+            $("#totalIDHolder").val(id);
+
+            $(".otherfilterNew").removeClass("activeColor")
+            $(this).addClass("activeColor");
+        })
+    </script>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<div class="bottomDiv card" style="position:relative;background-color: #fff; margin: 20px 50px; padding:20px">
+    <div style="">
+        <div class="bottomDivTitleParent" style="">
+            <i class="fal fa-pencil" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+            <p class="bottomDivTitle">بررسی تخصصی محصول</p>
+            <span style="flex:1; border-top:3px solid"></span>
+        </div>
+
+        <section>
+            <div class="c-mask js-mask is-masked">
+                <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
+                    @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                    {
+                        <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
+                    }
+                    else
+                    {
+                        <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
+                    }
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+</div>
+
+@if (Model.feature != null)
+{
+    <div class="bottomDiv card" style="position:relative;background-color: #fff; margin: 20px 50px; padding:20px">
+        <div class="bottomDivTitleParent">
+            <i class="fal fa-file" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+            <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+            <span style="flex:1; border-top:3px solid"></span>
+        </div>
+
+
+        <div class="c-box c-box--tabs p-tabs__content">
+            <div class="c-params is-active">
+                <article>
+                    @{
+                        List<int> lst2 = new List<int>();
+                        lst2.Clear();
+                        foreach (var item in Model.feature)
+                        {
+                            if (item.value == "Master")
+                            {
+                                lst2.Add(Model.feature.IndexOf(item));
+                            }
+                        }
+                        for (int i = 0; i < lst2.Count(); i++)
+                        {
+                            int j = i + 1;
+                            int myindex = lst2[i];
+                            <section>
+                                <p class="c-params__title">
+                                    <span class="line-title"></span>
+                                    <span>@Model.feature[myindex].title</span>
+
+                                </p>
+                                <ul class="c-params__list">
+                                    @if (j < lst2.Count())
+                                    {
+                                        foreach (var item in Model.feature)
+                                        {
+                                            if (Model.feature.IndexOf(item) > lst2[i] && Model.feature.IndexOf(item) < lst2[j])
+                                            {
+                                                <li>
+                                                    <div class="c-params__list-key">
+                                                        <span class="block">@item.title</span>
+                                                    </div>
+                                                    <div class="c-params__list-value">
+                                                        <span class="block">
+                                                            @item.value
+                                                        </span>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in Model.feature)
+                                        {
+                                            if (Model.feature.IndexOf(item) > lst2[i])
+                                            {
+                                                <li>
+                                                    <div class="c-params__list-key">
+                                                        <span class="block">@item.title</span>
+                                                    </div>
+                                                    <div class="c-params__list-value">
+                                                        <span class="block">
+                                                            @item.value
+                                                        </span>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                    }
+
+                                </ul>
+                            </section>
+                        }
+                    }
+
+                </article>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="bottomDiv card" style="position:relative;background-color: #fff; margin: 20px 50px; padding:20px">
+    <div class="bottomDivTitleParent" style="">
+        <i class="fal fa-comment" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+        <p class="bottomDivTitle">نظر کاربران</p>
+        <span style="flex:1; border-top:3px solid"></span>
+    </div>
+    <div class="c-comments " style="">
+
+        <div class="c-comments__summary">
+            <div class="c-comments__summary-note" style="margin-top:30px">
+                <span>شما هم می‌توانید در مورد این کالا نظر بدهید.</span>
+                <p>
+                    اگر این محصول را قبلا خریده باشید، با وارد شدن به حساب کاربری خود،  نظر
+                    شما به عنوان مالک محصول ثبت خواهد شد.
+                </p>
+                <div class="mybtn addingcomment" style="cursor:default">
+                    <div style="border-radius: 50px 0 0 50px; background-color: #36CDDF; width: 30%; padding: 10px; display: inline-block">
+                        <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i>
+                        <img style="display:inline-block; width:40px " src="~/images/comments.png" />
+                    </div>
+                    @{
+                        string id = Model.ID;
+                        string img = Model.slides != null ? Model.slides.First().image : "placeholder.png";
+                        if (@Session["token"] != null)
+                        {
+                            TempData["imgComment"] = img;
+                            <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">
+                                <a style="color:white !important;cursor:pointer" href="/Home/AddComment?id=@id">افزودن نظر جدید</a>
+                            </p>
+
+                        }
+                        else
+                        {
+                            <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "Login", new { }, new { style = "color:white !important;cursor:pointer" })</p>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="c-comments__filter">
+            <span class="c-faq__filter-title h4">نظرات کاربران</span>
+        </div>
+        <div id="product-comment-list">
+            <ul id="comment" class="c-comments__list"></ul>
+        </div>
+    </div>
+    <script>
+            var id = "@Model.ID";
+            $.ajax({
+                url: '/Home/getListOfComments',
+                dataType: 'html',
+                data: {
+                    ProductID: id
+
+                },
+                success: function (data) {
+
+                    $('#comment').html(data);
+
+                },
+                error: function (request, status, error) {
+
+                }
+            });
+    </script>
+    <div id="comment"></div>
+</div>
+
+<div id="webb">
+
+    @if (Model.similarProduct != null)
+    {
+        <div class="maxwidth">
+            <div class="card" style=" position:relative;background-color: #fff; margin: 20px 50px; padding:20px">
+                <div class="" style="padding:0; ">
+                    <div style="" class="fontTitle">
+                        <span>@Html.ActionLink(" پیشنهادهای مشابه", "ProductList", new { sortID = 1 }) </span>
+                    </div>
+
+                    <div class="" style="display:flex;">
+                        <div style="width:70%" id="bestholder" class="resCarousel" data-items="3-4-4-4" data-slide="1" data-speed="100">
+
+                            <div class="resCarousel-inner">
+
+
+                                @Html.Partial("~/Views/Shared/_returnVitirn13.cshtml", @Model.similarProduct)
+
+
+
+
+
+                            </div>
+                            <button style="color:#4d4d4d;" class=' leftRs'><i class="fa fa-arrow-left"></i></button>
+                            <button style="color:#4d4d4d" class=' rightRs'><i class="fa fa-arrow-right"></i></button>
+                        </div>
+                        <div style="width:25%; margin-left:50px">
+                            <img style="width:100%" src="~/webAsset/mrqeshmi/image/newest.jpg" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    }
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        // setting one image slider vertically middl
+
+        if (window.outerWidth > 950) {
+
+            $(".slidone").height($(".contentholder").height());
+        }
+        else  {
+            var width = window.outerWidth / 3;
+
+            $(".imageitsel").css("max-height", width)
+            $(".imageitsel").css("max-width", width)
+        }
+        $("#commentmoreandmore").click(function () {
+
+            //var id = $("#idholder").text();
+            //if (id != "") {
+            //    alert("page")
+            //}
+            //else {
+            //    alert("login")
+            //}
+        })
+
+        var ID = "o" + @Model.ID
+
+        $("#khabaramkon").click(function () {
+
+            $.ajax({
+                url: '/Home/Khabaramkon',
+                dataType: 'html',
+                data: {
+                    id: ID
+
+                },
+                success: function (data) {
+                    if (data === "0") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('ابتدا وارد شوید')
+                    }
+                    else if (data === "1") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('با شما در تماسیم')
+                    }
+                    else if (data === "2") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('خطای سیستمی')
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('شما در لیست اولویت ما قرار دارید')
+                    }
+
+
+                },
+                error: function () {
+
+                }
+            });
+        })
+
+
+
+
+
+
+    })
+</script>
+<script>
+
+    //ResCarouselCustom();
+    var pageRefresh = true;
+
+    function ResCarouselCustom() {
+        var items = $("#dItems").val(),
+            slide = $("#dSlide").val(),
+            speed = $("#dSpeed").val(),
+            interval = $("#dInterval").val()
+
+        var itemsD = "data-items=\"" + items + "\"",
+            slideD = "data-slide=\"" + slide + "\"",
+            speedD = "data-speed=\"" + speed + "\"",
+            intervalD = "data-interval=\"" + interval + "\"";
+
+
+        var atts = "";
+        atts += items != "" ? itemsD + " " : "";
+        atts += slide != "" ? slideD + " " : "";
+        atts += speed != "" ? speedD + " " : "";
+        atts += interval != "" ? intervalD + " " : ""
+
+        //console.log(atts);
+
+        var dat = "";
+        dat += '<h4 >' + atts + '</h4>'
+        dat += '<div class=\"resCarousel\" ' + atts + '>'
+        dat += '<div class="resCarousel-inner">'
+        for (var i = 1; i <= 14; i++) {
+            dat += '<div class=\"item\"><div><h1>' + i + '</h1></div></div>'
+        }
+        dat += '</div>'
+        dat += '<button class=\'btn btn-default leftRs\'><i class=\"fa fa-fw fa-angle-left\"></i></button>'
+        dat += '<button class=\'btn btn-default rightRs\'><i class=\"fa fa-fw fa-angle-right\"></i></button>    </div>'
+        console.log(dat);
+        $("#customRes").html(null).append(dat);
+
+        if (!pageRefresh) {
+            ResCarouselSize();
+        } else {
+            pageRefresh = false;
+        }
+        //ResCarouselSlide();
+    }
+
+    $("#eventLoad").on('ResCarouselLoad', function () {
+        //console.log("triggered");
+        var dat = "";
+        var lenghtI = $(this).find(".item").length;
+        if (lenghtI <= 30) {
+            for (var i = lenghtI; i <= lenghtI + 10; i++) {
+                dat += '<div class="item"><div class="tile"><div><h1>' + (i + 1) + '</h1></div><h3>Title</h3><p>content</p></div></div>'
+            }
+            $(this).append(dat);
+        }
+    });
+</script>
+<script src="~/Scripts/resCarousel.js"></script>
+
+<script src="~/Scripts/lightgallery.min.js"></script>
+<script src="~/Scripts/lg-thumbnail.js"></script>
+<script src="~/Scripts/lg-fullscreen.js"></script>
+<script src="~/Scripts/lg-zoom.js"></script>
+
+@*<script>
+        $(".flexslider").click(function () {
+            var IMGList = @Html.Raw(Json.Encode(@Model.imgGallery)) ;
+            $(this).lightGallery({
+                dynamic: true,
+                dynamicEl: IMGList,
+                startClass: 'lg-start-zoom'
+            })
+        })
+    </script>*@
+<script>
+        $(".otherNewColor").click(function () {
+
+            var price = $(this).attr('priceplaceholder');
+            var itemid = $(this).attr('idplaceholder');
+
+
+            $("#priceholdersection").text(numberWithCommas(price));
+            $("#totalIDHolder").val(itemid);
+
+            var id = "S"+$(this).attr('id');
+            $(".allbegone").removeClass("displayitem");
+            $(".allbegone").addClass("hideItem");
+
+            $(".allbegone[itemToShow='" + id+"']").removeClass("hideItem");
+            $(".allbegone[itemToShow='" + id+"']").addClass("displayitem");
+
+
+            $(".otherNewColor").removeClass("activeColor")
+            $(this).addClass("activeColor");
+
+        })
+        var otherColorClicked = function (id) {
+
+
+            $.ajax({
+                url: "/Home/changeLastNumber",
+                data: {
+                    value: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+            });
+        }
+        var finalsrt = "";
+       
+
+        $(".addsondtl").click(function () {
+            finalsrt = "";
+            //$(this).addClass('actvie');
+            //var el = $(this);
+
+
+            var parent = $(this).parent();
+
+            if ($(this).hasClass('adddsonSingle')) {
+
+                $(this).parent().find('.adddsonSingle').each(function () {
+                   // alert("d")
+                    $(this).removeClass("active");
+                })
+
+
+            }
+
+
+            if ($(this).hasClass('active')) {
+                //alert("ssss")
+                //let javael = el.get(0);
+                //javael.classList.remove("active");
+
+                $(this).removeClass("active")
+
+            }
+            else {
+                $(this).addClass("active")
+
+            }
+
+
+
+
+
+        })
+
+</script>
+<script>
+    $("#slidholder").click(function () {
+        var IMGList = @Html.Raw(Json.Encode(@Model.imgGallery)) ;
+        $(this).lightGallery({
+            dynamic: true,
+            dynamicEl: IMGList,
+            startClass: 'lg-start-zoom'
+
+        })
+    })
+</script>
+<script>
+    $(document).ready(function () {
+
+        if ($(window).width() < 960) {
+
+
+            $(".slidone div").height($(window).height() / 3);
+            //$(".imageitself").height($(window).height() / 3 - 40);
+            //$(".imageitself").width($(window).width() - 40);
+            //$(".imageitself").css("padding", "10px")
+            $(".flex-control-nav flex-control-thumbs").css("display", "none");
+            $(".slidone div").css("padding", "5px");
+            $("i.detailfal").css("position", "relative");
+            $("i.detailfal").css("font-size", "17px");
+            $("i.detailfal").css("float", "left");
+            $("i.detailfal").css("padding", "10px");
+            $("i.detailfal").css("left", "0px");
+            $("i.detailfal").css("top", "0px");
+            $(".gradientback").css("display", "block")
+
+
+
+
+        }
+    })
+</script>
+<script>
+    $('.value-plus').on('click', function () {
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        let newVal = $(this).parent().children(".value").text();
+        let finalVal = parseInt(newVal) + 1;
+        // $(this).parent().children(".value").text(finalVal);
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace("addtocarto", "");
+
+        $("." + myid).text(finalVal);
+
+        $.ajax({
+            url: '/Home/addtocart',
+            dataType: 'html',
+            data: {
+                id: ID
+
+            },
+            success: function (data) {
+                $.ajax({
+                    url: '/Home/gogetfinalprice',
+
+
+                    success: function (data) {
+                        var array = data.split(',');
+
+
+                        if (array[3] === "0") {
+                            $(".discountSection").css("display", "none");
+                        }
+                        $("#basepriceholder").text(addCommas(array[1]))
+                        $("#spanfortotal").text(addCommas(array[0]))
+                        $("#spanfortotal2").text(addCommas(array[0]))
+                        $(".simpleCart_quantityy").text(array[2])
+                        $(".discountfinal").text(addCommas(array[3]))
+                        $(".discountpercent").text(array[4])
+                        $.ajax({
+                            url: '/Home/checkoutsummery/',
+                            dataType: 'html',
+                            success: function (data) {
+
+                                $('#summerydetailholder').html(data);
+                                $("#loading").fadeOut()
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+    });
+    $('.value-minus').on('click', function () {
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace('minus', '');
+
+        let newVal = $(this).parent().children(".value").text();
+        if (newVal != "0") {
+            let finalVal = parseInt(newVal) - 1;
+            $("." + myid).text(finalVal);
+        }
+
+
+        $.ajax({
+            url: '/Home/minusfromcart',
+            dataType: 'html',
+            data: {
+                id: ID
+            },
+            success: function (data) {
+
+                $.ajax({
+                    url: '/Home/gogetfinalprice',
+                    success: function (data) {
+                        var array = data.split(',');
+                        if (array[3] === "0") {
+                            $(".discountSection").css("display", "none");
+                        }
+                        $("#basepriceholder").text(addCommas(array[1]))
+                        $("#spanfortotal").text(addCommas(array[0]))
+                        $("#spanfortotal2").text(addCommas(array[0]))
+                        $(".simpleCart_quantityy").text(array[2])
+                        $(".discountfinal").text(addCommas(array[3]))
+                        $(".discountpercent").text(array[4])
+                        $.ajax({
+                            url: '/Home/checkoutsummery/',
+                            dataType: 'html',
+                            success: function (data) {
+
+                                $('#summerydetailholder').html(data);
+                                $("#loading").fadeOut()
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+
+
+
+
+
+    });
+
+
+
+
+</script>
+<style>
+    .fontTitle {
+        font-weight: 600;
+        font-size: 28px;
+        text-align: right;
+        margin: 50px 0
+    }
+
+    .c-params__title {
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        direction: rtl
+    }
+
+    .line-title {
+        width: 20px;
+        border-bottom: 4px solid;
+        margin-left: 25px;
+    }
+
+    .c-params__title::before {
+        border-style: unset !important;
+    }
+
+    .c-params__list-key, .c-params__list-value {
+        padding: 0
+    }
+
+    .c-params__list-key {
+        border: 1px solid #c5c1c1;
+        border-left: none;
+    }
+
+    .c-params__list-value .block {
+        background-color: white;
+    }
+
+    .c-params__list-value {
+        border: 1px solid #ddd;
+        border-right: none;
+    }
+
+    .bottomDivTitle {
+        font-size: 18px;
+        margin: 0;
+        margin-left: 10px;
+        color: #FF4500;
+        margin-right: 20px;
+    }
+
+    .bottomDiv {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        text-align: right;
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .bottomDiv {
+            padding: 5px;
+            margin: 5px;
+        }
+    }
+</style>
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
+
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+
+        body {
+            background-color: unset;
+        }
+    }
+</style>
+
+<style>
+    .displayitem {
+        display: unset !important
+    }
+
+    .hideItem {
+        display: none !important
+    }
+</style>
+<link href="~/Content/css/product-style.css" rel="stylesheet" />
+

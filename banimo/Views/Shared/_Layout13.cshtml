@@ -1,0 +1,1828 @@
+﻿@*this is test comment*@
+@using System.Text.RegularExpressions;
+@using Newtonsoft.Json;
+
+<!DOCTYPE html>
+<html lang="fa">
+@{
+
+
+
+
+    string logo = "logo.png";
+    string phone = TempData["phone"] as string;
+    string analyticID = TempData["analyticID"] as string;
+    TempData.Keep("phone");
+    TempData.Keep("logo");
+    TempData.Keep("analyticID");
+
+    int w = Request.Browser.ScreenPixelsWidth;
+    int h = Request.Browser.ScreenPixelsHeight;
+    string userAgent = HttpContext.Current.Request.UserAgent.ToLower();
+
+
+    <head>
+
+        @*<script async src="https://www.googletagmanager.com/gtag/js?id=@analyticID"></script>
+        <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+
+                gtag('config', '@analyticID');
+        </script>*@
+
+        <meta charset="utf-8" />
+
+        <title>@ViewBag.Title </title>
+
+
+        <meta name="description" content=" @System.Configuration.ConfigurationManager.AppSettings["description"] " />
+        <meta name="keywords" content=" @System.Configuration.ConfigurationManager.AppSettings["keywords"] " />
+        <meta http-equiv="content-language" content="fa" />
+
+        <!-- Mobile Specific Metas
+    ================================================== -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="icon" sizes="192x192" href="nice-highres.png">
+        <style>
+            #loading {
+                align-content: center;
+                background: #fff;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999999;
+                opacity: 1;
+                margin: 0 auto;
+            }
+        </style>
+
+        @RenderSection("HeadIncludes", required: false)
+
+
+
+
+
+
+
+        <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+
+
+        @RenderSection("header", required: false)
+
+
+        <link href="~/Content/app_critical_min.css" rel="stylesheet" />
+        @*<link rel="stylesheet" href="~/Content/bundle.css">
+        <link href="~/Content/layoutStyle.css" rel="stylesheet" />
+        <link href="~/Content/toastr.css" rel="stylesheet" />*@
+        <script src="~/Scripts/toastr.js"></script>
+        <link href="~/fonts/icomoon/style.css" rel="stylesheet" />
+        <link href="~/Content/app_min13.css" rel="stylesheet" />
+        <link href="~/Content/fontIran.css" rel="stylesheet" />
+        
+        <style>
+            /*body {
+                background-color: #fff
+            }*/
+            .card {
+                background-color: #fff;
+                -webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
+                -ms-box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
+                box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
+                border-radius: 5px;
+            }
+
+            .viewapp {
+                display: none;
+            }
+
+            .viewdesk {
+                display: block;
+            }
+
+            .header-bot {
+                box-shadow: -1px 10px 5px -3px rgba(0,0,0,0.17);
+                -webkit-box-shadow: -1px 10px 5px -3px rgba(0,0,0,0.17);
+                -moz-box-shadow: -1px 10px 5px -3px rgba(0,0,0,0.17);
+            }
+
+
+
+            #myBtn {
+                display: none; /* Hidden by default */
+                position: fixed; /* Fixed/sticky position */
+                bottom: 20px; /* Place the button at the bottom of the page */
+                right: 30px; /* Place the button 30px from the right */
+                z-index: 99; /* Make sure it does not overlap */
+                border: none; /* Remove borders */
+                outline: none; /* Remove outline */
+                background-color: red; /* Set a background color */
+                color: white; /* Text color */
+                cursor: pointer; /* Add a mouse pointer on hover */
+                padding: 15px; /* Some padding */
+                border-radius: 10px; /* Rounded corners */
+                font-size: 18px; /* Increase font size */
+            }
+
+                #myBtn:hover {
+                    background-color: #555; /* Add a dark-grey background on hover */
+                }
+
+            .menunav {
+                width: 150px;
+            }
+
+            .menuDetailHoder {
+                width: 73%;
+                /*overflow-x: scroll;*/
+            }
+
+            .menuImageHolder {
+                width: 27%;
+                padding: 25px
+            }
+
+            .img-hover-zooom {
+                /*height: 100px;*/ /* [1.1] Set it as per your need */
+                overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+                border-radius: 8px;
+            }
+
+                /* [2] Transition property for smooth transformation of images */
+                .img-hover-zooom img {
+                    transition: transform .5s ease;
+                }
+
+                /* [3] Finally, transforming the image when container gets hovered */
+                .img-hover-zooom:hover img {
+                    transform: scale(1.2);
+                }
+
+            .img-hover-zoom {
+                overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+                border-radius: 8px;
+            }
+
+                /* [2] Transition property for smooth transformation of images */
+                .img-hover-zoom img {
+                    transition: transform .5s ease;
+                }
+
+                /* [3] Finally, transforming the image when container gets hovered */
+                .img-hover-zoom:hover img {
+                    transform: scale(1.2);
+                }
+
+            .bannerTitle {
+                padding: 15px;
+                margin: auto;
+                background: #f98f39;
+                padding: 8px;
+                margin: 10px 2px;
+                border-radius: 31px;
+                font-size: 16px;
+                color: white;
+                z-index: 5;
+            }
+
+            img.grayscale {
+                filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+                filter: gray; /* IE6-9 */
+                -webkit - filter: grayscale(100 %); /* Chrome 19+ & Safari 6+ */
+            }
+
+                img.grayscale:hover {
+                    filter: none;
+                    -webkit - filter: grayscale(0 %);
+                }
+
+            .banerset1 {
+                margin: 5px 0%;
+                display: flex;
+                justify-content: center
+            }
+
+            .bannerrow1 {
+                margin: 5px 10% !important
+            }
+
+            .mustbehide {
+                display: block !important;
+            }
+
+            .mustbeshown {
+                display: none !important;
+            }
+
+            @@media only screen and (max-width: 600px) {
+                .nav-tabs > li > a {
+                    padding: 10px !important
+                }
+
+                .mustbehide {
+                    display: none !important;
+                }
+
+                .mustbeshown {
+                    display: block !important;
+                }
+
+                .carousel-indicators {
+                    display: none
+                }
+
+                .resCarousel-inner .item {
+                    width: 50% !important;
+                }
+
+                .topHolder {
+                    margin: 0 !important
+                }
+
+                .img-hover-zoom {
+                    height: unset !important
+                }
+
+                .bannerrow1 {
+                    margin: 10px !important
+                }
+
+                .indexbanner {
+                    height: unset !important;
+                }
+
+                .banerset1 {
+                    margin: 5px 10%;
+                    display: block;
+                    justify-content: center;
+                    margin: 20px !important
+                }
+
+                .img-hover-zoom {
+                    /* [1.1] Set it as per your need */
+                    overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+                    border-radius: 35px;
+                }
+
+                    .img-hover-zoom img {
+                        max-width: 100% !important;
+                        max-height: 100% !important;
+                        object-fit: scale-down !important;
+                    }
+
+                .menuDetailHoder {
+                    width: 100%;
+                    overflow-x: scroll;
+                }
+
+                .menuImageHolder {
+                    display: none;
+                    width: 0%;
+                    padding: 25px
+                }
+
+                .menunav {
+                    width: 30%;
+                }
+
+                    .menunav li a {
+                        white-space: nowrap;
+                        width: 100%;
+                        overflow: hidden
+                    }
+
+
+
+                .viewapp {
+                    display: block;
+                }
+
+                .viewdesk {
+                    display: none;
+                }
+
+                .bannerTitle {
+                    padding: 15px;
+                    margin: auto;
+                    background: #f98f39;
+                    padding: 8px;
+                    border-radius: 31px;
+                    font-size: 12px;
+                    color: white;
+                    z-index: 5;
+                    margin-top: 5px;
+                    width: 70%;
+                }
+
+                .plusmargin {
+                    margin-top: 25px !important
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">با ما در ارتباط باشید</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" placeholder="ایمیل شما" style="margin-bottom:10px;text-align:right" />
+                        <input class="form-control" placeholder="شماره تلفن شما" style="margin-bottom:10px;text-align:right" />
+                        <textarea id="emailContent" placeholder="پیام شما" class="form-control" style="text-align:right"></textarea>
+                        @*
+
+                        <textarea class="form-control" placeholder="your message" />*@
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                        <button type="button" class="btn btn-primary" id="sendMessage">ارسال پیام</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="social">
+            <ul style="width:100%">
+                <li style="direction:rtl;  ">
+                    <i class="fal fa-link nulli"></i>
+                    <a href="https://api.whatsapp.com/send?phone=989199315433"> <i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/mitop.ir"> <i class="fab fa-instagram"></i></a>
+                    <p style="display:inline-block" data-toggle="modal" data-target="#messageModal"> <i class="fa fa-envelope"></i></p>
+                </li>
+            </ul>
+        </nav>
+
+
+        <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-chevron-up"></i></button>
+        <div id="loading" style="">
+            <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
+
+
+                <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
+               
+
+
+
+            </div>
+        </div>
+        @{
+            banimo.ViewModel.userdata userApp = Session["LogedInUser"] as banimo.ViewModel.userdata;
+        }
+
+        <div class="searchsection" style="display:none; position:fixed;top:0; background-color:rgba(0,0,0,0.7);z-index:9999; width:100%; height:100%">
+            <div id="searchpanel" action="~/Home/ProductList" style="margin:50px 30px 0 30px">
+                <div type="submit" id="searchImageWeb" style="cursor:pointer; display: inline-block; background-color: #64c4ef; border-radius: 10px 0px 0px 10px; position:absolute"> <img src="~/images/search.png" style="width:40px;" alt="جستجو" /></div><input id="searchInputWeb" name="newquery" type="text" style="outline:0; text-align:right; width:100%; height:40px; display:inline-block; padding:8px;border:1px solid #ddd;background-color:#eee; border-radius:10px 10px 10px 10px; text-align:right;direction:rtl;" placeholder="نام کالا، برند یا دسته مورد نظر را جستجو کنید .. " />
+            </div>
+            <div id="searchResultSection" style="padding:15px; border: 1px #ddd solid; background-color: #fff; position: fixed; top: 95px;  z-index: 99000; display: none ; border-radius:10px 10px 10px 10px">
+
+            </div>
+
+
+        </div>
+        <!-- header-bot -->
+        <div class="header-bot" style="">
+
+            <div class="headerMain container viewdesk" style="direction:rtl; width:100%">
+                <style>
+                    .logoSec {
+                        margin: 0 40px;
+                        text-align: center
+                    }
+
+                    .searchSec {
+                        border-radius: 11px;
+                        background: #f7f7f7;
+                        display: flex;
+                        align-items: center;
+                        flex: 1
+                    }
+
+                        .searchSec svg {
+                            margin: 0 30px;
+                            font-size: 18px
+                        }
+
+                        .searchSec input {
+                            height: 52px;
+                            font-size: 14px;
+                            font-size: 1rem;
+                            color: #757575;
+                            border-radius: 11px;
+                            background: #f7f7f7;
+                            text-align: right;
+                            direction: rtl;
+                            border: none;
+                            padding: 0 5px 0 40px !important;
+                            width: 100%;
+                            outline: none;
+                        }
+
+                    .headerSec1 {
+                        display: flex;
+                        width: 50%;
+                    }
+
+                    .headerSec2 {
+                        display: flex;
+                        width: 50%;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px
+                    }
+
+                    #cartholder {
+                        padding: 7px
+                    }
+
+                    #simpleCart_quantityy {
+                        font-family: IRANSansfaNum
+                    }
+
+                    .secParent {
+                        display: flex;
+                        width: 100%;
+                        margin: auto;
+                        padding: 20px 0;
+                        border-bottom: 1px solid #eee
+                    }
+
+                    .menuSectionParent {
+                        display: flex;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center
+                    }
+
+                    .flexel {
+                        display: flex;
+                        margin: 35px 45px;
+                        align-items:center;
+                        cursor:pointer
+                    }
+
+                        .flexel i {
+                            font-size: 18px;
+                            margin: 0 10px;
+                        }
+
+                    .secParentchilde {
+                        display: flex;
+                        width: 85%;
+                        margin: auto;
+                    }
+
+                    .headerItem {
+                        font-size: 15px
+                    }
+                    .menuIcon {
+                        width: 20px;
+                        margin: 5px
+                    }
+                    .aboutIcon{
+                        width:40px
+                    }
+                    .categoryIcon{
+                        width:30px
+                    }
+                </style>
+                <div class="secParent" style="">
+                    <div class="secParentchilde">
+                        <div class="headerSec1">
+                            <div class="logoSec" style="">
+                                <div>
+                                    <a href="/Home/Index"><img style="width:70px" src="~/images/@logo" alt="لوگو"></a>
+                                </div>
+                            </div>
+                            <div class="searchSec">
+                                <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="search" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-search s-icon input-search-icon b-icon bi" data-v-550996c4=""><g data-v-550996c4=""><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path></g></svg>
+                                <input placeholder="آیتم مورد نظر خود را جستجو کنید" />
+
+                            </div>
+                        </div>
+                        <div class="headerSec2">
+                            <div id="cartholder">
+                                <a href="/Home/checkout">
+                                    <p style="padding: 0 10px; " height="40px " class="">
+                                        <span style="color:#FF4500;  height:20px" class="cartnumber simpleCart_quantityy priceItem" id="simpleCart_quantityy"></span>
+                                        <img style="width:20px" src="~/webAsset/mrqeshmi/image/cart.png" />
+                                    </p>
+                                </a>
+
+
+                            </div>
+                            <div style="position:relative">
+                                <div style="float:left; cursor:pointer;  padding: 7px 0px 7px 30px;" class=" enterdiv ">
+                                    @{
+                                        banimo.ViewModel.userdata user = Session["LogedInUser"] as banimo.ViewModel.userdata;
+
+                                        if (user != null)
+                                        {
+                                            string name = user.fullname != "" ? user.fullname : user.phone;
+                                            <img class="menuIcon" src="~/webAsset/mrqeshmi/image/user.png" /> <a class="entertext" style="cursor: pointer; font-size: 12px;">@name</a><a style="margin-right:20px"> </a>
+                                        }
+                                        else
+                                        {
+
+
+                                            <img class="menuIcon" src="~/webAsset/mrqeshmi/image/user.png" /> <a href="/Home/loginPage" class="entertext" style="cursor: pointer; font-size: 12px;">ورود / ثبت نام</a><a style="margin-right:10px"> </a>
+                                        }
+                                    }
+
+                                </div>
+                                <div class="userinfosectino" style="position:absolute">
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                    @*<div style="cursor:pointer;display:flex; align-items:center">
+                        <div class="menuIcon" style="border-left: 1px solid #696464;padding: 7px 0px 7px 30px;">
+                            <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
+                            دسته بندی
+                            <i class="fa fa-chevron-down" style="font-size:8px; margin:0 5px;color:#FF4500"></i>
+                        </div>
+
+                        <div class="searchButton" style="padding: 7px 30px 7px 7px;">
+
+                            <i class="fa fa-search" style="margin:0 5px; color:#FF4500"></i>
+                            جستجو
+                        </div>
+                    </div>*@
+
+                    <div>
+                        <div style="display:flex; align-items:center">
+
+                        </div>
+
+                        <script>
+
+                            $(document).scroll(function () {
+                                var container = $("#cartsummery");
+                                container.hide();
+                                var loginarrow = $("#loginsectin");
+                                loginarrow.hide();
+
+                                var searchResultSection = $("#searchResultSection");
+                                searchResultSection.hide();
+
+                            })
+                            $(document).mouseup(function (e) {
+                                var searchResultSection = $("#searchResultSection");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!searchResultSection.is(e.target) && searchResultSection.has(e.target).length === 0) {
+                                    searchResultSection.hide();
+                                }
+
+                                var container = $("#loginsectin");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                                    container.hide();
+                                }
+                            });
+                        </script>
+                        <script>
+
+                            $("#arrowcart").click(function () {
+
+                                window.location.href = "/Home/checkout";
+
+                                //var x = document.getElementById("cartsummery");
+                                //if (x.style.display === "none") {
+                                //    $.ajax({
+                                //        url: '/Home/checkoutsummery/',
+                                //        dataType: 'html',
+                                //        success: function (data) {
+
+                                //            $('#summerydetailholder').html(data);
+                                //            $("#loading").fadeOut()
+                                //        },
+                                //        error: function () {
+
+                                //        }
+                                //    });
+                                //    $.ajax({
+                                //        url: '/Home/gogetfinalprice/',
+                                //        success: function (data) {
+                                //            var array = data.split(',');
+                                //            if (array[3] === "0") {
+                                //                $(".discountSection").css("display", "none");
+                                //            }
+                                //            $("#basepriceholder").text(addCommas(array[1]))
+                                //            $("#spanfortotal").text(addCommas(array[0]))
+                                //            $("#spanfortotal2").text(addCommas(array[0]))
+                                //            $(".simpleCart_quantityy").text(array[2])
+                                //            $("#simpleCart_quantityy").text(array[2])
+                                //            $(".discountfinal").text(addCommas(array[3]))
+                                //            $(".discountpercent").text(array[4])
+
+                                //        },
+                                //        error: function () {
+
+                                //        }
+                                //    });
+                                //    $("#cartsummery").show(150);
+
+                                //} else {
+                                //    $("#cartsummery").hide(150);
+                                //}
+
+                            });
+                            $(document).mouseup(function (e) {
+                                var container = $("#cartsummery");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                                    container.hide();
+                                }
+                            });
+                        </script>
+                    </div>
+
+
+
+
+                </div>
+                <style>
+                  
+                </style>
+                <div class="menuSectionParent">
+                    <a href="/"><div class="flexel"><img class="menuIcon" src="~/webAsset/mrqeshmi/image/home.png" /> <span class="headerItem">خانه</span></div></a>
+                    <a><div class="flexel"><img class="categoryIcon" src="~/webAsset/mrqeshmi/image/category.png" /> <span class="headerItem">دسته بندی</span></div></a>
+                    <a><div class="flexel"> <img class="aboutIcon" src="~/webAsset/mrqeshmi/image/about.png" /> <span class="headerItem">درباره ما</span></div></a>
+                    <a><div class="flexel"> <img class="menuIcon"  src="~/webAsset/mrqeshmi/image/contact.png" /> <span class="headerItem">تماس با ما</span></div></a>
+                </div>
+
+
+
+            </div>
+            <div class="container viewapp" style="direction:rtl; width:100%">
+
+                <div style="display:flex ; align-items:center">
+                    <div style="cursor:pointer;display:flex; align-items:center">
+                        <div class="menuIcon" style="border-left: 1px solid #696464;padding: 2px;">
+                            <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
+
+                        </div>
+
+                        <div class="searchButton" style="padding: 2px;">
+
+                            <i class="fa fa-search" style="margin:0 5px; color:#FF4500"></i>
+
+                        </div>
+                    </div>
+                    <div class="" style="flex:1;text-align:center">
+                        <div>
+                            <a href="/Home/Index"><img style="width:70px" src="~/images/@logo" alt="لوگو"></a>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; align-items:center">
+
+                            <div id="loginarrow" style="float:left; cursor:pointer; border-left: 1px solid #696464; padding: 2px;" class=" enterdiv">
+                                @{
+                                    user = Session["LogedInUser"] as banimo.ViewModel.userdata;
+
+                                    if (user != null)
+                                    {
+                                        string name = user.fullname != "" ? user.fullname : user.phone;
+                                        <i class="fal fa-user" style=" margin:0 5px;color:#FF4500"></i><a class="entertext" style="cursor: pointer; font-size: 12px;">@name</a>
+                                    }
+                                    else
+                                    {
+                                        <i class="fal fa-user" style=" margin:0 10px;color:#FF4500; font-weight:500"></i>
+                                    }
+                                }
+
+                            </div>
+
+                            <div id="cartholder">
+                                <a href="/Home/checkout">
+                                    <p style="padding: 0 10px; " height="40px " class=""><i class="fal fa-shopping-cart"></i><span style="color:#FF4500; width:20px; height:20px" class="cartnumber simpleCart_quantityy cartQuanitityapp" id="simpleCart_quantityy"></span></p>
+
+                                </a>
+
+
+                            </div>
+                        </div>
+
+                        <script>
+
+                            $(document).scroll(function () {
+                                var container = $("#cartsummery");
+                                container.hide();
+                                var loginarrow = $("#loginsectin");
+                                loginarrow.hide();
+
+                                var searchResultSection = $("#searchResultSection");
+                                searchResultSection.hide();
+
+                            })
+                            $(document).mouseup(function (e) {
+                                var searchResultSection = $("#searchResultSection");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!searchResultSection.is(e.target) && searchResultSection.has(e.target).length === 0) {
+                                    searchResultSection.hide();
+                                }
+
+                                var container = $("#loginsectin");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                                    container.hide();
+                                }
+                            });
+                        </script>
+                        <script>
+
+                            $("#arrowcart").click(function () {
+
+                                window.location.href = "/Home/checkout";
+
+                                //var x = document.getElementById("cartsummery");
+                                //if (x.style.display === "none") {
+                                //    $.ajax({
+                                //        url: '/Home/checkoutsummery/',
+                                //        dataType: 'html',
+                                //        success: function (data) {
+
+                                //            $('#summerydetailholder').html(data);
+                                //            $("#loading").fadeOut()
+                                //        },
+                                //        error: function () {
+
+                                //        }
+                                //    });
+                                //    $.ajax({
+                                //        url: '/Home/gogetfinalprice/',
+                                //        success: function (data) {
+                                //            var array = data.split(',');
+                                //            if (array[3] === "0") {
+                                //                $(".discountSection").css("display", "none");
+                                //            }
+                                //            $("#basepriceholder").text(addCommas(array[1]))
+                                //            $("#spanfortotal").text(addCommas(array[0]))
+                                //            $("#spanfortotal2").text(addCommas(array[0]))
+                                //            $(".simpleCart_quantityy").text(array[2])
+                                //            $("#simpleCart_quantityy").text(array[2])
+                                //            $(".discountfinal").text(addCommas(array[3]))
+                                //            $(".discountpercent").text(array[4])
+
+                                //        },
+                                //        error: function () {
+
+                                //        }
+                                //    });
+                                //    $("#cartsummery").show(150);
+
+                                //} else {
+                                //    $("#cartsummery").hide(150);
+                                //}
+
+                            });
+                            $(document).mouseup(function (e) {
+                                var container = $("#cartsummery");
+                                // if the target of the click isn't the container nor a descendant of the container
+                                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                                    container.hide();
+                                }
+                            });
+                        </script>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+            <div id="loginsectin" style="padding:15px; border: 1px #ddd solid; background-color: #fff; position: fixed; top: 65px;  z-index: 99000; display: none ; border-radius:0px 0px 10px 10px">
+
+                @if (userApp != null)
+                {
+                    string name = userApp.fullname != "" ? userApp.fullname : userApp.phone;
+
+                    <div class="menuAppHeader toolbarText" style="direction: rtl;padding: 15px;">
+                        <a href="/Home/myprofile?type=1">
+                            <i class="fal fa-user " style="        margin-left: 10px;
+        vertical-align: middle;"></i> <span class="">پروفایل</span>
+                        </a>
+                    </div>
+                    <div class="menuAppHeader" style="direction: rtl;padding: 5px 15px 20px 5px;">
+
+                        <a href="/CustomerLogin/LogOff">
+                            <i class="fal fa-sign-out " style=" margin-left:10px; vertical-align:middle"></i> <span class="">خروج</span>
+                        </a>
+                    </div>
+
+                }
+                else
+                {
+                    <a href="/Home/LoginPage">
+                        <div class="menuAppHeader" style="direction: rtl;padding: 15px;color: white;">
+
+                            <i class="fal fa-sign-in" style=" margin-left:10px; vertical-align:middle"></i> <span style="color:#4d4d4d">عضویت و ورود</span>
+                        </div>
+                    </a>
+                }
+
+
+
+
+            </div>
+        </div>
+        <!-- //header-bot -->
+        <!-- banner -->
+        <style>
+            /* width */
+            ::-webkit-scrollbar {
+                width: 5px;
+                height: 6px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 5px grey;
+                border-radius: 7px;
+            }
+
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #4d4d4d;
+                border-radius: 7px;
+            }
+        </style>
+        @{
+
+            List<banimo.ViewModel.Catsdata> menumodel = JsonConvert.DeserializeObject<List<banimo.ViewModel.Catsdata>>(ViewBag.MenuViewModel);
+            if (menumodel.First().mycatcollection != null)
+            {
+                <div class="menuParent" style="        display: none;
+        position: absolute;
+        top: 60px;
+        width: 95%;
+        z-index: 9999;
+        background-color: white;
+        margin-left: 2.5%;
+        padding: 15px;
+        -webkit-box-shadow: 0px -1px 26px -16px #000000;
+        box-shadow: 0px -1px 26px -16px #000000;
+        border-radius: 8px;
+        border: 1px solid #ddd;">
+
+                    <div class="mustbehide">
+                        <div style="display:flex; direction:rtl">
+                            <ul class="nav nav-tabs menunav">
+                                @{
+                                    foreach (var cat in menumodel.First().mycatcollection)
+                                    {
+                                        string entitle = "/" + cat.entitle;
+
+
+                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
+                                        if (index == 0)
+                                        {
+                                            <li style="width:100%" class="active menuCat"><a style="cursor:pointer" href="@entitle" childhref="#@cat.ID">@cat.title</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li style="width:100%" class="menuCat"><a style="cursor:pointer" href="@entitle" childhref="#@cat.ID">@cat.title</a></li>
+                                        }
+                                    }
+                                }
+
+
+
+                            </ul>
+
+                            <div class="tab-content" style="flex:1">
+                                @{
+                                    foreach (var cat in menumodel.First().mycatcollection)
+                                    {
+                                        string catImage = "/images/" + cat.image;
+                                        string entitle = "/" + cat.entitle;
+                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
+                                        string active = "in active";
+                                        if (index != 0)
+                                        {
+                                            active = "";
+                                        }
+                                        <div id="@cat.ID" class="tab-pane fade @active">
+                                            <div style="display:flex; align-items:center">
+                                                <div class="menuDetailHoder" style="">
+                                                    <div style="display:flex; flex-direction:column;height:400px;flex-wrap:wrap">
+                                                        @if (menumodel.First().mysubcatcollection != null)
+                                                        {
+                                                            foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
+                                                            {
+                                                                entitle += "/" + subcatitem.entitle;
+                                                                <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
+                                                                if (menumodel.First().mysubcatcollection2 != null)
+                                                                {
+                                                                    foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
+                                                                    {
+                                                                        entitle += "/" + subcat2item.entitle;
+                                                                        <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
+                                                                        entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
+                                                                    }
+                                                                }
+
+
+                                                                entitle = "/" + cat.entitle;
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                                <div class="menuImageHolder" style="">
+                                                    <img style="max-height:100%; max-width:100%; object-fit:contain" src="@catImage" />
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    }
+                                }
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mustbeshown">
+
+                        <div style=" direction:rtl">
+                            <ul class="nav nav-tabs menunav" style="width:100%">
+                                @{
+                                    foreach (var cat in menumodel.First().mycatcollection)
+                                    {
+                                        string entitle = "/" + cat.entitle;
+                                        string chidID = "child" + cat.ID;
+
+                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
+                                        if (index == 0)
+                                        {
+                                            <li style="width:100%" class="active menuCat"><a style="pointer-events: none; cursor:pointer" href="" childhref="#@chidID">@cat.title <i style="float :left" class="fa fa-link"></i></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li style="width:100%" class="menuCat"><a style="pointer-events: none; cursor:pointer" href="" childhref="#@chidID">@cat.title <i style="float :left" class="fa fa-link"></i></a></li>
+                                        }
+                                    }
+                                }
+
+
+
+                            </ul>
+
+                            <div class="tab-content" style="flex:1">
+                                @{
+                                    foreach (var cat in menumodel.First().mycatcollection)
+                                    {
+                                        string catImage = "/images/" + cat.image;
+                                        string entitle = "/" + cat.entitle;
+                                        string chidID = "child" + cat.ID;
+                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
+                                        string active = "in active";
+                                        if (index != 0)
+                                        {
+                                            active = "";
+                                        }
+                                        <div id="@chidID" class="tab-pane fade @active">
+                                            <div style="display:flex; align-items:center">
+                                                <div class="menuDetailHoder" style="">
+                                                    <div style="display:flex; flex-direction:column;height:400px;flex-wrap:wrap">
+                                                        @if (menumodel.First().mysubcatcollection != null)
+                                                        {
+                                                            foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
+                                                            {
+                                                                entitle += "/" + subcatitem.entitle;
+                                                                <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
+                                                                if (menumodel.First().mysubcatcollection2 != null)
+                                                                {
+                                                                    foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
+                                                                    {
+                                                                        entitle += "/" + subcat2item.entitle;
+                                                                        <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
+                                                                        entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
+                                                                    }
+                                                                }
+
+
+                                                                entitle = "/" + cat.entitle;
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                                <div class="menuImageHolder" style="">
+                                                    <img style="max-height:100%; max-width:100%; object-fit:contain" src="@catImage" />
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    }
+                                }
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            }
+            else
+            {
+
+            }
+
+
+
+
+
+        }
+
+        <script>
+            var width = screen.width;
+            var number = "-" + width + "px";
+            $("#barmenu").css("margin-right", number);
+            $("#searchdiv").css("margin-right", number);
+            $("#contactUsDiv").css("margin-right", number);
+
+
+            $("#searchActButt").click(function () {
+                var search = $("#searchinput").val();
+                if (search.length < 3) {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-full-width",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 15000,
+                        "extendedTimeOut": 1000,
+
+
+
+                    }
+                    toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
+                }
+                else {
+
+                    window.location.href = "/Home/ProductList?newquery=" + search
+                }
+            })
+            $("#barmenu").click(function () {
+
+                $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
+                $("#barmenu").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#barmenu").css("display", "none");
+                    $("#body").css("overflow", "hidden");
+
+                });
+
+                $("body").css("overflow", "scroll");
+            })
+            $("#barmenu #barmanuholder").click(function (e) {
+                e.stopPropagation();
+            });
+            $(".searchButt").click(function () {
+
+                $("#searchdiv").css("display", "block");
+                $("#searchdiv").animate({
+                    'margin-right': '0px'
+                });
+                $("body").css("overflow", "hidden");
+
+            })
+            $(".SearchReturnButt").click(function () {
+
+                $("#searchdiv").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#searchdiv").css("display", "none");
+                    $("body").css("overflow", "scroll");
+                });
+
+
+            })
+
+            $("#contactUsButt").click(function () {
+                $("#barmenu").css("background-color", "rgba(0, 0, 0, 0)")
+                $("#barmenu").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#barmenu").css("display", "block");
+                    $("#contactUsDiv").css("display", "block");
+                    $("#contactUsDiv").animate({
+                        'margin-right': '0px'
+                    }, function () {
+
+                        $("body").css("overflow", "hidden");
+                    });
+                });
+
+
+            })
+            $(".contactUsReturnButt").click(function () {
+
+                $("#contactUsDiv").animate({
+                    'margin-right': number
+                }, function () {
+                    $("#contactUsDiv").css("display", "scroll")
+                });
+            })
+
+        </script>
+
+
+        @RenderBody()
+
+
+
+
+        <!-- footer -->
+
+
+
+
+        @{Html.RenderAction("contactSection", "Home");}
+
+        <div style="color:white;  background-color:#4D4D4D; padding:25px; text-align:center; direction:rtl">
+            <p class="c-footer-light__text">کلیه حقوق این وبسایت متعلق به فروشگاه اینترنتی  @System.Configuration.ConfigurationManager.AppSettings["siteName"] می‌باشد.</p>
+            <p class="c-footer-light__copyright">برنامه نویسی شده توسط  <a href="http://www.supect.com">supect.com</a></p>
+        </div>
+
+
+        <script src="~/Scripts/imagezoom.js"></script>
+        <script src="~/Scripts/toastr.js"></script>
+        <script src="~/Scripts/jquery-ui.js"></script>
+        <script src="~/Scripts/bootstrap-3.1.1.min.js"></script>
+        <script src="~/Scripts/lazy/jquery.lazy.min.js"></script>
+        <script>
+
+            function addCommas(nStr) {
+                nStr += '';
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
+            $(document).ready(function () {
+                $(".ContactPhoneHolder").click(function () {
+
+                    $("#mymodal").modal('toggle');
+                    $("#contactPhone").text($("#footerPhone").text());
+
+                })
+
+                //$('.showmedetail').click(function () {
+                //    var ID = this.id;
+                //    var url = "/Home/ProductDetail?id=" + ID;
+                //    window.location.href = url;
+                //})
+
+                $('.tracotdda').click(function () {
+                    var ID = this.id;
+                    var tobeadded = $('.item_price', $(this).parent('div:first')).text();
+
+
+                    $.ajax({
+                        url: '/Home/addtocart/',
+                        dataType: 'html',
+                        data: {
+                            id: ID,
+                            price: tobeadded
+
+                        },
+                        success: function (data) {
+
+                            toastr.options = {
+                                "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 300,
+                                "fadeOut": 1000,
+                                "timeOut": 5000,
+                                "extendedTimeOut": 1000,
+
+
+                            }
+                            toastr.success('محصول مورد نظر به سبد اضافه شد')
+
+
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+
+                })
+
+
+
+            })
+
+        </script>
+        <script>
+            var getquntity = function () {
+                $.ajax({
+                    url: '/Home/getquntitiy',
+                    dataType: 'html',
+                    success: function (data) {
+                        var total = 0;
+                        var srtcookie = data;
+
+                        if (srtcookie.length > 0) {
+                            srtcookie = srtcookie.replace(/&quot;/g, '"');
+                            JSON.parse(srtcookie).forEach(function (item) {
+                                let valueID = "value" + item.productid;
+                                $("." + valueID).val(item.quantity);
+                               
+                               
+                               
+                                if (item.quantity == "0") {
+                                    $("." + valueID).parent().parent().find('.addButton').show();
+                                    $("." + valueID).parent().parent().find('.addholder').hide();
+                                }
+                                else {
+                                    $("." + valueID).parent().parent().find('.addButton').hide();
+                                    $("." + valueID).parent().parent().find('.addholder').show();
+                                }
+
+                                total += parseInt(item.quantity);
+                            });
+                            $(".simpleCart_quantityy").text(total)
+
+                        } else {
+                            $(".simpleCart_quantityy").text("0")
+                        };
+                    }
+
+                })
+            };
+        </script>
+        <script>
+
+
+            $(document).ready(function () {
+                getquntity();
+            })
+
+
+
+
+
+
+        </script>
+        @RenderSection("scripts", required: false)
+        <script>
+            //Get the button:
+            mybutton = document.getElementById("myBtn");
+
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () { scrollFunction() };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    mybutton.style.display = "block";
+                } else {
+                    mybutton.style.display = "none";
+                }
+            }
+
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 800);
+
+            }
+        </script>
+        <script>
+            $(document).ajaxStart(function () {
+                $("#loading").show();
+            }).ajaxStop(function () {
+                $("#loading").hide();
+            })
+        </script>
+
+        <script>
+            $(document).ready(function () {
+
+                $("#loading").hide();
+                $("#loading").css("background-color", "transparent");
+            })
+        </script>
+
+        <style>
+            a {
+                text-decoration: none;
+            }
+
+            .me {
+                width: 400px;
+                margin: 90px auto;
+            }
+
+                .me p,
+                .me h1 {
+                    text-transform: uppercase;
+                    letter-spacing: 3px;
+                    text-align: center;
+                }
+
+                .me p {
+                    font-weight: 200;
+                }
+
+                .me span {
+                    font-weight: bold;
+                }
+
+            .social {
+                position: fixed;
+                bottom: 50px;
+                left: 0;
+                z-index: 999999;
+                width: 50px
+            }
+
+                .social ul {
+                    padding: 0px;
+                    -webkit-transform: translate(-270px, 0);
+                    -moz-transform: translate(-270px, 0);
+                    -ms-transform: translate(-270px, 0);
+                    -o-transform: translate(-270px, 0);
+                    transform: translate(-270px, 0);
+                }
+
+                    .social ul li {
+                        display: block;
+                        margin: 10px 20px;
+                        background: rgba(0, 0, 0, 0.36) !important;
+                        width: 300px;
+                        text-align: right;
+                        padding: 10px;
+                        -webkit-border-radius: 0 30px 30px 0;
+                        -moz-border-radius: 0 30px 30px 0;
+                        border-radius: 0 30px 30px 0;
+                        -webkit-transition: all 1s;
+                        -moz-transition: all 1s;
+                        -ms-transition: all 1s;
+                        -o-transition: all 1s;
+                        transition: all 1s;
+                    }
+
+                        .social ul li:hover {
+                            -webkit-transform: translate(170px, 0);
+                            -moz-transform: translate(170px, 0);
+                            -ms-transform: translate(170px, 0);
+                            -o-transform: translate(170px, 0);
+                            transform: translate(170px, 0);
+                            background: rgba(255, 255, 255, 0.4);
+                        }
+
+
+                            .social ul li:hover a {
+                                color: #000;
+                            }
+
+                            .social ul li:hover i {
+                                color: #fff;
+                                background: black;
+                                -webkit-transform: rotate(360deg);
+                                -moz-transform: rotate(360deg);
+                                -ms-transform: rotate(360deg);
+                                -o-transform: rotate(360deg);
+                                transform: rotate(360deg);
+                                -webkit-transition: all 1s;
+                                -moz-transition: all 1s;
+                                -ms-transition: all 1s;
+                                -o-transition: all 1s;
+                                transition: all 1s;
+                            }
+
+                        .social ul li i {
+                            margin-left: 10px;
+                            color: #000;
+                            background: #fff;
+                            padding: 10px;
+                            -webkit-border-radius: 50%;
+                            -moz-border-radius: 50%;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            font-size: 20px;
+                            background: #ffffff;
+                            -webkit-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -ms-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+
+            .nulli {
+                background: #1c9426 !important;
+                color: white !important
+            }
+        </style>
+
+        <script>
+            $('.menuParent').hover(
+                function () {
+                    $(".menuParent").show();
+                },
+
+                function () {
+                    $(".menuParent").hide();
+                }
+            );
+           
+
+
+
+            $('#loginsectin').hover(
+                function () {
+                    $("#loginsectin").show();
+                },
+
+                function () {
+                    $("#loginsectin").hide();
+                }
+            );
+            $('.loginarrow').click(
+
+                function () {
+
+                    var x = document.getElementById("loginsectin");
+                    var left = $(this).offset().left;
+
+                    $("#loginsectin").css("left", left + "px");
+
+                    $("#loginsectin").show();
+
+                    // $(this).css({ "background-color": "red" });
+                }
+
+                //function () {
+                //    setTimeout(
+                //        function () {
+                //            if ($('#loginsectin:hover').length != 0) {
+
+                //            }
+                //            else {
+                //                $("#loginsectin").hide();
+                //            }
+
+
+                //        }, 1000);
+
+
+
+            );
+
+
+        </script>
+        <script>
+            $(".searchButton").click(function () {
+                $(".searchsection").show()
+            })
+            $(".searchsection").click(function () {
+                $(".searchsection").hide()
+            })
+        </script>
+        <script>
+            $("#searchInputWeb").click(function () {
+            })
+            $("#searchInputWeb").on('input', function () {
+                var left = $("#searchInputWeb").position().left;
+                $("#searchResultSection").css("left", left + "px");
+                $("#searchResultSection").width($("#searchInputWeb").width());
+                $("#searchResultSection").show();
+                let val = $(this).val();
+
+                if (val.length > 2) {
+                    $("#searchResultSection").show(15);
+                    $.ajax({
+                        url: "/Home/getsearch",
+                        dataType: "html",
+                        data: {
+                            val: val,
+                        },
+                        success: function (data) {
+                            $("#searchResultSection").html(data);
+                        }
+                    })
+                }
+                else {
+                    $("#searchResultSection").html("")
+                    $("#searchResultSection").hide();
+                }
+            })
+            $("#searchImageWeb").click(function () {
+                var search = $("#searchInputWeb").val();
+                if (search.length < 3) {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-full-width",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 15000,
+                        "extendedTimeOut": 1000,
+
+
+
+                    }
+                    toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
+                }
+                else {
+
+                    window.location.href = "/Home/ProductList?newquery=" + search
+                }
+                //    $("form#searchpanel").submit();
+
+            })
+        </script>
+        <script>
+            $("#searchInputWeb").click(function (e) {
+                e.stopPropagation();
+            })
+            $("#searchInputWeb").on('input', function () {
+                var left = $("#searchInputWeb").position().left;
+                $("#searchResultSection").css("left", left + "px");
+                $("#searchResultSection").width($("#searchInputWeb").width() - 12);
+                $("#searchResultSection").show();
+                let val = $(this).val();
+
+                if (val.length > 2) {
+                    $("#searchResultSection").show(15);
+                    $.ajax({
+                        url: "/Home/getsearch",
+                        dataType: "html",
+                        data: {
+                            val: val,
+                        },
+                        success: function (data) {
+                            $("#searchResultSection").html(data);
+                        }
+                    })
+                }
+                else {
+                    $("#searchResultSection").html("")
+                    $("#searchResultSection").hide();
+                }
+            })
+            $("#searchImageWeb").click(function () {
+                var search = $("#searchInputWeb").val();
+                if (search.length < 3) {
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-full-width",
+                        "onclick": null,
+                        "fadeIn": 300,
+                        "fadeOut": 1000,
+                        "timeOut": 15000,
+                        "extendedTimeOut": 1000,
+
+
+
+                    }
+                    toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
+                }
+                else {
+
+                    window.location.href = "/Home/ProductList?newquery=" + search
+                }
+                //    $("form#searchpanel").submit();
+
+            })
+        </script>
+
+        <script>
+
+
+            $(".menuCat").hover(function () {
+
+                $(".menuCat").each(function () {
+                    $(this).removeClass("active");
+                });
+                $(this).addClass("active")
+
+                var href = $(this).find('a').attr('childhref')
+                $(".tab-pane").hide();
+                $(".tab-pane").removeClass("in Active")
+                $("" + href).show();
+                $("" + href).addClass("in Active")
+            })
+        </script>
+        <script>
+            $(document).ready(function () {
+                $(".watchall").each(function () {
+                    $(this).height($(this).siblings(".showmedetail").height())
+                })
+
+            })
+
+            $(".watchall").click(function () {
+                window.location.href = this.id
+
+            })
+        </script>
+        <script>
+
+
+
+            var initial;
+
+            function invocation(el, ID, quntity, addson, refresh) {
+
+                initial = window.setTimeout(
+                    function () {
+
+                        updateCart(el, ID, quntity, addson, refresh);
+                    }, 1000);
+            }
+
+
+
+            var invocUpdate = function (el, ID, quntity, addson, refresh) {
+                clearTimeout(initial);
+                invocation(el, ID, quntity, addson, refresh);
+            }
+
+
+
+            var updateCart = function (el, ID, quntity, addson, refresh) {
+
+                var tarafH = el;
+                var RealID = "addtocarto";
+                var tobeid = RealID.concat(ID);
+                $.ajax({
+                    url: '/Home/updatecart',
+                    data: {
+                        id: tobeid,
+                        price: tarafH,
+                        quantity: quntity,
+                        addson: addson
+
+                    },
+                    success: function (data) {
+
+
+                        if (refresh == "1") {
+                            window.location.reload();
+                        }
+                        else {
+                            getquntity();
+                            toastr.options = {
+                                "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 300,
+                                "fadeOut": 1000,
+                                "timeOut": 10000,
+                                "extendedTimeOut": 1000,
+                            }
+                            toastr.success('با موفقیت انجام شد');
+
+                           
+                        }
+
+
+                    },
+
+                    error: function () {
+
+                    }
+                });
+            }
+            var enterUpdate = function (el, ID, addson, refresh) {
+
+                var className = "value" + ID;
+                var elements = document.getElementsByClassName(className);
+                var requiredElement = elements[0];
+                var CurrentItem = requiredElement.value;
+                var newCount = parseInt(CurrentItem);
+                invocUpdate(el, ID, newCount, addson, refresh);
+
+
+            };
+            var addtocart = function (el, ID, addson, refresh) {
+
+                var className = "value" + ID;
+                
+                var elements = document.getElementsByClassName(className);
+                var requiredElement = elements[0];
+                
+                var CurrentItem = requiredElement.value;
+               
+                var newCount = parseInt(CurrentItem) + 1;
+                $("." + className).val(newCount);
+
+                //if (refresh == "1") {
+
+                //    var ele = $("." + className).parent().parent();
+                //    var prc = ele.find(".basePrice").text();
+                //    alert(prc);
+                //    ele.find(".priceelement").text("22");
+                //}
+
+                //alert(ID)
+                invocUpdate(el, ID, newCount, addson, refresh);
+
+
+            }
+            var minusfromcart = function (el, ID, addson, refresh) {
+                var className = "value" + ID;
+                var elements = document.getElementsByClassName(className);
+                var requiredElement = elements[0];
+                var CurrentItem = requiredElement.value;
+                if (parseInt(CurrentItem) > 0) {
+                    var newCount = parseInt(CurrentItem) - 1;
+                    $("." + className).val(newCount);
+                    invocUpdate(el, ID, newCount, addson, refresh);
+                }
+            }
+
+            var removeAllFromCart = function (el, ID, addson) {
+                var tarafH = el;
+                var tobeid = "del" + ID;
+
+                $.ajax({
+                    url: '/Home/deletefromcart',
+                    dataType: 'html',
+                    data: {
+                        id: tobeid,
+                        price: tarafH,
+                        addson: addson
+                    },
+                    success: function (data) {
+                        window.location.reload()
+
+
+                    },
+                    error: function () {
+
+                    }
+
+
+                });
+            }
+
+
+
+        </script>
+        <style>
+            .imageholderindex img {
+                object-fit: cover;
+                width: 100%;
+                border-radius: 45px;
+                aspect-ratio: 1
+                /*height: 400px;*/
+            }
+        </style>
+    </body>
+
+
+}
+</html>
+

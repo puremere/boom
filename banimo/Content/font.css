@@ -21,10 +21,23 @@
     url('../fonts/faNum/woff/IRANSansWeb(FaNum)_Light.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
     url('../fonts/faNum/ttf/IRANSansWeb(FaNum)_Light.ttf') format('truetype');
 }
+@font-face {
+    font-family: IRANYekanX;
+    font-style: normal;
+    font-weight: bold;
+    src: url('../fonts/iranYekan/woff/IRANYekanX-Bold.woff') format('woff'), url('../fonts/iranYekan/woff2/IRANYekanX-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: IRANYekanX;
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/iranYekanwoff/IRANYekanX-Regular.woff') format('woff'), url('../fonts/iranYekan/woff2/IRANYekanX-Regular.woff2') format('woff2');
+}
 
 
 h1, h2, h3, h4, h5, h6, div, p, li, div, a, option, text, button, input, label, textarea,span {
-    font-family: IRANSansfaNum !important;
+    font-family:  IRANSansfaNum !important;
 }
 .priceItem {
     font-family: IRANSansfaNum !important;

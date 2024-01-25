@@ -1,0 +1,491 @@
+﻿@model banimo.ViewModel.ProfileVM
+@{
+    ViewBag.Title = "پروفایل";
+    Layout = "~/Views/Shared/_Layout13.cshtml";
+}
+<link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+
+<main class="main">
+    <!-- Start of Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title mb-0">@Resources.res.myaccount </h1>
+        </div>
+    </div>
+    <!-- End of Page Header -->
+    <!-- Start of Breadcrumb -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="Main/Index">@Resources.res.home </a></li>
+                <li>@Resources.res.myaccount</li>
+            </ul>
+        </div>
+    </nav>
+    <!-- End of Breadcrumb -->
+    <!-- Start of PageContent -->
+    <div class="page-content pt-2">
+        <div class="container">
+            <div class="tab tab-vertical row gutter-lg">
+                <style>
+                    .nav-item {
+                        margin: 0 !important;
+                        text-align: right !important;
+                    }
+
+                    .nav-link active {
+                        text-align: right !important
+                    }
+
+                    #detaildiv {
+                        border: 1px solid #ddd;
+                        border-radius: 10px;
+                        padding: 15px;
+                        margin-top: 25px
+                    }
+                </style>
+                <ul class="nav nav-tabs mb-6" role="tablist">
+                    <li class="nav-item">
+                        <a href="#account-dashboard" class="nav-link active">@Resources.res.dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#account-orders" class="nav-link">@Resources.res.orders </a>
+                    </li>
+
+                    <li class="nav-item">
+                            <a href="#account-addresses" class="nav-link">مالی </a>
+                     </li>
+                    <li class="nav-item">
+                        <a href="#account-details" class="nav-link">@Resources.res.accountDetail</a>
+                    </li>
+                    <li class="link-item">
+                        <a class="nav-link" href="#account-wishlist">@Resources.res.wishList </a>
+                    </li>
+                    <li class="link-item">
+
+                        <a class="nav-link" href="#account-remove">@Resources.res.removeAcount </a>
+                    </li>
+                    <li class="link-item">
+
+                        <a id="logout" class="nav-link" href="login.html">@Resources.res.logout </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content mb-6" style="border:none">
+                    <div class="tab-pane active in" id="account-dashboard">
+
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#account-orders" class="link-to-tab">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-orders">
+                                            <i class="w-icon-orders"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0">@Resources.res.orders </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#account-addresses" class="link-to-tab">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-address">
+                                            <i class="w-icon-money"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0"> مالی</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#account-details" class="link-to-tab">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-account">
+                                            <i class="w-icon-user"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0">@Resources.res.accountDetail</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#account-wishlist" class="link-to-tab">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-wishlist">
+                                            <i class="w-icon-heart"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0">@Resources.res.wishList</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-logout">
+                                            <i class="w-icon-logout"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0">@Resources.res.logout</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                <a href="#account-remove" class="link-to-tab">
+                                    <div class="icon-box text-center">
+                                        <span class="icon-box-icon icon-download">
+                                            <i class="w-icon-power-off"></i>
+                                        </span>
+                                        <div class="icon-box-content">
+                                            <p class="text-uppercase mb-0">@Resources.res.removeAcount </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" tab-pane mb-4" id="account-orders">
+                        <div class="icon-box icon-box-side icon-box-light">
+                            <span class="icon-box-icon icon-orders">
+                                <i class="w-icon-orders"></i>
+                            </span>
+                            <div class="icon-box-content">
+                                <h4 class="icon-box-title text-capitalize ls-normal mb-0">@Resources.res.orders</h4>
+                            </div>
+                        </div>
+                        <div class="tableOfOrders">
+                            <table class="  shop-table account-orders-table mb-6">
+                                <thead>
+                                    <tr>
+                                        <th class="order-id">@Resources.res.order </th>
+                                        <th class="order-date">@Resources.res.date </th>
+
+                                        <th class="order-total">@Resources.res.Total </th>
+                                        <th class="order-status"> @Resources.res.status </th>
+                                        <th class="order-actions">@Resources.res.action </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if (Model.myOrder != null)
+                                    {
+                                        foreach (var item in Model.myOrder)
+                                        {
+                                            int index = Model.myOrder.IndexOf(item) + 1;
+                                            string data = item.address + "," + item.fullname + "," + item.phone + "," + item.Rdate + "," + item.day + "," + item.price;
+
+                                            <tr>
+
+                                                <td class="order-date">@item.orderNumber</td>
+                                                <td class="order-status">@item.date</td>
+                                                <td class="order-total">
+                                                    <span class="order-price">@string.Format("{0:n0}", decimal.Parse(@item.price)) تومان</span>
+                                                </td>
+                                                <td class="order-status">@item.statusTitle</td>
+                                                <td class="order-action">
+                                                    <p idtocheck="@item.ID" dataToCheck="@data"
+                                                       class="showOrderDetail btn btn-outline btn-default btn-block btn-sm btn-rounded">@Resources.res.View</p>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+                        <script>
+                            $(".showOrderDetail").click(function () {
+                                var data = $(this).attr("dataToCheck");
+                                var id = $(this).attr("idtocheck");
+                                $.ajax({
+                                    url: '/Home/goGetOrderDetail',
+                                    dataType: 'html',
+                                    data: {
+                                        id: id,
+                                        data: data
+                                    },
+                                    success: function (data) {
+
+                                        $('#detaildiv').html(data);
+                                        $([document.documentElement, document.body]).animate({
+                                            scrollTop: $("#detaildiv").offset().top
+                                        }, 800);
+
+
+                                    }
+                                });
+                            })
+                        </script>
+                        <div id="detaildiv"></div>
+
+                    </div>
+
+
+
+                    <div class="tab-pane" id="account-addresses">
+                            <div class="icon-box icon-box-side icon-box-light">
+                                <span class="icon-box-icon icon-map-marker">
+                                    <i class="w-icon-money"></i>
+                                </span>
+                                <div class="icon-box-content">
+                                    <h4 class="icon-box-title mb-0 ls-normal">مالی</h4>
+                                </div>
+                            </div>
+                           
+                            <div class="row">
+                               
+                            </div>
+                        </div>
+
+                    <div class="tab-pane" id="account-details">
+                        <div class="icon-box icon-box-side icon-box-light">
+                            <span class="icon-box-icon icon-account mr-2">
+                                <i class="w-icon-user"></i>
+                            </span>
+                            <div class="icon-box-content">
+                                <h4 class="icon-box-title mb-0 ls-normal">اطلاعات کاربر</h4>
+                            </div>
+                        </div>
+                        <form class="form account-details-form" action="#" method="post">
+
+
+                            <div class="form-group mb-3">
+                                <label for="display-name">نام و نام خانودادگی  </label>
+                                @{
+                                    {
+                                        if (Model.userdata.fullname == "" || Model.userdata.email == null)
+                                        {
+                                            <input id="Editfullname" value=" " type="text" placeholder=""
+                                                   class="form-control form-control-md mb-0">
+                                        }
+                                        else
+                                        {
+
+                                            <input id="Editfullname" value=" @Model.userdata.fullname" type="text" placeholder=""
+                                                   class="form-control form-control-md mb-0">
+                                        }
+                                    }
+                                }
+
+
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="display-name">پست الکترونیکی</label>
+                                @{
+                                    {
+                                        if (Model.userdata.email == "" || Model.userdata.email == null)
+                                        {
+                                            <input id="EditEmail" value=" " type="text" placeholder=""
+                                                   class="form-control form-control-md mb-0">
+                                        }
+                                        else
+                                        {
+
+                                            <input id="EditEmail" value=" @Model.userdata.email" type="text" placeholder=""
+                                                   class="form-control form-control-md mb-0">
+                                        }
+                                    }
+                                }
+
+
+                            </div>
+
+
+                            <div id="confirm" class="btn btn-dark btn-rounded btn-sm mb-4">ذخیره اطلاعات</div>
+                            <script>
+                                function isValidEmailAddress(emailAddress) {
+                                   var pattern = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                                   return pattern.test(emailAddress);
+                                };
+                                $("#confirm").click(function () {
+                                    var email = $("#EditEmail").val();
+                                    var fullname = $("#Editfullname").val();
+                                    var mobile = "@Model.userdata.phone";
+
+
+                                    if (email === ""  && fullname === "") {
+
+                                        toastr.options = {
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "fadeIn": 300,
+                                            "fadeOut": 1000,
+                                            "timeOut": 8000,
+                                            "extendedTimeOut": 1000,
+
+
+                                        }
+                                        toastr.error("لطفا تمامی موارد را کامل کنید")
+                                    }
+
+                                    else {
+                                        if (isValidEmailAddress(email)) {
+                                            $.ajax({
+                                                url: '/Home/updataProfile',
+                                                dataType: 'html',
+                                                data: {
+                                                    email: email,
+                                                    fullname: fullname,
+                                                    phone: mobile,
+                                                },
+                                                success: function (data) {
+                                                    window.location.reload();
+
+
+                                                },
+                                                error: function () {
+
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            toastr.options = {
+                                                "debug": false,
+                                                "positionClass": "toast-top-center",
+                                                "onclick": null,
+                                                "fadeIn": 300,
+                                                "fadeOut": 1000,
+                                                "timeOut": 5000,
+                                                "extendedTimeOut": 1000,
+
+
+                                            }
+                                            toastr.error("ایمیل صحیح وارد نمایید")
+                                        }
+
+                                        //$(".edit").each(function () {
+                                        //    $(this).css("display", "none")
+                                        //    $(".c-profile-stats__row").css("min-height", "90px")
+                                        //})
+                                        //$(".profile").each(function () {
+                                        //    $(this).css("display", "block")
+                                        //})
+                                    }
+
+
+                                });
+                            </script>
+                        </form>
+                    </div>
+                    <div class="tab-pane mb-4" id="account-wishlist">
+                        <div class="icon-box icon-box-side icon-box-light">
+                            <span class="icon-box-icon icon-orders">
+                                <i class="w-icon-orders"></i>
+                            </span>
+                            <div class="icon-box-content">
+                                <h4 class="icon-box-title text-capitalize ls-normal mb-0">علاقه مندی ها</h4>
+                            </div>
+                        </div>
+                        @if (Model.wishList != null)
+                        {
+                            <table class="shop-table account-orders-table mb-6">
+                                <thead>
+                                    <tr>
+                                        <th class="order-id">تصویر</th>
+                                        <th class="order-date">عنوان</th>
+                                        <th class="order-status">قیمت</th>
+                                        <th class="order-total"></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.wishList)
+                                    {
+                                        string imagefile = "placeholder.jpg";
+                                        if (item.title != null)
+                                        {
+                                            imagefile = item.image;
+                                        }
+                                        string id = "wishon" + item.ID;
+                                        string link = "/Home/ProductDetail?id=N" + item.ID;
+                                        string src = "/images/panelimages/" + imagefile;
+                                        <tr>
+                                            <td class="order-id">
+                                                <a href="@link" class="c-profile-wishlist__list-item-img">
+                                                    <img alt="@item.title" src="@src" style="max-width:150px">
+                                                </a>
+                                                <button id="@id" class="c-profile-wishlist__list-item-remove js-remove-favorite-btn " data-product-id="680108"></button>
+                                            </td>
+                                            <td class="order-date">
+                                                <a href="@link">
+                                                    <h5>@item.title</h5>
+                                                </a>
+                                            </td>
+                                            <td class="order-total">
+                                                <span class="order-price">@string.Format("{0:n0}", decimal.Parse(@item.price))   تومان</span>
+                                            </td>
+                                            <td class="order-action">
+                                                <a href="@link"
+                                                   class="btn btn-outline btn-default btn-block btn-sm btn-rounded">مشاهده محصول</a>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p style=" padding: 100px;  text-align: center;  border: 1px solid #ddd; margin-top: 25px; border-radius: 15px;">موردی وجود ندارد</p>
+                        }
+
+
+
+                    </div>
+
+                    <div class="tab-pane" id="account-remove">
+
+                        <div class="row">
+
+                            <div class="col-md-12 mb-12">
+                                <div class="alert alert-error alert-bg alert-button alert-block show-code-action">
+                                    <h4 class="alert-title">توجه!</h4>
+                                    <p>
+                                        با حذف اکانت تمامی اطلاعات شما حذف می شود
+                                        <br>آیا با حذف اکانت موافقید ?
+                                    </p>
+                                    <a id="removeAccountButton" style="margin-top:25px" href="#" class="btn btn-error btn-rounded">بله ! اکانت حذف شود</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of PageContent -->
+</main>
+
+
+@section scripts{
+    <script>
+        $("#logout").click(function () {
+            window.location.href = "/CustomerLogin/LogOff";
+        })
+        $("#removeAccountButton").click(function () {
+            window.location.href = "/CustomerLogin/removeAccount";
+        })
+    </script>
+}
+
+

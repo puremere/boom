@@ -1,0 +1,615 @@
+﻿
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+
+    <title>پاپا اسپرت مرجع تخصصی ورزشی</title>
+
+    <meta name="keywords" content="Marketplace ecommerce  " />
+    <meta name="description" content="Marsool is powerful marketplace ">
+    <meta name="author" content="">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- WebFont.js -->
+    @*<script>
+            WebFontConfig = {
+                google: { families: ['Poppins:400,500,600,700,800'] }
+            };
+            (function (d) {
+                var wf = d.createElement('script'), s = d.scripts[0];
+                wf.src = '/webAsset/wolmart/assets/js/webfont.js';
+                wf.async = true;
+                s.parentNode.insertBefore(wf, s);
+            })(document);
+        </script>*@
+    <script src="/webAsset/wolmart/assets/vendor/jquery/jquery.min.js"></script>
+    
+
+    
+    <!-- <link rel="stylesheet" href="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/animate/animate.min.css">
+    @*<link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/vendor/magnific-popup/magnific-popup.min.css">*@
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="/webAsset/wolmart/assets/css/wearkala.css">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
+    <link href="~/Content/font.css" rel="stylesheet" />
+
+</head>
+
+<body class="home" style="direction:rtl">
+    <style>
+        #loading {
+            align-content: center;
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+            opacity: 1;
+            margin: 0 auto;
+        }
+    </style>
+    <div id="loading" style="display:none">
+        <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
+            <img style="max-width:80px; display:block; margin:auto" src="https://wearkala.ir/webAsset/wolmart/assets/images/logo0.png" />
+
+        </div>
+    </div>
+    <div class="page-wrapper">
+        <h1 class="d-none">Marsool</h1>
+        <header class="header header-border">
+
+            <!-- End of Header Top -->
+
+            <div class="forweb header-middle">
+                <div class="container">
+                    <div class="header-left mr-md-4">
+
+                        <a href="." class="logo ml-lg-0">
+                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" style="max-width:100px" />
+                        </a>
+                        <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
+
+                            <input style="border:2px solid #bc3f3f; border-left:0" type="text" class="form-control searchtxt" name="search"
+                                   placeholder="جستجو کنید" required />
+                            <button class="btn btn-search" style="border:2px solid #bc3f3f; border-right:0">
+                                <i class="w-icon-search"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="header-right ml-4">
+                        <div class="header-call d-xs-show d-lg-flex align-items-center">
+                            <a href="tel:#" class="w-icon-call"></a>
+                            <div class="call-info d-lg-show">
+                                <h4 class="chat font-weight-normal font-size-md text-normal ls-normal text-light mb-0">
+                                    <a href="mailto:#" class="text-capitalize"></a>
+                                </h4>
+                                <a href="tel:#" class="phone-number font-weight-bolder ls-50 priceItem">021-22931806</a>
+                            </div>
+                        </div>
+                        @if (Session["LogedInUser"] == null)
+                        {
+                            <a class="wishlist label-down link d-xs-show" href="/Home/LoginPage">
+                                <i style="font-weight:600" class="w-icon-user"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.login</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="wishlist label-down link " href="/Home/Myprofile">
+                                <i style="font-weight:600" class="w-icon-user"></i>
+                                <span class="wishlist-label d-lg-show">@Resources.res.profile</span>
+                            </a>
+                        }
+
+                        <div class=" cart-dropdown cart-offcanvas mr-0 mr-lg-2" style="position:relative">
+                            <div class="cart-overlay"></div>
+                            <a href="/Home/checkout" class=" label-down link">
+                                <i class="w-icon-cart">
+                                    <span class="cart-count simpleCart_quantityy priceItem">0</span>
+                                </i>
+                                <span class="cart-label">سبد خرید</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+        <!-- End of Header -->
+        <!-- Start of Main-->
+        @RenderBody()
+
+
+        <!-- End of Main -->
+        <!-- Start of Footer -->
+        <footer class="footer appear-animate" data-animation-options="{
+            'name': 'fadeIn'
+        }">
+            <div class="footer-newsletter bg-primary">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-xl-5 col-lg-6">
+                            <div class="icon-box icon-box-side text-white" style="justify-content:right">
+                                <div class="icon-box-icon d-inline-flex">
+                                    <i class="w-icon-envelop3"></i>
+                                </div>
+                                <div class="icon-box-content">
+                                    <h4 class="icon-box-title text-white text-uppercase font-weight-bold">
+                                        @Resources.res.SubscribeNewsletter
+                                    </h4>
+                                    <p class="text-white">
+                                        @Resources.res.newsletterDesc
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-6 col-md-9 mt-4 mt-lg-0 ">
+                            <form action="#" method="get"
+                                  class="input-wrapper input-wrapper-inline input-wrapper-rounded">
+                                <input type="email" class="form-control mr-2 bg-white" name="email" id="email"
+                                       placeholder="@Resources.res.emailPlaceholder" />
+                                <button class="btn btn-dark btn-rounded" type="submit">
+                                    @Resources.res.Subscribe  <i class="w-icon-long-arrow-left"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="footer-top">
+                    <div class="footer-top">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="widget widget-about">
+                                    <a href="demo10.html" class="logo-footer">
+                                        <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo-footer" width="144"
+                                             height="45" />
+                                    </a>
+                                    <div class="widget-body">
+                                        <p class="widget-about-title">پشتیبانی 24 ساعته</p>
+                                        <a href="tel:18005707777" class="widget-about-call">021-22931806</a>
+
+
+                                        <div class="social-icons social-icons-colored">
+                                            <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                            <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                            <a href="#" class="social-icon social-instagram w-icon-instagram"></a>
+                                            <a href="#" class="social-icon social-youtube w-icon-youtube"></a>
+                                            <a href="#" class="social-icon social-pinterest w-icon-pinterest"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h3 class="widget-title">شرکت</h3>
+                                    <ul class="widget-body">
+                                        <li><a href="#">درباره ما</a></li>
+                                        <li><a href="#">اعضای ورکالا</a></li>
+                                        <li><a href="#">همکاری</a></li>
+                                        <li><a href="#">تماس با ما</a></li>
+                                        <li><a href="/Home/downloadApp">دانلود اپلیکیشن</a></li>
+                                        <li><a href="#">سابقه خرید</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h4 class="widget-title">حساب کاربری</h4>
+                                    <ul class="widget-body">
+                                        <li><a href="#">پیگیری خرید</a></li>
+                                        <li><a href="#">سبد خرید</a></li>
+                                        <li><a href="#">ورود</a></li>
+                                        <li><a href="#">پشتیبانی</a></li>
+                                        <li><a href="#">لیست منتخب</a></li>
+                                        <li><a href="#">حریم خصوصی</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="widget">
+                                    <h4 class="widget-title">خدمات مشتریان</h4>
+                                    <ul class="widget-body">
+                                        <li><a href="#">روش های پرداخت</a></li>
+                                        <li><a href="#">تضمین بازگشت وجه</a></li>
+                                        <li><a href="#">عودت کالا</a></li>
+                                        <li><a href="#">مرکز پشتیبانی</a></li>
+                                        <li><a href="#">ارسال</a></li>
+                                        <li><a href="#">قوانین </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Page-wrapper-->
+    <!-- Start of Sticky Footer -->
+    <div class="sticky-footer sticky-content fix-bottom">
+        <a href="/" class="sticky-link active">
+            <i class="w-icon-home"></i>
+            <p>Home</p>
+        </a>
+        @*<a href="/Home/Index" class="sticky-link">
+                <i class="w-icon-category"></i>
+                <p>Shop</p>
+            </a>*@
+        <a href="/Home/myProfile" class="sticky-link">
+            <i class="w-icon-account"></i>
+            <p>Account</p>
+        </a>
+        <div class=" dir-up">
+            <a href="/Home/checkout" class="sticky-link">
+                <i class="w-icon-cart"></i>
+                <p>Cart</p>
+            </a>
+            <div class="dropdown-box">
+                <div class="products">
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product-default.html">
+                                    Beige knitted elas<br>tic
+                                    runner shoes
+                                </a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">$25.68</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="product-default.html">
+                                <img src="/webAsset/wolmart/assets/images/cart/product-1.jpg" alt="product" height="84" width="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product-default.html">
+                                    Blue utility pina<br>fore
+                                    denim dress
+                                </a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">$32.99</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="product-default.html">
+                                <img src="/webAsset/wolmart/assets/images/cart/product-2.jpg" alt="product" width="84" height="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-total">
+                    <label>Subtotal:</label>
+                    <span class="price">$58.67</span>
+                </div>
+
+                <div class="cart-action">
+                    <a href="cart.html" class="btn btn-dark btn-outline btn-rounded">View Cart</a>
+                    <a href="checkout.html" class="btn btn-primary  btn-rounded">Checkout</a>
+                </div>
+            </div>
+            <!-- End of Dropdown Box -->
+        </div>
+
+        <div class="header-search hs-toggle dir-up">
+            <a href="#" class="search-toggle sticky-link">
+                <i class="w-icon-search"></i>
+                <p>Search</p>
+            </a>
+            <form action="#" class="input-wrapper">
+                <input type="text" class="form-control" name="search" autocomplete="off" placeholder="Search"
+                       required />
+                <button class="btn btn-search" type="submit">
+                    <i class="w-icon-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- End of Sticky Footer -->
+    <!-- Start of Scroll Top -->
+    <a id="scroll-top" class="scroll-top" href="#top" title="Top" role="button">
+        <i class="w-icon-angle-up"></i> <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+            <circle id="progress-indicator" fill="transparent" stroke="#000000" stroke-miterlimit="10" cx="35" cy="35"
+                    r="34" style="stroke-dasharray: 16.4198, 400;"></circle>
+        </svg>
+    </a>
+    <!-- End of Scroll Top -->
+    <!-- Start of Mobile Menu -->
+    <!-- End of Mobile Menu -->
+    <!-- Plugin JS File -->
+
+    <script src="/webAsset/wolmart/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/zoom/jquery.zoom.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="/webAsset/wolmart/assets/vendor/skrollr/skrollr.min.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="~/Scripts/lazy/jquery.lazy.min.js"></script>
+    <script>
+        $(function () {
+            $('.lazy').Lazy();
+        });
+        var getquntity = function () {
+
+
+
+            $.ajax({
+                url: '/Home/getquntitiy',
+                dataType: 'html',
+                success: function (data) {
+                    var total = 0;
+                    var srtcookie = data;
+
+                    if (srtcookie.length > 0) {
+                        srtcookie = srtcookie.replace(/&quot;/g, '"');
+                        JSON.parse(srtcookie).forEach(function (item) {
+
+                            let valueID = "value" + item.productid;
+                            let valueAllID = "valueAll" + item.productid;
+
+                            let count = 0;
+                            JSON.parse(srtcookie).forEach(function (newitem) {
+                                if (newitem.productid == item.productid) {
+                                    count += newitem.quantity;
+                                }
+                            });
+
+                            $("." + valueAllID).text(count);
+                            $("." + valueAllID).val(count);
+                            total += parseInt(item.quantity);
+
+                            let addson = item.productid + "*" + item.addson;
+
+                            $("." + valueID).each(function () {
+                                var insrt = $(this).attr('addson');
+                                if (insrt == addson) {
+
+                                    $(this).text(item.quantity)
+                                    $(this).val(item.quantity)
+                                }
+                            })
+
+
+
+
+                            $("." + valueID).text(count);
+                            $("." + valueID).val(count);
+
+                            //if (item.quantity == "0") {
+                            //    $("." + valueID).parent().parent().find('.addButton').show();
+                            //    $("." + valueID).parent().parent().find('.addholder').hide();
+                            //}
+                            //else {
+                            //    $("." + valueID).parent().parent().find('.addButton').hide();
+                            //    $("." + valueID).parent().parent().find('.addholder').show();
+                            //}
+
+
+                        });
+                        $(".simpleCart_quantityy").text(total)
+
+                    } else {
+                        $(".simpleCart_quantityy").text("0")
+                    };
+                }
+
+            })
+        };
+        getquntity();
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <!-- Main JS -->
+    <script src="/webAsset/wolmart/assets/js/main.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            min-height: 90vh
+        }
+    </style>
+    <script>
+
+
+
+        var initial;
+
+        function invocation(el, ID, quntity, addson, refresh) {
+
+            initial = window.setTimeout(
+                function () {
+
+                    updateCart(el, ID, quntity, addson, refresh);
+                }, 1000);
+        }
+
+
+
+        var invocUpdate = function (el, ID, quntity, addson, refresh) {
+            clearTimeout(initial);
+            invocation(el, ID, quntity, addson, refresh);
+        }
+
+
+
+        var updateCart = function (el, ID, quntity, addson, refresh) {
+
+            var tarafH = el;
+            var RealID = "addtocarto";
+            var tobeid = RealID.concat(ID);
+            $.ajax({
+                url: '/Home/updatecart',
+                data: {
+                    id: tobeid,
+                    price: tarafH,
+                    quantity: quntity,
+                    addson: addson
+
+                },
+                success: function (data) {
+
+
+                    if (refresh == "1") {
+                        window.location.reload();
+                    }
+                    else {
+                        getquntity();
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 10000,
+                            "extendedTimeOut": 1000,
+                        }
+                        toastr.success('با موفقیت انجام شد');
+
+                        getquntity();
+                    }
+
+
+                },
+
+                error: function () {
+
+                }
+            });
+        }
+        var enterUpdate = function (el, ID, addson, refresh) {
+
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            var newCount = parseInt(CurrentItem);
+            invocUpdate(el, ID, newCount, addson, refresh);
+
+
+        };
+        var addtocart = function (el, ID, addson, refresh) {
+
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            var newCount = parseInt(CurrentItem) + 1;
+            $("." + className).val(newCount);
+
+            //if (refresh == "1") {
+
+            //    var ele = $("." + className).parent().parent();
+            //    var prc = ele.find(".basePrice").text();
+            //    alert(prc);
+            //    ele.find(".priceelement").text("22");
+            //}
+            invocUpdate(el, ID, newCount, addson, refresh);
+
+
+        }
+        var minusfromcart = function (el, ID, addson, refresh) {
+            var className = "value" + ID;
+            var elements = document.getElementsByClassName(className);
+            var requiredElement = elements[0];
+            var CurrentItem = requiredElement.value;
+            if (parseInt(CurrentItem) > 0) {
+                var newCount = parseInt(CurrentItem) - 1;
+                $("." + className).val(newCount);
+                invocUpdate(el, ID, newCount, addson, refresh);
+            }
+        }
+
+        var removeAllFromCart = function (el, ID, addson) {
+            var tarafH = el;
+            var tobeid = "del" + ID;
+
+            $.ajax({
+                url: '/Home/deletefromcart',
+                dataType: 'html',
+                data: {
+                    id: tobeid,
+                    price: tarafH,
+                    addson: addson
+                },
+                success: function (data) {
+                    window.location.reload()
+
+
+                },
+                error: function () {
+
+                }
+
+
+            });
+        }
+
+
+
+    </script>
+
+
+</body>
+
+</html>

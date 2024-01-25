@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 
-    <title>ورکالا، انچه شما می پسندید</title>
+    <title>شکلات مال خاطره خوش مزه </title>
 
     <meta name="keywords" content="Marketplace ecommerce  " />
     <meta name="description" content="Marsool is powerful marketplace ">
@@ -36,18 +36,6 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- WebFont.js -->
-    @*<script>
-            WebFontConfig = {
-                google: { families: ['Poppins:400,500,600,700,800'] }
-            };
-            (function (d) {
-                var wf = d.createElement('script'), s = d.scripts[0];
-                wf.src = '/webAsset/wolmart/assets/js/webfont.js';
-                wf.async = true;
-                s.parentNode.insertBefore(wf, s);
-            })(document);
-        </script>*@
     <script src="/webAsset/wolmart/assets/vendor/jquery/jquery.min.js"></script>
     
 
@@ -63,7 +51,7 @@
     <link href="~/Content/toastr.css" rel="stylesheet" />
     <link href="~/webAsset/wolmart/assets/css/rtlstyle.css" rel="stylesheet" />
     <link href="~/Content/font.css" rel="stylesheet" />
-
+    <link href="~/Content/toastr.css" rel="stylesheet" />
 </head>
 
 <body class="home" style="direction:rtl">
@@ -84,7 +72,7 @@
     <div id="loading" style="display:none">
         <div style="padding:15px 35px; background-color:white;position:fixed;overflow: visible;margin: auto;top: 0;left: 0; bottom: 0; right: 0;max-height:150px; max-width:250px">
             <img style="max-width:80px; display:block; margin:auto" src="https://wearkala.ir/webAsset/wolmart/assets/images/logo0.png" />
-          
+
         </div>
     </div>
     <div class="page-wrapper">
@@ -98,13 +86,13 @@
                     <div class="header-left mr-md-4">
 
                         <a href="." class="logo ml-lg-0">
-                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" style="max-width:100px"/>
+                            <img src="/webAsset/wolmart/assets/images/logo0.png" alt="logo" style="max-width:100px" />
                         </a>
-                        <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
+                        <div class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper" style="border :1px solid #ddd ; border-radius:15px">
 
-                            <input style="border:2px solid #bc3f3f; border-left:0" type="text" class="form-control searchtxt" name="search"
+                            <input id="searchinput" style="border:none;" type="text" class="form-control searchtxt" name="search"
                                    placeholder="جستجو کنید" required />
-                            <button class="btn btn-search" style="border:2px solid #bc3f3f; border-right:0">
+                            <button id="searchActButt" class="btn btn-search" style="border:none; border-radius:15px">
                                 <i class="w-icon-search"></i>
                             </button>
 
@@ -370,8 +358,6 @@
     <!-- End of Scroll Top -->
     <!-- Start of Mobile Menu -->
     <!-- End of Mobile Menu -->
-   
-
     <!-- Plugin JS File -->
 
     <script src="/webAsset/wolmart/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
@@ -380,10 +366,14 @@
     <script src="/webAsset/wolmart/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
     <script src="/webAsset/wolmart/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
     <script src="/webAsset/wolmart/assets/vendor/skrollr/skrollr.min.js"></script>
-
+    <script src="~/Scripts/jquery.reach-scroll.js"></script>
     <!-- Swiper JS -->
     <script src="/webAsset/wolmart/assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+
+    <script src="~/Scripts/lazy/jquery.lazy.min.js"></script>
     <script>
+
         var getquntity = function () {
 
 
@@ -451,6 +441,9 @@
             })
         };
         getquntity();
+        $(function () {
+            $('.lazy').Lazy();
+        });
     </script>
 
     @RenderSection("scripts", required: false)
@@ -547,7 +540,7 @@
 
         };
         var addtocart = function (el, ID, addson, refresh) {
-           
+
             var className = "value" + ID;
             var elements = document.getElementsByClassName(className);
             var requiredElement = elements[0];
@@ -604,10 +597,33 @@
         }
 
 
-       
+        $("#searchActButt").click(function () {
+            var search = $("#searchinput").val();
+            if (search.length < 3) {
+                //toastr.options = {
+                //    "debug": false,
+                //    "positionClass": "toast-top-full-width",
+                //    "onclick": null,
+                //    "fadeIn": 300,
+                //    "fadeOut": 1000,
+                //    "timeOut": 150000,
+                //    "extendedTimeOut": 10000,
+
+
+
+                //}
+                //toastr.error('عبارت مورد نظر نباید کمتر از سه حرف باشد');
+            }
+            else {
+
+                window.location.href = "/Home/ProductList?newquery=" + search
+            }
+        })
     </script>
 
+    <script>
 
+    </script>
 </body>
 
 </html>

@@ -46,7 +46,7 @@
 
                 if (Request.Browser.IsMobileDevice)
                 {
-                    string srt = "wearkala://?status=1&message=" + @ViewBag.message2;
+                    string srt = "wearkala://?type=order&status=1&message=" + @ViewBag.message2;
 
                     <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="@srt">بازگشت به اپلیکیشن</a></div>
 
@@ -77,7 +77,7 @@
 
                 if (Request.Browser.IsMobileDevice)
                 {
-                    string srt = "wearkala://?status=0&message= پرداخت شما ناموفق بود" ; /*+@ViewBag.message2*/
+                    string srt = "wearkala://?type=order&status=0&message= پرداخت شما ناموفق بود"; /*+@ViewBag.message2*/
 
                     <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="@srt">بازگشت به اپلیکیشن</a></div>
 

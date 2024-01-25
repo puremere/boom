@@ -104,10 +104,12 @@
                                                         }
                                                         toastr.success("کد تخفیف اعمال شد");
                                                         if (parseInt(obj.price) > parseInt(mot)) {
+
                                                             $("#finalamount").text("0");
                                                         }
                                                         else {
-
+                                                            let p = parseInt(mot) - parseInt(obj.price);
+                                                            alert(p);
                                                             $("#finalamount").text(addCommas(parseInt(mot) - parseInt(obj.price) + parseInt(del)))
 
                                                         }
@@ -155,8 +157,8 @@
                                         </div>
                                     </div>
                                 </div>
-                               
-                             
+
+
 
                                 <div class="form-group mt-3">
                                     <label for="order-notes">نظر کاربر  (غیر اجباریس)</label>
@@ -171,7 +173,7 @@
 
 
                     <div class="address-toggle holderContent" style="margin-top:20px">
-                       آدرس کاربر
+                        آدرس کاربر
                     </div>
 
                     <form class="address-content mb-4" style="margin-top:20px">
@@ -192,7 +194,7 @@
                                                     </div>
                                                     <div id="cash-on-delivery" class="card-body collapsed" style="display: none;">
                                                         <p class="mb-0">
-                                                           @item.state - @item.city - @item.address
+                                                            @item.state - @item.city - @item.address
                                                         </p>
 
                                                     </div>
@@ -216,8 +218,8 @@
                                         <div class="col-lg-6">
                                             <div id="mapHolder" style="display:block;  position:relative;top:0; left:0; margin:auto; width:100%; height:500px;  background-color:white; text-align:center; background-color:white;  /* Negative half of width. */">
                                                 @*<div style="height:8%; width:100%;z-index: 9999999999999;height:40px; margin-bottom:10px">
-                                    <input type="text" id="mapaddress" style="width:100%; height:100% " class="form-control" />
-                                </div>*@
+                                                        <input type="text" id="mapaddress" style="width:100%; height:100% " class="form-control" />
+                                                    </div>*@
                                                 <div id="Map" style="border-radius:3px; margin-top:10%; width:100%; margin:auto; height:88%; background: #eee; border: 2px solid #aaa;"></div>
 
                                             </div>
@@ -258,27 +260,27 @@
                             </div>
 
                         </div>
-                        
+
                     </form>
                     <div class="delivery-toggle holderContent" style="margin-top:20px">
-                        انتقال کالا 
+                        انتقال کالا
                     </div>
                     <div class="delivery-content mb-4" style="margin:20px 0;padding:20px ;display:none">
                         <div class="order-summary">
                             <div class="payment-methods" id="payment_method">
-                               
+
                                 <div class="accordion payment-accordion">
                                     @foreach (var item in Model.deliverType.paymentType)
                                     {
                                         <div class="card">
-                                            <div  idtogo="@item.ID" class="card-header"  id="applyDeliver">
+                                            <div idtogo="@item.ID" class="card-header" id="applyDeliver">
                                                 <a href="#cash-on-delivery" class="collapse">@item.typeTitle</a>
                                             </div>
                                             <div id="cash-on-delivery" class="card-body collapsed" style="display: block;">
                                                 <p class="mb-0">
                                                     @item.typeDesc
                                                 </p>
-                                               
+
 
                                             </div>
                                             <div class="TimeTableHolder" style="padding:30px"></div>
@@ -313,26 +315,26 @@
                                         </div>
                                     </div>
                                     @*<div class="card">
-                                        <div class="card-header">
-                                            <a href="#payment" class="expand">پرداخت در محل</a>
+                                            <div class="card-header">
+                                                <a href="#payment" class="expand">پرداخت در محل</a>
+                                            </div>
+                                            <div id="payment" class="card-body collapsed">
+                                                <p class="mb-0">
+                                                    پرداخت در محل در زمان دریافت کالا
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div id="payment" class="card-body collapsed">
-                                            <p class="mb-0">
-                                                پرداخت در محل در زمان دریافت کالا
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a href="#delivery" class="expand">انتقال با رمز ارز</a>
-                                        </div>
-                                        <div id="delivery" class="card-body collapsed">
-                                            <p class="mb-0">
-                                                در این روش انتقال مبلغ با رمز ارز صورت میگیرد
-                                            </p>
-                                        </div>
-                                    </div>*@
-                                   
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <a href="#delivery" class="expand">انتقال با رمز ارز</a>
+                                            </div>
+                                            <div id="delivery" class="card-body collapsed">
+                                                <p class="mb-0">
+                                                    در این روش انتقال مبلغ با رمز ارز صورت میگیرد
+                                                </p>
+                                            </div>
+                                        </div>*@
+
                                 </div>
                             </div>
                         </div>
@@ -375,7 +377,7 @@
                                                     <b>مجموع</b>
                                                 </td>
                                                 <td>
-                                                    <b><span id="subtotalamount">@string.Format("{0:n0}",@amountPrice)</span> تومان</b>
+                                                    <b><span id="subtotalamount">@string.Format("{0:n0}", @amountPrice)</span> تومان</b>
                                                 </td>
                                             </tr>
                                             <tr class="cart-subtotal bb-no">
@@ -425,7 +427,7 @@
     </div>
     <!-- End of PageContent -->
 </main>
-<p style="display:none" class="infoD"></p>
+<p style="display:none" class="infoD">1</p>
 <form id="endOrderForm" name="endOrderForm" action="EndOrder" method="post">
     <input hidden name="planID" id="planID" value="" />
     <input hidden name="addID" id="addID" value="0" />
@@ -434,11 +436,25 @@
     <input hidden name="lon" id="lng" value="" />
     <input hidden id="addressID" name="addressID" />
     <input hidden id="hourid" name="hourid" value="1" />
-    <input hidden id="Fpayment" name="payment" value="3" />
+    <input hidden id="Fpayment" name="payment" value="1" />
 </form>
 
 @section scripts{
     <link href="~/webAsset/wolmart/assets/css/style.min.css" rel="stylesheet" />
+    <script>
+
+        function addCommas(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+    </script>
     <style>
         .holderContent {
             padding: 25px;

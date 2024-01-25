@@ -63,7 +63,11 @@
             <div class="row fieldholder col-lg-3">
                 <label> برند</label>
                 <div class=" ">
-                    @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+                    @if (Model.brandCore != null)
+                    {
+                        @Html.DropDownListFor(x => x.selectedbrand, new SelectList(Model.brandCore, "title", "title"), "-- انتخاب برند--", new { id = "brandC", name = "brandC", style = "", @class = "form-control" })
+
+                    }
                 </div>
 
 

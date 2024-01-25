@@ -1657,8 +1657,10 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
 
-                var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
-                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                var collection = new NameValueCollection();
+                string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
+                collection.Add("servername", servername); 
+                collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
@@ -1680,18 +1682,20 @@ namespace banimo.Controllers
         {
             string device = RandomString(10);
             string code = MD5Hash(device + "ncase8934f49909");
-
+            List<string> lst = id.Split(',').ToList();
             string result = "";
             string token = Session["LogedInUser2"] as string;
             using (WebClient client = new WebClient())
             {
 
                 var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
-                collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                collection.Add("servername", servername); 
+                collection.Add("nodeID", finalNodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("token", token);
-                collection.Add("id", id);
+                collection.Add("ID", lst[0]);
+                collection.Add("orderID", lst[1]);
 
 
                 string url = server + "/Admin/deleteItemFromFactor.php";
@@ -2387,8 +2391,6 @@ namespace banimo.Controllers
                 return Content("3");
             }
         }
-
-
         //section  menu-------------
         public ActionResult setnewcat(string cattitle, string banimo)
         {
@@ -4378,8 +4380,6 @@ namespace banimo.Controllers
 
             return RedirectToAction("blog");
         }
-
-
         public ActionResult updatePages(ViewModel.updatePagesVM model)
         {
 
@@ -4642,8 +4642,6 @@ namespace banimo.Controllers
 
 
         }
-
-
         public ActionResult getTimeForAddOrder()
         {
             string token = Session["token"] as string;
@@ -4671,7 +4669,6 @@ namespace banimo.Controllers
             return PartialView("/Views/Shared/AdminShared/_getTimeForOrder.cshtml", log);
 
         }
-
         public ActionResult createOrderFromPanel(string userID, string userAddress, string userTime)
         {
             string token = Session["token"] as string;
@@ -4858,8 +4855,6 @@ namespace banimo.Controllers
             banimo.ViewModel.UserListOfAdmin log = JsonConvert.DeserializeObject<banimo.ViewModel.UserListOfAdmin>(result);
             return PartialView("/Views/Shared/AdminShared/_ListOfUsers.cshtml", log);
         }
-
-
         public ActionResult dashboard()
         {
 
@@ -4886,8 +4881,6 @@ namespace banimo.Controllers
 
             return View(log);
         }
-
-
         public void resetAdminProductPage()
         {
             Response.Cookies["lastpage"].Value = "1";
@@ -6926,7 +6919,8 @@ namespace banimo.Controllers
                 {
 
                     var collection = new NameValueCollection(); string finalNodeID = Session["nodeID"] != null ? Session["nodeID"].ToString() : nodeID;
-                    collection.Add("servername", servername); collection.Add("nodeID", finalNodeID);
+                    collection.Add("servername", servername); 
+                    collection.Add("nodeID", finalNodeID);
                     collection.Add("device", device);
                     collection.Add("code", code);
                     collection.Add("title", title);
@@ -7070,9 +7064,6 @@ namespace banimo.Controllers
             {
                 DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(pathString));
             }
-
-
-
 
             try
             {

@@ -77,6 +77,12 @@ namespace banimo.apiViewModel
         public string auth { get; set; }
     }
 
+    public class paymentVM
+    {
+        public string price { get; set; }
+        public string   token { get; set; }
+    }
+
     public class callMe
     {
         public string id { get; set; }

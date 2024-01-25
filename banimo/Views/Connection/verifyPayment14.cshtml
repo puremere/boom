@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Payment Verificatin";
+    Layout = "~/Views/Shared/_Layout9.cshtml";
+}
+
+
+<style>
+
+    .p {
+        width: 70%;
+        margin: auto;
+        align-content: center;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+    .childofp {
+        margin: 3%;
+    }
+
+        .childofp p {
+            text-align: right
+        }
+</style>
+
+
+
+@{
+    if (@ViewBag.message == "موفق")
+    {
+        <div class="container" style="text-align:center; direction:rtl; padding:50px 50px;background-color: white;margin-top: 20px;margin-bottom:20px; border: 1px #ddd solid;border-radius: 10px;">
+
+            <div class="row" style="display:flex">
+                <img style="width:150px; float:left; margin:auto" src="~/images/successPayment.png" />
+            </div>
+
+            <h4 style="text-align:center; float:right;color:#4d4d4d;padding: 30px;width:100%; ">
+                افزایش اعتبار شما با موفقیت انجام شد
+            </h4>
+            <h4 style="text-align:center;font-size:18px;">شماره پرداخت:   <span style="font-size:25px"></span>@ViewBag.message3 </h4>
+            <div class="btn btn-default" style="margin:25px"><a href="/">بازگشت به صفحه اصلی</a> </div>
+
+
+
+            <div id="buttonHolder">
+
+            </div>
+
+            @{
+
+                if (Request.Browser.IsMobileDevice)
+                {
+                    string srt = "wearkala://?type=credit&status=1&message=پرداخت با موفقیت  انجام شد" ;
+
+                    <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="@srt">بازگشت به اپلیکیشن</a></div>
+
+                }
+
+            }
+
+            @*@{
+                    if (Request.Browser.IsMobileDevice)
+                    {
+                        <script>
+                                const iphone = () => {
+                                    if (typeof window === `undefined` || typeof navigator === `undefined`) return false;
+
+                                    return /iPhone/i.test(navigator.userAgent || navigator.vendor || (window.opera && opera.toString() === `[object Opera]`));
+                                };
+
+
+                                if (iphone()) {
+                                    var srt = "wearkala://?status=1&message=" + @ViewBag.message3;
+                                    $("#buttonHolder").html(' <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="' + srt + '">بازگشت به اپلیکیشن</a></div>');
+                                }
+                                else {
+                                    var srt = "store://wearkala/purchase_result?status=1&message=" + @ViewBag.message3;
+                                    $("#buttonHolder").html(' <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="' + srt + '">بازگشت به اپلیکیشن</a></div>');
+
+                                 };
+                        </script>
+                    }
+                }*@
+
+        </div>
+
+    }
+    else
+    {
+        <div class="container" style="text-align:center; direction:rtl; padding:50px 50px;background-color: white;margin-top: 20px;border: 1px #ddd solid;border-radius: 10px;">
+
+            <div class="row" style="display:flex">
+
+                <img src="~/images/paymentError.png" style="width:150px; float:left; margin:auto" />
+            </div>
+
+            <h4 style="text-align:center; float:right;color:#4d4d4d;padding: 30px;width:100%; ">
+                خطا ! پرداخت با خطا مواجه شد
+            </h4>
+
+            <div class="btn btn-default" style="margin:25px"><a href="/Home/index">بازگشت به صفحه اصلی</a> </div>
+
+            <div id="buttonHolder">
+
+            </div>
+
+            @{
+
+                if (Request.Browser.IsMobileDevice)
+                {
+                    string srt = "wearkala://?type=credit&status=0&message= پرداخت شما ناموفق بود"; /*+@ViewBag.message2*/
+
+                    <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="@srt">بازگشت به اپلیکیشن</a></div>
+
+                }
+
+            }
+
+
+            @*@{
+                    if (Request.Browser.IsMobileDevice)
+                    {
+                        <script>
+                            const iphone = () => {
+                                if (typeof window === `undefined` || typeof navigator === `undefined`) return false;
+                                return /iPhone/i.test(navigator.userAgent || navigator.vendor || (window.opera && opera.toString() === `[object Opera]`));
+                            };
+
+
+                            if (iphone()) {
+                                var srt = "wearkala://?status=0&message=" + @ViewBag.message3;
+                                $("#buttonHolder").html(' <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="' + srt + '">بازگشت به اپلیکیشن</a></div>');
+                            }
+                            else {
+                                var srt = "store://wearkala/purchase_result?status=0&message=" + @ViewBag.message3;
+                                $("#buttonHolder").html(' <div class="btn btn-default" style="margin:25px"> <a style="font-size:15px" id="android" href="' + srt + '">بازگشت به اپلیکیشن</a></div>');
+
+                             };
+                        </script>
+                    }
+                }*@
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+    }
+}
+
+
+
+
+
+

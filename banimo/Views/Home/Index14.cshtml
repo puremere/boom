@@ -1,0 +1,674 @@
+﻿@using Newtonsoft.Json;
+@model banimo.ViewModePost.getMaindataViewModel
+@{
+    Layout = "~/Views/Shared/_Layout14.cshtml";
+}
+    <main class="main">
+
+        <section class="intro-wrapper" style="padding:15px; margin:auto; width:85%">
+
+
+            <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide pg-show nav-xxl-show nav-hide"
+                 data-swiper-options="{
+                    'slidesPerView': 1,
+                 'spaceBetween': 15,
+                    'breakpoints': {
+                        '1500': {
+                            'nav': true,
+                            'dots': false
+                        }
+                    },
+                    'autoplay': {
+                        'delay': 8000,
+                        'disableOnInteraction': false
+                    }
+                }">
+                <div class="swiper-wrapper row gutter-no cols-1">
+                    @if (Model.slides != null)
+                    {
+                        foreach (var item in Model.slides)
+                        {
+                            int i = Model.slides.IndexOf(item) + 1;
+                            string url = string.IsNullOrEmpty(item.catIDOrLink) ? "" : item.catIDOrLink;
+                            <div urltogo="@url" srcTogo="https://papaya-sport.com/images/@item.image" class=" slideitem swiper-slide banner banner-fixed intro-slide intro-slide1" style="border-radius:35px; height:400px; background-image: url(https://papaya-sport.com/images/panelImages/@item.image);    background-size: cover; background-color: #FFF; border-radui; ">
+                                <div class="container">
+
+                                    <div class="banner-content y-50 d-inline-block">
+                                        <div class="slide-animate" data-animation-options="{ 'name': 'flipInY', 'duration': '1s'}">
+                                            <h5 class="banner-subtitle text-uppercase font-weight-bold ls-10">
+                                                @item.Ptitle
+                                            </h5>
+                                            <h3 class="banner-title text-capitalize font-weight-normal ls-25">
+                                                <strong>@item.title</strong><br>
+                                            </h3>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        }
+                    }
+
+
+
+
+
+                </div>
+                <div class="swiper-pagination"></div>
+                @*<button class="swiper-button-next"></button>
+                <button class="swiper-button-prev"></button>*@
+            </div>
+        </section>
+
+        <!-- End of .intro-section -->
+
+        <div class="container">
+
+
+            @if (Model.catsParents != null)
+            {
+                <h2 class="title mb-5 appear-animate">  </h2>
+                <div style="display:none;" class="swiper-container swiper-theme shadow-swiper category-wrapper appear-animate"
+                     data-swiper-options="{
+                    'spaceBetween': 20,
+                    'slidesPerView': 2,
+                    'breakpoints': {
+                        '576': {
+                            'slidesPerView': 3
+                        },
+                        '768': {
+                            'slidesPerView': 4
+                        },
+                        '992': {
+                            'slidesPerView': 5
+                        },
+                        '1200': {
+                            'slidesPerView': 6
+                        }
+                    }
+                }">
+                    <div class="swiper-wrapper row cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" style="margin-right:35%">
+                        @foreach (var item in Model.catsParents)
+                        {
+                            <div id="@item.ID" class="categoryParent final swiper-slide category category-ellipse">
+                                <figure class="category-media">
+                                    <a href="javascript:void(0)">
+                                        <img class="lazy" data-src="https://papaya-sport.com/images/@item.image" alt="Categroy" width="190" @*https://www.ratasanat.com/images/*@
+                                             height="190" style="background-color: #5C92C0;" />
+                                    </a>
+                                </figure>
+                                <div class="category-content">
+                                    <h4 class="category-name">
+                                        <a href="shop-banner-sidebar.html">@item.title</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            }
+
+            @{
+                string display = "unset";
+                if (Model.catsParents == null)
+                {
+                    display = "none";
+                }
+            }
+
+            <section class="childcategory  category-section top-category bg-grey pt-10 pb-10 appear-animate" style="margin-top:50px ; display : @display">
+                <h2 class="title mb-5 appear-animate">  </h2>
+                <div id="catcantainer" class="container pb-2" style="display:none; flex-wrap:wrap; justify-content:center">
+
+                    @if (Model.catsdata != null)
+                    {
+                        if (Model.catsdata.First().mycatcollection != null)
+                        {
+                            foreach (var item in Model.catsdata.First().mycatcollection)
+                            {
+                                string catmode = "1" + @item.ID;
+                                string classname = "p" + item.parentID;
+                                <div id="@item.ID" class="category @classname  categoryitemchild">
+                                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                                        <img class="lazy" data-src="https://papaya-sport.com/images/@item.image" alt="Category"
+                                             width="130" height="130">
+
+
+                                    </div>
+                                    <a href="/Home/ProductList?catmode=@catmode" class="category-media">
+                                        <p>@item.title</p>
+                                    </a>
+
+                                </div>
+                            }
+                        }
+
+                    }
+
+
+
+                    <style>
+                        .category {
+                            width: 15%;
+                            display: inline-block;
+                            padding: 0 10px;
+                            border-radius: 8px;
+                            vertical-align: top
+                        }
+
+                            .category p {
+                                padding: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 16px;
+                            }
+
+                            .category img {
+                                border-radius: 35px;
+                                aspect-ratio:1;
+                            }
+
+                        @@media (max-width : 600px) {
+                            .category {
+                                width: 33%;
+                            }
+
+                                .category p {
+                                    padding: 8px 0;
+                                    text-align: center;
+                                    font-weight: 600;
+                                    font-size: 12px;
+                                    width: 100%;
+                                }
+                        }
+                    </style>
+                </div>
+
+
+
+                <div id="subcatcontainer" class="subContainer" style="text-align:center">
+                    @if (Model.catsdata != null)
+                    {
+                        if (Model.catsdata.First().mysubcatcollection != null)
+                        {
+                            foreach (var item in Model.catsdata.First().mysubcatcollection)
+                            {
+                                string catmode = "2" + @item.ID;
+                                string classname = "CH" + item.CatID;
+                                <div class="category @classname  categoryitemchild2" style="display:inline-block">
+                                    <div class="swiper-slide  category-classic category-absolute overlay-zoom br-xs" style="height:unset">
+                                        <a href="/Home/ProductList?catmode=@catmode" class="category-media">
+                                            <img class="lazy" data-src="https://papaya-sport.com/images/@item.image" alt="Category"
+                                                 width="130" height="130">
+                                        </a>
+
+                                    </div>
+
+                                    <p>@item.title</p>
+                                </div>
+                            }
+                        }
+
+                    }
+                </div>
+            </section>
+
+            <div class="row category-banner-wrapper appear-animate pt-6 pb-8">
+
+
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 0)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img class="lazy" data-src="https://papaya-sport.com/images/panelImages/@Model.banners[0].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 1)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img class="lazy" data-src="https://papaya-sport.com/images/@Model.banners[1].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+                            </div>
+                        </div>
+                    }
+                }
+
+
+            </div>
+
+        </div>
+
+
+        <!-- End of .category-section top-category -->
+
+        <div class="container">
+            <h2 class="title justify-content-center ls-normal mb-4 mt-10 pt-1 appear-animate">
+                @Resources.res.SomeOfOurItems
+            </h2>
+            <div class="tab tab-nav-boxed tab-nav-outline appear-animate">
+                <ul class="nav nav-tabs justify-content-center" role="tablist">
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link active br-sm font-size-md ls-normal" href="#tab1-1">@Resources.res.TrendingNow</a>
+                    </li>
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-2">@Resources.res.RecommendedItems</a>
+                    </li>
+                    <li class="nav-item mr-2 mb-2">
+                        <a class="nav-link br-sm font-size-md ls-normal" href="#tab1-3">@Resources.res.PopularItems</a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- End of Tab -->
+            <div class="tab-content product-wrapper appear-animate">
+                <div class="tab-pane active pt-4" id="tab1-1">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.newest != null)
+                        {
+                            foreach (var item in Model.newest)
+                            {
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
+                                }
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                string trf = item.tarafID == null ? "0" : item.tarafID;
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
+
+                                string src = imagefile;
+                                <div class="product-wrap ">
+                                    <div class="product text-center shadowbox" style="padding:2px">
+                                        <figure class="product-media">
+                                            <a href="/products/@newurl">
+                                                <img class="lazy" data-src="@src" src="~/images/placeholder.webp" alt="Product"
+                                                     width="300" height="338" />
+                                                <img class="lazy" onError="this.onerror=null;this.src='@src';" data-src="@src2" src="" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
+                                        </figure>
+                                        <div class="product-details">
+
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                            <div class="product-price" style="margin-bottom:20px">
+                                                <ins class="new-price"> @string.Format("{0:n0}", Int32.Parse(@item.price)) تومان</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@string.Format("{0:n0}", Int32.Parse(@item.oldPrice))   تومان</del>
+                                                }
+
+                                            </div>
+                                            @*<div style="padding:4%">
+                                            <div class="input-group">
+                                                @{
+                                                    string clsname = "value" + @item.ID;
+                                                    string partnerID = Response.Cookies["tarafID"] != null ? Response.Cookies["tarafID"].Value : "";
+                                                    string ads = @item.ID + "*";
+                                                }
+                                                <input addson="@ads" class=" form-control @clsname" type="number" min="1" max="100000" value="0">
+
+                                                <button class="quantity-plus w-icon-plus" onclick="addtocart('@trf','@item.ID','')"></button>
+                                                <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@trf','@item.ID','')"></button>
+                                            </div>
+                                        </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+
+                    </div>
+                </div>
+                <!-- End of Tab Pane -->
+                <div class="tab-pane pt-4" id="tab1-2">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.specialOffers != null)
+                        {
+                            foreach (var item in Model.specialOffers)
+                            {
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
+                                }
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
+
+                                string src = imagefile;
+                                <div class="product-wrap">
+                                    <div class="product text-center">
+                                        <figure class="product-media">
+                                            <a href="/products/@newurl">
+                                                <img class="lazy" data-src="@src" src="~/images/placeholder.webp" alt="Product"
+                                                     width="300" height="338" />
+                                                <img class="lazy" onError="this.onerror=null;this.src='@src';" data-src="@src2" src="" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
+                                        </figure>
+                                        <div class="product-details">
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                            <div class="product-price">
+                                                <ins class="new-price">@string.Format("{0:n0}", Int32.Parse(@item.price))   تومان</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@string.Format("{0:n0}", Int32.Parse(@item.oldPrice))  تومان</del>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- End of Tab Pane -->
+                <div class="tab-pane pt-4" id="tab1-3">
+                    <div class="row cols-xl-5 cols-md-4 cols-sm-3 cols-2">
+                        @if (Model.bestseller != null)
+                        {
+                            foreach (var item in Model.bestseller)
+                            {
+                                string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                if (item.meta != null)
+                                {
+                                    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                                    newurl = metaModel.curl;
+                                }
+                                string addID = "addtocarto" + item.ID;
+                                string minusID = "minus" + item.ID;
+                                string imagefile = "placeholder.jpg";
+                                List<string> srtlist = new List<string>();
+                                string src2 = "";
+                                if (item.title != null)
+                                {
+                                    srtlist = item.image.Trim(',').Split(',').ToList();
+                                    imagefile = srtlist[0];
+                                    if (srtlist.Count == 2)
+                                    {
+                                        src2 = srtlist[1];
+                                    }
+                                }
+                                string ID = "N" + item.ID.ToString();
+                                string addtocartid = "addtocart" + ID;
+                                string price = item.price;
+
+                                string src = imagefile;
+
+                                <div class="product-wrap">
+                                    <div class="product text-center shadowbox" style="padding:10px; border-radius:8px ">
+                                        <figure class="product-media" style="margin:auto; max-width:90%">
+                                            <a href="/products/@newurl">
+                                                <img class="lazy" data-src="@src" src="~/images/placeholder.webp" alt="Product"
+                                                     width="300" height="338" />
+                                                <img class="lazy" onError="this.onerror=null;this.src='@src';" data-src="@src2" src="" alt="Product"
+                                                     width="300" height="338" />
+                                            </a>
+                                            @*<div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-cart w-icon-cart"
+                                               title="Add to cart"></a>
+                                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"
+                                               title="Add to wishlist"></a>
+                                            <a href="#" class="btn-product-icon btn-quickview w-icon-search"
+                                               title="Quickview"></a>
+                                            <a href="#" class="btn-product-icon btn-compare w-icon-compare"
+                                               title="Add to Compare"></a>
+                                        </div>*@
+
+
+                                            @if (item.price != item.oldPrice)
+                                            {
+                                                <div class="product-label-group">
+                                                    <label class="product-label label-discount">@item.discount% Off</label>
+                                                </div>
+                                            }
+
+                                        </figure>
+                                        <div class="product-details">
+                                            <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+                                            @*<div class="ratings-container">
+                                            <div class="ratings-full">
+                                                <span class="ratings" style="width: 60%;"></span>
+                                                <span class="tooltiptext tooltip-top"></span>
+                                            </div>
+                                            <a href="product-default.html" class="rating-reviews">(1 Reviews)</a>
+                                        </div>*@
+                                            <div class="product-price">
+                                                <ins class="new-price ">@string.Format("{0:n0}", Int32.Parse(@item.price))  تومان</ins>
+                                                @if (item.price != item.oldPrice)
+                                                {
+                                                    <del class="old-price">@string.Format("{0:n0}", Int32.Parse(@item.oldPrice)) تومان</del>
+                                                }
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- End of Tab Pane -->
+
+            </div>
+            <!-- End of Tab Content -->
+
+            <div class="row category-cosmetic-lifestyle appear-animate mb-5">
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 2)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img class="lazy" data-src="https://papaya-sport.com/images/@Model.banners[2].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+
+                            </div>
+                        </div>
+                    }
+                }
+                @if (Model.banners != null)
+                {
+                    if (Model.banners.Count() > 3)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="banner banner-fixed br-xs">
+                                <figure>
+                                    <img class="lazy" data-src="https://papaya-sport.com/images/@Model.banners[3].image" alt="Category Banner"
+                                         width="610" height="160" style="background-color: #ecedec;" />
+                                </figure>
+
+                            </div>
+                        </div>
+                    }
+                }
+
+
+            </div>
+            <!-- End of Category Cosmetic Lifestyle -->
+            @if (Model.gourpList != null)
+            {
+                foreach (var tag in Model.gourpList)
+                {
+
+                    if (tag.value != null)
+                    {
+
+                        <div class="title-link-wrapper mb-4 appear-animate">
+                            <h2 class="title title-link title-vendor pt-2 pb-2">@tag.title</h2>
+                            <p style="flex:1"></p>
+                            <div tag="@tag.title" class="moretag font-size-normal font-weight-bold ls-25 mb-0" style="cursor:pointer; font-weight:600">
+                                @Html.ActionLink(@Resources.res.seeMore, "ManageSlide", new { val = @tag.catIDOrLink })
+
+
+                            </div>
+                        </div>
+                        <div class="swiper">
+                            <div class="swiper-container shadow-swiper swiper-theme vendor-wrapper appear-animate mb-10 pb-1"
+                                 data-swiper-options="{
+                        'spaceBetween': 20,
+                        'slidesPerView': 1.3,
+                        'breakpoints': {
+                            '576': {
+                                'slidesPerView': 2
+                            },
+                            '768': {
+                                'slidesPerView': 3
+                            },
+                            '992': {
+                                'slidesPerView': 4
+                            }
+                        }
+                    }">
+                                <div class="swiper-wrapper row cols-xl-4 cols-md-3 cols-sm-2 cols-1">
+
+                                    @foreach (var spec in tag.value)
+                                    {
+                                        <div class="swiper-slide vendor-widget shadowbox" style="border-radius:35px; padding:10px">
+                                            <div class="vendor-widget-banner">
+
+                                                <div class="vendor-details">
+                                                    <figure class="vendor-logo">
+                                                        <a href="/home/index?partnerID=@spec.ID">
+                                                            <img class="nodeImage lazy" data-src="@spec.image" src="~/images/placeholder.webp"
+                                                                 alt="Vendor Logo" />
+                                                        </a>
+                                                    </figure>
+                                                    <div class="vendor-personal">
+                                                        <h4 class="vendor-name">
+                                                            <p style="text-align:center;font-size:14px; padding:10px" href="vendor-dokan-store.html">@spec.title</p>
+                                                        </h4>
+                                                        @*<span class="vendor-product-count">27 Products</span>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End of Vendor Widget Banner -->
+                                        </div>
+                                    }
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    }
+
+
+                }
+            }
+
+        </div>
+        <!--End of Catainer -->
+    </main>
+
+
+@section scripts{
+    <script>
+        $(".categoryParent").click(function () {
+            var id = "p" + $(this).attr('id');
+
+            $(".childcategory").css("display", "block");
+            $(".categoryitemchild").css("display", "none");
+            $("." + id).css("display", "inline-block");
+
+
+            const myid = 'catcantainer';
+            const yOffset = -30;
+            const element = document.getElementById(myid);
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            window.scrollTo({ top: y, behavior: 'smooth' });
+           
+           
+        })
+        $(".categoryitemchild").click(function () {
+            var id = "CH" + $(this).attr('id');
+            $(".categoryitemchild2").css("display", "none");
+            $("." + id).css("display", "inline-block");
+
+
+            //const mysubid = 'subcatcontainer';
+            //const yOffset = -30;
+            //const element = document.getElementById(mysubid);
+            //const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            //window.scrollTo({ top: y, behavior: 'smooth' });
+        })
+    </script>
+    @*<style>
+            .swiper-slide {
+                height: unset !important
+            }
+        </style>*@
+
+}

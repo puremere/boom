@@ -1,0 +1,1109 @@
+﻿@model banimo.ViewModelPost.viewProductViewModel
+@using banimo.Classes;
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = Model.title + " | " + @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    Layout = "~/Views/Shared/_Layout4.cshtml";
+}
+@section HeadIncludes{
+    <meta name="product_name" content="@Model.title">
+    <meta name="product_price" content="@Model.price">
+    <meta name="product_id" content="@Model.ID">
+    <meta name="product_old_price" content="@Model.oldPrice">
+
+
+    @if (Model.isAvailable == "1")
+    {
+        <meta name="availability" content="instockor">
+    }
+    else
+    {
+        <meta name="availability" content="outofstock ">
+    }
+    @if (Model.imgGallery != null)
+    {
+        if (Model.imgGallery.Count() > 0)
+        {
+            <meta property="og:image" content="@Model.imgGallery.First().src">
+        }
+
+    }
+
+    @if (Model.filter.Count() > 0)
+    {
+        foreach (var item in Model.filter.ToList())
+        {
+            if (item.filtername == "گارانتی")
+            {
+                <meta name="guarantee" content="@item.detailname">
+
+            }
+
+        }
+
+
+    }
+  <link href="~/Content/css/bootstrap5.css" rel="stylesheet" />
+}
+
+<link href="~/Content/flexslider2.css" rel="stylesheet" />
+<link href="~/Content/detailStyle.css" rel="stylesheet" />
+<style>
+    .flex-control-thumbs {
+    }
+
+        .flex-control-thumbs li {
+            width: 50px;
+            height: 50px
+        }
+
+        .flex-control-thumbs img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover
+        }
+</style>
+<link href="~/Content/lightgallery.min.css" rel="stylesheet" />
+<style>
+
+
+    .c-product__summary {
+        max-width: 450px;
+    }
+
+    .c-product__summary {
+        flex: 1;
+    }
+
+    .c-product__stock-status {
+        line-height: normal;
+        border-radius: 5px;
+        border: 1px solid #e4e4e4;
+        background: #f5f5f5;
+    }
+
+    .c-product-stock__title {
+        display: flex;
+        color: #969696;
+        font-size: 18px;
+        font-weight: 700;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+        .c-product-stock__title::before {
+            content: "";
+            margin: .7rem;
+            flex: 1;
+            height: 1px;
+            background: #969696;
+        }
+
+        .c-product-stock__title::after, .c-product-stock__title::before {
+            content: "";
+            margin: .7rem;
+            flex: 1;
+            height: 1px;
+            background: #969696;
+        }
+
+    element {
+    }
+
+    .c-product-stock__body {
+        color: #4a4a4a;
+        font-size: .9rem;
+    }
+
+    .c-product-stock__body, .m-b-lg {
+        margin: 2rem;
+    }
+
+    .c-product-stock__action, .c-product-stock__title, .p-v-md {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .c-product-stock__action {
+        width: 80%;
+        border-width: 0;
+        background: #7a7a7a;
+        color: #fff;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: block;
+        margin: auto;
+        margin-bottom: 25px;
+    }
+</style>
+<style>
+    .resp-tabs-list li.selected {
+        color: #fff;
+        background-color: #FF4500;
+        border-radius: 10px;
+    }
+
+    .header1 {
+        display: flex;
+        padding: 20px;
+        background-color: #eee;
+        align-items: center;
+        justify-content: center;
+        direction: rtl;
+    }
+    .header2 {
+        display: flex;
+        direction: rtl;
+        margin: 10px 20px;
+        border-radius: 5px;
+        padding: 15px;
+        border-top: 1px solid #ddd
+    }
+    .headeer2Icon {
+        margin: 0 10px !important;
+        color: #FF4500 !important;
+        font-weight: 600 !important;
+    }
+    .header2 a,p{
+        display:flex
+    }
+    .detailTitle {
+        padding: 15px;
+        direction: rtl
+    }
+    .dataholder {
+        border-right: 1px solid #ddd;
+        padding-bottom: 10px;
+        direction: rtl;
+        float: left;
+        visibility:visible;
+    }
+    .pricedetail {
+        border-radius: 10px;
+        padding: 0 20px;
+        margin-top: 30px
+    }
+    .priceParent {
+        margin: 0px;
+        height: 100%;
+        float: right
+    }
+    .discountParentt {
+        display: inline-block;
+        width: 100%;
+        direction: ltr;
+        min-height: 25px
+    }
+    .oldPrice {
+        float: left;
+        display: inline-block;
+        margin-bottom: 5px;
+        font-size: 18px;
+        direction:rtl;
+    }
+    .discountSectence {
+        float: right;
+        display: inline-block;
+        color: white;
+        padding: 15px;
+        border-radius: 35px;
+        background-color: #ef3b3b;
+    }
+    .discountParentt {
+        display: flex;
+        align-items: center;
+    }
+    .oldPrice {
+        flex: 1
+    }
+    .priceParent{
+        width:100%
+    }
+    .addtocart {
+        border: unset;
+        background-color: orange;
+        margin:15px 0;
+        background-image: linear-gradient(to right, #FF4500 50%, #d53c0b 50%);
+        width: 100%;
+        padding:0
+    }
+    .featureTitle {
+        text-align: right;
+        float: right;
+        margin: 20px 0;
+    }
+    .bottomDivTitleParent {
+        display: flex;
+        direction: rtl;
+        align-items: center;
+        margin: 30px 0
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .mybtn{
+            width:100%;
+        }
+
+
+
+        .c-comments__summary-note {
+            flex: none !important;
+            max-width: 100% !important;
+        }
+        .bottomDiv {
+            margin-top: 15px
+        }
+        .discountParentt {
+            display: flex;
+            align-items: center;
+        }
+        .oldPrice{
+            flex:1
+        }
+        .pricedetail div {
+            padding: 0
+        }
+        .priceParent {
+            width: 100%
+        }
+        .pricedetail {
+            padding: 0;
+        }
+        .dataholder {
+            margin-top: 40px;
+            padding: 0 !important;
+            border: none
+        }
+        .detailTitle {
+            padding: 15px;
+            direction: rtl;
+            font-size: 18px;
+            text-align: center;
+        }
+        .header1 {
+            
+            padding:15px 5px;
+            
+        }
+
+        .header2Title {
+            clear: both;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width:100px
+        }
+
+    }
+</style>
+
+
+
+@{
+    banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@Model.meta);
+    string newurl = metaModel.curl;
+
+}
+<div class="header2" style="">
+    @{
+        string entitle = "";
+        if (Model.catTreeList != null)
+        {
+            <a href="/@entitle"> <i class="fa fa-home "></i>  </a>
+            if (Model.catTreeList.Count > 0)
+            {
+                entitle = @Model.catTreeList[0].entitle;
+                <a href="/@entitle"> <span   style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[0].title</span>  </a>
+            }
+            if (Model.catTreeList.Count > 1)
+            {
+                entitle += "/" + @Model.catTreeList[1].entitle;
+                <a href="/@entitle"> <span style="" class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[1].title</span>    </a>
+            }
+            if (Model.catTreeList.Count >  2)
+            {
+                entitle += "/" + @Model.catTreeList[2].entitle;
+                <a href="/@entitle">   <span class="fal fa-chevron-left headeer2Icon"></span><span class="header2Title">@Model.catTreeList[2].title</span> </a>
+            }
+            <p style="color: #FF4500 ">   <span style="" class="fal fa-chevron-left headeer2Icon"></span> <span class="header2Title">@Model.title</span></p>
+
+        }
+    }
+</div>
+<div class="header1"  style="">
+    <div style="display:flex;align-items: center;margin: 0 15px;">
+        <i class="fal fa-info" style="        margin: 0 5px;
+        color: #FF4500"></i>
+        <p>راهنمای خرید</p>
+    </div>
+    <div style="display:flex;align-items: center;margin: 0 15px;">
+        <i class="fal fa-phone" style="margin:0 5px; color:#FF4500"></i>
+        <p>تماس با فروشنده</p>
+    </div>
+    <div style="display:flex;align-items: center;margin: 0 15px;">
+        <i class="fal fa-envelope" style="margin:0 5px; color:#FF4500"></i>
+        <p>ارسال پیام</p>
+    </div>
+</div>
+<div id="idholder" style="display:none">@Model.ID</div>
+<div id="titleHolder" style="display:none">@newurl</div>
+
+
+
+
+<div id="pvDataHolder">
+    @*@Html.Action("GetPRoductView", @Model);*@
+
+</div>
+
+<script>
+    $(document).ready(function () {
+         var REP = "o"+'@Model.ID';
+        $.ajax({
+            url: "/Home/changeLastNumber",
+            data: {
+                value: REP
+            },
+            success: function (data) {
+                $.ajax({
+                    url: "/Home/ProductDetailPartial",
+                    success: function (data) {
+                        $("#pvDataHolder").html(data)
+
+                    }
+                });
+
+                //window.location.href = "/" + $("#titleHolder").text()
+
+            }
+        });
+    });
+
+</script>
+
+
+<div class="bottomDiv" style="position:relative">
+    
+    <div class="bottomDivTitleParent" style="">
+        <i class="fal fa-pencil" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+        <p class="bottomDivTitle">بررسی تخصصی محصول</p>
+        <span style="flex:1; border-top:3px solid"></span>
+    </div>
+    
+    <section >
+        <div class="c-mask js-mask is-masked">
+            <div class="c-mask__text " style=" height: unset; text-align:right; direction:rtl">
+                @if (@System.Configuration.ConfigurationManager.AppSettings["numberType"] == "1")
+                {
+                    <p style="margin:10px;  text-align:right" class="numEn">@Html.Raw(Model.desc)</p>
+                }
+                else
+                {
+                    <p style="margin:10px;  text-align:right">@Html.Raw(Model.desc)</p>
+                }
+            </div>
+          
+        </div>
+    </section>
+</div>
+
+@if (Model.feature != null)
+{
+    <div class="bottomDiv">
+        <div class="bottomDivTitleParent">
+            <i class="fal fa-file" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+            <p class="bottomDivTitle">بررسی ویژگی ها محصول</p>
+            <span style="flex:1; border-top:3px solid"></span>
+        </div>
+       
+
+        <div class="c-box c-box--tabs p-tabs__content">
+            <div class="c-params is-active">
+                <article>
+                    @{
+                        List<int> lst2 = new List<int>();
+                        lst2.Clear();
+                        foreach (var item in Model.feature)
+                        {
+                            if (item.value == "Master")
+                            {
+                                lst2.Add(Model.feature.IndexOf(item));
+                            }
+                        }
+                        for (int i = 0; i < lst2.Count(); i++)
+                        {
+                            int j = i + 1;
+                            int myindex = lst2[i];
+                            <section>
+                                                    <p class="c-params__title">
+                                                        <span class="line-title"></span>
+                                                        <span>@Model.feature[myindex].title</span>
+
+                                                    </p>
+                                <ul class="c-params__list">
+                                    @if (j < lst2.Count())
+                                    {
+                                        foreach (var item in Model.feature)
+                                        {
+                                            if (Model.feature.IndexOf(item) > lst2[i] && Model.feature.IndexOf(item) < lst2[j])
+                                            {
+                                                <li>
+                                                    <div class="c-params__list-key">
+                                                        <span class="block">@item.title</span>
+                                                    </div>
+                                                    <div class="c-params__list-value">
+                                                        <span class="block">
+                                                            @item.value
+                                                        </span>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in Model.feature)
+                                        {
+                                            if (Model.feature.IndexOf(item) > lst2[i])
+                                            {
+                                                <li>
+                                                    <div class="c-params__list-key">
+                                                        <span class="block">@item.title</span>
+                                                    </div>
+                                                    <div class="c-params__list-value">
+                                                        <span class="block">
+                                                            @item.value
+                                                        </span>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                    }
+
+                                </ul>
+                            </section>
+                        }
+                    }
+
+                </article>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="bottomDiv">
+    <div class="bottomDivTitleParent" style="">
+        <i class="fal fa-comment" style="color:#FF4500 !important; font-size:20px; color:black;"></i>
+        <p class="bottomDivTitle">نظر کاربران</p>
+        <span style="flex:1; border-top:3px solid"></span>
+    </div>
+    <div class="c-comments " style="">
+        
+        <div class="c-comments__summary">
+            <div class="c-comments__summary-note" style="margin-top:30px">
+                <span>شما هم می‌توانید در مورد این کالا نظر بدهید.</span>
+                <p>
+                    اگر این محصول را قبلا خریده باشید، با وارد شدن به حساب کاربری خود،  نظر
+                    شما به عنوان مالک محصول ثبت خواهد شد.
+                </p>
+                <div class="mybtn addingcomment" style="cursor:default">
+                    <div style="border-radius: 50px 0 0 50px; background-color: #36CDDF; width: 30%; padding: 10px; display: inline-block">
+                        <i class="glyphicon glyphicon-plus" style="display:inline-block; color:white"></i> <img style="display:inline-block; width:40px " src="~/images/comments.png" />
+                    </div>
+                    @{
+                        string id = Model.ID;
+                        string img = Model.slides != null ? Model.slides.First().image : "placeholder.png";
+                        if (@Session["token"] != null)
+                        {
+                            TempData["imgComment"] = img;
+                            <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet"> <a style="color:white !important;cursor:pointer" href="/Home/AddComment?id=@id">افزودن نظر جدید</a> </p>
+
+                        }
+                        else
+                        {
+                            <p style="vertical-align: middle; text-align: center; display: inline-block; font-size: 15px; width: 65%; color: white; " class="addcommnet">@Html.ActionLink("افزودن نظر جدید", "Login", new { }, new { style = "color:white !important;cursor:pointer" })</p>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="c-comments__filter">
+            <span class="c-faq__filter-title h4">نظرات کاربران</span>
+        </div>
+        <div id="product-comment-list">
+            <ul id="comment" class="c-comments__list"></ul>
+        </div>
+    </div>
+    <script>
+            var id = "@Model.ID";
+            $.ajax({
+                url: '/Home/getListOfComments',
+                dataType: 'html',
+                data: {
+                    ProductID: id
+
+                },
+                success: function (data) {
+
+                    $('#comment').html(data);
+
+                },
+                error: function (request, status, error) {
+
+                }
+            });
+    </script>
+    <div id="comment"></div>
+</div>
+
+<div id="webb">
+
+    @if (Model.similarProduct != null)
+    {
+
+        <div class="maxwidth">
+            <div style="background-color: #f6f5f5; padding: 2% 0px">
+                <div class="SECTIONHOLDER" style="padding:0; background: rgb(27,2,55);background: linear-gradient(90deg, rgba(27,2,55,1) 0%, rgba(46,15,148,1) 26%, rgba(180,160,236,1) 100%);">
+                    <div class="morphism" style="width:100%; height:100%; ">
+                        <div style="padding:25px; text-align:center"><span>@Html.ActionLink(" پیشنهادهای مشابه", "ProductList", new { sortID = 1 }, new { style = " color: #fff;" }) </span></div>
+
+                        <div id="bestholder" class="resCarousel" data-items="3-5-5-5" data-slide="1" data-speed="100">
+
+                            <div class="resCarousel-inner">
+                                <div id="/Home/ProductList?sortID=1" class="item watchall" style="background-color:white; cursor:pointer;height: 100%;box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.29);">
+                                    <div href="" style="width:100%;height:100%; display:flex; flex-direction:column; align-items:center;justify-content:center">
+                                        <span>
+                                            <i style="color:cornflowerblue; font-size:28px" class="fa fa-angle-left"></i>
+                                        </span>
+                                        <p style="padding:15px">مشاهده همه</p>
+                                    </div>
+                                </div>
+
+                                @Html.Partial("~/Views/Shared/_returnVitirn.cshtml", Model.similarProduct)
+
+
+
+
+
+                            </div>
+                            <button class='btn btn-default leftRs'><</button>
+                            <button class='btn btn-default rightRs'>></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        // setting one image slider vertically middl
+
+        if (window.outerWidth > 950) {
+
+            $(".slidone").height($(".contentholder").height());
+        }
+        else  {
+            var width = window.outerWidth / 3;
+
+            $(".imageitsel").css("max-height", width)
+            $(".imageitsel").css("max-width", width)
+        }
+        $("#commentmoreandmore").click(function () {
+
+            //var id = $("#idholder").text();
+            //if (id != "") {
+            //    alert("page")
+            //}
+            //else {
+            //    alert("login")
+            //}
+        })
+
+        var ID = "o" + @Model.ID
+
+        $("#khabaramkon").click(function () {
+
+            $.ajax({
+                url: '/Home/Khabaramkon',
+                dataType: 'html',
+                data: {
+                    id: ID
+
+                },
+                success: function (data) {
+                    if (data === "0") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('ابتدا وارد شوید')
+                    }
+                    else if (data === "1") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('با شما در تماسیم')
+                    }
+                    else if (data === "2") {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.error('خطای سیستمی')
+                    }
+                    else {
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000
+                        }
+                        toastr.success('شما در لیست اولویت ما قرار دارید')
+                    }
+
+
+                },
+                error: function () {
+
+                }
+            });
+        })
+
+
+
+
+
+
+    })
+</script>
+<script>
+
+    //ResCarouselCustom();
+    var pageRefresh = true;
+
+    function ResCarouselCustom() {
+        var items = $("#dItems").val(),
+            slide = $("#dSlide").val(),
+            speed = $("#dSpeed").val(),
+            interval = $("#dInterval").val()
+
+        var itemsD = "data-items=\"" + items + "\"",
+            slideD = "data-slide=\"" + slide + "\"",
+            speedD = "data-speed=\"" + speed + "\"",
+            intervalD = "data-interval=\"" + interval + "\"";
+
+
+        var atts = "";
+        atts += items != "" ? itemsD + " " : "";
+        atts += slide != "" ? slideD + " " : "";
+        atts += speed != "" ? speedD + " " : "";
+        atts += interval != "" ? intervalD + " " : ""
+
+        //console.log(atts);
+
+        var dat = "";
+        dat += '<h4 >' + atts + '</h4>'
+        dat += '<div class=\"resCarousel\" ' + atts + '>'
+        dat += '<div class="resCarousel-inner">'
+        for (var i = 1; i <= 14; i++) {
+            dat += '<div class=\"item\"><div><h1>' + i + '</h1></div></div>'
+        }
+        dat += '</div>'
+        dat += '<button class=\'btn btn-default leftRs\'><i class=\"fa fa-fw fa-angle-left\"></i></button>'
+        dat += '<button class=\'btn btn-default rightRs\'><i class=\"fa fa-fw fa-angle-right\"></i></button>    </div>'
+        console.log(dat);
+        $("#customRes").html(null).append(dat);
+
+        if (!pageRefresh) {
+            ResCarouselSize();
+        } else {
+            pageRefresh = false;
+        }
+        //ResCarouselSlide();
+    }
+
+    $("#eventLoad").on('ResCarouselLoad', function () {
+        //console.log("triggered");
+        var dat = "";
+        var lenghtI = $(this).find(".item").length;
+        if (lenghtI <= 30) {
+            for (var i = lenghtI; i <= lenghtI + 10; i++) {
+                dat += '<div class="item"><div class="tile"><div><h1>' + (i + 1) + '</h1></div><h3>Title</h3><p>content</p></div></div>'
+            }
+            $(this).append(dat);
+        }
+    });
+</script>
+<script src="~/Scripts/resCarousel.js"></script>
+
+<script src="~/Scripts/lightgallery.min.js"></script>
+<script src="~/Scripts/lg-thumbnail.js"></script>
+<script src="~/Scripts/lg-fullscreen.js"></script>
+<script src="~/Scripts/lg-zoom.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#lightgallery").lightGallery();
+    });
+</script>
+<script>
+    $(".flexslider").click(function () {
+        var IMGList = @Html.Raw(Json.Encode(@Model.imgGallery)) ;
+        $(this).lightGallery({
+            dynamic: true,
+            dynamicEl: IMGList,
+            startClass: 'lg-start-zoom'
+        })
+    })
+</script>
+<script>
+    $("#slidholder").click(function () {
+        var IMGList = @Html.Raw(Json.Encode(@Model.imgGallery)) ;
+        $(this).lightGallery({
+            dynamic: true,
+            dynamicEl: IMGList,
+            startClass: 'lg-start-zoom'
+
+        })
+    })
+</script>
+<script>
+    $(document).ready(function () {
+
+        if ($(window).width() < 960) {
+
+
+            $(".slidone div").height($(window).height() / 3);
+            //$(".imageitself").height($(window).height() / 3 - 40);
+            //$(".imageitself").width($(window).width() - 40);
+            //$(".imageitself").css("padding", "10px")
+            $(".flex-control-nav flex-control-thumbs").css("display", "none");
+            $(".slidone div").css("padding", "5px");
+            $("i.detailfal").css("position", "relative");
+            $("i.detailfal").css("font-size", "17px");
+            $("i.detailfal").css("float", "left");
+            $("i.detailfal").css("padding", "10px");
+            $("i.detailfal").css("left", "0px");
+            $("i.detailfal").css("top", "0px");
+            $(".gradientback").css("display", "block")
+
+
+
+
+        }
+    })
+</script>
+<script>
+    $('.value-plus').on('click', function () {
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        let newVal = $(this).parent().children(".value").text();
+        let finalVal = parseInt(newVal) + 1;
+        // $(this).parent().children(".value").text(finalVal);
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace("addtocarto", "");
+
+        $("." + myid).text(finalVal);
+
+        $.ajax({
+            url: '/Home/addtocart',
+            dataType: 'html',
+            data: {
+                id: ID
+
+            },
+            success: function (data) {
+                $.ajax({
+                    url: '/Home/gogetfinalprice',
+
+
+                    success: function (data) {
+                        var array = data.split(',');
+
+
+                        if (array[3] === "0") {
+                            $(".discountSection").css("display", "none");
+                        }
+                        $("#basepriceholder").text(addCommas(array[1]))
+                        $("#spanfortotal").text(addCommas(array[0]))
+                        $("#spanfortotal2").text(addCommas(array[0]))
+                        $(".simpleCart_quantityy").text(array[2])
+                        $(".discountfinal").text(addCommas(array[3]))
+                        $(".discountpercent").text(array[4])
+                        $.ajax({
+                            url: '/Home/checkoutsummery/',
+                            dataType: 'html',
+                            success: function (data) {
+
+                                $('#summerydetailholder').html(data);
+                                $("#loading").fadeOut()
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+    });
+    $('.value-minus').on('click', function () {
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace('minus', '');
+
+        let newVal = $(this).parent().children(".value").text();
+        if (newVal != "0") {
+            let finalVal = parseInt(newVal) - 1;
+            $("." + myid).text(finalVal);
+        }
+
+
+        $.ajax({
+            url: '/Home/minusfromcart',
+            dataType: 'html',
+            data: {
+                id: ID
+            },
+            success: function (data) {
+
+                $.ajax({
+                    url: '/Home/gogetfinalprice',
+                    success: function (data) {
+                        var array = data.split(',');
+                        if (array[3] === "0") {
+                            $(".discountSection").css("display", "none");
+                        }
+                        $("#basepriceholder").text(addCommas(array[1]))
+                        $("#spanfortotal").text(addCommas(array[0]))
+                        $("#spanfortotal2").text(addCommas(array[0]))
+                        $(".simpleCart_quantityy").text(array[2])
+                        $(".discountfinal").text(addCommas(array[3]))
+                        $(".discountpercent").text(array[4])
+                        $.ajax({
+                            url: '/Home/checkoutsummery/',
+                            dataType: 'html',
+                            success: function (data) {
+
+                                $('#summerydetailholder').html(data);
+                                $("#loading").fadeOut()
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+
+
+
+
+
+    });
+
+
+
+
+</script>
+<style>
+    .c-params__title{
+        font-size:16px; 
+        font-weight : 600;
+        display:flex;
+        align-items:center;
+        direction:rtl
+    }
+    .line-title{
+        width:20px;
+        border-bottom:4px solid;
+        margin-left:25px;
+
+    }
+    .c-params__title::before {
+        border-style: unset !important;
+    }
+    .c-params__list-key, .c-params__list-value{
+        padding:0
+    }
+    .c-params__list-key {
+        border: 1px solid #c5c1c1;
+        border-left: none;
+    }
+    .c-params__list-value .block {
+        background-color: white;
+    }
+    .c-params__list-value {
+       
+        border: 1px solid #ddd;
+        border-right: none;
+    }
+    .bottomDivTitle {
+        font-size: 18px;
+        margin: 0;
+        margin-left: 10px;
+        color: #FF4500;
+        margin-right: 20px;
+    }
+    .bottomDiv {
+        margin: 50px 150px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        text-align: right;
+    }
+    @@media only screen and (max-width: 600px) {
+        .bottomDiv {
+            padding: 5px;
+            margin:5px;
+        }
+    }
+</style>
+<style>
+    .showmedetail {
+        cursor: pointer
+    }
+
+    .mainParent {
+        padding: 15px;
+        background-color: white
+    }
+
+    .vitrinDiscount {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: red;
+        border-radius: 15px;
+        padding: 5px 10px;
+    }
+
+    .sectionPrice {
+        margin: 0px 15px;
+        min-height: 20px;
+        text-align: right
+    }
+
+   
+
+    .oldPrice {
+        font-size: 15px
+    }
+
+    .newPrice {
+        color: black;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600
+    }
+
+    .wholeSectionPrice {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .addButtonP {
+        font-size: 12px !important;
+        direction: rtl !important;
+        color: white !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #FF4500 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 5px !important;
+        border: unset !important;
+    }
+
+        .addButtonP i {
+            margin: 0 10px;
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .mainParent {
+            padding: 5px
+        }
+
+        .vitrinDiscount {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: red;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .sectionPrice {
+            margin: 0;
+            padding: 5px;
+            text-align: right
+        }
+
+        .addButtonP i {
+            margin: 0 5px;
+        }
+
+        .addButtonP p {
+            width: 70%
+        }
+    }
+</style>
+
+<link href="~/Content/css/product-style.css" rel="stylesheet" />

@@ -408,6 +408,9 @@ namespace banimo.Controllers
                             long referenceID = rnd.Next(222000000, 222999999);
                             string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
                             addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
+
+                            
+                            //return RedirectToAction("VerifyMellatTest");
                             return RedirectToAction("ReqestForMellat", new { price = famount, orderNumberWeb = referenceID });
                         }
                     }
@@ -421,9 +424,21 @@ namespace banimo.Controllers
             return Content("");
         }
 
+        public ActionResult requestForWalletNew(int price,string token)
+        {
+            string varizdesc = "  ";
+            int famount = price;
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result;
+            Random rnd = new Random();
+            long referenceID = rnd.Next(222000000, 222999999);
+            string add2result = wb.addTransaction(token, device, code, famount.ToString(), servername, "1", varizdesc, "0", "0", referenceID.ToString());
+            addTransactionVM Rmodel = JsonConvert.DeserializeObject<addTransactionVM>(add2result);
 
 
-
+            return RedirectToAction("ReqestForMellat", new { price = famount, orderNumberWeb = referenceID });
+        }
         public ActionResult ReqestForWallet(string id)
         {
 
@@ -783,7 +798,7 @@ namespace banimo.Controllers
                     collection2.Add("mbrand", servername);//dd12bd299fda26a6e4bb066bb2d30d39
 
                     byte[] response =
-                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
+                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsoolTest.php", collection2);
                     //client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckNewVersionV2.php", collection2);
                     // client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheck.php", collection2);
 
@@ -1521,6 +1536,140 @@ namespace banimo.Controllers
 
 
         }
+
+        public ActionResult VerifyMellatTest()
+        {
+            int saleOrderId = 222669788;
+            string rr = "" + saleOrderId;
+            string result2 = "";
+
+            if (saleOrderId / 1000000 == 222 || saleOrderId / 1000000 == 111)
+            {
+                // این قسمت برای پرداخت مابقی از ملت است که 
+                //1- تراکنش ثبت شده را تایید میکند
+                //2- به ازای کل خرید برداشت میزند
+                //3- وریفای بای ادمین را صدا می زند
+
+
+
+
+                string device = RandomString();
+                string code = MD5Hash(device + "ncase8934f49909");
+                string result;
+                //using (WebClient client = new WebClient())
+                //{
+
+                //    var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                //    collection2.Add("device", device);
+                //    collection2.Add("code", code);
+                //    collection2.Add("auth", saleOrderId.ToString());
+                //    collection2.Add("servername", servername);
+
+
+                //    byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getWalletTransactionData.php", collection2);
+
+                //    result = System.Text.Encoding.UTF8.GetString(response);
+                //}
+
+                //ProfileVM log2 = JsonConvert.DeserializeObject<ProfileVM>(result);
+
+                //int Amount = Convert.ToInt32(log2.mytransaction.First().price);
+
+
+                int Status = 100;// zp.PaymentVerification(ConfigurationManager.AppSettings["zarin"], Request.QueryString["Authority"].ToString(), Amount, out RefID);
+                                 //userdata user = Session["LogedInUser"] as userdata;
+
+                if (Status == 100)
+                {
+
+
+
+                    result2 = "";
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("auth", saleOrderId.ToString());
+                        collection2.Add("mbrand", servername);
+
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
+
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+                    }
+
+                    walletUpdate modelwallet = JsonConvert.DeserializeObject<walletUpdate>(result2);
+
+                    //string bardashdesc = " برداشت بابت سفارش شماره " + modelwallet.orderID;
+                    //string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
+
+
+                    // اگر پرچیس داشت باید اردر تمام شود اگر نداشت ینی فقط پرداخت بوده
+
+
+                    if (modelwallet.orderID == "")
+                    {
+                        return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1", fromUser = 1 });
+                    }
+                    else
+                    {
+                        ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                        finalModle.payment = "1";
+                        return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1", fromUser = 1 });
+
+                    }
+
+
+
+
+
+
+                }
+
+
+
+            }
+            if (saleOrderId != 111111)
+            {
+                try
+                {
+                    string device = RandomString();
+                    string code = MD5Hash(device + "ncase8934f49909");
+
+                    using (WebClient client = new WebClient())
+                    {
+
+                        var collection2 = new NameValueCollection(); collection2.Add("nodeID", nodeID);
+                        collection2.Add("device", device);
+                        collection2.Add("code", code);
+                        collection2.Add("refID", rr);
+                        collection2.Add("paymentStatus", "1");
+                        collection2.Add("payment", "3");
+                        collection2.Add("mbrand", servername);
+
+
+
+
+
+                        byte[] response =
+                        client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doFinalCheckMarsool.php", collection2);
+
+                        result2 = System.Text.Encoding.UTF8.GetString(response);
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                    TempData["Message"] = e.InnerException.Message;
+                    TempData["Message2"] = "" + saleOrderId;
+                }
+            }
+
+            return Content("");
+        }
         [HttpPost]
         public ActionResult VerifyMellat()
         {
@@ -1600,7 +1749,7 @@ namespace banimo.Controllers
 
 
 
-                                if (saleOrderId / 1000000 == 222)
+                                if (saleOrderId / 1000000 == 222 || saleOrderId / 1000000 == 111)
                                 {
                                     // این قسمت برای پرداخت مابقی از ملت است که 
                                     //1- تراکنش ثبت شده را تایید میکند
@@ -1650,7 +1799,6 @@ namespace banimo.Controllers
                                             collection2.Add("code", code);
                                             collection2.Add("auth", saleOrderId.ToString());
                                             collection2.Add("mbrand", servername);
-
                                             byte[] response =
                                             client.UploadValues(ConfigurationManager.AppSettings["server"] + "/Home/doWalletFinalCheck.php", collection2);
 
@@ -1663,11 +1811,18 @@ namespace banimo.Controllers
                                         //string addresult = wb.addTransaction(modelwallet.UserId, device, code, modelwallet.credit.ToString(), servername, "0", bardashdesc, modelwallet.orderID, "1", "");
 
 
+                                        // اگر پرچیس داشت باید اردر تمام شود اگر نداشت ینی فقط پرداخت بوده
+                                        if (modelwallet.orderID == "0")
+                                        {
 
-                                        ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
-                                        finalModle.payment = "1";
-                                        return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1", fromUser = 1 });
-
+                                            return RedirectToAction("verifyPayment", new { status = 200, refID = saleOrderId.ToString() });
+                                        }
+                                        else
+                                        {
+                                            ViewModelPost.ReqestForPaymentViewModel finalModle = new ViewModelPost.ReqestForPaymentViewModel();// JsonConvert.DeserializeObject<ViewModelPost.ReqestForPaymentViewModel>(modelstring);
+                                            finalModle.payment = "1";
+                                            return RedirectToAction("verifyByAdmin", new { payment = "1", id = modelwallet.orderID, isPayed = "1", fromUser = 1 });
+                                        }
 
 
 
@@ -1723,7 +1878,9 @@ namespace banimo.Controllers
                             }
                             else
                             {
-                                TempData["Message"] = int.Parse(resultCode_bpSettleRequest.Replace("_", " "));// bankMellatImplement.DesribtionStatusCode();
+
+                               
+                                    TempData["Message"] = int.Parse(resultCode_bpSettleRequest.Replace("_", " "));// bankMellatImplement.DesribtionStatusCode();
                                 TempData["Message2"] = "" + saleOrderId;
                                 Run_bpReversalRequest = true;
                             }
@@ -1751,7 +1908,16 @@ namespace banimo.Controllers
                     Run_bpReversalRequest = true;
                 }
 
-                return RedirectToAction("verifyAtBase", "Connection");
+
+                if (saleOrderId / 1000000 == 222 || saleOrderId / 1000000 == 111)
+                {
+                    return RedirectToAction("verifyPayment", new { status = 400, refID = saleOrderId.ToString() });
+                }
+                else
+                {
+                    return RedirectToAction("verifyAtBase", "Connection");
+                }
+               
             }
             catch (Exception Error)
             {
@@ -1762,12 +1928,11 @@ namespace banimo.Controllers
                 int item = (int)saleOrderId / 1000000;
                 if (item == 222)
                 {
-                    return Content("200");
+                    return RedirectToAction("verifyPayment", new { status = 400, refID = saleOrderId.ToString() });
                 }
                 else
                 {
                     return RedirectToAction("verifyAtBase", "Connection");
-
                 }
             }
             finally
@@ -1782,151 +1947,6 @@ namespace banimo.Controllers
 
 
 
-            //long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
-            //string userName = ConfigurationManager.AppSettings["userName"];
-            //string userPassword = ConfigurationManager.AppSettings["userPassword"];
-            //try
-            //{
-            //    if (Request.Params["SaleReferenceId"] != ""){
-            //        saleReferenceId = long.Parse(Request.Params["SaleReferenceId"].ToString());
-            //    }
-            //    if (Request.Params["SaleOrderId"] != "")
-            //    {
-            //        saleOrderId = long.Parse(Request.Params["SaleOrderId"].ToString());
-
-            //    }
-            //    resultCode_bpPayRequest = Request.Params["ResCode"].ToString();
-            //    string resultCode_bpinquiryRequest = "-9999";
-            //    string resultCode_bpSettleRequest = "-9999";
-            //    string resultCode_bpVerifyRequest = "-9999";
-            //    string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/Verify";
-
-
-            //    if (int.Parse(resultCode_bpPayRequest) == (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
-            //    {
-            //        bankMellat.PaymentGatewayImplService WebService = new bankMellat.PaymentGatewayImplService();
-            //        resultCode_bpVerifyRequest = WebService.bpVerifyRequest(terminalId, userName, userPassword, saleOrderId, saleOrderId, saleReferenceId);
-
-            //        if (string.IsNullOrEmpty(resultCode_bpVerifyRequest))
-            //        {
-            //            #region Inquiry Request
-
-            //            resultCode_bpinquiryRequest = WebService.bpInquiryRequest(terminalId, userName, userPassword, saleOrderId, saleOrderId, saleReferenceId);
-
-            //            if (int.Parse(resultCode_bpinquiryRequest) != (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
-            //            {
-            //                //the transactrion faild
-            //                //TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpinquiryRequest.Replace("_", " ")));
-            //                //
-
-            //                TempData["Message"] = "تراکنش ناموفق ";
-            //                TempData["Message2"] = resultCode_bpSettleRequest;
-            //                TempData["Message3"] = "";
-            //                Run_bpReversalRequest = true;
-            //            }
-
-            //            #endregion
-            //        }
-
-            //        if ((int.Parse(resultCode_bpVerifyRequest) == (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ) || (int.Parse(resultCode_bpinquiryRequest) == (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ))
-            //        {
-            //            #region SettleRequest
-
-
-            //            resultCode_bpSettleRequest = WebService.bpSettleRequest(terminalId, userName, userPassword, saleOrderId, saleOrderId, saleReferenceId);
-
-
-            //            if ((int.Parse(resultCode_bpSettleRequest) == (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
-            //                || (int.Parse(resultCode_bpSettleRequest) == (int)MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_Settle_ﺷﺪه_اﺳﺖ))
-            //            {
-
-
-            //                string result2 = "";
-            //                string device = RandomString();
-            //                string code = MD5Hash(device + "ncase8934f49909");
-            //                userdata user = Session["LogedInUser"] as userdata;
-            //                using (WebClient client = new WebClient())
-            //                {
-
-            //                     var collection2 = new NameValueCollection();collection2.Add("nodeID",  nodeID);
-            //                    collection2.Add("device", device);
-            //                    collection2.Add("code", code);
-            //                    collection2.Add("token", user.token);
-            //                    collection2.Add("refID", saleOrderId.ToString());
-
-            //                    collection2.Add("paymentStatus", "1");
-            //                    collection2.Add("servername", servername);
-
-
-            //                    byte[] response =
-            //                    client.UploadValues(ConfigurationManager.AppSettings["server"] + "/doFinalCheckMellat.php", collection2);
-
-            //                    result2 = System.Text.Encoding.UTF8.GetString(response);
-            //                }
-
-            //                TempData["message"] = "موفق";
-            //                TempData["message2"] = saleOrderId;
-            //                TempData["message3"] = "شماره پیگیری بانک: " + saleReferenceId;
-
-            //            }
-            //            else
-            //            {
-            //                TempData["Message"] = "تراکنش ناموفق ";
-            //                TempData["Message2"] = resultCode_bpSettleRequest;
-            //                TempData["Message3"] = "";
-            //                //TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpSettleRequest.Replace("_", " ")));
-            //                Run_bpReversalRequest = true;
-            //            }
-
-
-            //           // return RedirectToAction("", "Connection", new { refID = saleOrderId.ToString() });
-
-            //            // Save information to Database...
-
-            //            #endregion
-            //        }
-            //        else
-            //        {
-            //            //TempData["Message"] = bankMellatImplement.DesribtionStatusCode(int.Parse(resultCode_bpVerifyRequest.Replace("_", " ")));
-            //            Run_bpReversalRequest = true;
-            //            TempData["Message"] = "تراکنش ناموفق ";
-            //            TempData["Message2"] = resultCode_bpVerifyRequest;
-            //            TempData["Message3"] = "";
-            //        }
-
-
-            //    }
-            //    else
-            //    {
-            //        //TempData["Message"] = bankMellat.DesribtionStatusCode(int.Parse(resultCode_bpPayRequest)).Replace("_", " ");
-            //        Run_bpReversalRequest = true;
-            //        TempData["Message"] = "تراکنش ناموفق ";
-            //        TempData["Message2"] = resultCode_bpPayRequest;
-            //        TempData["Message3"] = "";
-            //    }
-            //    return RedirectToAction("verifyAtBase", "Connection");
-            //}
-            //catch (Exception)
-            //{
-            //    TempData["Message"] = "متاسفانه خطایی رخ داده است، لطفا مجددا عملیات خود را انجام دهید در صورت تکرار این مشکل را به بخش پشتیبانی اطلاع دهید";
-            //    // Save and send Error for admin user
-            //    Run_bpReversalRequest = true;
-            //    return RedirectToAction("verifyAtBase", "Connection");
-            //}
-            //finally
-            //{
-            //    if (Run_bpReversalRequest) //ReversalRequest
-            //    {
-            //        if (saleOrderId != -999 && saleReferenceId != -999)
-            //        {
-            //            bankMellat.PaymentGatewayImplService WebService = new bankMellat.PaymentGatewayImplService();
-            //            WebService.bpReversalRequest(terminalId, userName, userPassword, saleOrderId, saleOrderId, saleReferenceId);
-            //        }
-
-
-            //        // Save information to Database...
-            //    }
-            //}
 
 
         }
@@ -2739,7 +2759,38 @@ namespace banimo.Controllers
             return View(action);
         }
 
+        public ActionResult verifyPayment(string refID, int status)
+        {
 
+            if (status == 200)
+            {
+                ViewBag.message = "موفق";
+                //List<ProductDetail> data2 = new List<ViewModel.ProductDetail>();
+                //SetCookie(JsonConvert.SerializeObject(data2), "cartModel");
+                Response.Cookies["Modelcart"].Value = "";
+                ViewBag.message2 = "200";
+                ViewBag.message3 = "CHR-" + refID;
+            }
+            else
+            {
+                ViewBag.message2 = "error";
+                ViewBag.message2 = "-1";
+                ViewBag.message3 = "CHR";
+            }
+
+
+
+
+            ViewBag.message3 = "CHR-" + refID;
+
+           
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "verifyPayment" + srt;
+            //return RedirectToAction( "Index",boom.Controllers.HomeController);
+            setVariable();
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View(action);
+        }
 
 
 

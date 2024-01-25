@@ -1,0 +1,455 @@
+﻿@model banimo.ViewModelPost.ProductListViewModel
+@using Newtonsoft.Json;
+@using banimo.Classes;
+
+
+
+
+
+<!-- Start of Shop Content -->
+
+
+
+
+
+
+@{
+    if (Model.products != null)
+    {
+        if (Model.products.Count == 0)
+        {
+            <div class="product-wrapper row ">
+                <p style="text-align:center"><img src="~/images/noitem.png" /></p>
+            </div>
+        }
+        else
+        {
+            <div class="product-wrapper row cols-md-5 cols-sm-2 cols-3 boxshadow" >
+                @foreach (var item in Model.products)
+                {
+                    string newurl = "/Home/ProductDetail?id=" + item.ID;
+                    if (item.meta != null)
+                    {
+                        banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(@item.meta);
+                        newurl = metaModel.curl;
+                    }
+
+                    string imagefile = "placeholder.jpg";
+                    List<string> srtlist = new List<string>();
+                    string src2 = "";
+                    if (item.title != null)
+                    {
+                        srtlist = item.image.Trim(',').Split(',').ToList();
+                        imagefile = srtlist[0];
+                        if (srtlist.Count == 2)
+                        {
+                            src2 = srtlist[1];
+                        }
+                    }
+
+                    int price = item.price;
+
+                    string src = imagefile;
+                    <div class="product-wrap">
+                        <div class="product text-center shadowbox" style="border-radius:8px">
+                            <figure class="product-media" style="margin:auto; max-width:90%">
+                                <a href="/products/@newurl">
+                                    <img src="@src" alt="Product"
+                                         width="300" height="338" />
+                                    <img src="@src2" alt="Product"
+                                         width="300" height="338" />
+                                </a>
+
+                                @if (item.price != item.oldPrice)
+                                {
+                                    <div class="product-label-group">
+                                        <label class="product-label label-discount">@item.discount% Off</label>
+                                    </div>
+                                }
+                            </figure>
+                            <div class="product-details">
+                                <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                <div class="product-price">
+                                    <ins class="new-price">@string.Format("{0:n0}", @item.price)  تومان </ins>
+                                    @if (item.price != item.oldPrice)
+                                    {
+                                <del class="old-price">@string.Format("{0:n0}", @item.oldPrice) تومان </del>
+                                    }
+
+                                </div>
+                            </div>
+                            @*<div style="padding:4%">
+                                <div class="input-group">
+                                    @{
+                                        string clsname = "value" + @item.ID;
+                                        string partnerID = Request.Cookies["tarafID"] != null ? Request.Cookies["tarafID"].Value : "";
+                                        string ads = @item.ID + "*";
+                                    }
+                                    <input addson="@ads" class=" form-control @clsname" type="number" min="1" max="100000" value="0">
+
+                                    <button class="quantity-plus w-icon-plus" onclick="addtocart('@partnerID','@item.ID','')"></button>
+                                    <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@partnerID','@item.ID','')"></button>
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        }
+
+
+    }
+    else
+    {
+        <p>ddlsdj;lsjdf;lskjdf</p>
+    }
+}
+
+
+
+
+
+
+
+
+<div class="toolbox toolbox-pagination justify-content-between">
+    @*<p class="showing-info mb-2 mb-sm-0">
+            Showing<span>1-12 of 60</span>Products
+        </p>*@
+
+    @{
+        var total = Convert.ToInt32(Model.pageNumber);
+        var activ = Convert.ToInt32(Model.currentPage);
+        var activminus2 = activ - 2;
+        var activminus1 = activ - 1;
+        var activplus1 = activ + 1;
+        var activplus2 = activ + 2;
+        if ((total - activ) > 3 & activ > 3)
+        {
+            <ul class="pagination">
+                <li class="prev disabled">
+                    <a href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                        <i class="w-icon-long-arrow-left"></i>Prev
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activminus2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activminus1</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">@activ</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activplus1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activplus2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="next">
+                    <a href="#" aria-label="Next">
+                        Next<i class="w-icon-long-arrow-right"></i>
+                    </a>
+                </li>
+            </ul>
+        }
+        else if ((total - activ > 3) && !(activ > 3))
+        {
+            <ul class="pagination">
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+                <li class="page-item active">
+                    <a class="page-link" href="#">@activ</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activplus1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activplus2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="next">
+                    <a href="#" aria-label="Next">
+                        Next<i class="w-icon-long-arrow-right"></i>
+                    </a>
+                </li>
+            </ul>
+        }
+        else if (!(total - activ > 3) && activ > 3)
+        {
+            <ul class="pagination">
+                <li class="prev disabled">
+                    <a href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                        <i class="w-icon-long-arrow-left"></i>Prev
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activminus2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">@activminus1</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">@activ</a>
+                </li>
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+                <li class="next">
+                    <a href="#" aria-label="Next">
+                        Next<i class="w-icon-long-arrow-right"></i>
+                    </a>
+                </li>
+
+
+            </ul>
+        }
+        else if (total > 1 && !((total - activ) > 3) && !(activ > 3))
+        {
+            <ul>
+                @for (int i = 1; i < activ; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+                @for (int i = activ + 1; i <= total; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+            </ul>
+
+        }
+    }
+
+</div>
+
+
+
+
+<script>
+    var getquntity = function () {
+        $.ajax({
+            url: '/Home/getquntitiy',
+            dataType: 'html',
+            success: function (data) {
+                var total = 0;
+                var srtcookie = data;
+
+                if (srtcookie.length > 0) {
+                    srtcookie = srtcookie.replace(/&quot;/g, '"');
+                    JSON.parse(srtcookie).forEach(function (item) {
+                        let valueID = "value" + item.productid;
+                        $("." + valueID).text(item.quantity);
+
+                        if (item.quantity == "0") {
+                            $("." + valueID).parent().parent().find('.addButton').show();
+                            $("." + valueID).parent().parent().find('.addholder').hide();
+                        }
+                        else {
+                            $("." + valueID).parent().parent().find('.addButton').hide();
+                            $("." + valueID).parent().parent().find('.addholder').show();
+                        }
+
+                        total += parseInt(item.quantity);
+                    });
+                    $(".simpleCart_quantityy").text(total)
+
+                } else {
+                    $(".simpleCart_quantityy").text("0")
+                };
+            }
+
+        })
+    };
+</script>
+<script>
+    $(".page-item").click(function () {
+        var num = this.textContent;
+        $.ajax({
+            url: '/Home/allpaginationid',
+            dataType: 'html',
+            data: {
+                id: num,
+            },
+            success: function (data) {
+
+                if (data === "1") {
+                    $.ajax({
+                        url: '/Home/gogetproductlist',
+                        dataType: 'html',
+                        success: function (data) {
+
+                            $('#productlist').html(data);
+
+                            window.scrollTo(0, 500);
+                            getquntity();
+                        },
+                        error: function () {
+                            alert("nashod")
+                        },
+                        complete: function () {
+                            $('#FLTholder').css({ position: 'relative', top: '0px', right: '0px' });
+                            $('#spaceholder').css("height", '');
+                            $('#SIBdiv').scrollTop();
+                            window.scrollTo(0, 0);
+
+                        }
+                    });
+
+                }
+            },
+            error: function () {
+
+            }
+
+        })
+    })
+
+</script>
+<script>
+    var newProductDetail = function (e) {
+        window.location.href = "/" + e;
+
+    }
+    $(".imageitself").hover(function () {
+        var url = $(this).attr('srt2');
+        if (url != "") {
+            $(this).attr('src', url);
+        }
+
+
+    }, function () {
+        var url = $(this).attr('srt1');
+        $(this).attr('src', url);
+    });
+</script>
+@*<script>
+    $('.value-plus').on('click', function () {
+
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        let newVal = $(this).parent().children(".value").text();
+        if (newVal == "") {
+            newVal = "0";
+        }
+        let finalVal = parseInt(newVal) + 1;
+        // $(this).parent().children(".value").text(finalVal);
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace("addtocarto", "");
+
+        $("." + myid).text(finalVal);
+        $(this).parent().parent().find('.addButton').hide();
+        $(this).parent().parent().find('.addholder').show();
+
+        $.ajax({
+            url: '/Home/addtocart',
+            dataType: 'html',
+            data: {
+                id: ID
+
+            },
+            success: function (data) {
+                var value = "value" + ID;
+
+                var count = parseInt($(".simpleCart_quantityy").text());
+                count += 1;
+                $(".simpleCart_quantityy").text(count);
+                $("#loading").fadeOut();
+
+
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+    });
+
+
+    $('.value-minus').on('click', function () {
+        event.stopPropagation();
+        $("#loading").fadeIn()
+        var ID = $(this).attr('id');
+        let myid = "value" + ID.replace('minus', '');
+
+        let newVal = $(this).parent().children(".value").text();
+        let finalVal = "";
+        if (newVal != "0") {
+
+            finalVal = parseInt(newVal) - 1;
+            $("." + myid).text(finalVal);
+        }
+
+        if (finalVal == "0") {
+            $(this).parent().parent().find('.addButton').show();
+            $(this).parent().parent().find('.addholder').hide();
+        }
+        else {
+            $(this).parent().parent().find('.addButton').hide();
+            $(this).parent().parent().find('.addholder').show();
+        }
+
+        $.ajax({
+            url: '/Home/minusfromcart',
+            dataType: 'html',
+            data: {
+                id: ID
+            },
+            success: function (data) {
+
+                var count = parseInt($(".simpleCart_quantityy").text());
+                count -= 1;
+                $(".simpleCart_quantityy").text(count);
+                $("#loading").fadeOut();
+
+
+
+            },
+            error: function () {
+                alert("error")
+            }
+
+
+        });
+
+
+
+
+
+    });
+
+
+
+
+</script>*@
+<script>
+    getquntity();
+</script>
+<!-- End of Shop Content -->

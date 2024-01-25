@@ -1,0 +1,83 @@
+﻿@using BotDetect.Web.Mvc;
+@using banimo.Classes;
+@{
+    //ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_Layout13.cshtml";
+}
+
+
+<link href="~/Content/loginStyle4.css" rel="stylesheet" />
+<div class="">
+    <main id="main" class="">
+        <div class="semi-modal-layout">
+            <section class="o-page o-page--account-box">
+                <div class="c-account-box card">
+
+                    <div class="c-account-box__headline" style="background-color:transparent; color:#4d4d4d">تایید حساب کاربری</div>
+                    <div class="c-account-box__content">
+
+                        <form action="/CustomerLogIn/checkConfirmCode" class="c-form-account" data-name="remember" method="post" id="rememberForm" novalidate="novalidate">
+                            @Html.AntiForgeryToken()
+                            <input name="phone" hidden value="@Model.id" />
+                            <input type="hidden" name="rc" value="UC93TE55a281dk5QYnZBMjRRcjZHdz09"><input type="hidden" name="rd" value="cHdSdHlsMkFjckE4UG44NFFDZEtpcWdKMzRqVVRSM1k4L1FldlVBVEQ0UjFNbFF2TUFnamdOYlR2aHJ3UFU5TA~~">
+                            <div class="c-form-account__title"> کد تایید</div>
+                            <div class="c-form-account__row">
+                                <div class="c-form-account__col">
+                                    <label id="mainlabla2" class="c-ui-input c-ui-input--account-login">
+                                        <input id="number" class="c-ui-input__field priceItem" type="text" name="register" placeholder=" کد ارسال شده را وارد نمایید">
+                                        <div id="remember-error" class="error c-ui-feedback-hint"> کد ارسال شده را وارد نمایید</div>
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="fogetconfirm" class="mybtn addtocart" style="">
+
+                                <p class="buttonverif">تایید</p>
+
+                            </button>
+                        </form>
+                    </div>
+                    <div class="c-account-box__footer">
+
+                        <a data-snt-event="dkLoginClick" href="/Home/loginPage" class="btn-link-spoiler">تغییر شماره موبایل </a>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+
+
+@if (ViewBag.error == "300")
+{
+    <script>
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 8000,
+            "extendedTimeOut": 1000,
+        }
+        toastr.error('کد تایید صحیح نیست!')
+    </script>
+}
+else if (ViewBag.error == "400")
+{
+    <script>
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 8000,
+            "extendedTimeOut": 1000,
+        }
+        toastr.error('برای تلاش مجدد 20 ثانیه زمان لازم است')
+    </script>
+}
+

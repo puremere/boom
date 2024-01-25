@@ -111,7 +111,7 @@ namespace banimo.ViewModePost
         public string image { get; set; }
         public string type { get; set; }
         public string catIDOrLink { get; set; }
-        public List<Value> value { get; set; }
+        public List<Newest> value { get; set; }
     }
     public class WonderList
     {

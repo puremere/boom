@@ -255,7 +255,7 @@
 
                                 <input id="totalIDHolder" value="@finalID" hidden />
                                 <div class="product-price">
-                                    <span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size: 12px">تومان</span> <button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
+                                    <span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size: 12px">تومان</span> <button class="btn btn-primary btn-cart addtocart" @*onclick="addtocartDetail('@Model.partnerList.First().pID')"*@>
                                         <i class="w-icon-cart"></i>
 
                                         <span style="padding:5px" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">افزودن به سبد خرید</span>
@@ -379,12 +379,12 @@
                                                             var price = ocolorfilter.productprice;
                                                             var myID = ocolorfilter.ID;
                                                             string classFilter = "";
-
+                                                            var classn = "value" + myID;
                                                             if (colorfilter.otherColorFilter.IndexOf(ocolorfilter) == 0)
                                                             {
                                                                 classFilter = "activeColor";
                                                             }
-                                                            <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter</span></p>
+                                                            <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter <input value="0" class="@classn" style="display:none"/></p>
 
                                                         }
                                                     </div>

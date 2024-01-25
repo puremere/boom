@@ -1,0 +1,219 @@
+﻿@using BotDetect.Web.Mvc;
+@using banimo.Classes;
+@{
+    Layout = null;
+}
+
+
+
+
+
+
+@{
+    /**/
+
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout13.cshtml";
+}
+
+
+<link href="~/Content/loginStyle4.css" rel="stylesheet" />
+
+
+
+<script type="text/javascript">
+    function preventBack() { window.history.forward(); }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () { null };
+</script>
+@Scripts.Render("~/Scripts/captcha.validate.js")
+
+
+
+<div>
+
+    <main id="main" >
+
+        <div class="semi-modal-layout">
+            <section class="o-page o-page--account-box">
+                <div class="c-account-box card">
+                  
+                    <div class="c-account-box__headline" style="background-color:transparent; color:#4d4d4d">ورود</div>
+                    <div class="c-account-box__content">
+                        @using (Html.BeginForm("CustomerLoginWC", "CustomerLogIn", FormMethod.Post,
+new { @class = "c-form-account", enctype = "multipart/form-data", id = "registerForm" }))
+                        {
+
+
+                            @Html.AntiForgeryToken()
+                           
+                            <div class="c-form-account__title">شماره موبایل</div>
+                            <div class="c-form-account__row js-valid-row">
+                                <div class="c-form-account__col">
+                                    <label id="mainlabla" class="c-ui-input c-ui-input--account-login">
+                                        <input id="registertext" class="c-ui-input__field c-ui-input__field--right-placeholder priceItem" type="text" name="registertext" placeholder="شماره موبایل خود را وارد نمایید" value="@ViewBag.username">
+
+                                        <div id="registererror" class="hase-error c-ui-feedback-hint">  شماره موبایل را وارد نمایید</div>
+
+                                    </label>
+
+                                </div>
+                            </div>
+                            <div class="c-form-account__title">
+                                کلمه عبور
+                                <a href="/Home/forgetpass" style="float:left" class="btn-link-spoiler c-form-account__link c-form-account__link--inline">رمز عبور خود را فراموش کرده ام</a>
+                            </div>
+                            <div class="c-form-account__row js-valid-row">
+                                <div class="c-form-account__col">
+                                    <label id="mainlabla2" class="c-ui-input c-ui-input--account-password">
+                                        <input id="registerpassword" class="c-ui-input__field c-ui-input__field--right-placeholder" type="password" name="registerpassword" placeholder="کلمه عبور خود را وارد نمایید" value="@ViewBag.password">
+                                        <div id="registerpassword-error" class="error c-ui-feedback-hint">رمز عبور را وارد نمایید</div>
+                                    </label>
+                                </div>
+                            </div>
+                            if (Convert.ToInt32(Session["LoginTime"]) > 2)
+                            {
+                                <div class="c-form-account__row js-valid-row">
+                                    <div class="c-form-account__col">
+
+                                        @{MvcCaptcha registrationCaptcha = CaptchaHelper.GetRegistrationCaptcha(); }
+                                        @if (!registrationCaptcha.IsSolved)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    @Html.Captcha(registrationCaptcha)
+                                                </div>
+                                                <div class="col-lg-12" style="margin-top:10px">
+                                                    @Html.Label("کد را وارد نمایید", new
+                                                    {
+                                                        @class = "col-md-4 control-label",
+                                                     @for = "CaptchaCode",
+                                                        style = "float:right; margin-top:15px"
+                                                    })
+
+                                                    <div class="col-md-6" style="float:right">
+                                                        @Html.TextBox("CaptchaCode", null, new { @class = "form-control captchaVal" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            }
+
+                            <div id="verifyyy">
+                                <div class="mybtn addtocart" style="">
+                                  
+                                    <p   class=" buttonverif">ورود به  @System.Configuration.ConfigurationManager.AppSettings["siteName"] </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="c-form-account__agree js-valid-row">
+                                <label class="c-ui-checkbox c-ui-checkbox--primary">
+                                    <input type="checkbox" value="1" name="register" id="accountAutoLogin" checked="checked">
+                                    <span id="span" class="c-ui-checkbox__check"></span>
+                                </label>
+                                <label for="accountAutoLogin">
+                                    مرا به خاطر بسپار
+                                </label>
+                                <a href="/Home/loginpage" style="float:left" class="btn-link-spoiler c-form-account__link c-form-account__link--inline">ورود با رمز یکبار مصرف</a>
+
+                            </div>
+
+
+
+
+
+
+
+                        }
+                    </div>
+                    <div class="c-account-box__footer">
+                        <span>کاربر جدید هستید؟</span>
+                        <a data-snt-event="dkLoginClick" data-snt-params="{&quot;type&quot;:&quot;login&quot;,&quot;site&quot;:&quot;registration-page&quot;}" href="/Home/Register" class="btn-link-spoiler">ثبت نام در @System.Configuration.ConfigurationManager.AppSettings["siteName"]</a>
+                    </div>
+                </div>
+            </section>
+
+          
+        </div>
+        <script>
+            function isValidPhonenumber(phonenumber) {
+                var pattern = /^09[0-9]{9}$/;
+                return pattern.test(phonenumber);
+            };
+            function dologin() {
+                var n = $("#accountAutoLogin:checked").length;
+                var pass = $("#registerpassword").val();
+                var val = $("#registertext").val();
+
+
+
+                if (pass.length === 0) {
+                    $("#registerpassword-error").css("display", "block");
+                    $("#registertext").css("color", "#ef5662");
+                    $("#registerpassword").css("border", "1px solid #ef5662");
+                    $("#mainlabla2").addClass("error");
+
+                }
+                if (!isValidPhonenumber(val)) {
+
+                    $("#registererror").css("display", "block");
+                    $("#registertext").css("color", "#ef5662");
+                    $("#registertext").css("border", "1px solid #ef5662");
+                    $("#mainlabla").addClass("error");
+
+
+                }
+
+                if (isValidPhonenumber(val) && (pass.length !== 0)) {
+
+
+                    $("#registerForm").submit();
+
+                }
+            }
+            $('body').keypress(function (e) {
+                var key = e.which;
+                if (key == 13)  // the enter key code
+                {
+                    dologin();
+                    return false;
+                }
+            });
+            $("#verifyyy").click(function () {
+                dologin();
+
+
+            });
+        </script>
+    </main>
+
+</div>
+
+@{
+    if (ViewBag.message != null && ViewBag.message != "")
+    {
+        <script>
+
+            toastr.options = {
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "fadeIn": 300,
+                "fadeOut": 1000,
+                "timeOut": 8000,
+                "extendedTimeOut": 1000,
+
+
+            }
+            toastr.error('@ViewBag.message');
+        </script>
+    }
+
+}

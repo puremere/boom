@@ -427,8 +427,8 @@
 
 
 
-                            //$("." + valueID).text(count);
-                            //$("." + valueID).val(count);
+                            $("." + valueID).text(count);
+                            $("." + valueID).val(count);
 
                             //if (item.quantity == "0") {
                             //    $("." + valueID).parent().parent().find('.addButton').show();
@@ -512,17 +512,17 @@
                         window.location.reload();
                     }
                     else {
-                        // getquntity();
-                        //toastr.options = {
-                        //    "debug": false,
-                        //    "positionClass": "toast-top-center",
-                        //    "onclick": null,
-                        //    "fadeIn": 300,
-                        //    "fadeOut": 1000,
-                        //    "timeOut": 10000,
-                        //    "extendedTimeOut": 1000,
-                        //}
-                        //toastr.success('با موفقیت انجام شد');
+                         getquntity();
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 10000,
+                            "extendedTimeOut": 1000,
+                        }
+                        toastr.success('با موفقیت انجام شد');
 
                         getquntity();
                     }

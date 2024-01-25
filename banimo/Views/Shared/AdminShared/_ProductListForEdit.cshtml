@@ -540,7 +540,7 @@
 
                                                 <td id="@item.parentID" style="text-align: center; align-items:center; border:none">
                                                     @{
-                                                        <p class="quickEditInput addItemCount" style="display:none; font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>
+                                                        @*<p class="quickEditInput addItemCount" style="display:none; font-size:18px; color:green; margin:10px; cursor:pointer; "><i class="fa fa-plus"></i></p>*@
 
                                                         if (item.count == "-1")
                                                         {
@@ -556,7 +556,7 @@
 
                                                         }
 
-                                                        <p  class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>
+                                                        @*<p  class="quickEditInput minusItemCount" style=" display:none;font-size:18px; color:red; margin:10px; cursor:pointer"><i class="fa fa-minus"></i></p>*@
 
                                                         <input style="display:none" value="@item.count" class=" quickCount returnItemCount" />
 
@@ -680,7 +680,7 @@
 
                                                             <div itemToShow="@uploadID" class="conEdit addMoreImage">
 
-                                                                <img src="~/images/add.png" data-imagezoom="true" class=" back">
+                                                                <img style="width:25px" src="~/images/add.png" data-imagezoom="true" class=" back">
 
                                                             </div>
 

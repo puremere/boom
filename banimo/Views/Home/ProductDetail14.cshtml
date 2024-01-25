@@ -1,0 +1,1172 @@
+﻿@model banimo.ViewModelPost.viewProductViewModel
+@using banimo.Classes;
+@using Newtonsoft.Json;
+@{
+    //ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_Layout14.cshtml";
+}
+
+
+<link href="~/webAsset/wolmart/assets/css/style.min.css?v=1" rel="stylesheet" />
+
+<style>
+    .nomargin {
+        margin: 0
+    }
+
+    .anotherOption {
+        margin: 20px;
+    }
+
+        .anotherOption p {
+            padding: 10px 15px;
+            border: 1px solid;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 8px;
+        }
+
+    .anotherActive {
+        background-color: #34970b;
+        color: white;
+    }
+
+    .main-content {
+        max-width: 80%
+    }
+
+    @@media (max-width: 600px) {
+        .main-content {
+            max-width: 95%
+        }
+    }
+    .similarSwiper {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        -webkit-box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        -moz-box-shadow: 4px 3px 5px -2px rgba(0,0,0,0.5);
+        margin: 20px 0px 5px 20px
+    }
+</style>
+
+
+
+
+<!-- Start of Main -->
+<main class="main mb-10 pb-1">
+    <!-- Start of Breadcrumb -->
+    <nav class="breadcrumb-nav container">
+        <ul class="breadcrumb bb-no">
+            <li><a href="/">@Resources.res.home</a></li>
+            <li>@Resources.res.Products</li>
+        </ul>
+
+    </nav>
+    <!-- End of Breadcrumb -->
+    <!-- Start of Page Content -->
+    <div class="page-content">
+        <div class="container">
+            <div class="row gutter-lg" style="justify-content:center">
+                <div class="main-content" style="">
+
+
+
+                    <div class="product product-single row" id="pvDataHolder">
+
+
+                        <div class="col-md-6 mb-4 mb-md-8">
+                            <div class="product-gallery product-gallery-sticky">
+                                <div class="swiper-container product-single-swiper swiper-theme nav-inner" data-swiper-options="{
+                                            'navigation': {
+                                                'nextEl': '.swiper-button-next',
+                                                'prevEl': '.swiper-button-prev'
+                                            }
+                                        }">
+                                    <div class="swiper-wrapper row cols-1 gutter-no">
+                                        @{
+                                            if (Model.otherColors != null)
+                                            {
+                                                foreach (var item in Model.otherColors)
+                                                {
+                                                    if (item.otherColorFilter != null)
+                                                    {
+
+                                                        string displayclass = "displayitem";
+                                                        if (Model.otherColors.IndexOf(item) != 0)
+                                                        {
+                                                            displayclass = "hideItem";
+                                                        }
+                                                        if (item.imageTitle != null)
+                                                        {
+                                                            List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                            foreach (var slideItem in lst)
+                                                            {
+                                                                string slideItemID = "S" + item.ID.ToString();
+                                                                <div itemToShow="@slideItemID" class="swiper-slide  allbegone @displayclass">
+                                                                    <figure class="product-image ">
+                                                                        <img src="@slideItem"
+                                                                             data-zoom-image="@slideItem"
+                                                                             alt="" width="800" height="900">
+                                                                    </figure>
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.slides != null)
+                                                {
+
+                                                    foreach (var item in Model.slides)
+                                                    {
+                                                        string imagefile = "placeholder.jpg";
+                                                        if (item.title != null)
+                                                        {
+                                                            imagefile = item.image;
+                                                        }
+                                                        string src = imagefile;
+                                                        <div class="swiper-slide">
+                                                            <figure class="product-image">
+                                                                <img src="@src"
+                                                                     data-zoom-image="@src"
+                                                                     alt="" width="800" height="900">
+                                                            </figure>
+                                                        </div>
+
+
+                                                    }
+
+                                                }
+                                            }
+
+
+
+
+                                        }
+
+
+                                    </div>
+                                    <button class="swiper-button-next"></button>
+                                    <button class="swiper-button-prev"></button>
+                                    <a href="#" class="product-gallery-btn product-image-full"><i class="w-icon-zoom"></i></a>
+                                </div>
+                                <div class="product-thumbs-wrap swiper-container" data-swiper-options="{
+                                            'navigation': {
+                                                'nextEl': '.swiper-button-next',
+                                                'prevEl': '.swiper-button-prev'
+                                            }
+                                        }">
+                                    <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
+                                        @{
+
+                                            if (Model.otherColors != null)
+                                            {
+                                                foreach (var item in Model.otherColors)
+                                                {
+                                                    if (item.otherColorFilter != null)
+                                                    {
+
+                                                        string displayclass = "displayitem";
+                                                        if (Model.otherColors.IndexOf(item) != 0)
+                                                        {
+                                                            displayclass = "hideItem";
+                                                        }
+                                                        if (item.imageTitle != null)
+                                                        {
+                                                            List<string> lst = item.imageTitle.Trim(',').Split(',').ToList();
+                                                            foreach (var slideItem in lst)
+                                                            {
+                                                                string slideItemID = "S" + item.ID.ToString();
+                                                                <div itemToShow="@slideItemID" class="product-thumb swiper-slide  allbegone ">
+                                                                    <img src="@slideItem"
+                                                                         alt="Product Thumb" width="800" height="900">
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.slides != null)
+                                                {
+
+                                                    foreach (var item in Model.slides)
+                                                    {
+                                                        string imagefile = "placeholder.jpg";
+                                                        if (item.title != null)
+                                                        {
+                                                            imagefile = item.image;
+                                                        }
+                                                        string src = imagefile;
+                                                        <div class="product-thumb swiper-slide">
+                                                            <img src="@src"
+                                                                 alt="Product Thumb" width="800" height="900">
+                                                        </div>
+
+
+                                                    }
+
+                                                }
+                                            }
+
+                                        }
+
+
+                                    </div>
+                                    <button class="swiper-button-next"></button>
+                                    <button class="swiper-button-prev"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-6 mb-md-8">
+                            <div class="product-details" data-sticky-options="{'minWidth': 767}">
+                                <h1 class="product-title">@Model.title</h1>
+
+
+                                <hr class="product-divider">
+                                @{
+                                    decimal itemprice = 0;
+                                    string finalID = Model.ID;
+                                    if (Model.otherColors != null)
+                                    {
+                                        if (Model.otherColors.Count() > 0)
+                                        {
+                                            if (Model.otherColors.First().otherColorFilter != null)
+                                            {
+                                                itemprice = decimal.Parse(Model.otherColors.First().otherColorFilter.First().productprice);
+                                                finalID = Model.otherColors.First().otherColorFilter.First().ID;
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        itemprice = decimal.Parse(Model.partnerList.First().price);
+                                    }
+                                }
+
+                                <input id="totalIDHolder" value="@finalID" hidden />
+                                <div class="product-price">
+                                    <span id="priceholdersection">@string.Format("{0:n0}", itemprice)</span> <span style="font-size: 12px">تومان</span> <button class="btn btn-primary btn-cart addtocart" @*onclick="addtocartDetail('@Model.partnerList.First().pID')"*@>
+                                        <i class="w-icon-cart"></i>
+
+                                        <span style="padding:5px" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">افزودن به سبد خرید</span>
+                                    </button>
+                                </div>
+                               
+                                @*<div class="ratings-container">
+            <div class="ratings-full">
+                <span class="ratings" style="width: 80%;"></span>
+                <span class="tooltiptext tooltip-top"></span>
+            </div>
+            <a href="#product-tab-reviews" class="rating-reviews">(3 Reviews)</a>
+        </div>*@
+
+                                @*<div class="product-short-desc">
+            <ul class="list-type-check list-style-none">
+                <li style="display:flex"> <p>Item Color : </p>  <p style="margin:0 10px; width:100px; height:20px; background-color: @Model.color"></p></li>
+                <li>Item Feature : @Model.SelectedFilter</li>
+
+            </ul>
+        </div>*@
+
+                                <hr class="product-divider">
+
+                                @if (Model.otherColors != null)
+                                {
+                                    <p class="nomargin">رنگبندی:</p>
+                                    <style>
+                                        .activeColor {
+                                            border: 5px solid #34970b !important;
+                                            border-radius: 8px !important;
+                                        }
+                                    </style>
+                                    List<banimo.ViewModelPost.OtherColor> lst = Model.otherColors.ToList();
+
+                                    <div class="">
+
+                                        <section class="related-product-section">
+
+                                            <div class="swiper-container swiper-theme" data-swiper-options="{
+                                    'spaceBetween': 20,
+                                    'slidesPerView': 4,
+                                    'breakpoints': {
+                                        '576': {
+                                            'slidesPerView': 3
+                                        },
+                                        '768': {
+                                            'slidesPerView': 3
+                                        },
+                                        '992': {
+                                            'slidesPerView': 4
+                                        }
+                                    }
+                                }">
+                                                <div class="anotherOption swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
+
+
+                                                    @foreach (var it in lst)
+                                                    {
+                                                        if (it.imageTitle != null)
+                                                        {
+                                                            var myID = "o" + @it.ID;
+                                                            string classname = "";
+                                                            string imgsrc = it.imageTitle.Split(',').First();
+                                                            string idToGo = "S" + it.ID;
+                                                            var colorprice = it.otherColorFilter.First().productprice;
+                                                            var colorID = it.otherColorFilter.First().ID;
+                                                            <div class="swiper-slide product">
+
+
+                                                                @if (lst.IndexOf(it) == 0)
+                                                                {
+                                                                    classname = "activeColor";
+                                                                }
+
+
+                                                                <div idplaceholder="@colorID" priceplaceholder="@colorprice" id="@idToGo" class="swiper-slide product @classname otherNewColor">
+                                                                    <div style="" class=" otherColor ">
+                                                                        <img style="width:100px; border-radius:5px" src="@imgsrc"
+                                                                             alt="Product Swatch" />
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </section>
+
+
+
+                                    </div>
+
+                                }
+
+
+                                <hr class="product-divider">
+
+                                @{
+
+                                    if (Model.otherColors != null)
+                                    {
+                                        foreach (var colorfilter in Model.otherColors)
+                                        {
+                                            string displayclass = "displayitem";
+                                            string slideItemID = "S" + colorfilter.ID.ToString();
+                                            if (Model.otherColors.IndexOf(colorfilter) != 0)
+                                            {
+                                                displayclass = "hideItem";
+                                            }
+                                            if (colorfilter.otherColorFilter != null)
+                                            {
+                                                <div itemToShow="@slideItemID" class="allbegone product-form product-variation-form product-size-swatch @displayclass">
+
+                                                    <p class="nomargin">سایزبندی:</p>
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption ">
+                                                        @foreach (var ocolorfilter in colorfilter.otherColorFilter)
+                                                        {
+                                                            var price = ocolorfilter.productprice;
+                                                            var myID = ocolorfilter.ID;
+                                                            string classFilter = "";
+                                                            var classn = "value" + myID;
+                                                            if (colorfilter.otherColorFilter.IndexOf(ocolorfilter) == 0)
+                                                            {
+                                                                classFilter = "activeColor";
+                                                            }
+                                                            <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter"><span value="@ocolorfilter.ID">@ocolorfilter.selectedFilter <input value="0" class="@classn" style="display:none"/></p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Model.otherProductFilter != null)
+                                        {
+
+                                            if (Model.otherProductFilter.Count > 0)
+                                            {
+
+                                                <div class="product-form product-variation-form product-size-swatch">
+
+                                                    <p class="nomargin">سایزبندی:</p>
+                                                    <div class="flex-wrap d-flex align-items-center anotherOption">
+                                                        @foreach (var item in Model.otherProductFilter)
+                                                        {
+                                                            string classFilter = "";
+                                                            if (item.selectedFilter == Model.SelectedFilter)
+                                                            {
+                                                                classFilter = "anotherActive";
+                                                            }
+
+                                                            var classn = "value" + item.ID;
+                                                            var myID = "o" + item.ID;
+                                                            <p onclick="otherColorClicked('@myID')" class="otherfilter nomargin @classFilter"><span value="@item.ID">@item.selectedFilter</span><span class="@classn"></span></p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        }
+                                    }
+
+                                }
+                                <hr class="product-divider">
+
+                                @if (Model.addsonList != null)
+                                {
+                                    foreach (var item in Model.addsonList)
+                                    {
+                                        string isRequired = "item" + item.isRquired;
+                                        <div class="product-short-desc">
+                                            <div class="widget widget-collapsible">
+                                                <h3 class="widget-title collapsed"><span>@item.title</span><span class="toggle-btn"></span></h3>
+                                                <ul id="@item.ID" class=" addsonul widget-body filter-items item-check mt-1 @isRequired" style="display: none;">
+
+                                                    @if (item.detail != null)
+                                                    {
+                                                        foreach (var detail in item.detail)
+                                                        {
+                                                            if (item.isMultiple == "on")
+                                                            {
+                                                                <li id="@detail.ID" class="addsondtl"><a href="javascript:void(0)">@detail.title <span>@detail.price تومان</span></a></li>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <li id="@detail.ID" class="addsondtl adddsonSingle"><a href="javascript:void(0)">@detail.title <span>@detail.price تومان</span></a></li>
+
+                                                            }
+                                                        }
+                                                    }
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+
+
+                                    }
+                                    <hr class="product-divider">
+                                }
+
+
+
+                                <div class="fix-bottom product-sticky-content sticky-content">
+                                    <div class="product-form container">
+                                        @{
+                                            string calssname = "valueAll" + @Model.ID;
+                                            string calssname2 = "value" + @Model.ID;
+
+                                        }
+
+                                        <div class="product-qty-form">
+                                            @*<div class="input-group">
+
+                        <input value="0" id="fquantity" class=" form-control @calssname  @calssname2" type="number">
+                        <button class="quantity-plus w-icon-plus" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')"></button>
+                        <button class="quantity-minus w-icon-minus" onclick="minusfromcart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')"></button>
+                    </div>*@
+                                            @*<button class="btn btn-primary btn-cart addtocart" onclick="addtocartDetail('@Model.partnerList.First().pID')">
+                                                <i class="w-icon-cart"></i>
+
+                                                <span onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">افزودن به سبد خرید</span>
+                                            </button>*@
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                @*<div class="social-links-wrapper">
+            <div class="social-links">
+                <div class="social-icons social-no-color border-thin">
+                    <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                    <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                    <a href="#"
+                       class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                    <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                    <a href="#"
+                       class="social-icon social-youtube fab fa-linkedin-in"></a>
+                </div>
+            </div>
+            <span class="divider d-xs-show"></span>
+            <div class="product-link-wrapper d-flex">
+                <a href="#"
+                   class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                <a href="#"
+                   class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+            </div>
+        </div>*@
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" style="margin:0 10px">
+                                <a style="font-size:15px" href="#product-tab-description" class="nav-link active">@Resources.res.description</a>
+                            </li>
+                            <li class="nav-item" style="margin:0 10px">
+                                <a style="font-size:15px" href="#product-tab-specification" class="nav-link">ویژگی های محصول</a>
+                            </li>
+                            @*   <li class="nav-item">
+                                    <a href="#product-tab-vendor" class="nav-link">Vendor Info</a>
+                                </li>*@
+                            <li class="nav-item" style="margin:0 10px">
+                                <a style="font-size:15px" href="#product-tab-reviews" class="nav-link">نظرات کاربران</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="product-tab-description">
+                                @Html.Raw(Model.desc)
+                            </div>
+                            <div class="tab-pane" id="product-tab-specification">
+                                <ul class="list-none">
+                                    @{
+                                        if (Model.feature != null)
+                                        {
+                                            foreach (var item in Model.feature)
+                                            {
+                                                <li>
+                                                    <label>@item.title</label>
+                                                    <p>@item.value</p>
+                                                </li>
+                                            }
+                                        }
+
+
+
+                                    }
+
+                                </ul>
+
+                            </div>
+                            @*<div class="tab-pane" id="product-tab-vendor">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6 mb-4">
+                                            <figure class="vendor-banner br-sm">
+                                                <img src="/webAsset/wolmart/assets/images/products/vendor-banner.jpg"
+                                                     alt="Vendor Banner" width="610" height="295"
+                                                     style="background-color: #353B55;" />
+                                            </figure>
+                                        </div>
+                                        <div class="col-md-6 pl-2 pl-md-6 mb-4">
+                                            <div class="vendor-user">
+                                                <figure class="vendor-logo mr-4">
+                                                    <a href="#">
+                                                        <img src="/webAsset/wolmart/assets/images/products/vendor-logo.jpg"
+                                                             alt="Vendor Logo" width="80" height="80" />
+                                                    </a>
+                                                </figure>
+                                                <div>
+                                                    <div class="vendor-name"><a href="#">Jone Doe</a></div>
+                                                    <div class="ratings-container">
+                                                        <div class="ratings-full">
+                                                            <span class="ratings" style="width: 90%;"></span>
+                                                            <span class="tooltiptext tooltip-top"></span>
+                                                        </div>
+                                                        <a href="#" class="rating-reviews">(32 Reviews)</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <ul class="vendor-info list-style-none">
+                                                <li class="store-name">
+                                                    <label>Store Name:</label>
+                                                    <span class="detail">OAIO Store</span>
+                                                </li>
+                                                <li class="store-address">
+                                                    <label>Address:</label>
+                                                    <span class="detail">
+                                                        Steven Street, El Carjon, CA 92020, United
+                                                        States (US)
+                                                    </span>
+                                                </li>
+                                                <li class="store-phone">
+                                                    <label>Phone:</label>
+                                                    <a href="#tel:">1234567890</a>
+                                                </li>
+                                            </ul>
+                                            <a href="vendor-dokan-store.html"
+                                               class="btn btn-dark btn-link btn-underline btn-icon-right">
+                                                Visit
+                                                Store<i class="w-icon-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <p class="mb-5">
+                                        <strong class="text-dark">L</strong>orem ipsum dolor sit amet,
+                                        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                                        dolore magna aliqua.
+                                        Venenatis tellus in metus vulputate eu scelerisque felis. Vel pretium
+                                        lectus quam id leo in vitae turpis massa. Nunc id cursus metus aliquam.
+                                        Libero id faucibus nisl tincidunt eget. Aliquam id diam maecenas ultricies
+                                        mi eget mauris. Volutpat ac tincidunt vitae semper quis lectus. Vestibulum
+                                        mattis ullamcorper velit sed. A arcu cursus vitae congue mauris.
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong class="text-dark">A</strong> arcu cursus vitae congue
+                                        mauris. Sagittis id consectetur purus
+                                        ut. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla.
+                                        Diam in
+                                        arcu cursus euismod quis. Eget sit amet tellus cras adipiscing enim eu. In
+                                        fermentum et sollicitudin ac orci phasellus. A condimentum vitae sapien
+                                        pellentesque
+                                        habitant morbi tristique senectus et. In dictum non consectetur a erat. Nunc
+                                        scelerisque viverra mauris in aliquam sem fringilla.
+                                    </p>
+                                </div>*@
+
+
+
+
+                            <div class="tab-pane" id="product-tab-reviews">
+                                @{
+                                    decimal CommentC = Model.comment != null ? Model.comment.Count() : 0;
+                                    decimal sum = Model.comment != null ? Model.comment.Sum(x => x.rate) : 0;
+                                    decimal mear = Model.comment != null ? sum / CommentC : 0;
+                                    string percent = Model.comment != null ? (mear * 20) + "%" : "0%";
+
+                                    string percent100 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 5).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent80 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 4).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent60 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 3).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent40 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 2).Count() / CommentC) * 100)).ToString() : "0";
+                                    string percent20 = Model.comment != null ? ((int)((Model.comment.Where(x => x.rate == 1).Count() / CommentC) * 100)).ToString() : "0";
+                                }
+                                <div class="row mb-4">
+                                    <div class="col-xl-4 col-lg-5 mb-4">
+                                        <div class="ratings-wrapper">
+                                            <div class="avg-rating-container">
+                                                <div class="avg-rating">
+                                                    <p class="text-dark mb-1">امتیاز میانگین</p>
+                                                    <div class="ratings-container">
+                                                        <div class="ratings-full" style="    font-family: wolmart !important">
+
+                                                            <span class="ratings" style="width: @percent;"></span>
+                                                            <span class="tooltiptext tooltip-top"></span>
+                                                        </div>
+                                                        <a href="#" class="rating-reviews">(@CommentC نظر)</a>
+                                                    </div>
+                                                </div>
+                                                <h4 class="avg-mark font-weight-bolder ls-50">@mear</h4>
+
+                                            </div>
+                                            <div class="ratings-value d-flex align-items-center text-dark ls-25">
+                                                <span class="text-dark font-weight-bold"> </span>توصیه شده<span class="count">@percent</span>
+                                            </div>
+                                            <div class="ratings-list">
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 100%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent100%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 80%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent80%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 60%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent60%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 40%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent40%</mark>
+                                                    </div>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings-full" style="    font-family: wolmart !important">
+                                                        <span class="ratings" style="width: 20%;"></span>
+                                                        <span class="tooltiptext tooltip-top"></span>
+                                                    </div>
+                                                    <div class="progress-bar progress-bar-sm ">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="progress-value">
+                                                        <mark>@percent20%</mark>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-8 col-lg-7 mb-4">
+                                        <div class="review-form-wrapper">
+                                            <h3 class="title tab-pane-title font-weight-bold mb-1">
+                                                نظر خود را ثبت کنید
+                                            </h3>
+                                            <p class="mb-3">
+                                                برای ثبت نظر ابتدا ارد شوید
+                                            </p>
+                                            <form action="/Home/AddComment" id="Addcomment" method="POST" class="review-form">
+                                                <input hidden name="id" value="@Model.ID" />
+                                                @{
+                                                    banimo.ViewModePost.metaData metaModelM = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>(Model.meta);
+                                                    string entitle = metaModelM.curl;
+                                                }
+                                                <input hidden name="title" value="@entitle" />
+                                                <div class="rating-form">
+                                                    <label for="rating">امتیاز شما به محصول :</label>
+                                                    <span class="rating-stars">
+                                                        <a class="star-1" href="javascript:void(0)">1</a>
+                                                        <a class="star-2" href="javascript:void(0)">2</a>
+                                                        <a class="star-3" href="javascript:void(0)">3</a>
+                                                        <a class="star-4" href="javascript:void(0)">4</a>
+                                                        <a class="star-5" href="javascript:void(0)">5</a>
+                                                    </span>
+                                                    <select name="rating" id="rating" required=""
+                                                            style="display: none;">
+                                                        <option value="">امتیاز…</option>
+                                                        <option value="5">عالی</option>
+                                                        <option value="4">خوب</option>
+                                                        <option value="3">متوسط</option>
+                                                        <option value="2">ضعیف</option>
+                                                        <option value="1">بسیار ضعیف</option>
+                                                    </select>
+                                                </div>
+                                                <textarea cols="30" rows="6"
+                                                          placeholder="نظر خود را بنویسید" class="form-control"
+                                                          id="review" name="desc"></textarea>
+
+                                                @if (@Session["token"] != null)
+                                                {
+                                                    <div id="submitComment" class="btn btn-dark">
+                                                        ثبت نظر
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Home/login" class="btn btn-dark">
+                                                        ثبت نظر
+                                                    </a>
+                                                }
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <ul class="comments list-style-none">
+                                        @if (Model.comment != null)
+                                        {
+                                            foreach (var item in Model.comment)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <figure class="comment-avatar">
+                                                            <img src="/webAsset/wolmart/assets/images/agents/2-100x100.png"
+                                                                 alt="Commenter Avatar" width="90" height="90">
+                                                        </figure>
+                                                        <div class="comment-content">
+                                                            <h4 class="comment-author">
+                                                                <a href="#">@item.name</a>
+                                                                <span class="comment-date">
+                                                                    @item.time
+                                                                </span>
+                                                            </h4>
+                                                            <div class="ratings-container comment-rating">
+                                                                <div class="ratings-full">
+                                                                    @{
+                                                                        int wi = (int)item.rate * 20;
+                                                                        string wis = wi + "%";
+                                                                    }
+                                                                    <span class="ratings"
+                                                                          style="width: @wis;"></span>
+                                                                    <span class="tooltiptext tooltip-top"></span>
+                                                                </div>
+                                                            </div>
+                                                            <p>
+                                                                @item.comment
+                                                            </p>
+                                                            @if (!string.IsNullOrEmpty(item.Answer))
+                                                            {
+                                                                <div style="margin-left:100px">
+                                                                    <h4 class="comment-author">
+                                                                        <a href="#">Owner Answer</a>
+                                                                        <span class="comment-date">
+                                                                            @item.rtime
+                                                                        </span>
+                                                                    </h4>
+                                                                    <p>
+                                                                        @item.Answer
+                                                                    </p>
+                                                                </div>
+
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.similarProduct != null)
+                    {
+                        <section class="related-product-section" style="margin-top:35px">
+                            <div class="title-link-wrapper mb-4">
+                                <h4 style="flex:1" class="title">محصولات مشابه</h4>
+                                <a href="#" style="flex:unset" class="btn btn-dark btn-link btn-slide-right btn-icon-right">
+                                    بیشتر<i class="w-icon-long-arrow-left"></i>
+                                </a>
+
+
+                            </div>
+                            <div class="swiper-container swiper-theme" data-swiper-options="{
+                                    'spaceBetween': 20,
+                                    'slidesPerView': 4,
+                                    'breakpoints': {
+                                        '576': {
+                                            'slidesPerView': 2
+                                        },
+                                        '768': {
+                                            'slidesPerView': 2
+                                        },
+                                        '992': {
+                                            'slidesPerView': 4
+                                        }
+                                    }
+                                }">
+                                <div class="swiper-wrapper row cols-lg-12 cols-md-12 cols-sm-12 cols-12">
+
+                                    @foreach (var item in Model.similarProduct)
+                                    {
+                                        string newurl = "/Home/ProductDetail?id=" + item.ID;
+                                        if (item.meta != null)
+                                        {
+                                            banimo.ViewModePost.metaData metaModel = JsonConvert.DeserializeObject<banimo.ViewModePost.metaData>
+                                                (@item.meta);
+                                            newurl = metaModel.curl;
+                                        }
+
+                                        string addID = "addtocarto" + item.ID;
+                                        string minusID = "minus" + item.ID;
+                                        string ID = "o" + item.ID.ToString();
+                                        string addtocartid = "addtocart" + ID;
+                                        string price = (item.oldPrice);
+
+                                        string imagefile = "placeholder.jpg";
+                                        List<string>
+                                            srtlist = new List<string>
+                                                ();
+                                        string src2 = "";
+                                        if (item.title != null)
+                                        {
+
+                                            srtlist = item.image.Trim(',').Split(',').ToList();
+                                            imagefile = srtlist[0];
+                                            if (srtlist.Count == 2)
+                                            {
+                                                src2 = srtlist[1];
+                                            }
+                                        }
+                                        string src = imagefile;
+                                        <div class="swiper-slide product similarSwiper">
+                                            <figure class="product-media" style="width:100%;">
+                                                <a href="/products/@newurl">
+                                                    <img style="aspect-ratio:0.9;border-radius: 8px 8px 0 0;" src="@src" alt="Product"
+                                                         width="300" height="338" />
+                                                </a>
+
+                                                <div class="product-action">
+                                                    <a href="/products/@newurl" class="btn-product btn-quickview" title="Quick View">
+                                                        نمایش
+                                                    </a>
+                                                </div>
+                                            </figure>
+                                            <div class="product-details" style="margin:15px">
+                                                <h4 class="product-name"><a href="/products/@newurl">@item.title</a></h4>
+
+                                                <div class="product-pa-wrapper">
+                                                    <div class="product-price">@string.Format("{0:n0}", Int32.Parse(@item.price)) تومان</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+
+                </div>
+                <!-- End of Main Content -->
+
+            </div>
+        </div>
+    </div>
+    <!-- End of Page Content -->
+</main>
+<!-- End of Main -->
+
+
+@section scripts{
+    <script>
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        $(".otherfilterNew").click(function () {
+            var price = $(this).attr('priceplaceholder');
+            var id = $(this).attr('idplaceholder');
+
+
+            $("#priceholdersection").text(numberWithCommas(parseInt(price)));
+            $("#totalIDHolder").val(id);
+
+            $(".otherfilterNew").removeClass("activeColor")
+            $(this).addClass("activeColor");
+        })
+    </script>
+
+
+
+
+    <script>
+        $(".otherNewColor").click(function () {
+
+            var price = $(this).attr('priceplaceholder');
+            var itemid = $(this).attr('idplaceholder');
+
+
+            $("#priceholdersection").text(numberWithCommas(price));
+            $("#totalIDHolder").val(itemid);
+
+            var id = $(this).attr('id');
+            $(".allbegone").removeClass("displayitem");
+            $(".allbegone").addClass("hideItem");
+
+            $(".allbegone[itemToShow='" + id+"']").removeClass("hideItem");
+            $(".allbegone[itemToShow='" + id+"']").addClass("displayitem");
+
+
+            $(".otherNewColor").removeClass("activeColor")
+            $(this).addClass("activeColor");
+
+        })
+        var otherColorClicked = function (id) {
+
+
+            $.ajax({
+                url: "/Home/changeLastNumber",
+                data: {
+                    value: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+            });
+        }
+        var finalsrt = "";
+        var addtocartDetail = function (el) {
+            var iscontinue = "";
+            var finalitems = "";
+            $(".itemon").each(function () {
+                var txt = "";
+                txt = $(this).parent().find("h3").text().trim();
+                $(this).find(".addsondtl").each(function () {
+                    if ($(this).hasClass('active')) {
+                        txt = "";
+                    }
+
+                })
+
+                if (txt != "") {
+                    finalitems += txt + ",";
+                }
+
+
+
+            })
+
+            finalitems = finalitems.slice(0, -1)
+
+            if (finalitems == "") {
+                $(".addsondtl").each(function () {
+
+                    if ($(this).hasClass('active')) {
+                        var liid = $(this).attr('id');
+                        finalsrt = finalsrt + liid + "-";
+                    }
+
+
+                })
+
+
+
+                var tarafH = el;
+                var ID = $("#totalIDHolder").val();  //'@Model.ID';
+                var quantity = $("#fquantity").val();
+                var RealID = "addtocarto";
+                var tobeid = RealID.concat(ID);
+
+                $.ajax({
+                    url: '/Home/addtocart',
+                    data: {
+                        id: tobeid,
+                        price: tarafH,
+                        quantity: quantity,
+                        addson: finalsrt
+
+                    },
+                    success: function (data) {
+
+
+                        getquntity();
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 300,
+                            "fadeOut": 1000,
+                            "timeOut": 5000,
+                            "extendedTimeOut": 1000,
+                        }
+                        toastr.success('با موفقیت افزوده شد ')
+                        //window.location.href = "@Url.Action("checkout", "Home")";
+                    },
+
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000,
+                }
+                toastr.error('You Must select from Options:  ' + finalitems)
+            }
+
+
+
+        }
+
+        $(".addsondtl").click(function () {
+            finalsrt = "";
+            //$(this).addClass('actvie');
+            //var el = $(this);
+
+
+            var parent = $(this).parent();
+
+            if ($(this).hasClass('adddsonSingle')) {
+
+                $(this).parent().find('.adddsonSingle').each(function () {
+                   // alert("d")
+                    $(this).removeClass("active");
+                })
+
+
+            }
+
+
+            if ($(this).hasClass('active')) {
+                //alert("ssss")
+                //let javael = el.get(0);
+                //javael.classList.remove("active");
+
+                $(this).removeClass("active")
+
+            }
+            else {
+                $(this).addClass("active")
+
+            }
+
+
+
+
+
+        })
+
+    </script>
+
+
+    <script>
+        $(".rating-stars a").click(function () {
+
+            var $star = $(this);
+            $star.addClass('active').siblings().removeClass('active');
+            $star.parent().addClass('selected');
+            $star.closest('.rating-form').find('select').val($star.text());
+            e.preventDefault();
+        })
+        $("#submitComment").click(function () {
+            $("#Addcomment").submit();
+        })
+    </script>
+    <style>
+        .displayitem {
+            display: unset !important
+        }
+
+        .hideItem {
+            display: none !important
+        }
+    </style>
+
+}
+

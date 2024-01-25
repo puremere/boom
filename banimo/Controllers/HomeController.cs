@@ -1841,9 +1841,28 @@ namespace banimo.Controllers
             {
                 return RedirectToAction("Error404", "Error");
             }
-
-            List<ViewModelPost.imageGallery> galleryList = (from L in log.slides
-                                                            select new ViewModelPost.imageGallery { src =  L.image, thumb =  L.image }).ToList();
+            List<ViewModelPost.imageGallery> galleryList = new List<imageGallery>();
+            if (log.otherColors != null)
+            {
+                foreach (var color in log.otherColors)
+                {
+                    foreach(var img in color.imageTitle.Trim(',').Split(','))
+                    {
+                        imageGallery imgg = new imageGallery()
+                        {
+                            src = img,
+                            thumb = img,
+                        };
+                        galleryList.Add(imgg);
+                    }
+                }
+            }
+            else
+            {
+                galleryList = (from L in log.slides
+                               select new ViewModelPost.imageGallery { src = L.image, thumb = L.image }).ToList();
+            }
+          
             log.imgGallery = galleryList;
             if (log.cattree != null)
             {
@@ -2837,7 +2856,11 @@ namespace banimo.Controllers
                     idlist += item.productid.ToString() + ",";
                     if (item.tarafH != null )
                     {
-                        taraflist += item.tarafH.ToString() + ",";
+                        if (item.tarafH != "0")
+                        {
+                            taraflist += item.tarafH.ToString() + ",";
+                        }
+                        
                     }
 
                     addsonlist += item.addson.ToString() + ",";

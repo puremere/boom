@@ -236,6 +236,67 @@ namespace banimo.Controllers
            JObject jObject = JObject.Parse(result); return jObject ;
         }
 
+        
+
+        [System.Web.Http.HttpPost]
+        public async Task<JObject> requestWalletNew([FromBody] buyRequest model)
+        {
+            buyResponse responseModel = new buyResponse();
+            string varizdesc = "  ";
+            string servername = ConfigurationManager.AppSettings["serverName"];
+            int famount = Int32.Parse(model.payment);
+            string device = RandomString();
+            string code = MD5Hash(device + "ncase8934f49909");
+            string result;
+            Random rnd = new Random();
+            long referenceID = rnd.Next(222000000, 222999999);
+            webservise wb = new webservise();
+            string add2result = wb.addTransaction(model.token, device, code, famount.ToString(), servername, "1", varizdesc, "0", "0", referenceID.ToString());
+            ViewModel.addTransactionVM Rmodel = JsonConvert.DeserializeObject<ViewModel.addTransactionVM>(add2result);
+
+
+            string txtDescription = "افزودن به سبد خرید";
+            long orderID = referenceID;// rnd.Next(111000000, 111999999) model.orderNumberWeb == null ?  : long.Parse(model.orderNumberWeb);
+            string message = "";
+            long amount = famount * 10;
+            string additionalData = txtDescription;
+
+
+            string localDate = DateTime.Now.ToString("yyyyMMdd");
+            string localTime = DateTime.Now.ToString("HHmmss");
+
+            string callBackUrl = ConfigurationManager.AppSettings["domain"] + "/Connection/VerifyMellat";
+            long terminalId = Convert.ToInt64(ConfigurationManager.AppSettings["terminalId"]);
+            string userName = ConfigurationManager.AppSettings["userName"];
+            string userPassword = ConfigurationManager.AppSettings["userPassword"];
+            string payerId = "0";
+
+
+            BankMellatImplement bankMellatImplement = new BankMellatImplement(callBackUrl, terminalId, userName, userPassword);
+
+            string resultRequest = bankMellatImplement.bpPayRequest(orderID, amount, additionalData);
+            string[] StatusSendRequest = resultRequest.Split(',');
+            responseModel.status = 500;
+            responseModel.message = StatusSendRequest[0];
+            string finalUrl = "";
+            if (int.Parse(StatusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+            {
+                responseModel.status = 200;
+                responseModel.url = "/Connection/RedirectVPOS?id=" + StatusSendRequest[1];
+                responseModel.message = "";
+            }
+            else
+            {
+                responseModel.url = "";
+                responseModel.status = 500;
+                responseModel.message = "";
+
+            }
+
+            string jsonmodel = JsonConvert.SerializeObject(responseModel);
+
+            JObject jObject = JObject.Parse(jsonmodel); return jObject;
+        }
 
         [System.Web.Http.HttpPost]
         public async Task<JObject> buyRequestNew([FromBody] buyRequest model)
@@ -322,12 +383,21 @@ namespace banimo.Controllers
                         //return RedirectToAction("ReqestForWallet", "Connection", new { id = Rmodel.timestamp });
 
                         // کدها ملت
+
                         Random rnd = new Random();
                         long referenceID = rnd.Next(222000000, 222999999);
-                        // اینجا تراکنش مرتبط با افزایش کیف پول انجام میشه
                         webservise wb = new webservise();
                         string add2result = wb.addTransaction(model.token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
                         ViewModel.addTransactionVM Rmodel = JsonConvert.DeserializeObject<ViewModel.addTransactionVM>(add2result);
+
+
+
+                        //Random rnd = new Random();
+                        //long referenceID = rnd.Next(222000000, 222999999);
+                        //// اینجا تراکنش مرتبط با افزایش کیف پول انجام میشه
+                        //webservise wb = new webservise();
+                        //string add2result = wb.addTransaction(model.token, device, code, famount.ToString(), servername, "1", varizdesc, log2.ID, "0", referenceID.ToString());
+                        //ViewModel.addTransactionVM Rmodel = JsonConvert.DeserializeObject<ViewModel.addTransactionVM>(add2result);
                         
 
 
@@ -923,14 +993,13 @@ namespace banimo.Controllers
 
                 var collection = new NameValueCollection();
                 collection.Add("token", model.token);
-
-
-
                 collection.Add("device", device);
                 collection.Add("code", code);
-                collection.Add("mbrand", servername); collection.Add("nodeID", nodeID);
+                collection.Add("mbrand", servername);
+                collection.Add("nodeID", nodeID);
+                collection.Add("servername", nodeID);
 
-                byte[] response = await client.UploadValuesTaskAsync(appserver + "/getCredit.php", collection);
+                byte[] response = await client.UploadValuesTaskAsync(ConfigurationManager.AppSettings["server"] + "/Home/getCredit.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
            JObject jObject = JObject.Parse(result); return jObject ;

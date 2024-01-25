@@ -53,8 +53,8 @@
         }
 
         .c-account-box {
-            width: 50%;
-            margin: 50px 0 10px !important;
+            width: 40%;
+            margin: 50px 0 50px !important;
             background: #fff;
             border: 1px solid #dedede;
             box-shadow: 0 12px 12px 0 hsla(0,0%,70.6%,.11);
@@ -225,6 +225,8 @@
         .c-account-box__content .c-ui-input__field, .c-account-box__content .dk-selectric-input {
             direction: ltr;
             color: #777;
+            text-align:right;
+            direction:rtl
         }
 
         .c-account-box__content .c-ui-input__field, .c-account-box__content .dk-selectric-input {
@@ -488,7 +490,7 @@
     display: inline-block;
     font-size: 18px; /* width: 65%; */
     color: white;
-    padding: 15px;
+    padding: 20px;
     width: 100%;
 }
 
