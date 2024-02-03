@@ -125,6 +125,7 @@ namespace banimo.ViewModelPost
     {
         public string title { get; set; }
         public string desc { get; set; }
+        public string selectedFilter { get; set; }
         public string colorCode { get; set; }
         public string colorTitle { get; set; }
         public string price { get; set; }

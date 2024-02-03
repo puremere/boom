@@ -588,6 +588,7 @@ namespace banimo.Controllers
             return View(action);
 
         }
+      
         public ActionResult Contact()
         {
             string result = "";
@@ -600,13 +601,17 @@ namespace banimo.Controllers
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("servername", servername);
-                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/contactus.php", collection);
+                collection.Add("page", "contactus");
+                byte[] response = client.UploadValues(ConfigurationManager.AppSettings["server"] + "/aboutus.php", collection);
                 result = System.Text.Encoding.UTF8.GetString(response);
             }
 
             aboutVM model = JsonConvert.DeserializeObject<aboutVM>(result);
-
-            return View();
+            string srt = ConfigurationManager.AppSettings["design"] as string;
+            string action = "contactUs" + srt;
+            this.ViewData["MenuViewModel"] = Variables.menu;
+            return View(action, model);
+           
         }
 
         [HomeSessionCheck]
@@ -918,14 +923,17 @@ namespace banimo.Controllers
             using (WebClient client = new WebClient())
             {
                 
-                var collection = new NameValueCollection(); collection.Add("nodeID",  nodeID);
+                var collection = new NameValueCollection();
+                collection.Add("nodeID",  nodeID);
                 collection.Add("device", device);
                 collection.Add("code", code);
                 collection.Add("catLevel", catLevelforuse);
                 collection.Add("catID", catidforuse);
+                collection.Add("title", name);
+                
                 collection.Add("servername", servername);
                 byte[] response =
-                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getTypeListt.php", collection);
+                client.UploadValues(ConfigurationManager.AppSettings["server"] + "/getTypeListtTest.php", collection);
 
                 result = System.Text.Encoding.UTF8.GetString(response);
             }

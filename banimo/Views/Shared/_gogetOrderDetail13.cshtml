@@ -1,0 +1,174 @@
+﻿@model  banimo.ViewModelPost.ListOfProductOrder
+
+
+<style>
+    .Itemholderr {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 25px;
+        cursor: pointer;
+    }
+
+        .Itemholderr .itemtitle {
+            font-weight: 700;
+        }
+
+        .Itemholderr .itemvalue {
+            margin-right: 10px;
+        }
+
+        .Itemholderr .Item {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+            .Itemholderr .Item p {
+                display: inline-block;
+                text-align: right;
+                direction: rtl
+            }
+</style>
+
+<div class="row">
+    <div style="overflow-x:auto;padding:10px">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="    background-image: -webkit-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -o-linear-gradient(top,#2a85ae 0,#246388 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2a85ae),to(#246388)) !important;
+    background-image: linear-gradient(to bottom,#2a85ae 0,#246388 100%) !important;color: #fff">
+                <form method="post" id="getPDF" action="/Admin/createUserReport">
+                    <input name="data" hidden />
+                    <input name="id" hidden />
+                    <input value="user" name="type" hidden />
+                    <h3 class="panel-title"><i class="fa fa-shopping-basket fa-fw"></i> شرح سفارش    @*<i id="print" style="cursor:pointer; float:left" class="fa fa-print"></i>*@  </h3>
+
+                </form>
+               
+                @*<script>
+                    $("#print").click(function () {
+
+                        var obj = @Html.Raw(@Json.Encode(Model.myProducts));
+                        $("input[name=data]").val(JSON.stringify(obj));
+                        $("input[name=id]").val('@Model.myProducts.First().id');
+                        $("#getPDF").submit();
+                        $("#loading").fadeIn();
+                        setInterval(function () { $("#loading").fadeOut(); }, 3000);
+                       
+                        
+
+                    });
+                </script>*@
+            </div>
+            <div class="panel-body">
+                <div id="morris-area-chart">
+                    @{
+                        int w = Request.Browser.ScreenPixelsWidth;
+                        int h = Request.Browser.ScreenPixelsHeight;
+                        if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                        {
+                            if (Model.myProducts != null)
+                            {
+                                foreach (var item in Model.myProducts)
+                                {
+
+                                    int i = Model.myProducts.IndexOf(item) + 1;
+                                    string image = item.image;
+
+                                    <div class="Itemholderr" id="@item.orderID">
+
+                                        <div class="Item">
+                                            <p class="itemtitle">ردیف :</p>
+                                            <p class="itemvalue">@i</p>
+
+                                        </div>
+                                        <div class="Item">
+                                            <p class="itemtitle">نام کالا : </p>
+                                            <p class="itemvalue">@item.title</p>
+
+                                        </div>
+                                        <div class="Item">
+                                            <p class="itemtitle">قیمت :</p>
+                                            <p class="itemvalue"> @string.Format("{0:n0}", decimal.Parse(@item.price)) </p>
+
+                                        </div>
+                                        <div class="Item">
+                                            <p class="itemtitle">تعداد :</p>
+                                            <p class="itemvalue">@item.nums</p>
+
+                                        </div>
+                                        <div class="Item" style="text-align:center">
+                                            <img src=@image style="max-width:100px" />
+                                        </div>
+                                       
+
+
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <div style="overflow:auto;direction:rtl; margin-right:1px">
+                                <table  class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام کالا</th>
+                                            <th>قیمت </th>
+                                            <th>تعداد</th>
+                                            <th></th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody style="">
+
+                                        @if (Model.myProducts != null)
+                                        {
+                                            foreach (var item in Model.myProducts)
+                                            {
+                                                string image = item.image;
+                                                int i = Model.myProducts.IndexOf(item) + 1;
+
+                                                <tr id="@item.id" class="itemdetail" style="cursor:pointer ">
+                                                    <td>@i</td>
+                                                    <td>@item.title (@item.selectedFilter)</td>
+                                                    <td> @string.Format("{0:n0}", decimal.Parse(@item.price)) </td>
+                                                    <td>@item.nums</td>
+                                                    <td><img src=@image style="max-width:100px" /> </td>
+
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".itemdetail").click(function () {
+        var id = this.id;
+        var url = "/Home/ProductDetail?id=N" + id;
+        window.open(url)
+        //window.location.href = url
+    })
+</script>

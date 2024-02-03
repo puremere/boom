@@ -23933,7 +23933,7 @@ a.callbacks_nav.callbacks2_nav.next {
 .footer {
     padding-top: 70px;
     border-top: 1px solid #f1f1f1;
-    background-color: #007d80
+    
 }
 
 .footer-left p {
@@ -37512,10 +37512,7 @@ button.toast-close-button {
     border-radius: 5px
 }
 
-    .showmedetailFirstDiv:hover {
-        box-shadow: 2px 2px 5px -1px rgba(148,149,153,1)
-    }
-
+    
 .c-product-box__row--price {
     margin-top: 13px;
     height: 43px

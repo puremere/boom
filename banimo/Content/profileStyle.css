@@ -108,7 +108,7 @@ c-table-orders__cell:first-child {
     flex-grow: 1;
     flex-basis: 0;
     padding: 15px 10px;
-    min-height: 104px;
+    
     -webkit-box-align: center;
     align-items: center;
     font-size: 1.071rem;

@@ -1,16 +1,13 @@
-﻿@using BotDetect.Web.Mvc;
-@using banimo.Classes;
-
-@model banimo.ViewModePost.getMaindataViewModel
-
+﻿@model banimo.ViewModel.subMenuVM
+@using Newtonsoft.Json;
 @{
-    /**/
-
-
-    ViewBag.Title = @System.Configuration.ConfigurationManager.AppSettings["siteName2"];
+    ViewBag.Title = "submenu";
     Layout = "~/Views/Shared/_Layout13.cshtml";
-
 }
+
+
+
+
 
 @section scripts{
     <link href="~/Content/indexStyle13.css" rel="stylesheet" />
@@ -76,7 +73,7 @@
     }
 
     .heading {
-        padding:10px 50px;
+        padding: 50px;
         margin-top: 50px;
         width: 85%;
         margin: auto
@@ -116,7 +113,7 @@
         color: white;
         font-size: 14px;
         font-weight: 600;
-        margin: 10px 30px
+        margin: 30px
     }
 
     .slidparent {
@@ -235,26 +232,7 @@
         </div>
     </div>
 </div>
-<script>
-    var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-    if (iOS && '@Model.iosCookie' == "0") {
-        $('#iosModal').modal('show');
-        $('#AppFooter').hide();
-    }
-    $("#iosCookie").click(function () {
-        $.ajax({
-            url: '/Home/setIOSCookie/',
-            dataType: 'html',
 
-            success: function (data) {
-
-            },
-            error: function () {
-
-            }
-        });
-    })
-</script>
 
 <style>
 
@@ -306,148 +284,142 @@
     <div class="slidesectionParent" style="width:100%">
         @if (Model.slides != null)
         {
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    @{
-                        int w = Request.Browser.ScreenPixelsWidth;
-                        int h = Request.Browser.ScreenPixelsHeight;
-                        if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @{
+                    int w = Request.Browser.ScreenPixelsWidth;
+                    int h = Request.Browser.ScreenPixelsHeight;
+                    if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                    {
+                        string classname0 = "active";
+                        foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "app"))
                         {
-                            string classname0 = "active";
-                            foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "app"))
-                            {
-                                string src = "/images/panelimages/" + item.image;
-                                var index = Model.slides.IndexOf(item);
-                                <li data - target="#myCarousel" data-slide-to="@index" class="@classname0"></li>
-                                classname0 = "";
+                            string src = "/images/panelimages/" + item.image;
+                            var index = Model.slides.IndexOf(item);
+                            <li data - target="#myCarousel" data-slide-to="@index" class="@classname0"></li>
+                            classname0 = "";
 
-                            }
-
-                        }
-                        else
-                        {
-                            string classname0 = "active";
-                            foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "web"))
-                            {
-                                string src = "/images/panelimages/" + item.image;
-                                var index = Model.slides.IndexOf(item);
-                                <li data - target="#myCarousel" data-slide-to="@index" class="@classname0"></li>
-                                classname0 = "";
-
-
-                            }
                         }
 
                     }
-
-
-                </ol>
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    @{
-                        w = Request.Browser.ScreenPixelsWidth;
-                        h = Request.Browser.ScreenPixelsHeight;
-                        if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                    else
+                    {
+                        string classname0 = "active";
+                        foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "web"))
                         {
-                            string classname = "active";
-                            foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "app"))
+                            string src = "/images/panelimages/" + item.image;
+                            var index = Model.slides.IndexOf(item);
+                            <li data - target="#myCarousel" data-slide-to="@index" class="@classname0"></li>
+                            classname0 = "";
+
+
+                        }
+                    }
+
+                }
+
+
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                @{
+                    w = Request.Browser.ScreenPixelsWidth;
+                    h = Request.Browser.ScreenPixelsHeight;
+                    if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
+                    {
+                        string classname = "active";
+                        foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "app"))
+                        {
+                            string src = "/images/panelimages/" + item.image;
+
+                            <div class=" item @classname">
+                                <img style="object-fit:cover; max-height:450px!important" onerror="this.onerror=null; this.src='/images/placeholder.jpg'" style="cursor:pointer" src="@src" alt="@item.title" class="mySlide" id='@item.type-@item.catIDOrLink'>
+                            </div>
+                            classname = "";
+
+
+                        }
+                    }
+                    else
+                    {
+
+                        string classname = "active";
+                        foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "web"))
+                        {
+                            string src = "/images/panelimages/" + item.image;
+                            if (item.Ptitle.Trim() == "web")
                             {
-                                string src = "/images/panelimages/" + item.image;
 
                                 <div class=" item @classname">
                                     <img style="object-fit:cover; max-height:450px!important" onerror="this.onerror=null; this.src='/images/placeholder.jpg'" style="cursor:pointer" src="@src" alt="@item.title" class="mySlide" id='@item.type-@item.catIDOrLink'>
                                 </div>
                                 classname = "";
-
-
                             }
+
+
                         }
-                        else
-                        {
-
-                            string classname = "active";
-                            foreach (var item in Model.slides.Where(x => x.Ptitle.Trim() == "web"))
-                            {
-                                string src = "/images/panelimages/" + item.image;
-                                if (item.Ptitle.Trim() == "web")
-                                {
-
-                                    <div class=" item @classname">
-                                        <img style="object-fit:cover; max-height:450px!important" onerror="this.onerror=null; this.src='/images/placeholder.jpg'" style="cursor:pointer" src="@src" alt="@item.title" class="mySlide" id='@item.type-@item.catIDOrLink'>
-                                    </div>
-                                    classname = "";
-                                }
-
-
-                            }
-                        }
-
-
                     }
 
-                </div>
-                <a style="font-family:unset; top:50%" class="left carousel-control" href="#myCarousel" data-slide="prev">
 
-                    <span class=""><i class="fa fa-chevron-left"></i></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a style="font-family:unset; top:50%" class="right carousel-control" href="#myCarousel" data-slide="next">
-                   
-                    <span class=""> <i class="fa fa-chevron-right"></i></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                }
 
-                <!-- Left and right controls -->
             </div>
+            <a style="font-family:unset; top:50%" class="left carousel-control" href="#myCarousel" data-slide="prev">
+
+                <span class=""><i class="fa fa-chevron-left"></i></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a style="font-family:unset; top:50%" class="right carousel-control" href="#myCarousel" data-slide="next">
+
+                <span class=""> <i class="fa fa-chevron-right"></i></span>
+                <span class="sr-only">Next</span>
+            </a>
+
+            <!-- Left and right controls -->
+        </div>
         }
     </div>
 
 
 </div>
 <div class="heading">
-    <p class="" style="font-size:25px; font-weight:600; text-align:center">دسته بندی</p>
+
     <div style="padding:20px 30px ; display:flex; align-items:center; justify-content:center">
 
-        @if (Model.catsdata != null)
+        @if (Model.mycat != null)
         {
-            foreach (var item in Model.catsdata)
+            foreach (var cat in Model.mycat)
             {
-                if (item.mycatcollection != null)
-                {
-                    foreach (var cat in item.mycatcollection)
-                    {
-                        <div class="col-lg-2 col-md-6 col-sm-4 col-xs-4 indexbanner" style="max-width:260px">
-                            <div class="imageparent " style="text-align:center">
-                                <div class="img-hover-zoom" style="padding:15px">
-                                    @if (cat.IsFinal == "1")
-                                    {
-                                        string srtcat = "1" + cat.ID;
-                                        <a href=@Url.Action("submenu", "Home", new { catmode = srtcat})>
-                                            <img onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/placeHolder.webp'" alt="بنر" src="~/images/@cat.image" class="banner bannerimage " />
+                <div class="col-lg-2 col-md-6 col-sm-4 col-xs-4 indexbanner" style="max-width:260px">
+                    <div class="imageparent " style="text-align:center">
+                        <div class="img-hover-zoom">
+                            @if (cat.isFinal == 1)
+                            {
+                                string srtcat = "1" + cat.ID;
+                                <a href="/productlist/@cat.entitle">
+                                    <img onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/placeHolder.webp'" alt="بنر" src="~/images/@cat.image" class="banner bannerimage " />
 
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        string url = "/category/" + cat.entitle;
-                                        <a href=@url>
-                                            <img onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/placeHolder.webp'" alt="بنر" src="~/images/@cat.image" class="banner bannerimage " />
+                                </a>
+                            }
+                            else
+                            {
+                                string url = "/category/" + cat.entitle;
+                                <a href=@url>
+                                    <img onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/placeHolder.webp'" alt="بنر" src="~/images/@cat.image" class="banner bannerimage " />
 
-                                        </a>
+                                </a>
 
-                                    }
-
-                                </div>
-                                <p class="titlep2" style="color:black">
-                                    @cat.title
-                                </p>
-                            </div>
+                            }
 
                         </div>
+                        <p class="titlep2" style="color:black">
+                            @cat.title
+                        </p>
+                    </div>
 
-                    }
-                }
+                </div>
+
 
             }
         }
@@ -500,7 +472,7 @@
                                     string src = imagefile;
 
                                     <div class="item carasoulItem" style=" ">
-                                        <div class="showmedetail" id=@ID style="cursor:pointer;margin:1px; :25px; width:100%">
+                                        <div class="showmedetail" id=@ID style="cursor:pointer;margin:1px; border-radius:45px; width:100%">
                                             <div class="showmedetailFirstDiv showmedetailx" style="background-color:white;">
                                                 <div style="padding: 5px">
                                                     <a href="/Home/ProductDetail?id=@ID" nofollow>
@@ -554,7 +526,7 @@
 
                                                                     <div style="display:flex; align-items:center; ">
                                                                         <div style="width:20%;margin-right:5px">
-                                                                            <span class="priceItem discountbox" style="">
+                                                                            <span class="priceItem discountbox" >
                                                                                 @item.discount%
 
                                                                             </span>
@@ -615,61 +587,6 @@
     </div>
 
 </div>
-
-<div class="heading">
-    <p class="fontTitle center ">دنبال چی هستی؟</p>
-    @if (Model.cats != null)
-    {
-        <div style="padding:20px 30px">
-            <div class="owl-carousel owl-theme" style="">
-                @foreach (var item in Model.cats)
-                {
-                    if (item.cattags != null)
-                    {
-                        foreach (var tag in item.cattags)
-                        {
-                            <a href="/brands/@tag.title">
-                                <div class="item brandItem img-hover-zooom" style="border-radius:8px">
-                                    <img style="object-fit:cover; max-height:250px!important" onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/placeHolder.webp'" src="~/images/@tag.image" style="border-radius: 8px" class="" />
-                                    <p style="display:none; padding: 10px;text-align: center;background-color: rgba(0,0,0,0.5);color: white;position: absolute;bottom: 0;width: 100%;"> @tag.title</p>
-                                </div>
-                            </a>
-                        }
-                    }
-
-                }
-
-
-            </div>
-        </div>
-        @*<span class="tagItem"><a href="@Url.Action("ProductList", "Home", new { catmode = "1"+item.ID, tag = tag.title})">@tag.title</a> </span>*@
-
-        @*foreach (var item in Model.cats)
-            {
-                int index = Model.cats.IndexOf(item);
-
-                string idToShow = "p" + item.ID;
-                string classname = "";
-                if (index == 0)
-                {
-                    classname = "showParent";
-                }
-                <div class="tagHolder @classname" id="@idToShow">
-                    @if (item.cattags != null)
-                    {
-                        foreach (var tag in item.cattags)
-                        {
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 indexbanner" style="max-width:260px">
-
-
-                            </div>
-                        }
-                    }
-                </div>
-            }*@
-    }
-</div>
-
 
 
 
@@ -770,7 +687,7 @@
     {
         string id = group.type + "-" + group.catIDOrLink;
 
-        if (group.value != null)
+        if (group.Newest != null)
         {
             <div class="maxwidth">
                 <div style=" width:90%; margin:auto">
@@ -783,7 +700,7 @@
                                 <div class="resCarousel-inner">
 
 
-                                    @Html.Partial("~/Views/Shared/_returnVitirn13.cshtml", group.value)
+                                    @Html.Partial("~/Views/Shared/_returnVitirn13.cshtml", group.Newest)
 
 
 
@@ -819,7 +736,7 @@
     int h = Request.Browser.ScreenPixelsHeight;
     if (Request.Browser.IsMobileDevice || (w < 820 && h > 820))
     {
-        bannerList = bannerList.Where(x => x.Ptitle.Trim() == "app").OrderBy(x=>x.ID).ToList();
+        bannerList = bannerList.Where(x => x.Ptitle.Trim() == "app").OrderBy(x => x.ID).ToList();
     }
     else
     {
@@ -883,26 +800,7 @@
     </div>
 }
 
-@if (Model.brands != null)
-{
-    <div style="width:85%; margin:50px auto; padding:20px 30px">
-        <p class="fontTitle  ">برندهای مجموعه</p>
-        <div class="owl-carousel owl-theme" style="">
-            @foreach (var item in Model.brands)
-            {
-                <a href="/brands/@item.title">
-                    <div class="item brandItem img-hover-zooom" style="border-radius:8px">
-                        <img style="object-fit:cover; max-height:250px!important" onerror="this.onerror=null; this.src='/webAsset/mrqeshmi/image/brand.webp'" src="~/images/@item.image" style="border-radius: 8px" class="grayscale" />
-                        <p style="display:none; padding: 10px;text-align: center;background-color: rgba(0,0,0,0.5);color: white;position: absolute;bottom: 0;width: 100%;"> @item.title</p>
-                    </div>
-                </a>
-            }
 
-
-        </div>
-    </div>
-
-}
 
 
 
@@ -1350,6 +1248,11 @@ else
         background-color: white !important
     }
 </style>
+
+
+
+
+
 
 
 

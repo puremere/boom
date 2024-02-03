@@ -166,6 +166,8 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
         <input id="catmode" name="catmode" type="hidden" />
         <input id="ID" name="ID" type="hidden" />
         <input id="title" name="title" type="hidden" />
+        <input id="newHeader" name="newHeader" type="hidden" />
+        <input id="newDes" name="newDes" type="hidden" />
 
 
         <div class="row" style="background-color:white; padding:10px; margin:0px; margin-top:25px">
@@ -274,6 +276,44 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                             <div class="row fieldholder col-lg-3">
                                 <div>
                                     <label style="text-align: right">
+                                        هدر :
+                                    </label>
+
+                                    <div>
+                                        <span style="color:red; display:none">*</span>
+
+                                        <div id="contentHolder">
+                                            <input value="" type="text" id="HeaderNew" name="" required="required" class="form-control NRM  ">
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row fieldholder col-lg-3">
+                                <div>
+                                    <label style="text-align: right">
+                                        توضیحات :
+                                    </label>
+
+                                    <div>
+                                        <span style="color:red; display:none">*</span>
+
+                                        <div id="contentHolder">
+                                            <input value="" type="text" id="DesNew" name="" required="required" class="form-control NRM  ">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row fieldholder col-lg-3">
+                                <div>
+                                    <label style="text-align: right">
                                         محتوا :
                                     </label>
 
@@ -313,7 +353,8 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
 
                         </div>
 
-                        <script>//change autocomplete source based on selected type
+                        <script>
+    //change autocomplete source based on selected type
                             $("#newlist").change(function () {
 
                                 var val = $("#newlist option:selected").val();
@@ -357,6 +398,8 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                                     $("#type").val($("#newlist option:selected").val());
                                     $("#image").val($("#newImage").val());
                                     $("#catmode").val($("#listofcat").val());
+                                    $("#newDes").val($("#DesNew").val());
+                                    $("#newHeader").val($("#HeaderNew").val());
                                     $("form#editbaner").submit();
                                 }
                                 else {
@@ -387,6 +430,8 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                             string ID = item.ID + "";
                             string bannerList = "bannerList" + ID;
                             string content = "content" + ID;
+                            string header = "header" + ID;
+                            string descrip = "descrip" + ID;
                             string image = "image" + ID;
                             string button = "butt" + ID;
                             string classname = "REM" + ID;
@@ -404,6 +449,38 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                                         </div>
 
 
+                                    </div>
+                                    <div class="row fieldholder col-lg-3">
+                                        <div>
+                                            <label style="text-align: right">
+                                                هدر :
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+
+                                            <div id="contentHolder">
+                                                <input value="@item.title" type="text" id="@header" name="" required="required" class="form-control  @classname ">
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="row fieldholder col-lg-3">
+                                        <div>
+                                            <label style="text-align: right">
+                                                توضیحات :
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <span style="color:red; display:none">*</span>
+
+                                            <div id="contentHolder">
+                                                <input value="@item.Ptitle" type="text" id="@descrip" name="" required="required" class="form-control  @classname ">
+                                            </div>
+
+
+                                        </div>
                                     </div>
                                     <div class="row fieldholder col-lg-3">
                                         <div>
@@ -450,7 +527,7 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
 
                                     <div class="row fieldholder" style="width:25%;padding: 0 10px;display: inline-block;">
                                         <div id=@button class=" btn btn-primary">تایید</div>
-                                        <div itemToRemove="@item.ID" class="removeSlide btn btn-primary" >حذف</div>
+                                        <div itemToRemove="@item.ID" class="removeSlide btn btn-primary">حذف</div>
 
                                     </div>
 
@@ -462,6 +539,8 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                                     var cat = '@item.type'
                                     var bannerList = "bannerList" + @item.ID;
                                     var content = "content" + @item.ID;
+                                      var descrip = "descrip" + @item.ID;
+                                    var header = "header" + @item.ID;
                                     var image = "image"+ @item.ID;
                                     var button = "butt" + @item.ID;
                                     var classname = "REM" + @item.ID;
@@ -515,6 +594,9 @@ new { enctype = "multipart/form-data", id = "editbaner" }))
                                             $("#content").val($("#" + "content" +'@item.ID').val());
                                             $("#type").val($("#" + "bannerList" +'@item.ID' +" option:selected").val());
                                             $("#image").val($("#" +"image"+ '@item.ID').val());
+                                             $("#newHeader").val($("#" +"header"+ '@item.ID').val());
+                                            $("#newDes").val($("#" +"descrip"+ '@item.ID').val());
+
                                             $("#title").val('@item.title');
                                              $("#ID").val('@item.ID');
                                             $("form#editbaner").submit();

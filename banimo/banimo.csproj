@@ -889,6 +889,7 @@
     <Content Include="AdminPanel\Scripts\fastclick.js" />
     <Content Include="Content\ankerStyle.css" />
     <Content Include="Content\app_min13.css" />
+    <Content Include="Content\flexslider-rtl.css" />
     <Content Include="Content\fontIran.css" />
     <Content Include="Content\heson.css" />
     <Content Include="Content\indexStyle13.css" />
@@ -5240,7 +5241,6 @@
     <Content Include="Views\Home\ContactUs13.cshtml" />
     <Content Include="Views\Home\EndOrder13.cshtml" />
     <Content Include="Views\Home\forgetpass13.cshtml" />
-    <Content Include="Views\Home\myProfile13.cshtml" />
     <Content Include="Views\Shared\_ProductListForBUTFULImage13.cshtml" />
     <Content Include="Views\Home\ProductList13.cshtml" />
     <Content Include="Views\Home\ProductDetail13.cshtml" />
@@ -5251,6 +5251,12 @@
     <Content Include="Views\Shared\_partialProductDetail13.cshtml" />
     <Content Include="Views\Home\Register13.cshtml" />
     <Content Include="Views\Home\ChangePass13.cshtml" />
+    <Content Include="Views\Home\submenu13.cshtml" />
+    <Content Include="Views\Home\aboutus13.cshtml" />
+    <Content Include="Views\Home\myProfile13.cshtml" />
+    <Content Include="Views\Shared\_gogetOrderDetail13.cshtml" />
+    <Content Include="Views\Connection\verifyAtHome13.cshtml" />
+    <Content Include="Views\Connection\verifyPayment13.cshtml" />
     <None Include="Web References\bankMellat\IPaymentGateway.wsdl" />
     <None Include="Web References\bankMellat\PaymentGatewayImplService.wsdl" />
     <Content Include="Web References\bankMellat\Reference.map">

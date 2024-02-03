@@ -7564,7 +7564,7 @@ namespace banimo.Controllers
             return View(BannerListModel);
         }
         [HttpPost]
-        public ActionResult editbaner(string ID, string content, string type, string image, string title, string catmode)
+        public ActionResult editbaner(string ID, string content, string type, string image, string title, string catmode, string newDes, string newHeader)
         {
 
             string pathString = "~/images/panelimages";
@@ -7601,6 +7601,8 @@ namespace banimo.Controllers
                 collection.Add("content", content);
                 collection.Add("type", type);
                 collection.Add("title", title);
+                collection.Add("header", newHeader);
+                collection.Add("description", newDes);
                 collection.Add("ID", ID);
                 collection.Add("catmode", catmode);
 

@@ -604,7 +604,7 @@ accordion-blocks .card {
     }
 
     #productlistimageholder {
-        width: 80%;
+        width: 100%;
         margin: auto;
     }
 
@@ -660,9 +660,10 @@ accordion-blocks .card {
     }
 
     .pro-image-front {
-        max-width: 150px !important;
-        max-height: 150px !important;
-        min-height: 150px !important;
+        /*max-width: 150px !important;*/
+        max-height: 350px !important;
+        aspect-ratio:1
+        /*min-height: 150px !important;*/
     }
 
     #badgeholder {

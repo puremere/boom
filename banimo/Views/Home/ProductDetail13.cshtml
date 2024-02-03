@@ -47,9 +47,13 @@
 }
 
 <link href="~/Content/flexslider2.css" rel="stylesheet" />
+@*<link href="~/Content/flexslider-rtl.css" rel="stylesheet" />*@
 <link href="~/Content/detailStyle.css" rel="stylesheet" />
 <link href="~/Content/lightgallery.min.css" rel="stylesheet" />
+
+
 <script src="~/Scripts/jquery.flexslider2.js"></script>
+@*<script src="~/Scripts/jquery.flexslider2.js"></script>*@
 <style>
     .flex-control-thumbs {
     }
@@ -566,7 +570,7 @@
 
 
                 <div class="col-md-12 col-sm-12 col-lg-4" style=" border-left:1px solid #ddd">
-                    
+
                     @{
 
                         if (Model.otherColors != null)
@@ -603,9 +607,9 @@
                                         // Can also be used with $(document).ready() 66192763
                                         $('#flexslider').removeData("flexslider");
                                         $('.flexslider').flexslider({
-                                            animation: "slide",
+                                            animation: "fade",
                                             controlNav: "thumbnails",
-                                            direction: "horizontal",
+                                            //direction: "horizontal",
                                             reverse: false,
                                             directionNav: false,
 
@@ -983,7 +987,7 @@
                                                                 classFilter = "activeColor";
                                                             }
                                                             <p idplaceholder="@myID" priceplaceholder="@price" class="otherfilterNew nomargin @classFilter">
-                                                                <span style="font-size:18px; padding:10px; margin:10px" value="@ocolorfilter.ID">@ocolorfilter.selectedFilter <input value="0"  class="@classn" style="display:none" />
+                                                                <span style="font-size:18px; padding:10px; margin:10px" value="@ocolorfilter.ID">@ocolorfilter.selectedFilter <input value="0" class="@classn" style="display:none" />
                                                             </p>
 
                                                         }
@@ -1062,10 +1066,10 @@
                             }
 
 
-                            <div class="row"  onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">
+                            <div class="row" onclick="addtocart('@Model.partnerList.First().pID',$('#totalIDHolder').val(),'')">
                                 <div class="mybtn " style="">
                                     <div style="border-radius: 50px 15px 15px 50px; width: 30%; padding: 10px; display: inline-block">
-                                       
+
                                         <img style="display:inline-block; width:40px " src="/images/cart.png">
                                     </div>
                                     <p style="text-align:center; display:inline-block; font-size:15px; width:65%; color:white" class=" ">افزودن به سبد خرید</p>
@@ -1528,80 +1532,80 @@
         })
     </script>*@
 <script>
-        $(".otherNewColor").click(function () {
+    $(".otherNewColor").click(function () {
 
-            var price = $(this).attr('priceplaceholder');
-            var itemid = $(this).attr('idplaceholder');
-
-
-            $("#priceholdersection").text(numberWithCommas(price));
-            $("#totalIDHolder").val(itemid);
-
-            var id = "S"+$(this).attr('id');
-            $(".allbegone").removeClass("displayitem");
-            $(".allbegone").addClass("hideItem");
-
-            $(".allbegone[itemToShow='" + id+"']").removeClass("hideItem");
-            $(".allbegone[itemToShow='" + id+"']").addClass("displayitem");
+        var price = $(this).attr('priceplaceholder');
+        var itemid = $(this).attr('idplaceholder');
 
 
-            $(".otherNewColor").removeClass("activeColor")
-            $(this).addClass("activeColor");
+        $("#priceholdersection").text(numberWithCommas(price));
+        $("#totalIDHolder").val(itemid);
 
-        })
-        var otherColorClicked = function (id) {
+        var id = "S" + $(this).attr('id');
+        $(".allbegone").removeClass("displayitem");
+        $(".allbegone").addClass("hideItem");
+
+        $(".allbegone[itemToShow='" + id + "']").removeClass("hideItem");
+        $(".allbegone[itemToShow='" + id + "']").addClass("displayitem");
 
 
-            $.ajax({
-                url: "/Home/changeLastNumber",
-                data: {
-                    value: id
-                },
-                success: function (data) {
-                    window.location.reload();
-                },
-            });
+        $(".otherNewColor").removeClass("activeColor")
+        $(this).addClass("activeColor");
+
+    })
+    var otherColorClicked = function (id) {
+
+
+        $.ajax({
+            url: "/Home/changeLastNumber",
+            data: {
+                value: id
+            },
+            success: function (data) {
+                window.location.reload();
+            },
+        });
+    }
+    var finalsrt = "";
+
+
+    $(".addsondtl").click(function () {
+        finalsrt = "";
+        //$(this).addClass('actvie');
+        //var el = $(this);
+
+
+        var parent = $(this).parent();
+
+        if ($(this).hasClass('adddsonSingle')) {
+
+            $(this).parent().find('.adddsonSingle').each(function () {
+                // alert("d")
+                $(this).removeClass("active");
+            })
+
+
         }
-        var finalsrt = "";
-       
-
-        $(".addsondtl").click(function () {
-            finalsrt = "";
-            //$(this).addClass('actvie');
-            //var el = $(this);
 
 
-            var parent = $(this).parent();
+        if ($(this).hasClass('active')) {
+            //alert("ssss")
+            //let javael = el.get(0);
+            //javael.classList.remove("active");
 
-            if ($(this).hasClass('adddsonSingle')) {
+            $(this).removeClass("active")
 
-                $(this).parent().find('.adddsonSingle').each(function () {
-                   // alert("d")
-                    $(this).removeClass("active");
-                })
+        }
+        else {
+            $(this).addClass("active")
 
-
-            }
-
-
-            if ($(this).hasClass('active')) {
-                //alert("ssss")
-                //let javael = el.get(0);
-                //javael.classList.remove("active");
-
-                $(this).removeClass("active")
-
-            }
-            else {
-                $(this).addClass("active")
-
-            }
+        }
 
 
 
 
 
-        })
+    })
 
 </script>
 <script>

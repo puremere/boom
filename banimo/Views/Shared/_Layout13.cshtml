@@ -24,13 +24,13 @@
     <head>
 
         @*<script async src="https://www.googletagmanager.com/gtag/js?id=@analyticID"></script>
-        <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { dataLayer.push(arguments); }
-                gtag('js', new Date());
+            <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() { dataLayer.push(arguments); }
+                    gtag('js', new Date());
 
-                gtag('config', '@analyticID');
-        </script>*@
+                    gtag('config', '@analyticID');
+            </script>*@
 
         <meta charset="utf-8" />
 
@@ -42,7 +42,7 @@
         <meta http-equiv="content-language" content="fa" />
 
         <!-- Mobile Specific Metas
-    ================================================== -->
+        ================================================== -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2">
@@ -80,15 +80,15 @@
         @RenderSection("header", required: false)
 
 
-        <link href="~/Content/app_critical_min.css" rel="stylesheet" />
-        @*<link rel="stylesheet" href="~/Content/bundle.css">
+        @*<link href="~/Content/app_critical_min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/Content/bundle.css">
         <link href="~/Content/layoutStyle.css" rel="stylesheet" />
         <link href="~/Content/toastr.css" rel="stylesheet" />*@
-        <script src="~/Scripts/toastr.js"></script>
+
         <link href="~/fonts/icomoon/style.css" rel="stylesheet" />
         <link href="~/Content/app_min13.css" rel="stylesheet" />
         <link href="~/Content/fontIran.css" rel="stylesheet" />
-        
+
         <style>
             /*body {
                 background-color: #fff
@@ -223,7 +223,320 @@
                 display: none !important;
             }
 
+            .flexwrapho {
+                flex: 1 0 18%;
+            }
+
+            .flexwrapho2 {
+                flex: 1 0 21%;
+            }
+
+            .titlep2 {
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                margin: 30px
+            }
+
+            .showmedetail {
+                width: 25%;
+                z-index: 8;
+                cursor: pointer;
+                margin: 0;
+                border-radius: 35px;
+                z-index: 8;
+                cursor: pointer;
+                padding: 7px
+            }
+
+            .product-men {
+                float: right;
+                border-top: 0px;
+                border-right: 0px;
+            }
+
+                .product-men #detailholdermain {
+                    border: 1px solid #eee;
+                    border-radius: 5px;
+                    padding: 5px
+                }
+
+                    .product-men #detailholdermain:hover {
+                        box-shadow: 0px 0px 5px 5px #eee;
+                    }
+
+            .promotion__badge {
+                color: red;
+                border-bottom: 1px solid red;
+                padding-bottom: 15px;
+            }
+
+            .number3Vitrin {
+                border-radius: 8px;
+                padding: 15px;
+                position: relative
+            }
+            .descSecHolder {
+                display: flex
+            }
+
+            .descSec {
+                background-color: #302e2e;
+                padding: 20px;
+                flex: 1;
+                margin: 20px
+            }
+
+                .descSec i {
+                    font-size: 24px;
+                    color: #FF4500;
+                    margin-bottom: 15px
+                }
+
+                .descSec p {
+                    margin: 10px 0;
+                }
+
+            .footerH {
+                color: #FF4500 !important;
+            }
+
+            .footerdiv p {
+                color: white;
+                margin-bottom: 12px
+            }
+
+            .footerdiv a {
+                color: white;
+                margin-bottom: 10px
+            }
+            .footerLinkParent {
+                width: 90%;
+                margin: auto;
+                padding-bottom: 35px;
+                border-bottom: 1px #ddd solid;
+                display:flex;
+            }
+            .ft4 {
+                width: 23%;
+                margin-top: 25px
+            }
+            .ft3 {
+                width: 23%;
+                margin-top: 25px
+            }
+            .ft2 {
+                width: 23%;
+                margin-top: 25px
+            }
+            .ft1 {
+                width: 30%;
+            }
+            .footerfinal {
+                display: flex;
+                width: 100%
+            }
+            .footeraddress {
+                width: 70%;
+                float: right;
+                margin-top: 25px
+            }
+            .footerLogo {
+                width: 30%
+            }
+            .footerlogoch1 {
+                padding: 60px 40px
+            }
+            .logoSec {
+                margin: 0 40px;
+                text-align: center
+            }
+
+            .searchSec {
+                border-radius: 11px;
+                background: #f7f7f7;
+                display: flex;
+                align-items: center;
+                flex: 1
+            }
+
+                .searchSec svg {
+                    margin: 0 15px;
+                    font-size: 18px
+                }
+                .searchPlace{
+                    font-size:14px;
+                    color:#6d6d6d;
+                }
+
+                .searchSec input {
+                    height: 52px;
+                    font-size: 14px;
+                    font-size: 1rem;
+                    color: #757575;
+                    border-radius: 11px;
+                    background: #f7f7f7;
+                    text-align: right;
+                    direction: rtl;
+                    border: none;
+                    padding: 0 5px 0 40px !important;
+                    width: 100%;
+                    outline: none;
+                }
+
+            .headerSec1 {
+                display: flex;
+                width: 50%;
+            }
+
+            .headerSec2 {
+                display: flex;
+                width: 50%;
+                align-items: center;
+                justify-content: left;
+                font-size: 18px
+            }
+
+            #cartholder {
+                padding: 7px
+            }
+
+            #simpleCart_quantityy {
+                font-family: IRANSansfaNum
+            }
+
+            .secParent {
+                display: flex;
+                width: 100%;
+                margin: auto;
+                padding: 20px 0;
+                border-bottom: 1px solid #eee
+            }
+
+            .menuSectionParent {
+                display: flex;
+                align-items: center;
+                display: flex;
+                justify-content: center
+            }
+
+            .flexel {
+                display: flex;
+                margin: 10px 45px;
+                align-items: center;
+                cursor: pointer
+            }
+
+                .flexel i {
+                    font-size: 18px;
+                    margin: 0 10px;
+                }
+
+            .secParentchilde {
+                display: flex;
+                width: 85%;
+                margin: auto;
+            }
+
+            .headerItem {
+                font-size: 15px
+            }
+
+            .menuIcon {
+                width: 20px;
+                margin: 5px
+            }
+
+            .aboutIcon {
+                width: 40px
+            }
+
+            .categoryIcon {
+                width: 30px
+            }
+            .discountbox {
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                background-color: #f34f4f;
+                border-radius: 5px;
+                padding: 0px 10px;
+            }
             @@media only screen and (max-width: 600px) {
+                .footerlogoch1 {
+                    padding: 10px
+                }
+                .footerLogo {
+                    width: 100%
+                }
+                .footeraddress{
+                    width:100%;
+                    float:unset
+                }
+                .footerfinal {
+                    display: block;
+                }
+                .descSecHolder {
+                    display: block
+                }
+                .footerLinkParent{
+                    display:block
+                }
+                .ft4 {
+                    width: 100%;
+                }
+
+                .ft3 {
+                    width: 100%;
+                    margin-top: 25px
+                }
+
+                .ft2 {
+                    width: 100%;
+                    margin-top: 25px
+                }
+
+                .ft1 {
+                    width: 100%;
+                }
+
+                .number3Vitrin{
+                    padding:5px;
+                   
+                }
+                .contentholderofAll {
+                    border-radius: 35px
+                }
+
+                .product-men #detailholdermain {
+                    border: none;
+                    padding: unset;
+                    border-radius: 35px;
+                }
+
+                .showmedetail {
+                    width: 50%;
+                    margin: 0;
+                    background-color: none;
+                    border-radius: 35px;
+                }
+
+                .titlep2 {
+                    margin: 10px
+                }
+
+                .descSecHolder {
+                    display: block;
+                }
+
+                .flexwrapho {
+                    flex: 1 0 33%;
+                }
+
+                .flexwrapho2 {
+                    flex: 1 0 49%;
+                }
+
                 .nav-tabs > li > a {
                     padding: 10px !important
                 }
@@ -246,6 +559,10 @@
 
                 .topHolder {
                     margin: 0 !important
+                }
+
+                .slidesectionParent {
+                    margin: 15px;
                 }
 
                 .img-hover-zoom {
@@ -346,7 +663,7 @@
                         <textarea id="emailContent" placeholder="پیام شما" class="form-control" style="text-align:right"></textarea>
                         @*
 
-                        <textarea class="form-control" placeholder="your message" />*@
+                            <textarea class="form-control" placeholder="your message" />*@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
@@ -373,7 +690,7 @@
 
 
                 <img style="max-width:80px; display:block; margin:auto" src="~/images/@logo" alt="لوگو" />
-               
+
 
 
 
@@ -385,7 +702,10 @@
 
         <div class="searchsection" style="display:none; position:fixed;top:0; background-color:rgba(0,0,0,0.7);z-index:9999; width:100%; height:100%">
             <div id="searchpanel" action="~/Home/ProductList" style="margin:50px 30px 0 30px">
-                <div type="submit" id="searchImageWeb" style="cursor:pointer; display: inline-block; background-color: #64c4ef; border-radius: 10px 0px 0px 10px; position:absolute"> <img src="~/images/search.png" style="width:40px;" alt="جستجو" /></div><input id="searchInputWeb" name="newquery" type="text" style="outline:0; text-align:right; width:100%; height:40px; display:inline-block; padding:8px;border:1px solid #ddd;background-color:#eee; border-radius:10px 10px 10px 10px; text-align:right;direction:rtl;" placeholder="نام کالا، برند یا دسته مورد نظر را جستجو کنید .. " />
+                <div type="submit" id="searchImageWeb" style="cursor:pointer;display: inline-block;border-radius: 10px 0px 0px 10px;position:absolute;top: 60px;left: 40px;">
+                    <svg style="font-size:20px" viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="search" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-search s-icon input-search-icon b-icon bi" data-v-550996c4=""><g data-v-550996c4=""><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path></g></svg>
+                </div>
+                <input id="searchInputWeb" name="newquery" type="text" style="outline:0; text-align:right; width:100%; height:40px; display:inline-block; padding:8px;border:1px solid #ddd;background-color:#eee; border-radius:10px 10px 10px 10px; text-align:right;direction:rtl;" placeholder="نام کالا، برند یا دسته مورد نظر را جستجو کنید .. " />
             </div>
             <div id="searchResultSection" style="padding:15px; border: 1px #ddd solid; background-color: #fff; position: fixed; top: 95px;  z-index: 99000; display: none ; border-radius:10px 10px 10px 10px">
 
@@ -398,127 +718,30 @@
 
             <div class="headerMain container viewdesk" style="direction:rtl; width:100%">
                 <style>
-                    .logoSec {
-                        margin: 0 40px;
-                        text-align: center
-                    }
-
-                    .searchSec {
-                        border-radius: 11px;
-                        background: #f7f7f7;
-                        display: flex;
-                        align-items: center;
-                        flex: 1
-                    }
-
-                        .searchSec svg {
-                            margin: 0 30px;
-                            font-size: 18px
-                        }
-
-                        .searchSec input {
-                            height: 52px;
-                            font-size: 14px;
-                            font-size: 1rem;
-                            color: #757575;
-                            border-radius: 11px;
-                            background: #f7f7f7;
-                            text-align: right;
-                            direction: rtl;
-                            border: none;
-                            padding: 0 5px 0 40px !important;
-                            width: 100%;
-                            outline: none;
-                        }
-
-                    .headerSec1 {
-                        display: flex;
-                        width: 50%;
-                    }
-
-                    .headerSec2 {
-                        display: flex;
-                        width: 50%;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 18px
-                    }
-
-                    #cartholder {
-                        padding: 7px
-                    }
-
-                    #simpleCart_quantityy {
-                        font-family: IRANSansfaNum
-                    }
-
-                    .secParent {
-                        display: flex;
-                        width: 100%;
-                        margin: auto;
-                        padding: 20px 0;
-                        border-bottom: 1px solid #eee
-                    }
-
-                    .menuSectionParent {
-                        display: flex;
-                        align-items: center;
-                        display: flex;
-                        justify-content: center
-                    }
-
-                    .flexel {
-                        display: flex;
-                        margin: 35px 45px;
-                        align-items:center;
-                        cursor:pointer
-                    }
-
-                        .flexel i {
-                            font-size: 18px;
-                            margin: 0 10px;
-                        }
-
-                    .secParentchilde {
-                        display: flex;
-                        width: 85%;
-                        margin: auto;
-                    }
-
-                    .headerItem {
-                        font-size: 15px
-                    }
-                    .menuIcon {
-                        width: 20px;
-                        margin: 5px
-                    }
-                    .aboutIcon{
-                        width:40px
-                    }
-                    .categoryIcon{
-                        width:30px
-                    }
+                   
                 </style>
                 <div class="secParent" style="">
                     <div class="secParentchilde">
-                        <div class="headerSec1">
+                        <div class="headerSec1 ">
                             <div class="logoSec" style="">
                                 <div>
                                     <a href="/Home/Index"><img style="width:70px" src="~/images/@logo" alt="لوگو"></a>
                                 </div>
                             </div>
-                            <div class="searchSec">
+                            <div class="searchSec searchButton">
                                 <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="search" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-search s-icon input-search-icon b-icon bi" data-v-550996c4=""><g data-v-550996c4=""><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path></g></svg>
-                                <input placeholder="آیتم مورد نظر خود را جستجو کنید" />
+                                <div class="searchPlace" placeholder="">آیتم مورد نظر خود را جستجو کنید</div>
 
                             </div>
+
                         </div>
                         <div class="headerSec2">
                             <div id="cartholder">
                                 <a href="/Home/checkout">
                                     <p style="padding: 0 10px; " height="40px " class="">
                                         <span style="color:#FF4500;  height:20px" class="cartnumber simpleCart_quantityy priceItem" id="simpleCart_quantityy"></span>
-                                        <img style="width:20px" src="~/webAsset/mrqeshmi/image/cart.png" />
+                                        @*<img style="width:20px" src="~/webAsset/mrqeshmi/image/cart.png" />*@
+                                        <i style="padding:0" class="fal fa-shopping-cart"></i>
                                     </p>
                                 </a>
 
@@ -532,13 +755,14 @@
                                         if (user != null)
                                         {
                                             string name = user.fullname != "" ? user.fullname : user.phone;
-                                            <img class="menuIcon" src="~/webAsset/mrqeshmi/image/user.png" /> <a class="entertext" style="cursor: pointer; font-size: 12px;">@name</a><a style="margin-right:20px"> </a>
+                                            <i style="margin:0" class="fal fa-user menuIcon"></i> <a href="/home/myprofile?type=1" class="entertext" style="cursor: pointer; font-size: 12px;">@name</a><a style="margin-right:5px"> </a>
+
                                         }
                                         else
                                         {
 
 
-                                            <img class="menuIcon" src="~/webAsset/mrqeshmi/image/user.png" /> <a href="/Home/loginPage" class="entertext" style="cursor: pointer; font-size: 12px;">ورود / ثبت نام</a><a style="margin-right:10px"> </a>
+                                            <i style="margin:0" class="fal fa-user menuIcon"></i> <a href="/Home/loginPage" class="entertext" style="cursor: pointer; font-size: 12px;">ورود / ثبت نام</a><a style="margin-right:5px"> </a>
                                         }
                                     }
 
@@ -555,18 +779,18 @@
 
 
                     @*<div style="cursor:pointer;display:flex; align-items:center">
-                        <div class="menuIcon" style="border-left: 1px solid #696464;padding: 7px 0px 7px 30px;">
-                            <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
-                            دسته بندی
-                            <i class="fa fa-chevron-down" style="font-size:8px; margin:0 5px;color:#FF4500"></i>
-                        </div>
+                            <div class="menuIcon" style="border-left: 1px solid #696464;padding: 7px 0px 7px 30px;">
+                                <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
+                                دسته بندی
+                                <i class="fa fa-chevron-down" style="font-size:8px; margin:0 5px;color:#FF4500"></i>
+                            </div>
 
-                        <div class="searchButton" style="padding: 7px 30px 7px 7px;">
+                            <div class="searchButton" style="padding: 7px 30px 7px 7px;">
 
-                            <i class="fa fa-search" style="margin:0 5px; color:#FF4500"></i>
-                            جستجو
-                        </div>
-                    </div>*@
+                                <i class="fa fa-search" style="margin:0 5px; color:#FF4500"></i>
+                                جستجو
+                            </div>
+                        </div>*@
 
                     <div>
                         <div style="display:flex; align-items:center">
@@ -661,13 +885,12 @@
 
                 </div>
                 <style>
-                  
                 </style>
                 <div class="menuSectionParent">
                     <a href="/"><div class="flexel"><img class="menuIcon" src="~/webAsset/mrqeshmi/image/home.png" /> <span class="headerItem">خانه</span></div></a>
-                    <a><div class="flexel"><img class="categoryIcon" src="~/webAsset/mrqeshmi/image/category.png" /> <span class="headerItem">دسته بندی</span></div></a>
-                    <a><div class="flexel"> <img class="aboutIcon" src="~/webAsset/mrqeshmi/image/about.png" /> <span class="headerItem">درباره ما</span></div></a>
-                    <a><div class="flexel"> <img class="menuIcon"  src="~/webAsset/mrqeshmi/image/contact.png" /> <span class="headerItem">تماس با ما</span></div></a>
+                    @* <a><div class="flexel"><img class="categoryIcon" src="~/webAsset/mrqeshmi/image/category.png" /> <span class="headerItem">دسته بندی</span></div></a>*@
+                    <a href="@Url.Action("aboutus", "Home")"><div class="flexel"> <img class="aboutIcon" src="~/webAsset/mrqeshmi/image/about.png" /> <span class="headerItem">درباره ما</span></div></a>
+                    <a href="@Url.Action("contact", "Home")"><div class="flexel"> <img class="menuIcon" src="~/webAsset/mrqeshmi/image/contact.png" /> <span class="headerItem">تماس با ما</span></div></a>
                 </div>
 
 
@@ -677,10 +900,10 @@
 
                 <div style="display:flex ; align-items:center">
                     <div style="cursor:pointer;display:flex; align-items:center">
-                        <div class="menuIcon" style="border-left: 1px solid #696464;padding: 2px;">
-                            <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
+                        @*<div class="menuIcon" style="border-left: 1px solid #696464;padding: 2px;">
+                                <i class="fa fa-bars" style="margin:0 5px; color:#FF4500"></i>
 
-                        </div>
+                            </div>*@
 
                         <div class="searchButton" style="padding: 2px;">
 
@@ -816,7 +1039,15 @@
 
             </div>
 
+            <script>
+                $(".searchButton").click(function () {
 
+                    $(".searchsection").show()
+                })
+                $(".searchsection").click(function () {
+                    $(".searchsection").hide()
+                })
+            </script>
             <div id="loginsectin" style="padding:15px; border: 1px #ddd solid; background-color: #fff; position: fixed; top: 65px;  z-index: 99000; display: none ; border-radius:0px 0px 10px 10px">
 
                 @if (userApp != null)
@@ -873,203 +1104,7 @@
                 border-radius: 7px;
             }
         </style>
-        @{
 
-            List<banimo.ViewModel.Catsdata> menumodel = JsonConvert.DeserializeObject<List<banimo.ViewModel.Catsdata>>(ViewBag.MenuViewModel);
-            if (menumodel.First().mycatcollection != null)
-            {
-                <div class="menuParent" style="        display: none;
-        position: absolute;
-        top: 60px;
-        width: 95%;
-        z-index: 9999;
-        background-color: white;
-        margin-left: 2.5%;
-        padding: 15px;
-        -webkit-box-shadow: 0px -1px 26px -16px #000000;
-        box-shadow: 0px -1px 26px -16px #000000;
-        border-radius: 8px;
-        border: 1px solid #ddd;">
-
-                    <div class="mustbehide">
-                        <div style="display:flex; direction:rtl">
-                            <ul class="nav nav-tabs menunav">
-                                @{
-                                    foreach (var cat in menumodel.First().mycatcollection)
-                                    {
-                                        string entitle = "/" + cat.entitle;
-
-
-                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
-                                        if (index == 0)
-                                        {
-                                            <li style="width:100%" class="active menuCat"><a style="cursor:pointer" href="@entitle" childhref="#@cat.ID">@cat.title</a></li>
-                                        }
-                                        else
-                                        {
-                                            <li style="width:100%" class="menuCat"><a style="cursor:pointer" href="@entitle" childhref="#@cat.ID">@cat.title</a></li>
-                                        }
-                                    }
-                                }
-
-
-
-                            </ul>
-
-                            <div class="tab-content" style="flex:1">
-                                @{
-                                    foreach (var cat in menumodel.First().mycatcollection)
-                                    {
-                                        string catImage = "/images/" + cat.image;
-                                        string entitle = "/" + cat.entitle;
-                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
-                                        string active = "in active";
-                                        if (index != 0)
-                                        {
-                                            active = "";
-                                        }
-                                        <div id="@cat.ID" class="tab-pane fade @active">
-                                            <div style="display:flex; align-items:center">
-                                                <div class="menuDetailHoder" style="">
-                                                    <div style="display:flex; flex-direction:column;height:400px;flex-wrap:wrap">
-                                                        @if (menumodel.First().mysubcatcollection != null)
-                                                        {
-                                                            foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
-                                                            {
-                                                                entitle += "/" + subcatitem.entitle;
-                                                                <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
-                                                                if (menumodel.First().mysubcatcollection2 != null)
-                                                                {
-                                                                    foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
-                                                                    {
-                                                                        entitle += "/" + subcat2item.entitle;
-                                                                        <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
-                                                                        entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
-                                                                    }
-                                                                }
-
-
-                                                                entitle = "/" + cat.entitle;
-                                                            }
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                                <div class="menuImageHolder" style="">
-                                                    <img style="max-height:100%; max-width:100%; object-fit:contain" src="@catImage" />
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-                                    }
-                                }
-
-
-
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="mustbeshown">
-
-                        <div style=" direction:rtl">
-                            <ul class="nav nav-tabs menunav" style="width:100%">
-                                @{
-                                    foreach (var cat in menumodel.First().mycatcollection)
-                                    {
-                                        string entitle = "/" + cat.entitle;
-                                        string chidID = "child" + cat.ID;
-
-                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
-                                        if (index == 0)
-                                        {
-                                            <li style="width:100%" class="active menuCat"><a style="pointer-events: none; cursor:pointer" href="" childhref="#@chidID">@cat.title <i style="float :left" class="fa fa-link"></i></a></li>
-                                        }
-                                        else
-                                        {
-                                            <li style="width:100%" class="menuCat"><a style="pointer-events: none; cursor:pointer" href="" childhref="#@chidID">@cat.title <i style="float :left" class="fa fa-link"></i></a></li>
-                                        }
-                                    }
-                                }
-
-
-
-                            </ul>
-
-                            <div class="tab-content" style="flex:1">
-                                @{
-                                    foreach (var cat in menumodel.First().mycatcollection)
-                                    {
-                                        string catImage = "/images/" + cat.image;
-                                        string entitle = "/" + cat.entitle;
-                                        string chidID = "child" + cat.ID;
-                                        int index = menumodel.First().mycatcollection.IndexOf(cat);
-                                        string active = "in active";
-                                        if (index != 0)
-                                        {
-                                            active = "";
-                                        }
-                                        <div id="@chidID" class="tab-pane fade @active">
-                                            <div style="display:flex; align-items:center">
-                                                <div class="menuDetailHoder" style="">
-                                                    <div style="display:flex; flex-direction:column;height:400px;flex-wrap:wrap">
-                                                        @if (menumodel.First().mysubcatcollection != null)
-                                                        {
-                                                            foreach (var subcatitem in menumodel.First().mysubcatcollection.Where(c => c.CatID == cat.ID))
-                                                            {
-                                                                entitle += "/" + subcatitem.entitle;
-                                                                <p style="font-weight:600;padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcatitem.title</a></p>
-                                                                if (menumodel.First().mysubcatcollection2 != null)
-                                                                {
-                                                                    foreach (var subcat2item in menumodel.First().mysubcatcollection2.Where(c => c.subcatid == subcatitem.ID))
-                                                                    {
-                                                                        entitle += "/" + subcat2item.entitle;
-                                                                        <p style="padding:5px 15px; border-left:2px dashed #ddd"><a href="@entitle">@subcat2item.title</a></p>
-                                                                        entitle = "/" + cat.entitle + "/" + subcatitem.entitle;
-                                                                    }
-                                                                }
-
-
-                                                                entitle = "/" + cat.entitle;
-                                                            }
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                                <div class="menuImageHolder" style="">
-                                                    <img style="max-height:100%; max-width:100%; object-fit:contain" src="@catImage" />
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-                                    }
-                                }
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            }
-            else
-            {
-
-            }
-
-
-
-
-
-        }
 
         <script>
             var width = screen.width;
@@ -1175,13 +1210,15 @@
         <!-- footer -->
 
 
+        <div class="footer">
+            @{Html.RenderAction("contactSection", "Home");}
+        </div>
 
 
-        @{Html.RenderAction("contactSection", "Home");}
 
         <div style="color:white;  background-color:#4D4D4D; padding:25px; text-align:center; direction:rtl">
             <p class="c-footer-light__text">کلیه حقوق این وبسایت متعلق به فروشگاه اینترنتی  @System.Configuration.ConfigurationManager.AppSettings["siteName"] می‌باشد.</p>
-            <p class="c-footer-light__copyright">برنامه نویسی شده توسط  <a href="http://www.supect.com">supect.com</a></p>
+            <p class="c-footer-light__copyright">برنامه نویسی شده توسط  <a style="color:white" href="https://supect.com">تیم طراحی سوپکت</a></p>
         </div>
 
 
@@ -1275,9 +1312,9 @@
                             JSON.parse(srtcookie).forEach(function (item) {
                                 let valueID = "value" + item.productid;
                                 $("." + valueID).val(item.quantity);
-                               
-                               
-                               
+
+
+
                                 if (item.quantity == "0") {
                                     $("." + valueID).parent().parent().find('.addButton').show();
                                     $("." + valueID).parent().parent().find('.addholder').hide();
@@ -1475,7 +1512,7 @@
                     $(".menuParent").hide();
                 }
             );
-           
+
 
 
 
@@ -1521,14 +1558,7 @@
 
 
         </script>
-        <script>
-            $(".searchButton").click(function () {
-                $(".searchsection").show()
-            })
-            $(".searchsection").click(function () {
-                $(".searchsection").hide()
-            })
-        </script>
+
         <script>
             $("#searchInputWeb").click(function () {
             })
@@ -1724,7 +1754,7 @@
                             }
                             toastr.success('با موفقیت انجام شد');
 
-                           
+
                         }
 
 
@@ -1749,12 +1779,12 @@
             var addtocart = function (el, ID, addson, refresh) {
 
                 var className = "value" + ID;
-                
+
                 var elements = document.getElementsByClassName(className);
                 var requiredElement = elements[0];
-                
+
                 var CurrentItem = requiredElement.value;
-               
+
                 var newCount = parseInt(CurrentItem) + 1;
                 $("." + className).val(newCount);
 
@@ -1815,7 +1845,7 @@
             .imageholderindex img {
                 object-fit: cover;
                 width: 100%;
-                border-radius: 45px;
+                border-radius: 25px;
                 aspect-ratio: 1
                 /*height: 400px;*/
             }
